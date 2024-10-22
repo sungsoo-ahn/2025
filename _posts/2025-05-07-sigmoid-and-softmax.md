@@ -12,7 +12,7 @@ authors:
    - name: Anonymous
 
 # must be the exact same name as your blogpost
-# bibliography: sigmoidandsoftmax.bib  
+bibliography: 2025-05-07-sigmoid-and-softmax.bib
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -44,7 +44,7 @@ _styles: >
   }
 ---
 
-<h2 id="Introduction">Introduction</h2>
+## Introduction
 
 <p>Let $$\mathbf{x} \in \mathbf{R^d}$$ and $$\mathbf{S} = \left\{\left(\mathbf{w}_0, \mathbf{w}_1, \ldots, \mathbf{w}_d\right) \mid \sum_{i=1}^d \mathbf{w}_i = 1\right\} \subset \left[0, 1\right]^d$$. Softmax function $$\mathbf{f} : \mathbf{R^d} \rightarrow  \mathbf{S} $$ is given by
 $$
@@ -66,16 +66,12 @@ $$
 \end{align}
 $$
 This should not confuse the reader whether softmax does or does not has its roots in $$\arg\max$$. The next section shows that indeed it does not. But it is still not known where softmax arises from. An analysis on relatively recent online time-series algorithm sheds some light on generalized softmax function [2] and derivation of softmax can be established.
-</p>
 
-<h2 id="Sigmoid">Sigmoid</h2>
-<p>
-   
-</p>
+## Sigmoid
 
-<h2 id="Softmax">Softmax</h2>
-<p>
-   Consider the transformation
+
+## Softmax
+Consider the transformation
 $$
 \begin{align}
     \mathbf{p} &= \arg\min_{ \mathbf{w} \in \mathbf{S} } \langle \mathbf{w}, \mathbf{x} \rangle
@@ -112,7 +108,6 @@ $$
      \mathbf{\hat{p}} &= \mathbf{w}^\star
 \end{align}
 $$
-</p>
 
 <h2 id="Conclusion">Conclusion</h2>
 <p>
