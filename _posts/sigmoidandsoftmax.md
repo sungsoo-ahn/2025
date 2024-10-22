@@ -14,7 +14,7 @@ authors:
    - name: Anonymous
 
 # must be the exact same name as your blogpost
-bibliography: sigmoidandsoftmax.bib  
+# bibliography: sigmoidandsoftmax.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
