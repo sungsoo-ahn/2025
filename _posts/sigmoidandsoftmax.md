@@ -118,5 +118,5 @@ $$
 
 <h2 id="Conclusion">Conclusion/h2>
 <p>
-   Softmax is the function that when applied on a vector gives a probability vector that has minimum negative entropy and dot product with the input vector.
+   Softmax is the function that when applied on a vector gives a probability vector that has minimum negative entropy and dot product with the input vector. Sigmoid
 </p>
