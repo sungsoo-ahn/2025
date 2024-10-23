@@ -2,7 +2,7 @@
 layout: distill
 title: Sigmoid and Softmax
 description: Existing explanations of sigmoid and softmax rely on probabilistic interpretation of the output(s) but do not provide the source of probabilistic interpretation. In contrast, both sigmoid and softmax have a simple definition with their roots in basic information theory and calculus. This blog takes an isolated look at sigmoid and softmax and explains how and why they materialize. The definition and derivation show that they are not related.
-date: 2024-05-07
+date: 2024-10-23
 future: false
 htmlwidgets: true
 hidden: false
@@ -45,13 +45,20 @@ _styles: >
 ---
 
 ## Introduction
+Let $$x \in \mathbf{R}$$. Sigmoid function $$\sigma : \mathbf{R} \rightarrow  \left[0, 1\right]$$ is given by
+$$
+\begin{align}
+    \sigma\left(x\right) &= \frac{1}{1 + \exp\left(-x\right)}.
+\end{align}
+$$
 
-<p>Let $$\mathbf{x} \in \mathbf{R^d}$$ and $$\mathbf{S} = \left\{\left(\mathbf{w}_0, \mathbf{w}_1, \ldots, \mathbf{w}_d\right) \mid \sum_{i=1}^d \mathbf{w}_i = 1\right\} \subset \left[0, 1\right]^d$$. Softmax function $$\mathbf{f} : \mathbf{R^d} \rightarrow  \mathbf{S} $$ is given by
+Let $$\mathbf{x} \in \mathbf{R^d}$$ and $$\mathbf{S} = \left\{\left(\mathbf{w}_0, \mathbf{w}_1, \ldots, \mathbf{w}_d\right) \mid \sum_{i=1}^d \mathbf{w}_i = 1\right\} \subset \left[0, 1\right]^d$$. Softmax function $$\mathbf{f} : \mathbf{R^d} \rightarrow  \mathbf{S} $$ is given by
 $$
 \begin{align}
     \mathbf{f}\left(\mathbf{x}\right)_i &= \frac{\exp{\left(-\mathbf{x}_i\right)}}{\sum_{j=1}^d \exp{\left(-\mathbf{x}_j\right)}}.
 \end{align}
 $$
+
 Softmax does not approximate the $$\arg\max$$ function but approximates the one-hot encoding of the $$\arg\max$$ function [1]. Let $$\mathbf{p} \in \left\{0, 1\right\}^d$$, $$\mathbf{\hat{p}} \in \left[0, 1\right]^d$$ and $$\mathbf{p}, \mathbf{\hat{p}} \in \mathbf{S}$$.
 $$
 \begin{align}
@@ -65,7 +72,8 @@ $$
     \mathcal{L} &= \sum_{i=1}^d -\mathbf{p}_i\log\left(\mathbf{\hat{p}}_i\right).
 \end{align}
 $$
-This should not confuse the reader whether softmax does or does not has its roots in $$\arg\max$$. The next section shows that indeed it does not. But it is still not known where softmax arises from. An analysis on relatively recent online time-series algorithm sheds some light on generalized softmax function [2] and derivation of softmax can be established.
+
+This should not confuse the reader whether softmax does or does not have its roots in $\argmax$. The next section shows that indeed it does not. But it is still not known where softmax arises from. An analysis of a relatively recent online time-series algorithm sheds some light on the generalized softmax function [2] and the derivation of softmax can be established.
 
 ## Sigmoid
 
@@ -110,6 +118,4 @@ $$
 $$
 
 ## Discussion and Conclusion
-<p>
-   Softmax is the function that when applied on a vector gives a probability vector that has minimum negative entropy and dot product with the input vector. Sigmoid
-</p>
+   Softmax is the function that when applied on a vector gives a probability vector that has minimum negative entropy and dot product with the input vector.
