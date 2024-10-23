@@ -59,13 +59,14 @@ $$
 \end{align}
 $$
 
-Softmax does not approximate the $$\arg\max$$ function but approximates the one-hot encoding of the $$\arg\max$$ function [1]. Let $$\mathbf{p} \in \left\{0, 1\right\}^d$$, $$\mathbf{\hat{p}} \in \left[0, 1\right]^d$$ and $$\mathbf{p}, \mathbf{\hat{p}} \in \mathbf{S}$$.
+Softmax does not approximate the $$\arg\max$$ function but approximates the one-hot encoding of the $$\arg\max$$ function [1]. Let $$\mathbf{p} \in \left\{0, 1\right\}^d$$, $$\mathbf{\hat{p}} \in \left[0, 1\right]^d$$ and $$\mathbf{p}, \mathbf{\hat{p}} \in \mathbf{S}$$. Then
 $$
 \begin{align}
 \left(\mathbf{p}_0, \mathbf{p}_1, \ldots, \mathbf{p}_i, \ldots, \mathbf{p}_d\right) &\approx \left(\mathbf{\hat{p}}_0, \mathbf{\hat{p}}_1, \ldots, \mathbf{\hat{p}}_i, \ldots, \mathbf{\hat{p}}_d\right) \\
  &= \mathbf{f\left(\mathbf{x}\right)}.
 \end{align}
 $$
+
 The approximation error is quantified by cross entropy
 $$
 \begin{align}
@@ -76,7 +77,32 @@ $$
 This should not confuse the reader whether softmax does or does not have its roots in $\argmax$. The next section shows that indeed it does not. But it is still not known where softmax arises from. An analysis of a relatively recent online time-series algorithm sheds some light on the generalized softmax function [2] and the derivation of softmax can be established.
 
 ## Sigmoid
+Consider the transformation
+$$
+\begin{align}
+    p &= \argmax_{ w \in [0,1]} wx
+\end{align}
+$$
 
+$$p$$ with entropy regularizer
+$$
+\begin{align}
+        \hat{p} &= \argmax_{ w \in \left[0,1\right] } wx - w\log\left(w\right) - \left(1-w\right)\log\left(1-w\right)
+    \end{align}
+$$
+
+Differentiate the objective function with respect to $w$ and equate to 0
+$$
+    \begin{align}
+    x - 1 - \log(w) + 1 + \log(1-w) &= 0 \\
+    \log(1-w) - \log(w) &= -x \\
+    \log\left(\frac{1-w}{w}\right) &= -x \\
+    \log\left(\frac{1}{w} - 1\right) &= -x  \\
+    \frac{1}{w} &= 1 + \exp(-x) \\
+     w^\star &= \frac{1}{1+\exp(-x)} \\
+     \hat{p} &= w^\star
+    \end{align}
+$$
 
 ## Softmax
 Consider the transformation
