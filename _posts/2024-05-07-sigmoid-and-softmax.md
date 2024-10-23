@@ -80,14 +80,14 @@ This should not confuse the reader whether softmax does or does not have its roo
 Consider the transformation
 $$
 \begin{align}
-    p &= \argmax_{ w \in [0,1]} wx
+    p &= \arg\max_{ w \in [0,1]} wx
 \end{align}
 $$
 
 $$p$$ with entropy regularizer
 $$
 \begin{align}
-        \hat{p} &= \argmax_{ w \in \left[0,1\right] } wx - w\log\left(w\right) - \left(1-w\right)\log\left(1-w\right)
+        \hat{p} &= \arg\max_{ w \in \left[0,1\right] } wx - w\log\left(w\right) - \left(1-w\right)\log\left(1-w\right)
     \end{align}
 $$
 
