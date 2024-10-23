@@ -142,7 +142,11 @@ $$
      \mathbf{\hat{p}} &= \mathbf{w}^\star
 \end{align}
 $$
+
+
 ![Sigmoid with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/sigmoid_and_softmax/sigmoid_neg_entropy.png?raw=true)
+
+
 ![Softmax with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/sigmoid_and_softmax/softmax_neg_entropy.png?raw=true)
 Figure 1. Effect of the entropy term in values of the objective function of sigmoid and softmax.
 
