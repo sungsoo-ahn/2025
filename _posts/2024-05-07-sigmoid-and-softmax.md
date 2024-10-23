@@ -143,5 +143,7 @@ $$
 \end{align}
 $$
 
+
+
 ## Discussion and Conclusion
-   Softmax is the function that when applied on a vector gives a probability vector that has minimum negative entropy and dot product with the input vector.
+Sigmoid is the function when applied to a scalar gives the probability that has maximum entropy and multiplication value with the input scalar. Softmax is the function that when applied on a vector gives a probability vector that has minimum negative entropy and dot product value with the input vector. Figure 1 shows the values of the objective function for different weights to the entropy term.
