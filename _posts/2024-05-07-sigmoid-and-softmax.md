@@ -153,6 +153,6 @@ Figure 1 shows the values of the objective function for different weights to the
 ![Softmax with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/sigmoid_and_softmax/softmax_neg_entropy.png?raw=true)
 Figure 1. Effect of the entropy term in values of the objective function of sigmoid and softmax.
 
-The curve obtained by fixing the output probability and varying only the weight to the entropy term has a sigmoidal shape. On the other hand the xirve obtained by fixing the weight to the entropy term and varying the output probability has a parabolic shape.
+Sigmoid is the function when applied to a scalar gives the probability that has maximum entropy and multiplication value with the input scalar. The curve obtained by fixing the output probability and varying only the weight to the entropy term has a sigmoidal shape. On the other hand the curve obtained by fixing the weight to the entropy term and varying the output probability has a parabolic shape.
 
-Sigmoid is the function when applied to a scalar gives the probability that has maximum entropy and multiplication value with the input scalar. Softmax is the function that when applied on a vector gives a probability vector that has minimum negative entropy and dot product value with the input vector.
+Softmax is the function that when applied on a vector gives a probability vector that has minimum negative entropy and dot product value with the input vector. The curve obtained by fixing the output probability and varying only the weight to the entropy term has a sigmoidal shape. On the other hand the region obtained by fixing the weight to the entropy term and varying the output probabilities is an ellipsoid.
