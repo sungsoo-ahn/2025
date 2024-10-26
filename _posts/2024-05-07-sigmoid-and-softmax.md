@@ -52,6 +52,8 @@ $$
     \sigma\left(x\right) &= \frac{1}{1 + \exp\left(-x\right)}.
 \end{align}
 $$
+Sigmoid function is used in logistic regression and binary classification.
+
 
 Let $$\mathbf{x} \in \mathbf{R^d}$$ and $$\mathbf{S} = \left\{\left(\mathbf{w}_0, \mathbf{w}_1, \ldots, \mathbf{w}_d\right) \mid \sum_{i=1}^d \mathbf{w}_i = 1\right\} \subset \left[0, 1\right]^d$$. Softmax function $$\mathbf{f} : \mathbf{R^d} \rightarrow  \mathbf{S} $$ is given by
 $$
@@ -60,7 +62,7 @@ $$
 \end{align}
 $$
 
-Softmax does not approximate the $$\arg\max$$ function but approximates the one-hot encoding of the $$\arg\max$$ function [1]. Let $$\mathbf{p} \in \left\{0, 1\right\}^d$$, $$\mathbf{\hat{p}} \in \left[0, 1\right]^d$$ and $$\mathbf{p}, \mathbf{\hat{p}} \in \mathbf{S}$$. Then
+Softmax is used in multiclass classification. Softmax does not approximate the $$\arg\max$$ function but approximates the one-hot encoding of the $$\arg\max$$ function [1]. Let $$\mathbf{p} \in \left\{0, 1\right\}^d$$, $$\mathbf{\hat{p}} \in \left[0, 1\right]^d$$ and $$\mathbf{p}, \mathbf{\hat{p}} \in \mathbf{S}$$. Then
 $$
 \begin{align}
 \left(\mathbf{p}_0, \mathbf{p}_1, \ldots, \mathbf{p}_i, \ldots, \mathbf{p}_d\right) &\approx \left(\mathbf{\hat{p}}_0, \mathbf{\hat{p}}_1, \ldots, \mathbf{\hat{p}}_i, \ldots, \mathbf{\hat{p}}_d\right) \\
