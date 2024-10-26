@@ -339,8 +339,9 @@ We also cite the experimental results from these papers themselves below,
 </div>
 
 From the experimental results, we can see that 
-1. The centralized value function of MAPPO does not provide effective performance improvements. The independent value functions for each agent make the multi-agent learning more robust. 
-2. Introducing global information into the value function improves the learning efficiency of IPPO.
+>The centralized value function of MAPPO does not provide effective performance improvements. The independent value functions for each agent make the multi-agent learning more robust. 
+
+>Introducing global information into the value function improves the learning efficiency of IPPO.
 
 ### Discussion
 
@@ -350,9 +351,11 @@ Furthermore, we continue to discuss the different implementations of IPPO with g
 
 Therefore, there are several reasons for employing independent value functions over a centralized value function:
 
-1. The independent value functions increase policy diversity and improve exploration capabilities. 
-2. The independent value functions constitute ensemble learning <d-cite key="krawczyk2017ensemble"></d-cite> , making the PPO algorithm more robust in unstable multi-agent environments.
-3. Each agent having its own value function can be seen as an implicit credit assignment <d-cite key="foerster2018counterfactual"></d-cite>.
+> The independent value functions increase policy diversity and improve exploration capabilities. 
+
+> The independent value functions constitute ensemble learning <d-cite key="krawczyk2017ensemble"></d-cite> , making the PPO algorithm more robust in unstable multi-agent environments.
+
+> Each agent having its own value function can be seen as an implicit credit assignment <d-cite key="foerster2018counterfactual"></d-cite>.
 
 With this blog post, we aim to broaden awareness for the Multi-agent IPPO, beyond the well-known MAPPO method alone. We believe the Multi-agent IPPO holds untapped potential which deserves exploration. 
 
