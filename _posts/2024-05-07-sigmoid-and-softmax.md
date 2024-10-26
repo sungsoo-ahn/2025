@@ -62,7 +62,7 @@ $$
 \end{align}
 $$
 
-Softmax is used in multiclass classification. Softmax does not approximate the $$\arg\max$$ function but approximates the one-hot encoding of the $$\arg\max$$ function [1]. Let $$\mathbf{p} \in \left\{0, 1\right\}^d$$, $$\mathbf{\hat{p}} \in \left[0, 1\right]^d$$ and $$\mathbf{p}, \mathbf{\hat{p}} \in \mathbf{S}$$. Then
+Softmax function is used in multiclass classification. Softmax does not approximate the $$\arg\max$$ function but approximates the one-hot encoding of the $$\arg\max$$ function [1]. Let $$\mathbf{p} \in \left\{0, 1\right\}^d$$, $$\mathbf{\hat{p}} \in \left[0, 1\right]^d$$ and $$\mathbf{p}, \mathbf{\hat{p}} \in \mathbf{S}$$. Then
 $$
 \begin{align}
 \left(\mathbf{p}_0, \mathbf{p}_1, \ldots, \mathbf{p}_i, \ldots, \mathbf{p}_d\right) &\approx \left(\mathbf{\hat{p}}_0, \mathbf{\hat{p}}_1, \ldots, \mathbf{\hat{p}}_i, \ldots, \mathbf{\hat{p}}_d\right) \\
