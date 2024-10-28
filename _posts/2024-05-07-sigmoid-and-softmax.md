@@ -146,7 +146,7 @@ $$
 \end{align}
 $$
 
-Note that $\langle \mathbf{w}^\star, \mathbf{x}$ is smooth maximum.
+Note that $\langle \mathbf{w}^\star, \mathbf{x} \rangle$ is smooth maximum.
 
 ## Discussion and Conclusion
 
