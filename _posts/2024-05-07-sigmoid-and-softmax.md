@@ -62,7 +62,7 @@ $$
 \end{align}
 $$
 
-Softmax function is used in multiclass classification. Softmax does not approximate the $$\arg\max$$ function but approximates the one-hot encoding of the $$\arg\max$$ function [1]. Let $$\mathbf{p} \in \left\{0, 1\right\}^d$$, $$\mathbf{\hat{p}} \in \left[0, 1\right]^d$$ and $$\mathbf{p}, \mathbf{\hat{p}} \in \mathbf{S}$$. Then
+Softmax function is used in multiclass classification, smooth maximum and softargmax. Softmax does not approximate the $$\arg\max$$ function but approximates the one-hot encoding of the $$\arg\max$$ function [1]. Let $$\mathbf{p} \in \left\{0, 1\right\}^d$$, $$\mathbf{\hat{p}} \in \left[0, 1\right]^d$$ and $$\mathbf{p}, \mathbf{\hat{p}} \in \mathbf{S}$$. Then
 $$
 \begin{align}
 \left(\mathbf{p}_0, \mathbf{p}_1, \ldots, \mathbf{p}_i, \ldots, \mathbf{p}_d\right) &\approx \left(\mathbf{\hat{p}}_0, \mathbf{\hat{p}}_1, \ldots, \mathbf{\hat{p}}_i, \ldots, \mathbf{\hat{p}}_d\right) \\
@@ -146,6 +146,8 @@ $$
 \end{align}
 $$
 
+Note that $\langle \mathbf{w}^\star, \mathbf{x}$ is smooth maximum.
+
 ## Discussion and Conclusion
 
 Figure 1 shows the values of the objective function for different weights to the entropy term.
@@ -159,6 +161,8 @@ Figure 1. Effect of the entropy term in values of the objective function of sigm
 Sigmoid is the function when applied to a scalar gives the probability that has maximum entropy and multiplication value with the input scalar. The curve obtained by fixing the output probability and varying only the weight to the entropy term has a sigmoidal shape. On the other hand the curve obtained by fixing the weight to the entropy term and varying the output probability has a parabolic shape.
 
 Softmax is the function that when applied on a vector gives a probability vector that has minimum negative entropy and dot product value with the input vector. The curve obtained by fixing the output probabilities and varying only the weight to the entropy term has a sigmoidal shape. On the other hand the region obtained by fixing the weight to the entropy term and upper bounding value of the objective function and varying the output probabilities is an ellipse.
+
+Lastly, softmax has its roots in smooth maximum.
 
 ## References 
 1. Ian Goodfellow, Yoshua Bengio and Aaron Courville. Deep Learning. 2016.
