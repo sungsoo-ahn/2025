@@ -162,8 +162,6 @@ Sigmoid is the function when applied to a scalar gives the probability that has 
 
 Softmax is the function that when applied on a vector gives a probability vector that has minimum negative entropy and dot product value with the input vector. The curve obtained by fixing the output probabilities and varying only the weight to the entropy term has a sigmoidal shape. On the other hand the region obtained by fixing the weight to the entropy term and upper bounding value of the objective function and varying the output probabilities is an ellipse.
 
-Lastly, softmax has its roots in smooth maximum.
-
 ## References 
 1. Ian Goodfellow, Yoshua Bengio and Aaron Courville. Deep Learning. 2016.
 2. [Luca Trevison. The ``Follow-the-Regularized-Leader'' algorithm. Topics in computer science and optimization (Fall 2019).](https://lucatrevisan.github.io/40391/lecture12.pdf)
