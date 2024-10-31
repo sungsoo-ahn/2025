@@ -77,7 +77,7 @@ $$
 \end{align}
 $$
 
-This should not confuse the reader whether softmax does or does not have its roots in $\arg\max$. The next section shows that indeed it does not. But it is still not known where softmax arises from. An analysis of a relatively recent online time-series algorithm sheds some light on the generalized softmax function [2] and the derivation of softmax can be established.
+This should not confuse the reader whether softmax does or does not have its roots in $\arg\max$. The next section shows that indeed it does not. But it is still not known where softmax arises from. An analysis of an online time-series algorithm sheds some light on the softmax function [2] and the derivation of softmax can be established.
 
 ## Sigmoid
 Consider the transformation
