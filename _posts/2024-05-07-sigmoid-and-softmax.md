@@ -152,6 +152,10 @@ Note that $\langle \mathbf{w}^\star, \mathbf{x} \rangle$ is smooth maximum where
 
 Figure 1 shows the values of the objective function for different weights to the entropy term.
 
+<a target="_blank" href="https://colab.research.google.com/github/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/sigmoid_and_softmax/Sigmoid_and_Softmax_visualization.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
+
 ![Sigmoid with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/sigmoid_and_softmax/sigmoid_neg_entropy.png?raw=true)
 
 
