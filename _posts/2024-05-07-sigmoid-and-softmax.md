@@ -79,6 +79,7 @@ $$
 
 This should not confuse the reader whether softmax does or does not have its roots in $\arg\max$. The next section shows that indeed it does not. But it is still not known where softmax arises from. An analysis of an online time-series algorithm sheds some light on the softmax function [2] and the derivation of softmax can be established.
 
+
 ## Sigmoid
 Consider the transformation
 $$
@@ -106,6 +107,7 @@ $$
      \hat{p} &= w^\star
     \end{align}
 $$
+
 
 ## Softmax
 Consider the transformation
@@ -148,6 +150,7 @@ $$
 
 Note that $\langle \mathbf{w}^\star, \mathbf{x} \rangle$ is smooth maximum whereas $\langle \mathbf{w}, \mathbf{\left[1, 2, \ldots, d\right]} \rangle$ for some $\mathbf{w} \in \mathbf{S}$ is softargmax [3].
 
+
 ## Discussion and Conclusion
 
 Figure 1 shows the values of the objective function for different weights to the entropy term.
@@ -156,15 +159,18 @@ Figure 1 shows the values of the objective function for different weights to the
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
+
 ![Sigmoid with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/sigmoid_and_softmax/sigmoid_neg_entropy.png?raw=true)
 
 
 ![Softmax with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/sigmoid_and_softmax/softmax_neg_entropy.png?raw=true)
 Figure 1. Effect of the entropy term in values of the objective function of sigmoid and softmax.
 
+
 Sigmoid is the function when applied to a scalar gives the probability that has maximum entropy and multiplication value with the input scalar. The curve obtained by fixing the output probability and varying only the weight to the entropy term has a sigmoidal shape. On the other hand the curve obtained by fixing the weight to the entropy term and varying the output probability has a parabolic shape.
 
 Softmax is the function that when applied on a vector gives a probability vector that has minimum negative entropy and dot product value with the input vector. The curve obtained by fixing the output probabilities and varying only the weight to the entropy term has a sigmoidal shape. On the other hand the region obtained by fixing the weight to the entropy term and upper bounding value of the objective function and varying the output probabilities is an ellipse.
+
 
 ## References 
 1. Ian Goodfellow, Yoshua Bengio and Aaron Courville. Deep Learning. 2016.
