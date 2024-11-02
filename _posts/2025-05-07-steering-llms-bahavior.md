@@ -37,12 +37,12 @@ toc:
     - name: Methodology
     - name: Experiments
         subsections:
-        - name: Concept 1: Python (Code)
-        - name: Concept 2: Language
-        subsections:
-        - name: French Concept
-        - name: Simplfied/Traditional Chinese Concept
-        - name: Arabic Concept
+        - name: Python (Code) Concept
+        - name: Language Concept
+            subsections:
+            - name: French Concept
+            - name: Simplfied/Traditional Chinese Concept
+            - name: Arabic Concept
         - name: Areas where CAV Excels and Does Not
     - name: Discussion
         subsections:
@@ -145,7 +145,7 @@ Before training classifiers, we applied PCA reduction to evaluate the separabili
 
 By default, we use `Llama-3-8B-Instruct` for experiments. Other LLMs may be involved for some concepts, and we will clearly indicate.
 
-### Concept 1: Python (Code)
+### Python (Code) Concept
 
 First, we try the Python concept, which has a negative instruction dataset constructed by PSA (Perfix and Suffix Addition). The test accuracy for the CAV is quite high, above 99% except for layer 0. However, you will see in the PCA results shown below that the early layers seem to have better separability than the later layers. Therefore, the results of PCA can only be auxiliary, and the test accuracy is a better indicator for understanding the effectiveness of CAV.
 
@@ -165,7 +165,7 @@ You can try the interactive section below to compare the outputs of the three ta
 
 Our observation is, for some specific tasks, Python CAV can enable LLMs to provide answers containing Python code, even if the original response doesn't include Python code, or the original instruction is not a coding task at all. However, for coding tasks, there is a lack of broader experiments to demonstrate whether it will be better steering with CAV. Referring to the results of Task 1.3, the response before steering are more comprehensive, while the response after steering seem to be more straightforward.
 
-### Concept 2: Language
+### Language Concept
 
 Next, we explore language-related concepts, which are considered a more practical steering usage. The experiments of language concepts involves four specific languages—English, French, Chinese (including Simplified and Traditional), and Arabic. The construction of the dataset involves two methods—Prefix and Suffix Addition (PSA) and Instruction Transfer (IT). Due to space limitations, it is not possible to present the results for all combinations pairwise; only some of the most meaningful and interesting content will be discussed below.
 
