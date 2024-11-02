@@ -37,8 +37,8 @@ toc:
     - name: Methodology
     - name: Experiments
         subsections:
-        - name: "Concept 1: Python (Code)"
-        - name: "Concept 2: Language"
+        - name: Concept 1: Python (Code)
+        - name: Concept 2: Language
         subsections:
         - name: French Concept
         - name: Simplfied/Traditional Chinese Concept
