@@ -81,11 +81,11 @@ For single behavior steering, we use the pipeline outlined in <d-cite key="Xu202
 
 1. **Data Collection**: Gather two sets of instructions aimed at carrying out two different tasks, labeling one as the positive and the other as negative. For example, a positive dataset might include instructions like
 
-   $$ \quad\textcolor{red}{\text{Positive}:}\text{How to plant flowers in my garden?} $$
+   <div>&emsp;&emsp;&emsp;&emsp;<span style="color: red; font-weight: bold;">Positive:</span>How to plant flowers in my garden?</div>
 
    while the negative dataset might include instructions like
 
-   $$ \quad\textcolor{green}{\text{Negative}:}\text{Comment planter des fleurs dans mon jardin?} $$
+   <div>&emsp;&emsp;&emsp;&emsp;<span style="color: green; font-weight: bold;">Negative:</span>Comment planter des fleurs dans mon jardin?</div>
 
    Thus, this two datasets can be used for "French" concept steering. For optimal results, each dataset contains more than 50 instructions, though <d-cite key="Xu2024uncovering"></d-cite> claims only 10 pairs of instructions are enough.
 
