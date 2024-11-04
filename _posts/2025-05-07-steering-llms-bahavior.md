@@ -121,17 +121,17 @@ To construct the negative dataset, that is, to modify negative instructions into
 
 For example (CR - *Complete Replacement*; PSA - *Prefix and Suffix Addtion*; IT - *Instruction Transfer*):
 
-$$\quad x=\text{How to plant flowers in my garden?}$$
+<div>&emsp;&emsp;&emsp;&emsp;<span style="font-weight: bold;">x</span>=How to plant flowers in my garden?</div>
 
-$$\quad\textcolor{blue}{\text{CR}}(x)=\text{How to make American coffee?}$$
+<div>&emsp;&emsp;&emsp;&emsp;<span style="color: blue; font-weight: bold;">CR</span>(x)=How to make American coffee?</div>
 
-$$\quad\textcolor{orange}{\text{PSA}}(x)=\text{How to plant flowers in my garden? Answer in Python please.}$$
+<div>&emsp;&emsp;&emsp;&emsp;<span style="color: orange; font-weight: bold;">PSA</span>(x)=How to plant flowers in my garden? Answer in Python please.</div>
 
-$$\quad\textcolor{pink}{\text{IT}}(x)=\text{Comment planter des fleurs dans mon jardin?}$$
+<div>&emsp;&emsp;&emsp;&emsp;<span style="color: pink; font-weight: bold;">IT</span>(x)=Comment planter des fleurs dans mon jardin?</div>
 
 The above three operations can be seen as operational primitives, and the results obtained by nesting them can serve as a method for constructing datasets for multi-target behavior steering, which will be described in detail later.
 
-$$\quad\textcolor{orange}{\text{PSA}}(\textcolor{pink}{\text{IT}}(x))=\text{Comment planter des fleurs dans mon jardin? Answer in Python please.}$$
+<div>&emsp;&emsp;&emsp;&emsp;<span style="color: orange; font-weight: bold;">PSA</span>(<span style="color: pink; font-weight: bold;">IT</span>(x))=Comment planter des fleurs dans mon jardin? Answer in Python please.</div>
 
 After building the datasets, we perform the CAV perturbation in text generation process, achieving the effect of behavior steering.
 
@@ -156,7 +156,7 @@ After training the Python CAV, we will attempt to steer model behavior with it. 
 You can try the interactive section below to compare the outputs of the three tasks before and after using Python CAV to steer behavior.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/1.html' | relative_url }}" frameborder='0' scrolling='no' height="100%" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/1.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
 
 Our observation is, for some specific tasks, Python CAV can enable LLMs to provide answers containing Python code, even if the original response doesn't include Python code, or the original instruction is not a coding task at all. However, for coding tasks, there is a lack of broader experiments to demonstrate whether it will be better steering with CAV. Referring to the results of Task 1.3, the response before steering are more comprehensive, while the response after steering seem to be more straightforward.
@@ -172,7 +172,7 @@ When studying the French concept, we also examine the differences between PSA an
 We selected three different text generation tasks to test the effects of using PSA and IT to induce the French CAV for behavior steering. Please operate the interactive panel below to view the PCA results and outputs of the two CAVs.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/2.html' | relative_url }}" frameborder='0' scrolling='no' height="100%" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/2.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
 
 Our observations are:
@@ -188,7 +188,7 @@ Our observations are:
 The differences between simplified and traditional Chinese are a very interesting phenomenon. We use IT and translation APIs to construct positive and negative datasets, with the positive dataset translated into simplified Chinese and the negative dataset into traditional Chinese. However, we struggle to train a good CAV on `Llama-3-8B-Instruct` with such datasets, possibly because this model doesn't have good Chinese output capabilities. Therefore, we use `Llama3.1-8B-Chinese-Chat`, a fine-tuned version of `Llama3.1-8B-Instruct` and its original version for this concept.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/3.html' | relative_url }}" frameborder='0' scrolling='no' height="100%" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/3.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
 
 {% include figure.html path="assets/img/2025-05-07-steering-llms-bahavior/image-20241101195212504.png" class="img-fluid" %}
@@ -205,7 +205,7 @@ Our observations are:
 Compared to French and Chinese, Arabic should be a less common language in Llama-3.1 and is also a low-resource language. How effective is the CAV extraction and behavior steering for this low-resource language? We also used PSA and IT methods along with the Arabic translation API to build datasets. Try the interactive panel below to see the steering results.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/5.html' | relative_url }}" frameborder='0' scrolling='no' height="100%" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/5.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
 
 Our observations are:
@@ -219,7 +219,7 @@ Our observations are:
 From the results of the two concepts above, it seems that CAV is quite good at modifying the style of the entire generated content. We have attempted more style concepts based on PSA, such as telling jokes, being more creative, childish, fairy tale-like, etc. The results show that CAV performs well in steering these concepts. Please use the interactive panel below to view the results of various style transfers on three specific instructions.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/4.html' | relative_url }}" frameborder='0' scrolling='no' height="100%" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/4.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
 
 In addition to these concepts, we also tried many other concepts, but fail to demonstrate such effects. These PSA-based CAVs all had quite high test accuracy, but after multiple attempts with different values of $$P_0$$, we could never produce significantly steered responses. These concepts include:
