@@ -80,12 +80,10 @@ For single behavior steering, we use the pipeline outlined in <d-cite key="Xu202
 ### Overview of CAV Perturbation Algorithm 
 
 1. **Data Collection**: Gather two sets of instructions aimed at carrying out two different tasks, labeling one as the positive and the other as negative. For example, a positive dataset might include instructions like
-
-   <div>&emsp;&emsp;&emsp;&emsp;<span style="color: red; font-weight: bold;">Positive:</span>How to plant flowers in my garden?</div>
+   <div>&emsp;&emsp;<span style="color: red; font-weight: bold;">Positive:</span>How to plant flowers in my garden?</div>
 
    while the negative dataset might include instructions like
-
-   <div>&emsp;&emsp;&emsp;&emsp;<span style="color: green; font-weight: bold;">Negative:</span>Comment planter des fleurs dans mon jardin?</div>
+   <div>&emsp;&emsp;<span style="color: green; font-weight: bold;">Negative:</span>Comment planter des fleurs dans mon jardin?</div>
 
    Thus, this two datasets can be used for "French" concept steering. For optimal results, each dataset contains more than 50 instructions, though <d-cite key="Xu2024uncovering"></d-cite> claims only 10 pairs of instructions are enough.
 
@@ -120,18 +118,16 @@ To construct the negative dataset, that is, to modify negative instructions into
 3. **Instruction Transfer**. For tasks like language or grammar, the original instruction can be directly transferred to the target task. For example, for "French" concept, the original instruction can be translated into the corresponding language.
 
 For example (CR - *Complete Replacement*; PSA - *Prefix and Suffix Addtion*; IT - *Instruction Transfer*):
+<div>&emsp;&emsp;<span style="font-weight: bold;">x</span>=How to plant flowers in my garden?</div>
 
-<div>&emsp;&emsp;&emsp;&emsp;<span style="font-weight: bold;">x</span>=How to plant flowers in my garden?</div>
+<div>&emsp;&emsp;<span style="color: blue; font-weight: bold;">CR</span>(x)=How to make American coffee?</div>
 
-<div>&emsp;&emsp;&emsp;&emsp;<span style="color: blue; font-weight: bold;">CR</span>(x)=How to make American coffee?</div>
+<div>&emsp;&emsp;<span style="color: orange; font-weight: bold;">PSA</span>(x)=How to plant flowers in my garden? Answer in Python please.</div>
 
-<div>&emsp;&emsp;&emsp;&emsp;<span style="color: orange; font-weight: bold;">PSA</span>(x)=How to plant flowers in my garden? Answer in Python please.</div>
-
-<div>&emsp;&emsp;&emsp;&emsp;<span style="color: pink; font-weight: bold;">IT</span>(x)=Comment planter des fleurs dans mon jardin?</div>
+<div>&emsp;&emsp;<span style="color: pink; font-weight: bold;">IT</span>(x)=Comment planter des fleurs dans mon jardin?</div>
 
 The above three operations can be seen as operational primitives, and the results obtained by nesting them can serve as a method for constructing datasets for multi-target behavior steering, which will be described in detail later.
-
-<div>&emsp;&emsp;&emsp;&emsp;<span style="color: orange; font-weight: bold;">PSA</span>(<span style="color: pink; font-weight: bold;">IT</span>(x))=Comment planter des fleurs dans mon jardin? Answer in Python please.</div>
+<div>&emsp;&emsp;<span style="color: orange; font-weight: bold;">PSA</span>(<span style="color: pink; font-weight: bold;">IT</span>(x))=Comment planter des fleurs dans mon jardin? Answer in Python please.</div>
 
 After building the datasets, we perform the CAV perturbation in text generation process, achieving the effect of behavior steering.
 
@@ -145,7 +141,7 @@ By default, we use `Llama-3-8B-Instruct` for experiments. Other LLMs may be invo
 
 First, we try the Python concept, which has a negative instruction dataset constructed by PSA (Perfix and Suffix Addition). The test accuracy for the CAV is quite high, above 99% except for layer 0. However, you will see in the PCA results shown below that the early layers seem to have better separability than the later layers. Therefore, the results of PCA can only be auxiliary, and the test accuracy is a better indicator for understanding the effectiveness of CAV.
 
-{% include figure.html path="assets/img/2025-05-07-steering-llms-bahavior/image-20241031233343529.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-05-07-steering-llms-behavior/image-20241031233343529.png" class="img-fluid" %}
 
 After training the Python CAV, we will attempt to steer model behavior with it. We will apply Python CAV to three types of tasks: 
 
@@ -181,7 +177,7 @@ Our observations are:
 2. When steering with PSA-induced CAV, the output often retains more or less English content, while using IT-induced CAV results in much less, although some English content still exists;
 3. The optimal $$P_0$$ for steering with the two types of CAV are different, with about 25% for PSA-CAV and about 10% for IT-CAV. This difference seems to show that even we look like to induce the same CAVs, the results are different. This will be discussed further in the later section.
 
-{% include figure.html path="assets/img/2025-05-07-steering-llms-bahavior/image-20241101205150263.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-05-07-steering-llms-behavior/image-20241101205150263.png" class="img-fluid" %}
 
 #### Simplfied/Traditional Chinese Concept
 
@@ -191,9 +187,9 @@ The differences between simplified and traditional Chinese are a very interestin
   <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/3.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
 
-{% include figure.html path="assets/img/2025-05-07-steering-llms-bahavior/image-20241101195212504.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-05-07-steering-llms-behavior/image-20241101195212504.png" class="img-fluid" %}
 
-{% include figure.html path="assets/img/2025-05-07-steering-llms-bahavior/image-20241101202314773.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-05-07-steering-llms-behavior/image-20241101202314773.png" class="img-fluid" %}
 
 Our observations are:
 
@@ -265,7 +261,7 @@ We trained CAVs using the following pairs of datasets:
 
 The classifiers trained on these five pairs exhibited good test set accuracy. To further understand their behavior, we examined the cosine similarity between the parameters of these classifiers:
 
-{% include figure.html path="assets/img/2025-05-07-steering-llms-bahavior/bzvvxffran2k356edpf6.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-05-07-steering-llms-behavior/bzvvxffran2k356edpf6.png" class="img-fluid" %}
 
 Our observations are:
 
