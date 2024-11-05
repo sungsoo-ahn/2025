@@ -84,7 +84,7 @@ This should not confuse the reader whether softmax does or does not have its roo
 Consider the transformation
 $$
 \begin{align}
-    p &= \arg\max_{ w \in [0,1]} wx
+    p &= \arg\min_{ w \in [0,1]} wx
 \end{align}
 $$
 
@@ -167,7 +167,7 @@ Figure 1 shows the values of the objective function for different weights to the
 Figure 1. Effect of the entropy term in values of the objective function of sigmoid and softmax.
 
 
-Sigmoid is the function when applied to a scalar gives the probability that has maximum entropy and multiplication value with the input scalar. The curve obtained by fixing the output probability and varying only the weight to the entropy term has a sigmoidal shape. On the other hand the curve obtained by fixing the weight to the entropy term and varying the output probability has a parabolic shape.
+Sigmoid is the function when applied to a scalar gives the probability that has minimum entropy and multiplication value with the input scalar. The curve obtained by fixing the output probability and varying only the weight to the entropy term has a sigmoidal shape. On the other hand the curve obtained by fixing the weight to the entropy term and varying the output probability has a parabolic shape.
 
 Softmax is the function that when applied on a vector gives a probability vector that has minimum negative entropy and dot product value with the input vector. The curve obtained by fixing the output probabilities and varying only the weight to the entropy term has a sigmoidal shape. On the other hand the region obtained by fixing the weight to the entropy term and upper bounding value of the objective function and varying the output probabilities is an ellipse.
 
