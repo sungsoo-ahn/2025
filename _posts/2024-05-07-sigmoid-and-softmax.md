@@ -91,7 +91,7 @@ $$
 $$p$$ with entropy regularizer
 $$
 \begin{align}
-        \hat{p} &= \arg\max_{ w \in \left[0,1\right] } wx - w\log\left(w\right) - \left(1-w\right)\log\left(1-w\right)
+        \hat{p} &= \arg\min_{ w \in \left[0,1\right] } wx - w\log\left(w\right) - \left(1-w\right)\log\left(1-w\right)
     \end{align}
 $$
 
