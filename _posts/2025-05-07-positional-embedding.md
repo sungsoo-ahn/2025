@@ -1,7 +1,8 @@
 ---
 layout: distill
 title: 'Positional Embeddings in Transformer Models: Evolution from Text to Vision Domains'
-description: Positional encoding has emerged as a pivotal component in transformer architectures, addressing their inherent permutation invariance and enabling them to capture sequential relationships in data. This blog post explores positional encoding mechanisms in-depth, highlighting their crucial role in standard transformers and their application to 2D data in Vision Transformers (ViT). We analyze two modern approaches—ALiBi (Attention with Linear Biases) and RoPE (Rotary Position Embedding)—delving into their distinct methodologies for addressing sequence length extrapolation during inference, a critical challenge in transformers. We also analyze these approaches' underlying similarities and differences, examining how they affect transformer performance across various domains.
+description: Positional encoding has become an essential element in transformer models, addressing their fundamental property of permutation invariance and allowing them to understand sequential relationships within data. This blog post thoroughly examines positional encoding techniques, emphasizing their vital importance in traditional transformers and their use with 2D data in Vision Transformers (ViT). We explore two contemporary methods—ALiBi (Attention with Linear Biases) and RoPE (Rotary Position Embedding)—dissecting their unique approaches to tackling the challenge of sequence length extrapolation during inference, a significant issue for transformers. Additionally, we compare these methods' fundamental similarities and differences, assessing their impact on transformer performance across various fields. We also look into how interpolation strategies have been utilized to enhance the extrapolation capabilities of these methods; we conclude this blog with an empirical comparison of ALiBi and RoPE in Vision Transformers. 
+
 date: 2025-05-07
 future: true
 htmlwidgets: true
@@ -59,11 +60,11 @@ _styles: >
 
 ## Background
 
-"Attention Is All You Need," introduced by Vaswani et al. [2017] <d-cite key="46201"></d-cite>, revolutionized the field of natural language processing and computer vision by proposing a purely attention-based model, the Transformer, eliminating the need for recurrent or convolutional networks.
+"Attention Is All You Need," introduced by (Vaswani et al. [2017] <d-cite key="46201"></d-cite>), revolutionized the field of natural language processing and computer vision by proposing a purely attention-based model, the Transformer, an efficient alternative for recurrent or convolutional networks.
 
 Later, Dosovitskiy et al. [2021] <d-cite key="50650"></d-cite> applied this concept to computer vision, introducing Vision Transformers (ViTs).On its own, the Transformer architecture is position-invariant, i.e., it processes its input as an unordered set. Unlike RNNs, designed to handle ordered sequences, or CNNs, which leverage translation equivariance and locality, transformers lack the inherent ability to capture sequential patterns. This is because the self-attention mechanism is independent of the token index.
 
-Vaswani et al. [2017] <d-cite key="46201"></d-cite> introduced positional encoding to address this lack of inductive bias. Since then, researchers have explored various methods to encode positional information directly into tokens or within the self-attention interaction step. The following sections will discuss the broad advancements of positional encoding methods in 1D and their extension for 2d tasks in Vision Transformers.
+Vaswani et al. [2017] <d-cite key="46201"></d-cite> introduced positional encoding to address this lack of inductive bias. Since then, researchers have explored various methods to encode positional information directly into tokens or within the self-attention interaction step. The following sections will discuss the broad advancements of positional encoding methods in 1D and their extension for 2D tasks in Vision Transformers.
 
 ## Preliminaries
 
@@ -122,7 +123,7 @@ where $$W_O \in \mathbb{R}^{hd_k \times d}$$ is a learned matrix that maps the c
 
 ## Absolute Positional Embeddings
 
-Absolute Positional embedding was introduced by Vaswani et al. <d-cite key="46201"></d-cite> in their famous 2017 paper "Attention is All You Need". It involves the direct addition of positional embeddings into the embedding vector. These encodings are injected only once in the embedding vector before passing them into the transformer block. Mathematically, it’s equivalent to 
+Absolute Positional embedding was introduced by (Vaswani et al. <d-cite key="46201"></d-cite>) in their famous 2017 paper "Attention is All You Need". It involves the direct addition of positional embeddings into the embedding vector. These encodings are injected only once in the embedding vector before passing them into the transformer block. Mathematically, it’s equivalent to 
 
 $$
 x'_i := x_i + p_i
@@ -170,27 +171,30 @@ The authors hypothesized that sinusoidal positional encoding would enable the mo
 
 However, subsequent research challenged these assumptions. Studies found that absolute sinusoidal positional encoding was not well-suited for capturing relative positional information effectively (Shaw et al. [2018] <d-cite key="46989"></d-cite>). Moreover, it struggled with extrapolation, leading to poor performance on sequence lengths longer than those encountered in training (Press et al. [2021] <d-cite key="press2021train"></d-cite>).
 
-In addition to sinusoidal positional embedding, Vaswani et al. also explored learned positional encoding. They explored using a set of trainable vectors $$p \in \mathbb{R}^{d \times L}$$ $$\{ p_t \} _{t=1}^L$$ , $$L$$ represents the maximum sequence length as positional embeddings. However, this approach didn't yield significant performance improvements over sinusoidal positional embedding. Moreover, the upper bound $$L$$ limited the method's ability to extrapolate to sequences longer than $$L$$ without resorting to interpolation techniques.
+### Learned Positional Embeddings
+
+In addition to sinusoidal positional embedding, (Vaswani et al. [2017] <d-cite key="46201"></d-cite>) also explored learned positional encoding. They explored using a set of trainable vectors $$p \in \mathbb{R}^{d \times L}$$ where $$L$$ represents the maximum sequence length as positional embeddings. This method was applied in the (BERT [2018] <d-cite key="devlin2018bert"></d-cite>) and (GPT [2019] <d-cite key="radford2019language"></d-cite>) models as an alternative to Sinusoidal positional encoding. However, it did not yield significant performance improvements over sinusoidal positional embedding. Moreover, the upper bound $$L$$ limited the method's ability to extrapolate to sequences longer than $$L$$ without using interpolation techniques. Also, it introduces more trainable parameters, which increases the model's size and computational cost.
 
 ## Relative Positional Embeddings
 
 Unlike absolute positional encodings, which create embeddings for each position independently, relative positional embeddings focus on capturing the pairwise relationships between tokens in a sequence. Also rather than directly adding the embeddings to the context vectors, the relative positional information is added to keys and values during the attention calculation. Hence - 
 
 $$
-\mathbf{q_m} = W_Q \:x_m \; \; \; \; \; \; \mathbf{k_n'} = W_K \:(x_n+ \tilde{p}_r^k)\; \; \; \; \; \; \mathbf{v_n'} = W_V \:(x_n+ \tilde{p}_r^v)
+\mathbf{q_m} = W_Q^T \:x_m \; \; \; \; \; \; \mathbf{k_n'} = W_K^T \:(x_n+ \tilde{p}_r^k)\; \; \; \; \; \; \mathbf{v_n'} = W_V^T \:(x_n+ \tilde{p}_r^v)
 $$
 
-where $$\tilde{\mathbf{p}}_r^k, \tilde{\mathbf{p}}_r^v \in \mathbb{R}^d$$ are trainable relative positional embeddings and $$r$$ represents the relative distance between the two tokens at positions $$m$$ and $$n$$.
+where $$\tilde{\mathbf{p}}_r^k, \tilde{\mathbf{p}}_r^v \in \mathbb{R}^d$$ are trainable relative positional embeddings and $$r$$ = clip(m-n, Rmin, Rmax)  represents the relative distance between the two tokens at positions $m$ and $n$. The maximum relative position is clipped, assuming a precise relative position is not useful beyond a certain distance. Further, clipping the maximum distance enables the model to extrapolate at inference time. However, this approach may not encode useful information about the absolute position of the token, which is useful in 2D tasks like Image Classification
+(Islam et al. [2019] <d-cite key="islam2019much"></d-cite>)
 
 ## Positional encoding in Vision Transformers
 
-Motivated by the success of transformers in processing one-dimensional textual data, Dosovitskiy et al. (2021) extended this approach to two-dimensional image data by introducing the Vision Transformer (ViT). In this seminal work, they proposed a scalable transformer architecture with minimal adjustments to handle image data. The authors explored several approaches to positional embeddings for 2D images, including standard 1D learnable positional encoding based on the raster order of patches, spatially-aware 2D learned positional encoding and relative positional encoding. Their experiments revealed a significant performance gap between models without positional embeddings and those using any form of positional encoding. Interestingly, they observed little to no difference in performance between the different methods of encoding positional information. They speculated that because the transformer encoder operates on patch-level inputs rather than individual pixels, how spatial information is encoded becomes less critical; however, as will be seen subsequently in our blog, more advanced positional methods proposed for 1-dimensional data also lead to better performance in ViTs.
+Motivated by the success of transformers in processing one-dimensional textual data, (Dosovitskiy et al. [2021] <d-cite key="50650"></d-cite>) extended this approach to two-dimensional image data by introducing the Vision Transformer (ViT). In this seminal work, they proposed a scalable transformer architecture with minimal adjustments to handle image data. The authors explored several approaches to positional embeddings for 2D images, including standard 1D learnable positional encoding based on the raster order of patches, spatially-aware 2D learned positional encoding and relative positional encoding. Their experiments revealed a significant performance gap between models without positional embeddings and those using any form of positional encoding. Interestingly, they observed little to no difference in performance between the different methods of encoding positional information. They speculated that because the transformer encoder operates on patch-level inputs rather than individual pixels, how spatial information is encoded becomes less critical; however, as will be seen subsequently in our blog, more advanced positional methods proposed for 1-dimensional data also lead to better performance in ViTs.
 
 ## Rotary Positional Embeddings
 
 Traditional positional encoding methods have primarily involved adding positional information directly to context embeddings. While this approach introduces a positional bias, it can limit the depth of interaction with attention weights, potentially underutilizing valuable relative position information. Additionally, since this information is added after the query-key multiplication, it does not contribute to the critical query-key similarity calculations that influence attention mechanisms.
 
-Enter RoFormer, which introduced a novel approach with *Rotary Positional Embeddings (RoPE)*. Unlike conventional methods that add positional encodings to word embeddings, RoPE applies a *rotary transformation* to encode relative position information. This approach encodes relative position information without hindering the interaction of query-key pairs.
+Then came (RoFormer [2021] <d-cite key="su2021roformer"></d-cite>), which introduced a novel approach with *Rotary Positional Embeddings (RoPE)*. Unlike conventional methods that add positional encodings to word embeddings, RoPE applies a *rotary transformation* to encode relative position information. This approach encodes relative position information without hindering the interaction of query-key pairs.
 
 ### The mechanism of RoPE
 
@@ -220,11 +224,11 @@ $$
 A'_{(n,m)} = \text{Re}[q^{'}_nk^{'*}_m] = \text{Re}[q_nk^*_me^{i(n−m)θ}] \;\;\;\;\;\;\;\;\;\;\;\;  \scriptstyle \text{where Re[z] is the real part of z}
 $$
 
-Hence the $$e^{i(n−m)θ}$$ in this formulation of attention is responsible injecting relative position of the tokens which are $$(n-m)$$ distance apart from each other. The formal derivation that it is a solution to equation formulated is detailed in RoFormer [2023]. Intuitively, we're rotating 2D query and key vectors in the embedding space based on their sequence position. For example, the vector corresponding to first token is rotated by θ, the second by 2θ, and so on. The approach of rotating according to the position provides several benefits as discussed below - 
+Hence the $$e^{i(n−m)θ}$$ in this formulation of attention is responsible injecting relative position of the tokens which are $$(n-m)$$ distance apart from each other. The formal derivation that it is a solution to equation formulated is detailed in (RoFormer [2021] <d-cite key="su2021roformer"></d-cite>). Intuitively, we're rotating 2D query and key vectors in the embedding space based on their sequence position. For example, the vector corresponding to first token is rotated by θ, the second by 2θ, and so on. The approach of rotating according to the position provides several benefits as discussed below - 
 
 {% include figure.html path="assets/img/2025-05-07-positional-embedding/RotaryPE1.png" class="img-fluid" %}
 <div class="caption">
-    Figure 4: Visualization of ALiBi's attention computation mechanism. The method introduces a head-specific linear bias matrix (right) that gets added element-wise to the standard query-key dot product attention scores (left). This bias injection occurs before the softmax operation, while preserving the remaining transformer architecture. The bias strength is controlled by a  $m$, which is predetermined for each attention head.
+    Fig. 2: Rotation of query, key vectors by $m\theta$ in 2D.
 </div>
 
 - **Stability of Vectors**: Adding tokens at the end of a sentence doesn’t affect the vectors for words at the beginning, facilitating efficient caching.
@@ -236,7 +240,7 @@ The idea of extending the 2D result to the d dimensional case is to break the em
 
 {% include figure.html path="assets/img/2025-05-07-positional-embedding/RotaryPE2.png" class="img-fluid" %}
 <div class="caption">
-    Figure 4: Visual representation of chunking of tokens and applying the rotation of different frequency $\theta_t$ on each chunk.
+    Figure 3: Visual representation of chunking of tokens and applying the rotation of different frequency $\theta_t$ on each chunk.
 </div>
 
 
@@ -295,15 +299,16 @@ $$
 
 $$
 
-we will be using this summarized notation to further define axial and mixed RoPE Positional Embeddings for ViT  in later sections.
+Where Hadamard product is the operation of taking element wise multiplication of corresponding matrices. We will be using this summarized notation to further define axial and mixed RoPE Positional Embeddings for ViT in later sections.
 
  
 
-Roformer has also shown that RoPE has *long-term decay*, meaning tokens with larger relative positional distances naturally exhibit weaker connections. This aligns intuitively with the idea that distant tokens should carry less influence on each other, improving context relevance. Additionally, RoPE enables *linear self-attention* models to incorporate relative positional embeddings, making it a versatile choice for efficient attention calculations. RoPE also enhances sequence length flexibility, allowing models to work with varying sequence lengths. However, RoPE’s extrapolation performance on sequence lengths much longer than those seen during training is somewhat limited.
+(RoFormer [2021] <d-cite key="su2021roformer"></d-cite>) has also shown that RoPE has *long-term decay*, meaning tokens with larger relative positional distances naturally exhibit weaker connections. This aligns intuitively with the idea that distant tokens should carry less influence on each other, improving context relevance. Additionally, RoPE enables *linear self-attention* models to incorporate relative positional embeddings, making it a versatile choice for efficient attention calculations. RoPE also enhances sequence length flexibility, allowing models to work with varying sequence lengths. However, RoPE’s extrapolation performance on sequence lengths much longer than those seen during training is somewhat limited.
 
 ## RoPE in Vision Trasformers
 
-Byeongho et al. described various method to extend the idea of rotary positional embeddings to 2 dimensional application in Vision Transformers. Two approaches namely “Axial 2D Rope” and “RoPE Mixed” are discussed in the paper.
+
+(Heo et al. [2024] <d-cite key="heo2024rotary"></d-cite>) described various method to extend the idea of rotary positional embeddings to 2 dimensional application in Vision Transformers. Two approaches namely “Axial 2D Rope” and “RoPE Mixed” are discussed in the paper.
 
 ### Axial 2D Rope
 
@@ -323,7 +328,7 @@ Note that frequencies $$\theta_t$$ for vision tasks are much larger than those u
 
 ### Mixed RoPE
 
-The axial frequencies are not able to handle diagonal directions since frequencies only depend on either x or y axes. As the relative positions in RoPE are embedded in the form of $$e^{i\theta_t(n-m)}$$ the relative positions are always interpretted as either $$e^{i\theta_t(p_n^x-p_m^x)}$$ or $$e^{i\theta_t(p_n^x-p_m^x)}$$, so the axial frequencies are not mixed in the axial direction.
+The axial frequencies are unable to handle diagonal directions since frequencies only depend on either $x$ or $y$ axes. As the relative positions in RoPE are embedded in the form of $$e^{i\theta_t(n-m)}$$ the relative positions are always interpretted as either $$e^{i\theta_t(p_n^x-p_m^x)}$$ or $$e^{i\theta_t(p_n^x-p_m^x)}$$, so the axial frequencies are not mixed in the axial direction.
 
 In order to cater for mixed frequencies, the new rotation matrix $$\textbf{R}$$ is proposed as -
 
@@ -333,11 +338,11 @@ $$
 
 Unlike 1D RoPE and axial frequency RoPE, Mixed RoPE doesn't define frequencies explicitly. Instead, it allows the network to learn frequencies $$(\theta_t^x,\theta_t^y)$$ for $$t \in \{0, 1, \cdots, d/2\}$$ , as these are treated as learnable parameters. Separate sets of frequencies are used per head per self attention layer.
 
-RoPE ViT introduces 2D Fourier analysis to interpret the difference between RoPE-Axial and RoPE-Mixed. Applying a 2D Fast Fourier Transform (FFT) to all frequencies, followed by an inverse FFT (iFFT), allows for the reconstruction of the input image. However, due to the limited number of frequencies used, the reconstruction isn't perfect. The quality of this reconstruction reflects the representation capabilities of the frequencies and how effectively they can inject 2D positional information.
+
 
 ---
 
-While RoPE tries to tackle the problems of Absolute and Learned positional encoding, another method that addresses this fundamental question in the realm of transformer models, i.e., “how to achieve extrapolation at inference time for sequences that are longer than those encountered during training,” is Alibi(Attention with linear bias) introduced by Press et al. [1] in their ICLR 2022 paper.
+While RoPE tries to tackle the problems of Absolute and Learned positional encoding, another method that addresses this fundamental question in the realm of transformer models, i.e., “how to achieve extrapolation at inference time for sequences that are longer than those encountered during training,” is Alibi(Attention with linear bias) introduced by (Press et al. [2021] <d-cite key="press2021train"></d-cite>).
 
 ## **Attention with Linear Biases (**Alibi)
 
@@ -347,7 +352,7 @@ Unlike RoPE's rotary approach, ALiBi introduces a novel mechanism for incorporat
 
 ALiBi operates by injecting positional information through a bias matrix added to the self-attention scores before the softmax operation. The magnitude of this bias is proportional to the distance between the query and key tokens, establishing an intrinsic relationship between position and attention strength. Mathematically, this transforms the standard attention computation by introducing a position-aware bias term.
 
-The architecture proposed by Press et al. specifically addresses autoregressive decoder-only scenarios, implementing causal attention through a lower-triangular matrix structure. This ensures that each token can only attend to its predecessors. The resulting attention pattern can be represented as:
+The architecture proposed by (Press et al. [2021] <d-cite key="press2021train"></d-cite>) specifically addresses autoregressive decoder-only scenarios, implementing causal attention through a lower-triangular matrix structure. This ensures that each token can only attend to its predecessors. The resulting attention pattern can be represented as:
 
 {% include figure.html path="assets/img/2025-05-07-positional-embedding/ALiBi1.png" class="img-fluid" %}
 <div class="caption">
@@ -366,7 +371,7 @@ This choice of slope values offers several benefits:
 
 ### Theoretical Foundation and Advantages
 
-The core principle behind ALiBi lies in *temporal relevance*—a systematic adjustment of attention values based on the positional distance between queries and keys. This mechanism introduces an inductive *recency bias*, which brings several advantages:
+The core principle behind ALiBi lies in *temporal relevance*—a systematic adjustment of attention values based on the positional distance between queries and keys. This mechanism introduces an inductive *recency bias*, which has several advantages:
 
 - **Proportional Penalties**: ALiBi applies penalties to attention scores based on the distance between tokens, with closer tokens receiving lower penalties and more attention.
 - **Enhanced Focus on Proximity**: The method imposes stronger penalization on distant token relationships, naturally biasing the model toward more relevant, nearby tokens.
@@ -374,90 +379,164 @@ The core principle behind ALiBi lies in *temporal relevance*—a systematic adju
 
 ### Performance and Extrapolation
 
-A standout feature of ALiBi is its remarkable ability to *extrapolate* to sequence lengths far beyond those seen during training. Unlike traditional positional encoding methods, ALiBi sustains robust performance even as sequence lengths grow significantly. This capability overcomes a fundamental limitation in standard transformer architectures, representing a major advancement in the scalability and adaptability of attention-based models.
+A standout feature of ALiBi is its remarkable ability to extrapolate to sequence lengths far beyond those seen during training. Unlike traditional positional encoding methods, ALiBi sustains robust performance even as sequence lengths grow significantly. This capability overcomes a fundamental limitation in standard transformer architectures, representing a major advancement in the scalability and adaptability of attention-based models.
 
 ## **Alibi in Vision Transformers**
 
-Building on ALiBi’s success with sequential data, researchers extended its application to two-dimensional image data in Vision Transformers (ViT). Translating ALiBi from 1D to 2D domains introduced technical challenges, notably adapting its causal attention mechanism for general self-attention and designing spatially aware 2D penalty metrics. These adjustments were crucial in enabling ALiBi to effectively capture spatial dependencies in images, pushing the boundaries of positional encoding within vision models.
+Building on ALiBi’s success with sequential data, researchers extended its application to two-dimensional image data in Vision Transformers (ViT). Translating ALiBi from 1D to 2D domains posed some challenges like adapting its causal attention mechanism for general self-attention and designing spatially aware 2D penalty metrics. These adjustments enabled ALiBi to effectively capture spatial dependencies in images, expanding what positional encoding can do in vision models.
 
 ### Two-Dimensional Adaptation
 
-The adaptation to 2D data, proposed by Fuller et al., introduced several key modifications to the original ALiBi framework:
+
+The adaptation to 2D data, proposed by (Fuller et al. [2021] <d-cite key="fuller2024croma"></d-cite>), introduced several key modifications to the original ALiBi framework:
 
 1. **Symmetric Attention Structure**: Unlike the lower triangular matrix in sequential processing, the 2D implementation employs a symmetric attention matrix, reflecting the bidirectional nature of spatial relationships in images.
 2. **Spatial Distance Metrics**: The linear distance penalty is replaced by a Euclidean metric that captures 2D spatial relationships between image patches: $$\text{distance_penalty} = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2} \cdot m$$ 
 where $$m$$ retains its role as a non-learnable head-specific parameter.
 
+{% include figure.html path="assets/img/2025-05-07-positional-embedding/2D_Alibi.png" class="img-fluid" %}
+
+<div class="caption">
+    Figure 5: Visualization of 2D ALiBi's attention computation mechanism.The bias matrix is now a symmetric matrix.
+</div>
+
 ## Comparative Analysis: RoPE and ALiBi
 
-These two approaches, while sharing certain fundamental principles, represent distinct philosophical approaches to positional encoding:
+These two approaches, while sharing certain fundamental principles, represent distinct philosophical approaches to positional encoding:
 
 ### Shared Characteristics
 
-- Both implement relative positional encoding
-- Both incorporate distance-dependent attention penalties
+- Both work on the principle of not adding positional encoding to word embedding, instead focusing on modifying the attention weights computed at every layer. This aligns with the thought that positional information and semantic information represent different things and that they should not be mixed.
+- Both incorporate distance-dependent attention penalties. Both have an inductive recency bias and work on the philosophy that the farther a token is from a given token, the less relevant it is.
 
 ### Key Distinctions
 
 1. **Mathematical Foundation**
-    - RoPE employs trigonometric transformations with theoretical guarantees
-    - ALiBi utilizes straightforward linear distance penalties
-2. **Embedding Philosophy**
-    - RoPE maintains separate vector spaces for positional and contextual information
-    - ALiBi eliminates explicit positional encodings in favor of attention-level biases
-
-3. **Extrapolation Strength**
-    - Alibi shows a strong extrapolation capability, while RoPE struggles to extrapolate well enough above a dozen tokens. Both demonstrate strong extrapolation capabilities
+    - RoPE employs trigonometric transformations with theoretical guarantees. It uses the embedding vector's rotation to capture positional information, while ALiBi utilizes straightforward linear distance penalties for encoding positional information.
+2. **Extrapolation Strength**
+    - Alibi demonstrates strong extrapolation capability, while RoPE struggles to extrapolate well enough above a dozen tokens based on what it has been trained on.
 
 ## Extrapolation via Interpolation
 
-While ALiBi remains the only positional encoding method to demonstrate successful extrapolation to sequence lengths far beyond those encountered during training, and has been adopted in models like MPT-7B, MPT-30B, BLOOM, and BloombergGPT, it hasn’t gained widespread traction. Many popular large language models (LLMs), like LLaMA and OPT, still use Rotary Positional Embeddings (RoPE) or learned positional embeddings instead. A primary reason is that ALiBi requires models to be trained from scratch, making it computationally prohibitive for large pre-trained models already utilizing RoPE or learned embeddings.
+While ALiBi remains the only positional encoding method to demonstrate successful extrapolation to sequence lengths far beyond those encountered during training and has been adopted in models like MPT-7B, MPT-30B, BLOOM, and (BloombergGPT [2023] <d-cite key="wu2023bloomberggpt"></d-cite>), it hasn’t gained widespread traction. Many popular large language models (LLMs), like (LLaMA [2023] <d-cite key="touvron2023llama"></d-cite>)
+and (OPT [2022] <d-cite key="zhang2022opt"></d-cite>), still use Rotary Positional Embeddings (RoPE) or learned positional embeddings instead. 
 
-To address this challenge, Chen et al. (2023) proposed a novel *position interpolation* approach to extend RoPE’s context window. They observed that directly extrapolating RoPE often led to exploding attention scores, which contradicts the expected recency bias inherent to RoPE. This issue arises because the theoretical upper bound proposed in RoFormer is loose, as Chen et al. (2023) elaborates. To tackle this exploding attention score issue, they proposed interpolating sequences longer than the longest sequence encountered during training. Mathematically for a pre-trained LLM with a context window of size $$L$$, we have the following formula for sequence of length $$L'$$  with $$L'> L$$ we have,
+To address this challenge, (Chen et al. [2023] <d-cite key="chen2023extending"></d-cite>) proposed a novel *position interpolation* approach to extend RoPE’s context window. They observed that directly extrapolating RoPE often led to exploding attention scores, which contradicts the expected recency bias inherent to RoPE. This issue arises because the theoretical upper bound proposed in (RoFormer [2021] <d-cite key="su2021roformer"></d-cite>) is loose, as (Chen et al. [2023] <d-cite key="chen2023extending"></d-cite>) elaborates. To tackle this exploding attention score issue, they proposed interpolating sequences longer than the longest sequence encountered during training. Mathematically for a pre-trained LLM with a context window of size $$L$$, we have the following formula for sequence of length $$L'$$  with $$L'> L$$ we have,
 
 $$
 \mathbf{f}'(\mathbf{x}, m) = \mathbf{f} \left( \mathbf{x}, \frac{mL}{L'} \right) .
 $$
 
-Thus, we reduce their position indices from $$[0, L') \to [0, L)$$  to match the original range of indices before computing RoPE. Consequently, as inputs to RoPE, the maximum relative distance between any two tokens is reduced from $$L' \to L$$. This alignment of ranges of position indices and relative distances before and after extension helps mitigate the effect on attention score computation due to context window extensions, which make the model easier to adapt.
+Here $f$ denotes the positional encoding function which takes the context vector $x$ and its position in the sequence $m$.
 
-[image here]
 
-Recent research on extending the context windows of pre-trained Large Language Models (LLMs) has predominantly focused on position interpolation using RoPE (Rotary et al.) due to widespread use in many pre-trained LLMs. At the same time, the Alibi positioning method has received comparatively less attention. A recent work by Faisal Al-Khateeb et al. proposed an innovative approach to position interpolation for Alibi that significantly differs from Chen et al.'s (2023) methodology. While Chen et al.'s scaling operation was motivated by the problem of exploding attention score magnitudes during extrapolation, Alibi presents a different challenge: it generates lower magnitude attention scores for tokens in the extrapolation regime than the interpolation regime. To address this, Al-Khateeb et al. introduced a dynamic slope scaling mechanism that adjusts the Alibi slope to amplify attention scores, effectively preventing the decrease in magnitudes beyond the training context length. This approach involves scaling the slopes by a factor of $$L/L'$$, where $$L$$ represents the maximum sequence length during training and $$L'$$ denotes the extended input sequence length during inference, expressed as $$m_j' = m_j(L/L')$$. Importantly, this slope scaling is only applied when $$L'$$ exceeds $$L$$, ensuring the model maintains its original performance for sequences within the training length.
+Thus, they reduce their position indices from $$[0, L') \to [0, L)$$  to match the original range of indices before computing RoPE. Consequently, as inputs to RoPE, the maximum relative distance between any two tokens is reduced from $$L' \to L$$. This alignment of ranges of position indices and relative distances before and after extension helps mitigate the effect on attention score computation due to context window extensions, which make the model easier to adapt.
 
-In the domain of computer vision, Dosovitskiy et al., in their seminal work on Vision Transformers, introduced a unique interpolation method to handle position embeddings during fine-tuning for higher-resolution images. Specifically, when adapting to higher resolutions, they maintained the original patch size, which increased the sequence length and caused pre-trained positional embeddings to lose spatial relevance. To address this, they applied 2D interpolation to the pre-trained position embeddings, preserving spatial relationships based on their original locations in the image. This approach differs from Chen et al., who performed interpolation at the level of position indices rather than on the embeddings themselves. It also aligns more closely with Al-Khateeb et al.'s rescaling technique, which similarly adjusts positional embeddings rather than simply rescaling indices for longer sequences.
+{% include figure.html path="assets/img/2025-05-07-positional-embedding/Interpolation.png" %}
+<div class="caption">
+    Figure 6: An illustration of Position Interpolation method in RoPE. Consider a LLM model pre-trained with a maximum sequence length of 2048 . The upper left shows normal LLM usage where position indices stay within pre-trained range. Upper right shows length extrapolation where models handle unseen positions up to 4096. Lower left shows Position Interpolation  we downscale position indices from [0, 4096] to [0, 2048], keeping them in the pretrained range.
+</div>
+ 
+Recent research on extending the context windows of pre-trained Large Language Models (LLMs) has predominantly focused on position interpolation using (RoFormer [2021] <d-cite key="su2021roformer"></d-cite>2021) due to widespread use in many pre-trained LLMs. At the same time, the ALiBi positioning method has received comparatively less attention. A recent work by (Faisal Al-Khateeb et al. [2023] <d-cite key="al2023position"></d-cite>) proposed an innovative approach to position interpolation for ALibi that significantly differs from (Chen et al. [2023] <d-cite key="chen2023extending"></d-cite>) methodology. While (Chen et al's. [2023] <d-cite key="chen2023extending"></d-cite>) scaling operation was motivated by the problem of exploding attention score magnitudes during extrapolation, ALibi presents a different challenge: it generates lower magnitude attention scores for tokens in the extrapolation regime than the interpolation regime. To address this, (Faisal Al-Khateeb et al. [2023] <d-cite key="al2023position"></d-cite>) introduced a dynamic slope scaling mechanism that adjusts the ALiBi slope to amplify attention scores, effectively preventing the decrease in magnitudes beyond the training context length. This approach involves scaling the slopes by a factor of $$L/L'$$, where $$L$$ represents the maximum sequence length during training and $$L'$$ denotes the extended input sequence length during inference, expressed as $$m_j' = m_j(L/L')$$. Importantly, this slope scaling is only applied when $$L'$$ exceeds $$L$$, ensuring the model maintains its original performance for sequences within the training length.
 
-Notably, Al-Khateeb et al.'s method requires no additional training or fine-tuning, whereas the approaches by Chen et al. and Dosovitskiy et al. involve fine-tuning the model on longer sequences for effective extrapolation.
+In the domain of computer vision, (Dosovitskiy et al. [2021] <d-cite key="50650"></d-cite>), in their seminal work on Vision Transformers, introduced a unique interpolation method to handle position embeddings during fine-tuning for higher-resolution images. Specifically, when adapting to higher resolutions, they maintained the original patch size, which increased the sequence length and caused pre-trained positional embeddings to lose spatial relevance. To address this, they applied 2D interpolation to the pre-trained position embeddings, preserving spatial relationships based on their original locations in the image. This approach differs from (Chen et al. [2023] <d-cite key="chen2023extending"></d-cite>), who performed interpolation at the level of position indices rather than on the embeddings themselves. It also aligns more closely with (Faisal Al-Khateeb et al's. [2023] <d-cite key="al2023position"></d-cite>) rescaling technique, which similarly adjusts positional embeddings rather than rescaling indices for longer sequences.
+
+Notably, (Faisal Al-Khateeb et al's. [2023] <d-cite key="al2023position"></d-cite>) method requires no additional training or fine-tuning, whereas the approaches by (Chen et al. [2023] <d-cite key="chen2023extending"></d-cite>) and (Dosovitskiy et al. [2021] <d-cite key="50650"></d-cite>) involve fine-tuning the model on longer sequences for effective extrapolation.
 
 ## Experimental Evaluation
 
-We conducted comprehensive experiments comparing four architectural variants:
+We conducted experiments comparing four architectural variants to empirically verify performance differences :
 
 1. Standard Vision Transformer
 2. Vision Transformer without positional encoding
 3. Vision Transformer with 2D mixed-frequency RoPE
 4. Vision Transformer with 2D ALiBi
 
-### Methodology
+### Experimental Details
 
-- Training duration: 90 epochs (approximately 45K steps)
-- Optimizer: AdamW with 5K step linear warmup
-- Learning rate: 1e-4 (cosine decay schedule)
-- Batch size: 256
-- Weight decay: 0.05
-- Data augmentation: Mixup, Cutmix, RandAugment, Random Erasing
-- Dataset: ImageNet-100 (subset with 100 classes, 130K images)
+We trained all our models using the following hyperparameter scheme and high performance training recipes <d-cite key="cubuk2020randaugment"></d-cite> <d-cite key="zhang2018mixup"></d-cite> <d-cite key="yun2019cutmix"></d-cite> <d-cite key="zhong2020random"></d-cite> <d-cite key="szegedy2016rethinking"></d-cite> :
+
+| **Hyperparameters**            | **Value**          |
+|--------------------------------|--------------------|
+| **Dataset**                    | ImageNet100        |
+| **Training Image Resolution**  | 224x224            |
+| **Number of Epochs**           | 100                |
+| **Number of Steps**            | 50K                |
+| **Number of Warmup Steps**     | 10K                |
+| **Warmup Schedule**            | Linear             |
+| **Optimizer**                  | AdamW              |
+| **Base Learning Rate**         | 1e-3               |
+| **Learning Rate Schedule**     | Cosine Decay       |
+| **Weight Decay**               | 0.05               |
+| **Optimizer Momentum**         | β1, β2 = 0.9, 0.999 |
+| **Batch Size**                 | 256                |
+| **RandAugment**                | (9, 0.5)           |
+| **Mixup**                      | 0.8                |
+| **Cutmix**                     | 1.0                |
+| **Random Erasing**             | 0.25               |
+| **Label Smoothing**            | 0.1                |
+ 
+### Initialisation Scheme:
+
+**CLS Token**: Initialized using a standard normal distribution with mean 0 and variance 0.02 across all variants. The low variance prevents large initial values, reducing the risk of training instability.
+
+**Patch Embedding**: We applied LeCun normal initialization for the convolutional patch embedding layer in all variants. Biases are initialized to 0, and weights use a truncated normal distribution based on input features.
+
+**Positional Embedding**: For the standard Vision Transformer, the learned positional embedding in raster order is initialized with a standard normal distribution mean 0 and variance 0.02.
+
+**Classification Head**: Both weights and biases in the final classification head are initialized to zero across all variants.
+
+**Multi-Head Attention Initialization**: Attention layers use a uniform distribution, with bounds determined by the hidden dimension.
+
+**MLP Blocks and Layer Norms**: Following PyTorch’s default initialization scheme:
+
+- Linear layers use Kaiming uniform initialization.
+- Layer normalization has weight initialized to 1 and bias to 0.
+
+## Results
+
+{% include figure.html path="assets/img/2025-05-07-positional-embedding/results.png" %}
+
+| Resolution | Standard Vision Transformer | Vision Transformer without positional encoding | Vision Transformer with 2D mixed-frequency RoPE | Vision Transformer with 2D ALiBi |
+|------------|------------------------------|---------------------------------------------|-------------------------------------------------|--------------------------------|
+| 96x96      | 18.80                        | 16.82                                     | 18.98                                          | 19.60                          |
+| 128x128    | 33.96                        | 30.84                                     | 32.92                                          | 36.44                          |
+| 160x160    | 44.10                        | 42.96                                     | 44.84                                          | 50.28                          |
+| 192x192    | 51.42                        | 49.22                                     | 51.60                                          | 55.84                          |
+| 224x224    | 55.48                        | 53.86                                     | 55.26                                          | 60.74                          |
+| 256x256    | 56.52                        | 55.80                                     | 57.98                                          | 61.52                          |
+| 288x288    | 57.14                        | 56.52                                     | 58.76                                          | 64.00                          |
+| 320x320    | 57.02                        | 55.86                                     | 59.84                                          | 64.62                          |
+| 352x352    | 56.48                        | 55.22                                     | 59.70                                          | 65.54                          |
+| 384x384    | 55.88                        | 54.16                                     | 58.92                                          | 65.76                          |
+| 416x416    | 55.20                        | 53.50                                     | 58.44                                          | 65.24                          |
+| 448x448    | 54.34                        | 52.40                                     | 57.86                                          | 64.24                          |
+| 480x480    | 53.42                        | 51.48                                     | 56.88                                          | 63.56                          |
+| 512x512    | 52.32                        | 49.80                                     | 55.62                                          | 62.20                          |
+
+**Note**:  Due to limited computational resources, we trained and evaluated our model on a subset of ImageNet-1k rather than the full dataset. It comprises 100 classes with approximately 130,000 images for training and 5,000 images across 50 classes for validation. Additionally, we trained our model for 100 epochs instead of the standard 300 epochs commonly used for Vision Transformers (ViTs). Consequently, our results differ from those obtained on the full ImageNet-1k dataset. 
+
+Further, we did not fine-tune the model on a higher sequence length. That is, all our results are for 0 shots. We extrapolated the Standard vision transformer using 2D interpolation, whereas RoPE and Alibi did not require interpolation techniques as they can handle sequences of variable length.All models were trained using 2 T4 GPUs, with the following training times:
+
+| Model | Training Time |
+|--------|--------------|
+| Standard Vision Transformer | 2 days 7 hours 47 minutes |
+| Vision Transformer without positional encoding | 2 days 8 hours 22 minutes |
+| Vision Transformer with 2D mixed-frequency RoPE | 2 days 10 hours 45 minutes |
+| Vision Transformer with 2D ALiBi | 2 days 8 hours 28 minutes |
 
 ### Key Findings
 
 1. Both ALiBi and RoPE demonstrate superior extrapolation capabilities compared to the baseline ViT.
-2. ALiBi exhibits better extrapolation performance over RoPE.
-3. ALiBi demonstrates computational efficiency advantages in training time.
+2. ALiBi exhibits better extrapolation performance over RoPE, similar to what has been observed in 1D data.
+3. ALiBi also offers computational efficiency, reducing training time.
 
 ## Conclusions
 
 Our analysis of positional encoding mechanisms in Transformer architectures highlights several key insights:
 
-1. The evolution of positional encoding and its critical role across diverse domains within Transformer architectures.
-2. The challenge of sequence length extrapolation and the effectiveness of RoPE and ALiBi in handling variable sequence lengths, especially in extended contexts.
-3. The adaptation of positional encoding from 1D to 2D tasks showcases ALiBi's practical advantages over RoPE in terms of computational efficiency and implementation simplicity.
+1. The evolution of positional encoding and its fundamental role across diverse domains within Transformer architectures.
+2. The sequence length extrapolation challenge, where RoPE and ALiBi demonstrate particular effectiveness in handling variable sequence lengths, especially in extended contexts.
+3. The adaptation of positional encoding from 1D to 2D tasks, where ALiBi shows practical advantages over RoPE in computational efficiency and implementation simplicity.
+4. The application of interpolation techniques to enhance the extrapolation capabilities of both RoPE and ALiBi positional encoding methods.
+5. The empirical validation of RoPE and ALiBi positional encoding in standard Vision Transformers.
