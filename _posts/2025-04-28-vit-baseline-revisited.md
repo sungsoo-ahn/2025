@@ -36,6 +36,11 @@ toc:
   - name: Implication
   - name: Conclusion
 
+_styles: >
+  .CenteringContainer div {
+      margin: 10px auto;
+      width: 80%;
+  }
 ---
 
 *Adapted and expanded from [EIFY/mup-vit](https://github.com/EIFY/mup-vit).*
@@ -51,7 +56,7 @@ which uses transformer architecture that is already dominating the field of lang
 With competitive performance, ViT is now widely adapted not only for CV tasks, but also as a component
 for vision-language models <d-cite key="radford2021learning"></d-cite>.
 
-{% include figure.html path="assets/img/2025-04-28-vit-baseline-revisited/model_scheme.png" class="img-fluid" %}
+<img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/model_scheme.png" class="img-fluid" width="auto" height="auto">
 <div class="caption">
     ViT architecture. Images are divided into square patches, which are then linearly projected into
     tokens. After adding position embedding, the tokens are fed to the pre-norm transformer encoder.
@@ -111,9 +116,34 @@ most of the parameters to match that of the first-party implementation from Big 
 
     To conform with [`jax.nn.initializers.xavier_uniform()` used by the first-party implementation from Big Vision](https://github.com/google-research/big_vision/blob/ec86e4da0f4e9e02574acdead5bd27e282013ff1/big_vision/models/vit.py#L93), both are re-initialized with samples from uniform distribution $\mathcal{U}(-a, a)$ where $$a = \sqrt{\frac{3}{\text{hidden_dim}}}$$ <d-footnote>Note that the standard deviation of uniform distribution $\mathcal{U}(-a, a)$ is $$\frac{a}{\sqrt{3}}$$ So this is also the correct initialization for preserving the input scale assuming that the input features are uncorrelated.</d-footnote>.
 
-2. `torch.nn.Conv2d`: PyTorch's own `nn.init.trunc_normal_()` doesn't take the effect of truncation on stddev into account, so I used [the magic factor](https://github.com/google/jax/blob/1949691daabe815f4b098253609dc4912b3d61d8/jax/_src/nn/initializers.py#L334) from the JAX repo to re-initialize the patchifying `nn.Conv2d`.
+2. `torch.nn.Conv2d`: Linear projection of flattened patches can be done with 2D convolution, namely
+   [`torch.nn.Conv2d` initialized with `in_channels = 3`, `out_channels = hidden_dim`, and both `kernel_size`
+   and `stride` set to `patch_size` in PyTorch](https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html).
+   `torch.nn.Conv2d`, however, defaults to weight and bias initialization with uniform distribution
+   $\mathcal{U}(-a, a)$ where $$a = \sqrt{\frac{1}{\text{fan_in}}}$$ instead of Big Vision's Lecun normal
+   (truncated normal) initialization <d-cite key="klambauer2017self"></d-cite> for weight and zero-init for bias.
+   Furthermore, [PyTorch's own `nn.init.trunc_normal_()`](https://pytorch.org/docs/stable/nn.init.html#torch.nn.init.trunc_normal_)
+   doesn't take the effect of truncation on standard deviation into account unlike [the JAX implementation](https://github.com/google/jax/blob/1949691daabe815f4b098253609dc4912b3d61d8/jax/_src/nn/initializers.py#L334), so we have to implement the correction ourselves:
 
-After 1 and 2 all of the summary statistics of the model parameters match that of the reference implementation at initialization.
+   <div class="CenteringContainer">
+     <div>
+       <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/truncated_normal.png" class="img-fluid" width="auto" height="auto">
+     </div>
+   </div>
+
+   <div class="caption">
+     Unit normal distribution has standard deviation $\sigma = 1$, but after truncating at $\pm 2$
+     the standard deviation is reduced to $\sigma = 0.880$. To restore unit standard deviation, one
+     needs to sample $\mathcal{N}(0, \sigma = \frac{1}{.880})$ instead and truncate at $\pm 2 \sigma$.
+   </div>
+
+3. `torch.nn.Linear` for the classification head: Specifically for the classification head, Big Vision
+   usually zero-init both the weight and bias for the linear layer, including the ViT-S/16 in question.
+   Notably, neither [`simple_vit.py`](https://github.com/lucidrains/vit-pytorch/blob/141239ca86afc6e1fe6f4e50b60d173e21ca38ec/vit_pytorch/simple_vit.py#L108) nor [`simple_flash_attn_vit.py`](https://github.com/lucidrains/vit-pytorch/blob/141239ca86afc6e1fe6f4e50b60d173e21ca38ec/vit_pytorch/simple_flash_attn_vit.py#L162) from vit-pytorch does this.
+
+After fixing 1-3, we verify that all of the per-layer summary statistics including minimum, maximum,
+mean, and standard deviation of the 21,974,632 model parameters at initialization match that of the
+Big Vision first-party implementation.
 
 ### RandAugment
 
