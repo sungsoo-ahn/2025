@@ -65,6 +65,12 @@ _styles: >
 
 Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling.
 
+## Code
+
+The anonymized code to reproduce the results included into this blogpost can be found in the following repository: 
+
+[anonymous.4open.science/r/teacher-student-BB2ftbMaCJfRG3JXbE9PhYoiqCzwVims](https://anonymous.4open.science/r/teacher-student-BB2ftbMaCJfRG3JXbE9PhYoiqCzwVims/)
+
 ## Equations
 
 This theme supports rendering beautiful math in inline and display modes using [MathJax 3](https://www.mathjax.org/) engine.
