@@ -147,6 +147,18 @@ Big Vision first-party implementation.
 
 ### RandAugment
 
+Following <d-cite key="beyer2022better"></d-cite>, we train the model with batch size 1024, training
+budget 90 epochs = round(1281167 / 1024 * 90) = 112603 steps, 10000 warm-up steps, cosine learning
+rate decay, 1e-3 maximum learning rate, 1e-4 decoupled weight decay <d-cite key="adamw-decoupling-blog"></d-cite>
+(0.1 in PyTorch's parameterization before multiplying by the learning rate), AdamW optimizer, Inception
+crop with 5%-100% of the area of the original image ("scale"), random horizontal flips,
+RandAugment <d-cite key="NEURIPS2020_d85b63ef"></d-cite> with [`num_ops = 2` and `magnitude = 10`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandAugment.html),
+and Mixup <d-cite key="zhang2018mixup"></d-cite> with [`alpha = 0.2`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.MixUp.html).
+We also notice that the Big Vision implementation "normalizes" the image with mean = std = (0.5, 0.5, 0.5)
+([`value_range(-1, 1)`](https://github.com/google-research/big_vision/blob/46b2456f54b9d4f829d1925b78943372b376153d/big_vision/configs/vit_s16_i1k.py#L52))
+and uses [the same neutral RGB value as the fill value for RandAugment](https://github.com/google-research/big_vision/blob/46b2456f54b9d4f829d1925b78943372b376153d/big_vision/pp/archive/autoaugment.py#L676)
+and make sure that our reproduction conforms to this training setup.
+
 ### Inception crop
 
 ### Big Vision miscellaneous
