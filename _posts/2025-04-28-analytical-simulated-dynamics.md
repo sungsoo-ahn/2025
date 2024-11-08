@@ -65,6 +65,20 @@ _styles: >
 
 Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling.
 
+## Abstract
+
+TODO:
+- place the framework in the broader context of DL theory
+- describe the (dis)advantages of this approach to other DL theory approaches:
+  - assumptions on data distribution
+  - asymptotic in the input data dimension
+- temporally describe the history: S&S, Goldt, etc. including HMM
+- inventorize its use in modelling contexts: Andrew, Lenka, Cenghiz, that meta-learning paper
+- implementation details and code framework
+  - demo Goldt
+  - stretch: demo Lee
+- frontiers of modelling: research ideas for what to model next
+
 ## Code
 
 The anonymized code to reproduce the results included into this blogpost can be found in the following repository: 
