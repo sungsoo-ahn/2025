@@ -101,4 +101,4 @@ I see a future with the AI Entrepreneur in it. I think arguing over whether this
 
 ## Acknowledgments
 
-Thank you to Sean Peari, Kyrylo Kalashnikov, Aman Bhargava, and Alexander Detkov for reading and providing feedback on initial drafts of this post.
+Thank you to [anonymized, anonymized, anonymized, and anonymized] for reading and providing feedback on initial drafts of this post.
