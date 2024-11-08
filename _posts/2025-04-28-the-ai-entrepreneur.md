@@ -2,7 +2,7 @@
 layout: distill
 title: The AI Entrepreneur
 description: This blog post introduces the concept of “The AI Entrepreneur,” a future artificial intelligence system capable of founding, operating, and scaling a successful company. Unlike loftier end-goals of AGI such as novel scientific discovery or recursive self-improvement, entrepreneurship is practical, concrete, and well-suited to the current deep learning paradigm. Beyond feasibility, the AI Entrepreneur illuminates novel approaches to the alignment problem. By embedding an advanced AI in economic, legal, and governmental structures, we unlock advanced societal levers of control. A roadmap is sketched in broad strokes, and the primary difficulties with developing such a system are identified. Overall, this vision reframes conversations on AGI, moving from ill-defined notions of “true intelligence” to practical, impactful systems that amplify human ingenuity, reshape the startup ecosystem, and make the world a better place.
-date: 2025-05-07
+date: 2025-04-28
 future: true
 htmlwidgets: true
 hidden: false
@@ -15,7 +15,7 @@ authors:
   - name: Anonymous
 
 # must be the exact same name as your blogpost
-bibliography: 2025-05-07-the-ai-entrepreneur.bib 
+bibliography: 2025-04-28-the-ai-entrepreneur.bib 
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
