@@ -3,7 +3,7 @@ layout: distill
 title: Is MAPPO All You Need in Multi-Agent Reinforcement Learning?
 description: Multi-agent Proximal Policy Optimization (MAPPO), a very classic multi-agent reinforcement learning algorithm, is generally considered to be the simplest yet most powerful algorithm. MAPPO utilizes global information to enhance the training efficiency of a centralized value function, whereas Independent Proximal Policy Optimization (IPPO) only uses local information to train independent value functions. In this work, we discuss the history and origins of MAPPO and discover a startling fact, MAPPO does not outperform IPPO. IPPO achieves better performance than MAPPO in complex scenarios like the StarCraft Multi-Agent Challenge (SMAC). Furthermore, the global information can also help improve the training of IPPO. In other words, IPPO with global information (Multi-agent IPPO) is all you need.
 
-date: 2025-05-07
+date: 2025-04-28
 future: true
 htmlwidgets: true
 
@@ -26,7 +26,7 @@ authors:
 #       name: IAS, Princeton
 
 # must be the exact same name as your blogpost
-bibliography: 2025-05-07-is-mappo-all-you-need.bib  
+bibliography: 2025-04-28-is-mappo-all-you-need.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -142,7 +142,7 @@ MAPPO is often regarded as the simplest yet most powerful algorithm due to its u
 We use the StarCraft Multi-Agent Challenge (SMAC) <d-cite key="samvelyan2019starcraft"></d-cite> as our benchmark. SMAC uses the real-time strategy game StarCraft as its environment. In SMAC, each agent controls a unit in the game (e.g. marines, medics, zealots). The agents need to learn to work together as a team to defeat the enemy units, which are controlled by the built-in StarCraft AI, as shown in Figure (a):
 
 <div class="center"> 
-{% include figure.html path="assets/img/2025-05-07-is-mappo-all-you-need/smac.jpg" class="img-fluid width1" %}
+{% include figure.html path="assets/img/2025-04-28-is-mappo-all-you-need/smac.jpg" class="img-fluid width1" %}
 </div>
 <div class="caption">
     (a) The StarCraft Multi-Agent Challenge (SMAC).
@@ -318,21 +318,21 @@ We then reproduced some of the experimental results from IPPO, MAPPO, and Noisy-
 We also cite the experimental results from these papers themselves below,
 
 <div class="center"> 
-{% include figure.html path="assets/img/2025-05-07-is-mappo-all-you-need/ippo.jpg" class="img-fluid width1" %}
+{% include figure.html path="assets/img/2025-04-28-is-mappo-all-you-need/ippo.jpg" class="img-fluid width1" %}
 </div>
 <div class="caption">
     (c) IPPO vs MAPPO results for SMAC (from the Figure 2 in <d-cite key="de2020independent"></d-cite>), the data in the table represents the win rate.
 </div>
 
 <div class="center"> 
-{% include figure.html path="assets/img/2025-05-07-is-mappo-all-you-need/mappo.jpg" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-is-mappo-all-you-need/mappo.jpg" class="img-fluid" %}
 </div>
 <div class="caption">
     (d) MAPPO-FP (i.e., FP) vs MAPPO (i.e., CL) results for SMAC (from the Figure 16 in <d-cite key="yu2022surprising"></d-cite>).
 </div>
 
 <div class="center"> 
-{% include figure.html path="assets/img/2025-05-07-is-mappo-all-you-need/noisy.jpg" class="img-fluid width2" %}
+{% include figure.html path="assets/img/2025-04-28-is-mappo-all-you-need/noisy.jpg" class="img-fluid width2" %}
 </div>
 <div class="caption">
     (e) Noisy-MAPPO (i.e., NV-MAPPO) vs MAPPO results for SMAC (from the Figure 4 in <d-cite key="hu2021policy"></d-cite>).
