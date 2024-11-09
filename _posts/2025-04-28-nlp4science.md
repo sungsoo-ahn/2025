@@ -11,7 +11,6 @@ hidden: false
 authors:
   - name: Anonymous
 
-
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-nlp4science.bib  
 
