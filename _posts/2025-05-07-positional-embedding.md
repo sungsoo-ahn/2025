@@ -123,7 +123,7 @@ where $$W_O \in \mathbb{R}^{hd_k \times d}$$ is a learned matrix that maps the c
 
 ## Absolute Positional Embeddings
 
-Absolute Positional embedding was introduced by (Vaswani et al. <d-cite key="46201"></d-cite>) in their famous 2017 paper "Attention is All You Need". It involves the direct addition of positional embeddings into the embedding vector. These encodings are injected only once in the embedding vector before passing them into the transformer block. Mathematically, it’s equivalent to 
+Absolute Positional embedding was introduced by (Vaswani et al. [2017] <d-cite key="46201"></d-cite>) in their famous 2017 paper "Attention is All You Need". It involves the direct addition of positional embeddings into the embedding vector. These encodings are injected only once in the embedding vector before passing them into the transformer block. Mathematically, it’s equivalent to 
 
 $$
 x'_i := x_i + p_i
@@ -422,7 +422,7 @@ These two approaches, while sharing certain fundamental principles, represent d
 
 ## Extrapolation via Interpolation
 
-While ALiBi remains the only positional encoding method to demonstrate successful extrapolation to sequence lengths far beyond those encountered during training (Fuller et al. [2023] <d-cite key="fuller2024croma"></d-cite>),  and has been adopted in models like MPT-7B, MPT-30B, BLOOM, and BloombergGPT (Wu et al. [2023] <d-cite key="wu2023bloomberggpt"></d-cite>), it hasn’t gained widespread traction. Many popular large language models (LLMs), like LLaMA (Touvron et al. [2023] <d-cite key="touvron2023llama"></d-cite>)
+While ALiBi remains the only positional encoding method to demonstrate successful extrapolation to sequence lengths far beyond those encountered during training (Fuller et al. [2023] <d-cite key="fuller2024croma"></d-cite>),  and has been adopted in models like MPT-7B (MosaicML NLP Team [2023] <d-cite key="mosaicml2023introducing"></d-cite>), MPT-30B, BLOOM (Scao et al. [2023] <d-cite key="le2023bloom"></d-cite>), and BloombergGPT (Wu et al. [2023] <d-cite key="wu2023bloomberggpt"></d-cite>), it hasn’t gained widespread traction. Many popular large language models (LLMs), like LLaMA (Touvron et al. [2023] <d-cite key="touvron2023llama"></d-cite>)
 and OPT (Zhang et al. [2022] <d-cite key="zhang2022opt"></d-cite>), still use Rotary Positional Embeddings (RoPE) or learned positional embeddings instead. 
 
 To address this challenge, (Chen et al. [2023] <d-cite key="chen2023extending"></d-cite>) proposed a novel *position interpolation* approach to extend RoPE’s context window. They observed that directly extrapolating RoPE often led to exploding attention scores, which contradicts the expected recency bias inherent to RoPE. This issue arises because the theoretical upper bound proposed in RoFormer (Su et al. [2021] <d-cite key="su2021roformer"></d-cite>) is loose, as (Chen et al. [2023] <d-cite key="chen2023extending"></d-cite>) elaborate. To tackle this exploding attention score issue, they proposed interpolating sequences longer than the longest sequence encountered during training. Mathematically for a pre-trained LLM with a context window of size $$L$$, we have the following formula for sequence of length $$L'$$  with $$L'> L$$ we have,
@@ -445,7 +445,7 @@ Recent research on extending the context windows of pre-trained Large Language M
 
 In the domain of computer vision, (Dosovitskiy et al. [2021] <d-cite key="50650"></d-cite>), in their work on Vision Transformers, introduced a unique interpolation method to handle position embeddings during fine-tuning for higher-resolution images. Specifically, when adapting to higher resolutions, they maintained the original patch size, which increased the sequence length and caused pre-trained positional embeddings to lose spatial relevance. To address this, they applied 2D interpolation to the pre-trained position embeddings, preserving spatial relationships based on their original locations in the image. This approach differs from that of (Chen et al. [2023] <d-cite key="chen2023extending"></d-cite>), who performed interpolation at the level of position indices rather than on the embeddings themselves. It also aligns more closely with (Faisal Al-Khateeb et al's. [2023] <d-cite key="al2023position"></d-cite>) rescaling technique, which similarly adjusts positional embeddings rather than rescaling indices for longer sequences.
 
-Notably, (Faisal Al-Khateeb et al's. [2023] <d-cite key="al2023position"></d-cite>) method requires no additional training or fine-tuning, whereas the approaches by (Chen et al. [2023] <d-cite key="chen2023extending"></d-cite>) and (Dosovitskiy et al. [2021] <d-cite key="50650"></d-cite>) involve fine-tuning the model on longer sequences for effective extrapolation.
+Notably, the method proposed by (Faisal Al-Khateeb et al's. [2023] <d-cite key="al2023position"></d-cite>) required no additional training or fine-tuning. In contrast the approaches proposed by (Chen et al. [2023] <d-cite key="chen2023extending"></d-cite>) and (Dosovitskiy et al. [2021] <d-cite key="50650"></d-cite>) involved fine-tuning the model on longer sequences for effective extrapolation.
 
 ## Experimental Evaluation
 
