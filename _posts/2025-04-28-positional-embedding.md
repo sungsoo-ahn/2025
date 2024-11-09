@@ -3,7 +3,7 @@ layout: distill
 title: 'Positional Embeddings in Transformer Models: Evolution from Text to Vision Domains'
 description: Positional encoding has become an essential element in transformer models, addressing their fundamental property of permutation invariance and allowing them to understand sequential relationships within data. This blog post examines positional encoding techniques, emphasizing their vital importance in traditional transformers and their use with 2D data in Vision Transformers (ViT). We explore two contemporary methods—ALiBi (Attention with Linear Biases) and RoPE (Rotary Position Embedding)—analyzing their unique approaches to tackling the challenge of sequence length extrapolation during inference, a significant issue for transformers. Additionally, we compare these methods' fundamental similarities and differences, assessing their impact on transformer performance across various fields. We also look into how interpolation strategies have been utilized to enhance the extrapolation capabilities of these methods; we conclude this blog with an empirical comparison of ALiBi and RoPE in Vision Transformers. To our knowledge, this represents the first direct comparison of these positional encoding methods with those used in standard Vision Transformers.
 
-date: 2025-05-07
+date: 2025-04-28
 future: true
 htmlwidgets: true
 hidden: false
@@ -16,7 +16,7 @@ authors:
   - name: anonymous
 
 # must be the exact same name as your blogpost
-bibliography: 2025-05-07-positional-embedding.bib  
+bibliography: 2025-04-28-positional-embedding.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -143,7 +143,7 @@ $$
 where $$p_{i,t}$$ is the  $$t^{th}$$ element in the $$p_i$$ vector.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-05-07-positional-embedding/sinusoidal.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-04-28-positional-embedding/sinusoidal.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
 <div class="caption">
     Figure 1: Plot of sinusoidal positional embeddings, $i$ (position in sequence) vs $t$ (index in embedding vector). Each vertical strip can be seen as an absolute position embedding vector to be added.
@@ -226,7 +226,7 @@ $$
 
 Hence the $$e^{i(n−m)θ}$$ in this formulation of attention is responsible injecting relative position of the tokens which are $$(n-m)$$ distance apart from each other. The formal derivation that it is a solution to equation formulated is detailed in RoFormer (Su et al. [2021] <d-cite key="su2021roformer"></d-cite>). Intuitively, we're rotating 2D query and key vectors in the embedding space based on their sequence position. For example, the vector corresponding to first token is rotated by θ, the second by 2θ, and so on. The approach of rotating according to the position provides several benefits as discussed below - 
 
-{% include figure.html path="assets/img/2025-05-07-positional-embedding/RotaryPE1.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-positional-embedding/RotaryPE1.png" class="img-fluid" %}
 <div class="caption">
     Fig. 2: Rotation of query, key vectors by $m\theta$ in 2D.
 </div>
@@ -238,7 +238,7 @@ Hence the $$e^{i(n−m)θ}$$ in this formulation of attention is responsible inj
 
 The idea of extending the 2D result to the d dimensional case is to break the embedding vector in various 2 dimensional chunks and rotate each one of them by a specific angle $$m\theta_i$$ where m depends on the position of token in the sequence and $$\theta_i$$ varies according to the chunk. This can be intuitively thought of as a corkscrew rotation in higher dimensions.
 
-{% include figure.html path="assets/img/2025-05-07-positional-embedding/RotaryPE2.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-positional-embedding/RotaryPE2.png" class="img-fluid" %}
 <div class="caption">
     Figure 3: Visual representation of chunking of tokens and applying the rotation of different frequency $\theta_t$ on each chunk.
 </div>
@@ -354,7 +354,7 @@ ALiBi operates by injecting positional information through a bias matrix added t
 
 The architecture proposed by (Press et al. [2021] <d-cite key="press2021train"></d-cite>) specifically addresses autoregressive decoder-only scenarios, implementing causal attention through a lower-triangular matrix structure. This ensures that each token can only attend to its predecessors. The resulting attention pattern can be represented as shown in the figure
 
-{% include figure.html path="assets/img/2025-05-07-positional-embedding/ALiBi1.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-positional-embedding/ALiBi1.png" class="img-fluid" %}
 <div class="caption">
     Figure 4: Visualization of ALiBi's attention computation mechanism. The method introduces a head-specific linear bias matrix (right) that gets added element-wise to the standard query-key dot product attention scores (left). This bias injection occurs before the softmax operation, while preserving the remaining transformer architecture. The bias strength is controlled by a  $m$, which is predetermined for each attention head.
 </div>
@@ -398,7 +398,7 @@ $$
 
    where $$m$$ retains its role as a non-learnable head-specific parameter.
 
-{% include figure.html path="assets/img/2025-05-07-positional-embedding/2D_Alibi.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-positional-embedding/2D_Alibi.png" class="img-fluid" %}
 
 <div class="caption">
     Figure 5: Visualization of 2D ALiBi's attention computation mechanism.The bias matrix is now a symmetric matrix.
@@ -436,7 +436,7 @@ Here $f$ denotes the positional encoding function which takes the context vector
 
 Thus, they reduce their position indices from $$[0, L') \to [0, L)$$  to match the original range of indices before computing RoPE. Consequently, as inputs to RoPE, the maximum relative distance between any two tokens is reduced from $$L' \to L$$. This alignment of ranges of position indices and relative distances before and after extension helps mitigate the effect on attention score computation due to context window extensions, which make the model easier to adapt.
 
-{% include figure.html path="assets/img/2025-05-07-positional-embedding/Interpolation.png" %}
+{% include figure.html path="assets/img/2025-04-28-positional-embedding/Interpolation.png" %}
 <div class="caption">
     Figure 6: An illustration of the Position Interpolation method in RoPE. Consider a LLM model pre-trained with a maximum sequence length of 2048. The upper left shows normal LLM usage where position indices stay within the pre-trained range. The upper right shows length extrapolation where models handle unseen positions up to 4096. The lower left shows Position Interpolation, where we downscale position indices from [0, 4096] to [0, 2048], keeping them in the pre-trained range.
 </div>
@@ -499,7 +499,7 @@ We trained all our models using the following hyperparameter scheme and high per
 
 ## Results
 
-{% include figure.html path="assets/img/2025-05-07-positional-embedding/results.png" %}
+{% include figure.html path="assets/img/2025-04-28-positional-embedding/results.png" %}
 
 | Resolution | Standard Vision Transformer | Vision Transformer without positional encoding | Vision Transformer with 2D mixed-frequency RoPE | Vision Transformer with 2D ALiBi |
 |------------|------------------------------|---------------------------------------------|-------------------------------------------------|--------------------------------|
