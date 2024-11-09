@@ -308,6 +308,50 @@ defaults to 100 attempts.
 [`tf.image.sample_distorted_bounding_box()`](https://www.tensorflow.org/api_docs/python/tf/image/sample_distorted_bounding_box) samples the crop height uniformly given the aspect ratio and area range.
 4. If all attempts fail, [`v2.RandomResizedCrop()`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandomResizedCrop.html) at least crops the image to make sure that the aspect ratio falls within range before resizing. [`tf.image.sample_distorted_bounding_box()`](https://www.tensorflow.org/api_docs/python/tf/image/sample_distorted_bounding_box) just returns the whole image to be resized.
 
+We can verify this by taking stats of the crop sizes given the same image. Here is the density plot of
+(h, w) returned by `v2.RandomResizedCrop.get_params(..., scale=(0.05, 1.0), ratio=(3/4, 4/3))`,
+given an image of (height, width) = (256, 512), N = 10000000:
+
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/torch_hw_counts.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+There is a total of 14340 crop failures resulting in a bright pixel at the bottom right, but otherwise
+the density is roughly uniform. In comparison, here is what `tf.image.sample_distorted_bounding_box(..., area_range=[0.05, 1])` returns:
+
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/tf_hw_counts.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+While cropping never failed, we can see clearly that it's oversampling smaller crop areas, as if there
+were light shining from top-left ([notebook](https://github.com/EIFY/mup-vit/blob/e35ab281acb88f669b18555603d9187a194ccc2f/notebooks/InceptionCropStats.ipynb)).
+We replicate `tf.image.sample_distorted_bounding_box()`'s sampling logic in PyTorch and rerun the experiment by
+training a model with it for 90 epochs. At last, both the gradient L2 norm and the training loss match:
+
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/inception_crop_l2_grads_match.png" class="img-fluid" width="auto" height="auto">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/inception_crop_training_loss_match.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+This true reproduction model reaches 76.94% top-1 validation set accuracy after 90 epochs. In summary:
+
+| Model | Top-1 val acc. |
+|:-------------:|:-------------:|
+| Reference | 76.7% |
+| Same ViT init. in PyTorch | 76.91% |
+| + Same RandAugment | **77.27%** |
+| + Same Inception Crop | 76.94% |
+
+Before we move on: Which implementation is correct? While the reference implementation of the Inception crop
+is not publicly available to our best knowledge, here is the relevant excerpt from the paper <d-cite key="szegedy2015going"></d-cite>:
+
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/Inception_crop_paper_excerpt.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+While there is some ambiguity in whether aspect ratio should be sampled uniformly in log space or
+linear space, it is clear from the description that crop size should be sampled uniformly in crop area.
+
 ### Big Vision miscellaneous
 
 ## Corrected reproduction
