@@ -104,7 +104,6 @@ An example of pulling from a timeline:
 
 For more details on using the plugin visit: [jekyll-twitter-plugin](https://github.com/rob-murray/jekyll-twitter-plugin)
 
-***
 
 ## Blockquotes
 
@@ -113,5 +112,4 @@ For more details on using the plugin visit: [jekyll-twitter-plugin](https://gith
     —Anais Nin
 </blockquote>
 
-***
 
