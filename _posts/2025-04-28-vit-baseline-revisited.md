@@ -35,15 +35,9 @@ toc:
   - name: Corrected reproduction
   - name: Implication
   - name: Conclusion
-
-_styles: >
-  .CenteringContainer div {
-      margin: 10px auto;
-      width: 80%;
-  }
 ---
 
-*Adapted and expanded from [EIFY/mup-vit](https://github.com/EIFY/mup-vit).*
+*Edited and expanded from [EIFY/mup-vit/README.md](https://github.com/EIFY/mup-vit).*
 
 ## Introduction
 
@@ -56,7 +50,9 @@ which uses transformer architecture that is already dominating the field of lang
 With competitive performance, ViT is now widely adapted not only for CV tasks, but also as a component
 for vision-language models <d-cite key="radford2021learning"></d-cite>.
 
-<img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/model_scheme.png" class="img-fluid" width="auto" height="auto">
+<div class="caption">
+    <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/model_scheme.png" class="img-fluid" width="auto" height="auto">
+</div>
 <div class="caption">
     ViT architecture. Images are divided into square patches, which are then linearly projected into
     tokens. After adding position embedding, the tokens are fed to the pre-norm transformer encoder.
@@ -69,7 +65,7 @@ and relies more on model regularization or data augmentation, especially at smal
 It is therefore particularly notable that Beyer et al. published a short note claiming that ViT-S/16
 can achieve better metrics on the ImageNet-1k dataset than ResNet-50 <d-cite key="beyer2022better"></d-cite>.
 With manageable compute requirement and open-sourced Big Vision repo <d-cite key="big_vision"></d-cite>
-for first-party reproduction, we decide to reproduce it in the PyTorch <d-cite key="Ansel_PyTorch_2_Faster_2024"></d-cite>
+as the reference implementation, we decide to reproduce it in the PyTorch <d-cite key="Ansel_PyTorch_2_Faster_2024"></d-cite>
 ecosystem as the entry point to ViT research.
 
 | Model         | Layers        | Width | MLP        | Heads           | Params  |
@@ -104,7 +100,7 @@ backward compatibility. </d-footnote>, so we decide to implement our own.
 ### ViT initialization
 
 It turns out that even building simple ViT from built-in modules from PyTorch requires reinitializing
-most of the parameters to match that of the first-party implementation from Big Vision, including:
+most of the parameters to match that of the Big Vision reference implementation, including:
 
 1. `torch.nn.MultiheadAttention`
 
@@ -114,7 +110,7 @@ most of the parameters to match that of the first-party implementation from Big 
 
     * `out_proj.weight`:  Furthermore, the output projection is [initialized as `NonDynamicallyQuantizableLinear`](https://github.com/pytorch/pytorch/blob/e62073d7997c9e63896cb5289ffd0874a8cc1838/torch/nn/modules/activation.py#L1097). Just like [`torch.nn.Linear`](https://pytorch.org/docs/stable/generated/torch.nn.Linear.html), its initial weights are sampled from uniform distribution $\mathcal{U}(-a, a)$ where $$a = \sqrt{\frac{1}{\text{hidden_dim}}}$$ instead of $$\sqrt{\frac{3}{\text{hidden_dim}}}$$ <d-footnote>See <a href="https://github.com/pytorch/pytorch/issues/57109#issuecomment-828847575">pytorch/pytorch#57109 (comment)</a> for the origin of this discrepancy.</d-footnote>.
 
-    To conform with [`jax.nn.initializers.xavier_uniform()` used by the first-party implementation from Big Vision](https://github.com/google-research/big_vision/blob/ec86e4da0f4e9e02574acdead5bd27e282013ff1/big_vision/models/vit.py#L93), both are re-initialized with samples from uniform distribution $\mathcal{U}(-a, a)$ where $$a = \sqrt{\frac{3}{\text{hidden_dim}}}$$ <d-footnote>Note that the standard deviation of uniform distribution $\mathcal{U}(-a, a)$ is $$\frac{a}{\sqrt{3}}$$ So this is also the correct initialization for preserving the input scale assuming that the input features are uncorrelated.</d-footnote>.
+    To conform with [`jax.nn.initializers.xavier_uniform()` used by the reference implementation](https://github.com/google-research/big_vision/blob/ec86e4da0f4e9e02574acdead5bd27e282013ff1/big_vision/models/vit.py#L93), both are re-initialized with samples from uniform distribution $\mathcal{U}(-a, a)$ where $$a = \sqrt{\frac{3}{\text{hidden_dim}}}$$ <d-footnote>Note that the standard deviation of uniform distribution $\mathcal{U}(-a, a)$ is $$\frac{a}{\sqrt{3}}$$ So this is also the correct initialization for preserving the input scale assuming that the input features are uncorrelated.</d-footnote>.
 
 2. `torch.nn.Conv2d`: Linear projection of flattened patches can be done with 2D convolution, namely
    [`torch.nn.Conv2d` initialized with `in_channels = 3`, `out_channels = hidden_dim`, and both `kernel_size`
@@ -125,10 +121,8 @@ most of the parameters to match that of the first-party implementation from Big 
    Furthermore, [PyTorch's own `nn.init.trunc_normal_()`](https://pytorch.org/docs/stable/nn.init.html#torch.nn.init.trunc_normal_)
    doesn't take the effect of truncation on standard deviation into account unlike [the JAX implementation](https://github.com/google/jax/blob/1949691daabe815f4b098253609dc4912b3d61d8/jax/_src/nn/initializers.py#L334), so we have to implement the correction ourselves:
 
-   <div class="CenteringContainer">
-     <div>
-       <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/truncated_normal.png" class="img-fluid" width="auto" height="auto">
-     </div>
+   <div class="caption">
+     <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/truncated_normal.png" class="img-fluid" width="auto" height="auto">
    </div>
 
    <div class="caption">
@@ -143,7 +137,7 @@ most of the parameters to match that of the first-party implementation from Big 
 
 After fixing 1-3, we verify that all of the per-layer summary statistics including minimum, maximum,
 mean, and standard deviation of the 21,974,632 model parameters at initialization match that of the
-Big Vision first-party implementation.
+Big Vision reference implementation.
 
 ### RandAugment
 
@@ -160,12 +154,159 @@ We also notice that the Big Vision implementation "normalizes" the image with me
 and uses [the same neutral RGB value as the fill value for RandAugment](https://github.com/google-research/big_vision/blob/46b2456f54b9d4f829d1925b78943372b376153d/big_vision/pp/archive/autoaugment.py#L676)
 and make sure that our reproduction conforms to this training setup. Our reproduction attempt reaches
 76.91% top-1 ImageNet-1k validation set accuracy vs. 76.7% for the Head: MLP → linear ablation after
-90 epochs as given in <d-cite key="beyer2022better"></d-cite>. However, comparing the loss curve and
-gradient L2 norm suggests that they are not equivalent:
+90 epochs as given in <d-cite key="beyer2022better"></d-cite>. However, the training loss and gradient
+L2 norm comparison suggests that they are not equivalent:
 
-<img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/gradient_L2_norm_comparison.png" class="img-fluid" width="auto" height="auto">
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/gradient_L2_norm_comparison.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+It turns out that "RandAugment" in TorchVision <d-cite key="torchvision2016"></d-cite> is quite different
+from "RandAugment" in Big Vision. RandAugment in TorchVision, following the description in the paper <d-cite key="NEURIPS2020_d85b63ef"></d-cite>,
+randomly selects one of the following 14 transforms:
+
+||||
+|:-------------:|:-------------:|:-----:|
+|Identity | AutoContrast | Equalize|
+|Rotate | Solarize | Color|
+|Posterize | Contrast | Brightness|
+|Sharpness | ShearX | ShearY|
+|TranslateX | TranslateY||
+
+RandAugment in Big Vision, however, [forked](https://github.com/google-research/big_vision/blob/46b2456f54b9d4f829d1925b78943372b376153d/big_vision/pp/archive/autoaugment.py#L20)
+from the EfficientNet reference implementation and has a lineup that consists of 16 transforms:
+
+||||
+|:-------------:|:-------------:|:-----:|
+|AutoContrast | Equalize | Rotate|
+|Solarize | Color | Posterize|
+|Contrast | Brightness | Sharpness|
+|ShearX | ShearY | TranslateX|
+|TranslateY | Invert | Cutout|
+|SolarizeAdd|||
+
+with "Identity" no-op removed and "Invert", "Cutout", and "SolarizeAdd" added to the list. Moreover,
+its implementation of the Contrast transform is broken. In short: [the `mean` here](https://github.com/google-research/big_vision/blob/01edb81a4716f93a48be43b3a4af14e29cdb3a7f/big_vision/pp/autoaugment.py#L209-L213)
+
+{% highlight python %}
+  # Compute the grayscale histogram, then compute the mean pixel value,
+  # and create a constant image size of that value.  Use that as the
+  # blending degenerate target of the original image.
+  hist = tf.histogram_fixed_width(degenerate, [0, 255], nbins=256)
+  mean = tf.reduce_sum(tf.cast(hist, tf.float32)) / 256.0
+{% endhighlight %}
+
+is supposed to be the mean pixel value, but as it is it's just summing over the histogram (therefore
+equal to height * width), divided by 256. The correct implementation should be
+
+{% highlight python %}
+  image_height = tf.shape(image)[0]
+  image_width = tf.shape(image)[1]
+  # Compute the grayscale histogram, then compute the mean pixel value,
+  # and create a constant image size of that value.  Use that as the
+  # blending degenerate target of the original image.
+  hist = tf.histogram_fixed_width(degenerate, [0, 255], nbins=256)
+  mean = tf.reduce_sum(
+      tf.cast(hist, tf.float32) * tf.linspace(0., 255., 256)) / float(image_height * image_width)
+{% endhighlight %}
+
+or [as suggested by @yeqingli, just call `tf.image.adjust_contrast()` for the whole function](https://github.com/tensorflow/models/pull/11219#discussion_r1792502043):
+
+{% highlight python %}
+def contrast(image: tf.Tensor, factor: float) -> tf.Tensor:
+  return tf.image.adjust_contrast(image, factor)
+{% endhighlight %}
+
+We can experimentally confirm and visualize this using a calibration grid. For example, given the
+$224 \times 224$ grid below that consists of (192, 64, 64) and (64, 192, 192) squares:
+
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/color_grid.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+`contrast(tf_color_tile, 1.9)` before the fix returns a grid with (188, 0, 0) and (0, 188, 188) squares:
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/broken_result.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+After the fix, `contrast(tf_color_tile, 1.9)` returns a grid with (249, 6, 6) and (6, 249, 249) squares instead:
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/correct_result.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+Another problematic transform is the Solarize transform, [whose augmentation strength varies unintuitively with `magnitude` and is in danger of uint8 overflow](https://github.com/google-research/big_vision/issues/110).
+It just happens to behave as expected with [`randaug(2, 10)`](https://github.com/google-research/big_vision/blob/ec86e4da0f4e9e02574acdead5bd27e282013ff1/big_vision/configs/vit_s16_i1k.py#L57) in our case.
+
+As for the discrepancy between TorchVision's RandAugment and Big Vision's RandAugment, we can also
+use a calibration grid to confirm and visualize. Given the following $224 \times 224$ black & white
+calibration grid:
+
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/calibration_grid.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+We apply both versions of `RandAugment(2, 10)` 100000 times ([notebook](https://github.com/EIFY/mup-vit/blob/e35ab281acb88f669b18555603d9187a194ccc2f/notebooks/RandAugmentOnCalibrationGrid.ipynb)) to gather the stats. All of the resulting pixels remain colorless (i.e. for RGB values (r, g, b), r == g == b) so
+we can sort them from black to white into a spectrum ([notebook](https://github.com/EIFY/mup-vit/blob/e35ab281acb88f669b18555603d9187a194ccc2f/notebooks/GradientVisual.ipynb)).
+For the following $2000 \times 200$ spectra, pixels are sorted top-down, left-right, and each pixel represents 224 * 224 * 100000 / (2000 * 200) = 112 * 112 pixels of the aggregated output, amounting to 1/4 of one output image. In case one batch of 12544 pixels happens to be of different values, I took the average. Here is the spectrum of torchvision's `RandAugment(2, 10)`:
+
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/torch_vision_randaugment_2_10.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+Here is the spectrum of torchvision's `RandAugment(2, 10, fill=[128] * 3)`. We can see that it just shifts the zero-padding part of the black to the (128, 128, 128) neutral gray:
+
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/torch_vision_randaugment_2_10_mid_fill.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+And here is the spectrum of big_vision's `randaug(2, 10)`:
+
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/big_vision_randaugment_2_10.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+We end up subclassing torchvision's [`v2.RandAugment`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandAugment.html)([notebook](https://github.com/EIFY/mup-vit/blob/e35ab281acb88f669b18555603d9187a194ccc2f/notebooks/RandAugmentCalibration.ipynb)) in order to
+remove and add transforms to match the lineup of Big Vision's RandAugment. We use a variety of
+calibration grids to make sure that all transforms give results within $\pm 1$ of the RGB values given by the Big Vision
+counterpart, except the Contrast transform for which we decide against replicating the bug. Even with
+that exception, the near-replication of big_vision's `randaug(2, 10)` results in near-identical spectrum:
+
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/torch_vision_randaugment17_2_10.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+Before we move on: credit to [@tobiasmaier for first noticing the contrast bug and submitting a PR to fix it](https://github.com/tensorflow/tpu/pull/764).
+Apparently, some CV people are aware of the bug and the discrepancy between the RandAugment
+implemenations. To our best knowledge however, these issues are not publcally documented anywhere.
+
+{% twitter https://twitter.com/giffmana/status/1798978504689938560 %}
+{% twitter https://twitter.com/wightmanr/status/1799170879697686897 %}
 
 ### Inception crop
+
+Model trained with the near-replication of Big Vision's `randaug(2, 10)` for 90 epochs
+[reaches 77.27% top-1 validation set accuracy and the gradient L2 norm looks the same, but the training loss still differs](https://api.wandb.ai/links/eify/8d0wix47):
+
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/inception_crop_l2_grads_discrepancy.png" class="img-fluid" width="auto" height="auto">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/inception_crop_training_loss_discrepancy.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+It turns out that besides the default min scale ([8%](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandomResizedCrop.html)
+vs. [5%](https://github.com/google-research/big_vision/blob/01edb81a4716f93a48be43b3a4af14e29cdb3a7f/big_vision/pp/ops_image.py#L199)),
+the "Inception crop" implemented as torchvision [`v2.RandomResizedCrop()`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandomResizedCrop.html)
+is not the same as calling [`tf.slice()`](https://www.tensorflow.org/api_docs/python/tf/slice) with the bbox returned by
+[`tf.image.sample_distorted_bounding_box()`](https://www.tensorflow.org/api_docs/python/tf/image/sample_distorted_bounding_box)
+as it is commonly done in JAX / TF:
+
+1. They both rejection-sample the crop, but [`v2.RandomResizedCrop()`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandomResizedCrop.html)
+is hardcoded to try 10 times while [`tf.image.sample_distorted_bounding_box()`](https://www.tensorflow.org/api_docs/python/tf/image/sample_distorted_bounding_box)
+defaults to 100 attempts.
+2. [`v2.RandomResizedCrop()`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandomResizedCrop.html) samples the aspect ratio uniformly in log space,
+[`tf.image.sample_distorted_bounding_box()`](https://www.tensorflow.org/api_docs/python/tf/image/sample_distorted_bounding_box) samples uniformly in linear space.
+3. [`v2.RandomResizedCrop()`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandomResizedCrop.html) samples the area cropped uniformly while
+[`tf.image.sample_distorted_bounding_box()`](https://www.tensorflow.org/api_docs/python/tf/image/sample_distorted_bounding_box) samples the crop height uniformly given the aspect ratio and area range.
+4. If all attempts fail, [`v2.RandomResizedCrop()`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandomResizedCrop.html) at least crops the image to make sure that the aspect ratio falls within range before resizing. [`tf.image.sample_distorted_bounding_box()`](https://www.tensorflow.org/api_docs/python/tf/image/sample_distorted_bounding_box) just returns the whole image to be resized.
 
 ### Big Vision miscellaneous
 
