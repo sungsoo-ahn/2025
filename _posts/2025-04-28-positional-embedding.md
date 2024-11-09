@@ -228,7 +228,7 @@ Hence the $$e^{i(n−m)θ}$$ in this formulation of attention is responsible inj
 
 {% include figure.html path="assets/img/2025-04-28-positional-embedding/RotaryPE1.png" class="img-fluid" %}
 <div class="caption">
-    Fig. 2: Rotation of query, key vectors by $m\theta$ in 2D.
+    Figure 2: Rotation of query, key vectors by $m\theta$ in 2D.
 </div>
 
 - **Stability of Vectors**: Adding tokens at the end of a sentence doesn’t affect the vectors for words at the beginning, facilitating efficient caching.
