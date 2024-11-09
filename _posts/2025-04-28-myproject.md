@@ -1,6 +1,8 @@
 ---
 layout: distill
-title: My Post
+title: Lost in Prediction: The Missing Link Between LLMs and Narrative Economics
+Lost in Prediction: Why Social Media Narratives  Don't Help Macroeconomic Forecasting? 
+
 description: Your blog post's abstract 2.
   Please add your abstract or summary here and not in the main body of your text. 
   Do not include math/latex or hyperlinks.
