@@ -103,7 +103,7 @@ The economic term is wide and it is undefined what requirements a story or idea 
 
 Combined together, to capture a narrative, one would need a good measure of what many people are discussing about, over time. Twitter (X), in this case, is an almost ideal source of information for capturing this distribution of opinions. 
 
-And how to extract the "narrative" aspect from tweets? Aligning with Shiller’s arguments and with existing literature, the extraction might be (for example) a sentiment, a topic, or a specific economic outlook. TODO: citations
+**And how to extract the "narrative" aspect from tweets?** Aligning with Shiller’s arguments and with existing literature, the extraction might be (for example) a sentiment, a topic, or a specific economic outlook. TODO: citations
 
 
 
@@ -117,6 +117,14 @@ Both datasets were carefully curated using targeted queries with the inclusion o
 
 **Post-2021 Twitter Dataset:** We wanted to test the predictive power of our employed LLM (Chat Completion API with GPT-3.5 TODO:cite) on a timeframe beyond the LLM's data cutoff date (September 2021). Therefore, we collected a second dataset ranging from September 2021 until July 2023. This assures the LLM relies solely on provided tweets and pre-existing knowledge, unaware of "future" knowledge. Here we collected the tweets monthly, using Twitter Advanced Search, restricting to users with at least 1,000 followers. Overall we curated 2,881 tweets <d-footnote>As this data collection method is more restricted than the
 previous, the resulting dataset is relatively smaller.</d-footnote> contributed by 1,255 users including politicians, CEOs, activists, and academics. 
+
+### Did We Really Collected Narratives?
+We analyzed the tweets to assure the presence of narratives within them. First, we utilized RELATIO, a tool designed to "capture political and economic narratives" by mapping relationships and interactions among entities in a corpus (TODO:cite). We feed the algorithm with our Twitter dataset, receive “narrative statements” (as defined in RELATIO paper), and visualize their temporal distribution:
+
+<div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-myproject/relatio_plot.jpg" class="img-fluid z-depth-2" %}
+    </div>
+
 
 ### Why Macroeconomics?
 
