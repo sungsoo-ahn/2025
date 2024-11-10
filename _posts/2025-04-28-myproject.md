@@ -120,7 +120,7 @@ previous, the resulting dataset is relatively smaller.</d-footnote> contributed 
 
 An example tweet can be:
 
-{% twitter https://x.com/CNLiberalism/status/1525672295775223808}
+{% twitter https://x.com/CNLiberalism/status/1525672295775223808 %}
 
 ### Did We Really Collected Narratives?
 We analyzed the tweets to assure the presence of narratives within them. First, we utilized RELATIO, a tool designed to "capture political and economic narratives" by mapping relationships and interactions among entities in a corpus (TODO:cite). We feed the algorithm with our Twitter dataset, receive “narrative statements” (as defined in RELATIO paper), and visualize their temporal distribution:
