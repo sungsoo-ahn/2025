@@ -122,7 +122,7 @@ previous, the resulting dataset is relatively smaller.</d-footnote> contributed 
 We analyzed the tweets to assure the presence of narratives within them. First, we utilized RELATIO, a tool designed to "capture political and economic narratives" by mapping relationships and interactions among entities in a corpus (TODO:cite). We feed the algorithm with our Twitter dataset, receive “narrative statements” (as defined in RELATIO paper), and visualize their temporal distribution:
 
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-myproject/relatio_plot.jpg" class="img-fluid z-depth-2" %}
+        {% include figure.html path="assets/img/2025-04-28-myproject/relatio_plot.png" class="img-fluid z-depth-2" %}
     </div>
 
 
