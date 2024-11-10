@@ -77,11 +77,9 @@ The central idea is that the spread of viral narratives can influence individual
 
 This term is heavily attributed to Robert J. Shiller, a Nobel laureate economist and the founder of Narrative Economics which defined it as:
 
-<blockquote>
-  Spread through the public in the form of popular stories, **ideas can go viral and move markets** —whether it’s the belief that tech stocks can only go up, that housing prices never fall, or that some firms are too big to fail. Whether true or false, stories like these—transmitted by word of mouth, by the news media, and increasingly by social media—**drive the economy by driving our decisions about how and where to invest, how much to spend and save, and more.**  
-  - Robert J. Shiller
+> *Spread through the public in the form of popular stories, **ideas can go viral and move markets** —whether it’s the belief that tech stocks can only go up, that housing prices never fall, or that some firms are too big to fail. Whether true or false, stories like these—transmitted by word of mouth, by the news media, and increasingly by social media—**drive the economy by driving our decisions about how and where to invest, how much to spend and save, and more.***  
+  *- Robert J. Shiller*
   TODO: cite
-</blockquote>
 
 ### The Ambiguity of the Term "Narrative"
 
@@ -122,7 +120,7 @@ An example tweet can be:
 
 {% twitter https://x.com/CNLiberalism/status/1525672295775223808 %}
 
-### Did We Really Collected Narratives?
+### Did We Really Collect Narratives?
 We analyzed the tweets to assure the presence of narratives within them. First, we utilized RELATIO, a tool designed to "capture political and economic narratives" by mapping relationships and interactions among entities in a corpus (TODO:cite). We feed the algorithm with our Twitter dataset, receive “narrative statements” (as defined in RELATIO paper), and visualize their temporal distribution:
 
 <div class="col-sm mt-3 mt-md-0">
