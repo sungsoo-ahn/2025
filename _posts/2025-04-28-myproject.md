@@ -71,7 +71,41 @@ _styles: >
 
 ## What is Narrative Economics?
 
-bla
+Narrative Economics is the study of how popular stories and ideas (aka **narratives**) formed about the state of the economy could have real effects in the world. In this context, a “narrative” is a belief about the state of the world that is shared by the population, regardless of the actual state of the economy. For example, a narrative might be the belief that housing prices are increasing, whereas in-reality (according to economic indicators) they are stagnating. 
+
+The central idea is that the spread of viral narratives can influence individual and collective economic behavior, leading to fluctuations in markets, changes in investment patterns, and even broader economic shifts.
+
+This term is heavily attributed to Robert J. Shiller, a Nobel laureate economist and the founder of Narrative Economics which defined it as:
+
+<blockquote>
+  Spread through the public in the form of popular stories, **ideas can go viral and move markets** —whether it’s the belief that tech stocks can only go up, that housing prices never fall, or that some firms are too big to fail. Whether true or false, stories like these—transmitted by word of mouth, by the news media, and increasingly by social media—**drive the economy by driving our decisions about how and where to invest, how much to spend and save, and more.**  
+  - Robert J. Shiller
+  TODO: cite
+</blockquote>
+
+### The Ambiguity of the Term "Narrative"
+
+The term "narrative" itself has different connotations in NLP compared to economics, which might lead to some confusion. 
+
+In NLP, narrative is XXX.
+
+In Narrative Economcis, as stated in the above section, narrative is a shared belief or idea that spreads through the population and potentially influences economic behavior. 
+
+Our research uses the term "narrative" in the economic sense. We're interested in how shared beliefs about the economy can be used to predict market trends. 
+
+**But, how can we capture such narratives?**
+The economic term is wide and it is undefined what requirements a story or idea must have in order to be considered as "narrative". Yet, we can look at some characteristics Shiller's mentions about narratives to have a better understanding:
+
+* First, the story should be viral, publicly believed, in order to change a large enough audience to move the market.
+* Second, Shiller's uses some propositions while explaining the term. He states that "the economic impact of narratives may change through time" and "narrative constellations have more impact than any one narrative". 
+* Lastly, Shiller mentions social media as a source of narratives and Google Ngram as a tool for tracking them. 
+**TODO: cite coursera
+
+Combined together, to capture a narrative, one would need a good measure of what many people are discussing about, over time. Twitter, in this case, is an almost ideal source of information for capturing this distribution of opinions. 
+
+And how to extract the "narrative" aspect from tweets? Aligning with Shiller’s arguments and with existing literature, the extraction might be (for example) a sentiment, a topic, or a specific economic outlook. TODO: citations
+
+
 
 ## Social Media Narratives
 
@@ -85,7 +119,7 @@ bla
 
 ### LLMs Can Learn Narratives
 
-### The Callenges in Improving Models with Narratives
+### The Challenges in Improving Models with Narratives
 
 ## What Can We Take Away?
 
