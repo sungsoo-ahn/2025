@@ -85,7 +85,7 @@ This term is heavily attributed to Robert J. Shiller, a Nobel laureate economist
 
 The term "narrative" itself has different connotations in NLP compared to economics, which might lead to some confusion. 
 
-In NLP, narrative is XXX.
+In NLP, narrative is  XXX TODO.
 
 In Narrative Economcis, as stated in the above section, narrative is a shared belief or idea that spreads through the population and potentially influences economic behavior. 
 
@@ -247,7 +247,7 @@ TL;DR:
 
 **Sentiment-based next-day prediction:**
 
-We fed classic ML models with daily sentiments for FFR `next-value` and `direction change` prediction (as separate tasks).
+We fed classic ML models with daily sentiments for FFR `next value` and `direction change` prediction (as separate tasks).
 
 <div style="font-size: 6px;">
 
@@ -275,10 +275,27 @@ In predicting 'next value', best F, TF and T models yield comparable MSE to the 
 What can we learn? Sentiment analysis, lacks the nuance necessary for accurate financial prediction, and traditional ML models have limitations in capturing complex market dynamics.  This is evident as several models did not even outperform non-learned baselines, highlighting the need for more improved text representations and advanced prediction models.  
 
 
-**
+**Embeddings for time-series prediction:**
+
+Here we turn to embedding-representations (as explained in the Experimental Setup) and to DA-RNN (TODO:cite) model, which is designed to capture temporal dynamics and complex relationships within its given data.
+
+We extensively evaluated various model configurations, targer indicators (FFR and VIX), tasks ('next value', 'percentage change', 'direction change' and the last two together), prediction horizons (next-day, next-week), LLM architectures (see Experimental Setup), aggregation methods, and the daily number of tweets given as input. Additionaly, we assessed the models' reliance on temporal context and relevant narratives using the counerfactual textual baselines.
+
+To keep it short, we present results only for predicting the VIX 'next value' of the next-day and next-week (as separate tasks). Additional experiments showed a recurring pattern to the presented results.
+
+<div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2024-05-07-myproject/embeddings_exp_results.jpg" class="img-fluid rounded z-depth-1" style="width: 80%;" %}
+    </div>
+
+
 
 
 ## What Can We Take Away?
+
+This study serves as a foundation for further exploration, highlighting the need for new macroeconomic models or
+tasks designed to assess the extracted narratives’ influence on the economy
+
+TODO: link to paper.
 
 ## Citations
 
