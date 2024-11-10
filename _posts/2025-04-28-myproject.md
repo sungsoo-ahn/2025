@@ -194,12 +194,12 @@ We differ our models into 3 categories based on their input signal:
 
 **Baselines:**
 
-Financial baselines:
+*Financial baselines:*
 * As/inverse-previous: next value is the same/inverse as previous.
 * majority: next value is the majority vote of the previous week/training data.
 * up/down: always predict "increase"/"decrease".
 
-Counterfactual textual baselines:
+*Counterfactual textual baselines:*
 * random texts: feeding the LLM with randomly generated sentences comprised of varying random words. This baseline evaluate wether the LLM actually utilize the content of tweets.
 * Shuffled tweets: feeding the LLM with chronologically disordered tweets, isolating the impact of temporal narratives from confounding patterns or memoraization. This baseline assess the model reliance on temporal narratives.
 * Synthetic `narratives`: Fedding the LLM with generated narrative-like sentences experssing positive or negative cues, aligned with subsequent changes in the financial target. This baseline assess the LLM's ability to infer relationships between aligned narratives and the following market changes.
