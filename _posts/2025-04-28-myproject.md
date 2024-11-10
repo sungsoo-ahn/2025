@@ -215,18 +215,18 @@ Our model selection progresses from simpler models, frequently employed in the f
 *Textual models:*
 * Daily sentiment: a simple method, commonly used in the literature, is presenting each tweet with its sentiment score. Then, we average the scores of individual tweets of the same dates to recive a daily sentiment, and concatenate over a week.
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram_1.jpg" class="img-fluid z-depth-2" %}
+        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram_1.jpg" class="img-fluid rounded z-depth-1" %}
     </div>
     
 * LLM's representations of individual/joint tweets: we derive embeddings of individual or concatenated tweets using pre-trained languge models (BERT,RoBERTa and T5 TODO:cite). In the individual case, tweets' embeddings are aggregated daily by averaging or concatenating embeddings of same-date tweets. In the joint case, tweets are concatenated daily to create a single daily embedding, potentially capturing their collective meaning without explicit aggregation, avoiding potential information loss.
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram_2.jpg" class="img-fluid z-depth-2" %}
+        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram_2.jpg" class="img-fluid rounded z-depth-1" %}
     </div>
   
 * LLM-generated analyses for prediction/as input to a subsequent prediction model: First, we feed GPT-3.5 (TODO:cite) with a month of tweets and corresponding financial values of the target indicator to create monthly analyses.Then, these analyses are either used directly for prediction or as an input to a subsequent T5 model.  
 *since the LLM receives both tweets and financial data to enable analyzing relationships, this method applies only for a TF model type.
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram_3.jpg" class="img-fluid z-depth-2" %}
+        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram_3.jpg" class="img-fluid rounded z-depth-1" %}
     </div>
 
 *Fusing textual and financial models:* we experiment with several strategies for combining the representations from the T and F models for a unified prediction:
