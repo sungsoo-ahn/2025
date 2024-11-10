@@ -129,8 +129,19 @@ We analyzed the tweets to assure the presence of narratives within them. First, 
         {% include figure.html path="assets/img/2024-05-07-myproject/relatio_plot.jpg" class="img-fluid z-depth-2" %}
     </div>
 
-A more advanced technique to extract and analyze narratives is using LLMs. Prompting ChatGPT (TODO: cite) with tweets and prices of economic indicator from matching dates, we generated LLM-based narratives analysis, one for each date in the post-2021 dataset, containing a component of summarized analysis of the tweets and a component of potential effect on the given financial indicator. 
-Here's a snippet of such an LLM-based narrative analysis:
+A more advanced technique to extract and analyze narratives is using LLMs. Prompting ChatGPT (TODO: cite) with monthly tweets and prices of economic indicator from matching dates, we generated LLM-based narratives analysis, one for each date in the post-2021 dataset, containing a component of summarized analysis of the tweets and a component of potential effect on the given financial indicator. 
+Here's a snippet of such an LLM-based narrative analysis for inputs of dates 29/08/2022 to 28/09/2022. In this time period the Federal Reserve raised the interest rates in an effort to combat inflation, the US Supreme Court ruled that the Biden administration could not extend the pause on student loan payments, and more. :
+
+<blockquote>
+**Analysis of Tweets:**
+
+...Some tweets express concerns about inflation, rising interest rates, and the impact on the economy and personal finances...Several tweets highlight the impact of government policies on various sectors, such as healthcare, student loans, and housing.
+Some tweets express skepticism towards central banks and their role in the economy...A few tweets discuss the impact of global events, such as the Russian mobilization...
+
+**Potential Effect on S\&P 500:**
+
+...Concerns about inflation, rising interest rates, and economic instability expressed in the tweets may lead to increased market volatility and potential declines in the S\&P 500...Global events mentioned in the tweets...may have indirect effects on the S\&P 500 through their impact on global markets and investor sentiment.
+</blockquote>
 
 This snippet demonstrates the LLM’s ability to aggregate information, condensing and distinguishing between opinions and occurrences conveyed in the tweets. Moreover, the LLM links its insights to potential future consequences for the financial indicator, a pivotal initial move towards prediction.
 
