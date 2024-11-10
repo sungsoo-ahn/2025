@@ -295,7 +295,9 @@ However, the 'random texts' TF baseline (13.056), which replaced actual tweets w
 A contributing factor may arise from the difficulty of effectively capturing and representing aggregated tweet information for financial prediction, as well as the inherent challenges in predicting future values of a volatile financial indicator, characterized by frequent random movements and fluctuations, using its historical values.    
 
 
+**Predicting using LLM Analyses:**
 
+TODO: continue from here. display the final table.
 
 
 ## What Can We Take Away?
