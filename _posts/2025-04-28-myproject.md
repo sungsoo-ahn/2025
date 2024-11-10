@@ -101,7 +101,7 @@ The economic term is wide and it is undefined what requirements a story or idea 
 * Lastly, Shiller mentions social media as a source of narratives and Google Ngram as a tool for tracking them. 
 **TODO: cite coursera
 
-Combined together, to capture a narrative, one would need a good measure of what many people are discussing about, over time. Twitter, in this case, is an almost ideal source of information for capturing this distribution of opinions. 
+Combined together, to capture a narrative, one would need a good measure of what many people are discussing about, over time. Twitter (X), in this case, is an almost ideal source of information for capturing this distribution of opinions. 
 
 And how to extract the "narrative" aspect from tweets? Aligning with Shiller’s arguments and with existing literature, the extraction might be (for example) a sentiment, a topic, or a specific economic outlook. TODO: citations
 
@@ -109,7 +109,14 @@ And how to extract the "narrative" aspect from tweets? Aligning with Shiller’s
 
 ## Social Media Narratives
 
-bla
+We have collected two comprehensive datasets of tweets from Twitter (X), a platform chosen for its real-time reflection of public opinions and ability to capture diverse economic narratives. These datasets cover a broad time-frame, and a wide range of topics relevant to the economy, including economics, business, politics, and current events, ensuring a broad and comprehensive representation of narratives.  
+
+Both datasets were carefully curated using targeted queries with the inclusion of specific keywords, and were analyzed to ensure quality and relevant for capturing economic narratives. 
+
+**Pre-Pandemic Twitter Dataset:** Utilizing Twitter API (TODO: cite), we collected 2.4 million tweets from Twitter's early days (January 2007) to COVID-19 pandemic (December 2020). To prioritize viral tweets, we retrieved the daily top 200 tweets based on follower count,  then we randomly sampled 100 to mitigate potential bias towards highly active accounts typically associated with news outlets. This process yeilded a dataset contributed by about 250,000 users per collected topic, each boasting an average follower count of 100 million, including global leaders, news outlets and other influencers.
+
+**Post-2021 Twitter Dataset:** We wanted to test the predictive power of our employed LLM (Chat Completion API with GPT-3.5 TODO:cite) on a timeframe beyond the LLM's data cutoff date (September 2021). Therefore, we collected a second dataset ranging from September 2021 until July 2023. This assures the LLM relies solely on provided tweets and pre-existing knowledge, unaware of "future" knowledge. Here we collected the tweets monthly, using Twitter Advanced Search, restricting to users with at least 1,000 followers. Overall we curated 2,881 tweets <d-footnote>As this data collection method is more restricted than the
+previous, the resulting dataset is relatively smaller.</d-footnote> contributed by 1,255 users including politicians, CEOs, activists, and academics. 
 
 ### Why Macroeconomics?
 
