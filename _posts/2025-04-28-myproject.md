@@ -241,6 +241,43 @@ textual representations (T) as the exogenous series.
 
 ### The Challenges in Improving Models with Narratives
 
+TL;DR:
+* Models incorporating narratives (TF) show limited improvement over those using solely financial data (F).
+* Gains were inconsistent, marginal and statistically insignificant -> we regard it as negative results.
+
+**Sentiment-based next-day prediction:**
+
+We fed classic ML models with daily sentiments for FFR `next-value` and `direction change` prediction (as separate tasks).
+
+<div style="font-size: 6px;">
+
+| Type | Model | Accuracy |
+|---|---|---|
+| F baselines | As-previous | 0.812 |
+| F | Random Forest Numeric | **0.936** | 
+| TF | Random Forest Numeric | **0.939** | 
+| T | Logistic Regression | 0.885 |
+| T | SVM | 0.885 |
+
+</div>
+
+In classifying 'direction change', models with financial input (F & TF) outperform text-only models (T), with a 5% accuracy improvement (0.94 vs. 0.89). Models with both textual and financial signals (TF) achived similar accuracy to F models (0.939 vs. 0.936), suggesting that text has little impact. The T models achieve comparable accuracy to the F baselines (0.89 vs. 0.81).
+
+| **Type** | **Model** | **MSE** |
+|---|---|---|
+| F baseline | Train-mean | 15.661 |
+| F | SVM | 15.416 |
+| TF | SVM | 15.416 | 
+| T | SVM | 15.36 | 
+
+In predicting 'next value', best F, TF and T models yield comparable MSE to the 'train-mean' baseline (15.4, 15.6).
+
+What can we learn? Sentiment analysis, lacks the nuance necessary for accurate financial prediction, and traditional ML models have limitations in capturing complex market dynamics.  This is evident as several models did not even outperform non-learned baselines, highlighting the need for more improved text representations and advanced prediction models.  
+
+
+**
+
+
 ## What Can We Take Away?
 
 ## Citations
