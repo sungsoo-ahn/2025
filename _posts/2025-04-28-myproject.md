@@ -105,7 +105,7 @@ Combined together, to capture a narrative, one would need a good measure of what
 
 
 
-## Social Media Narratives
+### Social Media Narratives
 
 We have collected two comprehensive datasets of tweets from Twitter (X), a platform chosen for its real-time reflection of public opinions and ability to capture diverse economic narratives. These datasets cover a broad time-frame, and a wide range of topics relevant to the economy, including economics, business, politics, and current events, ensuring a broad and comprehensive representation of narratives.  
 
@@ -120,13 +120,14 @@ An example tweet can be:
 
 {% twitter https://x.com/CNLiberalism/status/1525672295775223808 %}
 
-### Did We Really Collect Narratives?
-We analyzed the tweets to assure the presence of narratives within them. First, we utilized RELATIO, a tool designed to "capture political and economic narratives" by mapping relationships and interactions among entities in a corpus (TODO:cite). We feed the algorithm with our Twitter dataset, receive “narrative statements” (as defined in RELATIO paper), and visualize their temporal distribution:
+#### Did We Really Collect Narratives?
+To confirm the presence of narratives within our Twitter dataset, we conducted an analysis using RELATIO, a tool designed to "capture political and economic narratives" by mapping relationships and interactions among entities within a corpus.  Upon processing our dataset with RELATIO, we obtained "narrative statements" (as defined in their paper) and visualized their temporal distribution:
 
 <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2024-05-07-myproject/relatio_plot.jpg" class="img-fluid z-depth-2" %}
     </div>
 
+### LLMs can Learn Narratives
 A more advanced technique to extract and analyze narratives is using LLMs. Prompting ChatGPT (TODO: cite) with monthly tweets and prices of economic indicator from matching dates, we generated LLM-based narratives analysis, one for each date in the post-2021 dataset, containing a component of summarized analysis of the tweets and a component of potential effect on the given financial indicator. 
 
 Here's a snippet of such an LLM-based narrative analysis for inputs of dates 29/08/2022 to 28/09/2022. In this time period the Federal Reserve raised the interest rates in an effort to combat inflation, the US Supreme Court ruled that the Biden administration could not extend the pause on student loan payments:
@@ -137,19 +138,67 @@ Here's a snippet of such an LLM-based narrative analysis for inputs of dates 29/
 
 This snippet demonstrates the LLM’s ability to aggregate information, condensing and distinguishing between opinions and occurrences conveyed in the tweets. Moreover, the LLM links its insights to potential future consequences for the financial indicator, a pivotal initial move towards prediction.
 
-### Why Macroeconomics?
+## Why Macroeconomics?
 
 Now that we have social media narratives in hand, let's focus on *macroeconomics*.  
 
 **Macroeconomics** studies the behavior of the economy as a whole, examining factors like inflation, unemployment, and economic growth. **Microeconomics**, on the other hand, is concerned with the decision-making of individuals and firms, examining indicators like a certain stock.
 
-A core concept in Narrative Economics is that narratives can drive economics flunctuations. This is especially intriguing at the macroeconomic level, as the theory suggests that widely shared stories can influence the collective decisions of millions of individuals. Additionaly, existing research focuses on microeconomic indicators within the context of Narrative Economics, while the application in macroeconomics remains relatively unexplored.
+A core concept in Narrative Economics is that narratives can drive economics flunctuations. This is especially intriguing at the macroeconomic level, as the theory suggests that widely shared stories can influence the collective decisions of millions of individuals. Additionaly, existing research focuses on microeconomic indicators within the context of Narrative Economics, while the application in macroeconomics remains relatively unexplored. TODO:cite
 
-However, studying this macroeconomically is more xomplax than microeconomically due to the complex interplay of various factors, the need for broad-covering narratives, and the inherent difficulty in isolating causal relationships. 
+However, studying this macroeconomically is more complax than microeconomically due to the complex interplay of various factors, the need for broad-covering narratives, and the inherent difficulty in isolating causal relationships. 
 
-## Testing Narratives' Effectiveness for Macroeconomic Forecasting
+### Our Macroeconomic Indicators
 
-### LLMs Can Learn Narratives
+We focus on predicting three key macroeconomic indicators:
+
+**Federal Funds Rate (FFR):** The interest rate at which depository institutions, such as banks, lend reserve balances overnight to meet reserve requirements. The FFR serves as a Federal Reserve monetary policy tool, is influenced by public perception of economic stability, and its fluctuations impact various sectors, making it widely monitored.
+
+**S\&P 500:** A stock market index measuring the performance of the 500 largest publicly traded companies in the U.S. It reflects collective investor confidence in economic growth and risk appetite and is widely regarded as a barometer of the overall health of the US stock market. 
+
+**CBOE Volatility Index (VIX):** Measures market expectations of future volatility based on S\&P 500 options prices, often referred to as the 'fear gauge' as it tends to rise during market stress and fall during market stability.
+
+These indicators are well-suited for testing the predictive power of narratives for macroeconomics due to their daily frequency, which aligns with the rapid pace of Twitter, and their sensitivity to public sentiment and behavior.
+
+
+## Connecting the dots: Testing Narratives' Effectiveness for Macroeconomic Forecasting
+
+The previous two sections discussed the theory of Narrative Economics and our curated Twitter dataset, which holds narratives within them, and the distinction between macroeconomics and microeconomics, highlighting why it is interesting to research the theory at the macroeconomic level and what macroeconomic indicators we chose.
+
+We can now delve into the series of experiments we tested to assess the central question - **can economic narratives can provide valuable insights for future macroeconomic movements?**
+
+Each experiment test the predictive power of narratives from the curated Dataset, for macroeconomic prediction of one (or more) of the financial targets intriduced before: FFR, S\&P 500, and VIX. 
+
+Our model selection progresses from simpler models, frequently employed in the financial literature (TODO:cite), to more advanced architectures. This progression serves two purposes: 
+1. Achieving positive results with simpler models provides a stronger evidence for the predictive signal of narratives.
+2. It allows us to build upon existing research in Narrative Economics, which is primarily rooted in finance and often utilizes relatively simple models, before exploring more advanced NLP approaches.
+
+We won't be able to cover all the details of the experiments in this blog, but it is available in our paper. 
+
+### Experimental Setup
+
+**Prediction tasks:** we test the predictive power of narratives on three tasks commonly used in macroeconomic literature (TODO:cite):
+* Next value: predicts the target’s value at the specified horizon.* Percentage change: predicts the target’s percentage change between the specified horizon and
+the day before.* Direction change: classifies the target’s direction of change (increase or decrease) between the
+specified horizon and the day before.
+
+**Models Categories:** We differ our models into 3 categories based on their input signal:
+* Financial (F): utilizes historical financial data, from the past week or month.
+* Textual (T): leverages solely textual data, either raw tweets or tweets’ analyses.
+* Textual & Financial (TF): draws upon both textual and financial data as input.
+
+Our goal is to effectively leverage insights from both textual narratives and historical financial patterns to improve prediction accuracy.  The added value of incorporating textual narratives can be demonstrated if a model that utilizes both text and financial data (TF model) outperforms a model that relies solely on financial data (F model). 
+
+**Baselines:**
+Financial baselines:
+* As/inverse-previous: next value is the same/inverse as previous.
+* majority: next value is the majority vote of the previous week/training data.
+* up/down: always predict "increase"/"decrease".
+
+Counterfactual textual baselines:
+* random texts: feeding the LLM with randomly generated sentences comprised of varying random words. This baseline evaluate wether the LLM actually utilize the content of tweets.
+* Shuffled tweets: feeding the LLM with chronologically disordered tweets, isolating the impact of temporal narratives from confounding patterns or memoraization. This baseline assess the model reliance on temporal narratives.
+* Synthetic `narratives`: Fedding the LLM with generated narrative-like sentences experssing positive or negative cues, aligned with subsequent changes in the financial target. This baseline assess the LLM's ability to infer relationships between aligned narratives and the following market changes. 
 
 ### The Challenges in Improving Models with Narratives
 
