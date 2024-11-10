@@ -38,7 +38,7 @@ toc:
 
 In recent years, diffusion models, a novel category of deep generative models <d-cite key="JiangMLF2021"></d-cite>, have made significant strides in producing high-quality, high-resolution images. Notable examples include GLIDE <d-cite key="nichol2022glidephotorealisticimagegeneration"></d-cite>, DALLE-2 <d-cite key="ramesh2022hierarchicaltextconditionalimagegeneration"></d-cite>, Imagen <d-cite key="saharia2022photorealistictexttoimagediffusionmodels"></d-cite>, and the fully open-source Stable Diffusion <d-cite key="rombach2022highresolutionimagesynthesislatent"></d-cite>. These models are traditionally developed based  on the framework of Denoising Diffusion Probabilistic Models (DDPM) <d-cite key="ho2020denoisingdiffusionprobabilisticmodels"></d-cite>. In this probabilistic framework, the forward diffusion process is modeled as a Gaussian process with Markovian properties. Conversely, the backward denoising process employs neural networks to estimate the conditional distribution at each time step. The neural networks involved in the denoising process are trained to minimize the evidence lower bound (ELBO) <d-cite key="ho2020denoisingdiffusionprobabilisticmodels"></d-cite> <d-cite key="luo2022understandingdiffusionmodelsunified"></d-cite>, akin to the approach used in a Variational Autoencoder (VAE) <d-cite key="Kingma_2019"></d-cite>. 
 
-In this post, we present a deterministic perspective on diffusion models. In this method, neural networks are constructed to function in the opposite way of a deterministic diffusion process that gradually deteriorates images over time. This training allows the neural networks to reconstruct or generate images by reversing the diffusion process without using any knowledge of stochastic process. This method simplifies the derivation of diffusion models, making the process more straightforward and comprehensive. Within this deterministic framework, diffusion models can be fully explained and derived from scratch using only a few straightforward mathematical equations in this concise, self-contained post. This approach requires only basic mathematical knowledge, eliminating the need for lengthy tutorials filled with hundreds of complex equations involving stochastic processes and probability distributions. <d-cite key="luo2022understandingdiffusionmodelsunified"></d-cite>. 
+In this post, we present a deterministic perspective on diffusion models. In this method, neural networks are constructed to function in the opposite way of a deterministic diffusion process that gradually deteriorates images over time. This training allows the neural networks to reconstruct or generate images by reversing the diffusion process without using any knowledge of stochastic process. This method simplifies the derivation of diffusion models, making the process more straightforward and comprehensible. Within this deterministic framework, diffusion models can be fully explained and derived from scratch using only a few straightforward mathematical equations, as shown in this concise, self-contained post. This approach requires only basic mathematical knowledge, eliminating the need for lengthy tutorials filled with hundreds of complex equations involving stochastic processes and probability distributions. <d-cite key="luo2022understandingdiffusionmodelsunified"></d-cite>. 
 
 ## **Deterministic Forward Diffusion Process**
 
@@ -65,14 +65,14 @@ Building on the so-called "nice property" outlined in <d-cite key="ho2020denoisi
 
 $$
 \begin{align}
-\mathbf{x}_t = f(\mathbf{x}_{0},t) = \sqrt{\bar{\alpha}_t} \mathbf{x}_{0} + \sqrt{1 - \bar{\alpha}_t} \,  {\boldsymbol \epsilon} \;\;\; \forall t=1, 2, \cdots, T   \label{eq-forward-deterministic}
+\mathbf{x}_t = f(\mathbf{x}_{0}, {\boldsymbol \epsilon}, t) = \sqrt{\bar{\alpha}_t} \mathbf{x}_{0} + \sqrt{1 - \bar{\alpha}_t} \,  {\boldsymbol \epsilon} \;\;\; \forall t=1, 2, \cdots, T   \label{eq-forward-deterministic}
 \end{align}
 $$
 
 where $$ \bar{\alpha}_t = \prod_{s=1}^t \alpha_s $$ 
 and we have $$ \bar{\alpha}_t \to 0 $$ as $$ t \to T $$.
 
-In the diffusion process described in Eq. (\ref{eq-forward-deterministic}), once the noise $$ {\boldsymbol \epsilon} $$ is sampled, it is treated as constant for the whole diffusion process. Consequently, the transformation from the clean image $$ \mathbf{x}_{0} $$ to noisy images $$ \mathbf{x}_{t} $$ at each time step $$ t $$ can be regarded as a deterministic mapping, characterized by the above function $$ \mathbf{x}_t = f(\mathbf{x}_{0},t) $$. 
+In the diffusion process described in Eq. (\ref{eq-forward-deterministic}), once the noise $$ {\boldsymbol \epsilon} $$ is sampled, it is treated as constant for the whole diffusion process. Consequently, the transformation from the clean image $$ \mathbf{x}_{0} $$ to noisy images $$ \mathbf{x}_{t} $$ at each time step $$ t $$ can be regarded as a deterministic mapping, characterized by the above function $$ \mathbf{x}_t = f(\mathbf{x}_{0}, {\boldsymbol \epsilon}, t) $$. 
 
 As shown in Figure 2, clean images are gradually converted into pure noises in the above deterministic diffusion process as $$ t $$ goes from $$ 0 $$ to $$ T $$.
 The method in Eq.(\ref{eq-forward-deterministic}) streamlines the process, making the generation of corrupted samples more straightforward and less computationally demanding. 
@@ -152,17 +152,13 @@ Here, let's explore the relationship between  $$ \mathbf{x}_{t-1} $$ and $$ \mat
 
   $$
   \begin{align}
-  \begin{aligned}
-  \mathbf{x}_{t-1} &= \sqrt{\bar{\gamma}_t} \, \mathbf{x}_t 
-  + \big( \sqrt{\bar{\alpha}_{t-1}} -  \sqrt{\bar{\gamma}_t  \bar{\alpha}_t} \big) \mathbf{x}_0 \\
-  &= \sqrt{\bar{\gamma}_t} \, \mathbf{x}_t 
-  + \frac{\bar{\alpha}_{t-1} (1 - \bar{\gamma}_t  \alpha_t)}{\sqrt{\bar{\alpha}_{t-1}} +  \sqrt{\bar{\gamma}_t  \bar{\alpha}_t} }\mathbf{x}_0
-  \end{aligned}  \label{eq-consecutive-time-x0}
+  \mathbf{x}_{t-1} = \sqrt{\bar{\gamma}_t} \, \mathbf{x}_t 
+  + \big( \sqrt{\bar{\alpha}_{t-1}} -  \sqrt{\bar{\gamma}_t  \bar{\alpha}_t} \big) \mathbf{x}_0  \label{eq-consecutive-time-x0}
   \end{align}
   $$
 
-However, in practice, we cannot directly use Eq. (\ref{eq-consecutive-time-noise}) or Eq. (\ref{eq-consecutive-time-x0}) to derive $$ \mathbf{x}_{t-1} $$ from $$ \mathbf{x}_t $$ during the backward denoising process, as neither the noise $$ {\boldsymbol \epsilon} $$ nor the original clean image ​$$ \mathbf{x}_0 $$ is known. The key insight of diffusion models is that neural networks can be trained to approximate the inverse of the deterministic mapping function $$ \mathbf{x}_t = f(\mathbf{x}_{0},t) $$
-from the forward process. By leveraging this inverse mapping, the learned neural networks can help to estimate 
+However, in practice, we cannot directly use Eq. (\ref{eq-consecutive-time-noise}) or Eq. (\ref{eq-consecutive-time-x0}) to derive $$ \mathbf{x}_{t-1} $$ from $$ \mathbf{x}_t $$ during the backward denoising process, as neither the noise $$ {\boldsymbol \epsilon} $$ nor the original clean image ​$$ \mathbf{x}_0 $$ is known. The key insight of diffusion models is that neural networks can be trained to approximate the inverse of the deterministic mapping function $$ \mathbf{x}_t = f(\mathbf{x}_{0},\boldsymbol \epsilon, t) $$
+in the forward process. By leveraging this inverse mapping, the learned neural networks can help to estimate 
 either the noise $$ {\boldsymbol \epsilon} $$ or the original clean image ​$$ \mathbf{x}_0 $$ from a noisy image $$ \mathbf{x}_t $$.
 There are two approaches for training neural networks, denoted as $$ {\boldsymbol \theta} $$, to approximate this inverse function:
 1. Approximate the inverse mapping from $$ \mathbf{x}_t $$ to the clean image $$ \mathbf{x}_0 $$, i.e. $$ \mathbf{\hat x}_0 = f^{-1}_{\boldsymbol \theta} (\mathbf{x}_t, t) $$, allowing Eq. (\ref{eq-consecutive-time-x0}) to be applied for the backward denoising process. This inverse mapping is  shown as the right-to-left red dash arrow in Figure 1. 
@@ -186,15 +182,15 @@ $$
 $$
 
 Alternatively, at any time step $$ t $$, given the corrupted image 
-$$ \mathbf{x}_t $$, we may also directly estimate the original clean image $$ \mathbf{x}_0 $$ based on $$ \mathbf{x}_t $$. If the estimate is good enough, we can terminate the above backward denoising process at an earlier stage; Otherwise, 
-we further denoise one time step backwards, i.e. deriving $$ \mathbf{x}_{t-1} $$ from $$ \mathbf{x}_t $$.  Based on $$ \mathbf{x}_{t-1} $$, we may derive a better estimate of the clean image $$ \mathbf{x}_0 $$. This sampling process continues until we finally obtain a sufficiently good clean image $$ \mathbf{x}_0 $$. 
+$$ \mathbf{x}_t $$, we may also directly estimate the original clean image $$ \mathbf{x}_0 $$ based on $$ \mathbf{x}_t $$. If the estimate is good enough, we can terminate the backward denoising process at an earlier stage; Otherwise, 
+we further denoise one time step backwards, i.e. deriving $$ \mathbf{x}_{t-1} $$ from $$ \mathbf{x}_t $$.  Based on $$ \mathbf{x}_{t-1} $$, we may derive a better estimate of the clean image $$ \mathbf{x}_0 $$. This denoising process continues until we finally obtain a sufficiently good clean image $$ \mathbf{x}_0 $$. 
 
 In the above backward denoising process, to obtain a slightly cleaner image $$ \mathbf{x}_{t-1} $$ from $$ \mathbf{x}_{t} $$ 
 using either Eq. (\ref{eq-consecutive-time-x0}) or Eq. (\ref{eq-consecutive-time-noise}), we have two options for training neural networks to approximate the inverse mapping, as previously discussed.
 
 ### **I. Estimating clean image $$ \mathbf{x}_0 $$**
 
-In this case, we construct a deep neural network $$ \boldsymbol \theta $$ to approximate the inverse function of the above diffusion mapping $$ \mathbf{x}_t = f(\mathbf{x}_0, t) $$, denoted as
+In this case, we construct a deep neural network $$ \boldsymbol \theta $$ to approximate the inverse function of the above diffusion mapping $$ \mathbf{x}_t = f(\mathbf{x}_0, {\boldsymbol \epsilon}, t) $$, denoted as
 
 $$
 \mathbf{\hat x}_0 = f^{-1}_{\boldsymbol \theta} (\mathbf{x}_t, t)
@@ -216,11 +212,11 @@ $$
 \begin{aligned}
 \mathbf{x}_{t-1} &= 
 \sqrt{\bar{\gamma}_t} \, \mathbf{x}_t 
-+ \frac{\bar{\alpha}_{t-1} (1 - \bar{\gamma}_t  \alpha_t)}{\sqrt{\bar{\alpha}_{t-1}} +  \sqrt{\bar{\gamma}_t  \bar{\alpha}_t} } \hat{\mathbf{x}}_0
++ \big( \sqrt{\bar{\alpha}_{t-1}} -  \sqrt{\bar{\gamma}_t  \bar{\alpha}_t} \big) \hat{\mathbf{x}}_0
 \\
 &= 
 \sqrt{\bar{\gamma}_t} \, \mathbf{x}_t 
-+ \frac{\bar{\alpha}_{t-1} (1 - \bar{\gamma}_t  \alpha_t)}{\sqrt{\bar{\alpha}_{t-1}} +  \sqrt{\bar{\gamma}_t  \bar{\alpha}_t} }  f^{-1}_{\boldsymbol \theta} (\mathbf{x}_t, t) \\
++ \big( \sqrt{\bar{\alpha}_{t-1}} -  \sqrt{\bar{\gamma}_t  \bar{\alpha}_t} \big)  f^{-1}_{\boldsymbol \theta} (\mathbf{x}_t, t) \\
 \end{aligned}
 $$
 
@@ -239,7 +235,7 @@ The corresponding sampling process to generate a new image can be described as f
 
 $$
  \mathbf{x}_{t-1} = \sqrt{\bar{\gamma}_t} \, \mathbf{x}_t 
-+ \frac{\bar{\alpha}_{t-1} (1 - \bar{\gamma}_t  \alpha_t)}{\sqrt{\bar{\alpha}_{t-1}} +  \sqrt{\bar{\gamma}_t  \bar{\alpha}_t} } \hat{\mathbf{x}}_0
++ \big( \sqrt{\bar{\alpha}_{t-1}} -  \sqrt{\bar{\gamma}_t  \bar{\alpha}_t} \big) \hat{\mathbf{x}}_0
 $$
 
 
@@ -257,7 +253,7 @@ In Figure 3, we have shown some sampling results from the MNIST-Fashion dataset 
 
 ### **II. Estimating noise $$ {\boldsymbol \epsilon} $$**
 
-In this case, we construct a deep neural network $$ \boldsymbol \theta $$ to approximate the inverse function via estimating the noise $$ {\boldsymbol \epsilon} $$ from each corrupted image $$ \mathbf{x}_t $$ at each time step $$ t $$:
+In this case, we construct a deep neural network $$ \boldsymbol \theta $$ to approximate the inverse function via estimating the noise $$ {\boldsymbol \epsilon} $$ from a corrupted image $$ \mathbf{x}_t $$ at each time step $$ t $$:
 
 $$
 \hat{\boldsymbol \epsilon} = g^{-1}_{\boldsymbol \theta} (\mathbf{x}_t, t)
@@ -283,7 +279,7 @@ $$
 \end{aligned}
 $$
 
-Similarly, the corresponding sampling process to generate a new image as above can be described as follows:
+Similarly, the corresponding sampling process to generate a new image can be described as follows:
 
 * sample a Gaussian noise $$ \mathbf{x}_T \sim \mathcal{N}(0, \mathbf{I}) $$
 
