@@ -139,7 +139,13 @@ This snippet demonstrates the LLM’s ability to aggregate information, condensi
 
 ### Why Macroeconomics?
 
-bla
+Now that we have social media narratives in hand, let's focus on *macroeconomics*.  
+
+**Macroeconomics** studies the behavior of the economy as a whole, examining factors like inflation, unemployment, and economic growth. **Microeconomics**, on the other hand, is concerned with the decision-making of individuals and firms, examining indicators like a certain stock.
+
+A core concept in Narrative Economics is that narratives can drive economics flunctuations. This is especially intriguing at the macroeconomic level, as the theory suggests that widely shared stories can influence the collective decisions of millions of individuals. Additionaly, existing research focuses on microeconomic indicators within the context of Narrative Economics, while the application in macroeconomics remains relatively unexplored.
+
+However, studying this macroeconomically is more xomplax than microeconomically due to the complex interplay of various factors, the need for broad-covering narratives, and the inherent difficulty in isolating causal relationships. 
 
 ## Testing Narratives' Effectiveness for Macroeconomic Forecasting
 
