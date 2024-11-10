@@ -129,6 +129,10 @@ We analyzed the tweets to assure the presence of narratives within them. First, 
         {% include figure.html path="assets/img/2024-05-07-myproject/relatio_plot.jpg" class="img-fluid z-depth-2" %}
     </div>
 
+A more advanced technique to extract and analyze narratives is using LLMs. Prompting ChatGPT (TODO: cite) with tweets and prices of economic indicator from matching dates, we generated LLM-based narratives analysis, one for each date in the post-2021 dataset, containing a component of summarized analysis of the tweets and a component of potential effect on the given financial indicator. 
+Here's a snippet of such an LLM-based narrative analysis:
+
+This snippet demonstrates the LLM’s ability to aggregate information, condensing and distinguishing between opinions and occurrences conveyed in the tweets. Moreover, the LLM links its insights to potential future consequences for the financial indicator, a pivotal initial move towards prediction.
 
 ### Why Macroeconomics?
 
@@ -146,24 +150,5 @@ bla
 
 bla
 
-
-
-## Tweets
-
-An example of displaying a tweet:
-{% twitter https://twitter.com/rubygems/status/518821243320287232 %}
-
-An example of pulling from a timeline:
-{% twitter https://twitter.com/jekyllrb maxwidth=500 limit=3 %}
-
-For more details on using the plugin visit: [jekyll-twitter-plugin](https://github.com/rob-murray/jekyll-twitter-plugin)
-
-
-## Blockquotes
-
-<blockquote>
-    We do not grow absolutely, chronologically. We grow sometimes in one dimension, and not in another, unevenly. We grow partially. We are relative. We are mature in one realm, childish in another.
-    —Anais Nin
-</blockquote>
 
 
