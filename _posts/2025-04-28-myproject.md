@@ -137,18 +137,6 @@ Here's a snippet of such an LLM-based narrative analysis for inputs of dates 29/
         {% include figure.html path="assets/img/2024-05-07-myproject/chatgpt_snippet.jpg" class="img-fluid z-depth-2" %}
     </div>
 
-<blockquote>
-  
-**Analysis of Tweets:**
-
-...Some tweets express concerns about inflation, rising interest rates, and the impact on the economy and personal finances...Several tweets highlight the impact of government policies on various sectors, such as healthcare, student loans, and housing.
-Some tweets express skepticism towards central banks and their role in the economy...A few tweets discuss the impact of global events, such as the Russian mobilization...
-
-**Potential Effect on S\&P 500:**
-
-...Concerns about inflation, rising interest rates, and economic instability expressed in the tweets may lead to increased market volatility and potential declines in the S\&P 500...Global events mentioned in the tweets...may have indirect effects on the S\&P 500 through their impact on global markets and investor sentiment.
-</blockquote>
-
 This snippet demonstrates the LLM’s ability to aggregate information, condensing and distinguishing between opinions and occurrences conveyed in the tweets. Moreover, the LLM links its insights to potential future consequences for the financial indicator, a pivotal initial move towards prediction.
 
 ### Why Macroeconomics?
