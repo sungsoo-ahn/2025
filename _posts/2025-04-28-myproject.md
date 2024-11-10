@@ -287,13 +287,21 @@ To keep it short, we present results only for predicting the VIX 'next value' of
         {% include figure.html path="assets/img/2024-05-07-myproject/embeddings_exp_results.jpg" class="img-fluid rounded z-depth-1" style="width: 80%;" %}
     </div>
 
+For the next-day horizon, the 'as-previous' F baseline outperforms all other models (3.079 MSE). This suggests that the input information might not be beneficial for such a short-term prediction. 
+
+For the next-week horizon, initially both TF models (13.148, 13.147) appeared to outperform the F model (13.463) and F baseline (16.172), implying a potential influence of the textual content. 
+However, the 'random texts' TF baseline (13.056), which replaced actual tweets with random texts, outperformed all others, indicating the improvement was not due to meaningful textual content. We hypothesize that the presence of text improves performance, even when random, due to spurious correlations or random noise aiding generalization, similar to regularization techniques. 
+
+A contributing factor may arise from the difficulty of effectively capturing and representing aggregated tweet information for financial prediction, as well as the inherent challenges in predicting future values of a volatile financial indicator, characterized by frequent random movements and fluctuations, using its historical values.    
+
+
 
 
 
 ## What Can We Take Away?
 
 This study serves as a foundation for further exploration, highlighting the need for new macroeconomic models or
-tasks designed to assess the extracted narratives’ influence on the economy
+tasks designed to assess the extracted narratives’ influence on the economy.
 
 TODO: link to paper.
 
