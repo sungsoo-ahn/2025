@@ -120,7 +120,7 @@ An example tweet can be:
 
 {% twitter https://x.com/CNLiberalism/status/1525672295775223808 %}
 
-#### Did We Really Collect Narratives?
+### Did We Really Collect Narratives?
 To confirm the presence of narratives within our Twitter dataset, we conducted an analysis using RELATIO, a tool designed to "capture political and economic narratives" by mapping relationships and interactions among entities within a corpus.  Upon processing our dataset with RELATIO, we obtained "narrative statements" (as defined in their paper) and visualized their temporal distribution:
 
 <div class="col-sm mt-3 mt-md-0">
@@ -154,9 +154,9 @@ We focus on predicting three key macroeconomic indicators:
 
 **Federal Funds Rate (FFR):** The interest rate at which depository institutions, such as banks, lend reserve balances overnight to meet reserve requirements. The FFR serves as a Federal Reserve monetary policy tool, is influenced by public perception of economic stability, and its fluctuations impact various sectors, making it widely monitored.
 
-**S\&P 500:** A stock market index measuring the performance of the 500 largest publicly traded companies in the U.S. It reflects collective investor confidence in economic growth and risk appetite and is widely regarded as a barometer of the overall health of the US stock market. 
+**S&P 500:** A stock market index measuring the performance of the 500 largest publicly traded companies in the U.S. It reflects collective investor confidence in economic growth and risk appetite and is widely regarded as a barometer of the overall health of the US stock market. 
 
-**CBOE Volatility Index (VIX):** Measures market expectations of future volatility based on S\&P 500 options prices, often referred to as the 'fear gauge' as it tends to rise during market stress and fall during market stability.
+**CBOE Volatility Index (VIX):** Measures market expectations of future volatility based on S&P 500 options prices, often referred to as the 'fear gauge' as it tends to rise during market stress and fall during market stability.
 
 These indicators are well-suited for testing the predictive power of narratives for macroeconomics due to their daily frequency, which aligns with the rapid pace of Twitter, and their sensitivity to public sentiment and behavior.
 
@@ -167,20 +167,25 @@ The previous two sections discussed the theory of Narrative Economics and our cu
 
 We can now delve into the series of experiments we tested to assess the central question - **can economic narratives can provide valuable insights for future macroeconomic movements?**
 
-Each experiment test the predictive power of narratives from the curated Dataset, for macroeconomic prediction of one (or more) of the financial targets intriduced before: FFR, S\&P 500, and VIX. 
+Each experiment test the predictive power of narratives from the curated Dataset, for macroeconomic prediction of one (or more) of the financial targets intriduced before: FFR, S&P 500, and VIX. 
 
 We won't be able to cover all the details of the experiments in this blog, but it is available in our paper. 
 
 ### Experimental Setup
 
-**Prediction tasks:** we test the predictive power of narratives on three tasks commonly used in macroeconomic literature (TODO:cite):
+**Prediction tasks:** 
+
+We test the predictive power of narratives on three tasks commonly used in macroeconomic literature (TODO:cite):
 * Next value: predicts the target’s value at the specified horizon.
 * Percentage change: predicts the target’s percentage change between the specified horizon and
 the day before.
 * Direction change: classifies the target’s direction of change (increase or decrease) between the
 specified horizon and the day before.
 
-**Models Categories:** We differ our models into 3 categories based on their input signal:
+
+**Models Categories:** 
+
+We differ our models into 3 categories based on their input signal:
 * Financial (F): utilizes historical financial data, from the past week or month.
 * Textual (T): leverages solely textual data, either raw tweets or tweets’ analyses.
 * Textual & Financial (TF): draws upon both textual and financial data as input.
@@ -210,23 +215,23 @@ Our model selection progresses from simpler models, frequently employed in the f
 *Textual models:*
 * Daily sentiment: a simple method, commonly used in the literature, is presenting each tweet with its sentiment score. Then, we average the scores of individual tweets of the same dates to recive a daily sentiment, and concatenate over a week.
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram1.jpg" class="img-fluid z-depth-2" %}
+        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram_1.jpg" class="img-fluid z-depth-2" %}
     </div>
     
 * LLM's representations of individual/joint tweets: we derive embeddings of individual or concatenated tweets using pre-trained languge models (BERT,RoBERTa and T5 TODO:cite). In the individual case, tweets' embeddings are aggregated daily by averaging or concatenating embeddings of same-date tweets. In the joint case, tweets are concatenated daily to create a single daily embedding, potentially capturing their collective meaning without explicit aggregation, avoiding potential information loss.
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram2.jpg" class="img-fluid z-depth-2" %}
+        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram_2.jpg" class="img-fluid z-depth-2" %}
     </div>
   
 * LLM-generated analyses for prediction/as input to a subsequent prediction model: First, we feed GPT-3.5 (TODO:cite) with a month of tweets and corresponding financial values of the target indicator to create monthly analyses.Then, these analyses are either used directly for prediction or as an input to a subsequent T5 model.  
 *since the LLM receives both tweets and financial data to enable analyzing relationships, this method applies only for a TF model type.
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram3.jpg" class="img-fluid z-depth-2" %}
+        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram_3.jpg" class="img-fluid z-depth-2" %}
     </div>
 
 *Fusing textual and financial models:* we experiment with several strategies for combining the representations from the T and F models for a unified prediction:
 * concatenation: the simplest approach is concatenating the T and F representations.
-* DA_RNN(TODO:cite): The dual-stage attention-based RNN model predicts the current value of a time-series based on its previous values and those of exogenous series. We feed historical financial representations (F) as the time series and
+* DA-RNN(TODO:cite): The dual-stage attention-based RNN model predicts the current value of a time-series based on its previous values and those of exogenous series. We feed historical financial representations (F) as the time series and
 textual representations (T) as the exogenous series.
 * Prompt-based fusion: LLM-based analysis of given tweets and historical financial values of the target indicator are fed together with raw historical values of the target to a T5 model as separate segments.
 
