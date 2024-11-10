@@ -130,9 +130,15 @@ We analyzed the tweets to assure the presence of narratives within them. First, 
     </div>
 
 A more advanced technique to extract and analyze narratives is using LLMs. Prompting ChatGPT (TODO: cite) with monthly tweets and prices of economic indicator from matching dates, we generated LLM-based narratives analysis, one for each date in the post-2021 dataset, containing a component of summarized analysis of the tweets and a component of potential effect on the given financial indicator. 
-Here's a snippet of such an LLM-based narrative analysis for inputs of dates 29/08/2022 to 28/09/2022. In this time period the Federal Reserve raised the interest rates in an effort to combat inflation, the US Supreme Court ruled that the Biden administration could not extend the pause on student loan payments, and more. :
+
+Here's a snippet of such an LLM-based narrative analysis for inputs of dates 29/08/2022 to 28/09/2022. In this time period the Federal Reserve raised the interest rates in an effort to combat inflation, the US Supreme Court ruled that the Biden administration could not extend the pause on student loan payments:
+
+<div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2024-05-07-myproject/chatgpt_snippet.jpg" class="img-fluid z-depth-2" %}
+    </div>
 
 <blockquote>
+  
 **Analysis of Tweets:**
 
 ...Some tweets express concerns about inflation, rising interest rates, and the impact on the economy and personal finances...Several tweets highlight the impact of government policies on various sectors, such as healthcare, student loans, and housing.
