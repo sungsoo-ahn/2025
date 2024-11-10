@@ -7,28 +7,29 @@ authors:
 - anonymous
 
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-towards-more-rigorous-llm-evals.bib
+bibliography: 2025-04-28-towards-more-rigorous-llm-evals.bib  
 
 toc:
-  - name: Introduction
-  - name: Elements of Rigorous Empirical Evaluation
-  - name: Summary of Mirzadeh et al. (2024)<d-cite key='mirzadeh2024gsm'><\d-cite>
+  - name: 1. Introduction
+  - name: 2. Elements of Rigorous Empirical Evaluation
+  - name: 3. Summary of Mirzadeh et al. (2024)
     subsections:
-    - name: What is the new benchmark and how is it constructed?
-    - name: What are the key findings and conclusions from the empirical evaluation?
-  - name: Critical Analysis and Re-evaluation
+    - name: 3.1 What is the new benchmark and how is it constructed?
+    - name: 3.2 What are the key findings and conclusions from the empirical evaluation?
+  - name: 4. Critical Analysis and Re-evaluation
     subsections:
-    - name: "Performance variability: Why is variability not (that) surprising?"    
+    - name: "4.1 Performance variability: Why is variability not (that) interesting?"
       subsections:
-      - name: "When is variability not expected?"      
-      - name: "When is variability expected?"
-    - name: "Performance decline on GSM-Symbolic"    
+      - name: 4.1.1 When is variability not expected?      
+      - name: 4.1.2 When is variability expected?
+    - name: 4.2 Performance decline on GSM-Symbolic    
       subsections:
-      - name: "Alternative explanation: Distribution mismatch"
-      - name: "Considering each model independently: Is the decline in performance statistically significant?"
-      - name: "Considering all models together: Is the decline in performance statistically significant?"
-    - name: "Performance decrease and variance increase with question complexity"    
-  - name: Conclusion
+      - name: "4.2.1 Alternative explanation: Distribution mismatch"
+      - name: "4.2.2 Considering each model independently: Is the decline in performance statistically significant?"
+      - name: "4.2.3 Considering all models together: Is the decline in performance statistically significant?"
+    - name: 4.3 Performance decrease and variance increase with question complexity
+    - name: 4.4 M1, P1, P2 and No-Op results
+  - name: 5. Conclusion
 ---
 
 
@@ -45,7 +46,7 @@ analysis crucial to reduce bias and improve the reliability of findings.
 In this post, we argue that LM researchers---especially those working in areas where core concepts lack established definitions---must adopt statistical methods to improve the rigor of their empirical evaluations.
 Leveraging techniques from classical statistics, such as confidence intervals and hypothesis tests, will help move the field beyond anecdotal observations and philosophical arguments toward a more scientific understanding of model behavior.
 
-To illustrate this in practice, we outline three key elements of rigorous empirical evaluation and apply them to [Mirzadeh et al. (2024), <d-cite key="mirzadeh2024gsm"></d-cite>](https://arxiv.org/pdf/2410.05229)---a recent paper that examines whether LMs perform "formal reasoning" or rely on "sophisticated pattern matching".
+To illustrate this in practice, we outline three key elements of rigorous empirical evaluation and apply them to [Mirzadeh et al. (2024)](https://arxiv.org/pdf/2410.05229) <d-cite key="mirzadeh2024gsm"></d-cite>---a recent paper that examines whether LMs perform "formal reasoning" or rely on "sophisticated pattern matching".
 
 # 2. Elements of Rigorous Empirical Evaluation
 
@@ -53,13 +54,13 @@ To illustrate this in practice, we outline three key elements of rigorous empiri
 2. Quantification of uncertainty in results through appropriate statistical measures.
 3. Careful consideration of train-test overlap, with reasonable attempts to evaluate on "out-of-sample" datasets when possible.
 
-> If one does not give thought to what the data would be like under the assumption that one’s theory is false, one is likely reinforcing confirmation bias rather than establishing the validity of the theory. *"Reproducibility, p-values, and type III errors: response to Mayo", Philip B. Stark (2022)*
+> If one does not give thought to what the data would be like under the assumption that one’s theory is false, one is likely reinforcing confirmation bias rather than establishing the validity of the theory. *"Reproducibility, p-values, and type III errors: response to Mayo", Philip B. Stark (2022) <d-cite key="stark2022reproducibility"></d-cite>*
 
 The first step in rigorous evaluation is to clarify assumptions and explore alternative explanations.
 Experiments can often be designed in ways that unintentionally favour the hypothesis being tested.
 By being upfront about assumptions, questioning their validity, and investigating alternative explanations, researchers will improve the reliability and robustness of their conclusions. 
 
-> In some sense it [the p-value] offers a first line of defense against being fooled by randomness, separating signal from noise [...]. *"It’s Not the P-Values’ Fault", Yoav Benjamini (2016).*
+> In some sense it [the p-value] offers a first line of defense against being fooled by randomness, separating signal from noise [...]. *"It’s Not the P-Values’ Fault", Yoav Benjamini (2016) <d-cite key="benjamini2016not"></d-cite>*
 
 A second essential step is quantifying uncertainty, using tools like error bars and confidence intervals, which help us gauge the reliability of performance metrics by providing a range of plausible values.
 Additionally, although often criticized, hypothesis tests and p-values can serve as an initial, coarse filter to distinguish signal from noise, laying the groundwork for deeper exploration into the practical significance of the reported results.
@@ -78,11 +79,11 @@ We review their methods, identify gaps in their analysis, and offer a more rigor
 
 # 3. Summary of [Mirzadeh et al. (2024)](https://arxiv.org/pdf/2410.05229)
 
-The paper makes two technical contributions: (1) a new benchmark, called GSM-Symbolic, for evaluating mathematical reasoning of LMs, and (2) an empirical evaluation of 25 LMs on this new benchmark to assess their reasoning capabilities.
+Mirzadeh et al. (2024) <d-cite key="mirzadeh2024gsm"></d-cite> make two technical contributions: (1) a new benchmark, called GSM-Symbolic, for evaluating mathematical reasoning of LMs, and (2) an empirical evaluation of 25 LMs on this new benchmark to assess their reasoning capabilities.
 
 ## 3.1 What is the new benchmark and how is it constructed?
 
-The authors propose GSM-Symbolic, a variant of the well-established GSM8K benchmark for grade school math word problems (Cobbe et al., 2021). Since GSM8K has likely leaked into many LMs' training sets due to its popularity, GSM-Symbolic aims to match its distribution whilst eliminating (or reducing) train-test overlap.
+The authors propose GSM-Symbolic, a variant of the well-established GSM8K benchmark for grade school math word problems <d-cite key="cobbe2021training"></d-cite>. Since GSM8K has likely leaked into many LMs' training sets due to its popularity, GSM-Symbolic aims to match its distribution whilst eliminating (or reducing) train-test overlap.
 
 The authors also construct four variants of GSM-Symbolic by modifying question difficulty:
 - GSM-M1: An easier version that removes one clause from each question.
@@ -92,9 +93,11 @@ The authors also construct four variants of GSM-Symbolic by modifying question d
 To generate GSM-Symbolic and the variants, the authors create "templates" from GSM8K questions by identifying modifiable variables whilst preserving the underlying logic. 
 Each variable has a specified domain and constraints to ensure valid questions and answers. Here's an example template:
 
-<!-- {{< figure library="true" src="assets/img/2025-04-28-towards-more-rigorous-llm-evals/template_gsm.png" title="Figure from Mirzadeh et al. (2024) https://arxiv.org/pdf/2410.05229." numbered="false">}} -->
-
-{% include figure.html path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/template_gsm.png" class="img-fluid" %}
+{% include figure.html 
+  path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/template_gsm.png" 
+  class="img-fluid" 
+  caption="Figure 1 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>"
+%}
 
 For their analysis, the authors select 100 questions from GSM8K and create such a template for each of them.
 Whilst the paper does not specify their selection method, we suppose that these questions were sampled randomly from GSM8K's test set.
@@ -122,9 +125,9 @@ The paper concludes that LMs “are not performing formal reasoning”.
 
 # 4. Critical analysis and re-evaluation
 
-## 4.1 Performance variability: Why is variability not (that) surprising?
+## 4.1 Performance variability: Why is variability not (that) interesting?
 
-> As shown, all models exhibit a **non-negligible variance** across different sets. […] It is **interesting that this variation even exists** […]. *Mirzadeh et al. (2024)*
+> As demonstrated, all models show a **significant variance** across different sets. […] It is **noteworthy that this variation even occurs** […]. <d-cite key="mirzadeh2024gsm"></d-cite>, emphasis added.
 
 The authors emphasise the "non-negligible variance" in model performance across different GSM-Symbolic datasets, framing it as surprising. But is it?
 
@@ -147,7 +150,9 @@ Model | 1 digit | 2 digits | 3 digits | 4 digits
 Phi-3.5-mini-instruct | 100% | 93.0% | 90.8% | 84.0%
 Llama-3-8B-Instruct | 100% | 100% | 100% | 95.3%
 
-*Table XX. Accuracy (zero-shot, CoT prompting) on a simple addition task. The larger model (Llama-3-8B-Instruct) is more accurate. For llama, numbers upto 3 digits are a single token, and 4-digit numbers are 2 tokens. For Phi, a $d$-digit number takes $d$ tokens. More on this in Section XX. [TODO]*
+<div class="caption">
+Accuracy (zero-shot, CoT prompting) on a simple addition task. The larger model (Llama-3-8B-Instruct) is more accurate. For llama, numbers upto 3 digits are a single token, and 4-digit numbers are 2 tokens. For Phi, a $d$-digit number takes $d$ tokens. More on this in Section 4.2.1. 
+</div>
 
 **Is performing arithmetic part of reasoning?** 
 Solving a word math problem consists of two steps: (1) translating the text to a sequence of operations, and (2) performing the operations correctly.
@@ -196,11 +201,10 @@ As expected, models with success probabilities closer to $1/2$ (e.g. Gemma-7b, P
 
 **Note:** The x-axis scales are different for different models.
 
-<!-- {{< figure library="true" src="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fig2_gsm.png" title="Figure 2 from Mirzadeh et al. (2024) https://arxiv.org/pdf/2410.05229." numbered="false">}} -->
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fig2_gsm.png" 
   class="img-fluid" 
-  caption="Figure 2 from <d-cite key='mirzadeh2024gsm'></d-cite>"
+  caption="Figure 2 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>"
 %}
 
 For the models shown in this figure, the GSM8K accuracy ranges from 74% for the weakest model (Llama3-8B-instruct) to 95% for the strongest model (GPT-4o). 
@@ -226,7 +230,9 @@ The table below compares the 95% Wilson score intervals to the approximate accur
 | o1-mini                        | (86%, 97%)          | (90%, 97%)            |
 | o1-preview                     | (90%, 98%)          | (88%, 96%)            |
 
-*Table XX: 95% Wilson score intervals for the point estimates of $p_m$ and reported ranges, approximated from Figure 1 in Mirzadeh et al. (2024), as well as Figures 10 and 12 from the appendix.*
+<div class="caption">
+95% Wilson score intervals for the point estimates of $p_m$ and reported ranges, approximated from Figure 1 in Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the paper'sappendix.
+</div>
 
 Note that our confidence intervals are wider than the implied ranges in the figures in the paper, i.e. under the iid Bernoulli assumption, the variation is actually **larger** than what is observed.
 This discrepancy is likely to be explained by the unmodelled correlations between questions---as initially suggested, a more reasonable assumption would be to model the probability of success on a question level, $p_{m,n}$, rather than assuming each question is equally likely to be answered correctly. 
@@ -240,7 +246,7 @@ The analysis can be repeated once (if) the detailed question-level data becomes 
 The paper claims that LMs perform worse on GSM-Symbolic compared to GSM8K. 
 Let's examine the evidence presented in Section 4.1, which we quote directly:
 
-> Another noteworthy observation is that the performance (represented by the dashed line in Fig. 2) on the original questions from the 100 examples of GSM8K used as templates is **often more than one standard deviation away from the center** of the GSM-Symbolic performance distribution, frequently on the right side of the distribution (this holds for 21 out of 25 models). **One explanation** for this could be data contamination […]. *Mirzadeh et al. (2024)*
+> Another noteworthy observation is that the performance (represented by the dashed line in Fig. 2) on the original questions from the 100 examples of GSM8K used as templates is **often more than one standard deviation away from the center** of the GSM-Symbolic performance distribution, frequently on the right side of the distribution (this holds for 21 out of 25 models). **One explanation** for this could be data contamination […]. <d-cite key='mirzadeh2024gsm'></d-cite>, emphasis added
 
 There are two issues with the above quote. 
 First, the authors suggest data contamination as one possible explanation for the performance decline, but do not explore other plausible explanations.
@@ -261,19 +267,22 @@ Looking at the example template (Figure 1 above), we see that the sampling range
 In other words, it is impossible to generate the original GSM8K question from the proposed symbolic template.
 A more appropriate sampling domain for both `total` and `ans` might be $[50, 99]$.
 
-[TODO: need to run the analsis and edit this to be realistic as opposed to this hypothetical example]
+{% include figure.html 
+  path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/addition_accuracy.png" 
+  class="img-fluid" 
+  title="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task" 
+  caption="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers." 
+%}
+
+[TODO: Image above shows what actually happens.]
 This seemingly small change in number ranges can significantly impact the performance of LMs due to tokenisation.
 Consider how Phi-3.5-mini-instruct and Llama3-8b handle numbers differently: Phi-3.5-mini-instruct uses 2 tokens for numbers $[10, 99]$ and 3 tokens for numbers $[100, 500]$, whilst Llama3-8b uses just 1 token for all numbers in $[10, 500]$.
-To understand the impact, let's model the probability of making mistakes during arithmetic operations.
-Assume there's a base error probability $\epsilon$ per token operation, which increases linearly with the total number of tokens involved.
-For $N$ total tokens in an operation, the error probability becomes $(N-1)\epsilon$ (so that adding two numbers each taking 1 token we have $N=2$ and the error probability is $\epsilon$).
+To understand the impact, .....
 
-[run the analysis on the data, will need the raw data for this!]
 The question in Figure 1 involves three arithmetic operations (two additions and one subtraction).
-In the worst case, where all numbers are at least 100, Llama3-8b would be correct with probability $(1-\epsilon)^3$ since it uses 1 token per number. 
-Phi-3.5-mini-instruct, on the other hand, would be correct with probability $(1-5\epsilon)^3$ as it uses 3 tokens per number.
-Taking $\epsilon=0.01$ as an example gives us a correct solution probability of $97.03\%$ for Llama3-8b, and only $85.74\%$ for Phi-3.5-mini-instruct.
-If all numbers are in the range $[10, 99]$, the probability of correct solution remains $97.03\%$ for Llama3-8b and goes up to $91.27\%$ for Phi-3.5-mini-instruct.
+In the worst case, where all numbers are at least 100, Llama3-8b would be correct with probability ...
+Phi-3.5-mini-instruct, on the other hand, would be correct with probability ... [take numbers from the model].
+
 
 If the number ranges in GSM-Symbolic are systematically chosen to be larger than those in GSM8K (and don't even include the original question values), then it cannot claimed that the datasets come from the same distribution.
 Tokenisation is one mechansim that explains why this matters; larger number ranges in GSM-Symbolic may inherently disadvantage certain (and eventually all) models, potentially explaining some of the observed performance differences between models and datasets.
@@ -284,7 +293,8 @@ The same analysis is applicable to more complex questions; e.g. adding one extra
 
 --> Say reasoning: translating the text to a sequence of operations; what the paper tests is whether models can do that *and* perofrm the operations correctly. The rest of this post will not deal with reasoning; 
 
-**Verdict:** TODO
+**Verdict:** Some indication that distributions might differ. Contamination is not mutually exclusive. TODO
+
 
 ### 4.2.2 Considering each model independently: Is the decline in performance statistically significant?
 
@@ -296,8 +306,7 @@ For many models in Figure 2, the dashed line is in the right tail of the distrib
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fig3_gsm.png" 
   class="img-fluid" 
-  title="Figure from Mirzadeh et al. (2024) https://arxiv.org/pdf/2410.05229." 
-  caption="Figure from Mirzadeh et al. (2024) https://arxiv.org/pdf/2410.05229." 
+  caption="Figure 3 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>"
 %}
 
 The right tool to determine whether these differences are statistically significant is hypothesis testing.
@@ -366,7 +375,7 @@ where  $p_{8k}=[p_{1,8k}, \dots, p_{7,8k}]$ and $p_{symb}= [p_{1,symb}, \dots, p
 **To summarise: analysing the results of models jointly, there appears to be some evidence of differences in performance.**
 
 
-## 4.3 Performance decreases and increasing variance with question complexity
+## 4.3 Performance decrease and variance increase with question complexity
 
 The paper highlights this on multiple occasions, most notably in Section 4.3. Some examples include:
 
@@ -376,12 +385,10 @@ The paper highlights this on multiple occasions, most notably in Section 4.3. So
 
 > [page 9, Figure 6 reproduced below] the distribution of performance shifts to the left (i.e., accuracy decreases), and the variance increases.
 
-<!-- {{< figure library="true" src="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fig6_gsm.png" title="Figure from Mirzadeh et al. (2024) https://arxiv.org/pdf/2410.05229." numbered="false">}} -->
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fig6_gsm.png" 
   class="img-fluid" 
-  title="Figure from Mirzadeh et al. (2024) https://arxiv.org/pdf/2410.05229." 
-  caption="Figure from Mirzadeh et al. (2024) https://arxiv.org/pdf/2410.05229." 
+  caption="Figure 6 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>"
 %}
 
 Here we have 4 different datasets: the baseline GSM-Symbolic, an easier version of it (M1) and two harder versions of it (P1 and P2). It is not unreasonable to expect that a model might perform differently on different datasets, for example better on the easier ones and worse on harder ones. We can make a similar assumption as before, namely that the answers a model m gives to questions of difficulty $d=-1, 0, 1, 2$ are i.i.d. Bernoulli trials with success probability $p_{m,d}$. The distribution of the total number of correct answers is then $\text{Bin}(N=100, p_{m,d})$, which has variance $N \cdot p_{m,d} \cdot (1 - p_{m,d})$.
@@ -391,7 +398,7 @@ If we happen to have decreasing probabilities of success, i.e. $p_{m,-1} > p_{m,
 **To summarise: the emphasis on “non-negligible variance” and “increase in variance” throughout the paper appears to be an over-interpretation of normal statistical variation.**
 
 ## 4.4 M1, P1, P2 and No-Op results
-
+TODO
 
 ## 5. Conclusion
 
@@ -405,41 +412,9 @@ Findings:
 
 
 
-References 
+<!-- ### Acknowledgement 
 
-[1] Mirzadeh, I., Alizadeh, K., Shahrokhi, H., Tuzel, O., Bengio, S., & Farajtabar, M. (2024). GSM-Symbolic: Understanding the Limitations of Mathematical Reasoning in Large Language Models. arXiv preprint arXiv:2410.05229.
-
-[2] Cobbe, K., Kosaraju, V., Bavarian, M., Chen, M., Jun, H., Kaiser, L., ... & Schulman, J. (2021). Training verifiers to solve math word problems. arXiv preprint arXiv:2110.14168.
-
-[3] Benjamini, Y. (2016). It’s Not the P-Values’ Fault. 
-
-[4] Stark, P. B. (2022). Reproducibility, p-values, and type III errors: response to Mayo (2022). Conservation Biology, 36, e13986. https://doi.org/10.1111/cobi.13986
-
-[5] Zhang, A. K., Klyman, K., Mai, Y., Levine, Y., Zhang, Y., Bommasani, R., & Liang, P. (2024). Language model developers should report train-test overlap. arXiv preprint arXiv:2410.08385.
-
-[6] Wasserstein, R. L. (2019). Moving to a world beyond “p< 0.05”.
-
-Valmeekam, K., Olmo, A., Sreedharan, S., & Kambhampati, S. (2022, November). Large language models still can't plan (a benchmark for LLMs on planning and reasoning about change). In NeurIPS 2022 Foundation Models for Decision Making Workshop.
-
-### BIBTEX
-
-@misc{wasserstein2019moving,
-  title={Moving to a world beyond “p< 0.05”},
-  author={Wasserstein, RL},
-  year={2019},
-  publisher={Taylor \& Francis}
-}
-
-@inproceedings{valmeekam2022large,
-  title={Large language models still can't plan (a benchmark for LLMs on planning and reasoning about change)},
-  author={Valmeekam, Karthik and Olmo, Alberto and Sreedharan, Sarath and Kambhampati, Subbarao},
-  booktitle={NeurIPS 2022 Foundation Models for Decision Making Workshop},
-  year={2022}
-}
-
-### Acknowledgement 
-
-I’d like to Alex Coca, Adam Goliński, Roumen Popov, and ... for their feedback on this post.
+I’d like to Alex Coca, Adam Goliński, Roumen Popov, and ... for their feedback on this post. -->
 
 ### Appendix
 
@@ -485,9 +460,15 @@ The test statistic (pm,8k - pm,symb) / SE(ppool)  is then approximately normal a
   caption="99% Wilson score intervals for the point estimates of $p_m$" 
 %}
 
-<!-- <iframe title="GSM-Symbolic and GSM8K along with 99% CI" aria-label="Dot Plot" id="datawrapper-chart-4DrS6" src="https://datawrapper.dwcdn.net/4DrS6/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="624" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();</script> -->
+{% include figure.html 
+  path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/clopper_0.99.png" 
+  class="img-fluid" 
+  title="99% Clopper-Pearson intervals for the point estimates of $p_m$" 
+  caption="99% Clopper-Pearson intervals for the point estimates of $p_m$" 
+%}
 
 
+<!-- 
 ## Suggested workflow for evaluating language models
 
 1. **Specify the objective and any relevant assumptions:** Define what is being investigated and explicitly outline any relevant assumptions that could impact the evaluation.
@@ -507,4 +488,4 @@ Regardless of the NHST outcomes, critically examine the results, initial assumpt
 
 **Remark:** Although NHST is the most commonly used framework, it is not the only approach for statistical analysis. 
 Bayesian analysis offers an alternative with some practical similarities, such as the use of highest density intervals (HDI). 
-However, the two approaches differ deeply in their epistemological foundations: NHST relies on a frequentist interpretation, viewing the results (e.g. accuracy) as repeated sampling from a fixed parameter. In contrast, Bayesian analysis treats parameters themselves as random variables and uses probability to express a degree of belief, that gets updated with new evidence.
+However, the two approaches differ deeply in their epistemological foundations: NHST relies on a frequentist interpretation, viewing the results (e.g. accuracy) as repeated sampling from a fixed parameter. In contrast, Bayesian analysis treats parameters themselves as random variables and uses probability to express a degree of belief, that gets updated with new evidence. -->
