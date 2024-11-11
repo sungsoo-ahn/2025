@@ -94,7 +94,7 @@ might face losing important information in your blog post.
 To include images in your submission in this way, you must do something like the following:
 
 ```markdown
-{% raw %}{% include figure.html path="assets/img/2025-04-28-distill-example/iclr.png" class="img-fluid" %}{% endraw %}
+{% raw %}{% include figure.html path="assets/img/2025-04-28-distill-example/iclr.png" class="img-fluid" %}
 ```
 
 which results in the following image:
