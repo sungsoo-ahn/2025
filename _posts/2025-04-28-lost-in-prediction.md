@@ -354,7 +354,7 @@ The missing link between the successful narrative extraction demonstrated by the
 This study serves as a foundation for further exploration, highlighting the need for new macroeconomic models or
 tasks designed to assess the extracted narratives’ influence on the economy.
 
-*This blogpost extends the technical experiments presented in our paper "Can LLMs Learn Macroeconomic Narratives from Social Media?" <d-cite key="gueta2024can"></d-cite>, delving deeper into broader aspects that naturally in a paper can only receive a shorter discussion as it primarily presents the technical results. We invite you to read the paper for full background and experiments.*
+*This blogpost extends the technical experiments presented in our paper <d-footnote>Link will be added for the camera ready version.</d-footnote>, delving deeper into broader aspects that naturally in a paper can only receive a shorter discussion as it primarily presents the technical results. We invite you to read the paper for full background and experiments.*
 
 
 
