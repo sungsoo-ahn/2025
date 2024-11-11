@@ -35,17 +35,31 @@ bibliography: 2025-04-28-distill-example.bib
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
 toc:
-  - name: Equations
-  - name: Images and Figures
+  - name: What is Narrative Economics?
     subsections:
-    - name: Interactive Figures
+    - name: The Ambiguity of the Term "Narrative"
+    - name: Social Media Narratives
+      subsections:
+      - name: Did We Really Collect Narratives?
+      - name: LLMs Can Understand Narratives
+  - name: Why Macroeconomics?
+    subsections:
+    - name: Our Macroeconomic Indicators
+  - name: Connecting the Dots: Testing Narratives' Effectiveness for Macroeconomic Forecasting
+    subsections:
+    - name: Experimental Setup
+      subesctions:
+      - name: Prediction Tasks
+      - name: Models Categories
+      - name: Baselines
+      - name: Models
+    - name: The Challenges in Improving Models with Narratives
+      subesctions:
+      - name: Sentiment-Based Prediction
+      - name: Embeddings for Time-Series Prediction
+      - name: Predicting Using LLM Analyses
+  - name: What Can We Take Away?
   - name: Citations
-  - name: Footnotes
-  - name: Code Blocks
-  - name: Diagrams
-  - name: Tweets
-  - name: Layouts
-  - name: Other Typography?
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
@@ -127,7 +141,7 @@ To confirm the presence of narratives within our Twitter dataset, we conducted a
         {% include figure.html path="assets/img/2024-05-07-myproject/relatio_plot.jpg" class="img-fluid z-depth-2" style="width: 60%;" %}
     </div>
 
-### LLMs can Understand Narratives
+### LLMs Can Understand Narratives
 A more advanced technique to extract and analyze narratives is using LLMs. Prompting ChatGPT (TODO: cite) with monthly tweets and prices of economic indicator from matching dates, we generated LLM-based narratives analysis, one for each date in the post-2021 dataset, containing a component of summarized analysis of the tweets and a component of potential effect on the given financial indicator. 
 
 Here's a snippet of such an LLM-based narrative analysis for inputs of dates 29/08/2022 to 28/09/2022. In this time period the Federal Reserve raised the interest rates in an effort to combat inflation, the US Supreme Court ruled that the Biden administration could not extend the pause on student loan payments:
@@ -161,7 +175,7 @@ We focus on predicting three key macroeconomic indicators:
 These indicators are well-suited for testing the predictive power of narratives for macroeconomics due to their daily frequency, which aligns with the rapid pace of Twitter, and their sensitivity to public sentiment and behavior.
 
 
-# Connecting the dots: Testing Narratives' Effectiveness for Macroeconomic Forecasting
+# Connecting the Dots: Testing Narratives' Effectiveness for Macroeconomic Forecasting
 
 The previous two sections discussed the theory of Narrative Economics and our curated Twitter dataset, which holds narratives within them, and the distinction between macroeconomics and microeconomics, highlighting why it is interesting to research the theory at the macroeconomic level and what macroeconomic indicators we chose.
 
@@ -173,7 +187,7 @@ We won't be able to cover all the details of the experiments in this blog, but i
 
 ## Experimental Setup
 
-### Prediction tasks:
+### Prediction Tasks
 
 We test the predictive power of narratives on three tasks commonly used in macroeconomic literature (TODO:cite):
 * Next value: predicts the target’s value at the specified horizon.
@@ -183,7 +197,7 @@ the day before.
 specified horizon and the day before.
 
 
-### Models Categories:
+### Models Categories
 
 We differ our models into 3 categories based on their input signal:
 * Financial (F): utilizes historical financial data, from the past week or month.
@@ -192,7 +206,7 @@ We differ our models into 3 categories based on their input signal:
 
   Our goal is to effectively leverage insights from both textual narratives and historical financial patterns to improve prediction accuracy.  The added value of incorporating textual narratives can be demonstrated if a model that utilizes both text and financial data (TF model) outperforms a model that relies solely on financial data (F model). 
 
-### Baselines:
+### Baselines
 
 **Financial baselines:**
 * As/inverse-previous: next value is the same/inverse as previous.
@@ -204,7 +218,7 @@ We differ our models into 3 categories based on their input signal:
 * Shuffled tweets: feeding the LLM with chronologically disordered tweets, isolating the impact of temporal narratives from confounding patterns or memoraization. This baseline assess the model reliance on temporal narratives.
 * Synthetic 'narratives': Fedding the LLM with generated narrative-like sentences experssing positive or negative cues, aligned with subsequent changes in the financial target. This baseline assess the LLM's ability to infer relationships between aligned narratives and the following market changes.
 
-### Models:
+### Models
 
 Our model selection progresses from simpler models, frequently employed in the financial literature (TODO:cite), to more advanced architectures. This progression serves two purposes: 
 1. Achieving positive results with simpler models provides a stronger evidence for the predictive signal of narratives.
@@ -229,6 +243,8 @@ Our model selection progresses from simpler models, frequently employed in the f
         {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram_3.jpg" class="img-fluid rounded z-depth-1" style="width: 50%;" %}
     </div>
 
+
+
 **Fusing textual and financial models:** we experiment with several strategies for combining the representations from the T and F models for a unified prediction:
 * concatenation: the simplest approach is concatenating the T and F representations.
 * DA-RNN(TODO:cite): The dual-stage attention-based RNN model predicts the current value of a time-series based on its previous values and those of exogenous series. We feed historical financial representations (F) as the time series and
@@ -245,7 +261,7 @@ TL;DR:
 * Models incorporating narratives (TF) show limited improvement over those using solely financial data (F).
 * Gains were inconsistent, marginal and statistically insignificant -> we regard it as negative results.
 
-### Sentiment-based next-day prediction:
+### Sentiment-Based Prediction:
 
 We fed classic ML models with daily sentiments for FFR 'next value' and 'direction change' prediction (as separate tasks).
 
@@ -275,7 +291,7 @@ In predicting 'next value', best F, TF and T models yield comparable MSE to the 
 **What can we learn?** Sentiment analysis, lacks the nuance necessary for accurate financial prediction, and traditional ML models have limitations in capturing complex market dynamics.  This is evident as several models did not even outperform non-learned baselines, highlighting the need for more improved text representations and advanced prediction models.  
 
 
-### Embeddings for time-series prediction:
+### Embeddings for Time-Series Prediction:
 
 Here we turn to embedding-representations (as explained in the Experimental Setup) and to DA-RNN (TODO:cite) model, which is designed to capture temporal dynamics and complex relationships within its given data.
 
@@ -296,7 +312,7 @@ A contributing factor may arise from the difficulty of effectively capturing and
 
 **What can we learn?** Our models struggled to leverage tweets for the prediction, indicating that implicitly capturing and aggregating latent narratives within LLMs remains a challenge.
 
-### Predicting using LLM Analyses:
+### Predicting Using LLM Analyses:
 
 **Can LLMs generate an accurate prediction?** We first tried to directly predict the financial indicator (average weekly VIX or S&P 500) as a generative response of the chat version of GPT (TODO: cite) prompted with a monthly window of tweets and corresponding values of the financial target. This resulted in limited inconsistent success. While the LLM consistently generated insightful narrative analyses and demonstrated comprehension of financial implications, it exhibited inconsistencies when applying these insights for prediction.  For instance, it occasionally refused to provide predictions, or it would simply mirror input ranges, neglecting the potential impact of the narratives it successfully analyzed. When presented with 'synthetic narratives', it recognized the change direction but struggled to quantify the magnitude of it.
 
