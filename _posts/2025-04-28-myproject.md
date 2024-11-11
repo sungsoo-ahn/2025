@@ -306,10 +306,38 @@ This approach addresses limitations of both previous experiments:
 * Instead of relying on the embedding-based approach, which struggled to aggregate diverse narratives, we leverage the LLM's ability to produce concise analyses.   
 * Instead of directly using the LLM for prediction, which exhibited inconsistencies, we utilize a separate fine-tuned model for downstream prediction.  
 
+| Type | Model | Accuracy | F<sub>1</sub>-Score | 
+|---|---|---|---|
+|  | Train-majority | 0.424 | 0.0 |  
+|  | Week-majority | 0.484 | 0.598 | 
+| F-baselines | As-previous | 0.484 | 0.552 | 
+|  | Inverse-previous | 0.517 | 0.511 | 
+|  | Up-predictor | 0.576 | 0.731 | 
+|  | Down-predictor | 0.424 | 0.0 |  
+|---|---|---|---| 
+| F | T5 Base | **0.604** | 0.723 |  
+| F | T5 Large | 0.593 | **0.727** | 
+|---|---|---|---| 
+| TF | T5 Base | 0.626 | 0.738 |  
+| TF | T5 Large | **0.627** | **0.742** |  
+|---|---|---|---| 
+| T | T5 Large | 0.587 | 0.726 | 
+|---|---|---|---| 
+| T-baseline | Synthetic narratives | 0.489 | 0.254 |
 
+
+So did it work? not really. Results show that there is no significant difference between the best TF and F models, with a performance gap of ~2% on the limited test set of ~90 samples. <d-footnote>As a reminder, we can only use the second Twitter dataset, of tweets that were posted after the LLM's training cutoff date, and our financial indicators are of daily frequency, therefore the small dataset for this type of experiments.</d-footnote>
+We confirmed it using the McNemar's test (TODO:cite) which shows no statistically significant difference (p-value=0.48).
+On the good side, this is the only approach were our models surpass all baselines. 
+
+**What can we learn?** While TF and F models outperform all others, the difference between their performance is negligible.
 
 
 ## What Can We Take Away?
+
+Despite the presence of narratives in our curated datasets and the development of NLP tools for narrative extraction, evaluating their impact on macroeconomic prediction remains challenging.  Our models incorporating narrative data showed limited improvement over those using only financial data, failing to consistently outperform baselines or financial models.  Any observed improvements were marginal and statistically insignificant and we regard it as a negative result.
+
+The missing link between the successful narrative extraction demonstrated by the LLM's analyses and the limited improvement in macroeconomic prediction raises questions about the extent to which narratives alone can truly drive and forecast economic fluctuations, at least at the macroeconomic level.
 
 This study serves as a foundation for further exploration, highlighting the need for new macroeconomic models or
 tasks designed to assess the extracted narratives’ influence on the economy.
