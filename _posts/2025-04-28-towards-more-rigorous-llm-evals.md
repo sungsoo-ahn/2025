@@ -246,7 +246,7 @@ The analysis can be repeated once (if) the detailed question-level data becomes 
 The paper claims that LMs perform worse on GSM-Symbolic compared to GSM8K. 
 Let's examine the evidence presented in Section 4.1, which we quote directly:
 
-> Another noteworthy observation is that the performance (represented by the dashed line in Fig. 2) on the original questions from the 100 examples of GSM8K used as templates is **often more than one standard deviation away from the center** of the GSM-Symbolic performance distribution, frequently on the right side of the distribution (this holds for 21 out of 25 models). **One explanation** for this could be data contamination […]. <d-cite key='mirzadeh2024gsm'></d-cite>, emphasis added
+> Another noteworthy observation is that the performance (represented by the dashed line in Fig. 2) on the original questions from the 100 examples of GSM8K used as templates is **often more than one standard deviation away from the center** of the GSM-Symbolic performance distribution, frequently on the right side of the distribution (this holds for 21 out of 25 models). **One explanation** for this could be data contamination […]. <d-cite key='mirzadeh2024gsm'></d-cite>, emphasis added.
 
 There are two issues with the above quote. 
 First, the authors suggest data contamination as one possible explanation for the performance decline, but do not explore other plausible explanations.
@@ -260,12 +260,17 @@ We note that the two explanations are not mutually exclusive---both can be true 
 
 The paper does not examine or discuss the potential distribution mismatch, making it impossible to draw definitive conclusions without access to the templates used.
 However, there is evidence indicating that the distribution of GSM-Symbolic questions differs from that of GSM8K, and that GSM-Symbolic is indeed more difficult.
-Looking at the example template (Figure 1 above), we see that the sampling ranges for some variables **exclude** the original GSM8K values:
+Looking at the example template (Figure 1 from the paper, reproduced above), we see that the sampling ranges for some variables **exclude** the original GSM8K values:
 - The variable `total` is sampled from $[100, 500]$, whilst in the original question we have `total=62`.
 - The variable `ans` is sampled from $[85, 200]$, whilst in the original question we have `ans=14`.
 
-In other words, it is impossible to generate the original GSM8K question from the proposed symbolic template.
-A more appropriate sampling domain for both `total` and `ans` might be $[50, 99]$.
+[This might actually go in the previous section, where we discuss the disentanglement of reasoning and arithmetic; then refer to it here.]
+In other words, the original GSM8K question cannot be generated from the proposed symbolic template.
+A more appropriate sampling range for both `total` and `ans` might be $[50, 99]$.
+We argue that and empirically show that such small changes in number ranges can significantly impact the performance of LMs, even if reasoning is consistent.
+To this end,consider again the simple addition task of adding two $d$-digit numbers.
+The figure below illustrates how the probability of answering a question correctly varies based on the number of digits $d$ of the numbers being added and the number of carry operations involved in the sum.
+
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/addition_accuracy.png" 
@@ -274,10 +279,51 @@ A more appropriate sampling domain for both `total` and `ans` might be $[50, 99]
   caption="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers." 
 %}
 
-[TODO: Image above shows what actually happens.]
-This seemingly small change in number ranges can significantly impact the performance of LMs due to tokenisation.
-Consider how Phi-3.5-mini-instruct and Llama3-8b handle numbers differently: Phi-3.5-mini-instruct uses 2 tokens for numbers $[10, 99]$ and 3 tokens for numbers $[100, 500]$, whilst Llama3-8b uses just 1 token for all numbers in $[10, 500]$.
-To understand the impact, .....
+[elaborate on this plot a bit..]
+
+
+[these will go to appendix, leaving here until this section is complete]
+llama results:
+```
+Call:
+glm(formula = correct ~ total_digits + carry, family = "binomial", 
+    data = .)
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)   7.63465    0.37386  20.421   <2e-16 ***
+total_digits -0.46207    0.04052 -11.402   <2e-16 ***
+carry        -0.15291    0.07054  -2.168   0.0302 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 1440.4  on 5162  degrees of freedom
+Residual deviance: 1141.7  on 5160  degrees of freedom
+AIC: 1147.7
+```
+
+Phi results:
+```
+Call:
+glm(formula = correct ~ total_digits + carry, family = "binomial", 
+    data = .)
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)   4.15642    0.21505  19.328   <2e-16 ***
+total_digits -0.29440    0.03006  -9.794   <2e-16 ***
+carry        -0.02347    0.05571  -0.421    0.674    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 2211.6  on 3071  degrees of freedom
+Residual deviance: 2055.2  on 3069  degrees of freedom
+AIC: 2061.2
+```
 
 The question in Figure 1 involves three arithmetic operations (two additions and one subtraction).
 In the worst case, where all numbers are at least 100, Llama3-8b would be correct with probability ...
@@ -416,7 +462,7 @@ Findings:
 
 I’d like to Alex Coca, Adam Goliński, Roumen Popov, and ... for their feedback on this post. -->
 
-### Appendix
+# Appendix
 
 
 Paragraph about p-values should go somehwere. Things to say: 
@@ -424,7 +470,8 @@ Paragraph about p-values should go somehwere. Things to say:
 - p-values get misinterpreted; Some "Don'ts" : don't base your conclusions solely on whether an association or effect was found to be “statistically significant”; Don’t believe that an association or effect exists just because it was statistically significant. Don’t believe that an association or effect is absent just because it was not statistically significant. Don’t conclude anything about scientific or practical importance based on statistical significance (or lack thereof).
 
 
-#### Clopper-Pearson CIs
+## Clopper-Pearson confidence intervals
+
 For robustness purposes, here are the [Clopper-Pearson](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Clopper–Pearson_interval) confidence intervals as well:
 <!-- {{< figure library="true" src="assets/img/2025-04-28-towards-more-rigorous-llm-evals/clopper_0.95.png" title="95% Clopper-Pearson intervals for the point estimates of $p_m$." numbered="false">}} -->
 {% include figure.html 
@@ -438,8 +485,9 @@ For robustness purposes, here are the [Clopper-Pearson](https://en.wikipedia.org
 
 The Clopper-Pearson CIs are slightly wider than those obtained using the Wilson score. Using Clopper-Pearson would not have changed any of the results presented in this post. 
 
-#### Two-sample binomial proportion test
-Strictly speaking, pm,symb is not a fixed number but an estimate computed using another sample. Therefore truly correct test to perform here is a two-sample binomial proportion test:
+## Two-sample binomial proportion test
+
+
 $$
 H_0: p_{m, 8k} - p_{m, symb} =0 \quad\quad\quad H_A: p_{m, 8k} - p_{m, symb} \neq 0
 $$
@@ -450,7 +498,7 @@ p_{pool} = \frac{(100 p_{8k} + 5000p_{symb})}{100+5000} \quad \text{SE}(p_{pool}
 $$
 The test statistic (pm,8k - pm,symb) / SE(ppool)  is then approximately normal and is used co compute p-values, which I’ve done in [this spreadsheet](https://docs.google.com/spreadsheets/d/1Ul6ZgFXf_II5EFUCgnJ9hSIQYwHxogxYBmwDn_bA4sA/edit?usp=sharing). The results in this case are exactly the same as before:  we are able to reject the null for Gemma-7b, Mistral-7b-instruct-v0.1 and Phi-2 (performing worse), and Llama3-8b (performing better). 
 
-#### 99% Confidence intervals (hypothesis test at the 1% confidence level)
+## 99% Confidence intervals
 
 <!-- {{< figure library="true" src="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.99.png" title="99% Wilson score intervals for the point estimates of $p_m$." numbered="false">}} -->
 {% include figure.html 
