@@ -45,7 +45,7 @@ toc:
   - name: Why Macroeconomics?
     subsections:
     - name: Our Macroeconomic Indicators
-  - name: Connecting the Dots: Testing Narratives' Effectiveness for Macroeconomic Forecasting
+  - name: "Connecting the Dots: Testing Narratives' Effectiveness for Macroeconomic Forecasting"
     subsections:
     - name: Experimental Setup
       subesctions:
