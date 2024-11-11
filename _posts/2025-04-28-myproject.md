@@ -136,7 +136,7 @@ An example tweet can be:
 To confirm the presence of narratives within our Twitter dataset, we conducted an analysis using RELATIO <d-cite key="ash2021relatio"></d-cite>, a tool designed to "capture political and economic narratives" by mapping relationships and interactions among entities within a corpus. Upon processing our dataset with RELATIO, we obtained "narrative statements" (as defined in their paper) and visualized their temporal distribution:
 
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-05-07-myproject/relatio_plot.jpg" class="img-fluid z-depth-2" style="width: 60%;" %}
+        {% include figure.html path="assets/img/2025-04-28-myproject/relatio_plot.jpg" class="img-fluid z-depth-2" style="width: 60%;" %}
     </div>
 
 ### LLMs Can Understand Narratives
@@ -145,7 +145,7 @@ A more advanced technique to extract and analyze narratives is using LLMs. Promp
 Here's a snippet of such an LLM-based narrative analysis for inputs of dates 29/08/2022 to 28/09/2022. In this time period the Federal Reserve raised the interest rates in an effort to combat inflation, the US Supreme Court ruled that the Biden administration could not extend the pause on student loan payments:
 
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-05-07-myproject/chatgpt_snippet.jpg" class="img-fluid z-depth-2" %}
+        {% include figure.html path="assets/img/2025-04-28-myproject/chatgpt_snippet.jpg" class="img-fluid z-depth-2" %}
     </div>
 
 This snippet demonstrates the LLM’s ability to aggregate information, condensing and distinguishing between opinions and occurrences conveyed in the tweets. Moreover, the LLM links its insights to potential future consequences for the financial indicator, a pivotal initial move towards prediction.
@@ -227,18 +227,18 @@ Our model selection progresses from simpler models, frequently employed in the f
 **Textual models:**
 * Daily sentiment: a simple method, commonly used in the literature, is presenting each tweet with its sentiment score. Then, we average the scores of individual tweets of the same dates to recive a daily sentiment, and concatenate over a week.
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram_1.jpg" class="img-fluid rounded z-depth-1" style="width: 50%;" %}
+        {% include figure.html path="assets/img/2025-04-28-myproject/models_diagram_1.jpg" class="img-fluid rounded z-depth-1" style="width: 50%;" %}
     </div>
     
 * LLM's representations of individual/joint tweets: we derive embeddings of individual or concatenated tweets using pre-trained languge models (BERT <d-cite key="devlin2018bert"></d-cite>,RoBERTa <d-cite key="liu2019roberta"></d-cite> and T5 <d-cite key="raffel2020exploring"></d-cite>. In the individual case, tweets' embeddings are aggregated daily by averaging or concatenating embeddings of same-date tweets. In the joint case, tweets are concatenated daily to create a single daily embedding, potentially capturing their collective meaning without explicit aggregation, avoiding potential information loss.
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram_2.jpg" class="img-fluid rounded z-depth-1" style="width: 50%;" %}
+        {% include figure.html path="assets/img/2025-04-28-myproject/models_diagram_2.jpg" class="img-fluid rounded z-depth-1" style="width: 50%;" %}
     </div>
   
 * LLM-generated analyses for prediction or as input to a subsequent prediction model: First, we feed OpenAI's Chat Completion API, GPT-3.5 <d-cite key="ChatGPT-3.5"></d-cite> with a month of tweets and corresponding financial values of the target indicator to create monthly analyses.Then, these analyses are either used directly for prediction or as an input to a subsequent T5 model.  
 *since the LLM receives both tweets and financial data to enable analyzing relationships, this method applies only for a TF model type.
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-05-07-myproject/models_diagram_3.jpg" class="img-fluid rounded z-depth-1" style="width: 50%;" %}
+        {% include figure.html path="assets/img/2025-04-28-myproject/models_diagram_3.jpg" class="img-fluid rounded z-depth-1" style="width: 50%;" %}
     </div>
 
 
@@ -295,7 +295,7 @@ We extensively evaluated various model configurations, targer indicators (FFR an
 To keep it short, we present results only for predicting the VIX 'next value' of the next-day and next-week (as separate tasks). Additional experiments showed a recurring pattern to the presented results.
 
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-05-07-myproject/embeddings_exp_results.jpg" class="img-fluid rounded z-depth-1" style="width: 80%;" %}
+        {% include figure.html path="assets/img/2025-04-28-myproject/embeddings_exp_results.jpg" class="img-fluid rounded z-depth-1" style="width: 80%;" %}
     </div>
 
 For the next-day horizon, the 'as-previous' F baseline outperforms all other models (3.079 MSE). This suggests that the input information might not be beneficial for such a short-term prediction. 
