@@ -9,18 +9,18 @@ future: true
 htmlwidgets: true
 hidden: false
 
-## Build page via 
-## ```bash
-## rbenv init
-## rbenv install 3.3.0
-## rbenv local 3.3.0
-## bundle install
-## bundle exec jekyll serve --future
-## ```
+# Build page via 
+# ```bash
+# rbenv init
+# rbenv install 3.3.0
+# rbenv local 3.3.0
+# bundle install
+# bundle exec jekyll serve --future
+# ```
 
-## Anonymize when submitting
-## authors:
-##   - name: Anonymous
+# Anonymize when submitting
+# authors:
+#   - name: Anonymous
 
 authors:
   - name: Adrian Hill
@@ -32,29 +32,28 @@ authors:
     affiliations:
       name: IdePHICS, INDY and SPOC laboratories, EPFL
 
-## must be the exact same name as your blogpost
+# must be the exact same name as your blogpost
 bibliography: 2025-04-28-sparse-ad.bib  
 
-## Add a table of contents to your post.
-##   - make sure that TOC names match the actual section names
-##     for hyperlinks within the post to work correctly. 
-##   - please use this format rather than manually creating a markdown table of contents.
+# Add a table of contents to your post.
+#   - make sure that TOC names match the actual section names
+#     for hyperlinks within the post to work correctly. 
+#   - please use this format rather than manually creating a markdown table of contents.
 toc:
-  - name: Equations
-  - name: Images and Figures
+  - name: Automatic differentiation
     subsections:
-    - name: Interactive Figures
-  - name: Citations
-  - name: Footnotes
-  - name: Code Blocks
-  - name: Diagrams
-  - name: Tweets
-  - name: Layouts
-  - name: Other Typography?
+    - name: Chain rule
+    - name: Forward-mode AD
+    - name: Reverse-mode AD
+  - name: Sparse AD
+  - name: Sparsity pattern detection
+  - name: Matrix coloring
+  - name: Second-order sparse AD
+  - name: Demonstration
 
-## Below is an example of injecting additional post-specific styles.
-## This is used in the 'Layouts' section of this post.
-## If you use this post as a template, delete this _styles block.
+# Below is an example of injecting additional post-specific styles.
+# This is used in the 'Layouts' section of this post.
+# If you use this post as a template, delete this _styles block.
 _styles: >
   .fake-img {
     background: ##bbb;
@@ -74,9 +73,9 @@ _styles: >
 
 Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling.
 
-## Automatic Differentiation
+## Automatic differentiation
 
-### Chain Rule
+### Chain rule
 
 For a **composed function** $f(x) = h(g(x))$, 
 the chain rule tells us that we obtain the Jacobian of $f$ by **composing the Jacobians** of $h$ and $g$:
@@ -106,7 +105,7 @@ Keeping intermediate Jacobian **matrices in memory** is inefficient or even impo
 By **materialized matrices**, we refer to matrices $A$ for which entries $(A)_{i,j}$ are kept in **computer memory**,
 e.g. a NumPy `np.array` or Julia `Matrix`.
 
-### AD is Matrix-free
+### AD is matrix-free
 
 Keeping full Jacobian **matrices in memory** (*solid*) is inefficient or even impossible.
 
@@ -126,7 +125,7 @@ Efficiently **materializing** these functions to a matrix $J_f$ is what this tal
 * Even though I will sometimes put numbers into linear maps in the upcoming slides, they should be considered "**opaque black boxes**" until materialized into matrices
 * Intuitive example for why materialization can be bad: **identity function** -->
 
-### Evaluating Linear Maps
+### Evaluating linear maps
 
 We only propagate **materialized vectors** (*solid*) through our **linear maps** (*dashed*):
 
@@ -203,7 +202,7 @@ The same idea also applies to rows in reverse-mode.
 
 <!-- * **"Coloring":** find orthogonal columns (or rows) via graph coloring  -->
 
-### The Solution: Sparsity Patterns
+### The Solution: Sparsity patterns
 
 **Step 1:** Pattern detection
 
@@ -219,9 +218,9 @@ The same idea also applies to rows in reverse-mode.
 
 <!-- * **"Coloring":** find orthogonal columns (or rows) via graph coloring  -->
 
-## Sparsity Pattern Detection
+## Sparsity pattern detection
 
-### Index Sets
+### Index sets
 
 Binary Jacobian patterns are efficiently compressed using **indices of non-zero values**:
 
@@ -241,7 +240,7 @@ Binary Jacobian patterns are efficiently compressed using **indices of non-zero 
 (Since the method we are about to show is essentially a binary forward-mode AD system, we compress along rows.)
 
 
-### Core Idea: Propagate Index Sets
+### Core Idea: Propagate index sets
 
 **Naive approach:** materialize full Jacobians (inefficient or impossible):
 
@@ -253,3 +252,9 @@ Binary Jacobian patterns are efficiently compressed using **indices of non-zero 
 
 **But how do we define these propagation rules?**
 Let's do some analysis!
+
+## Matrix coloring
+
+## Second-order sparse AD
+
+## Demonstration
