@@ -265,8 +265,6 @@ TL;DR:
 
 We fed classic ML models with daily sentiments for FFR 'next value' and 'direction change' prediction (as separate tasks).
 
-<div style="font-size: 6px;">
-
 | Type | Model | Accuracy |
 |---|---|---|
 | F baselines | As-previous | 0.812 |
@@ -275,7 +273,6 @@ We fed classic ML models with daily sentiments for FFR 'next value' and 'directi
 | T | Logistic Regression | 0.885 |
 | T | SVM | 0.885 |
 
-</div>
 
 In classifying 'direction change', models with financial input (F & TF) outperform text-only models (T), with a 5% accuracy improvement (0.94 vs. 0.89). Models with both textual and financial signals (TF) achived similar accuracy to F models (0.939 vs. 0.936), suggesting that text has little impact. The T models achieve comparable accuracy to the F baselines (0.89 vs. 0.81).
 
@@ -324,13 +321,13 @@ This approach addresses limitations of both previous experiments:
 
 | Type | Model | Accuracy | F<sub>1</sub>-Score | 
 |---|---|---|---|
-|  | Train-majority | 0.424 | 0.0 |  
-|  | Week-majority | 0.484 | 0.598 | 
+| F-baselines | Train-majority | 0.424 | 0.0 |  
+| F-baselines | Week-majority | 0.484 | 0.598 | 
 | F-baselines | As-previous | 0.484 | 0.552 | 
-|  | Inverse-previous | 0.517 | 0.511 | 
-|  | Up-predictor | 0.576 | 0.731 | 
-|  | Down-predictor | 0.424 | 0.0 |  
-|---|---|---|---| 
+| F-baselines | Inverse-previous | 0.517 | 0.511 | 
+| F-baselines | Up-predictor | 0.576 | 0.731 | 
+| F-baselines | Down-predictor | 0.424 | 0.0 |  
+|-----|-----|-----|-----| 
 | F | T5 Base | **0.604** | 0.723 |  
 | F | T5 Large | 0.593 | **0.727** | 
 |---|---|---|---| 
