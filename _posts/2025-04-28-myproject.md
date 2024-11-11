@@ -300,11 +300,11 @@ A contributing factor may arise from the difficulty of effectively capturing and
 
 **Can LLMs generate an accurate prediction?** We first tried to directly predict the financial indicator (average weekly VIX or S&P 500) as a generative response of the chat version of GPT (TODO: cite) prompted with a monthly window of tweets and corresponding values of the financial target. This resulted in limited inconsistent success. While the LLM consistently generated insightful narrative analyses and demonstrated comprehension of financial implications, it exhibited inconsistencies when applying these insights for prediction.  For instance, it occasionally refused to provide predictions, or it would simply mirror input ranges, neglecting the potential impact of the narratives it successfully analyzed. When presented with 'synthetic narratives', it recognized the change direction but struggled to quantify the magnitude of it.
 
-**Repurpusing the LLMs' analyses for a subsequent prediction model:** The previous experiment revealed the LLM's ability to generate insightful analyses of tweets and financial data. Here we utilize these analyses as inputs for a dedicated prediction model to predict the S&P 500 'direction change'.  
-Addressing the limitations of both preceding experiments, we use the LLM's ability to produce a consice analyses instead of the embedding-based approach (last section) which struggled to aggregate diverse narratives, and we utilize a separate fine-tuned model for downstream prediction, instead of the LLM-predictor approach (previous paragraph). 
+**Repurpusing the LLMs' analyses for a subsequent prediction model:** The previous experiment revealed the LLM's ability to generate insightful analyses of tweets and financial data. To leverage this capability, we utilize these analyses as inputs for a dedicated prediction model to predict the S&P 500 'direction change'.
 
-
-
+This approach addresses limitations of both previous experiments:
+* Instead of relying on the embedding-based approach, which struggled to aggregate diverse narratives, we leverage the LLM's ability to produce concise analyses.   
+* Instead of directly using the LLM for prediction, which exhibited inconsistencies, we utilize a separate fine-tuned model for downstream prediction.  
 
 
 
