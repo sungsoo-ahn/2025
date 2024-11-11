@@ -1,6 +1,6 @@
 ---
 layout: distill
-title: "Lost in Prediction: The Missing Link Between LLMs and Narrative Economics. -------OR------- Lost in Prediction: Why Social Media Narratives  Don't Help Macroeconomic Forecasting?"
+title: "Lost in Prediction: The Missing Link Between LLMs and Narrative Economics.      OR     Lost in Prediction: Why Social Media Narratives  Don't Help Macroeconomic Forecasting?"
 description: Can we predict the macroeconomy by analyzing the narratives people share on social media?  We dove deep into the world of Narrative Economics, using NLP models to analyze millions of viral tweets and see if they could help us predict the fluctuations of macroeconomic indicators. Spoiler alert: it's not that easy! Join us as we explore the fascinating relationship between narratives, social media, and macroeconomy, and uncover the challenges of turning narratives into treasure.
 date: 2025-04-28
 future: true
@@ -245,7 +245,7 @@ Our model selection progresses from simpler models, frequently employed in the f
 
 **Fusing textual and financial models:** we experiment with several strategies for combining the representations from the T and F models for a unified prediction:
 * concatenation: the simplest approach is concatenating the T and F representations.
-* DA-RNN <d-cite key="Qin2017dual"></d-cite>: The dual-stage attention-based RNN model predicts the current value of a time-series based on its previous values and those of exogenous series. We feed historical financial representations (F) as the time series and
+* DA-RNN <d-cite key="qin2017dual"></d-cite>: The dual-stage attention-based RNN model predicts the current value of a time-series based on its previous values and those of exogenous series. We feed historical financial representations (F) as the time series and
 textual representations (T) as the exogenous series.
 * Prompt-based fusion: LLM-based analysis of given tweets and historical financial values of the target indicator are fed together with raw historical values of the target to a T5 model as separate segments.
 
@@ -288,7 +288,7 @@ In predicting 'next value', best F, TF and T models yield comparable MSE to the 
 
 ### Embeddings for Time-Series Prediction:
 
-Here we turn to embedding-representations (as explained in the Experimental Setup) and to DA-RNN <d-cite key="Qin2017dual"></d-cite> model, which is designed to capture temporal dynamics and complex relationships within its given data.
+Here we turn to embedding-representations (as explained in the Experimental Setup) and to DA-RNN <d-cite key="qin2017dual"></d-cite> model, which is designed to capture temporal dynamics and complex relationships within its given data.
 
 We extensively evaluated various model configurations, target indicators (FFR and VIX), tasks ('next value', 'percentage change', 'direction change' and the last two together), prediction horizons (next-day, next-week), LLM architectures (see Experimental Setup), aggregation methods, and the daily number of tweets given as input. Additionally, we assessed the models' reliance on temporal context and relevant narratives using the counterfactual textual baselines.
 
