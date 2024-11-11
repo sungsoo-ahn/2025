@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: "Lost in Prediction: The Missing Link Between LLMs and Narrative Economics. -------OR------- Lost in Prediction: Why Social Media Narratives  Don't Help Macroeconomic Forecasting?"
-description: Can we predict the macroeconomy by analyzing the narratives people share on social media?  We dove deep into the world of Narrative Economics, using NLP models to analyze millions of viral tweets and see if they could help us predict the fluctuations of macroeconomic indicators. **Spoiler alert:** it's not that easy! Join us as we explore the fascinating relationship between narratives, social media, and macroeconomy, and uncover the challenges of turning narratives into treasure.
+description: Can we predict the macroeconomy by analyzing the narratives people share on social media?  We dove deep into the world of Narrative Economics, using NLP models to analyze millions of viral tweets and see if they could help us predict the fluctuations of macroeconomic indicators. Spoiler alert: it's not that easy! Join us as we explore the fascinating relationship between narratives, social media, and macroeconomy, and uncover the challenges of turning narratives into treasure.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -147,6 +147,8 @@ Here's a snippet of such an LLM-based narrative analysis for inputs of dates 29/
 
 This snippet demonstrates the LLM’s ability to aggregate information, condensing and distinguishing between opinions and occurrences conveyed in the tweets. Moreover, the LLM links its insights to potential future consequences for the financial indicator, a pivotal initial move towards prediction.
 
+*** 
+
 # Why Macroeconomics?
 
 Now that we have social media narratives in hand, let's focus on *macroeconomics*.  
@@ -169,6 +171,7 @@ We focus on predicting three key macroeconomic indicators:
 
 These indicators are well-suited for testing the predictive power of narratives for macroeconomics due to their daily frequency, which aligns with the rapid pace of Twitter, and their sensitivity to public sentiment and behavior.
 
+*** 
 
 # Connecting the Dots: Testing Narratives' Effectiveness for Macroeconomic Forecasting
 
@@ -340,6 +343,7 @@ On the good side, this is the only approach were our models surpass all baseline
 
 **What can we learn?** While TF and F models outperform all others, the difference between their performance is negligible.
 
+*** 
 
 # What Can We Take Away?
 
