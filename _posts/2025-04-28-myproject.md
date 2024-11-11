@@ -272,7 +272,7 @@ In classifying 'direction change', models with financial input (F & TF) outperfo
 
 In predicting 'next value', best F, TF and T models yield comparable MSE to the 'train-mean' baseline (15.4, 15.6).
 
-What can we learn? Sentiment analysis, lacks the nuance necessary for accurate financial prediction, and traditional ML models have limitations in capturing complex market dynamics.  This is evident as several models did not even outperform non-learned baselines, highlighting the need for more improved text representations and advanced prediction models.  
+**What can we learn?** Sentiment analysis, lacks the nuance necessary for accurate financial prediction, and traditional ML models have limitations in capturing complex market dynamics.  This is evident as several models did not even outperform non-learned baselines, highlighting the need for more improved text representations and advanced prediction models.  
 
 
 **Embeddings for time-series prediction:**
@@ -294,10 +294,19 @@ However, the 'random texts' TF baseline (13.056), which replaced actual tweets w
 
 A contributing factor may arise from the difficulty of effectively capturing and representing aggregated tweet information for financial prediction, as well as the inherent challenges in predicting future values of a volatile financial indicator, characterized by frequent random movements and fluctuations, using its historical values.    
 
+**What can we learn?** Our models struggled to leverage tweets for the prediction, indicating that implicitly capturing and aggregating latent narratives within LLMs remains a challenge.
 
 **Predicting using LLM Analyses:**
 
-TODO: continue from here. display the final table.
+**Can LLMs generate an accurate prediction?** We first tried to directly predict the financial indicator (average weekly VIX or S&P 500) as a generative response of the chat version of GPT (TODO: cite) prompted with a monthly window of tweets and corresponding values of the financial target. This resulted in limited inconsistent success. While the LLM consistently generated insightful narrative analyses and demonstrated comprehension of financial implications, it exhibited inconsistencies when applying these insights for prediction.  For instance, it occasionally refused to provide predictions, or it would simply mirror input ranges, neglecting the potential impact of the narratives it successfully analyzed. When presented with 'synthetic narratives', it recognized the change direction but struggled to quantify the magnitude of it.
+
+**Repurpusing the LLMs' analyses for a subsequent prediction model:** The previous experiment revealed the LLM's ability to generate insightful analyses of tweets and financial data. Here we utilize these analyses as inputs for a dedicated prediction model to predict the S&P 500 'direction change'.  
+Addressing the limitations of both preceding experiments, we use the LLM's ability to produce a consice analyses instead of the embedding-based approach (last section) which struggled to aggregate diverse narratives, and we utilize a separate fine-tuned model for downstream prediction, instead of the LLM-predictor approach (previous paragraph). 
+
+
+
+
+
 
 
 ## What Can We Take Away?
