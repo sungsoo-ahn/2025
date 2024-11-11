@@ -22,19 +22,19 @@ hidden: false
 # authors:
 #   - name: Anonymous
 
-authors:
-  - name: Albert Einstein
-    url: "https://en.wikipedia.org/wiki/Albert_Einstein"
-    affiliations:
-      name: IAS, Princeton
-  - name: Boris Podolsky
-    url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
-    affiliations:
-      name: IAS, Princeton
-  - name: Nathan Rosen
-    url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
-    affiliations:
-      name: IAS, Princeton
+#authors:
+#  - name: Albert Einstein
+#    url: "https://en.wikipedia.org/wiki/Albert_Einstein"
+#    affiliations:
+#      name: IAS, Princeton
+#  - name: Boris Podolsky
+#    url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
+#    affiliations:
+#      name: IAS, Princeton
+#  - name: Nathan Rosen
+#    url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
+#    affiliations:
+#      name: IAS, Princeton
 
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-visualprop.bib
@@ -48,6 +48,7 @@ toc:
     subsections:
       - name: Motivation
       - name: Scope of the study
+      - name: TL;DR
   - name: Experiments
     subsections:
       - name: Caricature recognition
@@ -57,7 +58,7 @@ toc:
   - name: Conclusion
     subsections:
       - name: Acknowledgments
-  - name: Methods
+  - name: Method
     subsections:
       - name: Models
 
@@ -249,7 +250,7 @@ and B) the normal image recognition accuracy.
 In Figure 3, A), we find that diverse models reach a strong caricature recognition 
 performance, at the estimated level of toddlers. While supervised 
 and vision-language models unsurprisingly perform well. We notably find 
-that ID methods (DinoV2, BYOL, AA-SIMCLR) perform reasonably well on caricature 
+that ID model (DinoV2, BYOL, AA-SIMCLR) perform reasonably well on caricature 
 recognition. Figure 3, B) indicates that the hard caricature recognition accuracy correlates with hard image 
 recognition accuracy 
 (Pearson score: $0.78$). Overall, we conclude that strong caricature recognition may 
@@ -301,7 +302,7 @@ In Figure 5, A), we verify that there is a correlation between hard caricature
 recognition and the degree of shape bias of a model over common objects (Pearson
 score: $0.68$). This is higher than the correlation with hard object recognition ($0.
 56$). We also find that language is not a mandatory component of the shape bias as ID 
-methods seem to classify object based on
+models seem to classify object based on
 shapes, especially DinoV2, which shows a similar degree of shape bias as vision-language
 or supervised models. This is interesting because developmental studies clearly found 
 that the productive vocabulary size is a strong predictor of the shape bias <d-cite 
@@ -578,7 +579,7 @@ research in addressing the gap between models and toddlers.
 Removed for anonymous peer-reviewing.
 
 
-# Methods
+# Method
 
 ## Models
 
