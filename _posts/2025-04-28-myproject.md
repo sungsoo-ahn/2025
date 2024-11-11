@@ -327,15 +327,15 @@ This approach addresses limitations of both previous experiments:
 | F-baselines | Inverse-previous | 0.517 | 0.511 | 
 | F-baselines | Up-predictor | 0.576 | 0.731 | 
 | F-baselines | Down-predictor | 0.424 | 0.0 |  
-|-----|-----|-----|-----| 
+|---|---|---|---|
 | F | T5 Base | **0.604** | 0.723 |  
 | F | T5 Large | 0.593 | **0.727** | 
-|---|---|---|---| 
+|---|---|---|---|
 | TF | T5 Base | 0.626 | 0.738 |  
 | TF | T5 Large | **0.627** | **0.742** |  
-|--|--|--|--| 
+|---|---|---|---|
 | T | T5 Large | 0.587 | 0.726 | 
-|-|-|-|-| 
+|---|---|---|---|
 | T-baseline | Synthetic narratives | 0.489 | 0.254 |
 
 
