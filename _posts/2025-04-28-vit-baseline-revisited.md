@@ -35,6 +35,12 @@ toc:
   - name: Corrected reproduction
   - name: Implication
   - name: Conclusion
+    subsections:
+    - name: Replication guide
+
+_styles: >
+  r { color: Red }
+  g { color: Green }
 ---
 
 *Edited and expanded from [EIFY/mup-vit/README.md](https://github.com/EIFY/mup-vit).*
@@ -161,8 +167,8 @@ L2 norm comparison suggests that they are not equivalent:
   <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/gradient_L2_norm_comparison.png" class="img-fluid" width="auto" height="auto">
 </div>
 
-It turns out that "RandAugment" in TorchVision <d-cite key="torchvision2016"></d-cite> is quite different
-from "RandAugment" in Big Vision. RandAugment in TorchVision, following the description in the paper <d-cite key="NEURIPS2020_d85b63ef"></d-cite>,
+It turns out that "RandAugment" in torchVision <d-cite key="torchvision2016"></d-cite> is quite different
+from "RandAugment" in Big Vision. RandAugment in torchVision, following the description in the paper <d-cite key="NEURIPS2020_d85b63ef"></d-cite>,
 randomly selects one of the following 14 transforms:
 
 ||||
@@ -237,7 +243,7 @@ After the fix, `contrast(tf_color_tile, 1.9)` returns a grid with (249, 6, 6) an
 Another problematic transform is the Solarize transform, [whose augmentation strength varies unintuitively with `magnitude` and is in danger of uint8 overflow](https://github.com/google-research/big_vision/issues/110).
 It just happens to behave as expected with [`randaug(2, 10)`](https://github.com/google-research/big_vision/blob/ec86e4da0f4e9e02574acdead5bd27e282013ff1/big_vision/configs/vit_s16_i1k.py#L57) in our case.
 
-As for the discrepancy between TorchVision's RandAugment and Big Vision's RandAugment, we can also
+As for the discrepancy between torchVision's RandAugment and Big Vision's RandAugment, we can also
 use a calibration grid to confirm and visualize. Given the following $224 \times 224$ black & white
 calibration grid:
 
@@ -354,8 +360,185 @@ linear space, it is clear from the description that crop size should be sampled 
 
 ### Big Vision miscellaneous
 
+Finally <d-footnote>Chronologically, these experiments were run before the true reproduction.</d-footnote>,
+there are a few idiosyncrasies of the Big Vision reference implementation that either are impractical
+or do not make sense to replicate. Here we run experiments using the Big Vision repo to test their
+effects on model training.
+
+1. In <d-cite key="beyer2022better"></d-cite> only the first 99% of the training data is used for training while the
+remaining 1% is used for minival "to encourage the community to stop selecting design choices on the validation (de-facto test) set". This however is
+difficult to replicate with [`torchvision.datasets`](https://pytorch.org/vision/main/datasets.html)
+since [`datasets.ImageNet()`](https://pytorch.org/vision/main/generated/torchvision.datasets.ImageNet.html)
+is ordered by class label, unlike [tfds](https://www.tensorflow.org/datasets/overview) whose ordering
+is somewhat randomized:
+
+    ```python
+    import tensorflow_datasets as tfds
+    ds = tfds.builder('imagenet2012').as_dataset(split='train[99%:]')
+    from collections import Counter
+    c = Counter(int(e['label']) for e in ds)
+    >>> len(c)
+    999
+    >>> max(c.values())
+    27
+    >>> min(c.values())
+    3
+    ```
+Naively trying to do the same with [`torchvision.datasets`](https://pytorch.org/vision/main/datasets.html)
+prevents the model from learning the last few classes and results in [near-random performance on the minival](https://api.wandb.ai/links/eify/3ju0jben):
+the model only learns the class that happened to stride across the first 99% and the last 1%.
+Instead of randomly selecting 99% of the training data or copying the 99% slice given by tfds, we
+just fall back to training on 100% of the training data.
+
+2. The reference implementation sets [`shuffle_buffer_size = 250_000`](https://github.com/google-research/big_vision/blob/46b2456f54b9d4f829d1925b78943372b376153d/big_vision/configs/vit_s16_i1k.py#L49)
+which is only 20% of the training set, so the training data is not fully shuffled. To fit the data in
+a TensorBook, we need to further reduce it to `150_000` and [revive the `utils.accumulate_gradient()`](https://github.com/EIFY/big_vision/commit/e2f74c170d926ab73846ceb9b0d9aad2aa5814af)
+function to train with gradient accumulation. 1 and 2 result in 76.74% top-1 validation set accuracy.
+
+3. We fix the Contrast transform bug [described above](#randaugment).
+
+4. [Inadvertently the validation set is anti-aliased](https://x.com/giffmana/status/1808394534424138049)
+because [the `area` resize method always anti-aliases](https://www.tensorflow.org/api_docs/python/tf/image/resize),
+but not the training set. We change the resize method to `bilinear` with anti-aliasing for both like
+the default for [`v2.Reize()`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.Resize.html#torchvision.transforms.v2.Resize)
+and [`v2.RandomResizedCrop()`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandomResizedCrop.html)
+in torchvision.
+
+5. [`tf.io.decode_jpeg()` by default lets the system decide the JPEG decompression algorithm](https://www.tensorflow.org/api_docs/python/tf/io/decode_jpeg). Specifying `dct_method="INTEGER_ACCURATE"` makes it [behave like the PIL/cv2/PyTorch counterpart](https://github.com/google-research/big_vision/blob/01edb81a4716f93a48be43b3a4af14e29cdb3a7f/big_vision/pp/ops_image.py#L39) (see also some quick test at the end of the [notebook](https://github.com/EIFY/mup-vit/blob/e35ab281acb88f669b18555603d9187a194ccc2f/notebooks/RandAugmentCalibration.ipynb)). [We expose this option](https://github.com/EIFY/big_vision/commit/a31822116a9377d6f6dbfbd78372964ed48d8b9a) and test it in our experiment. 1-5 result in 76.87% top-1 validation set accuracy.
+
+6. [`optax.scale_by_adam()` supports the unusual option of using a different dtype for the 1st order accumulator, `mu_dtype`](https://optax.readthedocs.io/en/latest/api/transformations.html#optax.scale_by_adam) and the reference implementation set it to [`bfloat16`](https://github.com/google-research/big_vision/blob/46b2456f54b9d4f829d1925b78943372b376153d/big_vision/configs/vit_s16_i1k.py#L80) instead of `float32` like the rest of the model. Changing it back to `float32` in addition to 1-5 results in [76.77% top-1 validation set accuracy](https://api.wandb.ai/links/eify/dr9b8q4w).
+
+7. Lastly, we test whether [fully shuffling the training set](https://www.tensorflow.org/api_docs/python/tf/data/Dataset#fully_shuffling_all_the_data)
+helps model performance. We set [`config.input.shuffle_buffer_size = 1281167`](https://github.com/EIFY/big_vision/blob/5adab5c5985f0cd9b2e5fd887a58c062866ab092/big_vision/configs/vit_s16_i1k_8_gpu.py#L50)
+and train a model on a 8x A100-SXM4-40GB instance on [Lambda](https://lambdalabs.com/) with 1-6 but
+no gradient accumulation. The model reaches [76.85% top-1 validation set accuracy](https://api.wandb.ai/links/eify/huigfbka).
+
+8. There is one discrepancy that we choose to ignore: In the Big Vision implementation of the Inception crop
+[max (aspect) ratio is set to 1.33](https://github.com/google-research/big_vision/blob/46b2456f54b9d4f829d1925b78943372b376153d/big_vision/pp/ops_image.py#L200),
+but in [`v2.RandomResizedCrop()` of torchvision](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandomResizedCrop.html) it's set to 4.0/3.0,
+with difference well above floating point precision. We don't find it relevant however, and it should be the latter as originally described.
+
+In summary:
+
+| Model | Top-1 val acc. |
+|:-------------:|:-------------:|
+| Reference | 76.7% |
+| 100% training set, smaller shuffle buffer, grad. acc. | 76.74% |
+| + contrast() fix, consistent anti-aliasing, accurate JPEG decode | **76.87%** |
+| + fp32 1st order acc. | 76.77% |
+| + full shuffle, no grad. acc. | 76.85% |
+
+The metrics suggest that none of them has any effect.
+
 ## Corrected reproduction
+
+To further assess the effect of different implementations, we reproduce the full ablation results
+with 90, 150, and 300 epochs of training budget from <d-cite key="beyer2022better"></d-cite> but
+with the torchvision Inception crop, [`v2.RandomResizedCrop()`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandomResizedCrop.html).
+Here is the relevant part of Table 1 from <d-cite key="beyer2022better"></d-cite>:
+
+| Model | 90ep |  150ep | 300ep |
+|:-------------:|:-------------:|:-------------:|:-------------:|
+| Our improvements | 76.5 | 78.5 | 80.0 |
+| no RandAug+MixUp | 73.6 | 73.7 | 73.7 |
+| Posemb: sincos2d → learned | 75.0 | 78.0 | 79.6 |
+| Batch-size: 1024 → 4096 | 74.7 | 77.3 | 78.6 |
+| Global Avgpool → [cls] token | 75.0 | 76.9 | 78.2 |
+| Head: MLP → linear | 76.7 | 78.6 | 79.8 |
+
+Here are our results training the same models with the correct Inception crop. We call their main
+approach "better baseline" and we round to the same figure to avoid making them seem more accurate
+than they are:
+
+| Model | 90ep |  150ep | 300ep |
+|:-------------:|:-------------:|:-------------:|:-------------:|
+| Better baseline | 76.8 <g>+0.3</g> | 78.8 <g>+0.3</g> | 79.6 <r>-0.4</r> |
+| no RandAug+MixUp | 73.4 <r>-0.2</r> | 73.5 <r>-0.2</r> | 73.8 <g>+0.1</g> |
+| Posemb: sincos2d → learned | 76.2 <g>+1.2</g> | 77.7 <r>-0.3</r> | 79.6 <g>+0.0</g> |
+| Batch-size: 1024 → 4096 | 75.6 <g>+0.9</g> | 77.8 <g>+0.5</g> | 78.3 <r>-0.3</r> |
+| Global Avgpool → [cls] token | 75.3 <g>+0.3</g> | 77.1 <g>+0.2</g> | 77.5 <r>-0.5</r> |
+| Head: MLP → linear | 76.8 <g>+0.1</g> | 78.6 | 79.8 |
+
+We first notice that there is quite a bit of variation: In particular, 76.8(3)% for 90ep Head: MLP → linear
+is low compared to our previous result 77.27%. This reminds us of our ["grafting" experiment](https://github.com/EIFY/big_vision/tree/grafted)
+of training a PyTorch model on the Big Vision data pipelines that results in [76.38% top-1 validation set accuracy](https://wandb.ai/eify/mup-vit/reports/torch-on-big-vision-input3--Vmlldzo4NTMzMTU4).
+If we believe that they are all from their respective distributions, then the Inception crop implementation
+means the difference between 76.38-76.87 and 76.83-77.27, with variation of $\pm 0.2$ in each range and overlapping extrema.
+Regardless, the trend seems to be that the correct Inception crop benefits lower training budget
+experiments but shows more mixed results for higher training budget. One plausible explanation
+is that oversampling crops with smaller area amounts to stronger augmentation, which tends to benefit
+models in the long run. We can also see this by [comparing better baseline with no RandAug+MixUp](https://api.wandb.ai/links/eify/3joh568g):
+
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/augmentation_tortoise_and_hare.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+As a setup that is already under-augmented, no RandAug+MixUp itself does not benefit from the
+correct Inception crop even with 90ep training budget. We also suspect that it may be possible to
+compensate the Inception crop implementation discrepancy by adjusting augmentation strength otherwise,
+either through parameters of Inception crop (scale and ratio) or other parts of the augmentation pipeline
+(RandAugment and Mixup).
 
 ## Implication
 
+In the broad sense, the discrepancies in parameter initialization we highlight are likely relevant to
+most of the models written in PyTorch and JAX, as long as they use the default
+
+* [`torch.nn.MultiheadAttention`](https://pytorch.org/docs/stable/generated/torch.nn.MultiheadAttention.html) / [`flax.linen.MultiHeadDotProductAttention`](https://flax.readthedocs.io/en/v0.5.3/_autosummary/flax.linen.MultiHeadDotProductAttention.html)
+* [`torch.nn.Linear`](https://pytorch.org/docs/stable/generated/torch.nn.Linear.html) / [`flax.linen.Dense`](https://flax.readthedocs.io/en/v0.5.3/_autosummary/flax.linen.Dense.html)
+* [`torch.nn.Conv2d`](https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html) and other `torch.nn._ConvNd` subclasses / [`flax.linen.Conv`](https://flax.readthedocs.io/en/v0.5.3/_autosummary/flax.linen.Conv.html), or
+* [`torch.nn.init.trunc_normal_()`](https://pytorch.org/docs/stable/nn.init.html#torch.nn.init.trunc_normal_) / [`jax.nn.initializers.variance_scaling` with `distribution="truncated_normal"`](https://jax.readthedocs.io/en/latest/_autosummary/jax.nn.initializers.variance_scaling.html).
+
+However, we don't know which of these discrepancies matter, if any. In the narrow sense, we have
+shown that the discrepancies in RandAugment and Inception crop implementations impact model performance.
+Some CV people are aware of the RandAugment issues, but to our best knowledge the Inception crop
+discrepancies are not documented anywhere. Given its deep root in training deep image models, it has
+potentially broad implications. Tracking down the commit histories, we find that the schism between
+the implementations goes back 8 years, almost as old as the paper <d-cite key="szegedy2015going"></d-cite> itself:
+
+* [`sample_distorted_bounding_box()` has remained unchanged](https://github.com/tensorflow/tensorflow/commit/f3a77378b4c056e76691c5eba350a022c11e00d4).
+* Hardcoded 10 sampling attempts and uniform crop area sampling ([1 and 3 listed here](#inception-crop)) [have been the same for `RandomSizedCrop()`](https://github.com/pytorch/vision/commit/d9b8d003d282904461d30e60b9e13ed2f74f3bc6).
+
+Below are some of the papers that we know are affected, the context in which the TF implementation
+of Inception crop is mentioned, and its current Google Scholar citation counts:
+
+| Paper | Context |  Cited By |
+|:-------------:|:-------------:|:-------------:|
+| A Simple Framework for Contrastive Learning of Visual Representations <d-cite key="chen2020simple"></d-cite>  | [`tf.image.sample_distorted_bounding_box()` call in the repo](https://github.com/google-research/simclr/blob/383d4143fd8cf7879ae10f1046a9baeb753ff438/data_util.py#L285) | 20235 |
+| Big Self-Supervised Models are Strong Semi-Supervised Learners <d-cite key="chen2020big"></d-cite>  | [`tf.image.sample_distorted_bounding_box()` call in the repo](https://github.com/google-research/simclr/blob/383d4143fd8cf7879ae10f1046a9baeb753ff438/tf2/data_util.py#L279) | 2498 |
+| Scaling Vision Transformers <d-cite key="zhai2022scaling"></d-cite>  | See [`inception_crop(224)` in the reference config](https://github.com/google-research/big_vision/blob/46b2456f54b9d4f829d1925b78943372b376153d/big_vision/configs/proj/scaling_laws/train_vit_g.py#L49) in Big Vision | 1149 |
+| How to train your ViT? Data, Augmentation, and Regularization in Vision Transformers <d-cite key="steiner2022how"></d-cite> | 'The code for full reproduction of model training is available at <https://github.com/google-research/big_vision>.' (...) 'The images are pre-processed by Inception-style cropping (36) and random horizontal flipping.' | 650 |
+| Better plain ViT baselines for ImageNet-1k <d-cite key="beyer2022better"></d-cite> | <https://github.com/google-research/big_vision>, 'All experiments use “inception crop”' | 108 |
+| Getting ViT in Shape: Scaling Laws for Compute-Optimal Model Design <d-cite key="alabdulmohsin2024getting"></d-cite> | 'We use the big_vision codebase [10, 9] for conducting experiments in this project' and `inception_crop` can be found in the hyper-parameters settings in the appendix. | 26 |
+| FlexiViT: One Model for All Patch Sizes <d-cite key="beyer2023flexivit"></d-cite> | `inception_crop` can be found in config.json downloaded from the link in the [flexivit project README](https://github.com/google-research/big_vision/tree/46b2456f54b9d4f829d1925b78943372b376153d/big_vision/configs/proj/flexivit) in Big Vision. | 82 |
+| Patch n' Pack: NaViT, a Vision Transformer for any Aspect Ratio and Resolution <d-cite key="dehghani2024patch"></d-cite> | 'NaViT is implemented in JAX [21] using the FLAX library [22] and built within Scenic [23].' (...) 'Second, we apply inception-style cropping [35] with a fixed minimum area of 50%'. While the source code of NaViT isn't available, [Scenic relies on `tf.image.sample_distorted_bounding_box()` for Inception crop](https://github.com/search?q=repo%3Agoogle-research%2Fscenic%20sample_distorted_bounding_box&type=code) and [this call](https://github.com/google-research/scenic/blob/0340172a1ffa97a2cdb02adde7ea6d0ea66e539c/scenic/dataset_lib/dataset_utils.py#L735) might be what it uses. | 51 |
+
+It is out of scope to retrain these models with the correct Inception crop, but we can examine the
+pair of baseline models we have. We compare the true reproduction model (76.94% top-1) and the first
+one with the correct Inception crop from torchvision (77.27% top-1). Using the ImageNet-1k validation
+set, we compute the gradient of the class logit on the image, sum over gradients of the 3 (RGB) channels
+per pixel, and then zero-out the negative ones. We normalize the resulting gradients by the max gradient of
+the image and examine the distribution of the normalized gradients on the $[0, 1]$ support over the validation set
+([notebook](https://github.com/EIFY/mup-vit/blob/e35ab281acb88f669b18555603d9187a194ccc2f/notebooks/gather_stats.ipynb)).
+We hypothesize that since the correct Inception crop tends to let the model see more of the image,
+the model will rely on more pixels at inference time.
+
+<div class="caption">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/gradient_CDF.png" class="img-fluid" width="auto" height="auto">
+</div>
+
+Tentatively we find that to be the case — over the validation set, 90% of the gradient per pixel is
+below 3.2% of the max per image for the true reproduction model, while the 90th percentile for the one
+trained with the correct Inception crop is 2.4%. The gradients for the latter are more spread out
+with more pixels having smaller gradients.
+
 ## Conclusion
+
+We wish that things just worked — The same models, the same layers, the same initializations, and the
+same data augmentations mean the same things across ecosystems — but that is not the world we live in.
+To get closer to that world, all of us need to be more proactive in documenting discrepancies and
+fixing bugs in existing implementations.
+
+And our own repo should be no exception.
+
+### Replication guide
