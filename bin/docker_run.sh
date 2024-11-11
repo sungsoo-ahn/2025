@@ -1,6 +1,6 @@
 FILE=Gemfile.lock
 if [ -f "$FILE" ]; then
-    rm $FILE
+	    rm $FILE
 fi
 docker build -t "iclr-2025:latest" . && \
 docker run --rm -v "$PWD:/srv/jekyll/" -p "8080:8080" \
