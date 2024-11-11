@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: "Lost in Prediction: The Missing Link Between LLMs and Narrative Economics.      OR     Lost in Prediction: Why Social Media Narratives  Don't Help Macroeconomic Forecasting?"
-description: Can we predict the macroeconomy by analyzing the narratives people share on social media?  We dove deep into the world of Narrative Economics, using NLP models to analyze millions of viral tweets and see if they could help us predict the fluctuations of macroeconomic indicators. Spoiler alert: it's not that easy! Join us as we explore the fascinating relationship between narratives, social media, and macroeconomy, and uncover the challenges of turning narratives into treasure.
+description: "Can we predict the macroeconomy by analyzing the narratives people share on social media?  We dove deep into the world of Narrative Economics, using NLP models to analyze millions of viral tweets and see if they could help us predict the fluctuations of macroeconomic indicators. Spoiler alert: it's not that easy! Join us as we explore the fascinating relationship between narratives, social media, and macroeconomy, and uncover the challenges of turning narratives into treasure."
 date: 2025-04-28
 future: true
 htmlwidgets: true
