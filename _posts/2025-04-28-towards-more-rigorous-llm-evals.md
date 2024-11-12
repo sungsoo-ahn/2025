@@ -144,20 +144,20 @@ The same applies to LMs.
 
 We demonstrate this empirically by looking at the performance of LMs on a basic addition task with varying digit lengths (e.g. "What is 147 + 562?"). 
 Consistent with prior literature that examines the impact of digit length on arithmetic performance [TODO CITE], we find that as the numbers get larger, accuracy declines, showing that simple arithmetic is not perfectly reliable.
-
-In addition to digit length, we also investigate how the number of carry operations affects performance on this addition task. 
+We go beyond digit length and also consider how the number of carry operations affects performance on this addition task. 
 The figure below illustrates how the probability of answering a question correctly varies based on the number of digits $d$ of the numbers being added and the number of carry operations involved in the sum.
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/addition_accuracy.png" 
   class="img-fluid" 
   title="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task" 
-  caption="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers. We group the questions by the number of digits $d$ and the number of carry operations involved in the sum and remove groups that have less than 10 questions." 
+  caption="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers. Questions are grouped by the number of digits $d$ and the number of carry operations required, with groups containing fewer than 10 questions excluded. Results are averaged over 512 samples." 
 %}
 
-
-
-[Elaborate a bit more on this plot...]
+The findings indicate that LM performance is negatively affected by both the number of digits and the number of carry operations in the sum. 
+I.e. as the numbers get larger and the number of carry operations increases, accuracy declines.
+This suggests that LMs make errors similar to those made by humans, such as forgetting carry operations. 
+Detailed regressionresults can be found in the Appendix.
 
 <!-- Model | 1 digit | 2 digits | 3 digits | 4 digits | 5 digits | 6 digits
 --- | --- | --- | --- | --- | --- | ---
