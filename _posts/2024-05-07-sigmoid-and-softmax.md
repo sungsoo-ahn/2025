@@ -162,10 +162,10 @@ Figure 1 shows the values of the objective function for different weights to the
 </a>
 
 
-![Sigmoid with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/sigmoid_and_softmax/sigmoid_neg_entropy.png?raw=true){width=90%}
+![Sigmoid with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/sigmoid_and_softmax/sigmoid_neg_entropy.png?raw=true)
 
 
-![Softmax with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/sigmoid_and_softmax/softmax_neg_entropy.png?raw=true){width=90%}
+![Softmax with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/sigmoid_and_softmax/softmax_neg_entropy.png?raw=true)
 
 Figure 1. Effect of the entropy term in values of the objective function corresponding to sigmoid and softmax.
 
