@@ -113,7 +113,7 @@ The metrics reported are average accuracy across the 50 versions of each dataset
 
 The key findings are:
 
-- Performance variability: LMs exhibit some variability in performance across different instnationals of the same question.
+- Performance variability: LMs exhibit some variability in performance across different instantiations of the same question.
 
 - Performance decline: Compared to GSM8K, performance on GSM-Symbolic drops, suggesting potential data contamination.
 
@@ -282,30 +282,39 @@ Looking at the example template (Figure 1 from the paper, reproduced above), we 
 - The variable `ans` is sampled from $[85, 200]$, whilst in the original question we have `ans=14`.
 
 In other words, the original GSM8K question cannot be generated from the proposed symbolic template.
-A more appropriate sampling range for both `total` and `ans` might be $[50, 99]$.
+A more appropriate sampling range for both `total` and `ans` might be $[10, 99]$.
 
-As we saw in Section ..., the accuracy of both models decreases as the number of digits increases, indicating that larger inputs are harder to process.
+As we saw in Section 4.1.1, the accuracy of both models decreases as the number of digits increases, indicating that larger inputs are harder to process.
 Accuracy is also negatively affected by the number of carry operations involved in the sum (effect statistically strong for Llama but not Phi; full details in Appendix).
 Model predictions: adding 2-digit numbers with 1 carry operation, 3-digit numbers with 2 carry operations (carry operations are the median):
+
 Phi: 95.1% 91.2% 
 Llama: 99.6% 99.0% 
 
 
 
 The question in Figure 1 involves three arithmetic operations (two additions and one subtraction).
-Assuming substraction is as hard as addition, the probability of the three operations being answered correctly is the product of the individual probabilities. If all 3 operations involve two-digit numbers, the probabilities are (table above ^3):
+Assuming subtraction is as hard as addition, the probability of the three operations being answered correctly is the product of the individual probabilities. 
+
+If all 3 operations involve two-digit numbers, the probabilities are (table above ^3):
+
 Phi: 85.9% 76.0% 
 Llama: 98.9% 96.9%
 
+[Redo this as passing inputs through logreg and averaging over 512 samples as opposed to passing an average input through logreg]
 
 If the number ranges in GSM-Symbolic are systematically chosen to be larger than those in GSM8K (and don't even include the original question values), then it cannot claimed that the datasets come from the same distribution.
 Tokenisation is one mechansim that explains why this matters; larger number ranges in GSM-Symbolic may inherently disadvantage certain (and eventually all) models, potentially explaining some of the observed performance differences between models and datasets.
 
 > We have also observed the performance of LLMs deteriorating as question complexity increases.
 
+Plausible that the reasoning is harder when more clauses are introduced.
+worth noting that adding more clauses involves more arithmetic operations; 
+more thorough analysis is needed to control for that variability.
+
 The same analysis is applicable to more complex questions; e.g. adding one extra clause, even if it takes only one operation --> similalry for 2 clauses;
 
---> Say reasoning: translating the text to a sequence of operations; what the paper tests is whether models can do that *and* perofrm the operations correctly. The rest of this post will not deal with reasoning; 
+Repeat reasoning: translating the text to a sequence of operations; what the paper tests is whether models can do that *and* perofrm the operations correctly. The rest of this post will not deal with reasoning; 
 
 **Verdict:** Some indication that distributions might differ. Contamination is not mutually exclusive. TODO
 
