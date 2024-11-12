@@ -148,7 +148,7 @@ $$
 \end{align}
 $$
 
-Note that $\langle \mathbf{w}^\star, \mathbf{x} \rangle$ is smooth maximum whereas $\langle \mathbf{w}, \left[\begin{array}{cccc}1& 2& \ldots& d \end{array}\right] \rangle$ for some $\mathbf{w} \in \mathbf{S}$ is softargmax [3].
+Note that $\langle \mathbf{w}^\star, \mathbf{x} \rangle$ is smooth maximum whereas $\langle \mathbf{w}, \left[\begin{array}[cccc] 1& 2& \ldots& d \end{array}\right] \rangle$ for some $\mathbf{w} \in \mathbf{S}$ is softargmax [3].
 
 
 ## Discussion and Conclusion
