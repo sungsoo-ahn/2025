@@ -140,60 +140,33 @@ In other words, this assumes that LMs never make arithmetic mistakes---a very st
 **Is this assumption valid?** 
 For humans, it clearly is not. 
 Even when solving the same problem with different numbers or subjects, humans can make (non-reasoning related) errors, such as arithmetic mistakes or copying a number incorrectly.
-The same applies to LMs. [todo: quote some papers that look into this??]
+The same applies to LMs. 
 
-The table below demonstrates empirically that LMs do indeed make arithmetic mistakes.
-The task is basic addition of two numbers with varying digit lengths (e.g. "What is 147 + 562?"). Consistent with prior literature [TODO CITE], as the numbers get larger, accuracy declines, showing that simple arithmetic is not perfectly reliable.
+We demonstrate this empirically by looking at the performance of LMs on a basic addition task with varying digit lengths (e.g. "What is 147 + 562?"). 
+Consistent with prior literature that examines the impact of digit length on arithmetic performance [TODO CITE], we find that as the numbers get larger, accuracy declines, showing that simple arithmetic is not perfectly reliable.
 
-Model | 1 digit | 2 digits | 3 digits | 4 digits | 5 digits | 6 digits
---- | --- | --- | --- | --- | --- | ---
-Phi-3.5-mini-instruct | 100% | 93.0% | 90.8% | 84.0% | 79.7% | TODO
-Llama-3-8B-Instruct | 100% | 100% | 100% | 95.3% | 91.2% | 86.3%
-
-<div class="caption">
-Accuracy (zero-shot, CoT prompting) on a simple addition task. The larger model (Llama-3-8B-Instruct) is more accurate. For llama, numbers upto 3 digits are a single token, and 4-digit numbers are 2 tokens. For Phi, a $d$-digit number takes $d$ tokens. More on this in Section 4.2.1. 
-</div>
-
-We explore this further: investigate how total digits and carry operations affect performance on this addition task. The figure below models accuracy as a function of these two factors.
+In addition to digit length, we also investigate how the number of carry operations affects performance on this addition task. 
 The figure below illustrates how the probability of answering a question correctly varies based on the number of digits $d$ of the numbers being added and the number of carry operations involved in the sum.
-
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/addition_accuracy.png" 
   class="img-fluid" 
   title="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task" 
-  caption="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers." 
+  caption="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers. We group the questions by the number of digits $d$ and the number of carry operations involved in the sum and remove groups that have less than 10 questions." 
 %}
 
-[Elaborate on this plot a bit..]
-
-Llama results:
-```
-Call:
-glm(formula = correct ~ total_digits + carry, family = "binomial", 
-    data = .)
-
-Coefficients:
-             Estimate Std. Error z value Pr(>|z|)    
-(Intercept)   7.63465    0.37386  20.421   <2e-16 ***
-total_digits -0.46207    0.04052 -11.402   <2e-16 ***
-carry        -0.15291    0.07054  -2.168   0.0302 *  
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 1440.4  on 5162  degrees of freedom
-Residual deviance: 1141.7  on 5160  degrees of freedom
-AIC: 1147.7
-```
-
-Phi results:
-```
-RUNNING 6 digit addition
-```
 
 
+[Elaborate a bit more on this plot...]
+
+<!-- Model | 1 digit | 2 digits | 3 digits | 4 digits | 5 digits | 6 digits
+--- | --- | --- | --- | --- | --- | ---
+Phi-3.5-mini-instruct | 100% | 93.0% | 90.8% | 84.0% | 79.7% | TODO
+Llama-3-8B-Instruct | 100% | 100% | 100% | 95.3% | 91.2% | 86.3%
+
+<div class="caption">
+Accuracy (zero-shot) on a simple addition task. The larger model (Llama-3-8B-Instruct) is more accurate. For Llama, numbers upto 3 digits are a single token, and 4-digit numbers are 2 tokens. For Phi, a $d$-digit number takes $d$ tokens. 
+</div> -->
 
 **Is performing arithmetic part of reasoning?** 
 Solving a word math problem consists of two steps: (1) translating the text to a sequence of operations, and (2) performing the operations correctly.
@@ -506,6 +479,35 @@ The test statistic (pm,8k - pm,symb) / SE(ppool)  is then approximately normal a
   title="99% Clopper-Pearson intervals for the point estimates of $p_m$" 
   caption="99% Clopper-Pearson intervals for the point estimates of $p_m$" 
 %}
+
+## Logistic regression results
+
+
+Llama results:
+```
+Call:
+glm(formula = correct ~ total_digits + carry, family = "binomial", 
+    data = .)
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)   7.63465    0.37386  20.421   <2e-16 ***
+total_digits -0.46207    0.04052 -11.402   <2e-16 ***
+carry        -0.15291    0.07054  -2.168   0.0302 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 1440.4  on 5162  degrees of freedom
+Residual deviance: 1141.7  on 5160  degrees of freedom
+AIC: 1147.7
+```
+
+Phi results:
+```
+RUNNING 6 digit addition
+```
 
 
 <!-- 
