@@ -135,23 +135,27 @@ The authors emphasise the "non-negligible variance" in model performance across 
 
 Variability would indeed be unexpected if each resampled question was effectively the same as the original. 
 The implicit assumption here is that if an LM solves (or fails to solve) a given question once, it should always solve (or fail to solve) it when presented with the same problem but with different numbers. 
-In other words, this assumes that LMs never make arithmetic mistakes---a very strong assumption, that is not mentioned or examined in the paper. 
+In other words, this assumes that LMs never make arithmetic mistakes---a very strong assumption that is not examined or addressed in the paper. 
 
 **Is this assumption valid?** 
 For humans, it clearly is not. 
 Even when solving the same problem with different numbers or subjects, humans can make (non-reasoning related) errors, such as arithmetic mistakes or copying a number incorrectly.
 The same applies to LMs. 
 
-We demonstrate this empirically by looking at the performance of LMs on a basic addition task with varying digit lengths (e.g. "What is 147 + 562?"). 
+We demonstrate this empirically by looking at the performance of LMs on a basic addition task with varying **digit lengths** (e.g. "What is 147 + 562?"). 
 Consistent with prior literature that examines the impact of digit length on arithmetic performance [TODO CITE], we find that as the numbers get larger, accuracy declines, showing that simple arithmetic is not perfectly reliable.
-We go beyond digit length and also consider how the number of carry operations affects performance on this addition task. 
-The figure below illustrates how the probability of answering a question correctly varies based on the number of digits $d$ of the numbers being added and the number of carry operations involved in the sum.
+We go beyond digit length and also consider how the number of **carry operations** affects performance on this addition task. 
+The figure below illustrates how the probability of answering a question correctly is affected by the number of digits $d$ of the numbers being added and the number of carry operations involved in the sum.
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/addition_accuracy.png" 
   class="img-fluid" 
   title="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task" 
-  caption="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers. Questions are grouped by the number of digits $d$ and the number of carry operations required, with groups containing fewer than 10 questions excluded. Results are averaged over 512 samples." 
+  caption="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers. 
+  We illustrate how the probability of answering a question correctly ($y$-axis) is affected by the total number of digits, $2d$, of the numbers being added ($x$-axis) and the number of carry operations involved in the sum (colour of the points). The size of the points indicate the corresponding total number of tokens. 
+  For the purposes of this illustration, we group questions by number of digits and carry operations, and plot the average accuracy over 512 samples. 
+  Groups containing fewer than 10 questions are excluded. 
+  The full results of the logistic regressions can be found in the Appendix." 
 %}
 
 The findings indicate that LM performance is negatively affected by both the number of digits and the number of carry operations in the sum. 
