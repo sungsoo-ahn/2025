@@ -211,14 +211,12 @@ There are different ways to construct CI for the [Binomial proportion](https://
 
 As expected, models with success probabilities closer to $1/2$ (e.g. Gemma-7b, Phi-2, Mistral-7b-v0.1) exhibit wider confidence intervals, reflecting higher variability. Conversely, models with success probabilities closer to 0 or 1 (Gemma2b, GPT-4o, o1-preview) have substantially narrower intervals.
 
-**Assuming** that GSM8K and GSM-Symbolic come from the same distributions (more on that in Section XX), let’s look at Figure 2 of the paper showing.
-
-**Note:** The x-axis scales are different for different models.
+**Assuming** that GSM8K and GSM-Symbolic come from the same distributions (more on that in Section 4.2.1), let’s look at Figure 2 of the paper.
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fig2_gsm.png" 
   class="img-fluid" 
-  caption="Figure 2 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>"
+  caption="Figure 2 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>. Note that the $x$-axis scales are different for different models."
 %}
 
 For the models shown in this figure, the GSM8K accuracy ranges from 74% for the weakest model (Llama3-8B-instruct) to 95% for the strongest model (GPT-4o). 
@@ -245,7 +243,7 @@ The table below compares the 95% Wilson score intervals to the approximate accur
 | o1-preview                     | (90%, 98%)          | (88%, 96%)            |
 
 <div class="caption">
-95% Wilson score intervals for the point estimates of $p_m$ and reported ranges, approximated from Figure 1 in Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the paper'sappendix.
+95% Wilson score intervals for the point estimates of $p_m$ and reported ranges, approximated from Figure 1 in Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper.
 </div>
 
 Note that our confidence intervals are wider than the implied ranges in the figures in the paper, i.e. under the iid Bernoulli assumption, the variation is actually **larger** than what is observed.
