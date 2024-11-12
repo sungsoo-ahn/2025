@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: "Lost in Prediction: The Missing Link Between LLMs and Narrative Economics.      OR     Lost in Prediction: Why Social Media Narratives  Don't Help Macroeconomic Forecasting?"
-description: "Can we predict the macroeconomy by analyzing the narratives people share on social media? We dove deep into the world of Narrative Economics, using NLP models to analyze millions of viral tweets and see if they could help us predict the fluctuations of macroeconomic indicators. Spoiler alert: it's not that easy! Join us as we explore the interesting relationship between narratives, social media, and macroeconomy, and uncover the challenges of turning narratives into treasure."
+description: "Can we predict the macroeconomy by analyzing the narratives people share on social media? We dove deep into the world of Narrative Economics, using NLP models to analyze millions of viral tweets and see if they could help us predict the fluctuations of macroeconomic indicators. Spoiler alert: it's not that easy! 👎 Join us as we explore the interesting relationship between narratives, social media, and macroeconomy, and uncover the challenges of turning narratives into treasure."
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -319,14 +319,15 @@ A contributing factor may arise from the difficulty of effectively capturing and
 
 ### Predicting Using LLM Analyses 💬
 
-**Can LLMs generate an accurate prediction?** We first tried to directly predict the financial indicator (average weekly VIX or S&P 500) as a generative response of the web chat version of GPT <d-cite key="gpt-chat"></d-cite> prompted with a monthly window of tweets and corresponding values of the financial target. This resulted in limited inconsistent success. While the LLM consistently generated insightful narrative analyses and demonstrated comprehension of financial implications, it exhibited inconsistencies when applying these insights for prediction.  For instance, it occasionally refused to provide predictions, or it would simply mirror input ranges, neglecting the potential impact of the narratives it successfully analyzed. When presented with 'synthetic narratives', it recognized the change direction but struggled to quantify the magnitude of it.
+**Can LLMs generate an accurate prediction?** We first tried to directly predict the financial indicator (average weekly VIX or S&P 500) as a generative response of the web chat version of GPT <d-cite key="gpt-chat"></d-cite> prompted with a monthly window of tweets and corresponding values of the financial target. This resulted in limited inconsistent success. 👎 While the LLM consistently generated insightful narrative analyses and demonstrated comprehension of financial implications, it exhibited inconsistencies when applying these insights for prediction. For instance, it occasionally refused to provide predictions, or it would simply mirror input ranges, neglecting the potential impact of the narratives it successfully analyzed. When presented with 'synthetic narratives', it recognized the change direction but struggled to quantify the magnitude of it.
 
 **Repurpusing the LLM analyses for a subsequent prediction model:** The previous experiment revealed the LLM's ability to generate insightful analyses of tweets and financial data. To leverage this capability, we utilize these analyses as inputs for a dedicated prediction model to predict the S&P 500 'direction change'.
 
 This approach addresses limitations of both previous experiments:
 * Instead of relying on the embedding-based approach, which struggled to aggregate diverse narratives, we leverage the LLM's ability to produce concise analyses.   
 * Instead of directly using the LLM for prediction, which exhibited inconsistencies, we utilize a separate fine-tuned model for downstream prediction.  
-
+**The results:**
+  
 | Type | Model | Accuracy | F<sub>1</sub>-Score | 
 |---|---|---|---|
 | F-baselines | Train-majority | 0.424 | 0.0 |  
@@ -347,12 +348,11 @@ This approach addresses limitations of both previous experiments:
 | T-baseline | Synthetic narratives | 0.489 | 0.254 |
 
 
-So did it work? not really. Results show that there is no significant difference between the best TF and F models, with a performance gap of ~2% on the limited test set of ~90 samples. <d-footnote>As a reminder, we can only use the second Twitter dataset, of tweets that were posted after the LLM's training cutoff date, and our financial indicators are of daily frequency, therefore the small dataset for this type of experiments.</d-footnote>
+**So did it work?** not really. 👎 Results show that there is no significant difference between the best TF and F models, with a performance gap of ~2% on the limited test set of ~90 samples. <d-footnote>As a reminder, we can only use the second Twitter dataset, of tweets that were posted after the LLM's training cutoff date, and our financial indicators are of daily frequency, therefore the small dataset for this type of experiments.</d-footnote>
 We confirmed it using the McNemar's test <d-cite key="P18-1128"></d-cite> which shows no statistically significant difference (p-value=0.48).
 On the good side, this is the only approach were our models surpass all baselines. 
 
-**What can we learn? 🤔** While TF and F models outperform all others, the difference between their performance is negligible.
-
+**What can we learn? 🤔** While LLMs can analyze insights from narratives and TF and F models outperform all other models, the TF model struggles to utilize those insights for improved prediction.
 *** 
 
 # What Can We Take Away?
@@ -361,8 +361,7 @@ Despite the presence of narratives in our curated datasets and the development o
 
 The missing link between the successful narrative extraction demonstrated by the LLM's analyses and the limited improvement in macroeconomic prediction raises a question about the extent to which narratives alone can truly drive and forecast economic fluctuations, at least at the macroeconomic level.
 
-This study serves as a foundation for further exploration, highlighting the need for new macroeconomic models or
-tasks designed to assess the extracted narratives’ influence on the economy.
+This study serves as a foundation for further exploration, highlighting the need for new macroeconomic models or tasks designed to assess the extracted narratives’ influence on the economy.
 
 *This blogpost extends the technical experiments presented in our paper <d-footnote>Link will be added for the camera ready version.</d-footnote>, delving deeper into broader aspects that naturally in a paper can only receive a shorter discussion as it primarily presents the technical results. We invite you to read the paper for full background and experiments.*
 
