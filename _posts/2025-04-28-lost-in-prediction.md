@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: "Lost in Prediction: The Missing Link Between LLMs and Narrative Economics.      OR     Lost in Prediction: Why Social Media Narratives  Don't Help Macroeconomic Forecasting?"
-description: "Can we predict the macroeconomy by analyzing the narratives people share on social media? We dove deep into the world of Narrative Economics, using NLP models to analyze millions of viral tweets and see if they could help us predict the fluctuations of macroeconomic indicators. 🚨 Spoiler alert: it's not that easy! 👎 Join us as we explore the interesting relationship between narratives, social media, and macroeconomy, and uncover the challenges of turning narratives into treasure."
+description: "Can we predict the macroeconomy by analyzing the narratives people share on social media? We dove deep into the world of Narrative Economics, using NLP models to analyze millions of viral tweets and see if they could help us predict the fluctuations of macroeconomic indicators. 🚨 Spoiler alert: it's not that easy!  Join us as we explore the interesting relationship between narratives, social media, and macroeconomy, and uncover the challenges of turning narratives into treasure."
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -87,7 +87,7 @@ Narrative Economics is the study of how popular stories and ideas (a.k.a **narra
 The central idea is that the spread of viral narratives can influence individual and collective economic behavior, leading to fluctuations in markets, changes in investment patterns, and even broader economic shifts.
 
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/narrative_economics.png" class="img-fluid z-depth-2" style="width: 40%;" %}
+        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/narrative_economics.png" class="img-fluid z-depth-2" style="width: 20%;" %}
     </div>
 
 Ths term "Narrative Economics" is heavily attributed to Robert J. Shiller, a Nobel laureate economist and the founder of Narrative Economics which defined it as:
@@ -105,7 +105,7 @@ The term "narrative" itself has different connotations in NLP compared to econom
 
 Our research uses the term "narrative" in the economic sense. We're interested in how shared beliefs about the economy can be used to predict market trends. 
 
-**But, how can we capture such narratives?**
+### But, how can we capture such narratives?
 The economic term is wide and it is undefined what requirements a story or idea must have in order to be considered as "narrative". Yet, we can look at some characteristics Shiller mentions <d-cite key="coursera_narratives"></d-cite> about narratives to have a better understanding:
 
 * First, the story should be viral, publicly believed, in order to change a large enough audience to move the market.
@@ -115,7 +115,8 @@ The economic term is wide and it is undefined what requirements a story or idea 
 
 Combined together, to capture a narrative, one would need a good measure of what many people are discussing about, over time. Twitter (X), in this case, is an almost ideal source of information for capturing this distribution of opinions. 
 
-**And how to extract the "narrative" aspect from tweets?** Aligning with Shiller’s arguments and with existing literature, the extraction might be (for example) a sentiment <d-cite key="macaulay2023narrative, yang2023multi, adams2023more, kim2023forecasting, gurgul2023forecasting, wang2023deepemotionnet"></d-cite>, a topic <d-cite key="ash2021relatio"></d-cite>, or a specific economic outlook <d-cite key="nyman2021news, ahrens2021extracting, handlan2020text"></d-cite>.
+## And how to extract the "narrative" aspect from tweets?
+Aligning with Shiller’s arguments and with existing literature, the extraction might be (for example) a sentiment <d-cite key="macaulay2023narrative, yang2023multi, adams2023more, kim2023forecasting, gurgul2023forecasting, wang2023deepemotionnet"></d-cite>, a topic <d-cite key="ash2021relatio"></d-cite>, or a specific economic outlook <d-cite key="nyman2021news, ahrens2021extracting, handlan2020text"></d-cite>.
 
 
 ## Social Media Narratives 𝕏
@@ -157,16 +158,16 @@ This snippet demonstrates the LLM’s ability to aggregate information, condensi
 
 # Narrative Economics at the Macro Level
 
-Now that we have social media narratives in hand, let's focus on why we chose to predict *macroeconomic* indicators:  
+Now that we are familier with Narrative Economics and established how we gathered these narratives from Twitter, let's explore why we chose to focus on *macroeconomics*:  
 
 **Macroeconomics** studies the behavior of the economy as a whole, examining factors like inflation, unemployment, and economic growth. **Microeconomics**, on the other hand, is concerned with the decision-making of individuals and firms, examining indicators like a certain stock.
 
 ## Why Macroeconomics?
-A core concept in Narrative Economics is that narratives can drive economics flunctuations. 💡 This is especially intriguing at the macroeconomic level, as the theory suggests that widely shared stories can influence the collective decisions of millions of individuals. Additionally, existing research focuses on microeconomic indicators within the context of Narrative Economics <d-cite key="yang2023multi, khedr2021cryptocurrency, he2021multi, gurgul2023forecasting, wang2023deepemotionnet"></d-cite>, while the application in macroeconomics remains relatively unexplored.
+A core concept in Narrative Economics is that narratives can drive economics flunctuations. This is especially intriguing at the macroeconomic level, as the theory suggests that widely shared stories can influence the collective decisions of millions of individuals. Additionally, existing research focuses on microeconomic indicators within the context of Narrative Economics <d-cite key="yang2023multi, khedr2021cryptocurrency, he2021multi, gurgul2023forecasting, wang2023deepemotionnet"></d-cite>, while the application in macroeconomics remains relatively unexplored.
 
 However, studying this macroeconomically is more complex than microeconomically due to the complex interplay of various factors, the need for broad-covering narratives, and the inherent difficulty in isolating causal relationships. 
 
-## Our Macroeconomic Indicators
+### Our Macroeconomic Indicators
 
 We focus on predicting three key macroeconomic indicators:
 
@@ -209,7 +210,7 @@ We differ our models into 3 categories based on their input signal:
 * Textual (T): leverages solely textual data, either raw tweets or tweets’ analyses.
 * Textual & Financial (TF): draws upon both textual and financial data as input.
 
-  Our goal is to effectively leverage insights from both textual narratives and historical financial patterns to improve prediction accuracy.  The added value of incorporating textual narratives can be demonstrated if a model that utilizes both text and financial data (TF model) outperforms a model that relies solely on financial data (F model). 
+Our goal is to effectively leverage insights from both textual narratives and historical financial patterns to improve prediction accuracy.  The added value of incorporating textual narratives can be demonstrated if a model that utilizes both text and financial data (TF model) outperforms a model that relies solely on financial data (F model). 
 
 ### Baselines
 
@@ -232,6 +233,8 @@ Our model selection progresses from simpler models, frequently employed in the f
 1. Achieving positive results with simpler models provides a stronger evidence for the predictive signal of narratives.
 2. It allows us to build upon existing research in Narrative Economics, which is primarily rooted in finance and often utilizes relatively simple models, before exploring more advanced NLP approaches.
 
+<br>
+
 **Financial models:** these include traditional ML models (e.g., Linear Regression, SVM), DA-RNN <d-cite key="qin2017dual"></d-cite>, and T5 <d-cite key="raffel2020exploring"></d-cite> which receives financial input in a text format. Each model is fed with a sequence of historical financial values of the target indicator, either as individual features per day or as a time-series.  
 
 **Textual models:**
@@ -251,7 +254,7 @@ Our model selection progresses from simpler models, frequently employed in the f
         {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/models_diagram_3.jpg" class="img-fluid rounded z-depth-1" style="width: 40%;" %}
     </div>
 
-
+<br>
 
 **Fusing textual and financial models:** we experiment with several strategies for combining the representations from the T and F models for a unified prediction:
 * concatenation: the simplest approach is concatenating the T and F representations.
