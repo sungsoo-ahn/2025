@@ -90,7 +90,7 @@ Narrative Economics is the study of how popular stories and ideas (a.k.a **narra
 
 The central idea is that the spread of viral narratives can influence individual and collective economic behavior, leading to fluctuations in markets, changes in investment patterns, and even broader economic shifts.
 
-<div style="width: 50%;"> <div class="col-sm mt-3 mt-md-0">
+<div style="width: 70%;"> <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/narrative_economics.png" class="img-fluid z-depth-2" %}
     </div></div>
     
@@ -228,7 +228,7 @@ Our goal is to effectively leverage insights from both textual narratives and hi
 
 **Counterfactual textual baselines:**
 
-During our experiments, certain results raised questions about the validity of our models' performance. To address this, we incorporated counterfactual textual baselines to rigorously assess whether observed improvements were genuinely due to the models' capabilities or attributable to other factors:
+During our experiments, we encountered some intriguing results that warranted further investigation. To ensure the validity of our findings and rule out any counterfactual explanations, we introduced counterfactual textual baselines. These baselines allowed us to rigorously test whether the observed improvements were truly due to the models' capabilities or stemmed from other factors. Unfottunately, these baselines revealed that the promising results were more elusive than we hoped.
 
 * Random texts: feeding the LLM with randomly generated sentences comprised of varying random words. This baseline evaluate whether the LLM actually utilize the content of tweets.
 * Shuffled tweets: feeding the LLM with chronologically disordered tweets, isolating the impact of temporal narratives from confounding patterns or memorization. This baseline assess the model reliance on temporal narratives.
@@ -321,7 +321,7 @@ Here we turn to embedding-representations (as explained in the Experimental Setu
 
 **The results:**
 
-<div style="width: 60%;"> <div class="col-sm mt-3 mt-md-0">
+<div style="width: 70%;"> <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/embeddings_exp_results.jpg" class="img-fluid rounded z-depth-1" %}
     </div></div>
 
