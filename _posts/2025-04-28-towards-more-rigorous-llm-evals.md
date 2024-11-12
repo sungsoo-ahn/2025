@@ -165,11 +165,7 @@ The figure below illustrates how the probability of answering a question correct
   caption="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers." 
 %}
 
-The accuracy of both models decreases as the number of digits increases, indicating that larger inputs are harder to process.
-Accuracy is also negatively affected by the number of carry operations involved in the sum (effect statistically strong for Llama but not Phi; full details in Appendix).
-Model predictions: adding 2-digit numbers with 1 carry operation, 3-digit numbers with 2 carry operations (carry operations are the median):
-Phi: 95.1% 91.2% 
-Llama: 99.6% 99.0% 
+[Elaborate on this plot a bit..]
 
 Llama results:
 ```
@@ -309,14 +305,21 @@ Looking at the example template (Figure 1 from the paper, reproduced above), we 
 - The variable `total` is sampled from $[100, 500]$, whilst in the original question we have `total=62`.
 - The variable `ans` is sampled from $[85, 200]$, whilst in the original question we have `ans=14`.
 
-[This might actually go in the previous section, where we discuss the disentanglement of reasoning and arithmetic; then refer to it here.]
 In other words, the original GSM8K question cannot be generated from the proposed symbolic template.
 A more appropriate sampling range for both `total` and `ans` might be $[50, 99]$.
 
+As we saw in Section ..., the accuracy of both models decreases as the number of digits increases, indicating that larger inputs are harder to process.
+Accuracy is also negatively affected by the number of carry operations involved in the sum (effect statistically strong for Llama but not Phi; full details in Appendix).
+Model predictions: adding 2-digit numbers with 1 carry operation, 3-digit numbers with 2 carry operations (carry operations are the median):
+Phi: 95.1% 91.2% 
+Llama: 99.6% 99.0% 
+
+
 
 The question in Figure 1 involves three arithmetic operations (two additions and one subtraction).
-In the worst case, where all numbers are at least 100, Llama3-8b would be correct with probability ...
-Phi-3.5-mini-instruct, on the other hand, would be correct with probability ... [take numbers from the model].
+Assuming substraction is as hard as addition, the probability of the three operations being answered correctly is the product of the individual probabilities. If all 3 operations involve two-digit numbers, the probabilities are (table above ^3):
+Phi: 85.9% 76.0% 
+Llama: 98.9% 96.9%
 
 
 If the number ranges in GSM-Symbolic are systematically chosen to be larger than those in GSM8K (and don't even include the original question values), then it cannot claimed that the datasets come from the same distribution.
