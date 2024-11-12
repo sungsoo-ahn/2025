@@ -148,7 +148,7 @@ A more advanced technique to extract and analyze narratives is using LLMs. Promp
 Here's a snippet of such an LLM-based narrative analysis for inputs of dates 29/08/2022 to 28/09/2022. In this time period the Federal Reserve raised the interest rates in an effort to combat inflation, the US Supreme Court ruled that the Biden administration could not extend the pause on student loan payments:
 
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/chatgpt_snippet.jpg" class="img-fluid z-depth-2 style="width: 50%;" %}
+        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/chatgpt_snippet.jpg" class="img-fluid z-depth-2" style="width: 50%;" %}
     </div>
 
 This snippet demonstrates the LLM’s ability to aggregate information, condensing and distinguishing between opinions and occurrences conveyed in the tweets. Moreover, the LLM links its insights to potential future consequences for the financial indicator, a pivotal initial move towards prediction. 👍
