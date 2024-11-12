@@ -87,7 +87,7 @@ Narrative Economics is the study of how popular stories and ideas (a.k.a **narra
 The central idea is that the spread of viral narratives can influence individual and collective economic behavior, leading to fluctuations in markets, changes in investment patterns, and even broader economic shifts.
 
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/narrative_economics" class="img-fluid z-depth-2" style="width: 60%;" %}
+        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/narrative_economics.png" class="img-fluid z-depth-2" style="width: 60%;" %}
     </div>
 
 This term is heavily attributed to Robert J. Shiller, a Nobel laureate economist and the founder of Narrative Economics which defined it as:
