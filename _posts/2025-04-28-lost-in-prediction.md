@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: "Lost in Prediction: The Missing Link Between LLMs and Narrative Economics.      OR     Lost in Prediction: Why Social Media Narratives  Don't Help Macroeconomic Forecasting?"
-description: "Can we predict the macroeconomy by analyzing the narratives people share on social media? We dove deep into the world of Narrative Economics, using NLP models to analyze millions of viral tweets and see if they could help us predict the fluctuations of macroeconomic indicators. Spoiler alert: it's not that easy! 👎 Join us as we explore the interesting relationship between narratives, social media, and macroeconomy, and uncover the challenges of turning narratives into treasure."
+description: "Can we predict the macroeconomy by analyzing the narratives people share on social media? We dove deep into the world of Narrative Economics, using NLP models to analyze millions of viral tweets and see if they could help us predict the fluctuations of macroeconomic indicators. 🚨 Spoiler alert: it's not that easy! 👎 Join us as we explore the interesting relationship between narratives, social media, and macroeconomy, and uncover the challenges of turning narratives into treasure."
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -87,21 +87,21 @@ Narrative Economics is the study of how popular stories and ideas (a.k.a **narra
 The central idea is that the spread of viral narratives can influence individual and collective economic behavior, leading to fluctuations in markets, changes in investment patterns, and even broader economic shifts.
 
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/narrative_economics.png" class="img-fluid z-depth-2" style="width: 60%;" %}
+        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/narrative_economics.png" class="img-fluid z-depth-2" style="width: 40%;" %}
     </div>
 
-This term is heavily attributed to Robert J. Shiller, a Nobel laureate economist and the founder of Narrative Economics which defined it as:
+Ths term "Narrative Economics" is heavily attributed to Robert J. Shiller, a Nobel laureate economist and the founder of Narrative Economics which defined it as:
 
 > *"Spread through the public in the form of popular stories, **ideas can go viral and move markets** —whether it’s the belief that tech stocks can only go up, that housing prices never fall, or that some firms are too big to fail. Whether true or false, stories like these—transmitted by word of mouth, by the news media, and increasingly by social media—**drive the economy by driving our decisions about how and where to invest, how much to spend and save, and more."***  
   *- Robert J. Shiller* <d-cite key="shiller2017narrative"></d-cite>
 
 ## The Ambiguity of the Term "Narrative"
 
-The term "narrative" itself has different connotations in NLP compared to economics, which might lead to some confusion. 
+The term "narrative" itself has different connotations in NLP compared to economics, which might lead to some confusion. 😵‍💫
 
-In NLP, narrative commonly refers to the structure and elements of stories, encompassing aspects like plot, characters, setting, and theme. It involves understanding how these elements interrelate and contribute to the overall meaning and coherence of a narrative. TODO: check!
+**In NLP**, narrative commonly refers to the structure and elements of stories, encompassing aspects like plot, characters, setting, and theme. It involves understanding how these elements interrelate and contribute to the overall meaning and coherence of a narrative. TODO: check!
 
-In Narrative Economics, as stated in the above section, narrative is a shared belief or idea that spreads through the population and potentially influences economic behavior. 
+**In Narrative Economics**, as stated in the above section, narrative is a shared belief or idea that spreads through the population and potentially influences economic behavior. 
 
 Our research uses the term "narrative" in the economic sense. We're interested in how shared beliefs about the economy can be used to predict market trends. 
 
@@ -137,8 +137,10 @@ An example tweet can be:
 To confirm the presence of narratives within our Twitter dataset, we conducted an analysis using RELATIO <d-cite key="ash2021relatio"></d-cite>, a tool designed to "capture political and economic narratives" by mapping relationships and interactions among entities within a corpus. Upon processing our dataset with RELATIO, we obtained "narrative statements" (as defined in their paper) and visualized their temporal distribution:
 
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/relatio_plot.jpg" class="img-fluid z-depth-2" style="width: 60%;" %}
+        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/relatio_plot.jpg" class="img-fluid z-depth-2" style="width: 40%;" %}
     </div>
+
+We can see the evolving nature of these narratives over time, where the distribution is aligned with real-life related events. 👍
 
 ### LLMs Can Understand Narratives
 A more advanced technique to extract and analyze narratives is using LLMs. Prompting OpenAI's Chat Completion API, GPT-3.5 <d-cite key="ChatGPT-3.5"></d-cite> with monthly tweets and prices of economic indicator from matching dates, we generated LLM-based narratives analysis, one for each date in the post-2021 dataset, containing a component of summarized analysis of the tweets and a component of potential effect on the given financial indicator. 
@@ -146,20 +148,21 @@ A more advanced technique to extract and analyze narratives is using LLMs. Promp
 Here's a snippet of such an LLM-based narrative analysis for inputs of dates 29/08/2022 to 28/09/2022. In this time period the Federal Reserve raised the interest rates in an effort to combat inflation, the US Supreme Court ruled that the Biden administration could not extend the pause on student loan payments:
 
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/chatgpt_snippet.jpg" class="img-fluid z-depth-2" %}
+        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/chatgpt_snippet.jpg" class="img-fluid z-depth-2 style="width: 50%;" %}
     </div>
 
-This snippet demonstrates the LLM’s ability to aggregate information, condensing and distinguishing between opinions and occurrences conveyed in the tweets. Moreover, the LLM links its insights to potential future consequences for the financial indicator, a pivotal initial move towards prediction.
+This snippet demonstrates the LLM’s ability to aggregate information, condensing and distinguishing between opinions and occurrences conveyed in the tweets. Moreover, the LLM links its insights to potential future consequences for the financial indicator, a pivotal initial move towards prediction. 👍
 
 *** 
 
-# Why Macroeconomics?
+# Narrative Economics at the Macro Level
 
-Now that we have social media narratives in hand, let's focus on *macroeconomics*.  
+Now that we have social media narratives in hand, let's focus on why we chose to predict *macroeconomic* indicators:  
 
 **Macroeconomics** studies the behavior of the economy as a whole, examining factors like inflation, unemployment, and economic growth. **Microeconomics**, on the other hand, is concerned with the decision-making of individuals and firms, examining indicators like a certain stock.
 
-A core concept in Narrative Economics is that narratives can drive economics flunctuations. This is especially intriguing at the macroeconomic level, as the theory suggests that widely shared stories can influence the collective decisions of millions of individuals. Additionally, existing research focuses on microeconomic indicators within the context of Narrative Economics <d-cite key="yang2023multi, khedr2021cryptocurrency, he2021multi, gurgul2023forecasting, wang2023deepemotionnet"></d-cite>, while the application in macroeconomics remains relatively unexplored.
+## Why Macroeconomics?
+A core concept in Narrative Economics is that narratives can drive economics flunctuations. 💡 This is especially intriguing at the macroeconomic level, as the theory suggests that widely shared stories can influence the collective decisions of millions of individuals. Additionally, existing research focuses on microeconomic indicators within the context of Narrative Economics <d-cite key="yang2023multi, khedr2021cryptocurrency, he2021multi, gurgul2023forecasting, wang2023deepemotionnet"></d-cite>, while the application in macroeconomics remains relatively unexplored.
 
 However, studying this macroeconomically is more complex than microeconomically due to the complex interplay of various factors, the need for broad-covering narratives, and the inherent difficulty in isolating causal relationships. 
 
@@ -216,7 +219,10 @@ We differ our models into 3 categories based on their input signal:
 * up/down: always predict 'increase'/'decrease'.
 
 **Counterfactual textual baselines:**
-* random texts: feeding the LLM with randomly generated sentences comprised of varying random words. This baseline evaluate whether the LLM actually utilize the content of tweets.
+
+During our experiments, certain results raised questions about the validity of our models' performance. To address this, we incorporated counterfactual textual baselines to rigorously assess whether observed improvements were genuinely due to the models' capabilities or attributable to other factors:
+
+* Random texts: feeding the LLM with randomly generated sentences comprised of varying random words. This baseline evaluate whether the LLM actually utilize the content of tweets.
 * Shuffled tweets: feeding the LLM with chronologically disordered tweets, isolating the impact of temporal narratives from confounding patterns or memorization. This baseline assess the model reliance on temporal narratives.
 * Synthetic 'narratives': Feeding the LLM with generated narrative-like sentences expressing positive or negative cues, aligned with subsequent changes in the financial target. This baseline assess the LLM's ability to infer relationships between aligned narratives and the following market changes.
 
@@ -231,18 +237,18 @@ Our model selection progresses from simpler models, frequently employed in the f
 **Textual models:**
 * Daily sentiment: a simple method, commonly used in the literature, is presenting each tweet with its sentiment score. Then, we average the scores of individual tweets of the same dates to receive a daily sentiment, and concatenate over a week.
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/models_diagram_1.jpg" class="img-fluid rounded z-depth-1" style="width: 50%;" %}
+        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/models_diagram_1.jpg" class="img-fluid rounded z-depth-1" style="width: 40%;" %}
     </div>
     
 * LLM's representations of individual/joint tweets: we derive embeddings of individual or concatenated tweets using pre-trained language models (BERT <d-cite key="devlin2018bert"></d-cite>,RoBERTa <d-cite key="liu2019roberta"></d-cite> and T5 <d-cite key="raffel2020exploring"></d-cite>. In the individual case, tweets' embeddings are aggregated daily by averaging or concatenating embeddings of same-date tweets. In the joint case, tweets are concatenated daily to create a single daily embedding, potentially capturing their collective meaning without explicit aggregation, avoiding potential information loss.
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/models_diagram_2.jpg" class="img-fluid rounded z-depth-1" style="width: 50%;" %}
+        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/models_diagram_2.jpg" class="img-fluid rounded z-depth-1" style="width: 40%;" %}
     </div>
   
 * LLM-generated analyses for prediction or as input to a subsequent prediction model: First, we feed OpenAI's Chat Completion API, GPT-3.5 <d-cite key="ChatGPT-3.5"></d-cite> with a month of tweets and corresponding financial values of the target indicator to create monthly analyses.Then, these analyses are either used directly for prediction or as an input to a subsequent T5 model.  
 *since the LLM receives both tweets and financial data to enable analyzing relationships, this method applies only for a TF model type.
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/models_diagram_3.jpg" class="img-fluid rounded z-depth-1" style="width: 50%;" %}
+        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/models_diagram_3.jpg" class="img-fluid rounded z-depth-1" style="width: 40%;" %}
     </div>
 
 
@@ -261,7 +267,7 @@ textual representations (T) as the exogenous series.
 
 **TL;DR:**
 * Models incorporating narratives (TF) show limited improvement over those using solely financial data (F).
-* Gains were inconsistent, marginal and statistically insignificant -> we regard it as negative results.
+* Gains were inconsistent, marginal and statistically insignificant ➡️ we regard it as negative results.
 
 ### Sentiment-Based Prediction 😄🙂😞
 
@@ -269,7 +275,7 @@ We fed classic ML models with daily sentiments for FFR 'next value' and 'directi
 
 **The results:**
 
-* **👎 Direction change**: Adding sentiment data didn't help, as both models with financial input (F & TF) achieved similar accuracy (0.939 vs. 0.936), outperforming text-only models (T) with a 5% accuracy improvement (~0.94 vs. 0.89). Additionaly, T models achieve comparable accuracy to the F baselines (0.89 vs. 0.81).
+* **👎 Direction change**: Adding sentiment data didn't help, as both models with financial input (F & TF) achieved similar accuracy (0.939 vs. 0.936). Additionaly, text-only models (T) underperform (0.89), achieving a comparable accuracy to the F baselines (0.89 vs. 0.81).
 
 | Type | Model | Accuracy |
 |---|---|---|
@@ -304,16 +310,14 @@ Here we turn to embedding-representations (as explained in the Experimental Setu
 **The results:**
 
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/embeddings_exp_results.jpg" class="img-fluid rounded z-depth-1" style="width: 60%;" %}
+        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/embeddings_exp_results.jpg" class="img-fluid rounded z-depth-1" style="width: 50%;" %}
     </div>
 
-* **👎 Next-day prediction:** The 'as-previous' F baseline outperforms all other models (3.079 MSE). This suggests that the input information might not be beneficial for such a short-term prediction. 
+* **👎 Next-day prediction:** The non-learned 'as-previous' F baseline outperforms all other models (3.079 MSE). This suggests that the input information might not be beneficial for such a short-term prediction. 
 
-* **Next-week prediction:** Initially both TF models (13.148, 13.147) appeared to outperform the F model (13.463) and F baseline (16.172), implying a potential influence of the textual content. 🚀
-However, the 'random texts' TF baseline (13.056), which replaced actual tweets with random texts, outperformed all others, indicating the improvement was not due to meaningful textual content. ⛔
+* **Next-week prediction:** Initially both TF models (13.148, 13.147) appeared to outperform the F model (13.463) and F baseline (16.172), implying a potential influence of the textual content. 🚀 <br> However, the 'random texts' TF baseline (13.056), which replaced actual tweets with random texts, outperformed all others, indicating the improvement was not due to meaningful textual content. 👎
 
-💡 We hypothesize that the presence of text improves performance, even when random, due to spurious correlations or random noise aiding generalization, similar to regularization techniques. 
-A contributing factor may arise from the difficulty of effectively capturing and representing aggregated tweet information for financial prediction, as well as the inherent challenges in predicting future values of a volatile financial indicator, characterized by frequent random movements and fluctuations, using its historical values.    
+💡 We hypothesize that the presence of text improves performance, even when random, due to spurious correlations or random noise aiding generalization, similar to regularization techniques. <br> A contributing factor may arise from the difficulty of effectively capturing and representing aggregated tweet information for financial prediction, as well as the inherent challenges in predicting future values of a volatile financial indicator, characterized by frequent random movements and fluctuations, using its historical values.    
 
 **What can we learn? 🤔** Our models struggled to leverage tweets for the prediction, indicating that implicitly capturing and aggregating latent narratives within LLMs remains a challenge.
 
@@ -353,6 +357,7 @@ We confirmed it using the McNemar's test <d-cite key="P18-1128"></d-cite> which 
 On the good side, this is the only approach were our models surpass all baselines. 
 
 **What can we learn? 🤔** While LLMs can analyze insights from narratives and TF and F models outperform all other models, the TF model struggles to utilize those insights for improved prediction.
+
 *** 
 
 # What Can We Take Away?
@@ -362,6 +367,7 @@ Despite the presence of narratives in our curated datasets and the development o
 The missing link between the successful narrative extraction demonstrated by the LLM's analyses and the limited improvement in macroeconomic prediction raises a question about the extent to which narratives alone can truly drive and forecast economic fluctuations, at least at the macroeconomic level.
 
 This study serves as a foundation for further exploration, highlighting the need for new macroeconomic models or tasks designed to assess the extracted narratives’ influence on the economy.
+
 
 *This blogpost extends the technical experiments presented in our paper <d-footnote>Link will be added for the camera ready version.</d-footnote>, delving deeper into broader aspects that naturally in a paper can only receive a shorter discussion as it primarily presents the technical results. We invite you to read the paper for full background and experiments.*
 
