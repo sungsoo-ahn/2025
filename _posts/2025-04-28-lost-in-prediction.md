@@ -53,9 +53,9 @@ toc:
       - name: Models
     - name: The Challenges in Improving Models with Narratives
       subsections:
-      - name: Sentiment-Based Prediction
-      - name: Embeddings for Time-Series Prediction
-      - name: Predicting Using LLM Analyses
+      - name: Sentiment-Based Prediction 😄🙂😞
+      - name: Embeddings for Time-Series Prediction 🕸️
+      - name: Predicting Using LLM Analyses 💬
   - name: What Can We Take Away?
 
 # Below is an example of injecting additional post-specific styles.
@@ -259,9 +259,13 @@ textual representations (T) as the exogenous series.
 * Models incorporating narratives (TF) show limited improvement over those using solely financial data (F).
 * Gains were inconsistent, marginal and statistically insignificant -> we regard it as negative results.
 
-### Sentiment-Based Prediction:
+### Sentiment-Based Prediction 😄🙂😞
 
 We fed classic ML models with daily sentiments for FFR 'next value' and 'direction change' prediction (as separate tasks).
+
+**The results:**
+
+* **👎 Direction change**: Adding sentiment data didn't help, as both models with financial input (F & TF) achieved similar accuracy (0.939 vs. 0.936), outperforming text-only models (T) with a 5% accuracy improvement (~0.94 vs. 0.89). Additionaly, T models achieve comparable accuracy to the F baselines (0.89 vs. 0.81).
 
 | Type | Model | Accuracy |
 |---|---|---|
@@ -271,8 +275,8 @@ We fed classic ML models with daily sentiments for FFR 'next value' and 'directi
 | T | Logistic Regression | 0.885 |
 | T | SVM | 0.885 |
 
+* 👎 **Next value**: None of the models, with or without sentiment or financial data, could outperform the non-learned 'train-mean' baseline (15.4, 15.6).
 
-In classifying 'direction change', models with financial input (F & TF) outperform text-only models (T), with a 5% accuracy improvement (0.94 vs. 0.89). Models with both textual and financial signals (TF) achieved similar accuracy to F models (0.939 vs. 0.936), suggesting that text has little impact. The T models achieve comparable accuracy to the F baselines (0.89 vs. 0.81).
 
 | **Type** | **Model** | **MSE** |
 |---|---|---|
@@ -281,33 +285,35 @@ In classifying 'direction change', models with financial input (F & TF) outperfo
 | TF | SVM | 15.416 | 
 | T | SVM | 15.36 | 
 
-In predicting 'next value', best F, TF and T models yield comparable MSE to the 'train-mean' baseline (15.4, 15.6).
 
-**What can we learn?** Sentiment analysis lacks the nuance necessary for accurate financial prediction, and traditional ML models have limitations in capturing complex market dynamics.  This is evident as several models did not even outperform non-learned baselines, highlighting the need for more improved text representations and advanced prediction models.  
+**What can we learn? 🤔** Sentiment analysis lacks the nuance necessary for accurate financial prediction, and traditional ML models have limitations in capturing complex market dynamics. ➡️ We need an improved text representations and more advanced prediction models.  
 
 
-### Embeddings for Time-Series Prediction:
+### Embeddings for Time-Series Prediction 🕸️
 
 Here we turn to embedding-representations (as explained in the Experimental Setup) and to DA-RNN <d-cite key="qin2017dual"></d-cite> model, which is designed to capture temporal dynamics and complex relationships within its given data.
 
-We extensively evaluated various model configurations, target indicators (FFR and VIX), tasks ('next value', 'percentage change', 'direction change' and the last two together), prediction horizons (next-day, next-week), LLM architectures (see Experimental Setup), aggregation methods, and the daily number of tweets given as input. Additionally, we assessed the models' reliance on temporal context and relevant narratives using the counterfactual textual baselines.
+🥵 We extensively evaluated various model configurations, target indicators (FFR and VIX), tasks ('next value', 'percentage change', 'direction change' and the last two together), prediction horizons (next-day, next-week), LLM architectures (see Experimental Setup), aggregation methods, and the daily number of tweets given as input. Additionally, we assessed the models' reliance on temporal context and relevant narratives using the counterfactual textual baselines.
 
-To keep it short, we present results only for predicting the VIX 'next value' of the next-day and next-week (as separate tasks). Additional experiments showed a recurring pattern to the presented results.
+🤏 To keep it short, we present results only for predicting the VIX 'next value' of the next-day and next-week (as separate tasks). Additional experiments showed a recurring pattern to the presented results.
+
+**The results:**
 
 <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/embeddings_exp_results.jpg" class="img-fluid rounded z-depth-1" style="width: 60%;" %}
     </div>
 
-For the next-day horizon, the 'as-previous' F baseline outperforms all other models (3.079 MSE). This suggests that the input information might not be beneficial for such a short-term prediction. 
+* **👎 Next-day prediction:** The 'as-previous' F baseline outperforms all other models (3.079 MSE). This suggests that the input information might not be beneficial for such a short-term prediction. 
 
-For the next-week horizon, initially both TF models (13.148, 13.147) appeared to outperform the F model (13.463) and F baseline (16.172), implying a potential influence of the textual content. 
-However, the 'random texts' TF baseline (13.056), which replaced actual tweets with random texts, outperformed all others, indicating the improvement was not due to meaningful textual content. We hypothesize that the presence of text improves performance, even when random, due to spurious correlations or random noise aiding generalization, similar to regularization techniques. 
+* **Next-week prediction:** Initially both TF models (13.148, 13.147) appeared to outperform the F model (13.463) and F baseline (16.172), implying a potential influence of the textual content. 🚀
+However, the 'random texts' TF baseline (13.056), which replaced actual tweets with random texts, outperformed all others, indicating the improvement was not due to meaningful textual content. ⛔
 
+💡 We hypothesize that the presence of text improves performance, even when random, due to spurious correlations or random noise aiding generalization, similar to regularization techniques. 
 A contributing factor may arise from the difficulty of effectively capturing and representing aggregated tweet information for financial prediction, as well as the inherent challenges in predicting future values of a volatile financial indicator, characterized by frequent random movements and fluctuations, using its historical values.    
 
-**What can we learn?** Our models struggled to leverage tweets for the prediction, indicating that implicitly capturing and aggregating latent narratives within LLMs remains a challenge.
+**What can we learn? 🤔** Our models struggled to leverage tweets for the prediction, indicating that implicitly capturing and aggregating latent narratives within LLMs remains a challenge.
 
-### Predicting Using LLM Analyses:
+### Predicting Using LLM Analyses 💬
 
 **Can LLMs generate an accurate prediction?** We first tried to directly predict the financial indicator (average weekly VIX or S&P 500) as a generative response of the web chat version of GPT <d-cite key="gpt-chat"></d-cite> prompted with a monthly window of tweets and corresponding values of the financial target. This resulted in limited inconsistent success. While the LLM consistently generated insightful narrative analyses and demonstrated comprehension of financial implications, it exhibited inconsistencies when applying these insights for prediction.  For instance, it occasionally refused to provide predictions, or it would simply mirror input ranges, neglecting the potential impact of the narratives it successfully analyzed. When presented with 'synthetic narratives', it recognized the change direction but struggled to quantify the magnitude of it.
 
@@ -341,7 +347,7 @@ So did it work? not really. Results show that there is no significant difference
 We confirmed it using the McNemar's test <d-cite key="P18-1128"></d-cite> which shows no statistically significant difference (p-value=0.48).
 On the good side, this is the only approach were our models surpass all baselines. 
 
-**What can we learn?** While TF and F models outperform all others, the difference between their performance is negligible.
+**What can we learn? 🤔** While TF and F models outperform all others, the difference between their performance is negligible.
 
 *** 
 
