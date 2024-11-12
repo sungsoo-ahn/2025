@@ -143,16 +143,61 @@ Even when solving the same problem with different numbers or subjects, humans ca
 The same applies to LMs. [todo: quote some papers that look into this??]
 
 The table below demonstrates empirically that LMs do indeed make arithmetic mistakes.
-The task is basic addition of two numbers with varying digit lengths (e.g. "What is 147 + 562?"). Consistent with prior literature [CITE], as the numbers get larger, accuracy declines, showing that simple arithmetic is not perfectly reliable.
+The task is basic addition of two numbers with varying digit lengths (e.g. "What is 147 + 562?"). Consistent with prior literature [TODO CITE], as the numbers get larger, accuracy declines, showing that simple arithmetic is not perfectly reliable.
 
-Model | 1 digit | 2 digits | 3 digits | 4 digits
---- | --- | --- | --- | ---
-Phi-3.5-mini-instruct | 100% | 93.0% | 90.8% | 84.0%
-Llama-3-8B-Instruct | 100% | 100% | 100% | 95.3%
+Model | 1 digit | 2 digits | 3 digits | 4 digits | 5 digits | 6 digits
+--- | --- | --- | --- | --- | --- | ---
+Phi-3.5-mini-instruct | 100% | 93.0% | 90.8% | 84.0% | 79.7% | TODO
+Llama-3-8B-Instruct | 100% | 100% | 100% | 95.3% | 91.2% | 86.3%
 
 <div class="caption">
 Accuracy (zero-shot, CoT prompting) on a simple addition task. The larger model (Llama-3-8B-Instruct) is more accurate. For llama, numbers upto 3 digits are a single token, and 4-digit numbers are 2 tokens. For Phi, a $d$-digit number takes $d$ tokens. More on this in Section 4.2.1. 
 </div>
+
+We explore this further: investigate how total digits and carry operations affect performance on this addition task. The figure below models accuracy as a function of these two factors.
+The figure below illustrates how the probability of answering a question correctly varies based on the number of digits $d$ of the numbers being added and the number of carry operations involved in the sum.
+
+
+{% include figure.html 
+  path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/addition_accuracy.png" 
+  class="img-fluid" 
+  title="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task" 
+  caption="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers." 
+%}
+
+The accuracy of both models decreases as the number of digits increases, indicating that larger inputs are harder to process.
+Accuracy is also negatively affected by the number of carry operations involved in the sum (effect statistically strong for Llama but not Phi; full details in Appendix).
+Model predictions: adding 2-digit numbers with 1 carry operation, 3-digit numbers with 2 carry operations (carry operations are the median):
+Phi: 95.1% 91.2% 
+Llama: 99.6% 99.0% 
+
+Llama results:
+```
+Call:
+glm(formula = correct ~ total_digits + carry, family = "binomial", 
+    data = .)
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)   7.63465    0.37386  20.421   <2e-16 ***
+total_digits -0.46207    0.04052 -11.402   <2e-16 ***
+carry        -0.15291    0.07054  -2.168   0.0302 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 1440.4  on 5162  degrees of freedom
+Residual deviance: 1141.7  on 5160  degrees of freedom
+AIC: 1147.7
+```
+
+Phi results:
+```
+RUNNING 6 digit addition
+```
+
+
 
 **Is performing arithmetic part of reasoning?** 
 Solving a word math problem consists of two steps: (1) translating the text to a sequence of operations, and (2) performing the operations correctly.
@@ -267,63 +312,7 @@ Looking at the example template (Figure 1 from the paper, reproduced above), we 
 [This might actually go in the previous section, where we discuss the disentanglement of reasoning and arithmetic; then refer to it here.]
 In other words, the original GSM8K question cannot be generated from the proposed symbolic template.
 A more appropriate sampling range for both `total` and `ans` might be $[50, 99]$.
-We argue that and empirically show that such small changes in number ranges can significantly impact the performance of LMs, even if reasoning is consistent.
-To this end,consider again the simple addition task of adding two $d$-digit numbers.
-The figure below illustrates how the probability of answering a question correctly varies based on the number of digits $d$ of the numbers being added and the number of carry operations involved in the sum.
 
-
-{% include figure.html 
-  path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/addition_accuracy.png" 
-  class="img-fluid" 
-  title="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task" 
-  caption="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers." 
-%}
-
-[elaborate on this plot a bit..]
-
-
-[these will go to appendix, leaving here until this section is complete]
-llama results:
-```
-Call:
-glm(formula = correct ~ total_digits + carry, family = "binomial", 
-    data = .)
-
-Coefficients:
-             Estimate Std. Error z value Pr(>|z|)    
-(Intercept)   7.63465    0.37386  20.421   <2e-16 ***
-total_digits -0.46207    0.04052 -11.402   <2e-16 ***
-carry        -0.15291    0.07054  -2.168   0.0302 *  
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 1440.4  on 5162  degrees of freedom
-Residual deviance: 1141.7  on 5160  degrees of freedom
-AIC: 1147.7
-```
-
-Phi results:
-```
-Call:
-glm(formula = correct ~ total_digits + carry, family = "binomial", 
-    data = .)
-
-Coefficients:
-             Estimate Std. Error z value Pr(>|z|)    
-(Intercept)   4.15642    0.21505  19.328   <2e-16 ***
-total_digits -0.29440    0.03006  -9.794   <2e-16 ***
-carry        -0.02347    0.05571  -0.421    0.674    
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 2211.6  on 3071  degrees of freedom
-Residual deviance: 2055.2  on 3069  degrees of freedom
-AIC: 2061.2
-```
 
 The question in Figure 1 involves three arithmetic operations (two additions and one subtraction).
 In the worst case, where all numbers are at least 100, Llama3-8b would be correct with probability ...
