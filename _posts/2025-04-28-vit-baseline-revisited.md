@@ -433,8 +433,8 @@ The metrics suggest that none of them has any effect.
 ## Corrected reproduction
 
 To further assess the effect of different implementations, we reproduce the full ablation results
-with 90, 150, and 300 epochs of training budget from <d-cite key="beyer2022better"></d-cite> but
-with the torchvision Inception crop, [`v2.RandomResizedCrop()`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandomResizedCrop.html).
+with 90, 150, and 300 epochs of training budget from <d-cite key="beyer2022better"></d-cite> on a
+8x A100-SXM4-40GB instance but with the torchvision Inception crop, [`v2.RandomResizedCrop()`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandomResizedCrop.html).
 Here is the relevant part of Table 1 from <d-cite key="beyer2022better"></d-cite>:
 
 | Model | 90ep |  150ep | 300ep |
@@ -457,7 +457,7 @@ than they are:
 | Posemb: sincos2d → learned | 76.2 <g>+1.2</g> | 77.7 <r>-0.3</r> | 79.6 <g>+0.0</g> |
 | Batch-size: 1024 → 4096 | 75.6 <g>+0.9</g> | 77.8 <g>+0.5</g> | 78.3 <r>-0.3</r> |
 | Global Avgpool → [cls] token | 75.3 <g>+0.3</g> | 77.1 <g>+0.2</g> | 77.5 <r>-0.5</r> |
-| Head: MLP → linear | 76.8 <g>+0.1</g> | 78.6 | 79.8 |
+| Head: MLP → linear | 76.8 <g>+0.1</g> | 78.1 <r>-0.5</r> | 79.8 |
 
 We first notice that there is quite a bit of variation: In particular, 76.8(3)% for 90ep Head: MLP → linear
 is low compared to our previous result 77.27%. This reminds us of our ["grafting" experiment](https://github.com/EIFY/big_vision/tree/grafted)
@@ -467,7 +467,7 @@ means the difference between 76.38-76.87 and 76.83-77.27, with variation of $\pm
 Regardless, the trend seems to be that the correct Inception crop benefits lower training budget
 experiments but shows more mixed results for higher training budget. One plausible explanation
 is that oversampling crops with smaller area amounts to stronger augmentation, which tends to benefit
-models in the long run. We can also see this by [comparing better baseline with no RandAug+MixUp](https://api.wandb.ai/links/eify/3joh568g):
+models in the long run <d-footnote>One might be tempted to try curriculum learning with increasing augmentation strength, but early experiments (<a href="https://github.com/EIFY/mup-vit/tree/curriculum">source</a>) result in <a href="https://api.wandb.ai/links/eify/ylnhm3or">76.65-77.35 for 90ep Head: MLP → linear</a>, almost the same range.</d-footnote>. We can also see this by [comparing better baseline with no RandAug+MixUp](https://api.wandb.ai/links/eify/3joh568g):
 
 <div class="caption">
   <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/augmentation_tortoise_and_hare.png" class="img-fluid" width="auto" height="auto">
@@ -513,24 +513,38 @@ of Inception crop is mentioned, and its current Google Scholar citation counts:
 | FlexiViT: One Model for All Patch Sizes <d-cite key="beyer2023flexivit"></d-cite> | `inception_crop` can be found in config.json downloaded from the link in the [flexivit project README](https://github.com/google-research/big_vision/tree/46b2456f54b9d4f829d1925b78943372b376153d/big_vision/configs/proj/flexivit) in Big Vision. | 82 |
 | Patch n' Pack: NaViT, a Vision Transformer for any Aspect Ratio and Resolution <d-cite key="dehghani2024patch"></d-cite> | 'NaViT is implemented in JAX [21] using the FLAX library [22] and built within Scenic [23].' (...) 'Second, we apply inception-style cropping [35] with a fixed minimum area of 50%'. While the source code of NaViT isn't available, [Scenic relies on `tf.image.sample_distorted_bounding_box()` for Inception crop](https://github.com/search?q=repo%3Agoogle-research%2Fscenic%20sample_distorted_bounding_box&type=code) and [this call](https://github.com/google-research/scenic/blob/0340172a1ffa97a2cdb02adde7ea6d0ea66e539c/scenic/dataset_lib/dataset_utils.py#L735) might be what it uses. | 51 |
 
-It is out of scope to retrain these models with the correct Inception crop, but we can examine the
-pair of baseline models we have. We compare the true reproduction model (76.94% top-1) and the first
-one with the correct Inception crop from torchvision (77.27% top-1). Using the ImageNet-1k validation
-set, we compute the gradient of the class logit on the image, sum over gradients of the 3 (RGB) channels
-per pixel, and then zero-out the negative ones. We normalize the resulting gradients by the max gradient of
-the image and examine the distribution of the normalized gradients on the $[0, 1]$ support over the validation set
-([notebook](https://github.com/EIFY/mup-vit/blob/e35ab281acb88f669b18555603d9187a194ccc2f/notebooks/gather_stats.ipynb)).
+It is out of scope to retrain these models with the correct Inception crop, but we can compare the
+90ep Head: MLP → linear models we trained with either the correct uniform area sampling:
+
+* "Fixed": the model trained on a single RTX 3080 Laptop (77.27% top-1)
+* "Fixed Parallel": the model trained on 8x A100-SXM4-40GB (76.83% top-1)
+
+or the TF-like uniform crop height sampling:
+
+* "Repro": the true reproduction model (76.94% top-1)
+* "Grafted": the PyTorch model trained on the Big Vision data pipelines (76.38% top-1)
+
+Using the ImageNet-1k validation set, we compute the gradient of the class logit on the image,
+sum over gradients of the 3 (RGB) channels per pixel, and then zero-out the negative ones. Finally,
+we measure how evenly the positive gradient is distributed among the $224^2$ pixels of the validation
+image center crop by the entropy ([notebook](https://github.com/EIFY/mup-vit/blob/51bcdc77ea6e26ceef049e96f59702a9d9ef15d1/notebooks/gather_stats.ipynb)).
 We hypothesize that since the correct Inception crop tends to let the model see more of the image,
-the model will rely on more pixels at inference time.
+How focused the model's attention (in the colloquial sense here) may differ. For reference and sanity
+check, the maximum possible entropy here is $\log(224^2) = 10.82$:
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/gradient_CDF.png" class="img-fluid" width="auto" height="auto">
+  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/gradient_entropy.png" class="img-fluid" width="auto" height="auto">
 </div>
 
-Tentatively we find that to be the case — over the validation set, 90% of the gradient per pixel is
-below 3.2% of the max per image for the true reproduction model, while the 90th percentile for the one
-trained with the correct Inception crop is 2.4%. The gradients for the latter are more spread out
-with more pixels having smaller gradients.
+Tentatively we find that to be the case. There is quite a bit of variation between the replications
+just like the evaluation metric, but models trained with the correct uniform area sampling tend to
+have more focused attention with lower positive gradient entropy. This is interesting and not necessary
+what one might have expected. As a plausible explanation, we hypothesize that perhaps the smaller crops
+of TF-like Inception crop force the model to learn different localized features in each epoch, so
+when the model sees the validation set center crop it is paying more evenly distributed attention.
+
+Now, how would the models trained for the highly-cited papers above including SimCLR, SoViT-400M,
+and FlexViT behave differently if they were trained with the correct Inception crop?
 
 ## Conclusion
 
