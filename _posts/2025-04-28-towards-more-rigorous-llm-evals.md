@@ -152,10 +152,11 @@ The figure below illustrates how the probability of answering a question correct
   class="img-fluid" 
   title="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task" 
   caption="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers. 
-  We illustrate how the probability of answering a question correctly ($y$-axis) is affected by the total number of digits, $2d$, of the numbers being added ($x$-axis) and the number of carry operations involved in the sum (colour of the points). The size of the points indicate the corresponding total number of tokens. 
-  For the purposes of this illustration, we group questions by number of digits and carry operations, and plot the average accuracy over 512 samples. 
+  The plot illustrates how the probability of answering a question correctly ($y$-axis) is affected by the total number of digits involved ($2d$, $x$-axis), and the total number of carry operations involved in that sum (colour of the points).  
+  Point size reflects the total number of tokens (for Phi, total digits equal total tokens; for Llama, numbers up to 3 digits are 1 token and up to 6 digits are 2 tokens). 
+  For this illustration, we group questions by number of digits and carry operations, and plot the average accuracy over 512 samples. 
   Groups containing fewer than 10 questions are excluded. 
-  The full results of the logistic regressions can be found in the Appendix." 
+  Detailed results of the logistic regressions are available in the Appendix." 
 %}
 
 The findings indicate that LM performance is negatively affected by both the number of digits and the number of carry operations in the sum. 
