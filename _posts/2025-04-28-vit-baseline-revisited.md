@@ -457,7 +457,7 @@ than they are:
 | Posemb: sincos2d → learned | 76.2 <g>+1.2</g> | 77.7 <r>-0.3</r> | 79.6 <g>+0.0</g> |
 | Batch-size: 1024 → 4096 | 75.6 <g>+0.9</g> | 77.8 <g>+0.5</g> | 78.3 <r>-0.3</r> |
 | Global Avgpool → [cls] token | 75.3 <g>+0.3</g> | 77.1 <g>+0.2</g> | 77.5 <r>-0.5</r> |
-| Head: MLP → linear | 76.8 <g>+0.1</g> | 78.1 <r>-0.5</r> | 79.8 |
+| Head: MLP → linear | 76.8 <g>+0.1</g> | 78.1 <r>-0.5</r> | 78.9 <r>-0.9</r> |
 
 We first notice that there is quite a bit of variation: In particular, 76.8(3)% for 90ep Head: MLP → linear
 is low compared to our previous result 77.27%. This reminds us of our ["grafting" experiment](https://github.com/EIFY/big_vision/tree/grafted)
@@ -524,10 +524,11 @@ or the TF-like uniform crop height sampling:
 * "Repro": the true reproduction model (76.94% top-1)
 * "Grafted": the PyTorch model trained on the Big Vision data pipelines (76.38% top-1)
 
-Using the ImageNet-1k validation set, we compute the gradient of the class logit on the image,
-sum over gradients of the 3 (RGB) channels per pixel, and then zero-out the negative ones. Finally,
-we measure how evenly the positive gradient is distributed among the $224^2$ pixels of the validation
-image center crop by the entropy ([notebook](https://github.com/EIFY/mup-vit/blob/51bcdc77ea6e26ceef049e96f59702a9d9ef15d1/notebooks/gather_stats.ipynb)).
+Loosely inspired by guided backpropagation <d-cite key="DBLP:journals/corr/SpringenbergDBR14"></d-cite>,
+we compute the gradient of the class logit on the images from the ImageNet-1k validation set, sum over
+gradients of the 3 (RGB) channels per pixel, and then zero-out the negative ones. Finally, we measure
+how evenly the positive gradient is distributed among the $224^2$ pixels of the validation image center
+crop by the entropy ([notebook](https://github.com/EIFY/mup-vit/blob/51bcdc77ea6e26ceef049e96f59702a9d9ef15d1/notebooks/gather_stats.ipynb)).
 We hypothesize that since the correct Inception crop tends to let the model see more of the image,
 How focused the model's attention (in the colloquial sense here) may differ. For reference and sanity
 check, the maximum possible entropy here is $\log(224^2) = 10.82$:
