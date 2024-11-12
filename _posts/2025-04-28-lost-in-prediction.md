@@ -90,7 +90,7 @@ Narrative Economics is the study of how popular stories and ideas (a.k.a **narra
 
 The central idea is that the spread of viral narratives can influence individual and collective economic behavior, leading to fluctuations in markets, changes in investment patterns, and even broader economic shifts.
 
-<div style="width: 70%;"> <div class="col-sm mt-3 mt-md-0">
+<div style="width: 70%; margin: 0 auto;"> <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/narrative_economics.png" class="img-fluid z-depth-2" %}
     </div></div>
     
@@ -321,7 +321,7 @@ Here we turn to embedding-representations (as explained in the Experimental Setu
 
 **The results:**
 
-<div style="width: 70%;"> <div class="col-sm mt-3 mt-md-0">
+<div style="width: 70%; margin: 0 auto;"> <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/embeddings_exp_results.jpg" class="img-fluid rounded z-depth-1" %}
     </div></div>
 
