@@ -592,3 +592,116 @@ Regardless of the NHST outcomes, critically examine the results, initial assumpt
 **Remark:** Although NHST is the most commonly used framework, it is not the only approach for statistical analysis. 
 Bayesian analysis offers an alternative with some practical similarities, such as the use of highest density intervals (HDI). 
 However, the two approaches differ deeply in their epistemological foundations: NHST relies on a frequentist interpretation, viewing the results (e.g. accuracy) as repeated sampling from a fixed parameter. In contrast, Bayesian analysis treats parameters themselves as random variables and uses probability to express a degree of belief, that gets updated with new evidence. -->
+
+# DGP:
+
+1. Sample a template $T \sim P_T$.
+2. Sample filler values 
+
+$$V \sim P_{V\vert T}(·\vert T)$$
+
+. The pair 
+
+$$T, V$$
+
+ produce a question and an answer
+ 
+$$\left(T(V)_Q, T(V)_A\right)$$
+
+
+3. We take a language model $M$ and we are interested in estimating 
+
+$$\mathbb{P}(M(T(V)_Q) = T(V)_A) =: p_M$$
+
+- We fix 100 samples 
+
+$$t_1, t_2, ..., t_{100}$$
+
+ of templates, sampled from 
+ 
+ $$P_T$$.
+- This gives us a collection of 100 conditional distributions 
+
+$$P_{V|t_i}$$
+
+ of filler values
+- We might, in fact, postulate that we have two sets of conditional distributions 
+
+$$\{P^{8k}_{V|t_i}: i=1...100\}$$ 
+
+and
+
+$$\{P^{Symb}_{V|t_i}: i=1...100\}$$
+
+- Under this model, the accuracies we're interested in are captured by the following random variables:
+
+  * for 
+  
+  $$V_i^{8k} \sim P^{8k}_{V|t_i}, 1≤i≤100$$
+  
+  , we have binary random variables
+  
+   $$X^{8k}_{M,t_i} = \mathbb{I}(M(t_i(V_i^{8k})_Q) = t_i(V_i^{8k})_A)$$
+   
+    and an accuracy estimator 
+    
+    $$\hat{P}^{8k}_M = \frac{1}{100}\sum_{i=1}^{100} X^{8k}_{M,t_i}$$
+
+  * for 
+  
+  $$V_i^{Symb} \sim P^{Symb}_{V|t_i}, 1≤i≤100$$
+  
+  , we have binary random variables
+  
+   $$X^{Symb}_{M,t_i} = \mathbb{I}(M(t_i(V_i^{Symb})_Q) = t_i(V_i^{Symb})_A)$$
+   
+    and an accuracy estimator 
+    
+    $$\hat{P}^{Symb}_M = \frac{1}{100}\sum_{i=1}^{100} X^{Symb}_{M,t_i}$$
+
+We have (†):
+- one observation 
+
+$$\hat{p}_M^{8k}$ of $\hat{P}^{8k}_M$$
+
+
+- 50 observations 
+
+$$\{\hat{p}_{M, j}^{Symb}: 1≤j≤50\}$$ 
+
+of
+
+ $$\hat{P}^{Symb}_M$$
+
+We may assume that 
+
+$$\{X^{8k}_{M,t_i}: 1≤i≤100\}$$
+
+ are i.i.d Bernoulli with probability of success 
+ 
+ $$p^{8k}_M$$
+
+$$\Rightarrow \hat{P}^{8k}_M \sim \frac{1}{100}Bin(100,p^{8k}_M)$$
+
+Same for 
+
+$$X^{Symb}_{t_i} \sim_{i.i.d} Bernoulli(p^{Symb}_M)$$
+
+ and 
+ 
+ $$\hat{P}^{Symb}_M \sim \frac{1}{100}Bin(100,p^{Symb}_M)$$
+
+
+Q: Given our observations (†), what evidence is there to believe that 
+
+$$p^{8k}_M \neq p^{Symb}_M$$
+
+? Similarly, what evidence is there to believe that 
+
+$$p^{8k}_M > p^{Symb}_M$$
+
+?
+
+Note that it _does_ make sense to also assume that 
+
+$$X^{8k}_{t_i} \perp\!\!\!\perp X^{Symb}_{t_i}$$.
