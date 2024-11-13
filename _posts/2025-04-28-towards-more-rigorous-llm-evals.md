@@ -503,22 +503,42 @@ glm(formula = correct ~ total_digits + carry, family = "binomial",
 
 Coefficients:
              Estimate Std. Error z value Pr(>|z|)    
-(Intercept)   7.63465    0.37386  20.421   <2e-16 ***
-total_digits -0.46207    0.04052 -11.402   <2e-16 ***
-carry        -0.15291    0.07054  -2.168   0.0302 *  
+(Intercept)   7.35210    0.47409  15.508  < 2e-16 ***
+total_digits -0.41672    0.04859  -8.576  < 2e-16 ***
+carry        -0.21252    0.07575  -2.806  0.00502 ** 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
-    Null deviance: 1440.4  on 5162  degrees of freedom
-Residual deviance: 1141.7  on 5160  degrees of freedom
-AIC: 1147.7
+    Null deviance: 1125.63  on 3066  degrees of freedom
+Residual deviance:  922.02  on 3064  degrees of freedom
+AIC: 928.02
+
+Number of Fisher Scoring iterations: 7
 ```
 
 Phi results:
 ```
-RUNNING 6 digit addition
+Call:
+glm(formula = correct ~ total_digits + carry, family = "binomial", 
+    data = .)
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)   3.95149    0.17593  22.460   <2e-16 ***
+total_digits -0.25747    0.02249 -11.447   <2e-16 ***
+carry        -0.02325    0.04907  -0.474    0.636    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 2460.8  on 3066  degrees of freedom
+Residual deviance: 2217.8  on 3064  degrees of freedom
+AIC: 2223.8
+
+Number of Fisher Scoring iterations: 5
 ```
 
 
