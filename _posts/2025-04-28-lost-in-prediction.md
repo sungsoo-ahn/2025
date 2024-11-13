@@ -9,8 +9,7 @@ hidden: false
 
 output: 
   html_document:
-    toc: true
-    toc_float: true
+    toc: false
 
 # Anonymize when submitting
 # authors:
