@@ -342,16 +342,21 @@ This approach addresses limitations of both previous experiments:
   
 **The results:**
   
-| Type | Model | Accuracy | F<sub>1</sub>-Score | 
+| Type | Model | Accuracy | F<sub>1</sub>-Score |
+|  | Train-majority | 0.424 | 0.0 |  
 |---|---|---|---|
-| F-baselines | Train-majority | 0.424 | 0.0 |  
-| F-baselines | Week-majority | 0.484 | 0.598 | 
+|  | Week-majority | 0.484 | 0.598 | 
+|---|---|---|---|
 | F-baselines | As-previous | 0.484 | 0.552 | 
-| F-baselines | Inverse-previous | 0.517 | 0.511 | 
-| F-baselines | Up-predictor | 0.576 | 0.731 | 
-| F-baselines | Down-predictor | 0.424 | 0.0 |  
 |---|---|---|---|
+|  | Inverse-previous | 0.517 | 0.511 | 
+|---|---|---|---|
+|  | Up-predictor | 0.576 | 0.731 | 
+|---|---|---|---|
+|  | Down-predictor | 0.424 | 0.0 |  
+
 | F | T5 Base | **0.604** | 0.723 |  
+|---|---|---|---|
 | F | T5 Large | 0.593 | **0.727** | 
 |---|---|---|---|
 | TF | T5 Base | 0.626 | 0.738 |  
