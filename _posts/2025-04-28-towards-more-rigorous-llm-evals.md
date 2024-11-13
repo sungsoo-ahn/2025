@@ -252,7 +252,7 @@ The table below compares the 95% Wilson score intervals to the approximate accur
 | o1-preview                     | (90%, 98%)          | (88%, 96%)            |
 
 <div class="caption">
-95% Wilson score intervals for the point estimates of $p_m$ and reported ranges, approximated from Figure 1 in Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper.
+95% Wilson score intervals for the point estimates of $p_{m, 8K}$ and approximate reported ranges of point estimates of $p_{m, Sym}$, derived from Figure 1 in Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper.
 </div>
 
 Note that our confidence intervals are wider than the implied ranges in the figures in the paper, i.e. under the i.i.d. Bernoulli assumption, the variation is actually **larger** than what is observed.
