@@ -350,7 +350,8 @@ This approach addresses limitations of both previous experiments:
   
 **The results:**
   
-| Type | Model | Accuracy | F<sub>1</sub>-Score |
+| Type | Model | Accuracy | F<sub>1</sub>-Score|
+|---|---|---|---|
 |  | Train-majority | 0.424 | 0.0 |  
 |---|---|---|---|
 |  | Week-majority | 0.484 | 0.598 | 
@@ -364,12 +365,11 @@ This approach addresses limitations of both previous experiments:
 |  | Down-predictor | 0.424 | 0.0 |  
 | F | T5 Base | **0.604** | 0.723 |  
 |---|---|---|---|
-| F | T5 Large | 0.593 | **0.727** | 
+|  | T5 Large | 0.593 | **0.727** | 
+| TF | T5 Base | 0.626 | 0.738 | 
 |---|---|---|---|
-| TF | T5 Base | 0.626 | 0.738 |  
-| TF | T5 Large | **0.627** | **0.742** |  
+|  | T5 Large | **0.627** | **0.742** |  
 | T | T5 Large | 0.587 | 0.726 | 
-|---|---|---|---|
 | T-baseline | Synthetic narratives | 0.489 | 0.254 |
 
 
