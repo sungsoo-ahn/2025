@@ -66,8 +66,8 @@ center(P::Position) = P.center
 xcenter(P::Position) = center(P).x
 ycenter(P::Position) = center(P).y
 
-top(P::Position) = Point(xcenter(P), ycenter(P) + height(P) / 2)
-bottom(P::Position) = Point(xcenter(P), ycenter(P) - height(P) / 2)
+top(P::Position) = Point(xcenter(P), ycenter(P) - height(P) / 2)
+bottom(P::Position) = Point(xcenter(P), ycenter(P) + height(P) / 2)
 right(P::Position) = Point(xcenter(P) + width(P) / 2, ycenter(P))
 left(P::Position) = Point(xcenter(P) - width(P) / 2, ycenter(P))
 
@@ -75,6 +75,14 @@ function position_right_of(P::Position; space = SPACE)
     x, y = right(P)
     function position_drawable(D::Drawable)
         return Position(D, Point(x + space + width(D) / 2, y))
+    end
+    return position_drawable
+end
+
+function position_above(P::Position; space = SPACE)
+    x, y = top(P)
+    function position_drawable(D::Drawable)
+        return Position(D, Point(x, y - space - height(D) / 2))
     end
     return position_drawable
 end
@@ -203,16 +211,16 @@ luma(c::RGB) = 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b # using BT. 709 coeffi
 # Operator #
 #==========#
 
-Base.@kwdef struct DrawOperator <: Drawable
+Base.@kwdef struct DrawText <: Drawable
     text::LaTeXString
     color::HSL{Float64} = color_operator
     cellsize::Float64 = 12
     fontsize::Float64 = 20
 end
-width(O::DrawOperator) = O.cellsize
-height(O::DrawOperator) = O.cellsize
+width(O::DrawText) = O.cellsize
+height(O::DrawText) = O.cellsize
 
-function draw!(O::DrawOperator, center)
+function draw!(O::DrawText, center)
     # Apply offset
     setcolor(O.color)
     fontsize(O.fontsize)
@@ -272,9 +280,15 @@ iszero_string(x) = !iszero(x) ? "≠ 0" : "0"
 P = map(!iszero, S)
 P_text = map(iszero_string, P)
 
-vFr = randn(StableRNG(3), m, 1)
-vHr = G * vFr
-vRr = H * vHr # result from right
+# Forward mode
+vFfw = randn(StableRNG(3), m, 1)
+vHfw = G * vFfw
+vRfw = H * vHfw # result from right
+
+# Reverse mode
+vFrv = randn(StableRNG(3), 1, n)
+vGrv = vFrv * H 
+vRrv = vGrv * G # result from left
 
 # Create drawables
 DF = DrawMatrix(; mat = F, color = color_F)
@@ -287,9 +301,9 @@ DHd = DrawMatrix(; mat = H, color = color_H, dashed = true)
 
 DFdn = DrawMatrix(; mat = F, color = color_F, dashed = true, show_text = true)
 
-DEq = DrawOperator(; text = "=")
-DTimes = DrawOperator(; text = "⋅")
-DCirc = DrawOperator(; text = "∘")
+DEq = DrawText(; text = "=")
+DTimes = DrawText(; text = "⋅")
+DCirc = DrawText(; text = "∘")
 
 DJF = DrawOverlay(; text = L"J_{f}(x)", color = color_F)
 DJG = DrawOverlay(; text = L"J_{g}(x)", color = color_G)
@@ -392,33 +406,34 @@ function matrixfree()
     end
 end
 
-function matrixfree2()
+function forward_mode_eval()
     setup!()
 
-    DvFr = DrawMatrix(; mat = vFr, color = color_blue)
-    DvHr = DrawMatrix(; mat = vHr, color = color_blue)
-    DvRr = DrawMatrix(; mat = vRr, color = color_blue)
+    # Create three vectors
+    DvFfw = DrawMatrix(; mat = vFfw, color = color_blue) # input
+    DvHfw = DrawMatrix(; mat = vHfw, color = color_blue)
+    DvRfw = DrawMatrix(; mat = vRfw, color = color_blue) # output
 
     # Position drawables
-    drawables = [DFd, DvFr, DEq, DHd, DGd, DvFr]
+    drawables = [DFd, DvFfw, DEq, DHd, DGd, DvFfw]
     total_width = sum(width, drawables) + (length(drawables) - 1) * SPACE
     xstart = (width(DF) - total_width) / 2
     ystart = -105.0
 
     PF = Position(DFd, Point(xstart, ystart))
-    PvFr = position_right_of(PF)(DvFr)
+    PvFfw = position_right_of(PF)(DvFfw)
 
-    PEq = position_right_of(PvFr)(DEq)
+    PEq = position_right_of(PvFfw)(DEq)
     PH = position_right_of(PEq)(DHd)
     PG = position_right_of(PH)(DGd)
-    PvFr2 = position_right_of(PG)(DvFr)
+    PvFfw2 = position_right_of(PG)(DvFfw)
 
     PEq2 = Position(DEq, center(PEq) + Point(0, 110))
     PH2 = position_right_of(PEq2)(DHd)
-    PvHr = position_right_of(PH2)(DvHr)
+    PvHfw = position_right_of(PH2)(DvHfw)
 
     PEq3 = Position(DEq, center(PEq2) + Point(0, 110))
-    PvRr = position_right_of(PEq3)(DvRr)
+    PvRfw = position_right_of(PEq3)(DvRfw)
 
     PDF = position_on(PF)(DDF)
     PDG = position_on(PG)(DDG)
@@ -427,7 +442,48 @@ function matrixfree2()
 
     # Draw 
     for obj in
-        (PF, PvFr, PEq, PH, PG, PvFr2, PEq2, PH2, PvHr, PEq3, PvRr, PDF, PDG, PDH, PDH2)
+        (PF, PvFfw, PEq, PH, PG, PvFfw2, PEq2, PH2, PvHfw, PEq3, PvRfw, PDF, PDG, PDH, PDH2)
+        draw!(obj)
+    end
+end
+
+function reverse_mode_eval()
+    setup!()
+
+    # Create drawables for three vectors
+    DvFrv = DrawMatrix(; mat = vFrv, color = color_blue) # input
+    DvGrv = DrawMatrix(; mat = vGrv, color = color_blue)
+    DvRrv = DrawMatrix(; mat = vRrv, color = color_blue) # output
+
+    # Position drawables
+    drawables = [DvFrv, DFd, DEq, DvFrv, DHd, DGd]
+    total_width = sum(width, drawables) + (length(drawables) - 1) * SPACE
+    xstart = (width(DvFrv) - total_width) / 2
+    ystart = -82.5
+
+    PvFrv = Position(DvFrv, Point(xstart, ystart))
+    PF = position_right_of(PvFrv)(DFd)
+
+    PEq = position_right_of(PF)(DEq)
+    PvFrv2 = position_right_of(PEq)(DvFrv)
+    PH = position_right_of(PvFrv2)(DHd)
+    PG = position_right_of(PH)(DGd)
+
+    PEq2 = Position(DEq, center(PEq) + Point(0, 110))
+    PvGrv = position_right_of(PEq2)(DvGrv)
+    PG2 = position_right_of(PvGrv)(DGd)
+
+    PEq3 = Position(DEq, center(PEq2) + Point(0, 90))
+    PvRrv = position_right_of(PEq3)(DvRrv)
+
+    PDF = position_on(PF)(DDF)
+    PDG = position_on(PG)(DDG)
+    PDH = position_on(PH)(DDH)
+    PDG2 = position_on(PG2)(DDG)
+
+    # Draw 
+    for obj in
+        (PF, PvFrv, PEq, PH, PG, PvFrv2, PEq2, PG2, PvGrv, PEq3, PvRrv, PDF, PDG, PDH, PDG2)
         draw!(obj)
     end
 end
@@ -468,7 +524,7 @@ function forward_mode()
     De2 = DrawMatrix(; mat = e2, color = color_blue, show_text = true)
     DFe1 = DrawMatrix(; mat = F * e1, color = color_F, absmax = absmax, show_text = true)
     DFe2 = DrawMatrix(; mat = F * e2, color = color_F, absmax = absmax, show_text = true)
-    DDots = DrawOperator(; text = "...", fontsize = 40)
+    DDots = DrawText(; text = "...", fontsize = 40)
 
     # Position drawables
     drawables = [DF1, De1, DEq, DFe1, DDots, DFdn, De2, DEq, DFe2]
@@ -534,7 +590,7 @@ function reverse_mode()
     De2 = DrawMatrix(; mat = e2, color = color_blue, show_text = true)
     DFe1 = DrawMatrix(; mat = e1 * F, color = color_F, absmax = absmax, show_text = true)
     DFe2 = DrawMatrix(; mat = e2 * F, color = color_F, absmax = absmax, show_text = true)
-    DDots = DrawOperator(; text = "...", fontsize = 40)
+    DDots = DrawText(; text = "...", fontsize = 40)
 
     # Position drawables
     drawables = [De1, DF1, DEq, DFe1]
@@ -595,6 +651,46 @@ function sparsity_pattern()
     DP = DrawMatrix(; mat = P, mat_text = P_text, color = color_F, show_text = true)
     PP = Position(DP, Point(0.0, 0.0))
     return draw!(PP)
+end
+
+function sparsity_pattern_representations()
+    setup!()
+
+    # Dense Jacobian
+    DS = DrawMatrix(; mat = S, color = color_F, dashed = false, show_text = true)
+    
+    # Binary Jacobian
+    B_text = map(x -> !iszero(x) ? "≠ 0" : "0", P)
+    DB = DrawMatrix(; mat = P, mat_text = B_text, color = color_F, show_text = true)
+    
+    # Index set representations
+    I = fill(1.0, n, 1)
+    I_text = reshape(["{2,4}", "{4,5}", "{2,3}", "{1,3}"], n, 1)
+    DI = DrawMatrix(; mat = I, mat_text = I_text, color = color_F, show_text = true)
+    
+    # Text labels
+    fontsize = 11
+    Da = DrawText(; text="(a)", fontsize)
+    Db = DrawText(; text="(b)", fontsize)
+    Dc = DrawText(; text="(c)", fontsize)
+
+    # Center drawables
+    space = 30
+    drawables = [DS, DB, DI]
+    total_width = sum(width, drawables) + (length(drawables) - 1) * space
+    xstart = (width(DS) - total_width) / 2
+    
+    PS = Position(DS, Point(xstart, 7.5))
+    PB = position_right_of(PS; space)(DB)
+    PI = position_right_of(PB; space)(DI)
+
+    Pa = position_above(PS; space=7)(Da)
+    Pb = position_above(PB; space=7)(Db)
+    Pc = position_above(PI; space=7)(Dc)
+    
+    for obj in (PS, PB, PI, Pa, Pb, Pc)
+        draw!(obj)
+    end
 end
 
 function sparsity_coloring()
@@ -658,16 +754,6 @@ function sparse_ad()
     end
 end
 
-function sparsity_pattern_compressed()
-    setup!()
-
-    P = fill(1.0, n, 1)
-    P_text = reshape(["{2,4}", "{4,5}", "{2,3}", "{1,3}"], n, 1)
-    DP = DrawMatrix(; mat = P, mat_text = P_text, color = color_F, show_text = true)
-    PP = Position(DP, Point(0.0, 0.0))
-    return draw!(PP)
-end
-
 function forward_mode_naive()
     setup!()
 
@@ -711,7 +797,7 @@ function forward_mode_sparse()
     DFj = DrawMatrix(; mat = PJ, mat_text = PJ_text, color = color_F, show_text = true)
     DP = DrawMatrix(; mat = P, mat_text = P_text, color = color_F, show_text = true)
 
-    DEq2 = DrawOperator(; text = "≔")
+    DEq2 = DrawText(; text = "≔")
 
     # Position drawables
     PFd = Position(DFd, Point(-137.5, 0.0)) # reuse center from `forward_mode_naive`
@@ -738,7 +824,9 @@ var"@save" = var"@svg" # var"@pdf"
 @save chainrule() 380 100 joinpath(@__DIR__, "chainrule")
 @save chainrule(; show_text = true) 380 100 joinpath(@__DIR__, "chainrule_num")
 @save matrixfree() 380 100 joinpath(@__DIR__, "matrixfree")
-@save matrixfree2() 450 340 joinpath(@__DIR__, "matrixfree2")
+
+@save forward_mode_eval() 450 340 joinpath(@__DIR__, "forward_mode_eval")
+@save reverse_mode_eval() 570 280 joinpath(@__DIR__, "reverse_mode_eval")
 
 @save forward_mode() 510 120 joinpath(@__DIR__, "forward_mode")
 @save reverse_mode() 380 250 joinpath(@__DIR__, "reverse_mode")
@@ -750,9 +838,11 @@ var"@save" = var"@svg" # var"@pdf"
 @save sparse_map_colored() 120 100 joinpath(@__DIR__, "sparse_map_colored")
 
 @save sparsity_pattern() 120 100 joinpath(@__DIR__, "sparsity_pattern")
+@save sparsity_pattern_representations() 330 120 joinpath(@__DIR__, "sparsity_pattern_representations")
 @save sparsity_coloring() 120 100 joinpath(@__DIR__, "coloring")
-@save sparsity_pattern_compressed() 40 100 joinpath(@__DIR__, "sparsity_pattern_compressed")
 
 # Sized need to match:
 @save forward_mode_naive() 400 120 joinpath(@__DIR__, "forward_mode_naive")
 @save forward_mode_sparse() 400 120 joinpath(@__DIR__, "forward_mode_sparse")
+
+
