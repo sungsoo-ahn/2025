@@ -147,7 +147,7 @@ TODO: add description of why the tweet is good example.
 To confirm the presence of narratives within our Twitter dataset, we conducted an analysis using RELATIO <d-cite key="ash2021relatio"></d-cite>, a tool designed to "capture political and economic narratives" by mapping relationships and interactions among entities within a corpus. Upon processing our dataset with RELATIO, we obtained "narrative statements" (as defined in their paper) and visualized their temporal distribution:
 
 <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/relatio_plot.jpg" class="img-fluid z-depth-2" style="width: 40%;" %}
+        {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/relatio_plot.png" class="img-fluid z-depth-2" style="width: 40%;" %}
     </div>
 
 We can see the evolving nature of these narratives over time, where the distribution is aligned with real-life related events. 👍
