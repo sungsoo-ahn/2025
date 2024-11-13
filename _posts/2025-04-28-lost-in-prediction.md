@@ -290,11 +290,12 @@ We fed classic ML models with daily sentiments for FFR 'next value' and 'directi
 
 | Type | Model | Accuracy |
 |---|---|---|
-| F baselines | As-previous | 0.812 |
+| F baseline | As-previous | 0.812 |
 | F | Random Forest Numeric | **0.936** | 
 | TF | Random Forest Numeric | **0.939** | 
 | T | Logistic Regression | 0.885 |
-| T | SVM | 0.885 |
+|---|---|---|
+|  | SVM | 0.885 |
 
 <br> 
 
