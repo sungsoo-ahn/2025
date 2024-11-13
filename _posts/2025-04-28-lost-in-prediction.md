@@ -213,39 +213,41 @@ We won't be able to cover all the details of the experiments in this blog, but i
 
 ### Prediction Tasks
 
+TODO: add bold to bullet
+
 We test the predictive power of narratives on three tasks commonly used in macroeconomic literature <d-cite key="handlan2020text, 10.1257/jel.20181020, kalamara2022making, ahrens2021extracting, masciandaro2021monetary, lee2009federal, hamilton2002model, kim2023forecasting, larkin2008good"></d-cite>:
-* Next value: predicts the target’s value at the specified horizon.
-* Percentage change: predicts the target’s percentage change between the specified horizon and
+* **Next value:** predicts the target’s value at the specified horizon.
+* **Percentage change:** predicts the target’s percentage change between the specified horizon and
 the day before.
-* Direction change: classifies the target’s direction of change (increase or decrease) between the
+* **Direction change:** classifies the target’s direction of change (increase or decrease) between the
 specified horizon and the day before.
 
 
 ### Models Categories
 
 We differ our models into 3 categories based on their input signal:
-* Financial (F): utilizes historical financial data, from the past week or month.
-* Textual (T): leverages solely textual data, either raw tweets or tweets’ analyses.
-* Textual & Financial (TF): draws upon both textual and financial data as input.
+* **Financial (F):** utilizes historical financial data, from the past week or month.
+* **Textual (T):** leverages solely textual data, either raw tweets or tweets’ analyses.
+* **Textual & Financial (TF):** draws upon both textual and financial data as input.
 
 Our goal is to effectively leverage insights from both textual narratives and historical financial patterns to improve prediction accuracy.  The added value of incorporating textual narratives can be demonstrated if a model that utilizes both text and financial data (TF model) outperforms a model that relies solely on financial data (F model). 
 
 ### Baselines
 
 **Financial baselines:**
-* As/inverse-previous: next value is the same/inverse as previous.
-* majority: next value is the majority vote of the previous week/training data.
-* up/down: always predict 'increase'/'decrease'.
+* **As/Inverse-previous:** next value is the same/inverse as previous.
+* **Majority:** next value is the majority vote of the previous week/training data.
+* **Up/Down:** always predict 'increase'/'decrease'.
 
 <br> 
 
 **Counterfactual textual baselines:**
 
-During our experiments, we encountered some intriguing results that warranted further investigation. To ensure the validity of our findings and rule out any counterfactual explanations, we introduced counterfactual textual baselines. These baselines allowed us to rigorously test whether the observed improvements were truly due to the models' capabilities or stemmed from other factors. Unfottunately, these baselines revealed that the promising results were more elusive than we hoped.
+During our experiments, we encountered some intriguing results that warranted further investigation. To ensure the validity of our findings and rule out any counterfactual explanations, we introduced counterfactual textual baselines. These baselines allowed us to rigorously test whether the observed improvements were truly due to the models' capabilities or stemmed from other factors. Unfortunately, these baselines revealed that the promising results were more elusive than we hoped.
 
-* Random texts: feeding the LLM with randomly generated sentences comprised of varying random words. This baseline evaluate whether the LLM actually utilize the content of tweets.
-* Shuffled tweets: feeding the LLM with chronologically disordered tweets, isolating the impact of temporal narratives from confounding patterns or memorization. This baseline assess the model reliance on temporal narratives.
-* Synthetic 'narratives': Feeding the LLM with generated narrative-like sentences expressing positive or negative cues, aligned with subsequent changes in the financial target. This baseline assess the LLM's ability to infer relationships between aligned narratives and the following market changes.
+* **Random texts:** feeding the LLM with randomly generated sentences comprised of varying random words. This baseline evaluate whether the LLM actually utilize the content of tweets.
+* **Shuffled tweets:** feeding the LLM with chronologically disordered tweets, isolating the impact of temporal narratives from confounding patterns or memorization. This baseline assess the model reliance on temporal narratives.
+* **Synthetic 'narratives':** Feeding the LLM with generated narrative-like sentences expressing positive or negative cues, aligned with subsequent changes in the financial target. This baseline assess the LLM's ability to infer relationships between aligned narratives and the following market changes.
 
 ### Models
 
@@ -260,17 +262,17 @@ Our model selection progresses from simpler models, frequently employed in the f
 <br>
 
 **Textual models:**
-* Daily sentiment: a simple method, commonly used in the literature, is presenting each tweet with its sentiment score. Then, we average the scores of individual tweets of the same dates to receive a daily sentiment, and concatenate over a week.
+* **Daily sentiment:** a simple method, commonly used in the literature, is presenting each tweet with its sentiment score. Then, we average the scores of individual tweets of the same dates to receive a daily sentiment, and concatenate over a week.
 <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/models_diagram_1.jpg" class="img-fluid rounded z-depth-1" style="width: 40%;" %}
     </div>
     
-* LLM's representations of individual/joint tweets: we derive embeddings of individual or concatenated tweets using pre-trained language models (BERT <d-cite key="devlin2018bert"></d-cite>,RoBERTa <d-cite key="liu2019roberta"></d-cite> and T5 <d-cite key="raffel2020exploring"></d-cite>. In the individual case, tweets' embeddings are aggregated daily by averaging or concatenating embeddings of same-date tweets. In the joint case, tweets are concatenated daily to create a single daily embedding, potentially capturing their collective meaning without explicit aggregation, avoiding potential information loss.
+* **LLM's representations of individual/joint tweets:** we derive embeddings of individual or concatenated tweets using pre-trained language models (BERT <d-cite key="devlin2018bert"></d-cite>,RoBERTa <d-cite key="liu2019roberta"></d-cite> and T5 <d-cite key="raffel2020exploring"></d-cite>. In the individual case, tweets' embeddings are aggregated daily by averaging or concatenating embeddings of same-date tweets. In the joint case, tweets are concatenated daily to create a single daily embedding, potentially capturing their collective meaning without explicit aggregation, avoiding potential information loss.
 <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/models_diagram_2.jpg" class="img-fluid rounded z-depth-1" style="width: 40%;" %}
     </div>
   
-* LLM-generated analyses for prediction or as input to a subsequent prediction model: First, we feed OpenAI's Chat Completion API, GPT-3.5 <d-cite key="ChatGPT-3.5"></d-cite> with a month of tweets and corresponding financial values of the target indicator to create monthly analyses.Then, these analyses are either used directly for prediction or as an input to a subsequent T5 model.  
+* **LLM-generated analyses for prediction or as input to a subsequent prediction model:** First, we feed OpenAI's Chat Completion API, GPT-3.5 <d-cite key="ChatGPT-3.5"></d-cite> with a month of tweets and corresponding financial values of the target indicator to create monthly analyses.Then, these analyses are either used directly for prediction or as an input to a subsequent T5 model.  
 *since the LLM receives both tweets and financial data to enable analyzing relationships, this method applies only for a TF model type.
 <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/models_diagram_3.jpg" class="img-fluid rounded z-depth-1" style="width: 40%;" %}
@@ -279,10 +281,10 @@ Our model selection progresses from simpler models, frequently employed in the f
 <br>
 
 **Fusing textual and financial models:** we experiment with several strategies for combining the representations from the T and F models for a unified prediction:
-* concatenation: the simplest approach is concatenating the T and F representations.
-* DA-RNN <d-cite key="qin2017dual"></d-cite>: The dual-stage attention-based RNN model predicts the current value of a time-series based on its previous values and those of exogenous series. We feed historical financial representations (F) as the time series and
+* **Concatenation:** the simplest approach is concatenating the T and F representations.
+* **DA-RNN <d-cite key="qin2017dual"></d-cite>:** The dual-stage attention-based RNN model predicts the current value of a time-series based on its previous values and those of exogenous series. We feed historical financial representations (F) as the time series and
 textual representations (T) as the exogenous series.
-* Prompt-based fusion: LLM-based analysis of given tweets and historical financial values of the target indicator are fed together with raw historical values of the target to a T5 model as separate segments.
+* **Prompt-based fusion:** LLM-based analysis of given tweets and historical financial values of the target indicator are fed together with raw historical values of the target to a T5 model as separate segments.
 
   Given a TF model we can derive a T or F model by omitting or zeroing either F or T component, respectively.
 
