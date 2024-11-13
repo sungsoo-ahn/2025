@@ -32,7 +32,7 @@ bibliography: 2025-04-28-lost-in-prediction.bib
 #   - make sure that TOC names match the actual section names
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
-toc:
+toc: TODO: remove subsections
   - name: What is Narrative Economics?
     subsections:
     - name: The Ambiguity of the Term "Narrative"
