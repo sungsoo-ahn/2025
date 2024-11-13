@@ -72,7 +72,7 @@ _styles: >
 <script>
   var toc = document.getElementsByTagName("d-contents")[0];
   toc.style.position = 'fixed';
-  toc.style.transition = "transform 0.7s ease-in-out";
+  toc.style.transition = "transform 0.3s ease-out";
 
   var y0 = toc.getBoundingClientRect().top + window.scrollY;
   
