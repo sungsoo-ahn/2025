@@ -47,6 +47,10 @@ toc:
     - name: Leveraging structure
     - name: Sparsity pattern detection and coloring
   - name: Pattern detection
+    subsections:
+    - name: Compressing Jacobians
+    - name: Propagating index sets
+    - name: Alternative evaluation
   - name: Matrix coloring
   - name: Second-order sparse differentiation
   - name: Demonstration
@@ -70,6 +74,24 @@ _styles: >
     font-size: 16px;
   }
 ---
+
+<!-- LaTeX commands -->
+<div style="display: none">
+    $$
+    \def\sR{\mathbb{R}}
+    \def\vx{\mathbf{x}}
+    \def\vv{\mathbf{v}}
+    \newcommand{\dfdx}[2]{\frac{\partial f_{#1}}{\partial x_{#2}}(\vx)}
+    \newcommand{\D}[2]{D{#1}(#2)}   
+    \newcommand{\J}[2]{J_{#1}(#2)} 
+    \def\Jf{\J{f}{\vx}}
+    \def\Df{\D{f}{\vx}}
+    \def\Jg{\J{g}{\vx}}
+    \def\Dg{\D{g}{\vx}}
+    \def\Jh{\J{h}{g(\vx)}}
+    \def\Dh{\D{h}{g(\vx)}}
+    $$
+</div>
 
 First-order optimization is ubiquitous in Machine Learning (ML) but second-order optimization is much less common.
 The intuitive reason is that large gradients are cheap, whereas large Hessian matrices are expensive.
@@ -100,21 +122,21 @@ Let us start by covering the fundamentals of traditional AD.
 AD makes use of the **compositional structure** of mathematical functions like deep neural networks.
 To make things simple, we will mainly look at a differentiable function $f$
 composed of two differentiable functions
-$g: \mathbb{R}^{n} \rightarrow \mathbb{R}^{p}$ and $h: \mathbb{R}^{p} \rightarrow \mathbb{R}^{m}$,
-such that $f = h \circ g: \mathbb{R}^{n} \rightarrow \mathbb{R}^{m}$.
+$g: \sR^{n} \rightarrow \sR^{p}$ and $h: \sR^{p} \rightarrow \sR^{m}$,
+such that $f = h \circ g: \sR^{n} \rightarrow \sR^{m}$.
 The insights gained from this toy example should translate directly to more deeply composed functions $f = g^{(L)} \circ g^{(L-1)} \circ \cdots \circ g^{(1)}$.
 For ease of visualization, we work in small dimension, but the real benefits of ASD only appear as the dimension grows.
 
 ### The chain rule
 
-For a function $f: \mathbb{R}^{n} \rightarrow \mathbb{R}^{m}$ and a point of linearization $\mathbf{x} \in \mathbb{R}^{n}$,
-the Jacobian $J_f(\mathbf{x})$ is the $m \times n$ matrix of first-order partial derivatives, such that the $(i,j)$-th entry is
+For a function $f: \sR^{n} \rightarrow \sR^{m}$ and a point of linearization $\vx \in \sR^{n}$,
+the Jacobian $J_f(\vx)$ is the $m \times n$ matrix of first-order partial derivatives, such that the $(i,j)$-th entry is
 
-$$ (J_f(\mathbf{x}))_{i,j} = \frac{\partial f_i}{\partial x_j}(\mathbf{x}) \in \mathbb{R} \quad . $$
+$$ \big( \Jf \big)_{i,j} = \dfdx{i}{j} \in \sR \quad . $$
 
 For a composed function $f = h \circ g$, the **multivariate chain rule** tells us that we obtain the Jacobian of $f$ by **multiplying** the Jacobians of $h$ and $g$:
 
-$$ J_f(\mathbf{x}) = J_{h \circ g}(\mathbf{x}) =J_h(g(\mathbf{x})) \cdot J_g(\mathbf{x}) \quad .$$
+$$ \Jf = \J{h \circ g}{\vx} = \Jh \cdot \Jg \quad .$$
 
 Figure 1 illustrates this for $n=5$, $m=4$ and $p=3$.
 We will keep using these dimensions in following illustrations.
@@ -152,10 +174,10 @@ computing intermediate Jacobians is not only inefficient: it exceeds available m
 AD circumvents this limitation using **linear maps**, lazy operators that act exactly like matrices but without materializing them.
 
 <!-- TODO: "In terms  of notation" or "Mathematically speaking"? -->
-The differential $Df: \mathbf{x} \longmapsto Df(\mathbf{x})$ is a linear map which provides the best linear approximation of $f$ around a given point $\mathbf{x}$.
+The differential $Df: \vx \longmapsto Df(\vx)$ is a linear map which provides the best linear approximation of $f$ around a given point $\vx$.
 We can rephrase  the chain rule as a **composition of linear maps** instead of a product of matrices:
 
-$$ Df(\mathbf{x}) = D(h \circ g)(\mathbf{x}) =Dh(g(\mathbf{x})) \circ Dg(\mathbf{x}) .$$
+$$ \Df = \D{(h \circ g)}{\vx} = \Dh \circ \Dg .$$
 
 Note that all terms in this formulation of the chain rule are linear maps.
 A new visualization for our toy example can be found in Figure 3b.
@@ -184,22 +206,22 @@ Now that we have translated the compositional structure of our function $f$ into
     Figure 4: Evaluating linear maps in forward-mode.
 </div>
 
-Figure 4 illustrates the propagation of a vector $\mathbf{v}_1 \in \mathbb{R}^n$ from the right-hand side.
+Figure 4 illustrates the propagation of a vector $\vv_1 \in \sR^n$ from the right-hand side.
 Since we propagate in the order of the original function evaluation, this is called **forward-mode AD**.
 
-In the first step, we evaluate $Dg(\mathbf{x})(\mathbf{v}_1)$.
+In the first step, we evaluate $Dg(\vx)(\vv_1)$.
 Since this operation by definition corresponds to 
 
-$$ \mathbf{v}_2 = Dg(\mathbf{x})(\mathbf{v}_1) = J_{g}(\mathbf{x}) \cdot \mathbf{v}_1 \;\in \mathbb{R}^p ,$$
+$$ \vv_2 = \Dg(\vv_1) = \Jg \cdot \vv_1 \;\in \sR^p ,$$
 
 it is also commonly called a **Jacobian-vector product** (JVP) or **pushforward**.
-The resulting vector $\mathbf{v}_2$ is then used to compute the subsequent JVP 
+The resulting vector $\vv_2$ is then used to compute the subsequent JVP 
 
-$$ \mathbf{v}_3 = Dh(g(\mathbf{x}))(\mathbf{v}_2) = J_{h}(g(\mathbf{x})) \cdot \mathbf{v}_2 \;\in \mathbb{R}^m ,$$
+$$ \vv_3 = \Dh(\vv_2) = \Jh \cdot \vv_2 \;\in \sR^m ,$$
 
 which in accordance with the chain rule is equivalent to 
 
-$$ \mathbf{v}_3 = Df(\mathbf{x})(\mathbf{v}_1) = J_{f}(\mathbf{x}) \cdot \mathbf{v}_1 ,$$
+$$ \vv_3 = \Df(\vv_1) = \Jf \cdot \vv_1 ,$$
 
 the JVP of our composed function $f$.
 
@@ -217,7 +239,7 @@ The linear map formulation allows us to avoid intermediate Jacobian matrices in 
 But can we use this machinery to materialize the **Jacobian** of the composition $f$ itself?
 
 As shown in Figure 5, we can **materialize Jacobians column by column** in forward mode.
-Evaluating the linear map $Df(\mathbf{x})$ on the $i$-th standard basis vector materializes the $i$-th column of the Jacobian $J_f(\mathbf{x})$.
+Evaluating the linear map $Df(\vx)$ on the $i$-th standard basis vector materializes the $i$-th column of the Jacobian $J_f(\vx)$.
 Thus, materializing the full $m \times n$ Jacobian requires one JVP with each of the $n$ standard basis vectors of the **input space**.
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/forward_mode.svg" class="img-fluid" %}
@@ -274,7 +296,7 @@ non-overlapping columns or rows via a method called **matrix coloring** that we 
 **The core idea of ASD is that we can materialize multiple orthogonal columns or rows in a single evaluation.**
 Since linear maps are additive, it always holds that
 
-$$ Df(\mathbf{x})(\mathbf{e}_i+\ldots+e_j) = Df(\mathbf{x})(\mathbf{e}_i) +\ldots+ Df(\mathbf{x})(\mathbf{e}_j) \quad .$$
+$$ Df(\vx)(\mathbf{e}_i+\ldots+e_j) = Df(\vx)(\mathbf{e}_i) +\ldots+ Df(\vx)(\mathbf{e}_j) \quad .$$
 
 The right hand side summands each correspond to a column of the Jacobian.
 If the columns are **orthogonal** and their **structure is known**, 
@@ -330,13 +352,45 @@ As we will see in later benchmarks, this level of performance can be achieved.
 Additionally, if we need to compute Jacobians multiple times and are able to reuse the sparsity pattern, 
 the cost of sparsity pattern detection and coloring can be amortized over time.
 
-
 ## Pattern detection
 
-### Index sets
+Sparsity pattern detection can be thought of as a binary version of AD.
+Mirroring the diversity of existing approaches to AD,
+there are also many possible approaches to sparsity pattern detection,
+each with their own advantages and tradeoffs.
 
-Binary Jacobian patterns are efficiently compressed using **indices of non-zero values**:
+The method we will present here corresponds to a binary forward-mode AD system 
+in which performance is gained by compressing matrix rows.
+*TODO: Alternatives include Bayesian probing, ...* 
+<!-- TODO: cite a wide list of approaches here -->
 
+### Compressing Jacobians
+
+Our goal with sparsity pattern detection is to quickly materialize the binary pattern of the Jacobian.
+One way to achieve better performance than traditional AD is to compress of rows of matrices to index sets.
+The $i$-th row of the Jacobian corresponds to 
+
+$$ \big( \Jf \big)_{i,:} 
+= \left[\dfdx{i}{j}\right]_{1 \le j \le n}
+= \begin{bmatrix}
+    \dfdx{i}{1} &
+    \ldots      &
+    \dfdx{i}{n}
+\end{bmatrix} .
+$$
+
+This can naively be represented in a computer program by computing and storing using the corresponding $n$ first-order partial derivatives.
+However, since we are only interested in the binary pattern 
+
+$$ \left[\dfdx{i}{j} \neq 0\right]_{1 \le j \le n} , $$
+
+we can instead represent the sparsity pattern of the $i$-th column of a Jacobian by the corresponding **index set of non-zero values**
+
+$$ \left\{j \;\Bigg|\; \dfdx{i}{j} \neq 0\right\} . $$
+
+These equivalent sparsity pattern representations are illustrated in Figure 10.
+
+<!-- TODO: just draw a combined figure to avoid dealing with HTML column shenanigans -->
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/sparse_matrix.svg" class="img-fluid" %}
@@ -354,10 +408,12 @@ Binary Jacobian patterns are efficiently compressed using **indices of non-zero 
 
 (Since the method we are about to show is essentially a binary forward-mode AD system, we compress along rows.)
 
+### Propagating index sets
 
-### Core Idea: Propagate index sets
-
-**Naive approach:** materialize full Jacobians (inefficient or impossible):
+Figure 11 shows the traditional forward-AD pass we want to avoid:
+propagating a full identity matrix through a linear map would materialize the Jacobian of $f$, 
+but also all intermediate linear maps.
+As previously discussed, this is not a viable option due to its inefficiency and high memory requirements.
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/forward_mode_naive.svg" class="img-fluid" %}
 <div class="caption">
@@ -365,14 +421,80 @@ Binary Jacobian patterns are efficiently compressed using **indices of non-zero 
     Due to high memory requirements for intermediate Jacobians, this approach is inefficient or impossible.  
 </div>
 
-**Our goal:** propagate full basis index sets:
+Instead, we *seed* an input vector with index sets corresponding to the compressed identity matrix. 
+An alternative view on this vector is that it corresponds to the index set representation of the Jacobian of the input, since $\frac{\partial x_i}{\partial x_j} \neq 0$ only holds for $i=j$.
+
+Our goal is to propagate this index set such that we get an output vector of index sets 
+that corresponds to the Jacobian sparsity pattern.
+This idea is visualized in Figure 12.
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/forward_mode_sparse.svg" class="img-fluid" %}
 <div class="caption">
     Figure 12: Propagating an index set through a linear map to obtain a sparsity pattern.  
 </div>
 
-**But how do we define these propagation rules?**
+### Alternative evaluation
+
+Instead of going into implementation details,
+we want to provide some intuition on the second key ingredient of our forward-mode sparsity detection: 
+**alternative function evaluation**.
+
+We will demonstrate this on a second toy example, the function
+
+$$ f(\vx) = x_1 + x_2x_3 + \text{sgn}(x_4) .$$
+
+The corresponding computational graph is shown in Figure 13,
+where circular nodes correspond to elementary operators,
+in this case addition, multiplication and the sign function.
+
+<!-- TODO: remove for submission -->
+**Note: It's normal that this diagram won't render locally!**
+
+{% mermaid %}
+flowchart LR
+    subgraph Inputs
+    X1["$$x_1$$"]
+    X2["$$x_2$$"]
+    X3["$$x_3$$"]
+    X4["$$x_4$$"]
+    end
+
+    PLUS((+))
+    TIMES((*))
+    SIGN((sgn))
+    PLUS2((+))
+
+    X1 --> |"{1}"| PLUS
+    X2 --> |"{2}"| TIMES
+    X3 --> |"{3}"| TIMES
+    X4 --> |"{4}"| SIGN
+    TIMES  --> |"{2,3}"| PLUS
+    PLUS --> |"{1,2,3}"| PLUS2
+    SIGN --> |"{}"| PLUS2
+
+    PLUS2 --> |"{1,2,3}"| RES["$$y=f(x)$$"]
+{% endmermaid %}
+
+<div class="caption">
+    Figure 13: Computational graph of the function $ f(\vx) = x_1 + x_2x_3 + \text{sgn}(x_4) $, annotated with corresponding index sets.  
+</div>
+
+As discussed in the previous section,
+all inputs are seeded with their respective input index sets.
+Figure 13 annotates these index sets on the edges of the computational graph.
+Our system for sparsity detection must now perform an **alternative evaluation of our computational graph**.
+Instead of computing the original function, 
+each operator must correctly propagate and accumulate the index sets of its inputs, 
+depending on whether an operator has a non-zero derivative or not.  
+
+Since addition and multiplication globally have non-zero derivatives with respect to both of their inputs, 
+the index sets of their inputs are accumulated and propagated. 
+The sign function has a zero-valued derivatives for any input value. 
+It therefore doesn't propagate the index set of its input. 
+Instead, it returns an empty set.
+
+*TODO: switch to multivariate function, quickly discuss resulting Jacobian.*
+<!-- TODO -->
 
 ### Matrix coloring
 
