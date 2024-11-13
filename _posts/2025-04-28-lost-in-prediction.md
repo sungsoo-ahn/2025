@@ -69,7 +69,15 @@ _styles: >
   }
 ---
 
-<script>alert('ok');</script>
+<script>
+  var toc = document.getElementsByTagName("d-contents")[0];
+  toc.style.position = 'fixed';
+  toc.style.transition = "transform 0.7s ease-in-out";
+
+  var y0 = toc.getBoundingClientRect().top + window.scrollY;
+  
+  window.addEventListener('scroll', function() {toc.style.transform = `translateY(${Math.max(0, window.scrollY - y0 + 180)}px)`;});
+</script>
 
 # What is Narrative Economics?
 
