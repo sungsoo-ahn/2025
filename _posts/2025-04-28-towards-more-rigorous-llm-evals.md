@@ -162,7 +162,7 @@ The figure below illustrates how the probability of answering a question correct
 The findings indicate that LM performance is negatively affected by both the number of digits and the number of carry operations in the sum. 
 I.e. as the numbers get larger and the number of carry operations increases, accuracy declines.
 This suggests that LMs make errors similar to those made by humans, such as forgetting carry operations. 
-Detailed regressionresults can be found in the Appendix.
+Detailed regression results can be found in the Appendix.
 
 <!-- Model | 1 digit | 2 digits | 3 digits | 4 digits | 5 digits | 6 digits
 --- | --- | --- | --- | --- | --- | ---
@@ -185,7 +185,7 @@ Even if a model applies consistent reasoning, it may still make arithmetic error
 
 **How much variation is expected?**  
 By now, it should be clear that the answer to this question depends on the assumptions we make about the data.
-One reasonable assumption we could make is that each model $m=1, \dots, 25$, answers each question $n=1,\dots,100$ correctly with some probability $p_{m,n}$.
+One reasonable assumption we could make is that each model $$m=1, \dots, 25$$, answers each question $$n=1,\dots,100$$ correctly with some probability $p_{m,n}$.
 Unfortuantely, since the paper does not provide question-level performance data, for the purposes of this analysis, we must further assume that this probability is constant across questions, that is $p_{m,n}=p_m$ for all $n$. 
 
 Thus, an LM answering questions is modelled as an independent and identically distributed Bernoulli trial with a model-specific success probability $p_m$.
@@ -199,7 +199,7 @@ $$N \cdot p_m \cdot (1-p_m).$$
 
 This variance is maximised when $p_m=1/2$ and goes to $0$ as $p_m$ approaches $0$ or $1$.
 
-To quantify what constitutes "normal" variation under our assumption, we can construct confidence intervals (CI) for the point estimates of $p_m$ (these are reported in the second column of Table 1 in the Appendix of the paper). 
+To quantify what constitutes "expected" variation under our assumption, we can construct confidence intervals (CI) for the point estimates of $p_m$ (these are reported in the second column of Table 1 in the Appendix of the paper). 
 There are different ways to construct CI for the [Binomial proportion](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval). Figure XX below shows [Wilson score](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval) intervals. (See Appendix for more results.)
 
 <!-- {{< figure library="true" src="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.95.png" title="95% Wilson score intervals for the point estimates of $p_m$." numbered="false">}} -->
@@ -282,30 +282,45 @@ Looking at the example template (Figure 1 from the paper, reproduced above), we 
 - The variable `ans` is sampled from $(85, 200)$, whilst in the original question we have `ans=14`.
 
 In other words, the original GSM8K question cannot be generated from the proposed symbolic template.
-Here we propose more suitable ranges for the variables: a more appropriate sampling range for  `total` might be $(10, 100)$; this also makes sense given `total` is number of toys. Then `x`, `y`, `z` and `ans` are determined from that range by dividing by 4; it's fair to assume that all four are on the same scale; so suggested ranges for those $(2, 25)$.
+We suggest more appropriate ranges for the variables and quantify impact of that choice on the accuracy of the arithmetic operations.
+A suitable sampling range for `total` might be $(10, 100)$: It includes the original (62) and aligns with the context that `total` represents the number of toys (500 toys seems rather large). 
+Assuming `y` (stuffed animals) and `z` (stacking rings) are on the same scale and in the range $(1, 20)$;
+and that `x` (building blocks) and `ans` (bouncy balls) are also on the same scale and are so that the total is in the specified range, i.e. $(4, 40)$;
+These ranges actually include the original values (9 rings, 8 stuffed animals, 31 building blocks, 14 bouncy balls, total of 62):
 
 
-As we saw in Section 4.1.1, the accuracy of both models decreases as the number of digits increases, indicating that larger inputs are harder to process.
-We use the logistic regression model from that section try quantify the difference in accuracy that might arise from using the ranges in the paper vs those we propose here (the "reasoning" that gets us to the correct mathematical expression is correct.)\footnote{we compute sums; TODO}
+We propose more suitable ranges for all variables, ensuring the original template can be reproduced and assess how these choices affect the accuracy of arithmetic operations, assuming the reasoning is correct.
 
-Symbolic:
+| Variable              | Symbolic range | Proposed range | Original value |
+|-----------------------|----------------|----------------|----------------|
+| `total` (toys)        | $(100, 500)$   | $(10, 100)$    | 62             |
+| `x` (building blocks) | $(5, 100)$     | $(4, 40)$      | 31             |
+| `y` (stuffed animals) | $(5, 100)$     | $(1, 20)$      | 8              |
+| `z` (stacking rings)  | $(5, 100)$     | $(1, 20)$      | 9              |
+| `ans` (bouncy balls)  | $(85, 200)$    | $(4, 40)$      | 14             |
 
-| Model | Sum1    | Sum2    | Sum3    | Prob(all correct) |
-|-------|---------|---------|---------|------------------|
-| Phi   | 0.94878 | 0.94072 | 0.91991 | 0.821080           |
-| Llama | 0.99592 | 0.99472 | 0.99119 | 0.981930          |
 
-
-| Model     | p1       | p2       | p3       | Prob(all correct)        |
-|-----------|----------|----------|----------|----------|
-| Phi       | 0.955933 | 0.952455 | 0.952238 | 0.866999 |
-| Llama     | 0.997145 | 0.996720 | 0.996710 | 0.990605 |
 
 The question in Figure 1 involves three arithmetic operations (two additions and one subtraction).
 Assuming subtraction is as hard as addition, the probability of the three operations being answered correctly is the product of the individual probabilities. 
 
+As we saw in Section 4.1.1, the accuracy of both models decreases as the number of digits increases.
+We use the logistic regression model from that section try quantify the difference in accuracy that might arise from using the ranges in the paper vs those we propose here (the "reasoning" that gets us to the correct mathematical expression is correct.)\footnote{we compute sums; TODO}
 
-[I'm redoing this as passing inputs through the logreg and averaging over XX samples as opposed to passing an average input through logreg]
+Symbolic:
+| Model | p1       | p2       | p3       | p        |
+|-------|----------|----------|----------|----------|
+| Phi   | 94.9 | 94.1 | 92.0 | 82.1 |
+| Llama | 99.6 | 99.5 | 99.1 | 98.2 |
+
+
+Proposal
+| Model | p1       | p2       | p3       | p        |
+|-------|----------|----------|----------|----------|
+| Phi   | 95.5 | 95.4 | 95.0 | 86.6 |
+| Llama | 99.7 | 99.7 | 99.6 | 99.0 |
+
+
 
 If the number ranges in GSM-Symbolic are systematically chosen to be larger than those in GSM8K (and don't even include the original question values), then it cannot claimed that the datasets come from the same distribution.
 Tokenisation is one mechansim that explains why this matters; larger number ranges in GSM-Symbolic may inherently disadvantage certain (and eventually all) models, potentially explaining some of the observed performance differences between models and datasets.
