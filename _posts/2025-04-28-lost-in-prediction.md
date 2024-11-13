@@ -81,6 +81,9 @@ _styles: >
     text-align: center;
     font-size: 16px;
   }
+  .h1 {
+    color: blue;
+  }
 ---
 
 
@@ -166,9 +169,7 @@ This snippet demonstrates the LLM’s ability to aggregate information, condensi
 
 *** 
 
-<h1 style="color:blue;">
-Narrative Economics at the Macro Level
-</h1>
+# Narrative Economics at the Macro Level
 
 Now that we are familier with Narrative Economics and established how we gathered these narratives from Twitter, let's explore why we chose to focus on *macroeconomics*:  
 
