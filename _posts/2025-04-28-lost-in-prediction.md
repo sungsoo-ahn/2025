@@ -90,7 +90,7 @@ The central idea is that the spread of viral narratives can influence individual
     </div></div>
     
 <br> 
-Ths term "Narrative Economics" is heavily attributed to Robert J. Shiller, a Nobel laureate economist and the founder of Narrative Economics which defined it as:
+The term "Narrative Economics" is heavily attributed to Robert J. Shiller, a Nobel laureate economist and the founder of Narrative Economics which defined it as:
 
 > *"Spread through the public in the form of popular stories, **ideas can go viral and move markets** —whether it’s the belief that tech stocks can only go up, that housing prices never fall, or that some firms are too big to fail. Whether true or false, stories like these—transmitted by word of mouth, by the news media, and increasingly by social media—**drive the economy by driving our decisions about how and where to invest, how much to spend and save, and more."***  
   *- Robert J. Shiller* <d-cite key="shiller2017narrative"></d-cite>
@@ -162,12 +162,12 @@ This snippet demonstrates the LLM’s ability to aggregate information, condensi
 
 # Narrative Economics at the Macro Level
 
-Now that we are familier with Narrative Economics and established how we gathered these narratives from Twitter, let's explore why we chose to focus on *macroeconomics*:  
+Now that we are familiar with Narrative Economics and established how we gathered these narratives from Twitter, let's explore why we chose to focus on *macroeconomics*:  
 
 **Macro**ceconomics studies the behavior of the economy as a whole, examining factors like inflation, unemployment, and economic growth. **Micro**economics, on the other hand, is concerned with the decision-making of individuals and firms, examining indicators like a certain stock.
 
 ### Why Macroeconomics?
-A core concept in Narrative Economics is that narratives can drive economics flunctuations. This is especially intriguing at the macroeconomic level, as the theory suggests that widely shared stories can influence the collective decisions of millions of individuals. Additionally, existing research focuses on microeconomic indicators within the context of Narrative Economics <d-cite key="yang2023multi, khedr2021cryptocurrency, he2021multi, gurgul2023forecasting, wang2023deepemotionnet"></d-cite>, while the application in macroeconomics remains relatively unexplored.
+A core concept in Narrative Economics is that narratives can drive economics fluctuations. This is especially intriguing at the macroeconomic level, as the theory suggests that widely shared stories can influence the collective decisions of millions of individuals. Additionally, existing research focuses on microeconomic indicators within the context of Narrative Economics <d-cite key="yang2023multi, khedr2021cryptocurrency, he2021multi, gurgul2023forecasting, wang2023deepemotionnet"></d-cite>, while the application in macroeconomics remains relatively unexplored.
 
 However, studying this macroeconomically is more complex than microeconomically due to the complex interplay of various factors, the need for broad-covering narratives, and the inherent difficulty in isolating causal relationships. 
 
@@ -286,7 +286,7 @@ We fed classic ML models with daily sentiments for FFR 'next value' and 'directi
 
 **The results:**
 
-* Direction change: 💡 <span class="highlight">Adding sentiment data didn't help</span>, as both models with financial input (F & TF) achieved similar accuracy (0.939 vs. 0.936). Additionaly, text-only models (T) underperform (0.89), achieving a comparable accuracy to the F baselines (0.89 vs. 0.81).
+* Direction change: 💡 <span class="highlight">Adding sentiment data didn't help</span>, as both models with financial input (F & TF) achieved similar accuracy (0.939 vs. 0.936). Additionally, text-only models (T) underperform (0.89), achieving a comparable accuracy to the F baselines (0.89 vs. 0.81).
 
 | Type | Model | Accuracy |
 |---|---|---|
@@ -342,7 +342,7 @@ We hypothesize that the presence of text improves performance, even when random,
 
 <br>
 
-**Repurpusing the LLM analyses for a subsequent prediction model:** The previous experiment revealed the LLM's ability to generate insightful analyses of tweets and financial data. To leverage this capability, we utilize these analyses as inputs for a dedicated prediction model to predict the S&P 500 'direction change'.
+**Re-purposing the LLM analyses for a subsequent prediction model:** The previous experiment revealed the LLM's ability to generate insightful analyses of tweets and financial data. To leverage this capability, we utilize these analyses as inputs for a dedicated prediction model to predict the S&P 500 'direction change'.
 
 This approach addresses limitations of both previous experiments:
 * Instead of relying on the embedding-based approach, which struggled to aggregate diverse narratives, we leverage the LLM's ability to produce concise analyses.   
@@ -376,7 +376,7 @@ This approach addresses limitations of both previous experiments:
 
 **So did it work?** not really. 💡 Results show that <span class="highlight">there is no significant difference between the best TF and F models</span>, with a performance gap of ~2% on the limited test set of ~90 samples. <d-footnote>As a reminder, we can only use the second Twitter dataset, of tweets that were posted after the LLM's training cutoff date, and our financial indicators are of daily frequency, therefore the small dataset for this type of experiments.</d-footnote>
 We confirmed it using the McNemar's test <d-cite key="P18-1128"></d-cite> which shows no statistically significant difference (p-value=0.48).
-On the good side, this is the only approach were our models surpass all baselines. 
+On the good side, this is the only approach where our models surpass all baselines. 
 
 **What can we learn? 🤔** While LLMs can analyze narratives, the TF model struggled to utilize this analysis for improved prediction.
 
@@ -388,7 +388,7 @@ Despite the presence of narratives in our curated datasets and the development o
 
 The missing link between the successful narrative extraction demonstrated by the LLM's analyses and the limited improvement in macroeconomic prediction **raises a question about the extent to which narratives alone can truly drive and forecast economic fluctuations**, at least at the macroeconomic level.
 
-This study serves as a foundation for further exploration, highlighting the need for new macroeconomic models or tasks designed to assess the extracted narratives’ influence on the economy.
+This study serves as a foundation for further exploration, highlighting the need for new macroeconomic models and tasks that can effectively assess the influence of extracted narratives on the economy.
 
 <br>
 
