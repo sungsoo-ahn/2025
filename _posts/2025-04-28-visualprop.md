@@ -2,7 +2,7 @@
 layout: distill
 title: Do vision models perceive objects like toddlers ?
 description: Despite recent advances in arficial vision systems, humans are still more 
-  data-efficient at learning robust visual representations. Psychophysic experiments suggest 
+  data-efficient at learning strong visual representations. Psychophysic experiments suggest 
   that toddlers develop fundamental visual properties between the ages of one and 
   three, which likely affect their perceptual system. 
   Especially, they become able to recognize impoverished variants of daily objects, pay more attention to the shape of 
