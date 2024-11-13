@@ -84,8 +84,11 @@ _styles: >
     \newcommand{\colorv}[1]{\textcolor{MidnightBlue}{#1}}
     \def\sR{\mathbb{R}}
     \def\vx{\mathbf{x}}
+    \def\vv{\mathbf{v}}
+    \def\vb{\mathbf{e}}
+    \newcommand{\vvc}[1]{\colorv{\vv_{#1}}}
+    \newcommand{\vbc}[1]{\colorv{\vb_{#1}}}
     \newcommand{\dfdx}[2]{\frac{\partial f_{#1}}{\partial x_{#2}}(\vx)}
-    % Jacobians
     \newcommand{\J}[2]{J_{#1}(#2)} 
     \def\Jf{\J{f}{\vx}}
     \def\Jg{\J{g}{\vx}}
@@ -93,7 +96,6 @@ _styles: >
     \def\Jfc{\colorf{\Jf}}
     \def\Jgc{\colorg{\Jg}}
     \def\Jhc{\colorh{\Jh}}
-    % Derivatives
     \newcommand{\D}[2]{D{#1}(#2)}
     \def\Df{\D{f}{\vx}}
     \def\Dg{\D{g}{\vx}}
@@ -101,11 +103,6 @@ _styles: >
     \def\Dfc{\colorf{\Df}}
     \def\Dgc{\colorg{\Dg}}
     \def\Dhc{\colorh{\Dh}}
-    % Vectors
-    \def\vv{\mathbf{v}}
-    \def\vb{\mathbf{e}}
-    \newcommand{\vvc}[1]{\colorv{\vv_{#1}}}
-    \newcommand{\vbc}[1]{\colorv{\vb_{#1}}}
     $$
 </div>
 
