@@ -193,7 +193,7 @@ We can now delve into the series of experiments we tested to assess the central 
 
 Each experiment tests the predictive power of narratives from the curated datasets, for macroeconomic prediction of one (or more) of the financial targets introduced before: FFR, S&P 500, and VIX. 
 
-We won't be able to cover all the details of the experiments in this blog, but it is available in our paper. (link will be shared upon acceptance).
+We won't be able to cover all the details of the experiments in this blog, but it is available in our paper <d-footnote>Link will be added upon acceptance.</d-footnote>. 
 
 ## Experimental Setup
 
@@ -286,7 +286,7 @@ We fed classic ML models with daily sentiments for FFR 'next value' and 'directi
 
 **The results:**
 
-* 👎 Direction change: **Adding sentiment data didn't help**, as both models with financial input (F & TF) achieved similar accuracy (0.939 vs. 0.936). Additionaly, text-only models (T) underperform (0.89), achieving a comparable accuracy to the F baselines (0.89 vs. 0.81).
+* Direction change: 💡 <span class="highlight">Adding sentiment data didn't help</span>, as both models with financial input (F & TF) achieved similar accuracy (0.939 vs. 0.936). Additionaly, text-only models (T) underperform (0.89), achieving a comparable accuracy to the F baselines (0.89 vs. 0.81).
 
 | Type | Model | Accuracy |
 |---|---|---|
@@ -299,7 +299,7 @@ We fed classic ML models with daily sentiments for FFR 'next value' and 'directi
 
 <br> 
 
-* 👎 Next value: <span class="highlight">None of the models, with or without sentiment or financial data, outperformed the non-learned 'train-mean' baseline</span> (15.4, 15.6).
+* Next value: 💡 <span class="highlight">None of the models, with or without sentiment or financial data, outperformed the non-learned 'train-mean' baseline</span> (15.4, 15.6).
 
 
 | **Type** | **Model** | **MSE** |
@@ -328,17 +328,17 @@ To keep it short, we present results only for predicting the VIX 'next value' of
         {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/embeddings_exp_results.jpg" class="img-fluid rounded z-depth-1" %}
     </div></div>
 
-* **👎 Next-day prediction:** The non-learned 'as-previous' F baseline outperforms all other models (3.079 MSE). This suggests that the input information might not be beneficial for such a short-term prediction. 
+* Next-day prediction: 💡 <span class="highlight">The non-learned 'as-previous' F baseline outperforms all other models</span> (3.079 MSE). This suggests that the input information might not be beneficial for such a short-term prediction. 
 
-* **Next-week prediction:** Initially both TF models (13.148, 13.147) appeared to outperform the F model (13.463) and F baseline (16.172), implying a potential influence of the textual content. 🚀 <br> However, the 'random texts' TF baseline (13.056), which replaced actual tweets with random texts, outperformed all others, indicating the improvement was not due to meaningful textual content. 👎
+* Next-week prediction: <span class="highlight">Initially both TF models (13.148, 13.147) appeared to outperform the F model (13.463) and F baseline</span> (16.172), implying a potential influence of the textual content. <br> 💡 <span class="highlight">However, the 'random texts' TF baseline</span> (13.056), which replaced actual tweets with random texts, <span class="highlight">outperformed all others</span>, indicating the improvement was not due to meaningful textual content. 
 
-💡 We hypothesize that the presence of text improves performance, even when random, due to spurious correlations or random noise aiding generalization, similar to regularization techniques. A contributing factor may arise from the difficulty of effectively capturing and representing aggregated tweet information for financial prediction, as well as the inherent challenges in predicting future values of a volatile financial indicator, characterized by frequent random movements and fluctuations, using its historical values.    
+We hypothesize that the presence of text improves performance, even when random, due to spurious correlations or random noise aiding generalization, similar to regularization techniques. A contributing factor may arise from the difficulty of effectively capturing and representing aggregated tweet information for financial prediction, as well as the inherent challenges in predicting future values of a volatile financial indicator, characterized by frequent random movements and fluctuations, using its historical values.    
 
 **What can we learn? 🤔** Our models struggled to leverage tweets for the prediction, indicating that implicitly capturing and aggregating latent narratives within LLMs remains a challenge.
 
 ### Predicting Using LLM Analyses
 
-**Can LLMs generate an accurate prediction?** We first tried to directly predict the financial indicator (average weekly VIX or S&P 500) as a generative response of the web chat version of GPT <d-cite key="gpt-chat"></d-cite> prompted with a monthly window of tweets and corresponding values of the financial target. This resulted in limited inconsistent success. 👎 While the LLM consistently generated insightful narrative analyses and demonstrated comprehension of financial implications, it exhibited inconsistencies when applying these insights for prediction. For instance, it occasionally refused to provide predictions, or it would simply mirror input ranges, neglecting the potential impact of the narratives it successfully analyzed. When presented with 'synthetic narratives', it recognized the change direction but struggled to quantify the magnitude of it.
+**Can LLMs generate an accurate prediction?** We first tried to directly predict the financial indicator (average weekly VIX or S&P 500) as a generative response of the web chat version of GPT <d-cite key="gpt-chat"></d-cite> prompted with a monthly window of tweets and corresponding values of the financial target. This resulted in limited inconsistent success. 💡 <span class="highlight">While the LLM consistently generated insightful narrative analyses and demonstrated comprehension of financial implications, it exhibited inconsistencies when applying these insights for prediction.</span> For instance, it occasionally refused to provide predictions, or it would simply mirror input ranges, neglecting the potential impact of the narratives it successfully analyzed. When presented with 'synthetic narratives', it recognized the change direction but struggled to quantify the magnitude of it.
 
 <br>
 
@@ -374,7 +374,7 @@ This approach addresses limitations of both previous experiments:
 | T-baseline | Synthetic narratives | 0.489 | 0.254 |
 
 
-**So did it work?** not really. 👎 Results show that there is no significant difference between the best TF and F models, with a performance gap of ~2% on the limited test set of ~90 samples. <d-footnote>As a reminder, we can only use the second Twitter dataset, of tweets that were posted after the LLM's training cutoff date, and our financial indicators are of daily frequency, therefore the small dataset for this type of experiments.</d-footnote>
+**So did it work?** not really. 💡 Results show that <span class="highlight">there is no significant difference between the best TF and F models</span>, with a performance gap of ~2% on the limited test set of ~90 samples. <d-footnote>As a reminder, we can only use the second Twitter dataset, of tweets that were posted after the LLM's training cutoff date, and our financial indicators are of daily frequency, therefore the small dataset for this type of experiments.</d-footnote>
 We confirmed it using the McNemar's test <d-cite key="P18-1128"></d-cite> which shows no statistically significant difference (p-value=0.48).
 On the good side, this is the only approach were our models surpass all baselines. 
 
@@ -392,7 +392,7 @@ This study serves as a foundation for further exploration, highlighting the need
 
 <br>
 
-*This blogpost extends the technical experiments presented in our paper <d-footnote>Link will be added for the camera ready version.</d-footnote>, delving deeper into broader aspects that naturally in a paper can only receive a shorter discussion as it primarily presents the technical results. We invite you to read the paper for full background and experiments.*
+*This blogpost extends the technical experiments presented in our paper <d-footnote>Link will be added upon acceptance.</d-footnote>, delving deeper into broader aspects that naturally in a paper can only receive a shorter discussion as it primarily presents the technical results. We invite you to read the paper for full background and experiments.*
 
 
 
