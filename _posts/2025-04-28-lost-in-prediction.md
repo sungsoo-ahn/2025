@@ -32,35 +32,10 @@ bibliography: 2025-04-28-lost-in-prediction.bib
 #   - make sure that TOC names match the actual section names
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
-# TODO: remove subsections
 toc:
   - name: What is Narrative Economics?
-    subsections:
-    - name: The Ambiguity of the Term "Narrative"
-      subsections:
-      - name: But, how can we capture such narratives?
-      - name: And how to extract the “narrative” aspect from tweets?
-    - name: Social Media Narratives 𝕏
-      subsections:
-      - name: Did We Really Collect Narratives?
-      - name: LLMs Can Understand Narratives
   - name: Narrative Economics at the Macro Level
-    subsections:
-    - name: Why Macroeconomics?
-    - name: Our Macroeconomic Indicators
-  - name: "Connecting the Dots: Testing Narratives' Effectiveness for Macroeconomic Forecasting"
-    subsections:
-    - name: Experimental Setup
-      subsections:
-      - name: Prediction Tasks
-      - name: Models Categories
-      - name: Baselines
-      - name: Models
-    - name: The Challenges in Improving Models with Narratives
-      subsections:
-      - name: Sentiment-Based Prediction 😄🙂😞
-      - name: Embeddings for Time-Series Prediction 🕸️
-      - name: Predicting Using LLM Analyses 💬
+  - name: "Connecting the Dots: Testing the Effectiveness of Narratives for Macroeconomic Forecasting"
   - name: What Can We Take Away?
 
 # Below is an example of injecting additional post-specific styles.
@@ -150,9 +125,9 @@ An example tweet can be:
   {% twitter https://x.com/CNLiberalism/status/1525672295775223808 %}
 </div>
 
-TODO: add description of why the tweet is good example.
+This tweet from influential user @CNLiberalism exemplifies the economic narratives captured in our dataset. Posted in May 2022, it captures real-time public concerns about inflation and its impact on the deficit. This type of narrative can influence consumer behavior and market trends, which is central to our research.
 
-### Did We Really Collect Narratives? TODO: change title.
+### Does Our Dataset Contain Narratives?
 To confirm the presence of narratives within our Twitter dataset, we conducted an analysis using RELATIO <d-cite key="ash2021relatio"></d-cite>, a tool designed to "capture political and economic narratives" by mapping relationships and interactions among entities within a corpus. Upon processing our dataset with RELATIO, we obtained "narrative statements" (as defined in their paper) and visualized their temporal distribution:
 
 <div class="col-sm mt-3 mt-md-0">
@@ -161,7 +136,7 @@ To confirm the presence of narratives within our Twitter dataset, we conducted a
 
 We can see the evolving nature of these narratives over time, where the distribution is aligned with real-life related events. 👍
 
-### LLMs Can Understand Narratives TODO: change title
+### LLMs Show Potential in Understanding Narratives
 A more advanced technique to extract and analyze narratives is using LLMs. Prompting OpenAI's Chat Completion API, GPT-3.5 <d-cite key="ChatGPT-3.5"></d-cite> with monthly tweets and prices of economic indicator from matching dates, we generated LLM-based narratives analysis, one for each date in the post-2021 dataset, containing a component of summarized analysis of the tweets and a component of potential effect on the given financial indicator. 
 
 Here's a snippet of such an LLM-based narrative analysis for inputs of dates 29/08/2022 to 28/09/2022. In this time period the Federal Reserve raised the interest rates in an effort to combat inflation, the US Supreme Court ruled that the Biden administration could not extend the pause on student loan payments:
@@ -199,7 +174,7 @@ These indicators are well-suited for testing the predictive power of narratives 
 
 *** 
 
-# Connecting the Dots: Testing Narratives' Effectiveness for Macroeconomic Forecasting TODO: check english
+# Connecting the Dots: Testing the Effectiveness of Narratives for Macroeconomic Forecasting
 
 The previous two sections discussed the theory of Narrative Economics and our curated Twitter dataset, which holds narratives within them, and the distinction between macroeconomics and microeconomics, highlighting why it is interesting to research the theory at the macroeconomic level and what macroeconomic indicators we chose.
 
@@ -212,8 +187,6 @@ We won't be able to cover all the details of the experiments in this blog, but i
 ## Experimental Setup
 
 ### Prediction Tasks
-
-TODO: add bold to bullet
 
 We test the predictive power of narratives on three tasks commonly used in macroeconomic literature <d-cite key="handlan2020text, 10.1257/jel.20181020, kalamara2022making, ahrens2021extracting, masciandaro2021monetary, lee2009federal, hamilton2002model, kim2023forecasting, larkin2008good"></d-cite>:
 * **Next value:** predicts the target’s value at the specified horizon.
@@ -294,9 +267,9 @@ textual representations (T) as the exogenous series.
 
 **TL;DR:**
 * Models incorporating narratives (TF) show limited improvement over those using solely financial data (F).
-* Gains were inconsistent, marginal and statistically insignificant ➡️ we regard it as negative results.
+* Gains were inconsistent, marginal and statistically insignificant. We regard it as negative results.
 
-### Sentiment-Based Prediction 😄🙂😞
+### Sentiment-Based Prediction
 
 We fed classic ML models with daily sentiments for FFR 'next value' and 'direction change' prediction (as separate tasks).
 
@@ -326,7 +299,7 @@ We fed classic ML models with daily sentiments for FFR 'next value' and 'directi
 **What can we learn? 🤔** Sentiment analysis lacks the nuance necessary for accurate financial prediction, and traditional ML models have limitations in capturing complex market dynamics. ➡️ We need an improved text representations and more advanced prediction models.  
 
 
-### Embeddings for Time-Series Prediction 🕸️
+### Embeddings for Time-Series Prediction
 
 Here we turn to embedding-representations (as explained in the Experimental Setup) and to DA-RNN <d-cite key="qin2017dual"></d-cite> model, which is designed to capture temporal dynamics and complex relationships within its given data.
 
@@ -348,7 +321,7 @@ Here we turn to embedding-representations (as explained in the Experimental Setu
 
 **What can we learn? 🤔** Our models struggled to leverage tweets for the prediction, indicating that implicitly capturing and aggregating latent narratives within LLMs remains a challenge.
 
-### Predicting Using LLM Analyses 💬
+### Predicting Using LLM Analyses
 
 **Can LLMs generate an accurate prediction?** We first tried to directly predict the financial indicator (average weekly VIX or S&P 500) as a generative response of the web chat version of GPT <d-cite key="gpt-chat"></d-cite> prompted with a monthly window of tweets and corresponding values of the financial target. This resulted in limited inconsistent success. 👎 While the LLM consistently generated insightful narrative analyses and demonstrated comprehension of financial implications, it exhibited inconsistencies when applying these insights for prediction. For instance, it occasionally refused to provide predictions, or it would simply mirror input ranges, neglecting the potential impact of the narratives it successfully analyzed. When presented with 'synthetic narratives', it recognized the change direction but struggled to quantify the magnitude of it.
 
