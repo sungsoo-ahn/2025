@@ -81,8 +81,13 @@ _styles: >
     text-align: center;
     font-size: 16px;
   }
-  h1 {
-    color: blue;
+  d-article h1 {
+    color: #1d45a9 !important;
+    font-weight: bold;
+    border-bottom: 3px solid #1d45a9 !important;
+  }
+  d-article h2 {
+    font-weight: 400;
   }
 ---
 
