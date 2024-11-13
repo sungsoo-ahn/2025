@@ -286,25 +286,24 @@ Here we propose more suitable ranges for the variables: a more appropriate sampl
 
 
 As we saw in Section 4.1.1, the accuracy of both models decreases as the number of digits increases, indicating that larger inputs are harder to process.
-We use the logistic regression model from that section try quantify the difference in accuracy that might arise from using the ranges in the paper vs those we propose here (the "reasoning" that gets us to the correct mathematical expression is correct.)
+We use the logistic regression model from that section try quantify the difference in accuracy that might arise from using the ranges in the paper vs those we propose here (the "reasoning" that gets us to the correct mathematical expression is correct.)\footnote{we compute sums; TODO}
 
-Back of the envelope calculation:
+Symbolic:
 
-| Model | Average-ish case for our ranges | Worst-ish case for their ranges |
-|-------|---------------------------------|---------------------------------|
-| Phi   | 95.1%                           | 91.2%                           |
-| Llama | 99.6%                           | 99.0%                           |
+| Model | Sum1    | Sum2    | Sum3    | Prob(all correct) |
+|-------|---------|---------|---------|------------------|
+| Phi   | 0.94878 | 0.94072 | 0.91991 | 0.821080           |
+| Llama | 0.99592 | 0.99472 | 0.99119 | 0.981930          |
 
+
+| Model     | p1       | p2       | p3       | Prob(all correct)        |
+|-----------|----------|----------|----------|----------|
+| Phi       | 0.955933 | 0.952455 | 0.952238 | 0.866999 |
+| Llama     | 0.997145 | 0.996720 | 0.996710 | 0.990605 |
 
 The question in Figure 1 involves three arithmetic operations (two additions and one subtraction).
 Assuming subtraction is as hard as addition, the probability of the three operations being answered correctly is the product of the individual probabilities. 
 
-If all 3 operations involve two-digit numbers, the probabilities are (table above ^3):
-
-| Model | Average-ish case for our ranges | Worst-ish case for their ranges |
-|-------|-------------------------------|---------------------------------|
-| Phi   | 85.9%                         | 76.0%                           |
-| Llama | 98.9%                         | 96.9%                           |
 
 [I'm redoing this as passing inputs through the logreg and averaging over XX samples as opposed to passing an average input through logreg]
 
