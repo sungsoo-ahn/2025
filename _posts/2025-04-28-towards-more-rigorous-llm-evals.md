@@ -278,19 +278,22 @@ We note that the two explanations are not mutually exclusive---both can be true 
 The paper does not examine or discuss the potential distribution mismatch, making it impossible to draw definitive conclusions without access to the templates used.
 However, there is evidence indicating that the distribution of GSM-Symbolic questions differs from that of GSM8K, and that GSM-Symbolic is indeed more difficult.
 Looking at the example template (Figure 1 from the paper, reproduced above), we see that the sampling ranges for some variables **exclude** the original GSM8K values:
-- The variable `total` is sampled from $[100, 500]$, whilst in the original question we have `total=62`.
-- The variable `ans` is sampled from $[85, 200]$, whilst in the original question we have `ans=14`.
+- The variable `total` is sampled from $(100, 500)$, whilst in the original question we have `total=62`.
+- The variable `ans` is sampled from $(85, 200)$, whilst in the original question we have `ans=14`.
 
 In other words, the original GSM8K question cannot be generated from the proposed symbolic template.
-A more appropriate sampling range for both `total` and `ans` might be $[10, 99]$.
+A more appropriate sampling range for `ans` might be $(5, 100)$ (i.e. the same as $x$, $y$ and $z$), and for `total` might be $(10, 100)$.
+
 
 As we saw in Section 4.1.1, the accuracy of both models decreases as the number of digits increases, indicating that larger inputs are harder to process.
-Accuracy is also negatively affected by the number of carry operations involved in the sum (effect statistically strong for Llama but not Phi; full details in Appendix).
-Model predictions: adding 2-digit numbers with 1 carry operation, 3-digit numbers with 2 carry operations (carry operations are the median):
+We use the logistic regression model from that section try quantify the difference in accuracy that might arise from using the ranges in the paper vs those we propose here (the "reasoning" that gets us to the correct mathematical expression is correct.)
 
-Phi: 95.1% 91.2% 
-Llama: 99.6% 99.0% 
+Back of the envelope calculation:
 
+| Model | Average-ish case for our ranges | Worst-ish case for their ranges |
+|-------|---------------------------------|---------------------------------|
+| Phi   | 95.1%                           | 91.2%                           |
+| Llama | 99.6%                           | 99.0%                           |
 
 
 The question in Figure 1 involves three arithmetic operations (two additions and one subtraction).
@@ -298,10 +301,12 @@ Assuming subtraction is as hard as addition, the probability of the three operat
 
 If all 3 operations involve two-digit numbers, the probabilities are (table above ^3):
 
-Phi: 85.9% 76.0% 
-Llama: 98.9% 96.9%
+| Model | Average-ish case for our ranges | Worst-ish case for their ranges |
+|-------|-------------------------------|---------------------------------|
+| Phi   | 85.9%                         | 76.0%                           |
+| Llama | 98.9%                         | 96.9%                           |
 
-[Redo this as passing inputs through logreg and averaging over 512 samples as opposed to passing an average input through logreg]
+[I'm redoing this as passing inputs through the logreg and averaging over XX samples as opposed to passing an average input through logreg]
 
 If the number ranges in GSM-Symbolic are systematically chosen to be larger than those in GSM8K (and don't even include the original question values), then it cannot claimed that the datasets come from the same distribution.
 Tokenisation is one mechansim that explains why this matters; larger number ranges in GSM-Symbolic may inherently disadvantage certain (and eventually all) models, potentially explaining some of the observed performance differences between models and datasets.
@@ -368,19 +373,25 @@ There is a trend that that many models perform worse on GSM-Symbolic than on GSM
 
 **Caveat 1**: Non-independent data. It will be incorrect to perform the test on all 25 models as these are not independent. There are several types of dependence to consider. Most obviously, the base models and their instruct-tuned version are clearly related (e.g. Gemma2-9b and Gemma2-9b-it). I’d also argue that different sizes within the same model family cannot be considered independent (e.g. mini-small-medium for Phi or 2b-9b-27b for Gemma); minor version updates (e.g. Mistral v0.1 vs 0.3, Phi 3 vs 3.5) will also likely be correlated. So although we have a sample of 25 models, the “effective” sample size is much, much smaller. 
 
-Here’s my attempt to come up with independent set of models. In each model family, I’ll take the latest, largest instruct-tuned version. I’ll repeat this by also taking the smallest version. This gives us two sets of 7 models (differences between them are in italics):
+Here’s our attempt to come up with independent set of models. In each model family, we take the latest, largest instruct-tuned version. We repeat this by also taking the smallest version. This gives us two sets of 7 models (differences between them are in italics):
 
 - Largest subset of models: Gemma2-27b-it, Phi-3.5-mini-instruct, Mistral-7b-instruct-v0.3, Mathstral-7b-v0.1, Llama3-8b-instruct, GPT-4o, o1-preview.
 
 - Smallest subset of models: Gemma2-2b-it, Phi-3.5-mini-instruct, Mistral-7b-instruct-v0.3, Mathstral-7b-v0.1, Llama3-8b-instruct, GPT-4o-mini, o1-mini.
 
-**Caveat 2**: The results of GSM-Symbolic are averages across 50 datasets, whilst GSM8K is based on a single sample. I think we’d want to compare accuracies on GSM8K vs accuracies on each of the 50 datasets (at the time of writing these are not publicly available). I’m still trying to figure out what is the correct way to handle the unbalanced number of samples in this case is (more on this to come). 
+**Caveat 2**: The results of GSM-Symbolic are averages across 50 datasets, whilst GSM8K is based on a single sample. We'd want to compare accuracies on GSM8K vs accuracies on each of the 50 datasets (at the time of writing these are not publicly available). We're still trying to figure out what is the correct way to handle the unbalanced number of samples in this case is (more on this to come). 
 
 With those two caveats, here is the hypothesis and results:
 
+- Two-sided: The success probabilities are different
 $$
-H_0: p_{8k} = p_{symb} \quad\quad H_A^\text{two-sided}: p_{8k} \neq p_{symb} \text{ ~or~ } H_A^\text{one-sided}: p_{8k} < p_{symb},
+H_0: p_{8k} = p_{symb} \quad\quad\quad H_A^\text{two-sided}: p_{8k} \neq p_{symb}.
 $$
+- One-sided: The success probability on GSM8K is greater than that on GSM-Symbolic
+$$
+H_0: p_{8k} = p_{symb} \quad\quad\quad H_A^\text{one-sided}: p_{8k} > p_{symb}.
+$$
+
 where  $p_{8k}=[p_{1,8k}, \dots, p_{7,8k}]$ and $p_{symb}= [p_{1,symb}, \dots, p_{7,symb}]$.
 
 - Largest subset of models: 
