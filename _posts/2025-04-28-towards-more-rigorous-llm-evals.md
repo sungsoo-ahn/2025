@@ -200,7 +200,7 @@ $$N \cdot p_m \cdot (1-p_m).$$
 This variance is maximised when $p_m=1/2$ and goes to $0$ as $p_m$ approaches $0$ or $1$.
 
 To understand what "expected" variation means under our assumption, we can construct confidence intervals (CIs) for the point estimates of $p_m$ on the GSM8K dataset. 
-Although the paper does not report such point estimates, we can calculate the maximum likelihood estimates of $p_m$ by dividing the number of correct answers by the total number of questions.
+We highlight that the paper does not report such point estimates, but we can calculate the maximum likelihood estimates of $p_m$ by dividing the number of correct answers by the total number of questions.
 The number of correct answers (out of 100 questions) on the GSM8K questions are reported in the second column of Table 1 in the Appendix of the paper. 
 We denote this estimate as $p_{m,8K}$ to indicate that it is computed from the GSM8K dataset.
 
@@ -212,7 +212,7 @@ There are different ways to construct CI for the [Binomial proportion](https://
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.95.png" 
   class="img-fluid" 
   title="95% Wilson score intervals" 
-  caption="95% Wilson score intervals for the point estimates of $p_m$." 
+  caption="95% Wilson score intervals for the point estimates of $p_{m, 8K}$ (red) and $p_{m, Sym}$ (blue)." 
 %}
 <!-- <div class="caption">
   "95% Wilson score intervals for the point estimates of $p_m$.
