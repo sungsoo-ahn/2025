@@ -104,7 +104,7 @@ Ths term "Narrative Economics" is heavily attributed to Robert J. Shiller, a Nob
 
 The term "narrative" itself has different connotations in NLP compared to economics, which might lead to some confusion. 😵‍💫
 
-**In NLP**, narrative commonly refers to the structure and elements of stories, encompassing aspects like plot, characters, setting, and theme. It involves understanding how these elements interrelate and contribute to the overall meaning and coherence of a narrative. TODO: check!
+**In NLP**, narrative commonly refers to the structure and elements of stories, encompassing aspects like plot, characters, setting, and theme. It involves understanding how these elements interrelate and contribute to the overall meaning and coherence of a narrative.
 
 **In Narrative Economics**, as stated in the above section, narrative is a shared belief or idea that spreads through the population and potentially influences economic behavior. 
 
