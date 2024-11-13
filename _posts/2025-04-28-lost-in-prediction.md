@@ -81,7 +81,7 @@ _styles: >
 
 # What is Narrative Economics?
 
-Narrative Economics is the study of how popular stories and ideas (a.k.a **narratives**) formed about the state of the economy could have real effects in the world. In this context, a “narrative” is a belief about the state of the world that is shared by the population, regardless of the actual state of the economy. For example, a narrative might be the belief that housing prices are increasing, whereas in-reality (according to economic indicators) they are stagnating. 
+Narrative Economics is the study of how popular stories and ideas (a.k.a **narratives**) formed about the state of the economy could have real effects in the world. In this context, a “narrative” is a belief about the state of the world that is shared by the population, regardless of the actual state of the economy. For example, a narrative might be the belief that housing prices are increasing, whereas in reality (according to economic indicators) they are stagnating. 
 
 The central idea is that the spread of viral narratives can influence individual and collective economic behavior, leading to fluctuations in markets, changes in investment patterns, and even broader economic shifts.
 
@@ -90,7 +90,7 @@ The central idea is that the spread of viral narratives can influence individual
     </div></div>
     
 <br> 
-The term "Narrative Economics" is heavily attributed to Robert J. Shiller, a Nobel laureate economist and the founder of Narrative Economics which defined it as:
+The term "Narrative Economics" is heavily attributed to Robert J. Shiller, a Nobel laureate economist and the founder of the field, who defined it as:
 
 > *"Spread through the public in the form of popular stories, **ideas can go viral and move markets** —whether it’s the belief that tech stocks can only go up, that housing prices never fall, or that some firms are too big to fail. Whether true or false, stories like these—transmitted by word of mouth, by the news media, and increasingly by social media—**drive the economy by driving our decisions about how and where to invest, how much to spend and save, and more."***  
   *- Robert J. Shiller* <d-cite key="shiller2017narrative"></d-cite>
@@ -113,7 +113,7 @@ The economic term is wide and it is undefined what requirements a story or idea 
 * Last, Shiller mentions social media as a source of narratives and Google Ngram as a tool for tracking them. 
 
 
-Combined together, to capture a narrative, one would need a good measure of what many people are discussing about, over time. Twitter (X), in this case, is an almost ideal source of information for capturing this distribution of opinions. 
+Combined together, to capture a narrative, one would need a good measure of what many people are discussing, over time. Twitter (X), in this case, is an almost ideal source of information for capturing this distribution of opinions. 
 
 ### And how to extract the "narrative" aspect from tweets?
 Aligning with Shiller’s arguments and with existing literature, the extraction might be (for example) a sentiment <d-cite key="macaulay2023narrative, yang2023multi, adams2023more, kim2023forecasting, gurgul2023forecasting, wang2023deepemotionnet"></d-cite>, a topic <d-cite key="ash2021relatio"></d-cite>, or a specific economic outlook <d-cite key="nyman2021news, ahrens2021extracting, handlan2020text"></d-cite>.
@@ -127,8 +127,7 @@ Both datasets were carefully curated using targeted queries with the inclusion o
 
 **Pre-Pandemic Twitter Dataset:** Utilizing Twitter API <d-cite key="Twitter-API"></d-cite>, we collected 2.4 million tweets from Twitter's early days (January 2007) to COVID-19 pandemic (December 2020). To prioritize viral tweets, we retrieved the daily top 200 tweets based on follower count,  then we randomly sampled 100 to mitigate potential bias towards highly active accounts typically associated with news outlets. This process yielded a dataset contributed by about 250,000 users per collected topic, each boasting an average follower count of 100 million, including global leaders, news outlets and other influencers.
 
-**Post-2021 Twitter Dataset:** We wanted to test the predictive power of our employed LLM (OpenAI's Chat Completion API with GPT-3.5 <d-cite key="ChatGPT-3.5"></d-cite>) on a timeframe beyond the LLM's data cutoff date (September 2021). Therefore, we collected a second dataset ranging from September 2021 until July 2023. This assures the LLM relies solely on provided tweets and pre-existing knowledge, unaware of 'future' knowledge. Here we collected the tweets monthly, using Twitter Advanced Search, restricting to users with at least 1,000 followers. Overall we curated 2,881 tweets <d-footnote>As this data collection method is more restricted than the
-previous, the resulting dataset is relatively smaller.</d-footnote> contributed by 1,255 users including politicians, CEOs, activists, and academics. 
+**Post-2021 Twitter Dataset:** We wanted to test the predictive power of our employed LLM (OpenAI's Chat Completion API with GPT-3.5 <d-cite key="ChatGPT-3.5"></d-cite>) on a timeframe beyond the LLM's data cutoff date (September 2021). Therefore, we collected a second dataset ranging from September 2021 until July 2023. This assures the LLM relies solely on provided tweets and pre-existing knowledge, unaware of 'future' knowledge. Here we collected the tweets monthly, using Twitter Advanced Search, restricting the search to users with at least 1,000 followers. Overall we curated 2,881 tweets <d-footnote>As this data collection method is more restricted than the previous, the resulting dataset is relatively smaller.</d-footnote>, contributed by 1,255 users, including politicians, CEOs, activists, and academics. 
 
 An example tweet can be:
 
@@ -150,7 +149,7 @@ We can see the evolving nature of these narratives over time, where the distribu
 ### LLMs Show Potential in Understanding Narratives
 A more advanced technique to extract and analyze narratives is using LLMs. Prompting OpenAI's Chat Completion API, GPT-3.5 <d-cite key="ChatGPT-3.5"></d-cite> with monthly tweets and prices of economic indicator from matching dates, we generated LLM-based narratives analysis, one for each date in the post-2021 dataset, containing a component of summarized analysis of the tweets and a component of potential effect on the given financial indicator. 
 
-Here's a snippet of such an LLM-based narrative analysis for inputs of dates 29/08/2022 to 28/09/2022. In this time period the Federal Reserve raised the interest rates in an effort to combat inflation, the US Supreme Court ruled that the Biden administration could not extend the pause on student loan payments:
+Here's a snippet of such an LLM-based narrative analysis for inputs of dates 29/08/2022 to 28/09/2022. In this time period, the Federal Reserve raised interest rates in an effort to combat inflation and the US Supreme Court ruled that the Biden administration could not extend the pause on student loan payments:
 
 <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/chatgpt_snippet.jpg" class="img-fluid z-depth-2" style="width: 50%;" %}
@@ -162,14 +161,14 @@ This snippet demonstrates the LLM’s ability to aggregate information, condensi
 
 # Narrative Economics at the Macro Level
 
-Now that we are familiar with Narrative Economics and established how we gathered these narratives from Twitter, let's explore why we chose to focus on *macroeconomics*:  
+Now that we are familiar with Narrative Economics and have established how we gathered these narratives from Twitter, let's explore why we chose to focus on *macroeconomics*:  
 
 **Macro**ceconomics studies the behavior of the economy as a whole, examining factors like inflation, unemployment, and economic growth. **Micro**economics, on the other hand, is concerned with the decision-making of individuals and firms, examining indicators like a certain stock.
 
 ### Why Macroeconomics?
 A core concept in Narrative Economics is that narratives can drive economics fluctuations. This is especially intriguing at the macroeconomic level, as the theory suggests that widely shared stories can influence the collective decisions of millions of individuals. Additionally, existing research focuses on microeconomic indicators within the context of Narrative Economics <d-cite key="yang2023multi, khedr2021cryptocurrency, he2021multi, gurgul2023forecasting, wang2023deepemotionnet"></d-cite>, while the application in macroeconomics remains relatively unexplored.
 
-However, studying this macroeconomically is more complex than microeconomically due to the complex interplay of various factors, the need for broad-covering narratives, and the inherent difficulty in isolating causal relationships. 
+However, studying this at the macroeconomic level is more complex than at the microeconomic level due to the complex interplay of various factors, the need for broadly covering narratives, and the inherent difficulty in isolating causal relationships. 
 
 ### Our Macroeconomic Indicators
 
@@ -181,13 +180,13 @@ We focus on predicting three key macroeconomic indicators:
 
 **CBOE Volatility Index (VIX):** Measures market expectations of future volatility based on S&P 500 options prices, often referred to as the 'fear gauge' as it tends to rise during market stress and fall during market stability.
 
-These indicators are well-suited for testing the predictive power of narratives for macroeconomics due to their daily frequency, which aligns with the rapid pace of Twitter, and their sensitivity to public sentiment and behavior.
+These indicators are well-suited for testing the predictive power of narratives in macroeconomics due to their daily frequency, which aligns with the rapid pace of Twitter, and their sensitivity to public sentiment and behavior.
 
 *** 
 
 # Connecting the Dots: Testing the Effectiveness of Narratives for Macroeconomic Forecasting
 
-The previous two sections discussed the theory of Narrative Economics and our curated Twitter dataset, which holds narratives within them, and the distinction between macroeconomics and microeconomics, highlighting why it is interesting to research the theory at the macroeconomic level and what macroeconomic indicators we chose.
+The previous two sections discussed the theory of Narrative Economics and our curated Twitter dataset, which holds narratives within them, and the distinction between macroeconomics and microeconomics, explaining why it is interesting to research the theory at the macroeconomic level and which macroeconomic indicators we chose.
 
 We can now delve into the series of experiments we tested to assess the central question - **can economic narratives provide valuable insights for future macroeconomic movements?**
 
@@ -200,28 +199,28 @@ We won't be able to cover all the details of the experiments in this blog, but i
 ### Prediction Tasks
 
 We test the predictive power of narratives on three tasks commonly used in macroeconomic literature <d-cite key="handlan2020text, 10.1257/jel.20181020, kalamara2022making, ahrens2021extracting, masciandaro2021monetary, lee2009federal, hamilton2002model, kim2023forecasting, larkin2008good"></d-cite>:
-* **Next value:** predicts the target’s value at the specified horizon.
-* **Percentage change:** predicts the target’s percentage change between the specified horizon and
+* **Next value:** Predicts the target’s value at the specified horizon.
+* **Percentage change:** Predicts the target’s percentage change between the specified horizon and
 the day before.
-* **Direction change:** classifies the target’s direction of change (increase or decrease) between the
+* **Direction change:** Classifies the target’s direction of change (increase or decrease) between the
 specified horizon and the day before.
 
 
 ### Models Categories
 
-We differ our models into 3 categories based on their input signal:
-* **Financial (F):** utilizes historical financial data, from the past week or month.
-* **Textual (T):** leverages solely textual data, either raw tweets or tweets’ analyses.
-* **Textual & Financial (TF):** draws upon both textual and financial data as input.
+We divide our models into 3 categories based on their input signal:
+* **Financial (F):** Utilizes historical financial data, from the past week or month.
+* **Textual (T):** Leverages solely textual data, either raw tweets or tweets’ analyses.
+* **Textual & Financial (TF):** Draws upon both textual and financial data as input.
 
 Our goal is to effectively leverage insights from both textual narratives and historical financial patterns to improve prediction accuracy.  The added value of incorporating textual narratives can be demonstrated if a model that utilizes both text and financial data (TF model) outperforms a model that relies solely on financial data (F model). 
 
 ### Baselines
 
 **Financial baselines:**
-* **As/Inverse-previous:** next value is the same/inverse as previous.
-* **Majority:** next value is the majority vote of the previous week/training data.
-* **Up/Down:** always predict 'increase'/'decrease'.
+* **As/Inverse-previous:** Next value is the same/inverse as previous.
+* **Majority:** Next value is the majority vote of the previous week/training data.
+* **Up/Down:** Always predict 'increase'/'decrease'.
 
 <br> 
 
@@ -229,9 +228,9 @@ Our goal is to effectively leverage insights from both textual narratives and hi
 
 During our experiments, we encountered some intriguing results that warranted further investigation. To ensure the validity of our findings and rule out any counterfactual explanations, we introduced counterfactual textual baselines. These baselines allowed us to rigorously test whether the observed improvements were truly due to the models' capabilities or stemmed from other factors. Unfortunately, these baselines revealed that the promising results were more elusive than we hoped.
 
-* **Random texts:** feeding the LLM with randomly generated sentences comprised of varying random words. This baseline evaluate whether the LLM actually utilize the content of tweets.
-* **Shuffled tweets:** feeding the LLM with chronologically disordered tweets, isolating the impact of temporal narratives from confounding patterns or memorization. This baseline assess the model reliance on temporal narratives.
-* **Synthetic 'narratives':** Feeding the LLM with generated narrative-like sentences expressing positive or negative cues, aligned with subsequent changes in the financial target. This baseline assess the LLM's ability to infer relationships between aligned narratives and the following market changes.
+* **Random texts:** Feeding the LLM with randomly generated sentences comprised of varying random words. This baseline evaluates whether the LLM actually utilizes the content of tweets.
+* **Shuffled tweets:** Feeding the LLM with chronologically disordered tweets, isolating the impact of temporal narratives from confounding patterns or memorization. This baseline assesses the model reliance on temporal narratives.
+* **Synthetic 'narratives':** Feeding the LLM with generated narrative-like sentences expressing positive or negative cues, aligned with subsequent changes in the financial target. This baseline assesses the LLM's ability to infer relationships between aligned narratives and the following market changes.
 
 ### Models
 
@@ -241,17 +240,17 @@ Our model selection progresses from simpler models, frequently employed in the f
 
 <br>
 
-**Financial models:** these include traditional ML models (e.g., Linear Regression, SVM), DA-RNN <d-cite key="qin2017dual"></d-cite>, and T5 <d-cite key="raffel2020exploring"></d-cite> which receives financial input in a text format. Each model is fed with a sequence of historical financial values of the target indicator, either as individual features per day or as a time-series.  
+**Financial models:** These include traditional ML models (e.g., Linear Regression, SVM), DA-RNN <d-cite key="qin2017dual"></d-cite>, and T5 <d-cite key="raffel2020exploring"></d-cite> which receives financial data input in a text format. Each model is fed with a sequence of historical financial values of the target indicator, either as individual features per day or as a time-series.  
 
 <br>
 
 **Textual models:**
-* **Daily sentiment:** a simple method, commonly used in the literature, is presenting each tweet with its sentiment score. Then, we average the scores of individual tweets of the same dates to receive a daily sentiment, and concatenate over a week.
+* **Daily sentiment:** A simple method, commonly used in the literature, is presenting each tweet with its sentiment score. Then, we average the scores of individual tweets of the same dates to receive a daily sentiment, and concatenate over a week.
 <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/models_diagram_1.jpg" class="img-fluid rounded z-depth-1" style="width: 40%;" %}
     </div>
     
-* **LLM's representations of individual/joint tweets:** we derive embeddings of individual or concatenated tweets using pre-trained language models (BERT <d-cite key="devlin2018bert"></d-cite>,RoBERTa <d-cite key="liu2019roberta"></d-cite> and T5 <d-cite key="raffel2020exploring"></d-cite>. In the individual case, tweets' embeddings are aggregated daily by averaging or concatenating embeddings of same-date tweets. In the joint case, tweets are concatenated daily to create a single daily embedding, potentially capturing their collective meaning without explicit aggregation, avoiding potential information loss.
+* **LLM's representations of individual/joint tweets:** We derive embeddings of individual or concatenated tweets using pre-trained language models (BERT <d-cite key="devlin2018bert"></d-cite>, RoBERTa <d-cite key="liu2019roberta"></d-cite>, and T5 <d-cite key="raffel2020exploring"></d-cite>). In the individual case, tweet embeddings are aggregated daily by averaging or concatenating embeddings of same-date tweets. In the joint case, tweets are concatenated daily to create a single daily embedding, potentially capturing their collective meaning without explicit aggregation, avoiding potential information loss.
 <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/models_diagram_2.jpg" class="img-fluid rounded z-depth-1" style="width: 40%;" %}
     </div>
@@ -264,13 +263,13 @@ Our model selection progresses from simpler models, frequently employed in the f
 
 <br>
 
-**Fusing textual and financial models:** we experiment with several strategies for combining the representations from the T and F models for a unified prediction:
-* **Concatenation:** the simplest approach is concatenating the T and F representations.
+**Fusing textual and financial models:** We experiment with several strategies for combining the representations from the T and F models for unified prediction:
+* **Concatenation:** The simplest approach is concatenating the T and F representations.
 * **DA-RNN <d-cite key="qin2017dual"></d-cite>:** The dual-stage attention-based RNN model predicts the current value of a time-series based on its previous values and those of exogenous series. We feed historical financial representations (F) as the time series and
 textual representations (T) as the exogenous series.
 * **Prompt-based fusion:** LLM-based analysis of given tweets and historical financial values of the target indicator are fed together with raw historical values of the target to a T5 model as separate segments.
 
-  Given a TF model we can derive a T or F model by omitting or zeroing either F or T component, respectively.
+  Given a TF model, we can derive a T or F model by omitting or zeroing either F or T component, respectively.
 
 
 
@@ -286,7 +285,7 @@ We fed classic ML models with daily sentiments for FFR 'next value' and 'directi
 
 **The results:**
 
-* Direction change: 💡 <span class="highlight">Adding sentiment data didn't help</span>, as both models with financial input (F & TF) achieved similar accuracy (0.939 vs. 0.936). Additionally, text-only models (T) underperform (0.89), achieving a comparable accuracy to the F baselines (0.89 vs. 0.81).
+* Direction change: 💡 <span class="highlight">Adding sentiment data didn't help</span>, as both models with financial input (F & TF) achieved similar accuracy (0.939 vs. 0.936). Additionally, text-only models (T) underperformed (0.89), achieving a comparable accuracy to the F baselines (0.89 vs. 0.81).
 
 | Type | Model | Accuracy |
 |---|---|---|
@@ -328,11 +327,11 @@ To keep it short, we present results only for predicting the VIX 'next value' of
         {% include figure.html path="assets/img/2025-04-28-lost-in-prediction/embeddings_exp_results.jpg" class="img-fluid rounded z-depth-1" %}
     </div></div>
 
-* Next-day prediction: 💡 <span class="highlight">The non-learned 'as-previous' F baseline outperforms all other models</span> (3.079 MSE). This suggests that the input information might not be beneficial for such a short-term prediction. 
+* Next-day prediction: 💡 <span class="highlight">The non-learned 'as-previous' F baseline outperforms all other models</span> (3.079 MSE). This suggests that the input data may not be beneficial for such a short-term prediction. 
 
-* Next-week prediction: <span class="highlight">Initially both TF models (13.148, 13.147) appeared to outperform the F model (13.463) and F baseline</span> (16.172), implying a potential influence of the textual content. <br> 💡 <span class="highlight">However, the 'random texts' TF baseline</span> (13.056), which replaced actual tweets with random texts, <span class="highlight">outperformed all others</span>, indicating the improvement was not due to meaningful textual content. 
+* Next-week prediction: <span class="highlight">Initially both TF models (13.148, 13.147) appeared to outperform the F model (13.463) and F baseline</span> (16.172), implying a potential influence of the textual content. <br> 💡 <span class="highlight">However, the 'random texts' TF baseline</span> (13.056), which replaced actual tweets with randomly generated text, <span class="highlight">outperformed all other models</span>, indicating the observed improvement was not driven by meaningful textual content. 
 
-We hypothesize that the presence of text improves performance, even when random, due to spurious correlations or random noise aiding generalization, similar to regularization techniques. A contributing factor may arise from the difficulty of effectively capturing and representing aggregated tweet information for financial prediction, as well as the inherent challenges in predicting future values of a volatile financial indicator, characterized by frequent random movements and fluctuations, using its historical values.    
+We hypothesize that the presence of text improves performance, even when random, due to spurious correlations or random noise aiding generalization, similar to regularization techniques. A contributing factor may be the difficulty of effectively capturing and representing aggregated tweet information for financial prediction, as well as the inherent challenges in predicting future values of a volatile financial indicator, characterized by frequent random movements and fluctuations, using its historical values.    
 
 **What can we learn? 🤔** Our models struggled to leverage tweets for the prediction, indicating that implicitly capturing and aggregating latent narratives within LLMs remains a challenge.
 
@@ -342,9 +341,9 @@ We hypothesize that the presence of text improves performance, even when random,
 
 <br>
 
-**Re-purposing the LLM analyses for a subsequent prediction model:** The previous experiment revealed the LLM's ability to generate insightful analyses of tweets and financial data. To leverage this capability, we utilize these analyses as inputs for a dedicated prediction model to predict the S&P 500 'direction change'.
+**Repurposing the LLM analyses for a subsequent prediction model:** The previous experiment revealed the LLM's ability to generate insightful analyses of tweets and financial data. To leverage this capability, we utilize these analyses as inputs for a dedicated prediction model to predict the S&P 500 'direction change'.
 
-This approach addresses limitations of both previous experiments:
+This approach addresses limitations of the two previous experiments by:
 * Instead of relying on the embedding-based approach, which struggled to aggregate diverse narratives, we leverage the LLM's ability to produce concise analyses.   
 * Instead of directly using the LLM for prediction, which exhibited inconsistencies, we utilize a separate fine-tuned model for downstream prediction.
 
@@ -374,11 +373,11 @@ This approach addresses limitations of both previous experiments:
 | T-baseline | Synthetic narratives | 0.489 | 0.254 |
 
 
-**So did it work?** not really. 💡 Results show that <span class="highlight">there is no significant difference between the best TF and F models</span>, with a performance gap of ~2% on the limited test set of ~90 samples. <d-footnote>As a reminder, we can only use the second Twitter dataset, of tweets that were posted after the LLM's training cutoff date, and our financial indicators are of daily frequency, therefore the small dataset for this type of experiments.</d-footnote>
-We confirmed it using the McNemar's test <d-cite key="P18-1128"></d-cite> which shows no statistically significant difference (p-value=0.48).
-On the good side, this is the only approach where our models surpass all baselines. 
+**Did it work?** Unfortunately, not really. 💡 Results show that <span class="highlight">there is no significant difference between the best TF and F models</span>, with a performance gap of ~2% on the limited test set of ~90 samples. <d-footnote>As a reminder, we can only use the second Twitter dataset, of tweets that were posted after the LLM's training cutoff date, and our financial indicators are of daily frequency, therefore the small dataset for this type of experiments.</d-footnote>
+We confirmed it using the McNemar's test <d-cite key="P18-1128"></d-cite>, which showed no statistically significant difference (p-value=0.48).
+On the good side, this is the only approach where our models surpassed all baselines. 
 
-**What can we learn? 🤔** While LLMs can analyze narratives, the TF model struggled to utilize this analysis for improved prediction.
+**What can we learn? 🤔** While LLMs can analyze narratives, the TF model struggled to effectively leverage this analysis for improved prediction.
 
 *** 
 
@@ -388,11 +387,11 @@ Despite the presence of narratives in our curated datasets and the development o
 
 The missing link between the successful narrative extraction demonstrated by the LLM's analyses and the limited improvement in macroeconomic prediction **raises a question about the extent to which narratives alone can truly drive and forecast economic fluctuations**, at least at the macroeconomic level.
 
-This study serves as a foundation for further exploration, highlighting the need for new macroeconomic models and tasks that can effectively assess the influence of extracted narratives on the economy.
+This study serves as a foundation for further exploration, highlighting the need for new macroeconomic models or tasks that can effectively assess the influence of extracted narratives on the economy.
 
 <br>
 
-*This blogpost extends the technical experiments presented in our paper <d-footnote>Link will be added upon acceptance.</d-footnote>, delving deeper into broader aspects that naturally in a paper can only receive a shorter discussion as it primarily presents the technical results. We invite you to read the paper for full background and experiments.*
+*This blogpost extends the technical experiments presented in our paper <d-footnote>Link will be added upon acceptance.</d-footnote>, delving deeper into broader aspects that naturally in a paper can only receive a shorter discussion as it primarily presents the technical results. We invite you to read the paper for comprehensive background and detailed experiments.*
 
 
 
