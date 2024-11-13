@@ -143,7 +143,7 @@ An example tweet can be:
 
 TODO: add description of why the tweet is good example.
 
-### Did We Really Collect Narratives?
+### Did We Really Collect Narratives? TODO: change title.
 To confirm the presence of narratives within our Twitter dataset, we conducted an analysis using RELATIO <d-cite key="ash2021relatio"></d-cite>, a tool designed to "capture political and economic narratives" by mapping relationships and interactions among entities within a corpus. Upon processing our dataset with RELATIO, we obtained "narrative statements" (as defined in their paper) and visualized their temporal distribution:
 
 <div class="col-sm mt-3 mt-md-0">
