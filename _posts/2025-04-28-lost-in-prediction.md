@@ -115,7 +115,7 @@ The economic term is wide and it is undefined what requirements a story or idea 
 
 * First, the story should be viral, publicly believed, in order to change a large enough audience to move the market.
 * Second, Shiller uses some propositions while explaining the term. He states that "the economic impact of narratives may change through time" and "narrative constellations have more impact than any one narrative". 
-* Lastly, Shiller mentions social media as a source of narratives and Google Ngram as a tool for tracking them. 
+* Last, Shiller mentions social media as a source of narratives and Google Ngram as a tool for tracking them. 
 
 
 Combined together, to capture a narrative, one would need a good measure of what many people are discussing about, over time. Twitter (X), in this case, is an almost ideal source of information for capturing this distribution of opinions. 
@@ -140,6 +140,8 @@ An example tweet can be:
 <div style="display: flex; justify-content: center;">
   {% twitter https://x.com/CNLiberalism/status/1525672295775223808 %}
 </div>
+
+TODO: add description of why the tweet is good example.
 
 ### Did We Really Collect Narratives?
 To confirm the presence of narratives within our Twitter dataset, we conducted an analysis using RELATIO <d-cite key="ash2021relatio"></d-cite>, a tool designed to "capture political and economic narratives" by mapping relationships and interactions among entities within a corpus. Upon processing our dataset with RELATIO, we obtained "narrative statements" (as defined in their paper) and visualized their temporal distribution:
