@@ -10,7 +10,7 @@ hidden: false
 output: 
   html_document:
     toc: true
-    toc_float:
+    toc_float: true
 
 # Anonymize when submitting
 # authors:
