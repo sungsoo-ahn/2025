@@ -7,10 +7,6 @@ future: true
 htmlwidgets: true
 hidden: false
 
-output: 
-  html_document:
-    toc: false
-
 # Anonymize when submitting
 # authors:
 #   - name: Anonymous
@@ -73,7 +69,7 @@ _styles: >
   }
 ---
 
-
+<script>alert('ok');</script>
 
 # What is Narrative Economics?
 
