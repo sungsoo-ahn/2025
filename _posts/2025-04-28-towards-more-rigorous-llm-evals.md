@@ -207,12 +207,11 @@ We denote this estimate as $p_{m,8K}$ to indicate that it is computed from the G
 
 There are different ways to construct CI for the [Binomial proportion](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval). Figure XX below shows [Wilson score](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval) intervals. (See Appendix for more results.)
 
-<!-- {{< figure library="true" src="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.95.png" title="95% Wilson score intervals for the point estimates of $p_m$." numbered="false">}} -->
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.95.png" 
   class="img-fluid" 
-  title="95% Wilson score intervals" 
-  caption="95% Wilson score intervals for the point estimates of $p_{m, 8K}$ (red) and $p_{m, Sym}$ (blue)." 
+  title="95% Wilson score confidence intervals" 
+  caption="95% Wilson score confidence intervals for the point estimates of $p_{m, 8K}$ (red dots), along with point estimates of $p_{m, Sym}$ (blue triangles)." 
 %}
 <!-- <div class="caption">
   "95% Wilson score intervals for the point estimates of $p_m$.
@@ -256,7 +255,7 @@ The table below compares the 95% Wilson score intervals to the approximate accur
 95% Wilson score intervals for the point estimates of $p_m$ and reported ranges, approximated from Figure 1 in Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper.
 </div>
 
-Note that our confidence intervals are wider than the implied ranges in the figures in the paper, i.e. under the iid Bernoulli assumption, the variation is actually **larger** than what is observed.
+Note that our confidence intervals are wider than the implied ranges in the figures in the paper, i.e. under the i.i.d. Bernoulli assumption, the variation is actually **larger** than what is observed.
 This discrepancy is likely to be explained by the unmodelled correlations between questions---as initially suggested, a more reasonable assumption would be to model the probability of success on a question level, $p_{m,n}$, rather than assuming each question is equally likely to be answered correctly. 
 The analysis can be repeated once (if) the detailed question-level data becomes available.
 
@@ -511,15 +510,15 @@ The test statistic (pm,8k - pm,symb) / SE(ppool)  is then approximately normal a
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.99.png" 
   class="img-fluid" 
-  title="99% Wilson score intervals for the point estimates of $p_m$" 
-  caption="99% Wilson score intervals for the point estimates of $p_m$" 
+  title="99% Wilson score confidence intervals for the point estimates of $p_{m, 8K}$ (red dots), along with point estimates of $p_{m, Sym}$ (blue triangles)." 
+  caption="99% Wilson score confidence intervals for the point estimates of $p_{m, 8K}$ (red dots), along with point estimates of $p_{m, Sym}$ (blue triangles)." 
 %}
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/clopper_0.99.png" 
   class="img-fluid" 
-  title="99% Clopper-Pearson intervals for the point estimates of $p_m$" 
-  caption="99% Clopper-Pearson intervals for the point estimates of $p_m$" 
+  title="99% Clopper-Pearson confidence intervals for the point estimates of $p_{m, 8K}$ (red dots), along with point estimates of $p_{m, Sym}$ (blue triangles)." 
+  caption="99% Clopper-Pearson confidence intervals for the point estimates of $p_{m, 8K}$ (red dots), along with point estimates of $p_{m, Sym}$ (blue triangles)." 
 %}
 
 ## Logistic regression results
