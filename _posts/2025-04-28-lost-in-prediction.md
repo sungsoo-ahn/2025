@@ -32,7 +32,8 @@ bibliography: 2025-04-28-lost-in-prediction.bib
 #   - make sure that TOC names match the actual section names
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
-toc: TODO: remove subsections
+# TODO: remove subsections
+toc:
   - name: What is Narrative Economics?
     subsections:
     - name: The Ambiguity of the Term "Narrative"
@@ -165,18 +166,20 @@ This snippet demonstrates the LLM’s ability to aggregate information, condensi
 
 *** 
 
-# Narrative Economics at the Macro Level
+<h1 style="color:blue;">
+Narrative Economics at the Macro Level
+</h1>
 
 Now that we are familier with Narrative Economics and established how we gathered these narratives from Twitter, let's explore why we chose to focus on *macroeconomics*:  
 
-**Macroeconomics** studies the behavior of the economy as a whole, examining factors like inflation, unemployment, and economic growth. **Microeconomics**, on the other hand, is concerned with the decision-making of individuals and firms, examining indicators like a certain stock.
+**Macro**ceconomics studies the behavior of the economy as a whole, examining factors like inflation, unemployment, and economic growth. **Micro**economics, on the other hand, is concerned with the decision-making of individuals and firms, examining indicators like a certain stock.
 
-## Why Macroeconomics?
+### Why Macroeconomics?
 A core concept in Narrative Economics is that narratives can drive economics flunctuations. This is especially intriguing at the macroeconomic level, as the theory suggests that widely shared stories can influence the collective decisions of millions of individuals. Additionally, existing research focuses on microeconomic indicators within the context of Narrative Economics <d-cite key="yang2023multi, khedr2021cryptocurrency, he2021multi, gurgul2023forecasting, wang2023deepemotionnet"></d-cite>, while the application in macroeconomics remains relatively unexplored.
 
 However, studying this macroeconomically is more complex than microeconomically due to the complex interplay of various factors, the need for broad-covering narratives, and the inherent difficulty in isolating causal relationships. 
 
-## Our Macroeconomic Indicators
+### Our Macroeconomic Indicators
 
 We focus on predicting three key macroeconomic indicators:
 
@@ -190,7 +193,7 @@ These indicators are well-suited for testing the predictive power of narratives 
 
 *** 
 
-# Connecting the Dots: Testing Narratives' Effectiveness for Macroeconomic Forecasting
+# Connecting the Dots: Testing Narratives' Effectiveness for Macroeconomic Forecasting TODO: check english
 
 The previous two sections discussed the theory of Narrative Economics and our curated Twitter dataset, which holds narratives within them, and the distinction between macroeconomics and microeconomics, highlighting why it is interesting to research the theory at the macroeconomic level and what macroeconomic indicators we chose.
 
@@ -198,7 +201,7 @@ We can now delve into the series of experiments we tested to assess the central 
 
 Each experiment tests the predictive power of narratives from the curated datasets, for macroeconomic prediction of one (or more) of the financial targets introduced before: FFR, S&P 500, and VIX. 
 
-We won't be able to cover all the details of the experiments in this blog, but it is available in our paper. 
+We won't be able to cover all the details of the experiments in this blog, but it is available in our paper. (link will be shared upon acceptance).
 
 ## Experimental Setup
 
