@@ -6,8 +6,11 @@ date: 2025-04-28
 future: true
 htmlwidgets: true
 hidden: false
-output:
-  toc_float: true
+
+output: 
+  html_document:
+    toc: true
+    toc_float:
 
 # Anonymize when submitting
 # authors:
