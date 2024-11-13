@@ -81,7 +81,7 @@ _styles: >
     text-align: center;
     font-size: 16px;
   }
-  .h1 {
+  h1 {
     color: blue;
   }
 ---
