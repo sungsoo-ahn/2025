@@ -282,7 +282,7 @@ Looking at the example template (Figure 1 from the paper, reproduced above), we 
 - The variable `ans` is sampled from $(85, 200)$, whilst in the original question we have `ans=14`.
 
 In other words, the original GSM8K question cannot be generated from the proposed symbolic template.
-A more appropriate sampling range for `ans` might be $(5, 100)$ (i.e. the same as $x$, $y$ and $z$), and for `total` might be $(10, 100)$.
+Here we propose more suitable ranges for the variables: a more appropriate sampling range for  `total` might be $(10, 100)$; this also makes sense given `total` is number of toys. Then `x`, `y`, `z` and `ans` are determined from that range by dividing by 4; it's fair to assume that all four are on the same scale; so suggested ranges for those $(2, 25)$.
 
 
 As we saw in Section 4.1.1, the accuracy of both models decreases as the number of digits increases, indicating that larger inputs are harder to process.
