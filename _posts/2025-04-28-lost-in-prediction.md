@@ -64,6 +64,9 @@ _styles: >
   d-article h2 {
     font-weight: 400;
   }
+  .highlight {
+    background-color: #ffffc5;
+  }
 ---
 
 
@@ -275,7 +278,7 @@ We fed classic ML models with daily sentiments for FFR 'next value' and 'directi
 
 **The results:**
 
-* **👎 Direction change**: Adding sentiment data didn't help, as both models with financial input (F & TF) achieved similar accuracy (0.939 vs. 0.936). Additionaly, text-only models (T) underperform (0.89), achieving a comparable accuracy to the F baselines (0.89 vs. 0.81).
+* 👎 Direction change: **Adding sentiment data didn't help**, as both models with financial input (F & TF) achieved similar accuracy (0.939 vs. 0.936). Additionaly, text-only models (T) underperform (0.89), achieving a comparable accuracy to the F baselines (0.89 vs. 0.81).
 
 | Type | Model | Accuracy |
 |---|---|---|
@@ -285,7 +288,9 @@ We fed classic ML models with daily sentiments for FFR 'next value' and 'directi
 | T | Logistic Regression | 0.885 |
 | T | SVM | 0.885 |
 
-* 👎 **Next value**: None of the models, with or without sentiment or financial data, could outperform the non-learned 'train-mean' baseline (15.4, 15.6).
+<br> 
+
+* 👎 Next value: <span class="highlight">None of the models, with or without sentiment or financial data, outperformed the non-learned 'train-mean' baseline</span> (15.4, 15.6).
 
 
 | **Type** | **Model** | **MSE** |
@@ -295,6 +300,7 @@ We fed classic ML models with daily sentiments for FFR 'next value' and 'directi
 | TF | SVM | 15.416 | 
 | T | SVM | 15.36 | 
 
+<br> 
 
 **What can we learn? 🤔** Sentiment analysis lacks the nuance necessary for accurate financial prediction, and traditional ML models have limitations in capturing complex market dynamics. ➡️ We need an improved text representations and more advanced prediction models.  
 
@@ -303,9 +309,9 @@ We fed classic ML models with daily sentiments for FFR 'next value' and 'directi
 
 Here we turn to embedding-representations (as explained in the Experimental Setup) and to DA-RNN <d-cite key="qin2017dual"></d-cite> model, which is designed to capture temporal dynamics and complex relationships within its given data.
 
-🥵 We extensively evaluated various model configurations, target indicators (FFR and VIX), tasks ('next value', 'percentage change', 'direction change' and the last two together), prediction horizons (next-day, next-week), LLM architectures (see Experimental Setup), aggregation methods, and the daily number of tweets given as input. Additionally, we assessed the models' reliance on temporal context and relevant narratives using the counterfactual textual baselines.
+We extensively evaluated various model configurations, target indicators (FFR and VIX), tasks ('next value', 'percentage change', 'direction change' and the last two together), prediction horizons (next-day, next-week), LLM architectures (see Experimental Setup), aggregation methods, and the daily number of tweets given as input. Additionally, we assessed the models' reliance on temporal context and relevant narratives using the counterfactual textual baselines.
 
-🤏 To keep it short, we present results only for predicting the VIX 'next value' of the next-day and next-week (as separate tasks). Additional experiments showed a recurring pattern to the presented results.
+To keep it short, we present results only for predicting the VIX 'next value' of the next-day and next-week (as separate tasks). Additional experiments showed a recurring pattern to the presented results.
 
 **The results:**
 
