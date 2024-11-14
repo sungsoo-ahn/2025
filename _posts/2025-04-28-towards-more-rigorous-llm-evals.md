@@ -228,14 +228,16 @@ As expected, models with success probabilities closer to $1/2$ (e.g. Gemma-7b, P
   caption="Figure 2 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>. Note that the $x$-axis scales are different for different models."
 %}
 
-For the models shown in this figure, the GSM8K accuracy ranges from 74% for the weakest model (Llama3-8B-instruct) to 95% for the strongest model (GPT-4o). 
-The weakest model, Llama3-8B-instruct, shows a much wider variation in accuracy in the range $\sim (69\%, 81\%)$. 
-The strongest model, GPT-4o, has a considerably narrower spread, between $\sim (91\%, 98\%)$. 
-Critically, for both of these models, **the variation in GSM-Symbolic performance falls well within the CIs we calculated above!** 
+For the models shown in the figure above, the GSM8K accuracy ($p_{m, 8K}$, dashed line) ranges from 74% for the weakest model (Llama3-8B-instruct) to 95% for the strongest model (GPT-4o). 
+The reported range of accuracy on the GSM-Symbolic dataset for the weakest model, Llama3-8B-instruct, is relatively wide, $\sim (69\%, 81\%)$. 
+The strongest model, GPT-4o, is reported to have a much narrower spread on the GSM-Symbolic dataset, between $\sim (91\%, 98\%)$. 
+Critically, for both of these models, **the variation in GSM-Symbolic performance falls well within the CIs of GSM8K performance we calculated above!** 
 These are $(64.6\%, 81.6\%)$ for Llama3-8B-instruct and $(88.8\%, 97.8\%)$ for GPT-4o. 
 This suggests that the variation in performance for these two models is quite expected.
 
-The table below compares the 95% Wilson score intervals to the approximate accuracy ranges reported in the paper:
+The figure below compares the 95% Wilson score intervals to the approximate accuracy ranges reported in the paper:
+
+<!-- 
 
 | Model                          | 95% Wilson score CI | Reported ranges (approximate)  |
 |--------------------------------|---------------------|-----------------------|
@@ -253,7 +255,14 @@ The table below compares the 95% Wilson score intervals to the approximate accur
 
 <div class="caption">
 95% Wilson score intervals for the point estimates of $p_{m, 8K}$ and approximate reported ranges of point estimates of $p_{m, Sym}$, derived from Figure 1 in Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper.
-</div>
+</div> -->
+
+
+{% include figure.html 
+  path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/ci_vs_reported.png" 
+  class="img-fluid" 
+  caption="95% Wilson score confidence intervals for the point estimates of GSM8K accuracy, $p_{m, 8K}$ (red), and approximate reported ranges of point estimates of GSM-Symbolic accuracy, $p_{m, Sym}$ (blue), derived from Figure 1 in Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper. We only show the subset of the models for which the paper plots these accuracy ranges." 
+%}
 
 Note that our confidence intervals are wider than the implied ranges in the figures in the paper, i.e. under the i.i.d. Bernoulli assumption, the variation is actually **larger** than what is observed.
 This discrepancy is likely to be explained by the unmodelled correlations between questions---as initially suggested, a more reasonable assumption would be to model the probability of success on a question level, $p_{m,n}$, rather than assuming each question is equally likely to be answered correctly. 
