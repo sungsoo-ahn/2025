@@ -313,29 +313,26 @@ Overall, the ranges we propose are *smaller* than those in the original template
 
 The question in Figure 1 involves three arithmetic operations: two additions and one subtraction. 
 Assuming that subtraction is as difficult as addition, the probability of getting all three operations correct is the product of the individual probabilities of each operation being answered correctly. 
-We use the logistic regression model from Section 4.1.1 to quantify the difference in accuracy that might arise from using the ranges in the paper versus the ranges we propose here.<d-footnote>We compute the sums; TODO</d-footnote>
+We use the logistic regression model from Section 4.1.1 to quantify the difference in accuracy that might arise from using the ranges in the paper versus the ranges we propose here. In order to directlyapply our model, we consider $(x+y)$, $(x+y)+z$ and $(x+y+z)+ans$ as the three operations.
 
-
+TODO: add error bars?
 Phi:
 
 |   | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 ops |
 |-- |-------|----------|----------|----------|
-|**Symbolic**    | 94.9 | 94.1 | 92.0 | 82.1 |
-| **Proposed (ours)**    | 95.5 | 95.4 | 95.0 | 86.6 |
+|**Symbolic**    | $94.9 \pm $ | $94.1 \pm $ | $92.0 \pm $ | $82.1  \pm $ |
+| **Proposed (ours)**    | $95.5  \pm $ | $95.4$ | $95.0 \pm $ | $86.6  \pm $ |
 
 Llama:
 
 |  | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 ops |
 |-------|----------|----------|----------|----------|
-| **Symbolic**  | 99.7 | 99.7 | 99.6 | 99.0 |
-| **Proposed (ours)**  | 99.6 | 99.5 | 99.1 | 98.2 |
+| **Symbolic**  | $99.7 \pm 0.$ | $99.7 \pm 0.$ | $99.6 \pm 0.$ | $99.0 \pm 0.$ |
+| **Proposed (ours)**  | $99.6 \pm 0.$ | $99.5 \pm 0.$ | $99.1 \pm 0.$ | $98.2 \pm 0.$ |
 
 
-
-
-
-If the number ranges in GSM-Symbolic are systematically chosen to be larger than those in GSM8K (and don't even include the original question values), then it cannot claimed that the datasets come from the same distribution.
-Tokenisation is one mechansim that explains why this matters; larger number ranges in GSM-Symbolic may inherently disadvantage certain (and eventually all) models, potentially explaining some of the observed performance differences between models and datasets.
+We believe that the sampling ranges that we propose represent the origunal GSM8K distribution much better. 
+The performance delta that can be attributed to just arithmetic mistakes is ...
 
 > We have also observed the performance of LLMs deteriorating as question complexity increases.
 
