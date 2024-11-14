@@ -228,14 +228,10 @@ As expected, models with success probabilities closer to $1/2$ (e.g. Gemma-7b, P
   caption="Figure 2 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>. Note that the $x$-axis scales are different for different models."
 %}
 
-For the models shown in the figure above, the GSM8K accuracy ($p_{m, 8K}$, dashed line) ranges from 74% for the weakest model (Llama3-8B-instruct) to 95% for the strongest model (GPT-4o). 
-The reported range of accuracy on the GSM-Symbolic dataset for the weakest model, Llama3-8B-instruct, is relatively wide, $\sim (69\%, 81\%)$. 
-The strongest model, GPT-4o, is reported to have a much narrower spread on the GSM-Symbolic dataset, between $\sim (91\%, 98\%)$. 
-Critically, for both of these models, **the variation in GSM-Symbolic performance falls well within the CIs of GSM8K performance we calculated above!** 
-These are $(64.6\%, 81.6\%)$ for Llama3-8B-instruct and $(88.8\%, 97.8\%)$ for GPT-4o. 
-This suggests that the variation in performance for these two models is quite expected.
-
-The figure below compares the 95% Wilson score intervals to the approximate accuracy ranges reported in the paper:
+For the models shown in this figure, the GSM8K accuracy ($p_{m, 8K}$, represented by the dashed line) varies from 74% for the weakest model, Llama3-8B-instruct, to 95% for the strongest model, GPT-4o. 
+On the GSM-Symbolic dataset, the reported accuracy range is relatively wide for Llama3-8B-instruct (approximately between 69% and 81%) and relatively narrow for GPT-4o (approximately between 91% and 98%).
+Importantly, for both models, **the variation in GSM-Symbolic performance falls well within the Wilson score confidence intervals of GSM8K performance that we calculated earlier!** 
+The following figure shows the overlap between the 95% Wilson score CIs for $p_{m, 8K}$ and the accuracy ranges on GSM-Symbolic for the models that had results reported in the paper (note that this does not include all 25 models).
 
 <!-- 
 
