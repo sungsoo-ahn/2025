@@ -455,13 +455,14 @@ The paper highlights this on multiple occasions, most notably in Section 4.3. So
   caption="Figure 6 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>"
 %}
 
-Here we have 4 different datasets: the baseline GSM-Symbolic, an easier version of it (M1) and two harder versions of it (P1 and P2). It is not unreasonable to expect that a model might perform differently on different datasets, for example better on the easier ones and worse on harder ones. We can make a similar assumption as before, namely that the answers a model m gives to questions of difficulty $d=-1, 0, 1, 2$ are i.i.d. Bernoulli trials with success probability $p_{m,d}$. The distribution of the total number of correct answers is then $\text{Bin}(N=100, p_{m,d})$, which has variance $N \cdot p_{m,d} \cdot (1 - p_{m,d})$.
+<!-- DRI: TODO change notation d is taken to denote digits -->
+Here we have 4 different datasets: the baseline GSM-Symbolic, an easier version of it (M1) and two harder versions of it (P1 and P2). It is not unreasonable to expect that a model might perform differently on different datasets, for example better on the easier ones and worse on harder ones. We can make a similar assumption as before, namely that the answers a model m gives to questions of difficulty $d=-1, 0, 1, 2$ are i.i.d. Bernoulli trials with success probability $p_{m,d}$. The distribution of the total number of correct answers is then $\text{Bin}(N=100, p_{m,d})$, which has variance $N \cdot p_{m,d} \cdot (1 - p_{m,d})$. 
 
 If we happen to have decreasing probabilities of success, i.e. $p_{m,-1} > p_{m,0} > p_{m,1} > p_{m,2} > 0.5$ as is the case for some of the models in Figure 6, then the corresponding variances must increase. Whether or not this decrease in probability of success has any relationship to the “reasoning abilities” of a model is beyond the scope of this blog :)
 
-**To summarise: the emphasis on “non-negligible variance” and “increase in variance” throughout the paper appears to be an over-interpretation of normal statistical variation.**
+**To summarise: the emphasis on “non-negligible variance” and “increase in variance” throughout the paper appears to be an over-interpretation of expected statistical variation.**
 
-## 4.4 M1, P1, P2 and No-Op results
+## 4.4 No-Op results
 TODO
 
 ## 5. Conclusion
