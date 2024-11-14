@@ -500,7 +500,6 @@ For robustness purposes, here are the [Clopper-Pearson](https://en.wikipedia.org
   caption="95% Clopper-Pearson intervals for the point estimates of $p_m$." 
 %}
 
-<!-- <iframe title="95% confidence intervals for Binomial proportion" aria-label="Dot Plot" id="datawrapper-chart-LkJtn" src="https://datawrapper.dwcdn.net/LkJtn/9/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="607" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();</script> -->
 
 The Clopper-Pearson CIs are slightly wider than those obtained using the Wilson score. Using Clopper-Pearson would not have changed any of the results presented in this post. 
 
@@ -520,7 +519,6 @@ The results: we are able to reject the null for Gemma-7b, Mistral-7b-instruct-v0
 
 ## 99% Confidence intervals
 
-<!-- {{< figure library="true" src="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.99.png" title="99% Wilson score intervals for the point estimates of $p_m$." numbered="false">}} -->
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.99.png" 
   class="img-fluid" 
@@ -536,7 +534,6 @@ The results: we are able to reject the null for Gemma-7b, Mistral-7b-instruct-v0
 %}
 
 ## Logistic regression results
-
 
 Llama results:
 ```
@@ -607,115 +604,64 @@ Regardless of the NHST outcomes, critically examine the results, initial assumpt
 Bayesian analysis offers an alternative with some practical similarities, such as the use of highest density intervals (HDI). 
 However, the two approaches differ deeply in their epistemological foundations: NHST relies on a frequentist interpretation, viewing the results (e.g. accuracy) as repeated sampling from a fixed parameter. In contrast, Bayesian analysis treats parameters themselves as random variables and uses probability to express a degree of belief, that gets updated with new evidence. -->
 
-# DGP:
+# Mathematical setup  
 
-1. Sample a template $T \sim P_T$.
-2. Sample filler values 
+## Data generation process
 
-$$V \sim P_{V\vert T}(·\vert T)$$
+1. Sample a template: $$T \sim \mathbb{P}_T$$.
+2. Sample filler values: $$V \sim \mathbb{P}_{V\vert T}(\cdot \vert T)$$
 
-. The pair 
-
-$$T, V$$
-
- produce a question and an answer
- 
-$$\left(T(V)_Q, T(V)_A\right)$$
+The pair $$(T, V)$$ produces a pair of a question and an answer $$\left(T(V)_Q, T(V)_A\right)$$.
 
 
 3. We take a language model $M$ and we are interested in estimating 
 
 $$\mathbb{P}(M(T(V)_Q) = T(V)_A) =: p_M$$
 
-- We fix 100 samples 
+- We fix 100 samples $$t_1, t_2, \dots, t_{100}$$ of templates, sampled from $$\mathbb{P}_T$$.
+- This gives us a collection of 100 conditional distributions $$\mathbb{P}_{V \vert t_i}$$ of filler values.
+- We might, in fact, postulate that we have two sets of conditional distributions  $$\{\mathbb{P}^{8K}_{V \vert t_i}: i=1,\dots,100\}$$ and $$\{\mathbb{P}^{Symb}_{V \vert t_i}: i=1,\dots,100\}$$.
 
-$$t_1, t_2, ..., t_{100}$$
+- Under this model, the accuracies we are interested in are captured by the following random variables:
 
- of templates, sampled from 
- 
- $$P_T$$.
-- This gives us a collection of 100 conditional distributions 
-
-$$P_{V|t_i}$$
-
- of filler values
-- We might, in fact, postulate that we have two sets of conditional distributions 
-
-$$\{P^{8k}_{V|t_i}: i=1...100\}$$ 
-
-and
-
-$$\{P^{Symb}_{V|t_i}: i=1...100\}$$
-
-- Under this model, the accuracies we're interested in are captured by the following random variables:
-
-  * for 
+  * for $$V_i^{8K} \sim \mathbb{P}^{8K}_{V \vert t_i}, 1 \leq i \leq 100$$, we have binary random variables
   
-  $$V_i^{8k} \sim P^{8k}_{V|t_i}, 1≤i≤100$$
-  
-  , we have binary random variables
-  
-   $$X^{8k}_{M,t_i} = \mathbb{I}(M(t_i(V_i^{8k})_Q) = t_i(V_i^{8k})_A)$$
+   $$X^{8K}_{M,t_i} = \mathbb{I}(M(t_i(V_i^{8K})_Q) = t_i(V_i^{8K})_A)$$
    
-    and an accuracy estimator 
+  and a maximum likelihood accuracy estimator 
     
-    $$\hat{P}^{8k}_M = \frac{1}{100}\sum_{i=1}^{100} X^{8k}_{M,t_i}$$
+  $$\hat{P}^{8K}_M = \frac{1}{100}\sum_{i=1}^{100} X^{8K}_{M,t_i}$$
 
-  * for 
+  * for $$V_i^{Symb} \sim \mathbb{P}^{Symb}_{V \vert t_i}, 1 \leq i \leq 100$$, we have binary random variables
   
-  $$V_i^{Symb} \sim P^{Symb}_{V|t_i}, 1≤i≤100$$
-  
-  , we have binary random variables
-  
-   $$X^{Symb}_{M,t_i} = \mathbb{I}(M(t_i(V_i^{Symb})_Q) = t_i(V_i^{Symb})_A)$$
+  $$X^{Symb}_{M,t_i} = \mathbb{I}(M(t_i(V_i^{Symb})_Q) = t_i(V_i^{Symb})_A)$$
    
-    and an accuracy estimator 
+    with a maximum likelihood accuracy estimator 
     
-    $$\hat{P}^{Symb}_M = \frac{1}{100}\sum_{i=1}^{100} X^{Symb}_{M,t_i}$$
+  $$\hat{P}^{Symb}_M = \frac{1}{100}\sum_{i=1}^{100} X^{Symb}_{M,t_i}$$
 
 We have (†):
-- one observation 
+- one observation $$\hat{p}_M^{8k}$$ of $$\hat{P}^{8k}_M$$
 
-$$\hat{p}_M^{8k}$ of $\hat{P}^{8k}_M$$
+- 50 observations $$\{\hat{p}_{M, j}^{Symb}: 1 \leq j \leq 50\}$$ of $$\hat{P}^{Symb}_M$$
 
+We assume that $$\{X^{8K}_{M,t_i}: 1 \leq i \leq 100\}$$ are i.i.d Bernoulli with probability of success $$p^{8K}_M$$
 
-- 50 observations 
+$$\Rightarrow \hat{P}^{8K}_M \sim \frac{1}{100}Bin(100,p^{8K}_M)$$
 
-$$\{\hat{p}_{M, j}^{Symb}: 1≤j≤50\}$$ 
-
-of
-
- $$\hat{P}^{Symb}_M$$
-
-We may assume that 
-
-$$\{X^{8k}_{M,t_i}: 1≤i≤100\}$$
-
- are i.i.d Bernoulli with probability of success 
- 
- $$p^{8k}_M$$
-
-$$\Rightarrow \hat{P}^{8k}_M \sim \frac{1}{100}Bin(100,p^{8k}_M)$$
-
-Same for 
-
-$$X^{Symb}_{t_i} \sim_{i.i.d} Bernoulli(p^{Symb}_M)$$
-
- and 
- 
- $$\hat{P}^{Symb}_M \sim \frac{1}{100}Bin(100,p^{Symb}_M)$$
+Same for $$X^{Symb}_{t_i} \sim_{i.i.d} Bernoulli(p^{Symb}_M)$$ and  $$\hat{P}^{Symb}_M \sim \frac{1}{100} Bin(100,p^{Symb}_M)$$
 
 
 Q: Given our observations (†), what evidence is there to believe that 
 
-$$p^{8k}_M \neq p^{Symb}_M$$
+$$p^{8K}_M \neq p^{Symb}_M$$
 
 ? Similarly, what evidence is there to believe that 
 
-$$p^{8k}_M > p^{Symb}_M$$
+$$p^{8K}_M > p^{Symb}_M$$
 
 ?
 
-Note that it _does_ make sense to also assume that 
+Note that it _does_ make sense to also assume that  -- NO!
 
 $$X^{8k}_{t_i} \perp\!\!\!\perp X^{Symb}_{t_i}$$.
