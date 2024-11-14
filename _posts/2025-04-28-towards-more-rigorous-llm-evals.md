@@ -292,17 +292,10 @@ Looking at the example template (Figure 1 from the paper, reproduced above), we 
 - The variable `total` is sampled from $(100, 500)$, whilst in the original question we have `total=62`.
 - The variable `ans` is sampled from $(85, 200)$, whilst in the original question we have `ans=14`.
 
-In other words, the original GSM8K question cannot be generated from the proposed symbolic template.
-We suggest more appropriate ranges for the variables and quantify impact of that choice on the accuracy of the arithmetic operations.
-A suitable sampling range for `total` might be $(10, 100)$: It includes the original (62) and aligns with the context that `total` represents the number of toys (500 toys seems rather large). 
-Assuming `y` (stuffed animals) and `z` (stacking rings) are on the same scale and in the range $(1, 20)$;
-and that `x` (building blocks) and `ans` (bouncy balls) are also on the same scale and are so that the total is in the specified range, i.e. $(4, 40)$;
-These ranges actually include the original values (9 rings, 8 stuffed animals, 31 building blocks, 14 bouncy balls, total of 62):
+In other words, the original GSM8K question cannot be generated from the sampling ranges in the Symbolic template of Figure 1.
+In the next table, we propose more suitable ranges for all variables in the symbolic template, that ensure that the original question can be reproduced. 
 
-
-We propose more suitable ranges for all variables, ensuring the original template can be reproduced and assess how these choices affect the accuracy of arithmetic operations, assuming the reasoning is correct.
-
-| Variable              | Symbolic range | Proposed range | Original value |
+| Variable              | Symbolic range | Proposed range (ours) | Original value |
 |-----------------------|----------------|----------------|----------------|
 | `total` (toys)        | $(100, 500)$   | $(10, 100)$    | $62$             |
 | `x` (building blocks) | $(5, 100)$     | $(4, 40)$      | $31$             |
@@ -310,28 +303,34 @@ We propose more suitable ranges for all variables, ensuring the original templat
 | `z` (stacking rings)  | $(5, 100)$     | $(1, 20)$      | $9$              |
 | `ans` (bouncy balls)  | $(85, 200)$    | $(4, 40)$      | $14$             |
 
+<div class="caption">
+The GSM-Symbolic sampling ranges for the variables from Figure 1 in Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite> (reproduced above) and our proposed sampling ranges. 
+We highlight that the original GSM8K question cannot be generated from the proposed symbolic template because the symbolic ranges do not include the original values, whereas our proposed ranges do.
+We also believe that the proposed ranges better align with the context of the variables (e.g. having between 4 and 40 bouncy balls is more realistic than having between 85 and 200).
+</div>
+
+Overall, the ranges we propose are *smaller* than those in the original template. This is significant because, as we discussed in Section 4.1.1, the accuracy of both models tends to decrease as the number of digits in the arithmetic operations increases. 
+
+The question in Figure 1 involves three arithmetic operations: two additions and one subtraction. 
+Assuming that subtraction is as difficult as addition, the probability of getting all three operations correct is the product of the individual probabilities of each operation being answered correctly. 
+We use the logistic regression model from Section 4.1.1 to quantify the difference in accuracy that might arise from using the ranges in the paper versus the ranges we propose here.<d-footnote>We compute the sums; TODO</d-footnote>
 
 
-The question in Figure 1 involves three arithmetic operations (two additions and one subtraction).
-Assuming subtraction is as hard as addition, the probability of the three operations being answered correctly is the product of the individual probabilities. 
+Phi:
 
-As we saw in Section 4.1.1, the accuracy of both models decreases as the number of digits increases.
-We use the logistic regression model from that section try quantify the difference in accuracy that might arise from using the ranges in the paper vs those we propose here (the "reasoning" that gets us to the correct mathematical expression is correct.)<d-footnote>we compute sums; TODO</d-footnote>
+|   | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 ops |
+|-- |-------|----------|----------|----------|
+|**Symbolic**    | 94.9 | 94.1 | 92.0 | 82.1 |
+| **Proposed (ours)**    | 95.5 | 95.4 | 95.0 | 86.6 |
 
-Symbolic:
+Llama:
 
-| Model | p1       | p2       | p3       | p        |
+|  | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 ops |
 |-------|----------|----------|----------|----------|
-| Phi   | 94.9 | 94.1 | 92.0 | 82.1 |
-| Llama | 99.6 | 99.5 | 99.1 | 98.2 |
+| **Symbolic**  | 99.7 | 99.7 | 99.6 | 99.0 |
+| **Proposed (ours)**  | 99.6 | 99.5 | 99.1 | 98.2 |
 
 
-Proposal:
-
-| Model | p1       | p2       | p3       | p        |
-|-------|----------|----------|----------|----------|
-| Phi   | 95.5 | 95.4 | 95.0 | 86.6 |
-| Llama | 99.7 | 99.7 | 99.6 | 99.0 |
 
 
 
