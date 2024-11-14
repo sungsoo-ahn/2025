@@ -313,17 +313,21 @@ Overall, the ranges we propose are *smaller* than those in the original template
 
 The question in Figure 1 involves three arithmetic operations: two additions and one subtraction. 
 Assuming that subtraction is as difficult as addition, the probability of getting all three operations correct is the product of the individual probabilities of each operation being answered correctly. 
-We use the logistic regression model from Section 4.1.1 to quantify the difference in accuracy that might arise from using the ranges in the paper versus the ranges we propose here. In order to directlyapply our model, we consider $(x+y)$, $(x+y)+z$ and $(x+y+z)+ans$ as the three operations.
+
+To quantify the difference in accuracy that might arise from using the ranges in the paper versus the ranges we propose, we use the logistic regression model from Section 4.1.1. 
+Specifically, we consider the operations $(x+y)$, $(x+y)+z$, and $(x+y+z)+ans$ as the three operations to directly apply our model.
 
 TODO: add error bars?
-Phi:
+
+The probabilities for Phi-3.5-mini-instruct are given in the following table:
 
 |   | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 ops |
 |-- |-------|----------|----------|----------|
 |**Symbolic**    | $94.9 \pm $ | $94.1 \pm $ | $92.0 \pm $ | $82.1  \pm $ |
 | **Proposed (ours)**    | $95.5  \pm $ | $95.4$ | $95.0 \pm $ | $86.6  \pm $ |
 
-Llama:
+
+The probabilities for Llama3-8b-instruct are given in the following table:
 
 |  | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 ops |
 |-------|----------|----------|----------|----------|
@@ -331,18 +335,19 @@ Llama:
 | **Proposed (ours)**  | $99.6 \pm 0.$ | $99.5 \pm 0.$ | $99.1 \pm 0.$ | $98.2 \pm 0.$ |
 
 
-We believe that the sampling ranges that we propose represent the origunal GSM8K distribution much better. 
-The performance delta that can be attributed to just arithmetic mistakes is ...
+The performance delta that can be attributed to just arithmetic mistakes is ... 
+In other words, even if the models execute the "reasoning" process perfectly, that is, translating the math word problem into a sequence of operations, they would still perform worse on the Symbolic template compared to our proposed template. 
+This suggests that if similar systematic discrepancies exist in other templates, some (potentially substantial) portion of the observed performance decline could be attributed to an increased number of arithmetic errors.
 
-> We have also observed the performance of LLMs deteriorating as question complexity increases.
+Similar observations can be made for the M1, P1 and P2 templates.
 
-Plausible that the reasoning is harder when more clauses are introduced.
-worth noting that adding more clauses involves more arithmetic operations; 
-more thorough analysis is needed to control for that variability.
+> We have also observed the performance of LLMs deteriorating as question complexity increases. <d-cite key='mirzadeh2024gsm'></d-cite>
 
-The same analysis is applicable to more complex questions; e.g. adding one extra clause, even if it takes only one operation --> similalry for 2 clauses;
+It is plausible that reasoning becomes more challenging as additional clauses are introduced, or conversely, easier when clauses are removed, as seen in the M1 template. 
+Importantly, introducing more clauses necessarily involves additional arithmetic operations. [exponential decline?]
+We argue that more careful and thorough analysis is required to account for this variability and its impact on performance.
 
-Repeat reasoning: translating the text to a sequence of operations; what the paper tests is whether models can do that *and* perofrm the operations correctly. The rest of this post will not deal with reasoning; 
+<!-- TODO maybe? Repeat reasoning: translating the text to a sequence of operations; what the paper tests is whether models can do that *and* perofrm the operations correctly. The rest of this post will not deal with reasoning; -->
 
 **Verdict:** Some indication that distributions might differ. Contamination is not mutually exclusive. TODO
 
