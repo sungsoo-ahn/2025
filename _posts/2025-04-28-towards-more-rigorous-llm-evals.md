@@ -202,9 +202,9 @@ This variance is maximised when $p_m=1/2$ and goes to $0$ as $p_m$ approaches $0
 To understand what "expected" variation means under our assumption, we can construct confidence intervals (CIs) for the point estimates of $p_m$ on the GSM8K dataset. 
 We highlight that the paper does not report such point estimates, but we can calculate the maximum likelihood estimates of $p_m$ by dividing the number of correct answers by the total number of questions.
 The number of correct answers (out of 100 questions) on the GSM8K questions are reported in the second column of Table 1 in the Appendix of the paper. 
-We denote this estimate as $p_{m,8K}$ to indicate that it is computed from the GSM8K dataset.
+We denote this estimate as $$p^{8K}_{m}$$ to indicate that it is computed from the GSM8K dataset.
 There are different ways to construct CI for the [Binomial proportion](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval). The next figure shows [Wilson score](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval) intervals, with more results included in the Appendix. 
-To put this variability into perspective, we also include the average of the 50 point estimates for the model performance on GSM-Symbolic, which we denote as $p^{Symb}_{m}$. <d-footnote>Similarly to $p^{8K}_{m}$, we obtain maximum likelihood estimates of $p^{Symb}_{m}$ from the average accuracy on GSM-Symbolic, reported in Table 1 of the paper.</d-footnote>
+To put this variability into perspective, we also include the average of the 50 point estimates for the model performance on GSM-Symbolic, which we denote as $$p^{Symb}_{m}$$. <d-footnote>Similarly to $$p^{8K}_{m}$$, we obtain maximum likelihood estimates of $$p^{Symb}_{m}$$ from the average accuracy on GSM-Symbolic, reported in Table 1 of the paper.</d-footnote>
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.95.png" 
@@ -228,10 +228,10 @@ Conversely, models with success probabilities closer to 0 or 1 (Gemma2b, GPT-4o,
   caption="Figure 2 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>. Note that the $x$-axis scales are different for different models."
 %}
 
-For the models shown in this figure, the GSM8K accuracy ($p^{8K}_{m}$, represented by the dashed line) varies from 74% for the weakest model, Llama3-8B-instruct, to 95% for the strongest model, GPT-4o. 
+For the models shown in this figure, the GSM8K accuracy ($$p^{8K}_{m}$$, represented by the dashed line) varies from 74% for the weakest model, Llama3-8B-instruct, to 95% for the strongest model, GPT-4o. 
 The range of accuracies achieved on the 50 GSM-Symbolic datasets is relatively *wide* for Llama3-8B-instruct (approximately between 69% and 81%) and relatively *narrow* for GPT-4o (approximately between 91% and 98%).
 Importantly, for both models, **the variation in GSM-Symbolic performance falls well within the Wilson score CIs of GSM8K performance that we calculated earlier!** 
-We visualise this in the next figure, showing the overlap between the 95% Wilson score CIs for $p^{8K}_{m}$ and the accuracy ranges on GSM-Symbolic for the models that had results reported in the paper (note that this does not include all 25 models).
+We visualise this in the next figure, showing the overlap between the 95% Wilson score CIs for $$p^{8K}_{m}$$ and the accuracy ranges on GSM-Symbolic for the models that had results reported in the paper (note that this does not include all 25 models).
 
 <!-- 
 
@@ -304,11 +304,11 @@ We propose more suitable ranges for all variables, ensuring the original templat
 
 | Variable              | Symbolic range | Proposed range | Original value |
 |-----------------------|----------------|----------------|----------------|
-| `total` (toys)        | $(100, 500)$   | $(10, 100)$    | 62             |
-| `x` (building blocks) | $(5, 100)$     | $(4, 40)$      | 31             |
-| `y` (stuffed animals) | $(5, 100)$     | $(1, 20)$      | 8              |
-| `z` (stacking rings)  | $(5, 100)$     | $(1, 20)$      | 9              |
-| `ans` (bouncy balls)  | $(85, 200)$    | $(4, 40)$      | 14             |
+| `total` (toys)        | $(100, 500)$   | $(10, 100)$    | $62$             |
+| `x` (building blocks) | $(5, 100)$     | $(4, 40)$      | $31$             |
+| `y` (stuffed animals) | $(5, 100)$     | $(1, 20)$      | $8$              |
+| `z` (stacking rings)  | $(5, 100)$     | $(1, 20)$      | $9$              |
+| `ans` (bouncy balls)  | $(85, 200)$    | $(4, 40)$      | $14$             |
 
 
 
@@ -319,13 +319,15 @@ As we saw in Section 4.1.1, the accuracy of both models decreases as the number 
 We use the logistic regression model from that section try quantify the difference in accuracy that might arise from using the ranges in the paper vs those we propose here (the "reasoning" that gets us to the correct mathematical expression is correct.)<d-footnote>we compute sums; TODO</d-footnote>
 
 Symbolic:
+
 | Model | p1       | p2       | p3       | p        |
 |-------|----------|----------|----------|----------|
 | Phi   | 94.9 | 94.1 | 92.0 | 82.1 |
 | Llama | 99.6 | 99.5 | 99.1 | 98.2 |
 
 
-Proposal
+Proposal:
+
 | Model | p1       | p2       | p3       | p        |
 |-------|----------|----------|----------|----------|
 | Phi   | 95.5 | 95.4 | 95.0 | 86.6 |
@@ -363,7 +365,7 @@ For many models in Figure 2, the dashed line is in the right tail of the distrib
 %}
 
 The right tool to determine whether these differences are statistically significant is hypothesis testing.
-For each model $m$, we want to test whether its success probability on GSM8K, denoted $p^{8K}_{m}$, equals its success probability on GSM-Symbolic, denoted $p^{Symb}_{m}$. 
+For each model $m$, we want to test whether its success probability on GSM8K, denoted $$p^{8K}_{m}$$, equals its success probability on GSM-Symbolic, denoted $$p^{Symb}_{m}$$. 
 This equality forms our *null hypothesis*. 
 Our *alternative hypothesis* can take two forms:
 
@@ -396,7 +398,7 @@ Analysing models independently, 21 out of 25 models show statistically equivalen
 
 There is a trend that that many models perform worse on GSM-Symbolic than on GSM8K. To assess the statistical significance of this systematic trend, we can conduct what is known as a *paired* difference test. The Wilcoxon signed-rank test would be an appropriate one to apply in our case with two important caveats.  
 
-**Caveat 1**: Non-independent data. It will be incorrect to perform the test on all 25 models as these are not independent. There are several types of dependence to consider. Most obviously, the base models and their instruct-tuned version are clearly related (e.g. Gemma2-9b and Gemma2-9b-it). I’d also argue that different sizes within the same model family cannot be considered independent (e.g. mini-small-medium for Phi or 2b-9b-27b for Gemma); minor version updates (e.g. Mistral v0.1 vs 0.3, Phi 3 vs 3.5) will also likely be correlated. So although we have a sample of 25 models, the “effective” sample size is much, much smaller. 
+**Caveat 1**: Non-independent data. It will be incorrect to perform the test on all 25 models as these are not independent. There are several types of dependence to consider. Most obviously, the base models and their instruct-tuned version are clearly related (e.g. Gemma2-9b and Gemma2-9b-it). I’d also argue that different sizes within the same model family cannot be considered independent (e.g. mini-small-medium for Phi or 2b-9b-27b for Gemma); minor version updates (e.g. Mistral v0.1 vs 0.3, Phi 3 vs 3.5) will also likely be correlated. So although we have a sample of 25 models, the “effective” sample size is much smaller. 
 
 Here’s our attempt to come up with independent set of models. In each model family, we take the latest, largest instruct-tuned version. We repeat this by also taking the smallest version. This gives us two sets of 7 models (differences between them are in italics):
 
@@ -409,15 +411,18 @@ Here’s our attempt to come up with independent set of models. In each model fa
 With those two caveats, here is the hypothesis and results:
 
 - Two-sided: The success probabilities are different
+
 $$
-H_0: p_{8k} = p_{symb} \quad\quad\quad H_A^\text{two-sided}: p_{8k} \neq p_{symb}.
-$$
-- One-sided: The success probability on GSM8K is greater than that on GSM-Symbolic
-$$
-H_0: p_{8k} = p_{symb} \quad\quad\quad H_A^\text{one-sided}: p_{8k} > p_{symb}.
+H_0: p^{8K}_{m} = p^{Symb}_{m} \quad\quad\quad H_A^\text{two-sided}: p^{8K}_{m} \neq p^{Symb}_{m}.
 $$
 
-where  $p_{8k}=[p_{1,8k}, \dots, p_{7,8k}]$ and $p_{symb}= [p_{1,symb}, \dots, p_{7,symb}]$.
+- One-sided: The success probability on GSM8K is greater than that on GSM-Symbolic
+
+$$
+H_0: p^{8K}_{m} = p^{Symb}_{m} \quad\quad\quad H_A^\text{one-sided}: p^{8K}_{m} > p^{Symb}_{m},
+$$
+
+where  $$p^{8K}_{m}=[p^{8K}_{1,m}, \dots, p^{8K}_{7,m}]$$ and $$p^{Symb}_{m}= [p^{Symb}_{1,m}, \dots, p^{Symb}_{7,m}]$$.
 
 - Largest subset of models: 
 
@@ -505,7 +510,7 @@ $$
 H_0: p^{8K}_{m} - p^{Symb}_{m} =0 \quad\quad\quad H_A: p^{8K}_{m} - p^{Symb}_{m} \neq 0
 $$
 
-Under the null $p^{8K}_{m} = p^{Symb}_{m}$ and so we estimate both using a pooled estimate:
+Under the null $$p^{8K}_{m} = p^{Symb}_{m}$$ and so we estimate both using a pooled estimate:
 $$
 p_{pool} = \frac{(100 p^{8K}_{m} + 5000p^{Symb}_{m})}{100+5000} \quad \text{SE}(p_{pool}) = \sqrt{p_{pool}*(1-p_{pool}) (1/100+1/5000)}.
 $$
