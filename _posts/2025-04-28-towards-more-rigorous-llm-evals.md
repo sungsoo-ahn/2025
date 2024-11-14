@@ -203,22 +203,22 @@ To understand what "expected" variation means under our assumption, we can const
 We highlight that the paper does not report such point estimates, but we can calculate the maximum likelihood estimates of $p_m$ by dividing the number of correct answers by the total number of questions.
 The number of correct answers (out of 100 questions) on the GSM8K questions are reported in the second column of Table 1 in the Appendix of the paper. 
 We denote this estimate as $p_{m,8K}$ to indicate that it is computed from the GSM8K dataset.
-
-
-There are different ways to construct CI for the [Binomial proportion](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval). Figure XX below shows [Wilson score](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval) intervals. (See Appendix for more results.)
+There are different ways to construct CI for the [Binomial proportion](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval). The next figure shows [Wilson score](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval) intervals, with more results included in the Appendix. 
+To put this variability into perspective, we also include the average of the 50 point estimates for the model performance on GSM-Symbolic, which we denote as $p^{Symb}_{m}$. <d-footnote>Similarly to $p^{8K}_{m}$, we obtain maximum likelihood estimates of $p^{Symb}_{m}$ from the average accuracy on GSM-Symbolic, reported in Table 1 of the paper.</d-footnote>
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.95.png" 
   class="img-fluid" 
   title="95% Wilson score confidence intervals" 
-  caption="95% Wilson score confidence intervals for the point estimates of $p_{m, 8K}$ (red dots), along with point estimates of $p_{m, Sym}$ (blue triangles)." 
+  caption="95% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with the average (over 50 datasets) point estimate of $p^{Symb}_{m}$ (blue triangles)." 
 %}
 <!-- <div class="caption">
   "95% Wilson score intervals for the point estimates of $p_m$.
 </div> -->
 
 
-As expected, models with success probabilities closer to $1/2$ (e.g. Gemma-7b, Phi-2, Mistral-7b-v0.1) exhibit wider confidence intervals, reflecting higher variability. Conversely, models with success probabilities closer to 0 or 1 (Gemma2b, GPT-4o, o1-preview) have substantially narrower intervals.
+As expected, models with success probabilities closer to $1/2$ (e.g. Gemma-7b, Phi-2, Mistral-7b-v0.1) exhibit wider confidence intervals, reflecting higher variability. 
+Conversely, models with success probabilities closer to 0 or 1 (Gemma2b, GPT-4o, o1-preview) have substantially narrower intervals.
 
 **Assuming** that GSM8K and GSM-Symbolic come from the same distributions (more on that in Section 4.2.1), let’s look at Figure 2 of the paper.
 
@@ -228,10 +228,10 @@ As expected, models with success probabilities closer to $1/2$ (e.g. Gemma-7b, P
   caption="Figure 2 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>. Note that the $x$-axis scales are different for different models."
 %}
 
-For the models shown in this figure, the GSM8K accuracy ($p_{m, 8K}$, represented by the dashed line) varies from 74% for the weakest model, Llama3-8B-instruct, to 95% for the strongest model, GPT-4o. 
-On the GSM-Symbolic dataset, the reported range of accuracy values achieved on the 50 datasets is relatively *wide* for Llama3-8B-instruct (approximately between 69% and 81%) and relatively *narrow* for GPT-4o (approximately between 91% and 98%).
-Importantly, for both models, **the variation in GSM-Symbolic performance falls well within the Wilson score confidence intervals of GSM8K performance that we calculated earlier!** 
-The following figure shows the overlap between the 95% Wilson score CIs for $p_{m, 8K}$ and the accuracy ranges on GSM-Symbolic for the models that had results reported in the paper (note that this does not include all 25 models).
+For the models shown in this figure, the GSM8K accuracy ($p^{8K}_{m}$, represented by the dashed line) varies from 74% for the weakest model, Llama3-8B-instruct, to 95% for the strongest model, GPT-4o. 
+The range of accuracies achieved on the 50 GSM-Symbolic datasets is relatively *wide* for Llama3-8B-instruct (approximately between 69% and 81%) and relatively *narrow* for GPT-4o (approximately between 91% and 98%).
+Importantly, for both models, **the variation in GSM-Symbolic performance falls well within the Wilson score CIs of GSM8K performance that we calculated earlier!** 
+We visualise this in the next figure, showing the overlap between the 95% Wilson score CIs for $p^{8K}_{m}$ and the accuracy ranges on GSM-Symbolic for the models that had results reported in the paper (note that this does not include all 25 models).
 
 <!-- 
 
@@ -250,24 +250,24 @@ The following figure shows the overlap between the 95% Wilson score CIs for $p_{
 | o1-preview                     | (90%, 98%)          | (88%, 96%)            |
 
 <div class="caption">
-95% Wilson score intervals for the point estimates of $p_{m, 8K}$ and approximate reported ranges of point estimates of $p_{m, Sym}$, derived from Figure 1 in Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper.
+95% Wilson score intervals for the point estimates of $p^{8K}_{m}$ and approximate reported ranges of point estimates of $p^{Symb}_{m}$, derived from Figure 1 in Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper.
 </div> -->
 
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/ci_vs_reported.png" 
   class="img-fluid" 
-  caption="95% Wilson score confidence intervals for the point estimates of GSM8K accuracy, $p_{m, 8K}$ (red), and approximate reported ranges of 50 point estimates of GSM-Symbolic accuracy, $p_{m, Sym}$ (blue). 
-  The ranges are only approximate and derived from the histograms in Figure 1 of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper. 
-  We only show the subset of the models for which the paper plots these accuracy ranges." 
+  caption="95% Wilson score confidence intervals for the point estimates of GSM8K accuracy, $p^{8K}_{m}$ (red), and range of accuracies achieved on the 50 GSM-Symbolic datasets, $p^{Symb}_{m}$ (blue). 
+  The latter ranges are not explicitly reported; we approximate them from the histograms in Figure 1 of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper. 
+  We only show the subset of the models for which such histograms are available in the paper." 
 %}
 
-Note that our confidence intervals are wider than the implied ranges in the figures in the paper, i.e. under the i.i.d. Bernoulli assumption, the variation is actually **larger** than what is observed.
+Note that our confidence intervals tend to be wider than the implied ranges in the figures in the paper, i.e. under the i.i.d. Bernoulli assumption, the expected variation is actually **larger** than what is observed.
 This discrepancy is likely to be explained by the unmodelled correlations between questions---as initially suggested, a more reasonable assumption would be to model the probability of success on a question level, $p_{m,n}$, rather than assuming each question is equally likely to be answered correctly. 
 The analysis can be repeated once (if) the detailed question-level data becomes available.
 
 **Verdict:** The observed variability in GSM-Symbolic performance is not inherently surprising, and is in fact expected.
-
+<!-- ili3p wrote: An idea I had here, how is the variability in the "adding two numbers" task? Are the results also within the 95% CI of assuming Binomial distribution?  TODO: @DRI CHECK-->
 
 ## 4.2 Performance decline on GSM-Symbolic
 
@@ -316,7 +316,7 @@ The question in Figure 1 involves three arithmetic operations (two additions and
 Assuming subtraction is as hard as addition, the probability of the three operations being answered correctly is the product of the individual probabilities. 
 
 As we saw in Section 4.1.1, the accuracy of both models decreases as the number of digits increases.
-We use the logistic regression model from that section try quantify the difference in accuracy that might arise from using the ranges in the paper vs those we propose here (the "reasoning" that gets us to the correct mathematical expression is correct.)\footnote{we compute sums; TODO}
+We use the logistic regression model from that section try quantify the difference in accuracy that might arise from using the ranges in the paper vs those we propose here (the "reasoning" that gets us to the correct mathematical expression is correct.)<d-footnote>we compute sums; TODO</d-footnote>
 
 Symbolic:
 | Model | p1       | p2       | p3       | p        |
@@ -363,17 +363,17 @@ For many models in Figure 2, the dashed line is in the right tail of the distrib
 %}
 
 The right tool to determine whether these differences are statistically significant is hypothesis testing.
-For each model $m$, we want to test whether its success probability on GSM8K, denoted $p_{m, 8k}$, equals its success probability on GSM-Symbolic, denoted $p_{m,symb}$. 
+For each model $m$, we want to test whether its success probability on GSM8K, denoted $p^{8K}_{m}$, equals its success probability on GSM-Symbolic, denoted $p^{Symb}_{m}$. 
 This equality forms our *null hypothesis*. 
 Our *alternative hypothesis* can take two forms:
 
 - Two-sided: The success probabilities are different
 $$
-H_0: p_{m, 8k} = p_{m, symb} \quad\quad\quad H^\text{two-sided}_A: p_{m, 8k} \neq p_{m, symb}.
+  H_0: p^{8K}_{m} = p^{Symb}_{m} \quad\quad\quad H^\text{two-sided}_A: p^{8K}_{m} \neq p^{Symb}_{m}.
 $$
 - One-sided: The success probability on GSM8K is greater than that on GSM-Symbolic
 $$
-H_0: p_{m, 8k} = p_{m, symb} \quad\quad\quad H^\text{one-sided}_A: p_{m, 8k} > p_{m, symb}.
+  H_0: p^{8K}_{m} = p^{Symb}_{m} \quad\quad\quad H^\text{one-sided}_A: p^{8K}_{m} > p^{Symb}_{m}.
 $$
 
 We use Fisher exact test for the binomial proportion for all models:
@@ -502,12 +502,12 @@ The Clopper-Pearson CIs are slightly wider than those obtained using the Wilson 
 
 
 $$
-H_0: p_{m, 8k} - p_{m, symb} =0 \quad\quad\quad H_A: p_{m, 8k} - p_{m, symb} \neq 0
+H_0: p^{8K}_{m} - p^{Symb}_{m} =0 \quad\quad\quad H_A: p^{8K}_{m} - p^{Symb}_{m} \neq 0
 $$
 
-Under the null $p_{m, 8k} = p_{m, symb}$ and so we estimate both using a pooled estimate:
+Under the null $p^{8K}_{m} = p^{Symb}_{m}$ and so we estimate both using a pooled estimate:
 $$
-p_{pool} = \frac{(100 p_{8k} + 5000p_{symb})}{100+5000} \quad \text{SE}(p_{pool}) = \sqrt{p_{pool}*(1-p_{pool}) (1/100+1/5000)}.
+p_{pool} = \frac{(100 p^{8K}_{m} + 5000p^{Symb}_{m})}{100+5000} \quad \text{SE}(p_{pool}) = \sqrt{p_{pool}*(1-p_{pool}) (1/100+1/5000)}.
 $$
 The test statistic (pm,8k - pm,symb) / SE(ppool)  is then approximately normal and is used co compute p-values, which I’ve done in [this spreadsheet](https://docs.google.com/spreadsheets/d/1Ul6ZgFXf_II5EFUCgnJ9hSIQYwHxogxYBmwDn_bA4sA/edit?usp=sharing). The results in this case are exactly the same as before:  we are able to reject the null for Gemma-7b, Mistral-7b-instruct-v0.1 and Phi-2 (performing worse), and Llama3-8b (performing better). 
 
@@ -517,15 +517,15 @@ The test statistic (pm,8k - pm,symb) / SE(ppool)  is then approximately normal a
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.99.png" 
   class="img-fluid" 
-  title="99% Wilson score confidence intervals for the point estimates of $p_{m, 8K}$ (red dots), along with point estimates of $p_{m, Sym}$ (blue triangles)." 
-  caption="99% Wilson score confidence intervals for the point estimates of $p_{m, 8K}$ (red dots), along with point estimates of $p_{m, Sym}$ (blue triangles)." 
+  title="99% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles)." 
+  caption="99% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles)." 
 %}
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/clopper_0.99.png" 
   class="img-fluid" 
-  title="99% Clopper-Pearson confidence intervals for the point estimates of $p_{m, 8K}$ (red dots), along with point estimates of $p_{m, Sym}$ (blue triangles)." 
-  caption="99% Clopper-Pearson confidence intervals for the point estimates of $p_{m, 8K}$ (red dots), along with point estimates of $p_{m, Sym}$ (blue triangles)." 
+  title="99% Clopper-Pearson confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles)." 
+  caption="99% Clopper-Pearson confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles)." 
 %}
 
 ## Logistic regression results
