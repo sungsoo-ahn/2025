@@ -229,7 +229,7 @@ As expected, models with success probabilities closer to $1/2$ (e.g. Gemma-7b, P
 %}
 
 For the models shown in this figure, the GSM8K accuracy ($p_{m, 8K}$, represented by the dashed line) varies from 74% for the weakest model, Llama3-8B-instruct, to 95% for the strongest model, GPT-4o. 
-On the GSM-Symbolic dataset, the reported accuracy range is relatively wide for Llama3-8B-instruct (approximately between 69% and 81%) and relatively narrow for GPT-4o (approximately between 91% and 98%).
+On the GSM-Symbolic dataset, the reported range of accuracy values achieved on the 50 datasets is relatively *wide* for Llama3-8B-instruct (approximately between 69% and 81%) and relatively *narrow* for GPT-4o (approximately between 91% and 98%).
 Importantly, for both models, **the variation in GSM-Symbolic performance falls well within the Wilson score confidence intervals of GSM8K performance that we calculated earlier!** 
 The following figure shows the overlap between the 95% Wilson score CIs for $p_{m, 8K}$ and the accuracy ranges on GSM-Symbolic for the models that had results reported in the paper (note that this does not include all 25 models).
 
@@ -257,7 +257,9 @@ The following figure shows the overlap between the 95% Wilson score CIs for $p_{
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/ci_vs_reported.png" 
   class="img-fluid" 
-  caption="95% Wilson score confidence intervals for the point estimates of GSM8K accuracy, $p_{m, 8K}$ (red), and approximate reported ranges of point estimates of GSM-Symbolic accuracy, $p_{m, Sym}$ (blue), derived from Figure 1 in Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper. We only show the subset of the models for which the paper plots these accuracy ranges." 
+  caption="95% Wilson score confidence intervals for the point estimates of GSM8K accuracy, $p_{m, 8K}$ (red), and approximate reported ranges of 50 point estimates of GSM-Symbolic accuracy, $p_{m, Sym}$ (blue). 
+  The ranges are only approximate and derived from the histograms in Figure 1 of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper. 
+  We only show the subset of the models for which the paper plots these accuracy ranges." 
 %}
 
 Note that our confidence intervals are wider than the implied ranges in the figures in the paper, i.e. under the i.i.d. Bernoulli assumption, the variation is actually **larger** than what is observed.
