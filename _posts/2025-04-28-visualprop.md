@@ -2,13 +2,14 @@
 layout: distill
 title: Do vision models perceive objects like toddlers ?
 description: Despite recent advances in arficial vision systems, humans are still more 
-  data-efficient at learning strong visual representations. Psychophysic experiments suggest 
+  data-efficient at learning strong visual representations. Psychophysical experiments 
+  suggest 
   that toddlers develop fundamental visual properties between the ages of one and 
-  three, which likely affect their perceptual system. 
+  three, which affect their perceptual system for the rest of their life. 
   They begin to recognize impoverished variants of daily objects, pay more 
   attention to the shape of 
-  an object to categorize it, move objects in specific orientations and progressively 
-  generalize over the configural arrangement of objects' parts. The post examines 
+  an object to categorize it, prefer objects in specific orientations and progressively 
+  generalize over the configural arrangement of objects' parts. This post examines 
   whether these four visual properties also emerge in off-the-shelf machine learning (ML) 
   vision models. We reproduce and complement previous studies by 
   comparing toddlers and a large set of diverse pre-trained vision models for each visual property. This way, we 
@@ -57,10 +58,7 @@ toc:
       - name: Configural sensitivity
   - name: Conclusion
   - name: Acknowledgments
-  - name: Method
-    subsections:
-      - name: Models
-
+  - name: Models
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
@@ -87,15 +85,16 @@ _styles: >
 ## Motivation
 State-of-the-art machine learning vision models learn visual representation by 
 learning on millions/billions of independently and identically distributed diverse images.
-In comparison, look at toddlers around: they play with/observe almost always the same 
-objects in the same playground/home/daycare environments. They likely have not seen 10% of the different dogs of ImageNet and 
+In comparison, toddlers play with/observe almost always the same objects in the same 
+playground/home/daycare environments. 
+They likely have not seen 10% of the different dogs of ImageNet and 
 not a single of the 1000 sea snakes of ImageNet-1k. In sum, toddlers likely experience a 
 diversity of objects which is several orders of magnitude lower than current models. 
-Unlike current machine learning (ML) vision models, they also do not access a massive amount category
-labels (or aligned language utterances), adversarial samples and do not massively
-color-transform or mask their visual inputs. Despite using different learning mechanism, 
+Unlike current machine learning (ML) vision models, they also do not have access to a 
+massive amount of category
+labels (or aligned language utterances) or adversarial samples. Despite using different learning mechanism, 
 they develop strong semantic representations that are robust to image distortions, viewpoints, machine-adversarial
-samples and different styles (draw, silhouettes...) <d-cite key="wichmann2023deep, 
+samples and different styles (drawings, silhouettes...) <d-cite key="wichmann2023deep, 
 huber2023developmental"></d-cite>.
 
 What perceptual mechanisms underpin such a robust visual system ? Psychophysics 
@@ -109,20 +108,21 @@ they also manipulate object to clearly exhibit their main axis of elongation <d-
 key="pereira2014main"></d-cite>, 
 and later, begin to semantically identify objects based
 the configural arrangement between their parts <d-cite key="augustine2011parts"></d-cite>.
-All these developments obviously shape how they perceive the similarity between 
-objects and their object recognition abilities over the rest of their life. This raises 
-the question of whether off-the-shelf ML models also exhibit these visual properties.
 
 
-In this blogpost, we extend previous studies to give a global picture of the 
-potential emergence of toddler-based visual properties in current pre-trained ML models.
-We include diverse models based on supervised learning, semi-weak supervision, robust 
+In this blogpost, we investigate to what extent off-the-shelf ML models also exhibit these properties.
+Compared to adults <d-cite key="bowers2023deep,wichmann2023deep"></d-cite>, comparing 
+vision models to toddlers specifically allows to identify which developmental stages are 
+not achieved by vision models. We extend previous studies to give a global picture of the potential emergence of toddler-like 
+visual properties in current pre-trained ML models. We include diverse models based on 
+supervised learning, semi-weak supervision, robust 
 out-of-distribution image 
 recognition, self-supervised learning with instance discrimination 
 (ID) and masked auto-encoders (MAE), adversarial training, 
 vision-language models and egocentric visual training. We also try both convolutional architectures (CNN) and vision transformers (ViT). We 
 refer to the end of the blogpost for a complete list 
-of models. Our objective is to 1) complement and extend prior experiments 
+of models and why we chose them. Our objective is to 1) complement and extend prior 
+experiments 
 comparing ML to humans to (in)validate prior claims; 2) understand 
 the (dis)similarities between the visual properties of ML models and toddlers; 3) clarify the interplay between
 different toddler-based visual properties in ML. We will also publicly release our 
@@ -132,25 +132,33 @@ code on github upon acceptance as an easy-to-use toolbox for assessing new model
 ## Scope of the study
 
 We divide our study into four parts, each corresponding to a specific visual
-property emerging in toddlers. In the following, we describe each of them and clarify the 
-scope of
+property emerging in toddlers and remaining for the rest of their life. In the following,
+we describe each and clarify the scope of
 our experiments with respect to prior work. Note that we do not aim to faithfully 
-reproduce evaluation protocols from developmental studies, they are often based on 
-language and we don't wanto to limit our experiments to vision-language models. We use 
+reproduce evaluation protocols from developmental studies, as they are often based on 
+language and we do not want to limit our experiments to vision-language models. 
+Instead, we use 
 alternatives that aim to assess the presence of a visual property relative to toddlers.
+
 
 {% include figure.html path="assets/img/2025-04-28-visualprop/overview.png"
 class="img-fluid" %}
 <div class="caption">
-Figure 1. Illustration of emerging visual properties in toddlers. Green rectangles means 
-that toddlers can match images based on their category (A and B) or focus on specific views (C). Red rectangle (D) means that humans learn to mismatch stimulis.
+Figure 1. Illustration of emerging visual properties in toddlers. 
+A: Caricature recognition. 
+B: Shape bias.
+C: Preferred views. 
+D: Sensitivity to spatial arrangement of features. 
+Green rectangles in A, B indicate what toddlers have learned to judge as more similar. 
+Blue rectangle in C indicates preference for side views. 
+Red rectangle in D means that humans learn to consider the two stimuli with rearranged features as dissimilar.
 </div>
 
 #### Caricature recognition
 
-After 18 months, toddlers become able to recognize
+At around 18 months, toddlers become able to recognize
 impoverished variants of daily-life objects called caricatures. These caricatures are
-constructed with few simple shapes <d-cite key="smith2003learning"></d-cite> (e.g. 
+constructed from few simple shapes <d-cite key="smith2003learning"></d-cite> (e.g. 
 Figure 1, A. The
 recognition of these caricatures is related to the development of abstract 
 representations and may boost category generalization <d-cite 
@@ -164,7 +172,7 @@ their experimental protocol to compare a wider range of pre-trained models.
 When asked to match objects based on their *kind* (but also names etc...), 
 toddlers group together novel objects that share the same shape, compared to objects that share the same color 
 or texture <d-cite key="diesendruck2003specific"></d-cite> (cf. Figure 1, B). This 
-bias emerges at around 18 months old and after learning caricature recognition <d-cite 
+bias emerges slightly after learning caricature recognition <d-cite 
 key="yee2012changes"></d-cite>. This effect has been widely investigated in ML models 
 following the introduction of related datasets <d-cite 
 key="geirhos2021partial, hermann2020origins"></d-cite>. However, mainstream evaluation
@@ -177,42 +185,46 @@ models, as they only evaluated 5 pre-trained models.
 #### Side-view bias
 
 From 18-24 months onward, toddlers learn to manipulate objects
-to see 1- objects in upright positions; 2- objects' main axis of 
-elongation perpendicularly to the line of sight, which we call side view (e.g. Figure 1,
-C) <d-cite key="pereira2010early, pereira2014main"></d-cite>. Here, we focus on the 
-side-view bias, which is a perceptual bias (thus, e.g., not a 
-motor/grasping bias) <d-cite key="james2014some"></d-cite>. A more fine-grained 
+to see them 1- in upright positions; 2- with their main axis of 
+elongation perpendicular to the line of sight, which we call side view (e.g. Figure 1,
+C) <d-cite key="pereira2010early, pereira2014main"></d-cite>. Here, we focus on this 
+side-view bias, which is a perceptual bias (not reflecting motor or grasping biases) 
+<d-cite key="james2014some"></d-cite>. A more fine-grained 
 look at toddlers' behavior shows that they visually inspect these views while 
 keeping the object almost static <d-cite 
-key="pereira2014main,lisboa2014looking"></d-cite>. This overall suggests that these 
-side-views are inherently *special*. However, the origins of the bias remain unclear. To 
-the best of our knowledge, we are the first to investigate the
-potential specificity of these views for ML models.
+key="pereira2014main,lisboa2014looking"></d-cite>. This suggests that these 
+side-views are somehow perceptually *special*. However, the origins of this bias remain 
+unclear. To the best of our knowledge, we are the first to investigate if these views are also 
+special for ML models.
 
 #### Configural relation between parts 
 
-Starting at around 20 months, infants increasingly account for the relative position of parts of an object to
-categorize it <d-cite key="augustine2011parts"></d-cite>. Such an ability become fully
-mature for novel objects later in infants development <d-cite key="mash2006multidimensional"></d-cite> and
-is a fundamental component of one of the main theory of object recognition <d-cite key="
-hummel1992dynamic"></d-cite>. To the best of our knowledge, two line of studies treat 
-this    ability in ML models <d-cite key="baker2022deep,farahat2023novel"></d-cite> with two opposite conclusions. We
+Starting at around 20 months, infants take into account for relative position of 
+parts of an object to
+categorize it <d-cite key="augustine2011parts"></d-cite>. Such ability becomes fully
+mature for novel objects later only later in development <d-cite 
+key="mash2006multidimensional"></d-cite> and
+is a fundamental component of one of the main theories of human object recognition 
+<d-cite key="
+hummel1992dynamic"></d-cite>. To the best of our knowledge, two lines of study have 
+investigated this ability in ML models <d-cite key="baker2022deep,farahat2023novel"></d-cite> with two opposite conclusions. We
 discuss their differences and assumptions and extend the experiments of Baker et al. 
 (2022) (Figure 1, D) to include more models.
 
 ## TL;DR
 
-Our analysis reveals two main visual milestones. The first one is the 
-acquisition of the shape bias, which emerges simultaneously to the ability to recognize 
-normal objects and caricatures. This bias is close to 
-toddlers' in the strongest models. We also find that the shape bias is clearly 
+Our analysis reveals two main visual milestones in machine learning models. The first 
+one is the acquisition of the shape bias, which correlates with the ability to 
+recognize normal objects and caricatures. This bias is close to that of 
+toddlers in the strongest models. We also find that the shape bias is clearly 
 connected to side views being better prototypes of object instances, *i.e.* they are 
 relatively more similar to other views of an object. However, side-views are not prototypical 
 enough to explain a side-view bias at the level of toddlers'. The second one is the development of 
 configural sensitivity, for which adults' (and probably toddlers') level is out-of-reach 
 for all investigated models. None of the two milestones are achieved by investigated models 
-that were trained on a reasonable amount of visual egocentric data. In sum, toddlers' 
-visual properties suggest there is room for ML improvements in 1) making the development 
+that were trained on a reasonable amount of visual egocentric data. In sum, 
+comparing properties of toddlers object perception with those of artificial vision 
+systems suggests that there is room for ML improvements in 1) making the development 
 of the shape bias more data-efficient and 2) learning to generalize based on the configural arrangement of parts.
 For 1), one should not overlook CNNs architectures, as we found them to show a more 
 robust shape bias on novel shapes, compared to ViTs.
@@ -254,7 +266,7 @@ and B) the normal image recognition accuracy. d is the negative cosine similarit
 </div>
 
 
-In Figure 3, A, we find that diverse models reach a strong caricature recognition 
+In Figure 3, A, we find that diverse models achieve a strong caricature recognition 
 performance, at the estimated level of toddlers. Results confirm that supervised 
 and vision-language models perform well on these tasks <d-cite key="sheybani2024modelvsbaby"></d-cite>. We notably find 
 that ID models (DinoV2, BYOL, AA-SIMCLR) perform reasonably well on caricature 
@@ -263,7 +275,7 @@ correlates with hard image
 recognition accuracy 
 (Pearson score: $0.78$). Overall, we conclude that strong caricature recognition may 
  be a side-effect of strong category recognition and that cutting-edge models 
-already reach the level of toddlers independently from the the training procedure.
+already reach the level of toddlers independently from their exact training procedure.
 
 
 {% include figure.html path="assets/img/2025-04-28-visualprop/caricatures.png"
@@ -436,15 +448,16 @@ target views because they are more prototypical, ML models show a far lower bias
 
 Paying attention to the shape of an object is different from looking at the relative
 position of all parts. It could be that the model only extracts local <d-cite key="baker2020local"></d-cite> or 
-intermediate <d-cite key="jarvers2023shape"></d-cite> shape feature for
-recognizing categories. This may not be enough to unveil the potential of side views: 
-they also clearly display the configural arrangement of parts of an object: for instance, 
+intermediate <d-cite key="jarvers2023shape"></d-cite> shape features for
+recognizing categories. For instance, looking at the shape of the small ears of a 
+bunny is often enough to regognize it. This may not be enough to 
+unveil the potential of side views as these views also clearly display the 
+configural arrangement of parts of an object. For instance, it exhibits that
 the head of an animal is located at the opposite to its tail, with respect to its body.
 
 The ability to categorize object based of the configural arrangement of their parts 
-develops late in toddlers <d-cite key="augustine2011parts"></d-cite> and becomes mature
-only for older children <d-cite key="mash2006multidimensional"></d-cite>. Two lines 
-of prior works studied whether ML models rely on the configural relation between parts to compare
+starts its development in toddlers <d-cite key="augustine2011parts"></d-cite> and 
+becomes mature only for older children <d-cite key="mash2006multidimensional"></d-cite>. Two lines of prior works studied whether ML models rely on the configural relation between parts to compare
 images <d-cite key="baker2022deep,farahat2023novel"></d-cite>. For both, the idea is the
 same: they try to modify the positions of parts of an image (e.g. a head, a tail, a wheel)
 without deterioring the structure of these parts.
@@ -465,10 +478,11 @@ specific to their CNN and the two-steps training process.
 In <d-cite key="baker2022deep,baker2018deep"></d-cite>, they propose to create 
 *frankenstein* silhouettes by taking an object silhouette and horizontally flipping 
 the upper part of the silhouette, while keeping aligned the boundaries of the silhouette.
-The underlying assumption is that the flip operation does not alter the parts. They found that
-the recognition performance of ML models is largely unaffected by the flipping process,
+The underlying assumption is that the flip operation does not alter the parts themselves. 
+They found that the recognition performance of ML models is largely unaffected by the flipping process,
 unlike adults. We notice that they mostly use animals in their study, such that the 
-lower and upper part of the silhouette are well-distinct: the bottom part corresponds to legs and the top part often displays the shape of the face (ears etc.
+lower and upper part of the silhouette contain distinct parts: the bottom part 
+corresponds to legs and the top part often displays the shape of the face (ears etc.
 ..).
 
 {% include figure.html path="assets/img/2025-04-28-visualprop/frankenstein.png"
@@ -476,13 +490,11 @@ class="img-fluid" %}
 
 Thus, we take the set of stimuli from Baker et al. (2022), which
 comprises 9 categories of animals, each containing 40 original and frankenstein 
-silhouettes.
-To reproduce experiments from Baker et al. (2022) without a classifier, we sample a
+silhouettes. To reproduce experiments from Baker et al. (2022) without a classifier, we sample a
 normal silhouette from each category and one frankenstein silhouette. We compute the
-cosine similarity between the frankenstein silhouettes and all others and define the
-accuracy as how often the cosine similarity between the frankenstein and the 
-category-matching normal
-silhouette is the largest (frankenstein test). To assess the relative
+cosine similarity between the frankenstein silhouette and all normal silhouettes and 
+define the accuracy as how often the cosine similarity between the frankenstein and the 
+category-matching normal silhouette is the largest (frankenstein test). To assess the relative
 performance, we apply the procedure again after replacing the frankenstein silhouette by
 another normal silhouette (normal test). Finally, we compute the 
 configural sensitivity as the difference of performance between the success 
@@ -500,9 +512,9 @@ hard image recognition ($-0.58$), hard caricature recognition ($-0.71$) shape bi
 common objects ($-0.69$) and shape bias on novel objects ($-0.41$). Given that hard 
 caricature recognition is the highest correlated metric,
 we plot configural sensitivity against hard caricature recognition in Figure 10. We 
-observe that the relative performance of current models is very weak. Only SWSL,
-CLIP, Swag and DinoV2 are significantly more sensitive than a BagNet-9, a model that 
-can not show configural sensitivity by design. All models are less sensitive than 
+observe that the performance of current models is very weak, barely lower than $0$. Only 
+Large-scale weakly supervised models are significantly more sensitive than a BagNet-9, a 
+model that can not show configural sensitivity by design. All models are less sensitive than 
 the estimated adults. We conclude that shape-biased models likely rely on local 
 shape cues instead of the global arrangement of parts.
 
@@ -516,29 +528,35 @@ Figure 10. Configural sensitivity of ML models against their shape bias on commo
 # Conclusion
 
 In this blogpost, we extended previous studies to investigate whether current ML models 
-learn 4 fundamental visual properties that emerge in toddlers. We found that cutting-edge 
+learn 4 fundamental visual properties that emerge in toddlers. While we did not observe 
+major effects of the 
+training setup (supervised, adversarial, self-supervised...), we 
+found that cutting-edge 
 models reach the estimated level of a toddler with respect to caricature recognition and the shape bias on common objects. For the shape bias on novel objects, 
-models are close to toddlers. However, most of the considered models use 
-bio-implausible data: a lot more diverse images, labels, millions of aligned language 
-utterances, color-jittered images, adversarial samples... In our study, models trained 
+the best models are close to toddlers. However, most of 
+the considered models use bio-implausible data: a lot more diverse images, labels, millions of aligned language 
+utterances, color-jittered images, adversarial samples... Models trained 
 with comparable egocentric visual images (VC-1, VIP, R3M) 
 perform poorly on all benchmarks. Despite all these *cheats*, ML 
 models still perform poorly on configural sensitivity and the proposed side-view bias 
 compared to toddlers and adults, suggesting there is room for improvements. We can not 
-conclude on the level of toddlers for configural sensitivity, but, given the emerging 
+conclude on the performance of toddlers for configural sensitivity for the considered 
+task. However, given the emerging 
 sensitivity of toddlers <d-cite key="augustine2011parts"></d-cite> and the amplitude of the 
-difference between models and adults, we speculate that ML models are 
+difference between models and adults, we presume that ML models are 
 likely inferior to toddlers.
 
-We found that object recognition abilities correlates with caricature recognition, which 
-also correlates with a strong shape bias. This suggests that these properties emerge 
-simultaneously in ML models. However, it does not mean that increasing the shape bias 
+We found that object recognition ability positively correlate with caricature 
+recognition, which 
+also positively correlates with a strong shape bias. This suggests that these properties 
+are connected in ML models. However, it does not mean that increasing the shape bias 
 systematically leads to better recognition abilities, as evidenced by the Noisy-Student 
 model (high shape bias, relatively low caricature recognition) and prior works <d-cite 
 key="hermann2020origins"></d-cite>. Furthermore, showing a shape bias spurs the side-view 
 bias and the configural sensitivity, but it is far from enough 
-to reach the level of humans. Thus, we speculate the shape bias may be a first step 
-towards a better understanding of the relative arrangement of parts.
+to reach the level of humans. Thus, we speculate the shape bias may be a first 
+milestone of visual learning, on the way to generalizing objects based on the relative 
+arrangement of parts.
 
 From a developmental perspective, prior work found that productive vocabulary size is a 
 strong predictor of the shape bias in toddlers <d-cite key="gershkoff2004shape,
@@ -556,16 +574,15 @@ In both cases, preliminary experiments indicate this bias may
 boost their object recognition abilities <d-cite key="james2001manipulating"></d-cite>.
 We investigated for the first time the potential specificity of side-views for ML 
 models and found that these views become more object-prototypical when the shape bias 
-increases. This supports the hypothesis stating that side-views are standardized views of 
-objects and may explain why this bias develops along with the shape 
-bias. However, in this case, it remains unclear why side-views are 
+increases. This supports the hypothesis that toddlers' bias emerges because these 
+views are more prototypical. However, in this case, it remains unclear why side-views are 
 still less object-prototypical than 3/4 views on average for ML models. It could be 
 that ML models lack some visual property like configural sensitivity or that our dataset is too different 
 from the set of 16 simple stimulus objects used in Pereira et al. (2010).
 
 This works presents several limitations. First, the experimental protocol do not 
 perfectly follow neither developmental experiments (often based on language), nor machine 
-learning protocols (often based on language or supervised labels).
+learning protocols (often based on vision-language models or supervised labels).
 We chose not to rely on language to test a broad set of models beyond vision-language 
 models, and we decided to not use supervised heads as it is unclear how it relates to 
 toddlers' visual representations. Thus, we assume that, during their task, toddlers 
@@ -573,10 +590,11 @@ perform a form of cognitive comparison that resembles our comparison of
 representations. Second, the set of stimuli generally varies between developmental 
 studies and ours, allowing to only approximate how a toddler would perform. This is 
 especially salient in our study of configural sensitivity: to the best of our knowledge, 
-toddlers have not been tested on frankenstein silhouettes. Third, the set of stimulis 
-is rather small and often biased (very small for caricatures, only animals for configural 
-sensitivity, white background in all datasets...). Despite that, our study provides a global picture of the emergence 
-and interplay between toddlers' visual properties in ML models. We hope it will spur 
+toddlers have not been tested on frankenstein silhouettes. Third, the set of stimuli 
+is small and often biased (very small for caricatures, only animals for configural 
+sensitivity, white background in all datasets...). Despite that, our study provides a 
+global picture of the presence
+and interplay of toddlers' visual properties in ML models. We hope it will spur 
 research in addressing the gap between models and toddlers.
 
 
@@ -585,9 +603,7 @@ research in addressing the gap between models and toddlers.
 Removed for anonymous peer-reviewing.
 
 
-# Method
-
-## Models
+# Models
 
 To reproduce and strengthen the claims reported papers and this blogpost, we test a very
 diverse set of pre-trained models, including those addressing specific shortcomings of ML
