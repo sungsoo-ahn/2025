@@ -358,7 +358,7 @@ For the purpose of this analysis, let's **assume** that GSM8K and GSM-Symbolic c
 
 For many models in Figure 2, the dashed line is in the right tail of the distribution. Additionally, Figure 3 of the paper, reproduced below, reports substantial performance decrease for many other models. So is the performance decline statistically significant, or could it be attributed to normal variation?
 
-<!-- {{< figure library="true" src="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fig3_gsm.png" title="Figure from Mirzadeh et al. (2024) https://arxiv.org/pdf/2410.05229." numbered="false">}} -->
+
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fig3_gsm.png" 
   class="img-fluid" 
@@ -381,7 +381,7 @@ $$
 
 We use Fisher exact test for the binomial proportion for all models:
 
-<!-- {{< figure library="true" src="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fisher_pvalues.png" title="Fisher exact test: p-values for two-sided and one-sided tests across models. We use (*) to indicate models for which the null can be rejected at the 5% significance level in favour of the two-sided alternative." numbered="false">}} -->
+
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fisher_pvalues.png"
   class="img-fluid" 
@@ -653,16 +653,10 @@ $$\Rightarrow \hat{P}^{8K}_M \sim \frac{1}{100}Bin(100,p^{8K}_M)$$
 Same for $$X^{Symb}_{t_i} \sim_{i.i.d} Bernoulli(p^{Symb}_M)$$ and  $$\hat{P}^{Symb}_M \sim \frac{1}{100} Bin(100,p^{Symb}_M)$$
 
 
-Q: Given our observations (†), what evidence is there to believe that 
+Q: Given our observations (†), what evidence is there to believe that $$p^{8K}_M \neq p^{Symb}_M$$
 
-$$p^{8K}_M \neq p^{Symb}_M$$
+Similarly, what evidence is there to believe that $$p^{8K}_M > p^{Symb}_M$$
 
-? Similarly, what evidence is there to believe that 
+<!-- Note that it _does_ make sense to also assume that  -- NO!
 
-$$p^{8K}_M > p^{Symb}_M$$
-
-?
-
-Note that it _does_ make sense to also assume that  -- NO!
-
-$$X^{8k}_{t_i} \perp\!\!\!\perp X^{Symb}_{t_i}$$.
+$$X^{8k}_{t_i} \perp\!\!\!\perp X^{Symb}_{t_i}$$. -->
