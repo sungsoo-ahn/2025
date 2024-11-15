@@ -8,14 +8,8 @@ htmlwidgets: true
 hidden: false
 
 # Anonymize when submitting
-# authors:
-#   - name: Anonymous
-
-# authors:
-#   - name: Albert Einstein
-#     url: "https://en.wikipedia.org/wiki/Albert_Einstein"
-#     affiliations:
-#       name: IAS, Princeton
+authors:
+  - name: Anonymous
 
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-Flow-With-What-You-Know.bib  
