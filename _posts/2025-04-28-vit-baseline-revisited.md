@@ -557,3 +557,53 @@ fixing bugs in existing implementations.
 And our own repo should be no exception.
 
 ### Replication guide
+
+1. [Install PyTorch](https://pytorch.org/), including torchvision
+2. Prepare the [ILSVRC 2012 ImageNet-1k dataset](https://pytorch.org/vision/main/generated/torchvision.datasets.ImageNet.html)
+3. `git clone https://github.com/EIFY/mup-vit.git`
+4. `pip install wandb` or make changes to use your preferred logging platform
+5. Depending on your machine:
+   * Multi-node, multi-GPU:
+    The code is intended to support but currently not tested on a multi-node, multi-GPU setup.
+   * Single-node, multi-GPU:
+    Say the ImagNet-1k dataset is at `/data/ImageNet/`. Just point `MUPVIT_MAIN` to `main.py` in the repo and run the bash script `baseline_revisited.sh`:
+
+    ```bash
+    #!/bin/bash
+
+    MUPVIT_MAIN=~/Downloads/mup-vit/main.py
+    PYTHON=torchrun
+    N_WORKERS=80
+    N_THREADS=124
+
+    for EPOCH in 90 150 300
+    do
+        NUMEXPR_MAX_THREADS=$N_THREADS $PYTHON $MUPVIT_MAIN /data/ImageNet/ --workers $N_WORKERS --multiprocessing-distributed --epochs $EPOCH --batch-size 1024 --torchvision-inception-crop --mlp-head --report-to wandb --name better-baseline-${EPOCH}ep
+    done
+    # (...)
+    ```
+
+    Remove `--torchvision-inception-crop` for faithful replication of <d-cite key="beyer2022better"></d-cite>, i.e. with TF-like Inception crop.
+    Experimentally step/s hits a plateau with 64-112 workers on a Lambda 8x A100-SXM4-40GB instance but the `no-randaug-no-mixup` experiment is
+    still faster (17h30m vs. 1d for 300 epochs), suggesting that the GPUs are sometimes waiting for data augmentation. Adjust both `N_WORKERS`
+    and `N_THREADS` for your machiine.
+
+   * Single-node, single-GPU:
+    Replace `torchrun` with `python` and remove `--multiprocessing-distributed`. You may need to use gradient accumulation to make sure $$\left( \frac{\text{batch-size}}{\text{accum-freq}} \right)$$ samples fit in the GPU RAM:
+
+    ```bash
+    #!/bin/bash
+
+    MUPVIT_MAIN=~/Downloads/mup-vit/main.py
+    PYTHON=python
+    N_WORKERS=4
+    ACC_FREQ=8
+
+    for EPOCH in 90 150 300
+    do
+        $PYTHON $MUPVIT_MAIN /data/ImageNet/ --workers $N_WORKERS --epochs $EPOCH --batch-size 1024 --accum-freq $ACC_FREQ --torchvision-inception-crop --mlp-head --report-to wandb --name better-baseline-${EPOCH}ep
+    done
+    # (...)
+    ```
+
+    Warning: On a single GPU these experiments will likely take a long time.
