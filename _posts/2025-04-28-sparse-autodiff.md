@@ -84,10 +84,10 @@ _styles: >
 <!-- LaTeX commands -->
 <div style="display: none">
     $$
-    \newcommand{\colorf}[1]{\textcolor{green}{#1}}
-    \newcommand{\colorg}[1]{\textcolor{Mulberry}{#1}}
-    \newcommand{\colorh}[1]{\textcolor{Crimson}{#1}}
-    \newcommand{\colorv}[1]{\textcolor{MidnightBlue}{#1}}
+    \newcommand{\colorf}[1]{\textcolor{RoyalBlue}{#1}}
+    \newcommand{\colorh}[1]{\textcolor{RedOrange}{#1}}
+    \newcommand{\colorg}[1]{\textcolor{PineGreen}{#1}}
+    \newcommand{\colorv}[1]{\textcolor{VioletRed}{#1}}
     \def\sR{\mathbb{R}}
     \def\vx{\mathbf{x}}
     \def\vv{\mathbf{v}}
@@ -269,7 +269,10 @@ The linear map formulation allows us to avoid intermediate Jacobian matrices in 
 But can we use this machinery to materialize the **Jacobian** of the composition $f$ itself?
 
 As shown in Figure 6, we can **materialize Jacobians column by column** in forward mode.
-Evaluating the linear map $Df(\vx)$ on the $i$-th standard basis vector materializes the $i$-th column of the Jacobian $J_f(\vx)$.
+Evaluating the linear map $Df(\vx)$ on the $i$-th standard basis vector materializes the $i$-th column of the Jacobian $J_f(\vx)$:
+
+$$ \Dfc(\vbc{i}) = \left( \Jfc \right)_\colorv{i,:} $$
+
 Thus, materializing the full $m \times n$ Jacobian requires one JVP with each of the $n$ standard basis vectors of the **input space**.
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/forward_mode.svg" class="img-fluid" %}
@@ -326,7 +329,11 @@ non-overlapping columns or rows via a method called **matrix coloring** that we 
 **The core idea of ASD is that we can materialize multiple orthogonal columns or rows in a single evaluation.**
 Since linear maps are additive, it always holds that
 
-$$ \Dfc(\vbc{i}+\ldots+\vbc{j}) = \Dfc(\vbc{i}) + \ldots+ \Dfc(\vbc{j}) \quad .$$
+$$ \Dfc(\vbc{i}+\ldots+\vbc{j}) 
+= \underbrace{\Dfc(\vbc{i})}_{\left( \Jfc \right)_\colorv{i,:}} 
++ \ldots
++ \underbrace{\Dfc(\vbc{j})}_{\left( \Jfc \right)_\colorv{j,:}} 
+. $$
 
 The right hand side summands each correspond to a column of the Jacobian.
 If the columns are **orthogonal** and their **structure is known**, 
@@ -341,15 +348,38 @@ This specific example using JVPs corresponds to sparse forward-mode AD
 and is visualized in Figure 9, where all orthogonal columns have been colored in matching hues.
 By computing a single JVP with the vector $\mathbf{e}_1 + \mathbf{e}_2 + \mathbf{e}_5$, 
 we materialize the sum of the first, second and fifth column of our Jacobian.
+
 Since we can assume we know the structure of the Jacobian,
 we can assign the values in the resulting vector to the correct Jacobian entries.
+The full forward-mode ASD materialization of our toy Jacobian is shown in Figure X. 
 
-The same idea can also be applied to reverse mode AD.
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/sparse_ad_forward_full.svg" class="img-fluid" %}
+    </div>
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/sparse_ad_forward_decompression.svg" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure X: Materializing a Jacobian with forward-mode ASD: (a) compressed evaluation of orthogonal columns (b) decompression to Jacobian matrix
+</div>
+
+The same idea can also be applied to reverse mode AD, as shown in Figure Y.
 Instead of finding orthogonal column, we need to find orthogonal rows.
 We can then materialize multiple rows in a single VJP.
 
-*TODO: illustrate reverse-mode*
-<!-- TODO: illustrate reverse mode -->
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/sparse_ad_reverse_full.svg" class="img-fluid" %}
+    </div>
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/sparse_ad_reverse_decompression.svg" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure Y: Materializing a Jacobian with reverse-mode ASD: (a) compressed evaluation of orthogonal rows (b) decompression to Jacobian matrix
+</div>
 
 ### Sparsity pattern detection and coloring
 
