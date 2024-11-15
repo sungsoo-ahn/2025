@@ -259,7 +259,7 @@ We visualise this in the next figure, showing the overlap between the 95% Wilson
   class="img-fluid" 
   caption="95% Wilson score confidence intervals for the point estimates of GSM8K accuracy, $p^{8K}_{m}$ (red), and range of accuracies achieved on the 50 GSM-Symbolic datasets, $p^{Symb}_{m}$ (blue). 
   The latter ranges are not explicitly reported; we approximate them from the histograms in Figure 1 of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper. 
-  We only show the subset of the models for which such histograms are available in the paper." 
+  Since such histograms are not available for all models, we only show the subset of the models for which they are." 
 %}
 
 Note that our confidence intervals tend to be wider than the implied ranges in the figures in the paper, i.e. under the i.i.d. Bernoulli assumption, the expected variation is actually **larger** than what is observed.
@@ -453,13 +453,17 @@ The paper highlights this on multiple occasions, most notably in Section 4.3. So
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fig6_gsm.png" 
   class="img-fluid" 
-  caption="Figure 6 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>"
+  caption="Figure 6 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>. Note that the $x$-axis scales are different for different models."
 %}
 
-<!-- DRI: TODO change notation d is taken to denote digits -->
-Here we have 4 different datasets: the baseline GSM-Symbolic, an easier version of it (M1) and two harder versions of it (P1 and P2). It is not unreasonable to expect that a model might perform differently on different datasets, for example better on the easier ones and worse on harder ones. We can make a similar assumption as before, namely that the answers a model m gives to questions of difficulty $d=-1, 0, 1, 2$ are i.i.d. Bernoulli trials with success probability $p_{m,d}$. The distribution of the total number of correct answers is then $\text{Bin}(N=100, p_{m,d})$, which has variance $N \cdot p_{m,d} \cdot (1 - p_{m,d})$. 
 
-If we happen to have decreasing probabilities of success, i.e. $p_{m,-1} > p_{m,0} > p_{m,1} > p_{m,2} > 0.5$ as is the case for some of the models in Figure 6, then the corresponding variances must increase. Whether or not this decrease in probability of success has any relationship to the “reasoning abilities” of a model is beyond the scope of this blog :)
+Here we have four datasets: the baseline GSM-Symbolic, M1 (minus 1), which removes a clause, and P1 (plus 1) and P2 (plus 2), which add one and two clauses respectively. 
+It is reasonable to expect that a model will perform better on easier datasets and worse on more difficult ones.
+We can assume, as before, that a model $m$ answers questions of varying difficulty levels $$\text{dif}=-1, 0, 1, 2$$ as independent and identically distributed Bernoulli trials with a success probability of $$p^{\text{dif}}_{m}$$. 
+The distribution of the total number of correct answers follows a binomial distribution $$\text{Bin}(N=100, p^\text{dif}_{m})$$, with a variance of $$N \cdot p^\text{dif}_{m} \cdot (1 - p^\text{dif}_{m})$$.
+
+If the probabilities of success decrease, such that $$p^{\text{dif}=-1}_{m} > p^{\text{dif}=0}_{m} > p^{\text{dif}=1}_{m} > p^{\text{dif}=2}_{m} > 0.5$$, as observed in some models in Figure 6, the corresponding variances *must increase*. 
+Whether this decrease in probability of success is related to the “reasoning abilities” or "pattern-matching abilities" of a model is beyond the scope of this blog.
 
 **To summarise: the emphasis on “non-negligible variance” and “increase in variance” throughout the paper appears to be an over-interpretation of expected statistical variation.**
 
