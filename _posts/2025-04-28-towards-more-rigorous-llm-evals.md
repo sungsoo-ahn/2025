@@ -309,13 +309,17 @@ We highlight that the original GSM8K question cannot be generated from the propo
 We also believe that the proposed ranges better align with the context of the variables (e.g. having between 4 and 40 bouncy balls is more realistic than having between 85 and 200).
 </div>
 
-Overall, the ranges we propose are *smaller* than those in the original template. This is significant because, as we discussed in Section 4.1.1, the accuracy of both models tends to decrease as the number of digits in the arithmetic operations increases. 
+
+Since accuracy decreases as the number of digits in arithmetic operations increases (as discussed in Section 4.1.1), we expect that our proposed smaller ranges would result in higher accuracy compared to the original template, assuming that the reasoning process is executed correctly.
 
 The question in Figure 1 involves three arithmetic operations: two additions and one subtraction. 
 Assuming that subtraction is as difficult as addition, the probability of getting all three operations correct is the product of the individual probabilities of each operation being answered correctly. 
 
-To quantify the difference in accuracy that might arise from using the ranges in the paper versus the ranges we propose, we use the logistic regression model from Section 4.1.1. 
-Specifically, we consider the operations $(x+y)$, $(x+y)+z$, and $(x+y+z)+ans$ as the three operations to directly apply our model, presenting the results in the next two tables.
+To quantify the difference in accuracy that might arise from using the ranges in the paper versus the ranges we propose, we apply the logistic regression model from Section 4.1.1. 
+Specifically, we consider the operations $(x+y)$, $(x+y)+z$, and $(x+y+z)+ans$ as the three operations to directly apply our model.
+
+We present the results for Phi-3.5-mini-instruct and Llama3-8b-instruct in the next two tables, reporting the mean and standard deviation over 512 samples. 
+For each example sampled from the corresponding ranges, we estimate the probabilities of correctly performing each arithmetic operation using our logistic regression model.
 
 
 
@@ -325,7 +329,7 @@ Specifically, we consider the operations $(x+y)$, $(x+y)+z$, and $(x+y+z)+ans$ a
 | **Proposed (ours)**    | $0.955 \pm 0.007$ | $0.954 \pm 0.006$| $0.950 \pm 0.004$ | $0.866 \pm 0.009$ |
 
 <div class="caption">
-TODO: fix caption; The probabilities for Phi-3.5-mini-instruct; 512 examples sampled from the ranges; mean and std.
+Results for Phi-3.5-mini-instruct model. Mean and standard deviation of probabilities over 512 examples.
 </div>
 
 
@@ -337,7 +341,7 @@ The probabilities for Llama3-8b-instruct are given in the following table:
 | **Proposed (ours)**  | $0.997 \pm	0.001$ | $0.997	\pm 0.001$ | $0.996	\pm 0.001$ | $0.990	\pm 0.001$ |
 
 <div class="caption">
-TODO: fix caption; The probabilities for Llama3-8b-instruct; 512 examples sampled from the ranges; mean and std.
+Results for Llama3-8b-instruct model. Mean and standard deviation of probabilities over 512 examples.
 </div>
 
 
