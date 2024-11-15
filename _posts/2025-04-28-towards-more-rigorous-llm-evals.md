@@ -315,24 +315,30 @@ The question in Figure 1 involves three arithmetic operations: two additions and
 Assuming that subtraction is as difficult as addition, the probability of getting all three operations correct is the product of the individual probabilities of each operation being answered correctly. 
 
 To quantify the difference in accuracy that might arise from using the ranges in the paper versus the ranges we propose, we use the logistic regression model from Section 4.1.1. 
-Specifically, we consider the operations $(x+y)$, $(x+y)+z$, and $(x+y+z)+ans$ as the three operations to directly apply our model.
+Specifically, we consider the operations $(x+y)$, $(x+y)+z$, and $(x+y+z)+ans$ as the three operations to directly apply our model, presenting the results in the next two tables.
 
-TODO: add error bars?
 
-The probabilities for Phi-3.5-mini-instruct are given in the following table:
 
-|   | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 ops |
+| **Phi-3.5**  | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 ops |
 |-- |-------|----------|----------|----------|
-|**Symbolic**    | $94.9 \pm $ | $94.1 \pm $ | $92.0 \pm $ | $82.1  \pm $ |
-| **Proposed (ours)**    | $95.5  \pm $ | $95.4$ | $95.0 \pm $ | $86.6  \pm $ |
+|**Symbolic**    | $0.949 \pm 0.004$ | $0.941 \pm 0.008$ | $0.920 \pm 0.008$ | $0.821 \pm 0.013$ |
+| **Proposed (ours)**    | $0.955 \pm 0.007$ | $0.954 \pm 0.006$| $0.950 \pm 0.004$ | $0.866 \pm 0.009$ |
+
+<div class="caption">
+TODO: fix caption; The probabilities for Phi-3.5-mini-instruct; 512 examples sampled from the ranges; mean and std.
+</div>
 
 
 The probabilities for Llama3-8b-instruct are given in the following table:
 
-|  | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 ops |
+|   **Llama3-8b**    | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 ops |
 |-------|----------|----------|----------|----------|
-| **Symbolic**  | $99.7 \pm 0.$ | $99.7 \pm 0.$ | $99.6 \pm 0.$ | $99.0 \pm 0.$ |
-| **Proposed (ours)**  | $99.6 \pm 0.$ | $99.5 \pm 0.$ | $99.1 \pm 0.$ | $98.2 \pm 0.$ |
+| **Symbolic**  | $0.996 \pm 0.001$ | $0.995 \pm 0.001$ | $0.991 \pm 0.002$ | $0.982 \pm 0.003$ |
+| **Proposed (ours)**  | $0.997 \pm	0.001$ | $0.997	\pm 0.001$ | $0.996	\pm 0.001$ | $0.990	\pm 0.001$ |
+
+<div class="caption">
+TODO: fix caption; The probabilities for Llama3-8b-instruct; 512 examples sampled from the ranges; mean and std.
+</div>
 
 
 The performance delta that can be attributed to just arithmetic mistakes is ... 
@@ -344,7 +350,7 @@ Similar observations can be made for the M1, P1 and P2 templates.
 > We have also observed the performance of LLMs deteriorating as question complexity increases. <d-cite key='mirzadeh2024gsm'></d-cite>
 
 It is plausible that reasoning becomes more challenging as additional clauses are introduced, or conversely, easier when clauses are removed, as seen in the M1 template. 
-Importantly, introducing more clauses necessarily involves additional arithmetic operations. [exponential decline?]
+Importantly, introducing more clauses necessarily involves additional arithmetic operations, resulting in an exponential decline in performance.
 We argue that more careful and thorough analysis is required to account for this variability and its impact on performance.
 
 <!-- TODO maybe? Repeat reasoning: translating the text to a sequence of operations; what the paper tests is whether models can do that *and* perofrm the operations correctly. The rest of this post will not deal with reasoning; -->
