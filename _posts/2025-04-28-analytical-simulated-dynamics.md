@@ -1,9 +1,20 @@
 ---
 layout: distill
-title: Analytical and simulated learning dynamics of simple neural networks
+title: Analytical learning dynamics of simple neural networks
 description:
-  We survey approaches to analyzing the learning dynamics of simple neural networks,
-  and provide parallel implementations of these methods in JAX.
+    The learning dynamics of neural networks—in particular, how parameters change over time during 
+    training—describe how data, architecture and algorithm interact in time to produce 
+    a trained neural network model.
+    Characterizing these dynamics in general remains an open problem in machine learning,
+    but, handily, restricting the setting allows careful empirical studies and even analytical results.
+    In this blog post, we introduce approaches to analyzing the learning dynamics of 
+    neural networks,
+    with a focus on a particular setting that permits an explicit analytical 
+    expression for the generalization error of a neural network trained with online gradient descent.
+    We provide an accessible mathematical formulation of this analysis
+     alongside a `JAX` codebase to implement both simulation of the analytical
+    system of ordinary differential equations and neural network training in this setting.
+    We conclude with discussion of how this analytical paradigm has been used to investigate generalization in neural networks and beyond.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -36,7 +47,9 @@ toc:
       subsections:
         - name: A long history 
         - name: "Our focus: Narrow neural networks"
-        - name: "Modern applications"
+          subsections:
+            - name: "The classical analysis"
+            - name: "Modern extensions of the analysis"
 - name: "Notation"
 - name: "Methods"
   subsections: 
@@ -48,24 +61,17 @@ toc:
     - name: The specialization transition tracks feature learning
     - name: Large initial weights produce individual differences
     - name: Theory-experiment overlap in two-layer neural networks
+    - name: Limits of the analytical teacher-student setting
 - name: Discussion
   subsections:
-    - name: Limitations of the analytical teacher-student setting
-    - name: Further applications of the teacher-student setting
+    - name: Applications of the teacher-student setting
+    - name: The analytical frontier
 ---
 
-The learning dynamics of neural networks---how parameters change during 
-training---describe how data, architecture and algorithm interact to produce 
-a trained model.
-Characterizing these dynamics in general is an open problem in machine learning,
-but recent work has made progress in understanding the dynamics of certain settings 
-both neural networks.
+
 
 
 - place the framework in the broader context of DL theory
-- describe the (dis)advantages of this approach to other DL theory approaches:
-  - assumptions on data distribution
-  - asymptotic in the input data dimension
 
 ## Background
 
@@ -80,15 +86,24 @@ The common shared assumption is distributional the data.
 #### A long history 
 
 In 2024, X and Y won the Nobel Prize in Physics for neural networks.
-news that was met with varying emotions: celebration, confusion and skepticism across the scientific communities with an on artificial intelligence.
+news that was met with varying emotions: celebration, confusion and skepticism across the scientific communities with an interest in artificial intelligence.
 
+- <d-cite key="mei2018mean"></d-cite>
 
-#### Our focus: Narrow neural networks
+#### Our focus: Narrow neural networks in the teacher-student setting
+
+- teacher-student intro <d-cite key="gardner1989three"></d-cite>
+- overview <d-cite key="cui2024highdimensional"></d-cite>
+- analytical results <d-cite key="saad1995online"></d-cite> <d-cite key="riegler1995online"></d-cite>
 
 temporally describe the history: S&S, Goldt, etc. including HMM
 Highlight Solla and Goldt paper, and a lot form Lenka's lab, (Hugo Cui), Cengiz lab (Blake's work). Teacher student is a framework that people use to derive analytical results for neural network dynamics, we are focusing in one of them (Solla and Goldt's work).
 
-#### Modern applications
+- describe the (dis)advantages of this approach to other DL theory approaches:
+  - assumptions on data distribution
+  - asymptotic in the input data dimension
+
+#### Modern applications of teacher-student
 
 Andrew, Lenka, Cenghiz, that meta-learning paper
 Features are fate?
@@ -122,16 +137,61 @@ Fig3: Large weights, varying simulations and average out to show correspondence 
 
 Fig4: (decide later, perhaps small weights).
 Goldt setting?
+- <d-cite key="goldt2020dynamics"></d-cite>
 
-## Discussion
-
-### Limitations of the analytical teacher-student setting
+### Limits of the analytical teacher-student setting
 
 Check the bounds for learning rate and noise such that the ODEs follow the simulations.
 
-### Further applications of the teacher-student setting
+## Discussion
 
-Task similarity.
+### The analytical frontier
+
+Other activation functions:
+- RBF <d-cite key="freeman1997online"></d-cite>
+
+Deep:
+- deep teacher-student, empirics <d-cite key="tian2019luck"></d-cite>
+- deep teacher-student, theory <d-cite key="tian2020student"></d-cite>
+
+Universality. Gaussian equivalence property.
+- <d-cite key="goldt2020modelling"></d-cite>
+- <d-cite key="goldt2021gaussian"></d-cite>
+
+Other settings:
+- <d-cite key="loureiro2021learning"></d-cite>
+- <d-cite key="arnaboldi2023highdimensional"></d-cite>
+
+### Applications of the teacher-student setting
+
+TODO:
+-
+
+**Optimization.**
+- natural gradient <d-cite key="yang1998complexity"></d-cite>
+
+**Parameterized task difficulty**.
+- task difficulty <d-cite key="arnaboldi2024online"></d-cite>
+
+**Parameterized task similarity for transfer and continual learning.**  
+- continual learning <d-cite key="lee2021continual"></d-cite>
+- catastrophic forgetting <d-cite key="asanuma2021statistical"></d-cite>
+- Maslow's hammer <d-cite key="lee2022maslow"></d-cite>
+- meta-learning <d-cite key="wang2024dynamics"></d-cite>
+
+**Reinforcement learning.**
+- reinforcement learning <d-cite key="patel2023rl"></d-cite>
+
+**Learning algorithms.**
+- multi-pass SGD <d-cite key="arnaboldi2024repetita"></d-cite>
+- feedback alignment <d-cite key="refinetti2022align"></d-cite>
+
+Even under review at ICLR 2025!
+- <d-cite key="anonymous2024analyzing"></d-cite>
+- <d-cite key="anonymous2024optimal"></d-cite>
+- <d-cite key="anonymous2024theory"></d-cite>
+
+
 
 ---
 
