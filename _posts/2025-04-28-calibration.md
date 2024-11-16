@@ -48,7 +48,7 @@ toc:
         #   - name: Multi-class Calibration
         #   - name: Class-wise Calibration
         #   - name: Human Uncertainty Calibration
-  - name: Takeaways
+  - name: Summary
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
@@ -316,7 +316,7 @@ All the approaches mentioned above __share a key assumption: ground-truth labels
     Image 10 | One-Hot-Vector
 </div>
 
-We have the same image as in our entry example and can see that the chosen label differs between annotators. A common approach to resolving such issues in the labelling process is to use some form of aggregation <d-cite key="paun2022statistical, artstein2008inter"></d-cite>. Let's say that in our example the majority vote is selected, so we end up evaluating how well our model is calibrated against such  'ground truth'. One might think, the image is small and pixelated; of course humans will not be certain about their choice. However,  rather than being an exception such disagreements are widespread <d-cite key="aroyo2024dices, sanders2022ambiguous, schwirten2024ambiguous"></d-cite>. So, when there is a lot of human disagreement in a dataset it might not be a good idea to calibrate against an aggregated 'gold' label <d-cite key="baan2022stop"></d-cite>. Instead of gold labels more and more researchers are using soft or smooth labels with are more representative of the human uncertainty <d-cite key="peterson2019cifar, sanders2022ambiguous, collins2023human"></d-cite>, see example below.
+We have the same image as in our entry example and can see that the chosen label differs between annotators. A common approach to resolving such issues in the labelling process is to use some form of aggregation <d-cite key="paun2022statistical, artstein2008inter"></d-cite>. Let's say that in our example the majority vote is selected, so we end up evaluating how well our model is calibrated against such  'ground truth'. One might think, the image is small and pixelated; of course humans will not be certain about their choice. However,  rather than being an exception such disagreements are widespread <d-cite key="aroyo2024dices, sanders2022ambiguous, schwirten2024ambiguous"></d-cite>. So, when there is a lot of human disagreement in a dataset it might not be a good idea to calibrate against an aggregated 'gold' label <d-cite key="baan2022stop"></d-cite>. Instead of gold labels more and more researchers are using soft or smooth labels which are more representative of the human uncertainty <d-cite key="peterson2019cifar, sanders2022ambiguous, collins2023human"></d-cite>, see example below.
 
 <div class="row mt-2">
     <div class="col-sm mt-3 mt-md-0">
@@ -409,7 +409,7 @@ Perhaps future efforts will introduce further measures that combine the benefits
 
 
 
-## Takeaways
+## Summary
 We have run through the most common definition of calibration, the shortcomings of ECE and how several new notions of calibration exist. 
 We also touched on some of the newly proposed evaluation measures and their shortcomings.
 Despite several works arguing against the use of ECE for evaluating calibration, it remains widely used. 
