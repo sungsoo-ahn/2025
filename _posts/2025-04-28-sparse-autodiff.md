@@ -491,17 +491,15 @@ This idea is visualized in Figure 13.
     Figure 13: Propagating an index set through a linear map to obtain a sparsity pattern.  
 </div>
 
-### Operator overloading
+### Alternative evaluation
 
 Instead of going into implementation details,
-we want to provide some intuition on a typical implementation technique for sparsity detection: 
-**operator overloading**.
+we want to provide some intuition on the second key ingredient of our forward-mode sparsity detection: 
+**alternative function evaluation**.
 
 We will demonstrate this on a second toy example, the function
 
 $$ f(\vx) = x_1 + x_2x_3 + \text{sgn}(x_4) .$$
-
-<!-- TODO: I don't see the graph here -->
 
 The corresponding computational graph is shown in Figure 14,
 where circular nodes correspond to elementary operators,
@@ -514,21 +512,20 @@ in this case addition, multiplication and the sign function.
 </div>
 
 As discussed in the previous section,
-all inputs are initialized with their respective singleton index sets.
-The sparsity detection system must walk through the computational graph in topological order.
-Each individual operator in the graph is "overloaded" to behave in a different way during sparsity detection.
-Instead of computing the output value, 
-it must correctly propagate and accumulate the index sets of its inputs, 
-depending on whether it has a non-zero derivative or not.  
+all inputs are seeded with their respective input index sets.
+Figure 14 annotates these index sets on the edges of the computational graph.
+Our system for sparsity detection must now perform an **alternative evaluation of our computational graph**.
+Instead of computing the original function, 
+each operator must correctly propagate and accumulate the index sets of its inputs, 
+depending on whether an operator has a non-zero derivative or not.  
 
-Figure 14 annotates index sets on the edges of the computational graph.
-Since addition and multiplication have non-zero derivatives with respect to both of their inputs, 
+Since addition and multiplication globally have non-zero derivatives with respect to both of their inputs, 
 the index sets of their inputs are accumulated and propagated. 
 The sign function has a zero-valued derivatives for any input value. 
 It therefore doesn't propagate the index set of its input. 
 Instead, it returns an empty set.
 
-<!-- *TODO: switch to multivariate function, quickly discuss resulting Jacobian.* -->
+*TODO: switch to multivariate function, quickly discuss resulting Jacobian.*
 <!-- TODO -->
 
 <!-- Coloring techniques? -->
