@@ -43,7 +43,7 @@ toc:
         - name: French Concept
         - name: Simplfied/Traditional Chinese Concept
         - name: Arabic Concept
-        - name: Areas where CAV Excels and Does Not
+      - name: Areas where CAV Excels and Does Not
     - name: Discussion
       subsections:
       - name: Is PSA-induced CAV the same as IT-induced?
@@ -79,19 +79,21 @@ For single behavior steering, we use the pipeline outlined in <d-cite key="Xu202
 
 ### Overview of CAV Perturbation Algorithm 
 
-1. <strong>Data Collection<strong>: Gather two sets of instructions aimed at carrying out two different tasks, labeling one as the positive and the other as negative. For example, a positive dataset might include instructions like
+1. <strong>Data Collection</strong>: Gather two sets of instructions aimed at carrying out two different tasks, labeling one as the positive and the other as negative. For example, a positive dataset might include instructions like
+
    <div>&emsp;&emsp;<span style="color: red; font-weight: bold;">Positive: </span>How to plant flowers in my garden?</div>
 
    while the negative dataset might include instructions like
+
    <div>&emsp;&emsp;<span style="color: green; font-weight: bold;">Negative:</span>Comment planter des fleurs dans mon jardin?</div>
 
    Thus, this two datasets can be used for "French" concept extraction and utilization. For optimal results, each dataset contains more than 50 instructions, though <d-cite key="Xu2024uncovering"></d-cite> claims only 10 pairs of instructions are enough.
 
-2. <strong>LLM Selection<strong>: Choose a target LLM, such as *LLaMA-3-8B*, known for its better capabilities. Collect the final token embeddings from each layer during the inference process for instructions in positive and negative datasets respectively.
+2. <strong>LLM Selection</strong>: Choose a target LLM, such as *LLaMA-3-8B*, known for its better capabilities. Collect the final token embeddings from each layer during the inference process for instructions in positive and negative datasets respectively.
 
-3. <strong>Classifier Training<strong>: Train a linear classifier on these embeddings with their corresponding labels for each layer. That's to say, we will get $$ N $$ classifiers for steering a single behavior, where $$ N $$ is the total number of transformer layers of the target LLM.
+3. <strong>Classifier Training</strong>: Train a linear classifier on these embeddings with their corresponding labels for each layer. That's to say, we will get $$ N $$ classifiers for steering a single behavior, where $$ N $$ is the total number of transformer layers of the target LLM.
 
-4. <strong>Text Generation with Perturbation<strong>: Use the trained classifier parameters to perturb a typical text generation process of the target LLM. Due to the transferability disclosed by <d-cite key="Xu2024uncovering"></d-cite>, it may be possible to apply the CAV trained on target LLM to other LLMs. However, since we have complete access to all open-source LLMs, it is assumed that the LLM used for training and generation is same by default.
+4. <strong>Text Generation with Perturbation</strong>: Use the trained classifier parameters to perturb a typical text generation process of the target LLM. Due to the transferability disclosed by <d-cite key="Xu2024uncovering"></d-cite>, it may be possible to apply the CAV trained on target LLM to other LLMs. However, since we have complete access to all open-source LLMs, it is assumed that the LLM used for training and generation is same by default.
 
 ### Perturbation Process Details
 
