@@ -111,9 +111,11 @@ the configural arrangement between their parts <d-cite key="augustine2011parts">
 
 
 In this blogpost, we investigate to what extent off-the-shelf ML models also exhibit these properties.
-Compared to adults <d-cite key="bowers2023deep,wichmann2023deep"></d-cite>, comparing 
-vision models to toddlers specifically allows to identify which developmental stages are 
-not achieved by vision models. We extend previous studies to give a global picture of the potential emergence of toddler-like 
+Comparing 
+vision models to specifically toddlers (not adults <d-cite key="bowers2023deep,
+wichmann2023deep"></d-cite>) allows us to identify which 
+developmental milestones are not (yet) achieved by current vision models. We extend previous studies to give a global 
+picture of the potential emergence of toddler-like 
 visual properties in current pre-trained ML models. We include diverse models based on 
 supervised learning, semi-weak supervision, robust 
 out-of-distribution image 
@@ -294,11 +296,12 @@ measure image similarities, as texture and color cues are absent from caricature
 Here, we examine the shape bias of current models, compared to toddlers, and analyze 
 the relationship between shape bias and caricature recognition.
 
-The cue-conflict protocol if the main experiment protocol to evaluate the shape bias <d-cite key="diesendruck2003specific"></d-cite>. 
+The cue-conflict protocol is the main experimental protocol to evaluate the shape bias 
+in toddlers <d-cite key="diesendruck2003specific"></d-cite>. 
 The idea is to present an object and two variants, one modifying only the texture of the 
 original object and one modifying only the shape of the original object. The task is 
 then to choose which of the two variants is the closest to the original one. If a 
-toddler tend to select the shape variant, it means that he is shape biased. 
+toddler tends to select the same-shape variant, it means that they are shape biased. 
 
 ML benchmarks used to evaluate the shape bias of models <d-cite key="
 geirhos2021partial,hermann2020origins"></d-cite> do not follow the experimental protocols
@@ -329,7 +332,8 @@ and B) novel shapes. $d$ is the negative cosine similarity.
 
 In Figure 5, A, we verify that there is a correlation between hard caricature
 recognition and the degree of shape bias over common objects (Pearson
-score: $0.68$). This is higher than the correlation with hard object recognition ($0.
+correlation: $0.68$). This is higher than the correlation with hard object recognition 
+($0.
 56$). We also find that language is not a mandatory component of the shape bias as ID 
 models seem to classify object based on shapes. In particular, DinoV2 shows a 
 similar degree of shape bias as vision-language or supervised models. This is interesting because developmental studies clearly found 
@@ -345,12 +349,12 @@ for novel shapes. When reproducing their results, we noticed that the performanc
 random ResNet50 (Random_RN50, averaged over three random initializations) decreases 
 between common and novel shapes. Since all shapes are novel for a random model, this suggests that the 
 used novel shapes are inherently less prone to induce a shape-based matching than the 
-common objects. To naively correct this effect, we multiply all scores by the ratio 
+common objects. To naively correct for this effect, we multiply all scores by the ratio 
 $$\frac{\texttt{ShapeBiasCommon}
 (\texttt{Random_RN50})}{\texttt{ShapeBiasNovel}(\texttt{Random_RN50})}=1.334$$
 and show the results in Figure 5, B. We find that the strongest models perform close 
-to toddlers' performance; the best models, Noisy-Student and SWSL, respectively matches 
-and outperforms toddlers. A thorough 
+to toddlers' performance; the best models, Noisy-Student and SWSL, match 
+and outperforms toddlers, respectively. A thorough 
 look at Figure 5, B seems to indicate that CNNs
 better generalize the shape bias to novel objects than ViTs (e.g. CLIP_RN50 versus 
 CLIP_ViT-L/14), despite two outliers (Sup_RN50 and CLIP-LAION_CNX_XXL/32). This nuances
@@ -375,14 +379,15 @@ side views of objects <d-cite key="pereira2010early,pereira2014main"></d-cite>, 
 views showing the main axis of elongation perpendicularly to the line of sight (when the object is in a canonical upright position).
 To the best of our knowledge, the reasons for such a
 bias are currently unclear. A hypothesis may be that side views are particularly
-interesting for toddlers because they unambiguously display the whole shape of the 
-object, making easier to recognize the object.
+interesting for toddlers because they unambiguously display the whole shape, 
+simplifying object recognition.
 
 To investigate this question, we leverage the OmniObject3D dataset <d-cite key="
 wu2023omniobject3d"></d-cite> which contains 6,000 high-quality textured meshes scanned
-from real-world objects, distributed in 190 categories. We specifically use the provided
+from real-world objects, distributed into 190 categories. We specifically use the provided
 recordings of 24 in-depth rotations per object in a canonical upright position. We 
-preprocess this dataset by removing objects that do not show a clear main axis of elongation (e.g. a symmetric bottle). To do
+preprocess this dataset by removing objects that do not show a clear main axis of 
+elongation (e.g. a rotationally symmetric bottle). To do
 so, we remove objects for which the ratio between the finest and widest views on the
 horizontal axis is below $0.8$. The provided views were randomly sampled around the yaw
 axis, meaning that we do not access the exact side views of an object. Thus, we define 
@@ -392,15 +397,15 @@ canonical side view, to $\\{0, 180\\}$, $\\{-90, 90\\}$, $\\{-135, -45, 45, 135\
 degrees, respectively. 
 
 To assess the specificity of each of these main views, we propose two metrics: 
-- the intra-object distance as the 
+- the intra-object distance as the average 
 distance between the representation of the given main view of an object and the representations of all 
-  other views of the same object. 
-representations from the same object;
-- the intra-category distance as the distance between the representation of the given main view of an object and the representations of all other views in the 
+  other views of the same object;
+- the intra-category distance as the average distance between the representation of the 
+  given main view of an object and the representations of all other views in the 
   same category.
 
 For each object, we retrieve the main view that maximizes and minimizes each
-metric. Finally, we compute the side-view accuracy as the average number of time the main
+metric. Finally, we compute the side-view accuracy as the average number of times the main
 side view maximizes these metrics. We similarly compute the 3/4-view and front-view accuracy.
 This allows us to assess which main orientation is more prototypical for an object or a 
 category. Figure 6 illustrates the procedure.
@@ -413,11 +418,12 @@ Figure 6. Illustration of how we compute the side-view accuracy for intra-object
 distance. $d$ refers to the negative cosine similarity.
 </div>
 
-First, we compute the Pearson correlation score between the intra-object side-view 
-accuracy and our previously reported measures. We find that the metrics that most highly 
+First, we compute the Pearson correlation between the intra-object side-view 
+accuracy and our previously reported measures. We find that the metric that most highly 
 correlate with 
-the side-view accuracy is the shape bias on common objects (Pearson score: $0.86$). 
-The correlation is similar for intra-category side-view accuracy (Pearson score: $0.80$).
+the side-view accuracy is the shape bias on common objects (Pearson correlation: $0.86$). 
+The correlation is similar for intra-category side-view accuracy (Pearson correlation: $0.
+80$).
 Visualizing the results in Figure 7 confirms that, the higher the shape bias, the 
 more prototypical are the side views. The fact that the shape bias correlates with 
 side views being more prototypical aligns with the fact that the shape bias emerges 
@@ -440,7 +446,8 @@ Figure 7. View accuracies for intra-object and intra-category similarity maximiz
 
 We did not find raw data on the time spent by toddlers on side views. 
 However, current studies found (on a different sets of objects) that toddlers focus 
-more on these views than 3/4 views <d-cite key="pereira2010early"></d-cite>. In our case, 
+more on these views than on 3/4 views <d-cite key="pereira2010early"></d-cite>. In our 
+case, 
 the 3/4 view accuracy remains out-of-reach for all models. Thus, if toddlers indeed 
 target views because they are more prototypical, ML models show a far lower bias than toddlers. 
 
@@ -452,15 +459,15 @@ intermediate <d-cite key="jarvers2023shape"></d-cite> shape features for
 recognizing categories. For instance, looking at the shape of the small ears of a 
 bunny is often enough to regognize it. This may not be enough to 
 unveil the potential of side views as these views also clearly display the 
-configural arrangement of parts of an object. For instance, it exhibits that
-the head of an animal is located at the opposite to its tail, with respect to its body.
+configural arrangement of parts of an object. For instance, side-views exhibit that
+the head of an animal is usually located at the opposite side as its tail.
 
-The ability to categorize object based of the configural arrangement of their parts 
+The ability to categorize objects based of the configural arrangement of their parts 
 starts its development in toddlers <d-cite key="augustine2011parts"></d-cite> and 
 becomes mature only for older children <d-cite key="mash2006multidimensional"></d-cite>. Two lines of prior works studied whether ML models rely on the configural relation between parts to compare
 images <d-cite key="baker2022deep,farahat2023novel"></d-cite>. For both, the idea is the
 same: they try to modify the positions of parts of an image (e.g. a head, a tail, a wheel)
-without deterioring the structure of these parts.
+without deteriorating the structure of these parts.
 
 In <d-cite key="farahat2023novel"></d-cite>, they train a CNN (with 
 supervision) with a specific
@@ -470,19 +477,19 @@ neural network on top of it.
 Their assumption is that the first model learns representations of local and coherent 
 features: in that case, the scrambling process will mimic a change in relative feature 
 positions. They found that the scrambling process hurts the
-recognition performance and conclude that current CNN pays attention to configural
+recognition performance and conclude that current CNNs pay attention to the configural
 relation between parts. To the best of our knowledge, the validity of their assumption 
  is unclear. In addition, their results could be
 specific to their CNN and the two-steps training process.
 
 In <d-cite key="baker2022deep,baker2018deep"></d-cite>, they propose to create 
-*frankenstein* silhouettes by taking an object silhouette and horizontally flipping 
+*Frankenstein* silhouettes by taking an object silhouette and horizontally flipping 
 the upper part of the silhouette, while keeping aligned the boundaries of the silhouette.
 The underlying assumption is that the flip operation does not alter the parts themselves. 
 They found that the recognition performance of ML models is largely unaffected by the flipping process,
 unlike adults. We notice that they mostly use animals in their study, such that the 
 lower and upper part of the silhouette contain distinct parts: the bottom part 
-corresponds to legs and the top part often displays the shape of the face (ears etc.
+corresponds to the legs and the top part often displays the shape of the head (ears etc.
 ..).
 
 {% include figure.html path="assets/img/2025-04-28-visualprop/frankenstein.png"
@@ -491,14 +498,15 @@ class="img-fluid" %}
 Thus, we take the set of stimuli from Baker et al. (2022), which
 comprises 9 categories of animals, each containing 40 original and frankenstein 
 silhouettes. To reproduce experiments from Baker et al. (2022) without a classifier, we sample a
-normal silhouette from each category and one frankenstein silhouette. We compute the
-cosine similarity between the frankenstein silhouette and all normal silhouettes and 
+normal silhouette from each category and one Frankenstein silhouette. We compute the
+cosine similarity between the Frankenstein silhouette and all normal silhouettes and 
 define the accuracy as how often the cosine similarity between the frankenstein and the 
-category-matching normal silhouette is the largest (frankenstein test). To assess the relative
-performance, we apply the procedure again after replacing the frankenstein silhouette by
+category-matching normal silhouette is the largest (Frankenstein test). To assess the 
+relative
+performance, we apply the procedure again after replacing the Frankenstein silhouette by
 another normal silhouette (normal test). Finally, we compute the 
 configural sensitivity as the difference of performance between the success 
-rate of the frankenstein test and the success 
+rate of the Frankenstein test and the success 
 rate of the normal test. To show sensitivity to the spatial arrangement of parts, the metric must be lower than $0$.
 
 {% include figure.html path="assets/img/2025-04-28-visualprop/configuralimg.png"
@@ -510,12 +518,12 @@ Figure 9. Illustration of the frankenstein test.
 We first compute the Pearson correlation score between configural sensitivity and
 hard image recognition ($-0.58$), hard caricature recognition ($-0.71$) shape bias on 
 common objects ($-0.69$) and shape bias on novel objects ($-0.41$). Given that hard 
-caricature recognition is the highest correlated metric,
+caricature recognition is the most highest correlated metric,
 we plot configural sensitivity against hard caricature recognition in Figure 10. We 
 observe that the performance of current models is very weak, barely lower than $0$. Only 
-Large-scale weakly supervised models are significantly more sensitive than a BagNet-9, a 
+large-scale weakly supervised models are significantly more sensitive than a BagNet-9, a 
 model that can not show configural sensitivity by design. All models are less sensitive than 
-the estimated adults. We conclude that shape-biased models likely rely on local 
+the estimated adults. We conclude that even shape-biased models likely rely on local 
 shape cues instead of the global arrangement of parts.
 
 
@@ -527,7 +535,8 @@ Figure 10. Configural sensitivity of ML models against their shape bias on commo
 
 # Conclusion
 
-In this blogpost, we extended previous studies to investigate whether current ML models 
+In this blogpost, we have extended previous studies to investigate whether current ML 
+models 
 learn 4 fundamental visual properties that emerge in toddlers. While we did not observe 
 major effects of the 
 training setup (supervised, adversarial, self-supervised...), we 
@@ -535,26 +544,27 @@ found that cutting-edge
 models reach the estimated level of a toddler with respect to caricature recognition and the shape bias on common objects. For the shape bias on novel objects, 
 the best models are close to toddlers. However, most of 
 the considered models use bio-implausible data: a lot more diverse images, labels, millions of aligned language 
-utterances, color-jittered images, adversarial samples... Models trained 
-with comparable egocentric visual images (VC-1, VIP, R3M) 
-perform poorly on all benchmarks. Despite all these *cheats*, ML 
+utterances, adversarial samples, etc... Models trained 
+with egocentric visual images comparable to humans (VC-1, VIP, R3M) 
+perform poorly on all benchmarks. In addition, other ML 
 models still perform poorly on configural sensitivity and the proposed side-view bias 
 compared to toddlers and adults, suggesting there is room for improvements. We can not 
 conclude on the performance of toddlers for configural sensitivity for the considered 
-task. However, given the emerging 
+task. However, given the emerging configural
 sensitivity of toddlers <d-cite key="augustine2011parts"></d-cite> and the amplitude of the 
 difference between models and adults, we presume that ML models are 
 likely inferior to toddlers.
 
-We found that object recognition ability positively correlate with caricature 
+We found that object recognition abilities positively correlate with caricature 
 recognition, which 
 also positively correlates with a strong shape bias. This suggests that these properties 
 are connected in ML models. However, it does not mean that increasing the shape bias 
 systematically leads to better recognition abilities, as evidenced by the Noisy-Student 
 model (high shape bias, relatively low caricature recognition) and prior works <d-cite 
-key="hermann2020origins"></d-cite>. Furthermore, showing a shape bias spurs the side-view 
+key="hermann2020origins"></d-cite>. Furthermore, showing a shape bias correlates with the 
+side-view 
 bias and the configural sensitivity, but it is far from enough 
-to reach the level of humans. Thus, we speculate the shape bias may be a first 
+to reach the level of humans. Thus, we speculate that the shape bias may be a first 
 milestone of visual learning, on the way to generalizing objects based on the relative 
 arrangement of parts.
 
@@ -580,7 +590,7 @@ still less object-prototypical than 3/4 views on average for ML models. It could
 that ML models lack some visual property like configural sensitivity or that our dataset is too different 
 from the set of 16 simple stimulus objects used in Pereira et al. (2010).
 
-This works presents several limitations. First, the experimental protocol do not 
+This study presents several limitations. First, the experimental protocol do not 
 perfectly follow neither developmental experiments (often based on language), nor machine 
 learning protocols (often based on vision-language models or supervised labels).
 We chose not to rely on language to test a broad set of models beyond vision-language 
@@ -590,9 +600,10 @@ perform a form of cognitive comparison that resembles our comparison of
 representations. Second, the set of stimuli generally varies between developmental 
 studies and ours, allowing to only approximate how a toddler would perform. This is 
 especially salient in our study of configural sensitivity: to the best of our knowledge, 
-toddlers have not been tested on frankenstein silhouettes. Third, the set of stimuli 
+toddlers have not been tested on Frankenstein silhouettes. Third, the set of stimuli 
 is small and often biased (very small for caricatures, only animals for configural 
-sensitivity, white background in all datasets...). Despite that, our study provides a 
+sensitivity, white background in almost all datasets...). Despite that, our study 
+provides a 
 global picture of the presence
 and interplay of toddlers' visual properties in ML models. We hope it will spur 
 research in addressing the gap between models and toddlers.
