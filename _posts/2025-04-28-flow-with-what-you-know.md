@@ -12,7 +12,7 @@ authors:
   - name: Anonymous
 
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-Flow-With-What-You-Know.bib  
+bibliography: 2025-04-28-flow-with-what-you-know.bib  
 
 
 # Add a table of contents to your post.
@@ -95,7 +95,7 @@ Intuitively, these models operate akin to the fluid processes that transform the
 In the real world, things typically follow curved paths - like water flowing in a river, or crowds of people navigating around obstacles.  Here's map of wind provided from the WW2010 atmospheric science project at UIUC: at every point in space, the wind has a velocity vector, and the air moves along "streamlines" or "trajectories" parallel to the velocity vectors...
 
 <div class="l-page"> <center>
-  <iframe src="{{ 'assets/img/2025-04-28-Flow-With-What-You-Know/weather-map.gif' | relative_url }}" frameborder='0' scrolling='no' height="300px" width="500"></iframe><br>
+  <iframe src="{{ 'assets/img/2025-04-28-flow-with-what-you-know/weather-map.gif' | relative_url }}" frameborder='0' scrolling='no' height="300px" width="500"></iframe><br>
   <i>Source: <a href="http://ww2010.atmos.uiuc.edu/%28Gh%29/guides/maps/fcst/3wndhght.rxml">atmos.uiuc.edu</a></i>
   </center></div>
 
@@ -369,12 +369,12 @@ plot_distributions(source, target, "Starting Distribution", "Target Distribution
 </details>
 
 
-{% include figure.html path="assets/img/2025-04-28-Flow-With-What-You-Know/big_gaussian_and_spiral.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-flow-with-what-you-know/big_gaussian_and_spiral.png" class="img-fluid" %}
 
     
 The process of transitioning from the starting "source" to the final "target" might include snapshots like these:
 
-{% include figure.html path="assets/img/2025-04-28-Flow-With-What-You-Know/transition_frames_example.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-flow-with-what-you-know/transition_frames_example.png" class="img-fluid" %}
 
 
 (Note the colors aren't meaningful, they're just added to make it easier to distinguish what we're looking at. Our data are just points in 2-D space.)
@@ -433,7 +433,7 @@ plt.close()
 </details>
 
 
-{% include figure.html path="assets/img/2025-04-28-Flow-With-What-You-Know/gaussian_to_spiral_crossing_lines.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-flow-with-what-you-know/gaussian_to_spiral_crossing_lines.png" class="img-fluid" %}
 
 
 <div class="callout-block">
@@ -445,7 +445,7 @@ This is not the <i>only</i> choice for trial trajectories. We could instead use 
 There are big issues with doing this: The random pairing results in lots of trajectories that cross each other. But this is a *starting point* for Flow Matching.<d-footnote>"We'll cross the streams." -- Ghostbusters (1984)</d-footnote>
 
 <!--- <div class="l-page"> <center>
-  <iframe src="{{ 'assets/img/2025-04-28-Flow-With-What-You-Know/gb-well-cross-streams.gif' | relative_url }}" frameborder='0' scrolling='no' height="200px" width="500"></iframe>
+  <iframe src="{{ 'assets/img/2025-04-28-flow-with-what-you-know/gb-well-cross-streams.gif' | relative_url }}" frameborder='0' scrolling='no' height="200px" width="500"></iframe>
   </center></div> --->
 
 
@@ -462,7 +462,7 @@ Here's a visualization from the code we'll execute later in the lesson. We'll pl
 3. The paths (aka "trajectories") that data points follow when flowing with the learned field
 
 
-{% include figure.html path="assets/img/2025-04-28-Flow-With-What-You-Know/cross_uncross_plot.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-flow-with-what-you-know/cross_uncross_plot.png" class="img-fluid" %}
 
 Left: Training data uses simple straight lines (with many crossings).
 Middle: The learned flow (velocity vector) field is smooth and continuous.
@@ -622,7 +622,7 @@ viz(val_points, target_samples,  model)
 
     Testing visualization routines (before training):    
 
-{% include figure.html path="assets/img/2025-04-28-Flow-With-What-You-Know/viz_test.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-flow-with-what-you-know/viz_test.png" class="img-fluid" %}
 
 
 The clever part about flow matching is how we train this network. For each training step:
@@ -691,7 +691,7 @@ def train_model(model, n_epochs=100, lr=0.003, batch_size=2048, status_every=1, 
 </details>
 
 
-{% include figure.html path="assets/img/2025-04-28-Flow-With-What-You-Know/last_epoch_viz.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-flow-with-what-you-know/last_epoch_viz.png" class="img-fluid" %}
 
     
 
@@ -822,7 +822,7 @@ create_flow_animation(val_points.clone(), models=[fm_model], titles=['Flow Match
 
 <center>
 <video width="50%" controls loop>
-  <source src="{{ site.baseurl }}/assets/img/2025-04-28-Flow-With-What-You-Know/particles_fm.mp4" type="video/mp4">
+  <source src="{{ site.baseurl }}/assets/img/2025-04-28-flow-with-what-you-know/particles_fm.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 </center>
@@ -922,7 +922,7 @@ plot_training_trajectories_vs_learned_flow(fm_model)
 </details>
 
 
-{% include figure.html path="assets/img/2025-04-28-Flow-With-What-You-Know/cross_uncross_plot.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-flow-with-what-you-know/cross_uncross_plot.png" class="img-fluid" %}
 
     
 
@@ -935,7 +935,7 @@ The Reflow idea is that, instead of randomly pairing source and target points wh
 
 
 
-{% include figure.html path="assets/img/2025-04-28-Flow-With-What-You-Know/reflow_diagram.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-flow-with-what-you-know/reflow_diagram.png" class="img-fluid" %}
 
 
 This has the effect of straightening out the curved trajectory of the flow matching model, making the new "reflowed" trajectories much easier and faster to integrate!
@@ -1067,7 +1067,7 @@ viz_parabola_with_steps()
 </details>
 
 
-{% include figure.html path="assets/img/2025-04-28-Flow-With-What-You-Know/integrate_parabola_fwd_euler.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-flow-with-what-you-know/integrate_parabola_fwd_euler.png" class="img-fluid" %}
 
 
 While the results for $s=0.5$ are better than the others, we see that *none* of these examples make it all the way around the parabola (to the point (1,1))! If we're going to be using the endpoints integrated from the flow matching model as proxies for the true target data, we should have some confidence that those endpoints are actually "reaching" the target data. We could add more (smaller) steps to the integration, but there's another way: upgrade the integration (i.e. sampling) operation to a higher order of accuracy.
@@ -1101,7 +1101,7 @@ viz_parabola_with_steps(step_fn=rk4_step, n_steps=6)
 </details>
 
 
-{% include figure.html path="assets/img/2025-04-28-Flow-With-What-You-Know/integrate_parabola_rk4.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-flow-with-what-you-know/integrate_parabola_rk4.png" class="img-fluid" %}
 
 
 It's cool how the RK4 results, despite showing much less error than the Euler results, actually involve less computational cost in terms of total number of function evaluations, although the RK4 scheme needs 4 times the storage compared to forward Euler. (The good news is that no PyTorch gradients need to be stored; the integrator is only ever used when the model is in "eval" mode.)
@@ -1145,7 +1145,7 @@ plt.close()
 {% endhighlight %}
 </details>
 
-{% include figure.html path="assets/img/2025-04-28-Flow-With-What-You-Know/check_viz_b4_reflow.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-flow-with-what-you-know/check_viz_b4_reflow.png" class="img-fluid" %}
 
 
 ....ok, so we see the learned outputs are a bit different from the true data, but they're not bad.  Let's now train the "reflow" model. 
@@ -1231,7 +1231,7 @@ reflowed_model.train()               # make sure we have gradients turned on
 reflowed_model = train_reflow_model(reflowed_model, pretrained_model=pretrained_model)
 ```
 
-{% include figure.html path="assets/img/2025-04-28-Flow-With-What-You-Know/reflowed_inp_gen_targ_traj.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-flow-with-what-you-know/reflowed_inp_gen_targ_traj.png" class="img-fluid" %}
  
 
 Now look how straight the trajectories are!  Let's compare animations of the original flow matching model with the "Reflowed" model: 
@@ -1248,7 +1248,7 @@ create_flow_animation(val_points.clone(), models=[pretrained_model, reflowed_mod
 
 
 <video width="100%" controls loop>
-  <source src="{{ site.baseurl }}/assets/img/2025-04-28-Flow-With-What-You-Know/particles_fm_vs_rf.mp4" type="video/mp4">
+  <source src="{{ site.baseurl }}/assets/img/2025-04-28-flow-with-what-you-know/particles_fm_vs_rf.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
@@ -1405,7 +1405,7 @@ create_streamline_animation(val_points, fm_model, model2=reflowed_model, n_frame
  
 
 <video width="100%" controls loop>
-  <source src="{{ site.baseurl }}/assets/img/2025-04-28-Flow-With-What-You-Know/fm_vs_rf_streamvecs.mp4" type="video/mp4">
+  <source src="{{ site.baseurl }}/assets/img/2025-04-28-flow-with-what-you-know/fm_vs_rf_streamvecs.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
