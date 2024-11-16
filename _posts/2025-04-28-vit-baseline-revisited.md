@@ -57,7 +57,7 @@ With competitive performance, ViT is now widely adapted not only for CV tasks, b
 for vision-language models <d-cite key="radford2021learning"></d-cite>.
 
 <div class="caption">
-    <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/model_scheme.png" class="img-fluid" width="auto" height="auto">
+    <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/model_scheme.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 <div class="caption">
     ViT architecture. Images are divided into square patches, which are then linearly projected into
@@ -128,7 +128,7 @@ most of the parameters to match that of the Big Vision reference implementation,
    doesn't take the effect of truncation on standard deviation into account unlike [the JAX implementation](https://github.com/google/jax/blob/1949691daabe815f4b098253609dc4912b3d61d8/jax/_src/nn/initializers.py#L334), so we have to implement the correction ourselves:
 
    <div class="caption">
-     <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/truncated_normal.png" class="img-fluid" width="auto" height="auto">
+     <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/truncated_normal.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
    </div>
 
    <div class="caption">
@@ -164,7 +164,7 @@ and make sure that our reproduction conforms to this training setup. Our reprodu
 L2 norm comparison suggests that they are not equivalent:
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/gradient_L2_norm_comparison.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/gradient_L2_norm_comparison.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 It turns out that "RandAugment" in torchVision <d-cite key="torchvision2016"></d-cite> is quite different
@@ -227,17 +227,17 @@ We can experimentally confirm and visualize this using a calibration grid. For e
 $224 \times 224$ grid below that consists of (192, 64, 64) and (64, 192, 192) squares:
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/color_grid.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/color_grid.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 `contrast(tf_color_tile, 1.9)` before the fix returns a grid with (188, 0, 0) and (0, 188, 188) squares:
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/broken_result.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/broken_result.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 After the fix, `contrast(tf_color_tile, 1.9)` returns a grid with (249, 6, 6) and (6, 249, 249) squares instead:
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/correct_result.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/correct_result.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 Another problematic transform is the Solarize transform, [whose augmentation strength varies unintuitively with `magnitude` and is in danger of uint8 overflow](https://github.com/google-research/big_vision/issues/110).
@@ -248,7 +248,7 @@ use a calibration grid to confirm and visualize. Given the following $224 \times
 calibration grid:
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/calibration_grid.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/calibration_grid.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 We apply both versions of `RandAugment(2, 10)` 100000 times ([notebook](https://github.com/EIFY/mup-vit/blob/e35ab281acb88f669b18555603d9187a194ccc2f/notebooks/RandAugmentOnCalibrationGrid.ipynb)) to gather the stats. All of the resulting pixels remain colorless (i.e. for RGB values (r, g, b), r == g == b) so
@@ -256,19 +256,19 @@ we can sort them from black to white into a spectrum ([notebook](https://github.
 For the following $2000 \times 200$ spectra, pixels are sorted top-down, left-right, and each pixel represents 224 * 224 * 100000 / (2000 * 200) = 112 * 112 pixels of the aggregated output, amounting to 1/4 of one output image. In case one batch of 12544 pixels happens to be of different values, I took the average. Here is the spectrum of torchvision's `RandAugment(2, 10)`:
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/torch_vision_randaugment_2_10.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/torch_vision_randaugment_2_10.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 Here is the spectrum of torchvision's `RandAugment(2, 10, fill=[128] * 3)`. We can see that it just shifts the zero-padding part of the black to the (128, 128, 128) neutral gray:
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/torch_vision_randaugment_2_10_mid_fill.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/torch_vision_randaugment_2_10_mid_fill.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 And here is the spectrum of big_vision's `randaug(2, 10)`:
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/big_vision_randaugment_2_10.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/big_vision_randaugment_2_10.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 We end up subclassing torchvision's [`v2.RandAugment`](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandAugment.html)([notebook](https://github.com/EIFY/mup-vit/blob/e35ab281acb88f669b18555603d9187a194ccc2f/notebooks/RandAugmentCalibration.ipynb)) in order to
@@ -278,7 +278,7 @@ counterpart, except the Contrast transform for which we decide against replicati
 that exception, the near-replication of big_vision's `randaug(2, 10)` results in near-identical spectrum:
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/torch_vision_randaugment17_2_10.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/torch_vision_randaugment17_2_10.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 Before we move on: credit to [@tobiasmaier for first noticing the contrast bug and submitting a PR to fix it](https://github.com/tensorflow/tpu/pull/764).
@@ -294,8 +294,8 @@ Model trained with the near-replication of Big Vision's `randaug(2, 10)` for 90 
 [reaches 77.27% top-1 validation set accuracy and the gradient L2 norm looks the same, but the training loss still differs](https://api.wandb.ai/links/eify/8d0wix47):
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/inception_crop_l2_grads_discrepancy.png" class="img-fluid" width="auto" height="auto">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/inception_crop_training_loss_discrepancy.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/inception_crop_l2_grads_discrepancy.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/inception_crop_training_loss_discrepancy.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 It turns out that besides the default min scale ([8%](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandomResizedCrop.html)
@@ -319,14 +319,14 @@ We can verify this by taking stats of the crop sizes given the same image. Here 
 given an image of (height, width) = (256, 512), N = 10000000:
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/torch_hw_counts.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/torch_hw_counts.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 There is a total of 14340 crop failures resulting in a bright pixel at the bottom right, but otherwise
 the density is roughly uniform. In comparison, here is what `tf.image.sample_distorted_bounding_box(..., area_range=[0.05, 1])` returns:
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/tf_hw_counts.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/tf_hw_counts.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 While cropping never failed, we can see clearly that it's oversampling smaller crop areas, as if there
@@ -335,8 +335,8 @@ We replicate `tf.image.sample_distorted_bounding_box()`'s sampling logic in PyTo
 training a model with it for 90 epochs. At last, both the gradient L2 norm and the training loss match:
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/inception_crop_l2_grads_match.png" class="img-fluid" width="auto" height="auto">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/inception_crop_training_loss_match.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/inception_crop_l2_grads_match.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/inception_crop_training_loss_match.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 This true reproduction model reaches 76.94% top-1 validation set accuracy after 90 epochs. In summary:
@@ -352,7 +352,7 @@ Before we move on: Which implementation is correct? While the reference implemen
 is not publicly available to our best knowledge, here is the relevant excerpt from the paper <d-cite key="szegedy2015going"></d-cite>:
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/Inception_crop_paper_excerpt.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/Inception_crop_paper_excerpt.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 While there is some ambiguity in whether aspect ratio should be sampled uniformly in log space or
@@ -470,7 +470,7 @@ is that oversampling crops with smaller area amounts to stronger augmentation, w
 models in the long run <d-footnote>One might be tempted to try curriculum learning with increasing augmentation strength, but early experiments (<a href="https://github.com/EIFY/mup-vit/tree/curriculum">source</a>) result in <a href="https://api.wandb.ai/links/eify/ylnhm3or">76.65-77.35 for 90ep Head: MLP → linear</a>, almost the same range.</d-footnote>. We can also see this by [comparing better baseline with no RandAug+MixUp](https://api.wandb.ai/links/eify/3joh568g):
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/augmentation_tortoise_and_hare.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/augmentation_tortoise_and_hare.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 As a setup that is already under-augmented, no RandAug+MixUp itself does not benefit from the
@@ -534,7 +534,7 @@ How focused the model's attention (in the colloquial sense here) may differ. For
 check, the maximum possible entropy here is $\log(224^2) = 10.82$:
 
 <div class="caption">
-  <img src="/2025/assets/img/2025-04-28-vit-baseline-revisited/gradient_entropy.png" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/gradient_entropy.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
 Tentatively we find that to be the case. There is quite a bit of variation between the replications
