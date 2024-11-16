@@ -97,7 +97,7 @@ _styles: >
 
 <figure>
 <center>
-    <img src="{{ 'assets/img/2025-04-28-efficient-dl/0.webp' | relative_url }}" style="width:90%" alt="NVIDIA Blackwell GPU">
+    <img src="{{ 'assets/img/2025-04-28-efficient-dl/0.webp' | relative_url }}" style="width:100%" alt="NVIDIA Blackwell GPU">
     <figcaption>NVIDIA's newest Blackwell chip is marketed to be significantly more powerful for deep learning applications.</figcaption>
 </center>
 </figure>
@@ -149,7 +149,7 @@ The introduction of the graphics processors in the late 20th century did not imm
 4. **OpenCL (2009):** An alternative to hacking in OpenGL, OpenCL was a device-agnostic library for performing computations in multiple processors. It was far more flexible for implementing primitives like matrix multiplication.
 
 Just for some reference numbers, I just ran a simple matrix multiplication experiment on my Macbook M2 Pro (12-core CPU, 3.5 GHz) with NumPy 1.26.4, which currently uses OpenBLAS under the hood. I found this [blogpost by Aman Salykov](https://salykova.github.io/matmul-cpu) which does more extensive experimenting as well.
-<d-code block language="python" style="font-size:0.7em">
+{% highlight c++ linenos %}
 import numpy as np
 import time
 
@@ -164,7 +164,7 @@ end_time = time.time()
 
 time_taken = end_time - start_time
 print(f"Average of {(OPS / time_taken * (1e-9)):.4f} GLOPS")
-</d-code>
+{% endhighlight %}
 ```
 > Average of 361.4851 GFLOPS
 ```
@@ -543,7 +543,7 @@ Let’s continue where we [left off](#i2-compute-unified-device-architecture-cud
 
 An example template of launching a CUDA kernel from the host is below.
 
-<d-code block language="python" style="font-size:0.7em">
+{% highlight c++ linenos %}
 __global__ void func(float *a, float *b) {
   // Thread ID
   int x = blockIdx.x * blockDim.x + threadIdx.x;
@@ -555,7 +555,7 @@ int main(int argc, char* argv[]) {
 	// Example of launching a GPU kernel from the CPU.
 	func<<<blk_in_grid, thr_per_blk>>>(a, b);
 }
-</d-code>
+{% endhighlight %}
 
 <hr style="margin-bottom: 20px;margin-top: 20px">
 
@@ -851,14 +851,14 @@ $$
 $$
 </p>
 
-<d-code block language="python" style="font-size:0.7em">
+{% highlight python linenos %}
 def attention(Q: torch.Tensor, K: torch.Tensor, V: torch.Tensor) -> torch.Tensor:
     d_k = math.sqrt(Q.size(-1))
     scores = torch.matmul(Q, K.transpose(-2, -1)) / d_k
     p_attn = scores.softmax(dim=-1)
     O = torch.matmul(p_attn, V)
     return O
-</d-code>
+{% endhighlight %}
 
 In eager execution mode or without a clever compiler, every assignment $y = f(x_1,x_2,...)$ in the code above will do something like this. 
 
@@ -1079,12 +1079,12 @@ Multi-GPU and multi-node algorithms like ZeRO have been integrated into librarie
 - The **device rank** or world rank is a unique identifier in $\mathbb{N}$ for each device in the distributed network. The **local rank** is the identifier of a process within a node (e.g. gpu:0), and the **world size** is the total number of devices.
 - The communication **backend** is the protocol that defines how messages are sent and received across nodes and devices, as well as the available communication collectives (e.g. [send, recv, all_reduce, all_to_all, reduce_scatter](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/collectives.html), etc.).
 
-<d-code block language="python" style="font-size:0.7em">
+{% highlight python linenos %}
 # Define node-specific constants
 os.environ['MASTER_ADDR']= '127.0.0.1'
 os.environ['MASTER_PORT']= '01134'
 torch.distributed.init_process_group(backend, rank=rank, world_size=size)
-</d-code>
+{% endhighlight %}
 
 Modern libraries like `deepspeed` will make these primitives a lot easier for you, and will even make launching these applications with their [CLI tools](https://aws.amazon.com/what-is/cli/) a lot simpler (you’ll probably just have to run `deepspeed program.py ...`).  If you were to manually run a distributed workload (e.g. with [PyTorch’s DistributedDataParallel](https://pytorch.org/tutorials/intermediate/ddp_tutorial.html) or by defining your own sends and receives), you would typically have to run the program on each separate node while specifying their individual ranks. 
 
