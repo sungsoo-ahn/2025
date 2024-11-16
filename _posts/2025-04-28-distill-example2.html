@@ -4,7 +4,7 @@ title: Sample Blog Post (HTML version)
 description: Your blog post's abstract.
   Please add your abstract or summary here and not in the main body of your text. 
   Do not include math/latex or hyperlinks.
-date: 2025-05-07
+date: 2025-04-28
 future: true
 htmlwidgets: true
 hidden: false
@@ -28,7 +28,7 @@ authors:
       name: IAS, Princeton
 
 # must be the exact same name as your blogpost
-bibliography: 2025-05-07-distill-example.bib  
+bibliography: 2025-04-28-distill-example.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -68,7 +68,7 @@ _styles: >
 ---
 
 <p>
-  This is a sample blog post written in HTML (while the other <a href="{% post_url 2025-05-07-distill-example %}">sample post</a> is written in Markdown). Authors have the choice to write in HTML or Markdown. While Markdown is easier to write, HTML gives you more control over the layout of your post. Furthermore, Markdown often interacts in unexpected ways with MathJax and other HTML widgets. If you are having trouble with Markdown, try writing in HTML instead.
+  This is a sample blog post written in HTML (while the other <a href="{% post_url 2025-04-28-distill-example %}">sample post</a> is written in Markdown). Authors have the choice to write in HTML or Markdown. While Markdown is easier to write, HTML gives you more control over the layout of your post. Furthermore, Markdown often interacts in unexpected ways with MathJax and other HTML widgets. If you are having trouble with Markdown, try writing in HTML instead.
 </p>
 
 <p>
@@ -98,16 +98,16 @@ that brought a significant improvement to the loading and rendering speed, which
 might face losing important information in your blog post.
 You can display images from this repository using the following code:</p>
 
-<pre><code>{% raw %}{% include figure.html path="assets/img/2025-05-07-distill-example/iclr.png" class="img-fluid" %}{% endraw %}</code></pre>
+<pre><code>{% raw %}{% include figure.html path="assets/img/2025-04-28-distill-example/iclr.png" class="img-fluid" %}{% endraw %}</code></pre>
 
 <p>which results in the following image:</p>
 
-{% include figure.html path="assets/img/2025-05-07-distill-example/iclr.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-distill-example/iclr.png" class="img-fluid" %}
 
 
 <p>
   To ensure that there are no namespace conflicts, you must save your asset to your unique directory
-  `/assets/img/2025-05-07-[SUBMISSION NAME]` within your submission.  
+  `/assets/img/2025-04-28-[SUBMISSION NAME]` within your submission.  
 </p>
 
 <p>
@@ -117,10 +117,10 @@ You can display images from this repository using the following code:</p>
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-05-07-distill-example/9.jpg" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-distill-example/9.jpg" class="img-fluid rounded z-depth-1" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-05-07-distill-example/7.jpg" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-distill-example/7.jpg" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -129,22 +129,22 @@ You can display images from this repository using the following code:</p>
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-05-07-distill-example/8.jpg" class="img-fluid z-depth-2" %}
+        {% include figure.html path="assets/img/2025-04-28-distill-example/8.jpg" class="img-fluid z-depth-2" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-05-07-distill-example/10.jpg" class="img-fluid z-depth-2" %}
+        {% include figure.html path="assets/img/2025-04-28-distill-example/10.jpg" class="img-fluid z-depth-2" %}
     </div>
 </div>
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-05-07-distill-example/11.jpg" class="img-fluid"  %}
+        {% include figure.html path="assets/img/2025-04-28-distill-example/11.jpg" class="img-fluid"  %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-05-07-distill-example/12.jpg" class="img-fluid" %}
+        {% include figure.html path="assets/img/2025-04-28-distill-example/12.jpg" class="img-fluid" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-05-07-distill-example/7.jpg" class="img-fluid" %}
+        {% include figure.html path="assets/img/2025-04-28-distill-example/7.jpg" class="img-fluid" %}
     </div>
 </div>
 
@@ -174,20 +174,20 @@ fig = px.density_mapbox(
     center=dict(lat=0, lon=180), zoom=0, mapbox_style="stamen-terrain")
 fig.show()
 
-fig.write_html('./assets/html/2025-05-07-distill-example/plotly_demo_1.html')
+fig.write_html('./assets/html/2025-04-28-distill-example/plotly_demo_1.html')
 </code></pre>
 
 And then include it with the following:
 
 <pre><code class="language-html">{% raw %}&lt;div class="l-page"&gt;
-  &lt;iframe src="{{ 'assets/html/2025-05-07-distill-example/plotly_demo_1.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"&gt;&lt;/iframe&gt;
+  &lt;iframe src="{{ 'assets/html/2025-04-28-distill-example/plotly_demo_1.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"&gt;&lt;/iframe&gt;
 &lt;/div&gt;{% endraw %}
 </code></pre>
 
 Voila!
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-05-07-distill-example/plotly_demo_1.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-04-28-distill-example/plotly_demo_1.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
 
 
