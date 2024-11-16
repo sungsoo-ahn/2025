@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: [The Usefulness Ceiling -- Why Frontier AI Isn't Ready to Replace Humans, And What We Should Do About It]
-description: [LLMs and diffusion models have improved so much so quickly of late that some believe that humans are at risk of wholesale replacement in the near term. We argue that a host of challenges and obstacles, which we can collectively call The Usefulness Ceiling, make such an event unlikely in the near term. We should make good use of this opportunity, orienting our research away from short-term projects and performance hacks and towards more ambitious, interdisciplinary challenges.]
+description: [LLMs and diffusion models have improved so much so quickly of late that some believe that humans are at risk of wholesale replacement in the near term. We argue that a host of challenges and obstacles, which we can collectively call The Usefulness Ceiling, make such an event unlikely in the near term. We should make good use of this opportunity, shifting our research away from short-term projects and performance hacks and towards more ambitious, interdisciplinary challenges.]
 date: 2025-04-28
 future: true
 htmlwidgets: true
