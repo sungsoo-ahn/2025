@@ -92,7 +92,7 @@ Intuitively, these models operate akin to the fluid processes that transform the
 
 
 ## What's a Flow? 
-In the real world, things typically follow curved paths - like water flowing in a river, or crowds of people navigating around obstacles.  Here's map of wind provided from the WW2010 atmospheric science project at UIUC: at every point in space, the wind has a velocity vector, and the air moves along "streamlines" or "trajectories" parallel to the velocity vectors...
+In the real world, things typically follow curved paths - like water flowing in a river, or crowds of people navigating around obstacles.  Here's map of wind provided from the [WW2010 atmospheric science project at UIUC](http://ww2010.atmos.uiuc.edu/%28Gh%29/guides/maps/fcst/3wndhght.rxml): at every point in space, the wind has a velocity vector, and the air moves along "streamlines" or "trajectories" parallel to the velocity vectors...
 
 <div class="l-page"> <center>
   <iframe src="{{ 'assets/img/2025-04-28-flow-with-what-you-know/weather-map.gif' | relative_url }}" frameborder='0' scrolling='no' height="300px" width="500"></iframe><br>
