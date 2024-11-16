@@ -19,7 +19,7 @@ authors:
 #       name: York University, Toronto, Canada
   
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-Deterministic-Diffusion-Models.bib  
+bibliography: 2025-04-28-deterministic-diffusion-models.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -44,7 +44,7 @@ In this post, we present a deterministic perspective on diffusion models. In thi
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-Deterministic-Diffusion-Models/deterministic-diffusion.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-deterministic-diffusion-models/deterministic-diffusion.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -79,7 +79,7 @@ The method in Eq.(\ref{eq-forward-deterministic}) streamlines the process, makin
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-Deterministic-Diffusion-Models/deterministic-diffusion-process.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-deterministic-diffusion-models/deterministic-diffusion-process.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -243,7 +243,7 @@ In Figure 3, we have shown some sampling results from the MNIST-Fashion dataset 
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-Deterministic-Diffusion-Models/deterministic_denoising_via_cleanimage.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-deterministic-diffusion-models/deterministic_denoising_via_cleanimage.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -311,7 +311,7 @@ In Figure 4, we have shown some sampling results from the MNIST-Fashion dataset 
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-Deterministic-Diffusion-Models/deterministic_denoising_via_noise.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-deterministic-diffusion-models/deterministic_denoising_via_noise.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
