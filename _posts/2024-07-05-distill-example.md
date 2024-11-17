@@ -4,8 +4,8 @@ title: Sample Blog Post
 description: Your blog post's abstract.
   Please add your abstract or summary here and not in the main body of your text. 
   Do not include math/latex or hyperlinks.
-date: 2025-04-28
-future: true
+date: 2024-10-23
+future: false
 htmlwidgets: true
 hidden: false
 
