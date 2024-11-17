@@ -157,15 +157,15 @@ Note that $\langle \mathbf{w}^\star, \mathbf{x} \rangle$ is smooth maximum where
 
 Figure 1 shows the values of the objective function for different weights to the entropy term.
 
-<a target="_blank" href="https://colab.research.google.com/github/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/sigmoid_and_softmax/Sigmoid_and_Softmax_visualization.ipynb">
+<a target="_blank" href="https://colab.research.google.com/github/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2025-01-01-sigmoid-and-softmax/Sigmoid_and_Softmax_visualization.ipynb">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
 
-![Sigmoid with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/sigmoid_and_softmax/sigmoid_neg_entropy.png?raw=true)
+![Sigmoid with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2025-01-01-sigmoid-and-softmax/sigmoid_neg_entropy.png?raw=true)
 
 
-![Softmax with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/sigmoid_and_softmax/softmax_neg_entropy.png?raw=true)
+![Softmax with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2025-01-01-sigmoid-and-softmax/softmax_neg_entropy.png?raw=true)
 
 Figure 1. Effect of the entropy term in values of the objective function corresponding to sigmoid and softmax.
 
