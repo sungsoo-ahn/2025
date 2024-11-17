@@ -78,7 +78,7 @@ _styles: >
 
 ## Background: Autoregressive and Diffusion
 
-### Autoregressive
+### Autoregressive Model
 Autoregressive (AR) sequence generation is a method where a sequence is generated token by token, with each token predicted based on the preceding ones. 
 This approach models dependencies within the sequence by conditioning each output on prior outputs, effectively capturing the structure and patterns of sequential data.
 
@@ -94,10 +94,37 @@ This formula captures the essence of autoregressive generation: predicting each 
 Autoregressive models are simple, interpretable, and effective, but their sequential nature can limit efficiency, particularly for long sequences. These characteristics are central to understanding their role in unified multimodal generation tasks.
 
 
-### Diffusion
+### Diffusion Model
+Diffusion models are a class of probabilistic generative models used to synthesize data by modeling its distribution through a gradual process of noise addition and removal. These models have shown impressive results in image, audio, and video generation tasks.
+
+**Forward Process**. The forward process is a Markov chain where Gaussian noise is iteratively added to the data $\mathbf{x}_0$, resulting in a series of noisy representations $\mathbf{x}_1,\mathbf{x}_2,...,\mathbf{x}_T$:
+
+$$
+q(\mathbf{x}_{t} | \mathbf{x}_{t-1}) = \mathcal{N}(\mathbf{x}_t; \sqrt{1-\beta_t} \mathbf{x}_{t-1}, \beta_t \mathbf{I}),
+$$
+
+where $β_t$ is the noise schedule, $\mathcal{N}$ refers to Gaussian distribution. 
 
 
-## Unified Multimodal Models
+**Reverse Process**. The reverse process learns to denoise $x_T$ back to $x_0$ through a neural network $p_θ$, parameterized as:
+
+$$
+p_θ(x_{t-1} | x_t) = \mathcal{N}(x_{t-1}; μ_θ(x_t, t), Σ_θ(x_t, t)),
+$$
+
+During sampling, we start from pure Gaussian noise $x_T ~ \mathcal{N}(0, I)$ and iteratively sample $x_{t-1}$ from $p_θ$ until $x_0$ is reconstructed.
+
+**Loss Function**. The neural network $ε_θ$ is trained to predict the noise added at each step $t$, using the following loss function:
+
+$$
+L(θ) = \mathbb{E}_{x_0, ε, t}[ ||ε - ε_θ(x_t, t)||^2 ],
+$$
+
+where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at step $t$, $ε_θ(x_t, t)$ is the model's noise prediction.
+
+
+
+## Unified Multimodal Model
 
 
 
