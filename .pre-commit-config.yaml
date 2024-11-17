@@ -17,6 +17,6 @@ repos:
       - '--no-trailing-commas'
       - '--encode-urls'
       - '--no-backup'
-      - '--sort=year,name,title'
+      - '--sort=year,date,name,title'
       - '--sort-fields=title,shorttitle,author,year,month,day,journal,booktitle,location,on,publisher,address,series,volume,number,pages,doi,isbn,issn,url,urldate,copyright,category,note,metadata'
       - '--omit=abstract,address,on,doi,isbn,issn,month_numeric,urldate,copyright,category,metadata,pdf,added-at,biburl,file,groups,interhash,intrahas,_isbn,keywords,timestamp,username'
