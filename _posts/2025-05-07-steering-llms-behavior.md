@@ -164,7 +164,7 @@ When studying the French concept, we also examine the differences between PSA an
 We select three different text generation tasks to test the effects of using PSA and IT to induce the French CAV for behavior steering. Try the interactive panel below to view the PCA results and outputs of the two CAVs.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/2.html' | relative_url }}" frameborder='0' scrolling='no' height="1100px" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/2.html' | relative_url }}" frameborder='0' scrolling='no' height="1600px" width="100%"></iframe>
 </div>
 
 Our observations are:
