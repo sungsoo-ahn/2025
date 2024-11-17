@@ -2,8 +2,8 @@
 layout: distill
 title: Sigmoid and Softmax
 description: Explanations of sigmoid and softmax rely on probabilistic interpretation of the output(s) but do not provide the source of probabilistic interpretation. In contrast, both sigmoid and softmax have a simple definition with their roots in basic information theory and calculus. This blog takes an isolated look at sigmoid and softmax and explains how and why they materialize. The definition and derivation show that they are related.
-date: 2025-01-01
-future: true
+date: 2024-10-23
+future: false
 htmlwidgets: true
 hidden: false
 
@@ -12,7 +12,7 @@ authors:
    - name: Anonymous
 
 # must be the exact same name as your blogpost
-bibliography: 2025-05-07-sigmoid-and-softmax.bib
+bibliography: 2024-10-23-sigmoid-and-softmax.bib
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -157,15 +157,15 @@ Note that $\langle \mathbf{w}^\star, \mathbf{x} \rangle$ is smooth maximum where
 
 Figure 1 shows the values of the objective function for different weights to the entropy term.
 
-<a target="_blank" href="https://colab.research.google.com/github/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2025-01-01-sigmoid-and-softmax/Sigmoid_and_Softmax_visualization.ipynb">
+<a target="_blank" href="https://colab.research.google.com/github/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2024-10-23-sigmoid-and-softmax/Sigmoid_and_Softmax_visualization.ipynb">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
 
-![Sigmoid with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2025-01-01-sigmoid-and-softmax/sigmoid_neg_entropy.png?raw=true)
+![Sigmoid with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2024-10-23-sigmoid-and-softmax/sigmoid_neg_entropy.png?raw=true)
 
 
-![Softmax with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2025-01-01-sigmoid-and-softmax/softmax_neg_entropy.png?raw=true)
+![Softmax with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2025-10-23-sigmoid-and-softmax/softmax_neg_entropy.png?raw=true)
 
 Figure 1. Effect of the entropy term in values of the objective function corresponding to sigmoid and softmax.
 
