@@ -79,15 +79,7 @@ For single behavior steering, we use the pipeline outlined in <d-cite key="Xu202
 
 ### Overview of CAV Perturbation Algorithm 
 
-1. <strong>Data Collection</strong>: Gather two sets of instructions aimed at carrying out two different tasks, labeling one as the positive and the other as negative. For example, a positive dataset might include instructions like
-
-   <div>&emsp;&emsp;<span style="color: red; font-weight: bold;">Positive: </span>How to plant flowers in my garden?</div>
-
-   while the negative dataset might include instructions like
-
-   <div>&emsp;&emsp;<span style="color: green; font-weight: bold;">Negative:</span>Comment planter des fleurs dans mon jardin?</div>
-
-   Thus, this two datasets can be used for "French" concept extraction and utilization. For optimal results, each dataset contains more than 50 instructions, though <d-cite key="Xu2024uncovering"></d-cite> claims only 10 pairs of instructions are enough.
+1. <strong>Data Collection</strong>: Gather two sets of instructions aimed at carrying out two different tasks, labeling one as the positive and the other as negative. For example, a positive dataset might include instructions like <span style="color: red;">How to plant flowers in my garden?</span>, while the negative dataset might include instructions like <span style="color: green;">Comment planter des fleurs dans mon jardin?</span>. Thus, this two datasets can be used for "French" concept extraction and utilization. <d-footnote>For optimal results, each dataset contains more than 50 instructions, though <d-cite key="Xu2024uncovering"></d-cite> claims only 10 pairs of instructions are enough.</d-footnote>
 
 2. <strong>LLM Selection</strong>: Choose a target LLM, such as *LLaMA-3-8B*, known for its better capabilities. Collect the final token embeddings from each layer during the inference process for instructions in positive and negative datasets respectively.
 
@@ -122,14 +114,14 @@ To construct the negative dataset, that is, to modify negative instructions into
 For example (CR - *Complete Replacement*; PSA - *Prefix and Suffix Addtion*; IT - *Instruction Transfer*):
 <div>&emsp;&emsp;<span style="font-weight: bold;">x</span> = How to plant flowers in my garden?</div>
 
-<div>&emsp;&emsp;<span style="color: blue; font-weight: bold;">CR</span>(x) = How to make American coffee?</div>
+<div>&emsp;&emsp;<span style="color: blue; font-weight: bold;">CR</span>(<span style="font-weight: bold;">x</span>) = How to make American coffee?</div>
 
-<div>&emsp;&emsp;<span style="color: orange; font-weight: bold;">PSA</span>(x) = How to plant flowers in my garden? Answer in Python please.</div>
+<div>&emsp;&emsp;<span style="color: orange; font-weight: bold;">PSA</span>(<span style="font-weight: bold;">x</span>) = How to plant flowers in my garden? Answer in Python please.</div>
 
-<div>&emsp;&emsp;<span style="color: pink; font-weight: bold;">IT</span>(x) = Comment planter des fleurs dans mon jardin?</div>
+<div>&emsp;&emsp;<span style="color: pink; font-weight: bold;">IT</span>(<span style="font-weight: bold;">x</span>) = Comment planter des fleurs dans mon jardin?</div><br>
 
 The above three operations can be seen as operational primitives, and the results obtained by nesting them can serve as a method for constructing datasets for multi-behavior steering.
-<div>&emsp;&emsp;<span style="color: orange; font-weight: bold;">PSA</span>(<span style="color: pink; font-weight: bold;">IT</span>(x)) = Comment planter des fleurs dans mon jardin? Answer in Python please.</div>
+<div>&emsp;&emsp;<span style="color: orange; font-weight: bold;">PSA</span>(<span style="color: pink; font-weight: bold;">IT</span>(<span style="font-weight: bold;">x</span>)) = Comment planter des fleurs dans mon jardin? Answer in Python please.</div><br>
 
 After building the datasets, we perform the CAV perturbation in text generation process, achieving the effect of behavior steering.
 
@@ -143,7 +135,9 @@ By default, we use `Llama-3-8B-Instruct` for experiments. Other LLMs may be invo
 
 First, we try the Python concept, which has a negative instruction dataset constructed by PSA (Perfix and Suffix Addition). The test accuracy for the CAV is quite high, above 99% except for layer 0. However, you will see in the PCA results shown below that the early layers seem to have better separability than the later layers. Therefore, the results of PCA can only be auxiliary, and the test accuracy is a better indicator for understanding the effectiveness of CAV.
 
-{% include figure.html path="assets/img/2025-05-07-steering-llms-behavior/image-20241031233343529.png" class="img-fluid" %}
+<div class="l-screen">
+  <iframe src="{{ 'assets/html/pca_code.html' | relative_url }}" frameborder='0' scrolling='no' height="820px" width="100%"></iframe>
+</div>
 
 After training the Python CAV, we will attempt to steer behavior with it. We will apply Python CAV to three types of tasks: 
 
@@ -154,7 +148,7 @@ After training the Python CAV, we will attempt to steer behavior with it. We wil
 You can try the interactive panel below to compare the outputs of the three tasks before and after using Python CAV to steer behavior.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/1.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/1.html' | relative_url }}" frameborder='0' scrolling='no' height="500px" width="100%"></iframe>
 </div>
 Our observation are:
 
@@ -172,7 +166,7 @@ When studying the French concept, we also examine the differences between PSA an
 We select three different text generation tasks to test the effects of using PSA and IT to induce the French CAV for behavior steering. Try the interactive panel below to view the PCA results and outputs of the two CAVs.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/2.html' | relative_url }}" frameborder='0' scrolling='no' height="1200px" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/2.html' | relative_url }}" frameborder='0' scrolling='no' height="1100px" width="100%"></iframe>
 </div>
 
 Our observations are:
@@ -181,7 +175,9 @@ Our observations are:
 2. When steering with PSA-induced CAV, the output often retains more or less English content, while using IT-induced CAV results in much less;
 3. The optimal $$P_0$$ for steering with the two types of CAV are different, with about 25% for PSA-CAV and about 10% for IT-CAV. This difference seems to show that even we look like to induce the same CAVs, the results are different. This will be discussed further in the discussion section.
 
-{% include figure.html path="assets/img/2025-05-07-steering-llms-behavior/image-20241101205150263.png" class="img-fluid" %}
+<div class="l-page">
+  <iframe src="{{ 'assets/html/test_accuracy_french_psa_it.html' | relative_url }}" frameborder='0' scrolling='no' height="300px" width="50%"></iframe>
+</div>
 
 #### Simplfied/Traditional Chinese Concept
 
@@ -191,14 +187,18 @@ The differences between simplified and traditional Chinese are a very interestin
   <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/3.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
 
-{% include figure.html path="assets/img/2025-05-07-steering-llms-behavior/image-20241101195212504.png" class="img-fluid" %}
+<div class="l-screen">
+  <iframe src="{{ 'assets/html/pca_chinese_3.1c.html' | relative_url }}" frameborder='0' scrolling='no' height="820px" width="100%"></iframe>
+</div>
 
 Our observations are:
 
 1. `Llama-3-8B-Instruct` answers all three tasks tested with English as the input language in Simplified Chinese, so there was no noticeable change after applying CAV perturbations; `Llama-3.1-8B-Instruct` and `Llama-3.1-8B-Chinese-Chat` are able to respond in Chinese, making the CAV perturbations effective. The text in the interactive panel above is generated by `Llama-3.1-8B-Chinese-Chat`;
 2. The accuracy trends of the CAVs trained on the three mentioned LLMs show a similar pattern across layers, initially decreasing and then increasing. In terms of relative accuracy, `Llama-3-8B-Instruct` is the lowest, while `Llama-3.1-8B-Instruct` is the highest (with some late layers of `Llama-3.1-8B-Chinese-Chat` being even higher). In certain middle layers, the difference between `Llama-3.1-8B-Instruct` and `Llama-3.1-8B-Chinese-Chat` is even greater than the difference between `Llama-3.1-8B-Chinese-Chat` and `Llama-3-8B-Instruct`. The reason for this is currently unclear.
 
-{% include figure.html path="assets/img/2025-05-07-steering-llms-behavior/image-20241101202314773.png" class="img-fluid" %}
+<div class="l-page">
+  <iframe src="{{ 'assets/html/test_accuracy_chinese.html' | relative_url }}" frameborder='0' scrolling='no' height="300px" width="50%"></iframe>
+</div>
 
 #### Arabic Concept
 
@@ -266,7 +266,9 @@ We train CAVs using the following pairs of datasets:
 
 The classifiers trained on these five pairs exhibited good test set accuracy. To further understand their behavior, we examine the cosine similarity between the parameters of these classifiers:
 
-{% include figure.html path="assets/img/2025-05-07-steering-llms-behavior/bzvvxffran2k356edpf6.png" class="img-fluid" %}
+<div class="l-screen">
+  <iframe src="{{ 'assets/html/heatmap_corr.html' | relative_url }}" frameborder='0' scrolling='no' height="820px" width="100%"></iframe>
+</div>
 
 Our observations are:
 
