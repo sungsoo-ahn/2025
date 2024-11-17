@@ -119,10 +119,8 @@ For example (CR - *Complete Replacement*; PSA - *Prefix and Suffix Addtion*; IT 
 <div>&emsp;&emsp;<span style="color: orange; font-weight: bold;">PSA</span>(<span style="font-weight: bold;">x</span>) = How to plant flowers in my garden? Answer in Python please.</div>
 
 <div>&emsp;&emsp;<span style="color: pink; font-weight: bold;">IT</span>(<span style="font-weight: bold;">x</span>) = Comment planter des fleurs dans mon jardin?</div><br>
-
 The above three operations can be seen as operational primitives, and the results obtained by nesting them can serve as a method for constructing datasets for multi-behavior steering.
 <div>&emsp;&emsp;<span style="color: orange; font-weight: bold;">PSA</span>(<span style="color: pink; font-weight: bold;">IT</span>(<span style="font-weight: bold;">x</span>)) = Comment planter des fleurs dans mon jardin? Answer in Python please.</div><br>
-
 After building the datasets, we perform the CAV perturbation in text generation process, achieving the effect of behavior steering.
 
 ## Experiments
@@ -135,7 +133,7 @@ By default, we use `Llama-3-8B-Instruct` for experiments. Other LLMs may be invo
 
 First, we try the Python concept, which has a negative instruction dataset constructed by PSA (Perfix and Suffix Addition). The test accuracy for the CAV is quite high, above 99% except for layer 0. However, you will see in the PCA results shown below that the early layers seem to have better separability than the later layers. Therefore, the results of PCA can only be auxiliary, and the test accuracy is a better indicator for understanding the effectiveness of CAV.
 
-<div class="l-screen">
+<div class="l-page">
   <iframe src="{{ 'assets/html/pca_code.html' | relative_url }}" frameborder='0' scrolling='no' height="820px" width="100%"></iframe>
 </div>
 
@@ -187,7 +185,7 @@ The differences between simplified and traditional Chinese are a very interestin
   <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/3.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
 
-<div class="l-screen">
+<div class="l-page">
   <iframe src="{{ 'assets/html/pca_chinese_3.1c.html' | relative_url }}" frameborder='0' scrolling='no' height="820px" width="100%"></iframe>
 </div>
 
@@ -266,7 +264,7 @@ We train CAVs using the following pairs of datasets:
 
 The classifiers trained on these five pairs exhibited good test set accuracy. To further understand their behavior, we examine the cosine similarity between the parameters of these classifiers:
 
-<div class="l-screen">
+<div class="l-page">
   <iframe src="{{ 'assets/html/heatmap_corr.html' | relative_url }}" frameborder='0' scrolling='no' height="820px" width="100%"></iframe>
 </div>
 
