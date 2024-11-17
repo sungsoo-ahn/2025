@@ -621,56 +621,62 @@ However, the two approaches differ deeply in their epistemological foundations: 
 
 # Mathematical setup  
 
-## Data generation process
+Here we briefly describe the mathematical lens which we use to analyse the results from <d-cite key="mirzadeh2024gsm"></d-cite>.
+First, we assume that the questions from GSM8k and GSM-Symbolic are obtained from the following data-generating process:
 
-1. Sample a template: $$T \sim \mathbb{P}_T$$.
-2. Sample filler values: $$V \sim \mathbb{P}_{V\vert T}(\cdot \vert T)$$
+1. We sample a _template_ $$T$$ from some distribution $$\mathbb{P}_T$$. A template here is defined in the sense of <d-cite key="mirzadeh2024gsm"></d-cite>, that is, it is a mathematical word problem, in which numerical values and certain other objects are
+marked as variables, to be filled-in later. 
+2. The template $$T$$ gives rise to a conditional distribution $$\mathbb{P}_{V\vert T}$$ over the admissible filler-values. We sample a set of such values $$V \sim \mathbb{P}_{V\vert T}(\cdot \vert T)$$ and plug them into the template, 
+producing a pair of a question and an answer $$\left(T(V)_Q, T(V)_A\right)$$.
 
-The pair $$(T, V)$$ produces a pair of a question and an answer $$\left(T(V)_Q, T(V)_A\right)$$.
+We are interested in whether a Language model $$m$$ answers a question correctly which we model by the random variable
+$$X_m \colon = \mathbb{I}\left(m(T(V)_Q) = T(V)_A\right)$$. The accuracy of a model $$m$$ is then $$p_m \colon = \mathbb{E}[X_m]$$ and the variable $$X_m$$ follows a $$Bernoulli(p_m)$$ distribution.
 
+In fact, since we care about the difference in model performance on GSM8k and GSM-Symbolic, we postulate that we have two random variables  $$V^{8K}$$ and $$V^{Symb}$$, governed by (potentially) different conditional distributions $$\mathbb{P}^{8K}_{V \vert T}$$ and 
+$$\mathbb{P}^{Symb}_{V \vert T}$$, respectively. 
 
-3. We take a language model $M$ and we are interested in estimating 
+This setup can be represented by the following directed probabilistic graphical model: 
+{% include figure.html 
+  path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/gsm_prob_graph.png" 
+  class="img-fluid" 
+%}
+<!-- \documentclass{article}
+\usepackage{tikz}
+\begin{document}
+\begin{tikzpicture}[
+    % Define styles for nodes and edges
+    node/.style={circle, draw, minimum size=40pt},  % consistent size for all nodes
+    edge/.style={->, >=stealth, thick}
+]
+    % Place nodes
+    \node[node] (T) at (0,0) {$T$};
+    \node[node] (V8k) at (-1,-2) {$V^{8K}$};
+    \node[node] (Vsymb) at (1,-2) {$V^{Symb}$};
+    \node[node] (X8k) at (-2,-4) {$X^{8K}_M$};
+    \node[node] (Xsymb) at (2,-4) {$X^{Symb}_M$};
+    % Draw edges
+    \draw[edge] (T) -- (V8k);
+    \draw[edge] (T) -- (Vsymb);
+    \draw[edge] (V8k) -- (X8k);
+    \draw[edge] (Vsymb) -- (Xsymb);
+\end{tikzpicture}
+\end{document}
+-->
 
-$$\mathbb{P}(M(T(V)_Q) = T(V)_A) =: p_M$$
+where, for the purpose of this analysis, the bottom-most arrows denote deterministic dependencies. Under this model, we have
+$$X_m^{8K} \sim Bernoulli\left(p_m^{8K}\right)$$ and $$X_m^{Symb} \sim Bernoulli\left(p_m^{Symb}\right)$$, where $$p_m^{8K}, p_m^{Symb} \in [0, 1]$$ are 
+our main parameters of interest.
 
-- We fix 100 samples $$t_1, t_2, \dots, t_{100}$$ of templates, sampled from $$\mathbb{P}_T$$.
-- This gives us a collection of 100 conditional distributions $$\mathbb{P}_{V \vert t_i}$$ of filler values.
-- We might, in fact, postulate that we have two sets of conditional distributions  $$\{\mathbb{P}^{8K}_{V \vert t_i}: i=1,\dots,100\}$$ and $$\{\mathbb{P}^{Symb}_{V \vert t_i}: i=1,\dots,100\}$$.
+In this framework, the data analysed in <d-cite key=mirzadeh2024gsm></d-cite> consists of: 
+- 100 templates $$t_1, t_2, \dots, t_{100}$$ sampled independenty from $$\mathbb{P}_T$$
+- one sample $$v^{8K}_i$$ from each conditional $$\mathbb{P}^{8K}_{V \vert t_i}$$ for $$1 \leq i \leq 100$$
+- 50 i.i.d. samples $$v^{Symb}_{i, j}, 1\le j \le 50$$ from each conditional $$\mathbb{P}^{Symb}_{V \vert t_i}$$
+- for each of these and each model $$m$$ (in a pre-determined set of 25 models), the corresponding observations $$x^{8K}_{m,t_i}$$ and $$x^{Symb}_{m, t_i, j}$$ --- that is, whether model $$m$$ answered correctly the questions $$t_i(v^{8K}_i)$$ and $$t_i\left(v^{Symb}_{i, j}\right)$$, respectively.
+- the accuracy estimates $$\hat{p}_m^{8K} = \frac{1}{100}\sum_{i=1}^{100} x^{8K}_{m,t_i}$$ and 
+$$\hat{p}_{m, j}^{Symb} = \frac{1}{100}\sum_{i=1}^{100} x^{Symb}_{m,t_i, j}, \; 1 \leq j \leq 50$$.
 
-- Under this model, the accuracies we are interested in are captured by the following random variables:
+Note that only $$\hat{p}_m^{8K}$$ and the average $$\overline{\hat{p}_m^{8K}} = \frac{1}{50}\sum_{j=1}^{50}\hat{p}_{m, j}^{Symb}$$ are reported in the paper (Table 1, Appendix A.2 in <d-cite key=mirzadeh2024gsm></d-cite>).
 
-  * for $$V_i^{8K} \sim \mathbb{P}^{8K}_{V \vert t_i}, 1 \leq i \leq 100$$, we have binary random variables
-  
-   $$X^{8K}_{M,t_i} = \mathbb{I}(M(t_i(V_i^{8K})_Q) = t_i(V_i^{8K})_A)$$
-   
-  and a maximum likelihood accuracy estimator 
-    
-  $$\hat{P}^{8K}_M = \frac{1}{100}\sum_{i=1}^{100} X^{8K}_{M,t_i}$$
+Under the assumptions of this mathematical model, we can think of $$\hat{p}_m^{8K}$$ as an observation from a random variable $$\hat{P}^{8K}_m \sim \frac{1}{100}Bin\left(100,p^{8K}_m\right)$$. Similarly, each $$\hat{p}_{m, j}^{Symb}, \; 1 \le j \le 50$$ is an observation of $$\hat{P}^{Symb}_m \sim \frac{1}{100} Bin\left(100,p^{Symb}_m\right)$$, although we can't assume that these observations are independent, due to the shared templates.  
 
-  * for $$V_i^{Symb} \sim \mathbb{P}^{Symb}_{V \vert t_i}, 1 \leq i \leq 100$$, we have binary random variables
-  
-  $$X^{Symb}_{M,t_i} = \mathbb{I}(M(t_i(V_i^{Symb})_Q) = t_i(V_i^{Symb})_A)$$
-   
-    with a maximum likelihood accuracy estimator 
-    
-  $$\hat{P}^{Symb}_M = \frac{1}{100}\sum_{i=1}^{100} X^{Symb}_{M,t_i}$$
-
-We have (†):
-- one observation $$\hat{p}_M^{8k}$$ of $$\hat{P}^{8k}_M$$
-
-- 50 observations $$\{\hat{p}_{M, j}^{Symb}: 1 \leq j \leq 50\}$$ of $$\hat{P}^{Symb}_M$$
-
-We assume that $$\{X^{8K}_{M,t_i}: 1 \leq i \leq 100\}$$ are i.i.d Bernoulli with probability of success $$p^{8K}_M$$
-
-$$\Rightarrow \hat{P}^{8K}_M \sim \frac{1}{100}Bin(100,p^{8K}_M)$$
-
-Same for $$X^{Symb}_{t_i} \sim_{i.i.d} Bernoulli(p^{Symb}_M)$$ and  $$\hat{P}^{Symb}_M \sim \frac{1}{100} Bin(100,p^{Symb}_M)$$
-
-
-Q: Given our observations (†), what evidence is there to believe that $$p^{8K}_M \neq p^{Symb}_M$$
-
-Similarly, what evidence is there to believe that $$p^{8K}_M > p^{Symb}_M$$
-
-<!-- Note that it _does_ make sense to also assume that  -- NO!
-
-$$X^{8k}_{t_i} \perp\!\!\!\perp X^{Symb}_{t_i}$$. -->
+Throughout this blogpost, the main question we've tackled is: given these observed $$\hat{p}_m^{8K}$$ and $$\overline{\hat{p}_m^{8K}}$$, what evidence is there to believe that $$p^{8K}_m \neq p^{Symb}_m$$ or that $$p^{8K}_m > p^{Symb}_m$$?
