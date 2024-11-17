@@ -146,7 +146,7 @@ You must change the `title`, `discription`, `toc`, and eventually the `authors` 
 submission is anonymous for the review process**).
 
 <!-- Add any tags that are relevant to your post, such as the areas your work is relevant to. -->
-Read our [sample blog post]({% post_url 2025-04-28-distill-example %}) carefully to see how you can add image assets, and how to write using $$\LaTeX$$!
+Read our carefully to see how you can add image assets, and how to write using $$\LaTeX$$!
 Read about rendering your post locally [below](#serving).
 
 **Important: make sure your post is completely anonymized before you export and submit it!**
