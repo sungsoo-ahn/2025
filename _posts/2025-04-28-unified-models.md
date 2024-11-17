@@ -1,6 +1,6 @@
 ---
 layout: distill
-title: Review of Current Unified Models for Multimodal Understanding and Generation
+title: Rethinking Unified Multimodal Models: Insights and Directions
 description: Your blog post's abstract.
   Please add your abstract or summary here and not in the main body of your text. 
   Do not include math/latex or hyperlinks.
@@ -67,10 +67,27 @@ _styles: >
   }
 ---
 
-Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling.
 
-## Equations
 
+## Introduction
+
+## Background: Autoregressive and Diffusion
+
+### Autoregressive
+
+### Diffusion
+
+
+## Unified Multimodal Models
+
+
+
+## Challenges and Future Work
+
+
+
+
+## to be removed
 This theme supports rendering beautiful math in inline and display modes using [MathJax 3](https://www.mathjax.org/) engine.
 You just need to surround your math expression with `$$`, like `$$ E = mc^2 $$`.
 If you leave it inside a paragraph, it will produce an inline expression, just like $$ E = mc^2 $$.
@@ -87,7 +104,7 @@ that brought a significant improvement to the loading and rendering speed, which
 [on par with KaTeX](http://www.intmath.com/cg5/katex-mathjax-comparison.php).
 
 
-## Images and Figures
+### Images and Figures
 
 Its generally a better idea to avoid linking to images hosted elsewhere - links can break and you
 might face losing important information in your blog post.
@@ -183,7 +200,7 @@ Voila!
   <iframe src="{{ 'assets/html/2025-04-28-distill-example/plotly_demo_1.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
 
-## Citations
+### Citations
 
 Citations are then used in the article body with the `<d-cite>` tag.
 The key attribute is a reference to the id provided in the bibliography.
@@ -197,14 +214,14 @@ However, we consider it good style to mention author last names if you discuss s
 
 ***
 
-## Footnotes
+### Footnotes
 
 Just wrap the text you would like to show up in a footnote in a `<d-footnote>` tag.
 The number of the footnote will be automatically generated.<d-footnote>This will become a hoverable footnote.</d-footnote>
 
 ***
 
-## Code Blocks
+### Code Blocks
 
 This theme implements a built-in Jekyll feature, the use of Rouge, for syntax highlighting.
 It supports more than 100 languages.
@@ -241,7 +258,7 @@ string myString;
 
 ***
 
-## Diagrams
+### Diagrams
 
 This theme supports generating various diagrams from a text description using [jekyll-diagrams](https://github.com/zhustec/jekyll-diagrams){:target="\_blank"} plugin.
 Below, we generate a few examples of such diagrams using languages such as [mermaid](https://mermaid-js.github.io/mermaid/){:target="\_blank"}, [plantuml](https://plantuml.com/){:target="\_blank"}, [vega-lite](https://vega.github.io/vega-lite/){:target="\_blank"}, etc.
@@ -276,7 +293,7 @@ John-->>Alice: Great!
 
 ***
 
-## Tweets
+### Tweets
 
 An example of displaying a tweet:
 {% twitter https://twitter.com/rubygems/status/518821243320287232 %}
@@ -288,7 +305,7 @@ For more details on using the plugin visit: [jekyll-twitter-plugin](https://gith
 
 ***
 
-## Blockquotes
+### Blockquotes
 
 <blockquote>
     We do not grow absolutely, chronologically. We grow sometimes in one dimension, and not in another, unevenly. We grow partially. We are relative. We are mature in one realm, childish in another.
@@ -298,7 +315,7 @@ For more details on using the plugin visit: [jekyll-twitter-plugin](https://gith
 ***
 
 
-## Layouts
+### Layouts
 
 The main text column is referred to as the body.
 It is the assumed layout of any direct descendants of the `d-article` element.
@@ -344,7 +361,7 @@ It does not interrupt the normal flow of `.l-body`-sized text except on mobile s
 
 ***
 
-## Other Typography?
+### Other Typography?
 
 Emphasis, aka italics, with *asterisks* (`*asterisks*`) or _underscores_ (`_underscores_`).
 
