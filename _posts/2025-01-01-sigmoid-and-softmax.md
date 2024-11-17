@@ -2,8 +2,8 @@
 layout: distill
 title: Sigmoid and Softmax
 description: Explanations of sigmoid and softmax rely on probabilistic interpretation of the output(s) but do not provide the source of probabilistic interpretation. In contrast, both sigmoid and softmax have a simple definition with their roots in basic information theory and calculus. This blog takes an isolated look at sigmoid and softmax and explains how and why they materialize. The definition and derivation show that they are related.
-date: 2024-10-23
-future: false
+date: 2025-01-01
+future: true
 htmlwidgets: true
 hidden: false
 
