@@ -133,8 +133,8 @@ By default, we use `Llama-3-8B-Instruct` for experiments. Other LLMs may be invo
 
 First, we try the Python concept, which has a negative instruction dataset constructed by PSA (Perfix and Suffix Addition). The test accuracy for the CAV is quite high, above 99% except for layer 0. However, you will see in the PCA results shown below that the early layers seem to have better separability than the later layers. Therefore, the results of PCA can only be auxiliary, and the test accuracy is a better indicator for understanding the effectiveness of CAV.
 
-<div class="l-page">
-  <iframe src="{{ 'assets/html/pca_code.html' | relative_url }}" frameborder='0' scrolling='no' height="820px" width="100%"></iframe>
+<div class="l-screen">
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/pca_code.html' | relative_url }}" frameborder='0' scrolling='no' height="820px" width="100%"></iframe>
 </div>
 
 After training the Python CAV, we will attempt to steer behavior with it. We will apply Python CAV to three types of tasks: 
@@ -174,7 +174,7 @@ Our observations are:
 3. The optimal $$P_0$$ for steering with the two types of CAV are different, with about 25% for PSA-CAV and about 10% for IT-CAV. This difference seems to show that even we look like to induce the same CAVs, the results are different. This will be discussed further in the discussion section.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/test_accuracy_french_psa_it.html' | relative_url }}" frameborder='0' scrolling='no' height="300px" width="50%"></iframe>
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/test_accuracy_french_psa_it.html' | relative_url }}" frameborder='0' scrolling='no' height="300px" width="50%"></iframe>
 </div>
 
 #### Simplfied/Traditional Chinese Concept
@@ -185,8 +185,8 @@ The differences between simplified and traditional Chinese are a very interestin
   <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/3.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
 
-<div class="l-page">
-  <iframe src="{{ 'assets/html/pca_chinese_3.1c.html' | relative_url }}" frameborder='0' scrolling='no' height="820px" width="100%"></iframe>
+<div class="l-screen">
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/pca_chinese_3.1c.html' | relative_url }}" frameborder='0' scrolling='no' height="820px" width="100%"></iframe>
 </div>
 
 Our observations are:
@@ -195,7 +195,7 @@ Our observations are:
 2. The accuracy trends of the CAVs trained on the three mentioned LLMs show a similar pattern across layers, initially decreasing and then increasing. In terms of relative accuracy, `Llama-3-8B-Instruct` is the lowest, while `Llama-3.1-8B-Instruct` is the highest (with some late layers of `Llama-3.1-8B-Chinese-Chat` being even higher). In certain middle layers, the difference between `Llama-3.1-8B-Instruct` and `Llama-3.1-8B-Chinese-Chat` is even greater than the difference between `Llama-3.1-8B-Chinese-Chat` and `Llama-3-8B-Instruct`. The reason for this is currently unclear.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/test_accuracy_chinese.html' | relative_url }}" frameborder='0' scrolling='no' height="300px" width="50%"></iframe>
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/test_accuracy_chinese.html' | relative_url }}" frameborder='0' scrolling='no' height="300px" width="50%"></iframe>
 </div>
 
 #### Arabic Concept
@@ -264,8 +264,8 @@ We train CAVs using the following pairs of datasets:
 
 The classifiers trained on these five pairs exhibited good test set accuracy. To further understand their behavior, we examine the cosine similarity between the parameters of these classifiers:
 
-<div class="l-page">
-  <iframe src="{{ 'assets/html/heatmap_corr.html' | relative_url }}" frameborder='0' scrolling='no' height="820px" width="100%"></iframe>
+<div class="l-screen">
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/heatmap_corr.html' | relative_url }}" frameborder='0' scrolling='no' height="820px" width="100%"></iframe>
 </div>
 
 Our observations are:
