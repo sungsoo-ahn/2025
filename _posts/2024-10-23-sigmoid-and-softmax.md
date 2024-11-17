@@ -161,11 +161,15 @@ Figure 1 shows the values of the objective function for different weights to the
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
+\begin{figure}
+\includegrqaphihcs[width=45\linewidth]{https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2024-10-23-sigmoid-and-softmax/sigmoid_neg_entropy.png?raw=true}
+\includegrqaphihcs[width=45\linewidth]{https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2024-10-23-sigmoid-and-softmax/softmax_neg_entropy.png?raw=true}
+\end{figure}
 
-![Sigmoid with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2024-10-23-sigmoid-and-softmax/sigmoid_neg_entropy.png?raw=true =50%x)
+![Sigmoid with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2024-10-23-sigmoid-and-softmax/sigmoid_neg_entropy.png?raw=true)
 
 
-![Softmax with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2024-10-23-sigmoid-and-softmax/softmax_neg_entropy.png?raw=true =50%x)
+![Softmax with entropy](https://github.com/sigmoidandsoftmax/sigmoidandsoftmax.github.io/blob/main/assets/img/2024-10-23-sigmoid-and-softmax/softmax_neg_entropy.png?raw=true)
 
 Figure 1. Effect of the entropy term in values of the objective function corresponding to sigmoid and softmax.
 
