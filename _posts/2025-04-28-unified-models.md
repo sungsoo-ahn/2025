@@ -1,6 +1,6 @@
 ---
 layout: distill
-title: Rethinking Unified Multimodal Models':' Insights and Directions
+title: Rethinking Unified Multimodal Models:Insights and Directions
 description: Your blog post's abstract.
   Please add your abstract or summary here and not in the main body of your text. 
   Do not include math/latex or hyperlinks.
@@ -34,18 +34,32 @@ bibliography: 2025-04-28-distill-example.bib
 #   - make sure that TOC names match the actual section names
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
+## Introduction
+## Background: Autoregressive and Diffusion
+### Autoregressive
+### Diffusion
+## Unified Multimodal Models
+## Challenges and Future Work
+## to be removed
 toc:
-  - name: Equations
-  - name: Images and Figures
+  - name: Introduction
+  - name: Background:Autoregressive and Diffusion
     subsections:
+    - name: Autoregressive
+    - name: Diffusion
+  - name: Unified Multimodal Models
+  - name: Challenges and Future Work
+  - name: to be removed
+    subsections:
+    - name: Images and Figures
     - name: Interactive Figures
-  - name: Citations
-  - name: Footnotes
-  - name: Code Blocks
-  - name: Diagrams
-  - name: Tweets
-  - name: Layouts
-  - name: Other Typography?
+    - name: Citations
+    - name: Footnotes
+    - name: Code Blocks
+    - name: Diagrams
+    - name: Tweets
+    - name: Layouts
+    - name: Other Typography?
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
