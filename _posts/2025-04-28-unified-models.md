@@ -83,9 +83,11 @@ Autoregressive (AR) sequence generation is a method where a sequence is generate
 This approach models dependencies within the sequence by conditioning each output on prior outputs, effectively capturing the structure and patterns of sequential data.
 
 **Definition**. For a data sequence $$(x_1, x_2, ..., x_{T})$$, an autoregressive model represents the joint probability as:
+
 $$
 P(x_1, x_2, ..., x_T) = \prod_{t=1}^{T} P(x_t | x_1, x_2, ..., x_{t-1})
 $$
+
 This formula captures the essence of autoregressive generation: predicting each token based on the prior sequence of tokens.
 
 **Autoregressive for Vision**. The process for generating an image can be broken down pixel-by-pixel or patch-by-patch, where each pixel/patch is conditioned on previously generated content.
