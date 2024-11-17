@@ -1,9 +1,7 @@
 ---
 layout: distill
 title: Rethinking Unified Multimodal Models:Insights and Directions
-description: Your blog post's abstract.
-  Please add your abstract or summary here and not in the main body of your text. 
-  Do not include math/latex or hyperlinks.
+description: Recent advancements in unified models for multimodal understanding and generation, such as Transfusion of Meta, Show-O of NUS, and EMU3 of BAAI, highlight a growing trend toward single models capable of handling diverse tasks. These models explore pure autoregressive methods, diffusion-based approaches, or their combinations. Inspired by these works, this blog provides an overview of unified multimodal models, reviews current developments, and offers insights into potential future directions. We also discuss the principles of autoregressive and diffusion models and explore whether the future of unified models lies in one of these paradigms or a hybrid approach.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -34,13 +32,6 @@ bibliography: 2025-04-28-distill-example.bib
 #   - make sure that TOC names match the actual section names
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
-## Introduction
-## Background: Autoregressive and Diffusion
-### Autoregressive
-### Diffusion
-## Unified Multimodal Models
-## Challenges and Future Work
-## to be removed
 toc:
   - name: Introduction
   - name: Background:Autoregressive and Diffusion
