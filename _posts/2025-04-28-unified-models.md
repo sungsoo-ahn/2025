@@ -1,6 +1,6 @@
 ---
 layout: distill
-title: Rethinking Unified Multimodal Models: Insights and Directions
+title: Rethinking Unified Multimodal Models':' Insights and Directions
 description: Your blog post's abstract.
   Please add your abstract or summary here and not in the main body of your text. 
   Do not include math/latex or hyperlinks.
