@@ -146,7 +146,7 @@ After training the Python CAV, we will attempt to steer behavior with it. We wil
 You can try the interactive panel below to compare the outputs of the three tasks before and after using Python CAV to steer behavior.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/1.html' | relative_url }}" frameborder='0' scrolling='no' height="500px" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/1.html' | relative_url }}" frameborder='0' scrolling='no' height="520px" width="100%"></iframe>
 </div>
 Our observation are:
 
@@ -265,7 +265,7 @@ We train CAVs using the following pairs of datasets:
 The classifiers trained on these five pairs exhibited good test set accuracy. To further understand their behavior, we examine the cosine similarity between the parameters of these classifiers:
 
 <div class="l-screen" style="display: flex; justify-content: center; align-items: center; height: 100%;">
-  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/heatmap_corr.html' | relative_url }}" frameborder="0" scrolling="no" height="800px" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-05-07-steering-llms-behavior/heatmap_corr.html' | relative_url }}" frameborder="0" scrolling="no" height="800px" width="1500px"></iframe>
 </div>
 
 Our observations are:
