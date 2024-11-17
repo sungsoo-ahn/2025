@@ -150,6 +150,9 @@ Check the bounds for learning rate and noise such that the ODEs follow the simul
 Other activation functions:
 - RBF <d-cite key="freeman1997online"></d-cite>
 
+Convergence:
+- <d-cite key="richert2022soft"></d-cite>
+
 Deep:
 - deep teacher-student, empirics <d-cite key="tian2019luck"></d-cite>
 - deep teacher-student, theory <d-cite key="tian2020student"></d-cite>
@@ -161,6 +164,10 @@ Universality. Gaussian equivalence property.
 Other settings:
 - <d-cite key="loureiro2021learning"></d-cite>
 - <d-cite key="arnaboldi2023highdimensional"></d-cite>
+- correlated latents <d-cite key="bardone2024sliding"></d-cite>
+
+Learnability:
+- <d-cite key="troiani2024fundamental"></d-cite>
 
 ### Applications of the teacher-student setting
 
@@ -174,10 +181,12 @@ TODO:
 - task difficulty <d-cite key="arnaboldi2024online"></d-cite>
 
 **Parameterized task similarity for transfer and continual learning.**  
+- continual learning <d-cite key="straat2018statistical"></d-cite>
 - continual learning <d-cite key="lee2021continual"></d-cite>
 - catastrophic forgetting <d-cite key="asanuma2021statistical"></d-cite>
 - Maslow's hammer <d-cite key="lee2022maslow"></d-cite>
 - meta-learning <d-cite key="wang2024dynamics"></d-cite>
+- continual learning <d-cite key="hiratani2024disentangling"></d-cite>
 
 **Reinforcement learning.**
 - reinforcement learning <d-cite key="patel2023rl"></d-cite>
