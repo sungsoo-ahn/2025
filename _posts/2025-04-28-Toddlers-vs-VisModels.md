@@ -38,7 +38,7 @@ authors:
 #      name: IAS, Princeton
 
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-visualprop.bib
+bibliography: 2025-04-28-Toddlers-vs-VisModels.bib
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -143,7 +143,7 @@ Instead, we use
 alternatives that aim to assess the presence of a visual property relative to toddlers.
 
 
-{% include figure.html path="assets/img/2025-04-28-visualprop/overview.png"
+{% include figure.html path="assets/img/2025-04-28-Toddlers-vs-VisModels/overview.png"
 class="img-fluid" %}
 <div class="caption">
 Figure 1. Illustration of emerging visual properties in toddlers. 
@@ -258,7 +258,7 @@ per realistic
 image. Furthermore, to estimate the recognition performance of models on normal images,
 we also compute the success rate on realistic images.
 
-{% include figure.html path="assets/img/2025-04-28-visualprop/caricaturesimg.png"
+{% include figure.html path="assets/img/2025-04-28-Toddlers-vs-VisModels/caricaturesimg.png"
 class="img-fluid" %}
 <div class="caption">
 Figure 2. Illustration of how we compute A) simple caricature recognition accuracy 
@@ -278,7 +278,7 @@ recognition accuracy
 already reach the level of toddlers independently from their exact training procedure.
 
 
-{% include figure.html path="assets/img/2025-04-28-visualprop/caricatures.png"
+{% include figure.html path="assets/img/2025-04-28-Toddlers-vs-VisModels/caricatures.png"
 class="img-fluid" %}
 <div class="caption">
 Figure 3. A) Simple caricature and B) hard caricature accuracy against normal image
@@ -304,8 +304,7 @@ toddler tends to select the same-shape variant, it means that they are shape bia
 
 ML benchmarks used to evaluate the shape bias of models <d-cite key="
 geirhos2021partial,hermann2020origins"></d-cite> do not follow the experimental protocols
-of developmental studies, as they texture the whole image instead of the object itself 
-<d-cite key="smith2003learning"></d-cite>. This is important as it confounds using the 
+of developmental studies, as they texture the whole image instead of the object itself<d-cite key="smith2003learning"></d-cite>. This is important as it confounds using the 
 shape and being able to segment the object. Thus we follow the cue-conflict 
 experimental protocol of Tartaglini et al. (2022), who only texture the objects. First,
 we evaluate the shape bias on common (in-distribution) objects. We reuse the masks of common objects and the 16 
@@ -322,7 +321,7 @@ combinations.
 Second, to evaluate the shape bias on novel objects, we reproduce the same protocol, but
 using the 16 novel shapes used in prior work <d-cite key="tartaglini2022developmentally,parks2020statistical"></d-cite>.
 
-{% include figure.html path="assets/img/2025-04-28-visualprop/shapebiasimg.png"
+{% include figure.html path="assets/img/2025-04-28-Toddlers-vs-VisModels/shapebiasimg.png"
 class="img-fluid" %}
 <div class="caption">
 Figure 4. Illustration of how we compute the degree of shape bias on A) common objects 
@@ -361,7 +360,7 @@ previous claims of ViTs being more shape biased than CNNs<d-cite
 key="tuli2021convolutional,naseer2021intriguing"></d-cite>. Overall, the best ML models have a relatively similar level of shape bias 
 than toddlers.
 
-{% include figure.html path="assets/img/2025-04-28-visualprop/shapebias.png"
+{% include figure.html path="assets/img/2025-04-28-Toddlers-vs-VisModels/shapebias.png"
 class="img-fluid" %}
 <div class="caption">
 Figure 5. Shape bias for A) common objects and B) novel objects. We extract
@@ -410,7 +409,7 @@ This allows us to assess which main orientation is more prototypical for an obje
 category. Figure 6 illustrates the procedure.
   
 
-{% include figure.html path="assets/img/2025-04-28-visualprop/viewsimg.png"
+{% include figure.html path="assets/img/2025-04-28-Toddlers-vs-VisModels/viewsimg.png"
 class="img-fluid" %}
 <div class="caption">
 Figure 6. Illustration of how we compute the side-view accuracy for intra-object 
@@ -437,7 +436,7 @@ rotate objects during training and has been shown to better generalize visual re
 viewpoint-wise fashion. This suggests that one may increase the 
 side-view accuracy of the best-performing models that way. 
 
-{% include figure.html path="assets/img/2025-04-28-visualprop/views.png"
+{% include figure.html path="assets/img/2025-04-28-Toddlers-vs-VisModels/views.png"
 class="img-fluid" %}
 <div class="caption">
 Figure 7. View accuracies for intra-object and intra-category similarity maximization.
@@ -491,7 +490,7 @@ lower and upper part of the silhouette contain distinct parts: the bottom part
 corresponds to the legs and the top part often displays the shape of the head (ears etc.
 ..).
 
-{% include figure.html path="assets/img/2025-04-28-visualprop/frankenstein.png"
+{% include figure.html path="assets/img/2025-04-28-Toddlers-vs-VisModels/frankenstein.png"
 class="img-fluid" %}
 
 Thus, we take the set of stimuli from Baker et al. (2022), which
@@ -508,7 +507,7 @@ configural sensitivity as the difference of performance between the success
 rate of the Frankenstein test and the success 
 rate of the normal test. To show sensitivity to the spatial arrangement of parts, the metric must be lower than $0$.
 
-{% include figure.html path="assets/img/2025-04-28-visualprop/configuralimg.png"
+{% include figure.html path="assets/img/2025-04-28-Toddlers-vs-VisModels/configuralimg.png"
 class="img-fluid" %}
 <div class="caption">
 Figure 9. Illustration of the frankenstein test.
@@ -526,7 +525,7 @@ the estimated adults. We conclude that even shape-biased models likely rely on l
 shape cues instead of the global arrangement of parts.
 
 
-{% include figure.html path="assets/img/2025-04-28-visualprop/configural.png"
+{% include figure.html path="assets/img/2025-04-28-Toddlers-vs-VisModels/configural.png"
 class="img-fluid" %}
 <div class="caption">
 Figure 10. Configural sensitivity of ML models against their shape bias on common objects.
