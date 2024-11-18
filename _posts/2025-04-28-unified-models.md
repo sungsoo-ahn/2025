@@ -131,6 +131,7 @@ where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at
 ## Unified Model for Multimodal Understanding and Generation 
 
 ### Preliminary
+
 这里介绍一下unified model，给出定义，和有哪些主流模态
 
 
@@ -143,7 +144,11 @@ where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
 
-## Challenges and Future Work
+## Challenges 
+
+## What's Next for Unified Models?
+
+## Conclusion
 
 
 
