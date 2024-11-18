@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Do vision models perceive objects like toddlers ?
-description: Despite recent advances in arficial vision systems, humans are still more 
+description: Despite recent advances in artificial vision systems, humans are still more 
   data-efficient at learning strong visual representations. Psychophysical experiments 
   suggest 
   that toddlers develop fundamental visual properties between the ages of one and 
