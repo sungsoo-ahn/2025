@@ -190,8 +190,7 @@ From 18-24 months onward, toddlers learn to manipulate objects
 to see them 1- in upright positions; 2- with their main axis of 
 elongation perpendicular to the line of sight, which we call side view (e.g. Figure 1,
 C) <d-cite key="pereira2010early, pereira2014main"></d-cite>. Here, we focus on this 
-side-view bias, which is a perceptual bias (not reflecting motor or grasping biases) 
-<d-cite key="james2014some"></d-cite>. A more fine-grained 
+side-view bias, which is a perceptual bias (not reflecting motor or grasping biases)<d-cite key="james2014some"></d-cite>. A more fine-grained 
 look at toddlers' behavior shows that they visually inspect these views while 
 keeping the object almost static <d-cite 
 key="pereira2014main,lisboa2014looking"></d-cite>. This suggests that these 
@@ -206,9 +205,8 @@ parts of an object to
 categorize it <d-cite key="augustine2011parts"></d-cite>. Such ability becomes fully
 mature for novel objects later only later in development <d-cite 
 key="mash2006multidimensional"></d-cite> and
-is a fundamental component of one of the main theories of human object recognition 
-<d-cite key="
-hummel1992dynamic"></d-cite>. To the best of our knowledge, two lines of study have 
+is a fundamental component of one of the main theories of human object 
+recognition<d-cite key="hummel1992dynamic"></d-cite>. To the best of our knowledge, two lines of study have 
 investigated this ability in ML models <d-cite key="baker2022deep,farahat2023novel"></d-cite> with two opposite conclusions. We
 discuss their differences and assumptions and extend the experiments of Baker et al. 
 (2022) (Figure 1, D) to include more models.
@@ -286,7 +284,8 @@ class="img-fluid" %}
 Figure 3. A) Simple caricature and B) hard caricature accuracy against normal image
 accuracy recognition. We estimate 24-months toddler performance based on data from 
 Pereira et al. (2009). This is consistent with results from Sheybani et al. (2024),  
-which suggests that they perform similarly to pre-trained CLIP models. 
+which suggests that they perform similarly to pre-trained CLIP models. We refer to the 
+"Models" section for more information about the groups of models.
 </div>
 
 ## Shape bias
