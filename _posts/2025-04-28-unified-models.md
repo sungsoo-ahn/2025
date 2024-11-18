@@ -90,8 +90,12 @@ $$
 
 This formula captures the essence of autoregressive generation: predicting each token based on the prior sequence of tokens.
 
+**Why Choose Autoregressive Models?**
+
+
 **Autoregressive for Vision**. The process for generating an image can be broken down pixel-by-pixel or patch-by-patch, where each pixel/patch is conditioned on previously generated content.
 Autoregressive models are simple, interpretable, and effective, but their sequential nature can limit efficiency, particularly for long sequences. These characteristics are central to understanding their role in unified multimodal generation tasks.
+
 
 
 ### Diffusion Model
@@ -122,10 +126,21 @@ $$
 
 where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at step $t$, $ε_θ(x_t, t)$ is the model's noise prediction.
 
+**Why Choose Diffusion Models?**
+
+## Unified Model for Multimodal Understanding and Generation 
+
+### Preliminary
+这里介绍一下unified model，给出定义，和有哪些主流模态
 
 
-## Unified Multimodal Model
+### Autoregressive Models
+<!-- https://poloclub.github.io/transformer-explainer/ -->
 
+
+### Autoregressive+Diffusion Model
+
+<!-- https://poloclub.github.io/transformer-explainer/ -->
 
 
 ## Challenges and Future Work
