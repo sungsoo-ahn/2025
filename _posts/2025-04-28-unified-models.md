@@ -135,8 +135,9 @@ where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at
 这里介绍一下unified model，给出定义，和有哪些主流模态
 
 
+{% include figure.html path="assets/img/2025-04-28-unified-models/flowchart.pdf" class="pdf-viewer" %}
 
-{% include figure.html path="assets/img/2025-04-28-unified-models/flowchart.pdf" class="img-fluid" %}
+<!-- {% include figure.html path="assets/img/2025-04-28-unified-models/flowchart.pdf" class="img-fluid" %} -->
 
 
 {% mermaid %}
