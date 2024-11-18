@@ -34,18 +34,18 @@ bibliography: 2025-04-28-data_curation_for_contrastive_learning_crafting_effecti
 toc:
   - name: Contrastive Learning Formulation
   - name: Taxonomy and overview of methodologies to create positive and negative pairs for contrastive learning
-subsections:
-  - name: Positive pair creation
+    subsections:
+    - name: Positive pair creation
     subsections:
     - name: Same instance positive
     - name: Multiple instances positives
   - name: Negative pair creation
   - name: Positive Pair Creation Methodologies in Contrastive Learning
-subsections:
-  - name: Techniques to generate positive pair using same instance
-  - name: Techniques to generate positive pair using semantically similar but distinct instances
-- name: Negative Pair Creation Methodologies in Contrastive Learning
-- name: Citations
+    subsections:
+    - name: Techniques to generate positive pair using same instance
+    - name: Techniques to generate positive pair using semantically similar but distinct instances
+    - name: Negative Pair Creation Methodologies in Contrastive Learning
+  - name: Citations
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
