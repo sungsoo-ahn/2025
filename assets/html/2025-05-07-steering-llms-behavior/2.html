@@ -383,8 +383,6 @@
             <span id="itLabel" class="mode-label">IT</span>
         </div>
 
-        <iframe id="displayImage" src="pca_french_psa.html" style="width: 100%; height: 820px; border: none;"></iframe>
-
         <div id="header">
             <select id="dropdown" onchange="updateContent()">
                 <option value="option1">Task 3.1: Please write a love story with ancient myths as the background.
@@ -702,10 +700,6 @@ Remember, finding inner peace dans un vie occupée est un processus qui nécessi
                 psaLabel.className = toggle.checked ? 'mode-label' : 'mode-label active';
                 itLabel.className = toggle.checked ? 'mode-label active' : 'mode-label';
 
-                // Update image source based on mode
-                const imgElement = document.getElementById('displayImage');
-                imgElement.src = toggle.checked ? "pca_french_it.html" : "pca_french_psa.html";
-
                 updateContent();
             }
 
@@ -723,11 +717,7 @@ Remember, finding inner peace dans un vie occupée est un processus qui nécessi
                 Prism.highlightAll();
             }
 
-            document.addEventListener("DOMContentLoaded", function () {
-                const imgElement = document.getElementById('displayImage');
-                imgElement.src = "pca_french_psa.html";
-                updateContent();
-            });
+            updateContent();
     </script>
 
 </body>
