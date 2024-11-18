@@ -68,20 +68,36 @@ toc:
 # This is used in the 'Layouts' section of this post.
 # If you use this post as a template, delete this _styles block.
 _styles: >
-  .fake-img {
-    background: ##bbb;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 0px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 12px;
-  }
-  .fake-img p {
-    font-family: monospace;
-    color: white;
-    text-align: left;
-    margin: 12px 0;
-    text-align: center;
-    font-size: 16px;
-  }
+    .fake-img {
+        background: ##bbb;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 12px;
+    }
+    .fake-img p {
+        font-family: monospace;
+        color: white;
+        text-align: left;
+        margin: 12px 0;
+        text-align: center;
+        font-size: 16px;
+    }
+    /* Adapted from Andreas Kirsch https://github.com/iclr-blogposts/2024/blob/c111fe06039524fcb60a76c1e9bed26667d30fcf/_posts/2024-05-07-dpi-fsvi.md  */
+    .box-note {
+        font-size: 14px;
+        padding: 15px 15px 10px 15px;
+        margin: 20px 20px 20px 10px;
+        border-left: 7px solid #009E73;
+        border-radius: 5px;
+    }
+    d-article .box-note {
+        background-color: #eee;
+        border-left-color: #009E73;
+    }
+    html[data-theme='dark'] d-article .box-note {
+        background-color: #333333;
+        border-left-color: #009E73;
+    }
 ---
 
 <!-- LaTeX commands -->
@@ -218,9 +234,11 @@ Our illustrations distinguish between materialized matrices and linear maps by u
     Figure 3b: Chain rule using matrix-free linear maps (dashed outline).
 </div>
 
-*We visualize "matrix entries" in linear maps to build intuition.
-Even though following illustrations will sometimes put numbers onto these "matrix entries",
-linear maps are best thought of as black-box functions.*
+<aside class="l-body box-note" markdown="1">
+We visualize "matrix entries" in linear maps to build intuition.
+Even though following illustrations will sometimes put numbers onto these entries,
+linear maps are best thought of as black-box functions.
+</aside>
 
 ### Forward-mode AD
 
@@ -292,10 +310,12 @@ this requires one VJP with each of the $m$ standard basis vectors of the **outpu
     Figure 7: Reverse-mode AD materializes Jacobians row-by-row.
 </div>
 
+<aside class="l-body box-note" markdown="1">
 Since neural networks are usually trained using scalar loss functions,
 reverse-mode AD only requires the evaluation of a single VJP to compute a gradient.
 This makes it the method of choice for machine learners,
 who typically refer to reverse-mode AD as *backpropagation*.
+</aside>
 
 ## Sparse automatic differentiation
 
@@ -369,7 +389,7 @@ This final decompression step is shown in Figure X.
 </div>
 
 The same idea can also be applied to reverse mode AD, as shown in Figure Y.
-Instead of leveraging orthogonal column, we exploit orthogonal rows.
+Instead of leveraging orthogonal columns, we rely on orthogonal rows.
 We can then materialize multiple rows in a single VJP.
 
 <div class="row mt-3">
@@ -397,7 +417,10 @@ in order to find orthogonal columns (or rows), we don't need to materialize the 
 Instead, it is enough to **detect the sparsity pattern** of the Jacobian.
 This binary-valued pattern contains enough information to deduce orthogonality.
 From there, we use a **coloring algorithm** to group mutually orthogonal columns (or rows) together.
-Such a coloring can be visualized on Figure 10 (b), where the yellow columns will be evaluated together and the light blue ones too.
+Such a coloring can be visualized on Figure 10 (b), 
+where the yellow columns will be evaluated together (first JVP) 
+and the light blue ones will be evaluated together (second JVP), 
+for a total of 2 JVPs instead of 5.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -431,9 +454,13 @@ Mirroring the diversity of existing approaches to AD,
 there are also many possible approaches to sparsity pattern detection,
 each with their own advantages and tradeoffs.
 
-The method we describe is one of the most basic: it is equivalent to a binary forward-mode AD system.
-<!-- *TODO: Alternatives include Bayesian probing, ...*  -->
+The method we will present here corresponds to a binary forward-mode AD system. 
+in which performance is gained by representing matrix rows as index sets.
+
+<aside class="l-body box-note" markdown="1">
 <!-- TODO: cite a wide list of approaches here -->
+Alternatives include Bayesian probing, ... *TODO* 
+</aside>
 
 ### Index sets
 
@@ -538,9 +565,14 @@ If they are mutually orthogonal, then this gives all the necessary information t
 ### Graph formulation
 
 Luckily, this can be reformulated as a graph coloring problem, which is very well studied.
-Let us build a graph $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ such that each column is a vertex of the graph, and two vertices are connected iff their respective columns share a non-zero index.
+Let us build a graph $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ with vertex set $\mathcal{V}$ and edge set $\mathcal{E}$, 
+such that each column is a vertex of the graph, and two vertices are connected iff their respective columns share a non-zero index.
 Put differently, an edge between vertices $j_1$ and $j_2$ means that columns $j_1$ and $j_2$ are not orthogonal.
-There are more efficient representations, but we leave them aside.
+
+<aside class="l-body box-note" markdown="1">
+<!-- TODO -->
+There are more efficient representations, e.g. *TODO*
+</aside>
 
 We want to assign to each vertex $j$ a color $c(j)$, such that any two adjacent vertices $(j_1, j_2) \in \mathcal{E}$ have different colors $c(j_1) \neq c(j_2)$.
 This constraint ensures that columns in the same color group are indeed orthogonal.
