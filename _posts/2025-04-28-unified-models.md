@@ -143,7 +143,7 @@ graph TD
     B --> D[Autoregressive]
     B --> E[Mixed Architectures]
 
-    D --> D1[*e.g.,* VILA-U,Chameleon <d-cite key="chameleon2024"></d-cite>]
+    D --> D1[*e.g.,* VILA-U,Chameleon]
     
     C --> F[Image-Centric Alignment]
     C --> G[Text-Centric Alignment]
