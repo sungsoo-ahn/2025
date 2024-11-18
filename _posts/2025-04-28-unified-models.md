@@ -76,6 +76,11 @@ _styles: >
 
 ## Introduction
 
+<blockquote>
+“Unity is strength... when there is teamwork and collaboration, wonderful things can be achieved.” — Mattie Stepanek
+</blockquote>
+
+
 ## Background: Autoregressive and Diffusion
 
 ### Autoregressive Model
@@ -135,26 +140,8 @@ where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at
 这里介绍一下unified model，给出定义，和有哪些主流模态
 
 
-<!-- {% include figure.html path="assets/img/2025-04-28-unified-models/flowchart.pdf" class="pdf-viewer" %} -->
 
 {% include figure.html path="assets/img/2025-04-28-unified-models/flowchart.png" class="img-fluid" %}
-
-
-{% mermaid %}
-graph TD
-    A[Unified Multimodal Models]
-    A --> B[Single Model]
-    A --> C[Multi Experts]
-    
-    B --> D[Autoregressive]
-    B --> E[Mixed Architectures]
-
-    D --> D1[*e.g.,* VILA-U,Chameleon]
-    
-    C --> F[Image-Centric Alignment]
-    C --> G[Text-Centric Alignment]
-    C --> H[Others]
-{% endmermaid %}
 
 
 
