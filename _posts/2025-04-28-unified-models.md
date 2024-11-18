@@ -26,7 +26,7 @@ authors:
 #       name: IAS, Princeton
 
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-distill-example.bib  
+bibliography: 2025-04-28-unified-models.bib
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -142,34 +142,14 @@ graph TD
     
     B --> D[Autoregressive]
     B --> E[Mixed Architectures]
+
+    D --> D1[*e.g.,* VILA-U,Chameleon <d-cite key="chameleon2024"></d-cite>]
     
-    C --> F[Unified Representation Alignment]
-    C --> G[Image-Centric Alignment]
-    C --> H[Text-Centric Alignment]
+    C --> F[Image-Centric Alignment]
+    C --> G[Text-Centric Alignment]
+    C --> H[Others]
 {% endmermaid %}
 
-{% mermaid %}
-graph TD
-    %% 顶层
-    A[Unified Multimodal Models]
-
-    %% 第二层
-    B[Single Model]
-    C[Multi Experts]
-
-    %% 第三层 - Single Model
-    B --> D[Autoregressive]
-    B --> E[Mixed Architectures]
-
-    %% 第三层 - Multi Experts
-    C --> F[Unified Representation Alignment]
-    C --> G[Image-Centric Alignment]
-    C --> H[Text-Centric Alignment]
-
-    %% 连接关系
-    A --> B
-    A --> C
-{% endmermaid %}
 
 
 
