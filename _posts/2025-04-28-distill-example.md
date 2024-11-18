@@ -422,11 +422,11 @@ But let's throw in a <b>tag</b>.
 
 Colons can be used to align columns.
 
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
+| Tables        | Are           | Cool  |abcd  |
+| ------------- |:-------------:| -----:| ----: |
+| col 3 is      | right-aligned | $1600 | 1
+| col 2 is      | centered      |   $12 | 2
+| zebra stripes | are neat      |    $1 | 3
 
 There must be at least 3 dashes separating each header cell.
 The outer pipes (|) are optional, and you don't need to make the 
