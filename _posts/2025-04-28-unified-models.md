@@ -75,10 +75,13 @@ _styles: >
 
 
 ## Introduction
+In recent years, the field of multimodal understanding and generation has seen significant advancements, particularly with the rise of unified models capable of addressing a wide range of tasks. Notable examples include Meta’s Transfusion, NUS’s Show-O, and BAAI’s EMU3, which have set the stage for a growing trend: the development of single models that can process and generate information across multiple modalities, such as text, images, and more. These unified models utilize a variety of techniques, including pure autoregressive methods, diffusion-based approaches, or even hybrid combinations of both.
+
 
 <blockquote>
 “Unity is strength... when there is teamwork and collaboration, wonderful things can be achieved.” — Mattie Stepanek
 </blockquote>
+Unity concept resonates deeply in the context of unified models for multimodal understanding and generation. This blog aims to explore the recent developments in unified multimodal models, reviewing their current state and outlining the future directions for research and application. We will delve into the principles behind autoregressive and diffusion models, shedding light on their unique characteristics and how they can be effectively combined. Ultimately, we will discuss whether the future of unified models lies in one of these paradigms, or if a hybrid approach holds the key to even greater advancements.
 
 
 ## Background: Autoregressive and Diffusion
@@ -151,7 +154,7 @@ where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
 
-### Autoregressive+Diffusion Model
+### Mixed Architectures (AR+Diffusion)
 
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
