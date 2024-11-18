@@ -149,10 +149,15 @@ graph TD
 
 {% mermaid %}
 sequenceDiagram
-    participant John
-    participant Alice
-    Alice->>John: Hello John, how are you?
-    John-->>Alice: Great!
+    A[Unified Multimodal Models] --> B[Single Model]
+    A --> C[Multi Experts]
+
+    B --> D[Autoregressive]
+    B --> E[Mixed Architectures]
+
+    C --> F[Unified Representation Alignment]
+    C --> G[Image-Centric Alignment]
+    C --> H[Text-Centric Alignment]
 {% endmermaid %}
 
 ### Autoregressive Models
