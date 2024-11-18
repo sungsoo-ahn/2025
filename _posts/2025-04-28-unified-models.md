@@ -154,26 +154,27 @@ graph TD
     A[Unified Multimodal Models]
 
     %% 第二层
-    subgraph Single_Model_Group ["Single Model"]
+    subgraph Single_Model [Single Model]
         B1[Autoregressive]
         B2[Mixed Architectures]
     end
 
-    subgraph Multi_Experts_Group ["Multi Experts"]
+    subgraph Multi_Experts [Multi Experts]
         C1[Unified Representation Alignment]
         C2[Image-Centric Alignment]
         C3[Text-Centric Alignment]
     end
 
     %% 连接关系
-    A --> Single_Model_Group
-    A --> Multi_Experts_Group
-    Single_Model_Group --> B1
-    Single_Model_Group --> B2
-    Multi_Experts_Group --> C1
-    Multi_Experts_Group --> C2
-    Multi_Experts_Group --> C3
+    A --> Single_Model
+    A --> Multi_Experts
+    Single_Model --> B1
+    Single_Model --> B2
+    Multi_Experts --> C1
+    Multi_Experts --> C2
+    Multi_Experts --> C3
 {% endmermaid %}
+
 
 
 ### Autoregressive Models
