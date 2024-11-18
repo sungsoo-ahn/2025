@@ -134,7 +134,6 @@ where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at
 
 这里介绍一下unified model，给出定义，和有哪些主流模态
 
-<div class="mermaid">
 graph TD
     A[Unified Multimodal Models] --> B[Single Model]
     A --> C[Multi Experts]
@@ -145,20 +144,7 @@ graph TD
     C --> F[Unified Representation Alignment]
     C --> G[Image-Centric Alignment]
     C --> H[Text-Centric Alignment]
-</div>
 
-{% mermaid %}
-sequenceDiagram
-    A[Unified Multimodal Models] --> B[Single Model]
-    A --> C[Multi Experts]
-
-    B --> D[Autoregressive]
-    B --> E[Mixed Architectures]
-
-    C --> F[Unified Representation Alignment]
-    C --> G[Image-Centric Alignment]
-    C --> H[Text-Centric Alignment]
-{% endmermaid %}
 
 ### Autoregressive Models
 <!-- https://poloclub.github.io/transformer-explainer/ -->
