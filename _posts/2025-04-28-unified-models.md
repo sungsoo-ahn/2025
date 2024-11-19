@@ -273,13 +273,18 @@ Further, single models can be classified into pure autoregressive architectures 
 </aside>
 
 
+Markdown | Discrete | Continuous
+--- | --- | ---
+Autoregressive | Chameleon<d-cite key="chameleon2024"></d-cite>;EMU3<d-cite key="wang2024emu3"></d-cite> | MMAR<d-cite key="yang2024mmar"></d-cite>
+AR+Diffusion | Show-O<d-cite key="xie2024showo"></d-cite> | Transfusion<d-cite key="zhou2024transfusion"></d-cite>;MonoFormer
 
 
-### Autoregressive Models
+
+### Autoregressive Models v.s. Mixed Architectures (AR+Diffusion)
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
 
-### Mixed Architectures (AR+Diffusion)
+### Discrete v.s. Continuous
 
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
