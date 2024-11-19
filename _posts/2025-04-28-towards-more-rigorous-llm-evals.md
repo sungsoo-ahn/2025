@@ -406,56 +406,76 @@ We use Fisher exact test for the binomial proportion for all models, reporting t
   Llama3-8b performs statistically better on GSM-Symbolic than on GSM8K." 
 %}
 
-At the $5\%$ significance level, we see that there are 4 models for which we are able to reject the null: Gemma-7b, Mistral-7b-instruct-v0.1, Phi-2 and Llama3-8b. 
-Note that the performance of Llama3-8b on GSM-Symbolic appears to be statistically better than on GSM8K.
-
-Analysing models independently, 21 out of 25 models show statistically equivalent performance on GSM8K and GSM-Symbolic.
+When analyzing the models independently at the 5% significance level, we find that four models---Gemma-7b, Mistral-7b-instruct-v0.1, Phi-2, and Llama3-8b (indicated with (*) in the figure above)---exhibit statistically significant differences 
+in performance based on the two-sided test.
+Among these four models, Llama3-8b performs statistically better on GSM-Symbolic compared to GSM8K, whilst the other three perform worse on GSM-Symbolic.
+The remaining 21 out of 25 models do not show a statistically significant difference in performance between GSM8K and GSM-Symbolic.
 
 
 ### 4.2.3 Considering all models together: Is the decline in performance statistically significant?
 
-There is a trend that that many models perform worse on GSM-Symbolic than on GSM8K. To assess the statistical significance of this systematic trend, we can conduct what is known as a *paired* difference test. The Wilcoxon signed-rank test would be an appropriate one to apply in our case with two important caveats.  
+There is a trend that that many models perform worse on GSM-Symbolic than on GSM8K. 
+To assess the statistical significance of this systematic trend, we can conduct what is known as a *paired* difference test. 
+The Wilcoxon signed-rank test would be an appropriate one to apply in our case with two important caveats.<d-footnote>todo make a note on parametric vs non-parametric test and why we use non-parametric here but not for the previous tests [@ILI check]</d-footnote>
 
-**Caveat 1**: Non-independent data. It will be incorrect to perform the test on all 25 models as these are not independent. There are several types of dependence to consider. Most obviously, the base models and their instruct-tuned version are clearly related (e.g. Gemma2-9b and Gemma2-9b-it). I’d also argue that different sizes within the same model family cannot be considered independent (e.g. mini-small-medium for Phi or 2b-9b-27b for Gemma); minor version updates (e.g. Mistral v0.1 vs 0.3, Phi 3 vs 3.5) will also likely be correlated. So although we have a sample of 25 models, the “effective” sample size is much smaller. 
+**Caveat 1: Non-independent data.** It will be incorrect to perform the test on all 25 models as these are not independent. 
+There are several types of dependence to consider. 
+Most obviously, the base models and their instruct-tuned version are clearly related (e.g. Gemma2-9b and Gemma2-9b-it). 
+We also think that different sizes within the same model family cannot be considered independent (e.g. mini-small-medium for Phi or 2b-9b-27b for Gemma); minor version updates (e.g. Mistral v0.1 vs 0.3, Phi 3 vs 3.5) will also likely be correlated. 
+So although we have a sample of 25 models, the *effective sample* size is much smaller. 
 
-Here’s our attempt to come up with independent set of models. In each model family, we take the latest, largest instruct-tuned version. We repeat this by also taking the smallest version. This gives us two sets of 7 models (differences between them are in italics):
+Here is our attempt to come up with independent sets of models. 
+In each model family, we take the latest, largest instruct-tuned version.
+We repeat this by also taking the smallest version. 
+This gives us two sets of 7 models (differences between the two sets are in italics):
 
-- Largest subset of models: Gemma2-27b-it, Phi-3.5-mini-instruct, Mistral-7b-instruct-v0.3, Mathstral-7b-v0.1, Llama3-8b-instruct, GPT-4o, o1-preview.
+- Subset of **largest** models: *Gemma2-27b-it*, Phi-3.5-mini-instruct, Mistral-7b-instruct-v0.3, Mathstral-7b-v0.1, Llama3-8b-instruct, *GPT-4o*, *o1-preview*.
 
-- Smallest subset of models: Gemma2-2b-it, Phi-3.5-mini-instruct, Mistral-7b-instruct-v0.3, Mathstral-7b-v0.1, Llama3-8b-instruct, GPT-4o-mini, o1-mini.
+- Subset of **smallest** models: *Gemma2-2b-it*, Phi-3.5-mini-instruct, Mistral-7b-instruct-v0.3, Mathstral-7b-v0.1, Llama3-8b-instruct, *GPT-4o-mini*, *o1-mini*.
 
-**Caveat 2**: The results of GSM-Symbolic are averages across 50 datasets, whilst GSM8K is based on a single sample. We'd want to compare accuracies on GSM8K vs accuracies on each of the 50 datasets (at the time of writing these are not publicly available). We're still trying to figure out what is the correct way to handle the unbalanced number of samples in this case is (more on this to come). 
+**Caveat 2: Sample sizes.** The results of GSM-Symbolic are averages across 50 datasets, whilst GSM8K is based on a single sample. 
+We'd want to compare accuracies on GSM8K vs accuracies on each of the 50 datasets (at the time of writing these are not publicly available). [@ILI check]
 
-With those two caveats, here is the hypothesis and results:
+
+With those two caveats, let's define where  $$p^{8K}_{m}=[p^{8K}_{1,m}, \dots, p^{8K}_{7,m}]$$ and $$p^{Symb}_{m}= [p^{Symb}_{1,m}, \dots, p^{Symb}_{7,m}]$$.
+Here is the hypothesis and results:
 
 - Two-sided: The success probabilities are different
 
 $$
-H_0: p^{8K}_{m} = p^{Symb}_{m} \quad\quad\quad H_A^\text{two-sided}: p^{8K}_{m} \neq p^{Symb}_{m}.
+  H_0: p^{8K}_{m} = p^{Symb}_{m} \quad\quad\quad H_A^\text{two-sided}: p^{8K}_{m} \neq p^{Symb}_{m}.
 $$
 
 - One-sided: The success probability on GSM8K is greater than that on GSM-Symbolic
 
 $$
-H_0: p^{8K}_{m} = p^{Symb}_{m} \quad\quad\quad H_A^\text{one-sided}: p^{8K}_{m} > p^{Symb}_{m},
+  H_0: p^{8K}_{m} = p^{Symb}_{m} \quad\quad\quad H_A^\text{one-sided}: p^{8K}_{m} > p^{Symb}_{m}.
 $$
 
-where  $$p^{8K}_{m}=[p^{8K}_{1,m}, \dots, p^{8K}_{7,m}]$$ and $$p^{Symb}_{m}= [p^{Symb}_{1,m}, \dots, p^{Symb}_{7,m}]$$.
 
-- Largest subset of models: 
+- Subset of **largest** models: 
 
   - p-value of the two-sided test is 0.046875. This means that we can reject the null at the 5%, but not at the 1%, that there are performance differences between GSM-Symbolic and GSM8K. 
 
   - p-value of the one-sided test is 0.0234375.
 
-- Smallest subset of models: 
+- Subset of **smallest** models: 
 
   - p-value of the two-sided test is 0.078125, i.e. we cannot reject the null at the 5% or the 1% level. 
 
   - p-value of the one-sided test is 0.0390625.
 
-**To summarise: analysing the results of models jointly, there appears to be some evidence of differences in performance.**
+| Subset of Models | Two-sided p-value | One-sided p-value |
+|------------------|-------------------|-------------------|
+| Largest          | 0.047          | 0.023         |
+| Smallest         | 0.078          | 0.039         |
 
+<div class="caption">
+<b>Results of the Wilcoxon signed-rank test for the two subsets of models.</b> TODO explain.
+</div>
+
+
+**Verdict:** [Takaway from 4.2] Aanalysing the results of models jointly, there appears to be some evidence of differences in performance.
 
 ## 4.3 Performance decrease and variance increase with question complexity
 
