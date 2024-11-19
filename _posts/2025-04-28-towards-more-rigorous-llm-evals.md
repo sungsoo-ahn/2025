@@ -350,11 +350,11 @@ For each example sampled from the corresponding ranges, we estimate the probabil
 
 
 For the Llama3-8b-instruct model, the smaller sampling ranges that we propose have a minimal effect: the probability of correctly performing all 3 operations is only $0.8$ percentage points higher compared to the symbolic ranges.
-In contrast, for the Phi-3.5-mini-instruct model, the effect is substantially larger: the probability of correctly performing all 3 operations is $86.6\%$ with our proposed ranges, compared to $82.1\%$ with the symbolic ranges—--a difference of $4.5$ percentage points. 
-Interestingly, this difference is similar to the performance drop observed for this model from GSM8K to GSM-Symbolic, which is $5.9$ percentage points ($88.0\%$ vs $82.1\%$).
+In contrast, for the Phi-3.5-mini-instruct model, the effect is substantially larger: the probability of correctly performing all 3 operations is $86.6\%$ with our proposed ranges, compared to $82.1\%$ with the symbolic ranges---a difference of $4.5$ percentage points. 
+Interestingly, this difference is similar to the performance drop observed for this model on the GSM8K vs the GSM-Symbolic datasets, which is $5.9$ percentage points ($88.0\%$ on GSM8K vs $82.1\%$ on GSM-Symbolic).
 
 <!-- It is reasonable to expect that similar.. holds for all models. In other words, -->
-Based on this analysis of a template for a single question, we can argue that even if the models execute the "reasoning" process perfectly, i.e. they are able to correctly translate the word math problem into a sequence of arithmetic operations, they would still perform worse on the Symbolic template compared to our proposed template. 
+Based on the analysis for this question template, we argue that even if the models execute the "reasoning" process perfectly, i.e. they are able to correctly translate the word math problem into a sequence of arithmetic operations, they would still perform worse on the Symbolic template compared to our proposed template. 
 Extrapolating from this, we suggest that if similar systematic discrepancies are present in other templates, then some (for some models likely substantial) portion of the observed performance decline could be attributed to an increased frequency of arithmetic errors.
 
 **Note:** Using this analysis, we can conclude that the probability of successfully performing all arithmetic operations decreases exponentially as the number of arithmetic operations increases (more on this in Section 4.3).
