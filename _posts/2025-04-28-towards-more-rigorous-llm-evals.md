@@ -329,7 +329,7 @@ For each example sampled from the corresponding ranges, we estimate the probabil
 | **Proposed (ours)**    | 0.955 $\pm$ 0.007 | 0.954 $\pm$ 0.006 | 0.950 $\pm$ 0.004 | 0.866 $\pm$ 0.009 |
 
 <div class="caption">
-Results for Phi-3.5-mini-instruct model. Mean and standard deviation of probabilities over 512 examples.
+<b>Results for Phi-3.5-mini-instruct model.</b> Mean and standard deviation of probabilities over 512 examples.
 </div>
 
 
@@ -341,21 +341,15 @@ The probabilities for Llama3-8b-instruct are given in the following table:
 | **Proposed (ours)**  | 0.997 $\pm$ 0.001 | 0.997 $\pm$ 0.001 | 0.996 $\pm$ 0.001 | 0.990 $\pm$ 0.001 |
 
 <div class="caption">
-Results for Llama3-8b-instruct model. Mean and standard deviation of probabilities over 512 examples.
+<b>Results for Llama3-8b-instruct model.</b> Mean and standard deviation of probabilities over 512 examples.
 </div>
 
 
 The performance delta that can be attributed to just arithmetic mistakes is ... 
 In other words, even if the models execute the "reasoning" process perfectly, that is, translating the math word problem into a sequence of operations, they would still perform worse on the Symbolic template compared to our proposed template. 
-This suggests that if similar systematic discrepancies exist in other templates, some (potentially substantial) portion of the observed performance decline could be attributed to an increased number of arithmetic errors.
+This suggests that if similar systematic discrepancies exist in other templates, then some (potentially substantial) portion of the observed performance decline could be attributed to an increased number of arithmetic errors.
 
-Similar observations can be made for the M1, P1 and P2 templates.
-
-> We have also observed the performance of LLMs deteriorating as question complexity increases. <d-cite key='mirzadeh2024gsm'></d-cite>
-
-It is plausible that reasoning becomes more challenging as additional clauses are introduced, or conversely, easier when clauses are removed, as seen in the M1 template. 
-Importantly, introducing more clauses necessarily involves additional arithmetic operations, resulting in an exponential decline in performance.
-We argue that more careful and thorough analysis is required to account for this variability and its impact on performance.
+**Note:** Even if the models perform the "reasoning" process perfectly, the probability of success decreases exponentially as the number of arithmetic operations increases (more on this in Section 4.3).
 
 <!-- TODO maybe? Repeat reasoning: translating the text to a sequence of operations; what the paper tests is whether models can do that *and* perofrm the operations correctly. The rest of this post will not deal with reasoning; -->
 
@@ -478,13 +472,14 @@ These differences could be due to several factors, including distribution mismat
 
 ## 4.3 Performance decrease and variance increase with question complexity
 
-The paper highlights this on multiple occasions, most notably in Section 4.3. Some examples include:
+Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite> highlights the fact that performance decreases and variance increases with question complexity on multiple occasions, most notably in Section 4.3. Some examples include:
 
 > [page 3] We show that performance degradation and variance increase as the number of clauses increases, indicating that LLMs’ reasoning capabilities struggle […]
 
+> [page 9, Figure 6 reproduced below] the distribution of performance shifts to the left (i.e., accuracy decreases), and the variance increases.
+
 > [page 9] the increase in variance suggests that searching and pattern-matching become significantly harder for models as the difficulty increases.
 
-> [page 9, Figure 6 reproduced below] the distribution of performance shifts to the left (i.e., accuracy decreases), and the variance increases.
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fig6_gsm.png" 
@@ -493,15 +488,23 @@ The paper highlights this on multiple occasions, most notably in Section 4.3. So
 %}
 
 
-Here we have four datasets: the baseline GSM-Symbolic, M1 (minus 1), which removes a clause, and P1 (plus 1) and P2 (plus 2), which add one and two clauses respectively. 
+The figure above shows the results for four datasets: the baseline GSM-Symbolic, M1 (minus 1), which removes a clause, and P1 (plus 1) and P2 (plus 2), which add one and two clauses respectively. 
 It is reasonable to expect that a model will perform better on easier datasets and worse on more difficult ones.
-We can assume, as before, that a model $m$ answers questions of varying difficulty levels $$\text{dif}=-1, 0, 1, 2$$ as independent and identically distributed Bernoulli trials with a success probability of $$p^{\text{dif}}_{m}$$. 
-The distribution of the total number of correct answers follows a binomial distribution $$\text{Bin}(N=100, p^\text{dif}_{m})$$, with a variance of $$N \cdot p^\text{dif}_{m} \cdot (1 - p^\text{dif}_{m})$$.
+As before, we assume that a model $m$ answers questions of varying difficulty levels $$\text{dif}=-1, 0, 1, 2$$ as independent and identically distributed Bernoulli trials with a success probability of $$p^{\text{dif}}_{m}$$. 
+The distribution of the total number of correct answers follows a binomial distribution $$\text{Bin}(N=100, p^\text{dif}_{m})$$, with variance equal to $$N \cdot p^\text{dif}_{m} \cdot (1 - p^\text{dif}_{m})$$.
 
-If the probabilities of success decrease, such that $$p^{\text{dif}=-1}_{m} > p^{\text{dif}=0}_{m} > p^{\text{dif}=1}_{m} > p^{\text{dif}=2}_{m} > 0.5$$, as observed in some models in Figure 6, the corresponding variances *must increase*. 
-Whether this decrease in probability of success is related to the “reasoning abilities” or "pattern-matching abilities" of a model is beyond the scope of this blog.
+If the probabilities of success decrease with increasing question complexity, i.e. $$p^{\text{dif}=-1}_{m} > p^{\text{dif}=0}_{m} > p^{\text{dif}=1}_{m} > p^{\text{dif}=2}_{m} > 0.5$$, the corresponding variances *must increase*. 
+We believe that this is precisely what we observe in Figure 6: the increase in variance is a trivial consequence of the decrease in probabilities of success, rather than a sign of "pattern-matching" becomeing harder.
 
-**To summarise: the emphasis on “non-negligible variance” and “increase in variance” throughout the paper appears to be an over-interpretation of expected statistical variation.**
+Regarding the decrease in probability of success itself, it is plausible that reasoning becomes more challenging as additional clauses are introduced, or conversely, easier when clauses are removed, as seen in the M1 template. 
+Importantly, as noted in Section 4.2.1, introducing more clauses necessarily involves more arithmetic operations, which in turn will result in an exponential decline in performance. 
+This decline will occur even if the models perfectly execute the "reasoning" process of translating the word math problem into a sequence of arithmetic operations.
+To distinguish between these two effects, a more detailed and thorough analysis will be needed.
+
+<!-- The extent to which the decrease in probability of success itself is related to the “reasoning abilities” or "pattern-matching abilities" of a model versus increased probability of making a mistake (as discussed in Section 4.2.1) is beyond the scope of this blog.  -->
+
+
+**Verdict:** The emphasis on “non-negligible variance” and “increase in variance” throughout the paper appears to be an over-interpretation of expected statistical variation. The decrease in probability of success as question complexity increases can be due to both increased difficulty in reasoning and increased probability of making an arithmetic mistake.
 
 ## 4.4 No-Op results
 TODO
