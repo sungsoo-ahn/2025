@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: The Illustrated AlphaFold
-description: A visual walkthrough of the AlphaFold3 architecture, with more details and diagrams than you were probably looking for.
+description: We present the Illustrated AlphaFold, a visual walkthrough of the architecture and information flow of AlphaFold 3. We explain every model component and training detail, with particular focus on the advances since AlphaFold 2 – including the unified tokenization scheme that extends to DNA, RNA, and small molecules, as well as the novel diffusion-based structural module. Finally, we include some musings on the ML lessons learned from studying AlphaFold 3.
 giscus_comments: false
 date: 2025-04-28
 future: true
@@ -27,7 +27,7 @@ toc:
 ---
 # Introduction
 ### Who should read this
-Do you want to understand exactly how AlphaFold3 works? The architecture is quite complicated and the description in the paper can be overwhelming, so we made a much more friendly (but just as detailed!) visual walkthrough.
+Do you want to understand exactly how AlphaFold 3 works? The architecture is quite complicated and the description in the paper can be overwhelming, so we made a much more friendly (but just as detailed!) visual walkthrough.
 
 This is mostly written for an ML audience and multiple points assume familiarity with the steps of attention. If you're rusty, see Jay Alammar's [The Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/) for a thorough visual explanation. That post is one of the best explanations of a model architecture at the level of individual matrix operations and also the inspiration for the diagrams and naming.
 
