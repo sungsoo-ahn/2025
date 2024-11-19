@@ -139,9 +139,37 @@ where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at
 ## Unified Multimodal Model
 
 ### Preliminary
+Unified multimodal models represent a pivotal advancement in artificial intelligence, aiming to integrate and process multiple data modalities ($e.g.,$ text, images, audio, and video) within a single model framework. These models are designed for understanding and generating across modalities, offering flexibility and efficiency that surpass traditional task-specific or modality-specific approaches. 
 
-这里介绍一下unified model，给出定义，和有哪些主流模态
 
+** Key Concepts in Unified Multimodal Models: **
+
+* Multimodal Understanding: 
+Unified models are trained to understand relationships and interactions across multiple modalities (*e.g.,* text, image, audio). For example, given a pair , the model learns a joint representation  such that:
+
+$$
+z = f(x_{\text{image}}, x_{\text{text}})
+$$
+
+* Multimodal Generation: 
+These models synthesize cross-modal outputs. For instance, generating text from image can be formulated as:
+
+$$
+x_{\text{text}} = g(x_{\text{image}})
+$$
+
+* Cross-Modal Alignment:
+A key challenge is aligning feature spaces of diverse modalities into a unified latent space. Formally, given and from different modalities, the goal is to minimize their alignment loss align:
+
+$$
+\mathcal{L}_{\text{align}} = \| f(x_i) - f(x_j) \|_2^2
+$$
+
+* Model Architectures:
+
+1) Autoregressive Models
+
+2) Hybrid Architectures
 
 
 {% include figure.html path="assets/img/2025-04-28-unified-models/flowchart.png" class="img-fluid" %}
