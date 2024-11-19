@@ -544,6 +544,7 @@ I’d like to Alex Coca, Adam Goliński, Roumen Popov, and ... for their feedbac
 
 # Appendix
 
+
 ## Mathematical setup  
 
 Here we more rigorously describe the mathematical lens which we use to analyse the results from <d-cite key="mirzadeh2024gsm"></d-cite>.
@@ -606,6 +607,9 @@ Under the assumptions of this mathematical model, we can think of $$\hat{p}_m^{8
 
 Throughout this blogpost, the main question we've tackled is: given these observed $$\hat{p}_m^{8K}$$ and $$\overline{\hat{p}_m^{8K}}$$, what evidence is there to believe that $$p^{8K}_m \neq p^{Symb}_m$$ or that $$p^{8K}_m > p^{Symb}_m$$?
 
+## Computational resources:
+
+The extra analysis in this blog post (the addition task discussed in Section 4.1.1) was performed on a single L4 GPU (24GB RAM) on a Lightning AI Cloud instance.
 
 ## Clopper-Pearson confidence intervals
 
