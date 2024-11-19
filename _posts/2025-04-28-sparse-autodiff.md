@@ -533,11 +533,12 @@ in this case addition, multiplication and the sign function.
 
 {% mermaid %}
 flowchart LR
+
     subgraph Inputs
-    X1["$$x_1$$"]
-    X2["$$x_2$$"]
-    X3["$$x_3$$"]
-    X4["$$x_4$$"]
+        X1["$$x_1$$"]
+        X2["$$x_2$$"]
+        X3["$$x_3$$"]
+        X4["$$x_4$$"]
     end
 
     PLUS(("$$+$$"))
