@@ -96,7 +96,7 @@ Each variable has a specified domain and constraints to ensure valid questions a
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/template_gsm.png" 
   class="img-fluid" 
-  caption="Figure 1 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>"
+  caption="<b>Figure 1 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>.</b>"
 %}
 
 For their analysis, the authors select 100 questions from GSM8K and create such a template for each of them.
@@ -151,7 +151,7 @@ The figure below illustrates how the probability of answering a question correct
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/addition_accuracy.png" 
   class="img-fluid" 
   title="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task" 
-  caption="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers. 
+  caption="<b>Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers.</b> 
   The plot illustrates how the probability of answering a question correctly ($y$-axis) is affected by the total number of digits involved ($2d$, $x$-axis), and the total number of carry operations involved in that sum (colour of the points).  
   Point size reflects the total number of tokens (for Phi, total digits equal total tokens; for Llama, numbers up to 3 digits are 1 token and up to 6 digits are 2 tokens). 
   For this illustration, we group questions by number of digits and carry operations, and plot the average accuracy over 512 samples. 
@@ -210,7 +210,7 @@ To put this variability into perspective, we also include the average of the 50 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.95.png" 
   class="img-fluid" 
   title="95% Wilson score confidence intervals" 
-  caption="95% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with the average (over 50 datasets) point estimate of $p^{Symb}_{m}$ (blue triangles)." 
+  caption="<b>95% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with the average (over 50 datasets) point estimate of $p^{Symb}_{m}$ (blue triangles).</b> " 
 %}
 <!-- <div class="caption">
   "95% Wilson score intervals for the point estimates of $p_m$.
@@ -225,7 +225,7 @@ Conversely, models with success probabilities closer to 0 or 1 (Gemma2b, GPT-4o,
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fig2_gsm.png" 
   class="img-fluid" 
-  caption="Figure 2 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>. Note that the $x$-axis scales are different for different models."
+  caption="<b>Figure 2 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>.</b> Note that the $x$-axis scales are different for different models."
 %}
 
 For the models shown in this figure, the GSM8K accuracy ($$p^{8K}_{m}$$, represented by the dashed line) varies from 74% for the weakest model, Llama3-8B-instruct, to 95% for the strongest model, GPT-4o. 
@@ -257,7 +257,7 @@ We visualise this in the next figure, showing the overlap between the 95% Wilson
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/ci_vs_reported.png" 
   class="img-fluid" 
-  caption="95% Wilson score confidence intervals for the point estimates of GSM8K accuracy, $p^{8K}_{m}$ (red), and range of accuracies achieved on the 50 GSM-Symbolic datasets, $p^{Symb}_{m}$ (blue). 
+  caption="<b>95% Wilson score confidence intervals for the point estimates of GSM8K accuracy, $p^{8K}_{m}$ (red), and range of accuracies achieved on the 50 GSM-Symbolic datasets, $p^{Symb}_{m}$ (blue).</b> 
   The latter ranges are not explicitly reported; we approximate them from the histograms in Figure 1 of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper. 
   Since such histograms are not available for all models, we only show the subset of the models for which they are." 
 %}
@@ -372,7 +372,7 @@ For many models in Figure 2, the dashed line is in the right tail of the distrib
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fig3_gsm.png" 
   class="img-fluid" 
-  caption="Figure 3 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>"
+  caption="<b>Figure 3 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>.</b>"
 %}
 
 The right tool to determine whether these differences are statistically significant is hypothesis testing.
@@ -380,23 +380,30 @@ For each model $m$, we want to test whether its success probability on GSM8K, de
 This equality forms our *null hypothesis*. 
 Our *alternative hypothesis* can take two forms:
 
-- Two-sided: The success probabilities are different
+- Two-sided alternative: The success probabilities are different
+
 $$
   H_0: p^{8K}_{m} = p^{Symb}_{m} \quad\quad\quad H^\text{two-sided}_A: p^{8K}_{m} \neq p^{Symb}_{m}.
 $$
-- One-sided: The success probability on GSM8K is greater than that on GSM-Symbolic
+
+- One-sided alternative: The success probability on GSM8K is greater than that on GSM-Symbolic
+
 $$
   H_0: p^{8K}_{m} = p^{Symb}_{m} \quad\quad\quad H^\text{one-sided}_A: p^{8K}_{m} > p^{Symb}_{m}.
 $$
 
-We use Fisher exact test for the binomial proportion for all models:
+We use Fisher exact test for the binomial proportion for all models, reporting the p-values in the next figure.
 
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fisher_pvalues.png"
   class="img-fluid" 
   title="Fisher exact test" 
-  caption="Fisher exact test: p-values for two-sided and one-sided tests across models. We use (*) to indicate models for which the null can be rejected at the 5% significance level in favour of the two-sided alternative." 
+  caption="<b>Fisher exact test: p-values for two-sided and one-sided tests across models.</b>
+  The grey line represents the 5% significance level, and the black line represents the 1% significance level. 
+  Models marked with (*) indicate that the null hypothesis can be rejected at the 5% significance level in favor of the two-sided alternative; these models are Gemma-7b, Mistral-7b-instruct-v0.1, Phi-2, and Llama3-8b. 
+  The models for which the null hypothesis can be rejected in favour of the one-sided alternative are Gemma-7b, Mistral-7b-instruct-v0.1, and Phi-2. 
+  Llama3-8b performs statistically better on GSM-Symbolic than on GSM8K." 
 %}
 
 At the $5\%$ significance level, we see that there are 4 models for which we are able to reject the null: Gemma-7b, Mistral-7b-instruct-v0.1, Phi-2 and Llama3-8b. 
@@ -463,7 +470,7 @@ The paper highlights this on multiple occasions, most notably in Section 4.3. So
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fig6_gsm.png" 
   class="img-fluid" 
-  caption="Figure 6 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>. Note that the $x$-axis scales are different for different models."
+  caption="<b>Figure 6 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>.</b> Note that the $x$-axis scales are different for different models."
 %}
 
 
@@ -512,7 +519,7 @@ For robustness purposes, here are the [Clopper-Pearson](https://en.wikipedia.org
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/clopper_0.95.png" 
   class="img-fluid" 
   title="95% Clopper-Pearson intervals for the point estimates of $p_m$." 
-  caption="95% Clopper-Pearson intervals for the point estimates of $p_m$." 
+  caption="<b>95% Clopper-Pearson intervals for the point estimates of $p_m$.</b>" 
 %}
 
 
@@ -538,14 +545,14 @@ The results: we are able to reject the null for Gemma-7b, Mistral-7b-instruct-v0
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.99.png" 
   class="img-fluid" 
   title="99% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles)." 
-  caption="99% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles)." 
+  caption="<b>99% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles).</b>" 
 %}
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/clopper_0.99.png" 
   class="img-fluid" 
   title="99% Clopper-Pearson confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles)." 
-  caption="99% Clopper-Pearson confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles)." 
+  caption="<b>99% Clopper-Pearson confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles).</b>" 
 %}
 
 ## Logistic regression results
