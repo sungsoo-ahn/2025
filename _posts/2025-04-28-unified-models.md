@@ -270,11 +270,14 @@ $$
 
 
 
+</aside>
+
+<aside class="l-body box-note" markdown="1">
 Based on model architectures, unified multimodal models can be categorized into two primary divisions: single models and multi-expert models. 
-Further, single models can be classified into pure autoregressive architectures and mixed architectures.
+Further, single models can be classified into pure autoregressive architectures and mixed architectures:
 
 {% include figure.html path="assets/img/2025-04-28-unified-models/flowchart.png" class="img-fluid" %}
-
+</aside>
 
 
 
