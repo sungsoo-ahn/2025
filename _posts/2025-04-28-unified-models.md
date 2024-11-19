@@ -276,11 +276,11 @@ Further, single models can be classified into pure autoregressive architectures 
 
 
 For the single-model paradigm, existing methods can primarily be categorized into two aspects: model architecture and feature representation, as shown in the table below:
-| **Model Paradigm**  | **Discrete**                                                                                     | **Continuous**                                                                               |
-|----------------------|-------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| **Autoregressive**   | - *Chameleon* <d-cite key="chameleon2024"></d-cite> <br> - *EMU3* <d-cite key="wang2024emu3"></d-cite> | - *MMAR* <d-cite key="yang2024mmar"></d-cite>                                               |
-| **AR+Diffusion**     | - *Show-O* <d-cite key="xie2024showo"></d-cite>                                                 | - *Transfusion* <d-cite key="zhou2024transfusion"></d-cite> <br> - *MonoFormer*             |
 
+ | **Discrete** | **Continuous** 
+--- | --- | ---
+**Autoregressive** | *Chameleon*<d-cite key="chameleon2024"></d-cite>;*EMU3*<d-cite key="wang2024emu3"></d-cite> | *MMAR*<d-cite key="yang2024mmar"></d-cite>
+**AR+Diffusion** | *Show-O*<d-cite key="xie2024showo"></d-cite> | *Transfusion*<d-cite key="zhou2024transfusion"></d-cite>;*MonoFormer* 
 
 
 
