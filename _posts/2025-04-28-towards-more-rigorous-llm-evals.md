@@ -125,6 +125,11 @@ The paper concludes that LMs “are not performing formal reasoning”.
 
 # 4. Critical analysis and re-evaluation
 
+**Note:** We run some additional simple, small-scale experiments to provide additional empirical evidence for our claims. 
+We will use two of the models that were evaluated in the paper: Llama-3-8B-Instruct and Phi-3.5-mini-Instruct.
+All code will be made available on GitHub.
+
+
 ## 4.1 Performance variability: Why is variability not (that) interesting?
 
 > As demonstrated, all models show a **significant variance** across different sets. […] It is **noteworthy that this variation even occurs** […]. <d-cite key="mirzadeh2024gsm"></d-cite>, emphasis added.
@@ -150,8 +155,8 @@ The figure below illustrates how the probability of answering a question correct
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/addition_accuracy.png" 
   class="img-fluid" 
-  title="Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task" 
-  caption="<b>Accuracy of Llama3-8b and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers.</b> 
+  title="Accuracy of Llama-3-8B-Instruct and Phi-3.5-mini-instruct on a simple addition task" 
+  caption="<b>Accuracy of Llama-3-8B-Instruct and Phi-3.5-mini-instruct on a simple addition task of adding two $d$-digit numbers.</b> 
   The plot illustrates how the probability of answering a question correctly ($y$-axis) is affected by the total number of digits involved ($2d$, $x$-axis), and the total number of carry operations involved in that sum (colour of the points).  
   Point size reflects the total number of tokens (for Phi, total digits equal total tokens; for Llama, numbers up to 3 digits are 1 token and up to 6 digits are 2 tokens). 
   For this illustration, we group questions by number of digits and carry operations, and plot the average accuracy over 512 samples. 
@@ -159,8 +164,8 @@ The figure below illustrates how the probability of answering a question correct
   Detailed results of the logistic regressions are available in the Appendix." 
 %}
 
-The findings indicate that LM performance is negatively affected by both the number of digits and the number of carry operations in the sum. 
-I.e. as the numbers get larger and the number of carry operations increases, accuracy declines.
+The regression results indicate that LM performance is negatively affected by both the number of digits and the number of carry operations in the sum. 
+In other words, as the numbers get larger and the number of carry operations increases, accuracy declines.
 This suggests that LMs make errors similar to those made by humans, such as forgetting carry operations. 
 Detailed regression results can be found in the Appendix.
 
@@ -210,7 +215,7 @@ To put this variability into perspective, we also include the average of the 50 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.95.png" 
   class="img-fluid" 
   title="95% Wilson score confidence intervals" 
-  caption="<b>95% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with the average (over 50 datasets) point estimate of $p^{Symb}_{m}$ (blue triangles).</b> " 
+  caption="<b>95% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with the average (over 50 datasets) point estimate of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ estimated from the data reported in Table 1 in the appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
 %}
 <!-- <div class="caption">
   "95% Wilson score intervals for the point estimates of $p_m$.
@@ -266,7 +271,7 @@ Note that our confidence intervals tend to be wider than the implied ranges in t
 This discrepancy is likely to be explained by the unmodelled correlations between questions---as initially suggested, a more reasonable assumption would be to model the probability of success on a question level, $p_{m,n}$, rather than assuming each question is equally likely to be answered correctly. 
 The analysis can be repeated once (if) the detailed question-level data becomes available.
 
-**Verdict:** The observed variability in GSM-Symbolic performance is not inherently surprising, and is in fact expected.
+**Verdict:** The observed variability in GSM-Symbolic performance is not inherently surprising, and we provide empirical evidence that it is indeed expected.
 <!-- ili3p wrote: An idea I had here, how is the variability in the "adding two numbers" task? Are the results also within the 95% CI of assuming Binomial distribution?  TODO: @DRI CHECK-->
 
 ## 4.2 Performance decline on GSM-Symbolic
@@ -304,7 +309,7 @@ In the next table, we propose more suitable ranges for all variables in the symb
 | `ans` (bouncy balls)  | $(85, 200)$    | $(4, 40)$      | $14$             |
 
 <div class="caption">
-The GSM-Symbolic sampling ranges for the variables from Figure 1 in Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite> (reproduced above) and our proposed sampling ranges. 
+<b>The GSM-Symbolic sampling ranges for the variables from Figure 1 in Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite> (reproduced above) and our proposed sampling ranges.</b> 
 We highlight that the original GSM8K question cannot be generated from the proposed symbolic template because the symbolic ranges do not include the original values, whereas our proposed ranges do.
 We also believe that the proposed ranges better align with the context of the variables (e.g. having between 4 and 40 bouncy balls is more realistic than having between 85 and 200).
 </div>
@@ -323,7 +328,7 @@ For each example sampled from the corresponding ranges, we estimate the probabil
 
 
 
-| **Phi-3.5**  | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 operations |
+|  Phi | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 operations |
 |-- |-------|----------|----------|----------|
 |**Symbolic**    | 0.949 $\pm$ 0.004 | 0.941 $\pm$ 0.008 | 0.920 $\pm$ 0.008 | 0.821 $\pm$ 0.013 |
 | **Proposed (ours)**    | 0.955 $\pm$ 0.007 | 0.954 $\pm$ 0.006 | 0.950 $\pm$ 0.004 | 0.866 $\pm$ 0.009 |
@@ -333,9 +338,8 @@ For each example sampled from the corresponding ranges, we estimate the probabil
 </div>
 
 
-The probabilities for Llama3-8b-instruct are given in the following table:
 
-|   **Llama3-8b**    | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 operations |
+|   Llama   | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 operations |
 |-------|----------|----------|----------|----------|
 | **Symbolic**  | 0.996 $\pm$ 0.001 | 0.995 $\pm$ 0.001 | 0.991 $\pm$ 0.002 | 0.982 $\pm$ 0.003 |
 | **Proposed (ours)**  | 0.997 $\pm$ 0.001 | 0.997 $\pm$ 0.001 | 0.996 $\pm$ 0.001 | 0.990 $\pm$ 0.001 |
@@ -345,15 +349,19 @@ The probabilities for Llama3-8b-instruct are given in the following table:
 </div>
 
 
-The performance delta that can be attributed to just arithmetic mistakes is ... 
-In other words, even if the models execute the "reasoning" process perfectly, that is, translating the math word problem into a sequence of operations, they would still perform worse on the Symbolic template compared to our proposed template. 
-This suggests that if similar systematic discrepancies exist in other templates, then some (potentially substantial) portion of the observed performance decline could be attributed to an increased number of arithmetic errors.
+For the Llama3-8b-instruct model, the smaller sampling ranges that we propose have a minimal effect: the probability of correctly performing all 3 operations is only $0.8$ percentage points higher compared to the symbolic ranges.
+In contrast, for the Phi-3.5-mini-instruct model, the effect is substantially larger: the probability of correctly performing all 3 operations is $86.6\%$ with our proposed ranges, compared to $82.1\%$ with the symbolic ranges—--a difference of $4.5$ percentage points. 
+Interestingly, this difference is similar to the performance drop observed for this model from GSM8K to GSM-Symbolic, which is $5.9$ percentage points ($88.0\%$ vs $82.1\%$).
 
-**Note:** Even if the models perform the "reasoning" process perfectly, the probability of success decreases exponentially as the number of arithmetic operations increases (more on this in Section 4.3).
+<!-- It is reasonable to expect that similar.. holds for all models. In other words, -->
+Based on this analysis of a template for a single question, we can argue that even if the models execute the "reasoning" process perfectly, i.e. they are able to correctly translate the word math problem into a sequence of arithmetic operations, they would still perform worse on the Symbolic template compared to our proposed template. 
+Extrapolating from this, we suggest that if similar systematic discrepancies are present in other templates, then some (for some models likely substantial) portion of the observed performance decline could be attributed to an increased frequency of arithmetic errors.
 
-<!-- TODO maybe? Repeat reasoning: translating the text to a sequence of operations; what the paper tests is whether models can do that *and* perofrm the operations correctly. The rest of this post will not deal with reasoning; -->
+**Note:** Using this analysis, we can conclude that the probability of successfully performing all arithmetic operations decreases exponentially as the number of arithmetic operations increases (more on this in Section 4.3).
 
-**Verdict:** Some indication that distributions might differ. Contamination is not mutually exclusive. TODO
+**Verdict:** We provide some evidence for the existence of a distribution mismatch between GSM8K and GSM-Symbolic, which we believe should be further investigated.
+This mismatch could explain (some of) the performance discrepancies, and we offer some empirical support for this claim.
+Data contamination, as suggested by the authors, is also a plausible explanation, and is not mutually exclusive with distribution mismatch.
 
 
 ### 4.2.2 Considering each model independently: Is the decline in performance statistically significant?
@@ -488,7 +496,7 @@ Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite> highlights the fa
 %}
 
 
-The figure above shows the results for four datasets: the baseline GSM-Symbolic, M1 (minus 1), which removes a clause, and P1 (plus 1) and P2 (plus 2), which add one and two clauses respectively. 
+The figure above shows the results for four datasets: the baseline GSM-Symbolic, GSM-M1 (Minus 1), which removes a clause, and GSM-P1 (Plus 1) and GSM-P2 (Plus 2), which add one and two clauses respectively. 
 It is reasonable to expect that a model will perform better on easier datasets and worse on more difficult ones.
 As before, we assume that a model $m$ answers questions of varying difficulty levels $$\text{dif}=-1, 0, 1, 2$$ as independent and identically distributed Bernoulli trials with a success probability of $$p^{\text{dif}}_{m}$$. 
 The distribution of the total number of correct answers follows a binomial distribution $$\text{Bin}(N=100, p^\text{dif}_{m})$$, with variance equal to $$N \cdot p^\text{dif}_{m} \cdot (1 - p^\text{dif}_{m})$$.
