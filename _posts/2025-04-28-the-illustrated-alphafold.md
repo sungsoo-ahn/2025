@@ -85,7 +85,7 @@ This section contains:
 ## Tokenization
 <div class="l-gutter">
     <figure style="position: relative; overflow: visible;">
-        <img src="/2025/assets/img/2025-04-28-the-illustrated-alphafold/summaries/tokenize.png"
+        <img src="../../assets/img/2025-04-28-the-illustrated-alphafold/summaries/tokenize.png"
              class="img-fluid rounded z-depth-1"
              style="transition: transform 0.3s ease; cursor: zoom-in; transform-origin: bottom right;"
              onmouseover="this.style.transform='scale(4)'; this.style.zIndex='999';"
@@ -109,7 +109,7 @@ As a result, we can think of some tokens (like those for amino acids) as being a
 ## Retrieval (Create MSA and Templates)
 <div class="l-gutter">
     <figure style="position: relative; overflow: visible;">
-        <img src="/2025/assets/img/2025-04-28-the-illustrated-alphafold/summaries/retrieval.png"
+        <img src="../../assets/img/2025-04-28-the-illustrated-alphafold/summaries/retrieval.png"
              class="img-fluid rounded z-depth-1"
              style="transition: transform 0.3s ease; cursor: zoom-in; transform-origin: bottom right;"
              onmouseover="this.style.transform='scale(4)'; this.style.zIndex='999';"
@@ -165,7 +165,7 @@ It is not specified why, but note that while there is no inter-chain interaction
 ## Create Atom-Level Representations
 <div class="l-gutter">
     <figure style="position: relative; overflow: visible;">
-        <img src="/2025/assets/img/2025-04-28-the-illustrated-alphafold/summaries/make-atom-level.png"
+        <img src="../../assets/img/2025-04-28-the-illustrated-alphafold/summaries/make-atom-level.png"
              class="img-fluid rounded z-depth-1"
              style="transition: transform 0.3s ease; cursor: zoom-in; transform-origin: bottom right;"
              onmouseover="this.style.transform='scale(4)'; this.style.zIndex='999';"
@@ -187,7 +187,7 @@ Finally, we make a copy of our atom-level single representation, calling this co
 ## Update Atom-Level Representations (Atom Transformer)
 <div class="l-gutter">
     <figure style="position: relative; overflow: visible;">
-        <img src="/2025/assets/img/2025-04-28-the-illustrated-alphafold/summaries/atom-transformer.png"
+        <img src="../../assets/img/2025-04-28-the-illustrated-alphafold/summaries/atom-transformer.png"
              class="img-fluid rounded z-depth-1"
              style="transition: transform 0.3s ease; cursor: zoom-in; transform-origin: bottom right;"
              onmouseover="this.style.transform='scale(4)'; this.style.zIndex='999';"
@@ -267,7 +267,7 @@ With a ReLU-based transition layer (as in AF2), we take the activations, project
 ## Aggregate Atom-Level → Token-Level
 <div class="l-gutter">
     <figure style="position: relative; overflow: visible;">
-        <img src="/2025/assets/img/2025-04-28-the-illustrated-alphafold/summaries/atom-to-token-level.png"
+        <img src="../../assets/img/2025-04-28-the-illustrated-alphafold/summaries/atom-to-token-level.png"
              class="img-fluid rounded z-depth-1"
              style="transition: transform 0.3s ease; cursor: zoom-in; transform-origin: bottom right;"
              onmouseover="this.style.transform='scale(4)'; this.style.zIndex='999';"
@@ -325,7 +325,7 @@ Each individual block is repeated multiple times, and then the output of the who
 ## Template Module
 <div class="l-gutter">
     <figure style="position: relative; overflow: visible;">
-        <img src="/2025/assets/img/2025-04-28-the-illustrated-alphafold/summaries/templates.png"
+        <img src="../../assets/img/2025-04-28-the-illustrated-alphafold/summaries/templates.png"
              class="img-fluid rounded z-depth-1"
              style="transition: transform 0.3s ease; cursor: zoom-in; transform-origin: bottom right;"
              onmouseover="this.style.transform='scale(4)'; this.style.zIndex='999';"
@@ -343,7 +343,7 @@ Each template (N<sub>templates</sub>=2 in the diagram) goes through a linear pro
 ## MSA Module
 <div class="l-gutter">
     <figure style="position: relative; overflow: visible;">
-        <img src="/2025/assets/img/2025-04-28-the-illustrated-alphafold/summaries/msa.png"
+        <img src="../../assets/img/2025-04-28-the-illustrated-alphafold/summaries/msa.png"
              class="img-fluid rounded z-depth-1"
              style="transition: transform 0.3s ease; cursor: zoom-in; transform-origin: bottom right;"
              onmouseover="this.style.transform='scale(4)'; this.style.zIndex='999';"
@@ -387,7 +387,7 @@ The last step of the MSA module is to update the pair representation through a s
 ## Pairformer module
 <div class="l-gutter">
     <figure style="position: relative; overflow: visible;">
-        <img src="/2025/assets/img/2025-04-28-the-illustrated-alphafold/summaries/pairformer.png"
+        <img src="../../assets/img/2025-04-28-the-illustrated-alphafold/summaries/pairformer.png"
              class="img-fluid rounded z-depth-1"
              style="transition: transform 0.3s ease; cursor: zoom-in; transform-origin: bottom right;"
              onmouseover="this.style.transform='scale(4)'; this.style.zIndex='999';"
@@ -487,7 +487,7 @@ With AF3, the data we learn to de-noise is a matrix **<span style="color: #F4DD6
 ## Diffusion Module
 <div class="l-gutter">
     <figure style="position: relative; overflow: visible;">
-        <img src="/2025/assets/img/2025-04-28-the-illustrated-alphafold/summaries/diffusion.png"
+        <img src="../../assets/img/2025-04-28-the-illustrated-alphafold/summaries/diffusion.png"
              class="img-fluid rounded z-depth-1"
              style="transition: transform 0.3s ease; cursor: zoom-in; transform-origin: bottom right;"
              onmouseover="this.style.transform='scale(4)'; this.style.zIndex='999';"
