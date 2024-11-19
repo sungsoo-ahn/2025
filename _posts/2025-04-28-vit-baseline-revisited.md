@@ -465,8 +465,8 @@ of training a PyTorch model on the Big Vision data pipelines that results in [76
 If we believe that they are all from their respective distributions, then the Inception crop implementation
 means the difference between 76.38-76.87 and 76.83-77.27, with variation of $\pm 0.2$ in each range and overlapping extrema.
 Regardless, the trend seems to be that the correct Inception crop benefits lower training budget
-experiments but shows more mixed results for higher training budget. One plausible explanation
-is that oversampling crops with smaller area amounts to stronger augmentation, which tends to benefit
+experiments but shows mixed results for higher training budget. One plausible explanation
+is that oversampling smaller crops amounts to stronger augmentation, which tends to benefit
 models in the long run <d-footnote>One might be tempted to try curriculum learning with increasing augmentation strength, but early experiments (<a href="https://github.com/EIFY/mup-vit/tree/curriculum">source</a>) result in <a href="https://api.wandb.ai/links/eify/ylnhm3or">76.65-77.35 for 90ep Head: MLP → linear</a>, almost the same range.</d-footnote>. We can also see this by [comparing better baseline with no RandAug+MixUp](https://api.wandb.ai/links/eify/3joh568g):
 
 <div class="caption">
