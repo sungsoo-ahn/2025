@@ -544,10 +544,67 @@ I’d like to Alex Coca, Adam Goliński, Roumen Popov, and ... for their feedbac
 
 # Appendix
 
+## Mathematical setup  
 
-Paragraph about p-values should go somehwere. Things to say: 
+Here we more rigorously describe the mathematical lens which we use to analyse the results from <d-cite key="mirzadeh2024gsm"></d-cite>.
+First, we assume that the questions from GSM8k and GSM-Symbolic are obtained from the following data-generating process:
 
-- p-values get misinterpreted; Some "Don'ts" : don't base your conclusions solely on whether an association or effect was found to be “statistically significant”; Don’t believe that an association or effect exists just because it was statistically significant. Don’t believe that an association or effect is absent just because it was not statistically significant. Don’t conclude anything about scientific or practical importance based on statistical significance (or lack thereof).
+1. We sample a _template_ $$T$$ from some distribution $$\mathbb{P}_T$$. A template here is defined in the sense of <d-cite key="mirzadeh2024gsm"></d-cite>, that is, it is a mathematical word problem, in which numerical values and certain other objects are
+marked as variables, to be filled-in later. 
+2. The template $$T$$ gives rise to a conditional distribution $$\mathbb{P}_{V\vert T}$$ over the admissible filler-values. We sample a set of such values $$V \sim \mathbb{P}_{V\vert T}(\cdot \vert T)$$ and plug them into the template, 
+producing a pair of a question and an answer $$\left(T(V)_Q, T(V)_A\right)$$.
+
+We are interested in whether a Language model $$m$$ answers a question correctly which we model by the random variable
+$$X_m \colon = \mathbb{I}\left(m(T(V)_Q) = T(V)_A\right)$$. The accuracy of a model $$m$$ is then $$p_m \colon = \mathbb{E}[X_m]$$ and the variable $$X_m$$ follows a $$Bernoulli(p_m)$$ distribution.
+
+In fact, since we care about the difference in model performance on GSM8k and GSM-Symbolic, we postulate that we have two random variables  $$V^{8K}$$ and $$V^{Symb}$$, governed by (potentially) different conditional distributions $$\mathbb{P}^{8K}_{V \vert T}$$ and 
+$$\mathbb{P}^{Symb}_{V \vert T}$$, respectively. 
+
+This setup can be represented by the following directed probabilistic graphical model: 
+{% include figure.html 
+  path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/gsm_prob_graph.png" 
+  class="img-fluid" 
+%}
+<!-- \documentclass{article}
+\usepackage{tikz}
+\begin{document}
+\begin{tikzpicture}[
+    % Define styles for nodes and edges
+    node/.style={circle, draw, minimum size=40pt},  % consistent size for all nodes
+    edge/.style={->, >=stealth, thick}
+]
+    % Place nodes
+    \node[node] (T) at (0,0) {$T$};
+    \node[node] (V8k) at (-1,-2) {$V^{8K}$};
+    \node[node] (Vsymb) at (1,-2) {$V^{Symb}$};
+    \node[node] (X8k) at (-2,-4) {$X^{8K}_M$};
+    \node[node] (Xsymb) at (2,-4) {$X^{Symb}_M$};
+    % Draw edges
+    \draw[edge] (T) -- (V8k);
+    \draw[edge] (T) -- (Vsymb);
+    \draw[edge] (V8k) -- (X8k);
+    \draw[edge] (Vsymb) -- (Xsymb);
+\end{tikzpicture}
+\end{document}
+-->
+
+where, for the purpose of this analysis, the bottom-most arrows denote deterministic dependencies. Under this model, we have
+$$X_m^{8K} \sim Bernoulli\left(p_m^{8K}\right)$$ and $$X_m^{Symb} \sim Bernoulli\left(p_m^{Symb}\right)$$, where $$p_m^{8K}, p_m^{Symb} \in [0, 1]$$ are 
+our main parameters of interest.
+
+In this framework, the data analysed in <d-cite key=mirzadeh2024gsm></d-cite> consists of: 
+- 100 templates $$t_1, t_2, \dots, t_{100}$$ sampled independenty from $$\mathbb{P}_T$$
+- one sample $$v^{8K}_i$$ from each conditional $$\mathbb{P}^{8K}_{V \vert t_i}$$ for $$1 \leq i \leq 100$$
+- 50 i.i.d. samples $$v^{Symb}_{i, j}, 1\le j \le 50$$ from each conditional $$\mathbb{P}^{Symb}_{V \vert t_i}$$
+- for each of these and each model $$m$$ (in a pre-determined set of 25 models), the corresponding observations $$x^{8K}_{m,t_i}$$ and $$x^{Symb}_{m, t_i, j}$$ --- that is, whether model $$m$$ answered correctly the questions $$t_i(v^{8K}_i)$$ and $$t_i\left(v^{Symb}_{i, j}\right)$$, respectively.
+- the accuracy estimates $$\hat{p}_m^{8K} = \frac{1}{100}\sum_{i=1}^{100} x^{8K}_{m,t_i}$$ and 
+$$\hat{p}_{m, j}^{Symb} = \frac{1}{100}\sum_{i=1}^{100} x^{Symb}_{m,t_i, j}, \; 1 \leq j \leq 50$$.
+
+Note that only $$\hat{p}_m^{8K}$$ and the average $$\overline{\hat{p}_m^{8K}} = \frac{1}{50}\sum_{j=1}^{50}\hat{p}_{m, j}^{Symb}$$ are reported in the paper (Table 1, Appendix A.2 in <d-cite key=mirzadeh2024gsm></d-cite>).
+
+Under the assumptions of this mathematical model, we can think of $$\hat{p}_m^{8K}$$ as an observation from a random variable $$\hat{P}^{8K}_m \sim \frac{1}{100}Bin\left(100,p^{8K}_m\right)$$. Similarly, each $$\hat{p}_{m, j}^{Symb}, \; 1 \le j \le 50$$ is an observation of $$\hat{P}^{Symb}_m \sim \frac{1}{100} Bin\left(100,p^{Symb}_m\right)$$, although we can't assume that these observations are independent, due to the shared templates.  
+
+Throughout this blogpost, the main question we've tackled is: given these observed $$\hat{p}_m^{8K}$$ and $$\overline{\hat{p}_m^{8K}}$$, what evidence is there to believe that $$p^{8K}_m \neq p^{Symb}_m$$ or that $$p^{8K}_m > p^{Symb}_m$$?
 
 
 ## Clopper-Pearson confidence intervals
@@ -564,7 +621,7 @@ For robustness purposes, here are the [Clopper-Pearson](https://en.wikipedia.org
 
 The Clopper-Pearson CIs are slightly wider than those obtained using the Wilson score. Using Clopper-Pearson would not have changed any of the results presented in this post. 
 
-## Two-sample binomial proportion test
+<!-- ## Two-sample binomial proportion test
 
 
 $$
@@ -576,7 +633,7 @@ $$
 p_{pool} = \frac{(100 p^{8K}_{m} + 5000p^{Symb}_{m})}{100+5000} \quad \text{SE}(p_{pool}) = \sqrt{p_{pool}*(1-p_{pool}) (1/100+1/5000)}.
 $$
 The test statistic ($p^{8K}_{m} - p^{Symb}_{m}$) / SE($p_{pool}$) is then approximately normal and is used compute p-values, which we’ve done in [this spreadsheet](https://docs.google.com/spreadsheets/d/1Ul6ZgFXf_II5EFUCgnJ9hSIQYwHxogxYBmwDn_bA4sA/edit?usp=sharing). 
-The results: we are able to reject the null for Gemma-7b, Mistral-7b-instruct-v0.1 and Phi-2 (performing worse), and Llama3-8b (performing better). 
+The results: we are able to reject the null for Gemma-7b, Mistral-7b-instruct-v0.1 and Phi-2 (performing worse), and Llama3-8b (performing better).  -->
 
 ## 99% Confidence intervals
 
@@ -643,6 +700,13 @@ Number of Fisher Scoring iterations: 5
 ```
 
 
+## Should we include some notes on P-values ?
+Paragraph about p-values should go somehwere. Things to say: 
+
+- p-values get misinterpreted; Some "Don'ts" : don't base your conclusions solely on whether an association or effect was found to be “statistically significant”; Don’t believe that an association or effect exists just because it was statistically significant. Don’t believe that an association or effect is absent just because it was not statistically significant. Don’t conclude anything about scientific or practical importance based on statistical significance (or lack thereof).
+
+## Should we include some notes on Bayesian analysis?
+
 <!-- 
 ## Suggested workflow for evaluating language models
 
@@ -664,65 +728,3 @@ Regardless of the NHST outcomes, critically examine the results, initial assumpt
 **Remark:** Although NHST is the most commonly used framework, it is not the only approach for statistical analysis. 
 Bayesian analysis offers an alternative with some practical similarities, such as the use of highest density intervals (HDI). 
 However, the two approaches differ deeply in their epistemological foundations: NHST relies on a frequentist interpretation, viewing the results (e.g. accuracy) as repeated sampling from a fixed parameter. In contrast, Bayesian analysis treats parameters themselves as random variables and uses probability to express a degree of belief, that gets updated with new evidence. -->
-
-# Mathematical setup  
-
-Here we briefly describe the mathematical lens which we use to analyse the results from <d-cite key="mirzadeh2024gsm"></d-cite>.
-First, we assume that the questions from GSM8k and GSM-Symbolic are obtained from the following data-generating process:
-
-1. We sample a _template_ $$T$$ from some distribution $$\mathbb{P}_T$$. A template here is defined in the sense of <d-cite key="mirzadeh2024gsm"></d-cite>, that is, it is a mathematical word problem, in which numerical values and certain other objects are
-marked as variables, to be filled-in later. 
-2. The template $$T$$ gives rise to a conditional distribution $$\mathbb{P}_{V\vert T}$$ over the admissible filler-values. We sample a set of such values $$V \sim \mathbb{P}_{V\vert T}(\cdot \vert T)$$ and plug them into the template, 
-producing a pair of a question and an answer $$\left(T(V)_Q, T(V)_A\right)$$.
-
-We are interested in whether a Language model $$m$$ answers a question correctly which we model by the random variable
-$$X_m \colon = \mathbb{I}\left(m(T(V)_Q) = T(V)_A\right)$$. The accuracy of a model $$m$$ is then $$p_m \colon = \mathbb{E}[X_m]$$ and the variable $$X_m$$ follows a $$Bernoulli(p_m)$$ distribution.
-
-In fact, since we care about the difference in model performance on GSM8k and GSM-Symbolic, we postulate that we have two random variables  $$V^{8K}$$ and $$V^{Symb}$$, governed by (potentially) different conditional distributions $$\mathbb{P}^{8K}_{V \vert T}$$ and 
-$$\mathbb{P}^{Symb}_{V \vert T}$$, respectively. 
-
-This setup can be represented by the following directed probabilistic graphical model: 
-{% include figure.html 
-  path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/gsm_prob_graph.png" 
-  class="img-fluid" 
-%}
-<!-- \documentclass{article}
-\usepackage{tikz}
-\begin{document}
-\begin{tikzpicture}[
-    % Define styles for nodes and edges
-    node/.style={circle, draw, minimum size=40pt},  % consistent size for all nodes
-    edge/.style={->, >=stealth, thick}
-]
-    % Place nodes
-    \node[node] (T) at (0,0) {$T$};
-    \node[node] (V8k) at (-1,-2) {$V^{8K}$};
-    \node[node] (Vsymb) at (1,-2) {$V^{Symb}$};
-    \node[node] (X8k) at (-2,-4) {$X^{8K}_M$};
-    \node[node] (Xsymb) at (2,-4) {$X^{Symb}_M$};
-    % Draw edges
-    \draw[edge] (T) -- (V8k);
-    \draw[edge] (T) -- (Vsymb);
-    \draw[edge] (V8k) -- (X8k);
-    \draw[edge] (Vsymb) -- (Xsymb);
-\end{tikzpicture}
-\end{document}
--->
-
-where, for the purpose of this analysis, the bottom-most arrows denote deterministic dependencies. Under this model, we have
-$$X_m^{8K} \sim Bernoulli\left(p_m^{8K}\right)$$ and $$X_m^{Symb} \sim Bernoulli\left(p_m^{Symb}\right)$$, where $$p_m^{8K}, p_m^{Symb} \in [0, 1]$$ are 
-our main parameters of interest.
-
-In this framework, the data analysed in <d-cite key=mirzadeh2024gsm></d-cite> consists of: 
-- 100 templates $$t_1, t_2, \dots, t_{100}$$ sampled independenty from $$\mathbb{P}_T$$
-- one sample $$v^{8K}_i$$ from each conditional $$\mathbb{P}^{8K}_{V \vert t_i}$$ for $$1 \leq i \leq 100$$
-- 50 i.i.d. samples $$v^{Symb}_{i, j}, 1\le j \le 50$$ from each conditional $$\mathbb{P}^{Symb}_{V \vert t_i}$$
-- for each of these and each model $$m$$ (in a pre-determined set of 25 models), the corresponding observations $$x^{8K}_{m,t_i}$$ and $$x^{Symb}_{m, t_i, j}$$ --- that is, whether model $$m$$ answered correctly the questions $$t_i(v^{8K}_i)$$ and $$t_i\left(v^{Symb}_{i, j}\right)$$, respectively.
-- the accuracy estimates $$\hat{p}_m^{8K} = \frac{1}{100}\sum_{i=1}^{100} x^{8K}_{m,t_i}$$ and 
-$$\hat{p}_{m, j}^{Symb} = \frac{1}{100}\sum_{i=1}^{100} x^{Symb}_{m,t_i, j}, \; 1 \leq j \leq 50$$.
-
-Note that only $$\hat{p}_m^{8K}$$ and the average $$\overline{\hat{p}_m^{8K}} = \frac{1}{50}\sum_{j=1}^{50}\hat{p}_{m, j}^{Symb}$$ are reported in the paper (Table 1, Appendix A.2 in <d-cite key=mirzadeh2024gsm></d-cite>).
-
-Under the assumptions of this mathematical model, we can think of $$\hat{p}_m^{8K}$$ as an observation from a random variable $$\hat{P}^{8K}_m \sim \frac{1}{100}Bin\left(100,p^{8K}_m\right)$$. Similarly, each $$\hat{p}_{m, j}^{Symb}, \; 1 \le j \le 50$$ is an observation of $$\hat{P}^{Symb}_m \sim \frac{1}{100} Bin\left(100,p^{Symb}_m\right)$$, although we can't assume that these observations are independent, due to the shared templates.  
-
-Throughout this blogpost, the main question we've tackled is: given these observed $$\hat{p}_m^{8K}$$ and $$\overline{\hat{p}_m^{8K}}$$, what evidence is there to believe that $$p^{8K}_m \neq p^{Symb}_m$$ or that $$p^{8K}_m > p^{Symb}_m$$?
