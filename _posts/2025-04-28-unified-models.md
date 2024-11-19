@@ -259,18 +259,11 @@ $$
 
 * **Model Architectures**:
 
-<aside class="l-body box-note" markdown="1">
-*Autoregressive Models*.  Predict the next token or step $x_{t+1}$ based on past inputs $x_{\leq t}$, examples include EMU3.
-
-</aside>
-
-<aside class="l-body box-note" markdown="1">
-*Mixed Architectures*. Combine autoregressive and diffusion methods, leveraging their respective strengths, as seen in models like Show-O.
-</aside>
+*1. Autoregressive Models*.  Predict the next token or step $x_{t+1}$ based on past inputs $x_{\leq t}$, examples include EMU3.
 
 
+*2. Mixed Architectures*. Combine autoregressive and diffusion methods, leveraging their respective strengths, as seen in models like Show-O.
 
-</aside>
 
 <aside class="l-body box-note" markdown="1">
 Based on model architectures, unified multimodal models can be categorized into two primary divisions: single models and multi-expert models. 
