@@ -1,34 +1,35 @@
 ---
 layout: distill
-title: Sample Blog Post
-description: Your blog post's abstract.
-  Please add your abstract or summary here and not in the main body of your text. 
-  Do not include math/latex or hyperlinks.
+title: Multi-resolution training improves robustness against adversarial attacks
+description: Deep neural networks (DNNs) have progressed rapidly in recent years and are increasingly deployed in real-world applications. They are now integral to critical tasks, such as traffic sign recognition in autonomous vehicles, where DNNs have become the primary method for handling most of the processing. However, many DNNs are known to be vulnerable to adversarial attacks—small but deliberately crafted perturbations applied to input data. Such perturbations can easily cause misclassification, posing significant risks, especially in autonomous vehicle systems. In this blog post, we present a novel approach called multi-resolution training, which utilizes lower-resolution information from input images to retain essential features while partially filtering out adversarial attacks. Our method involves designing CNN layers that apply various downsampling techniques with custom-designed filters, followed by upsampling to restore the resolution for further network processing. This approach has been tested on multiple DNNs, and results show that it effectively enhances the robustness of DNNs against adversarial attacks.
+
+
 date: 2025-04-28
 future: true
 htmlwidgets: true
 hidden: false
 
 # Anonymize when submitting
-# authors:
-#   - name: Anonymous
-
 authors:
-  - name: Albert Einstein
-    url: "https://en.wikipedia.org/wiki/Albert_Einstein"
-    affiliations:
-      name: IAS, Princeton
-  - name: Boris Podolsky
-    url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
-    affiliations:
-      name: IAS, Princeton
-  - name: Nathan Rosen
-    url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
-    affiliations:
-      name: IAS, Princeton
+  - name: Anonymous
+
+# do not fill this in until your post is accepted and you're publishing your camera-ready post!
+# authors:
+#   - name: Albert Einstein
+#     url: "https://en.wikipedia.org/wiki/Albert_Einstein"
+#     affiliations:
+#       name: IAS, Princeton
+#   - name: Boris Podolsky
+#     url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
+#     affiliations:
+#       name: IAS, Princeton
+#   - name: Nathan Rosen
+#     url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
+#     affiliations:
+#       name: IAS, Princeton 
 
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-distill-example.bib  
+bibliography: 2025-04-28-Multi-Resolution-Training.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -67,10 +68,51 @@ _styles: >
   }
 ---
 
-Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling.
+Recent studies have shown that DNNs are vulnerable to adversarial examples, where small modifications to input data can result in incorrect predictions. This susceptibility arises from DNNs' inherent linearity in high-dimensional spaces and limited generalization. This vulnerability is especially concerning for traffic sign recognition systems, which rely exclusively on DNNs processing camera images without additional error correction sources. Many research efforts have been made on attacks targeting these systems, as they are particularly susceptible and easily exploited in real-world scenarios. Early research into adversarial attacks on traffic sign recognition typically involved physical methods, such as affixing stickers to traffic signs, replacing signs with versions that included embedded perturbations, or placing patches directly on camera lenses. While these methods can be effective, they require manual effort and are often noticeable to drivers. To address these limitations, researchers have shifted their focus to direct attacks on DNN inputs. One of the first developed techniques is the Fast Gradient Sign Method (FGSM), which uses the gradients of the loss function relative to the input data to create perturbations that maximize the loss and result in misclassification. Subsequent developments include the Projected Gradient Descent (PGD) approach. Other significant adversarial algorithms are the Jacobian-based Saliency Map Attack (JSMA), Papernot's attack, and the Carlini and Wagner (C&W) attack, all contributing to the evolving landscape of adversarial machine learning. Despite the proliferation of these attack methods, defense and mitigation strategies, particularly for traffic sign classification tasks, have received significantly less attention. The common approach to enhancing the robustness of DNNs is adversarial training, which involves incorporating adversarial attack samples into the training dataset. Training a model with only one or a limited range of adversarial examples leaves it susceptible to other types of attacks, necessitating the inclusion of diverse adversarial examples during training. Consequently, this approach is not universal and can demand significant training effort.
 
-## Equations
+We propose a novel multi-resolution training approach  that enhances the DNN architecture by incorporating an additional CNN block before the main network. This block first downsamples traffic sign images to a lower resolution via decimation and then upsamples them back to their original resolution via interpolation for further processing by the network. The CNN block incorporates layers with filters designed using various downsampling techniques, such as low-pass filtering, Gaussian filtering, and median filtering. This method helps mitigate subtle attacks characterized by small, high-frequency perturbations while preserving the essential features of the original traffic signs, thereby enhancing the DNNs' robustness against adversarial attacks.     
 
+{% raw %}<div class="l-page">
+  <iframe src="{{ 'assets/html/2025-04-28-Multi-Resolution-Training/animated_figure.html' | relative_url }}" frameborder="0" scrolling="no" width="100%" height="auto"></iframe>
+</div>{% endraw %}
+
+## Multi-resolution CNN block
+The multi-resolution process is implemented through a custom-designed CNN block, which includes a downsampling CNN layer with multiple filter options, followed by a standard bilinear interpolation layer for upsampling.
+
+The **first option** utilizes a simple 1D low-pass filter defined as $$h_\text{lp} = [\frac{1}{4}, \frac{1}{2}, \frac{1}{4}]$$, commonly used for its simplicity and effectiveness in smoothing operations, approximating a half-band low-pass filter. The corresponding 2D filter used in the `LP_conv` layer is computed as:
+
+$$ h_\text{lp}[x, y] = h_\text{lp} \cdot h_\text{lp}^T, $$
+
+resulting in a \(3 \times 3\) kernel:
+
+$$
+h_\text{lp} =
+\begin{bmatrix}
+\frac{1}{16} & \frac{1}{8} & \frac{1}{16} \\
+\frac{1}{8} & \frac{1}{4} & \frac{1}{8} \\
+\frac{1}{16} & \frac{1}{8} & \frac{1}{16}
+\end{bmatrix}.
+$$
+
+This 2D filter effectively smooths input data, making it ideal for downsampling in the multi-resolution framework.
+
+The **second option** is a Gaussian filter, which offers more customization and smoother outputs. The normalized 1D Gaussian filter is defined as:
+
+$$
+h_\text{g}(n) = \frac{\exp\left(-0.5 \left(\frac{n}{\sigma}\right)^2\right)}{\sum_{n} \exp\left(-0.5 \left(\frac{n}{\sigma}\right)^2\right)},
+$$
+
+where $$n$$ denotes the indices, represented as $$(\{-\frac{z-1}{2}, \ldots, 0, \ldots, \frac{z-1}{2}\}\)$$, $$z$$ is the filter size, and $${\sigma}$$ is the standard deviation, which controls the spread of the filter. The resulting 2D Gaussian filter applied in the `Gaussian_conv` layer is computed as:
+
+$$ h_\text{g}[x, y] = h_\text{g} \cdot h_\text{g}^T $$
+
+By adjusting the kernel size $$z$$ and the standard deviation $${\sigma}$$, the `Gaussian_conv` layer can achieve varying levels of smoothing, offering enhanced flexibility. This design ensures that the multi-resolution training framework adapts to different filtering needs while maintaining computational efficiency.
+
+
+## Experiment
+
+## Adversarial Attack
+We deployed two adversarial attacks on the traffic signs including the FGSM attack and the patch attack. The FGSM attack is one of the earliest and most representative adversarial attack. It is considered as a white-box attack as it requires the prior knowdlege of the neural entwork structure, parameters and 
 This theme supports rendering beautiful math in inline and display modes using [MathJax 3](https://www.mathjax.org/) engine.
 You just need to surround your math expression with `$$`, like `$$ E = mc^2 $$`.
 If you leave it inside a paragraph, it will produce an inline expression, just like $$ E = mc^2 $$.
