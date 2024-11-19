@@ -70,6 +70,98 @@ _styles: >
     text-align: center;
     font-size: 16px;
   }
+  .box-note, .box-warning, .box-error, .box-important {
+    padding: 15px 15px 15px 10px;
+    margin: 20px 20px 20px 5px;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 5px 3px 3px 5px;
+  }
+  d-article .box-note {
+    background-color: #eee;
+    border-left-color: #2980b9;
+  }
+  d-article .box-warning {
+    background-color: #fdf5d4;
+    border-left-color: #f1c40f;
+  }
+  d-article .box-error {
+    background-color: #f4dddb;
+    border-left-color: #c0392b;
+  }
+  d-article .box-important {
+    background-color: #d4f4dd;
+    border-left-color: #2bc039;
+  }
+  html[data-theme='dark'] d-article .box-note {
+    background-color: #333333;
+    border-left-color: #2980b9;
+  }
+  html[data-theme='dark'] d-article .box-warning {
+    background-color: #3f3f00;
+    border-left-color: #f1c40f;
+  }
+  html[data-theme='dark'] d-article .box-error {
+    background-color: #300000;
+    border-left-color: #c0392b;
+  }
+  html[data-theme='dark'] d-article .box-important {
+    background-color: #003300;
+    border-left-color: #2bc039;
+  }
+  html[data-theme='dark'] d-article blockquote {
+    color: var(--global-text-color) !important;
+  }
+  html[data-theme='dark'] d-article summary {
+    color: var(--global-text-color) !important;
+  }
+  d-article aside * {
+    color: var(--global-text-color) !important;
+  }
+  d-article p {
+    text-align: justify;
+    text-justify: inter-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+  d-article aside {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+    font-size: 90%;
+  }
+  d-article aside p:first-child {
+      margin-top: 0;
+  }
+  d-article details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+  }
+  d-article summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+    display: list-item;
+  }
+  d-article details[open] {
+    padding: .5em;
+  }
+  d-article details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+  }
+categories:
+- Data Processing Inequality
+- Information Theory
+- Data Processing Inequality
+- Information Theory
+- Function-Space Variational Inference
+- Parameter Equivalence Classes
+- Entropy Regularization
+- Label Entropy Regularization
 ---
 
 
