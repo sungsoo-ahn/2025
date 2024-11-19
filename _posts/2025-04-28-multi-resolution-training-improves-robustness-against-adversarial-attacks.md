@@ -29,7 +29,7 @@ authors:
 #       name: IAS, Princeton 
 
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-Multi-Resolution-Training.bib  
+bibliography: 2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -73,7 +73,7 @@ Recent studies have shown that DNNs are vulnerable to adversarial examples, wher
 We propose a novel multi-resolution training approach  that enhances the DNN architecture by incorporating an additional CNN block before the main network. This block first downsamples traffic sign images to a lower resolution via decimation and then upsamples them back to their original resolution via interpolation for further processing by the network. The CNN block incorporates layers with filters designed using various downsampling techniques, such as low-pass filtering, Gaussian filtering, and median filtering. This method helps mitigate subtle attacks characterized by small, high-frequency perturbations while preserving the essential features of the original traffic signs, thereby enhancing the DNNs' robustness against adversarial attacks.     
 
 {% raw %}<div class="l-page">
-  <iframe src="{{ 'assets/html/2025-04-28-Multi-Resolution-Training/animated_figure.html' | relative_url }}" frameborder="0" scrolling="no" width="100%" height="auto"></iframe>
+  <iframe src="{{ 'assets/html/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/animated_figure.html' | relative_url }}" frameborder="0" scrolling="no" width="100%" height="auto"></iframe>
 </div>{% endraw %}
 
 ## Multi-resolution CNN block
