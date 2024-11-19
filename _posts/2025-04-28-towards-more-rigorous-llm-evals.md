@@ -28,7 +28,7 @@ toc:
       - name: "4.2.2 Considering each model independently: Is the decline in performance statistically significant?"
       - name: "4.2.3 Considering all models together: Is the decline in performance statistically significant?"
     - name: 4.3 Performance decrease and variance increase with question complexity
-    - name: 4.4 M1, P1, P2 and No-Op results
+    - name: 4.4 No-Op results
   - name: 5. Conclusion
 ---
 
@@ -504,21 +504,25 @@ To distinguish between these two effects, a more detailed and thorough analysis 
 <!-- The extent to which the decrease in probability of success itself is related to the “reasoning abilities” or "pattern-matching abilities" of a model versus increased probability of making a mistake (as discussed in Section 4.2.1) is beyond the scope of this blog.  -->
 
 
-**Verdict:** The emphasis on “non-negligible variance” and “increase in variance” throughout the paper appears to be an over-interpretation of expected statistical variation. The decrease in probability of success as question complexity increases can be due to both increased difficulty in reasoning and increased probability of making an arithmetic mistake.
+**Verdict:** The emphasis on “non-negligible variance” and “increase in variance” throughout the paper appears to be an over-interpretation of expected statistical artifacts. 
+The decrease in probability of success as question complexity increases can be due to both increased difficulty in reasoning and increased probability of making an arithmetic mistake.
 
 ## 4.4 No-Op results
 TODO
 
 ## 5. Conclusion
 
-There’s huge value in developing new benchmarks and I think the proposed GSM-Symbolic is quite neat and useful! The accompanying analysis, in my opinion, can be substantially improved with the help of basic statistics. Without those we risk over-interpreting results and drawing misleading conclusions.
+There’s huge value in developing new benchmarks and we believe that the proposed GSM-Symbolic can be quite useful! 
+The accompanying analysis, however, can be substantially improved with the help of basic statistics. 
+The frequentist analysis we perform here is particularly suitable, as the Symbolic templates allow us to create an arbitrary number of new datasets (the frequentists' dream).
 
 Findings:
-- Depending on assumptions, variability is expected and quantifiable; and the observed increase in variance with question complexity is expected.
-- The observed performance degradation on GSM-Symbolic is not statistically significant.
-- Mismatch between GSM8K and GSM-Symbolic distributions may explain some of the observed performance differences between models and datasets (in addition to contamination and "lack of reasoning").
+- [Section 4.1] We discuss the assumptions under which variability of performance on GSM-Symbolic is expected and quantifiable. We provide empirical evidence that that variability is indeed expected.
+- [Section 4.2] Mismatch between GSM8K and GSM-Symbolic distributions may explain some of the observed performance differences between models and datasets (in addition to contamination and "lack of reasoning"). The observed performance degradation on GSM-Symbolic is not statistically significant.
+- [Section 4.3] Performance increase and variance increase with question complexity.
+- [Section 4.4] No-Op results do indeed show statistically significant decrease in performance for all models except ...; taken jointly, ....
 
-
+We strongly believe that without those we risk over-interpreting results and drawing misleading conclusions.
 
 
 <!-- ### Acknowledgement 
