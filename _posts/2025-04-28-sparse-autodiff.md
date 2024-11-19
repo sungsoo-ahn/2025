@@ -546,15 +546,15 @@ flowchart LR
     SIGN((sgn))
     PLUS2(("$$+$$"))
 
-    X1 --> |"{1}"| PLUS
-    X2 --> |"{2}"| TIMES
-    X3 --> |"{3}"| TIMES
-    X4 --> |"{4}"| SIGN
-    TIMES  --> |"{2,3}"| PLUS
-    PLUS --> |"{1,2,3}"| PLUS2
-    SIGN --> |"{}"| PLUS2
+    X1 --> |"$$\{1\}$$"| PLUS
+    X2 --> |"$$\{2\}$$"| TIMES
+    X3 --> |"$$\{3\}$$"| TIMES
+    X4 --> |"$$\{4\}$$"| SIGN
+    TIMES  --> |"$$\{2,3\}$$"| PLUS
+    PLUS --> |"$$\{1,2,3\}$$"| PLUS2
+    SIGN --> |"$$\{\}"$$| PLUS2
 
-    PLUS2 --> |"{1,2,3}"| RES["$$y=f(x)$$"]
+    PLUS2 --> |"$$\{1,2,3\}$$"| RES["$$y=f(x)$$"]
 {% endmermaid %}
 
 <div class="caption">
