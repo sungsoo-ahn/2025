@@ -28,7 +28,7 @@ toc:
       - name: "4.2.2 Considering each model independently: Is the decline in performance statistically significant?"
       - name: "4.2.3 Considering all models together: Is the decline in performance statistically significant?"
     - name: 4.3 Performance decrease and variance increase with question complexity
-    - name: 4.4 No-Op results
+    - name: 4.4 Performance decline on the No-Op dataset
   - name: 5. Conclusion
 ---
 
@@ -507,7 +507,7 @@ To distinguish between these two effects, a more detailed and thorough analysis 
 **Verdict:** The emphasis on “non-negligible variance” and “increase in variance” throughout the paper appears to be an over-interpretation of expected statistical artifacts. 
 The decrease in probability of success as question complexity increases can be due to both increased difficulty in reasoning and increased probability of making an arithmetic mistake.
 
-## 4.4 No-Op results
+## 4.4 Performance decline on the No-Op dataset
 TODO
 
 ## 5. Conclusion
