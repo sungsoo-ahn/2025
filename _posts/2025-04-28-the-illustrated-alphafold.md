@@ -15,6 +15,15 @@ og_image_width: 2126
 og_image_height: 1478
 twitter_card: summary_large_image
 twitter_image: assets/img/2025-04-28-the-illustrated-alphafold/af3_thumbnail.png
+bibliography: 2025-04-28-the-illustrated-alphafold.bib
+toc:
+  - name: Introduction
+  - name: 1. Input Preparation
+  - name: 2. Representation Learning
+  - name: 3. Structure Prediction
+  - name: 4. Loss Function and Other Training Details
+  - name: ML Musings
+
 ---
 # Introduction
 ### Who should read this
@@ -29,7 +38,7 @@ _How are these molecules represented in the model and what are all of the operat
 This is probably more exhaustive than most people are looking for, but if you want to understand all the details and you like learning via diagrams, this should help :)
 
 ### Architecture Overview
-We'll start by pointing out that goals of the model are a bit different than previous AlphaFold models: instead of just predicting the structure of individual protein sequences (AF2) or protein complexes (AF-multimeter), it predicts the structure of a protein, optionally complexed with other proteins, nucleic acids, or small molecules, all from sequence alone. So while previous AF models only had to represent sequences of standard amino acids, AF3 has to represent more complex input types, and thus there is a more complex featurization/tokenization scheme. Tokenization is described in its own section, but for now just know that when we say "token" it either represents a single amino acid (for proteins), nucleotide (for DNA/RNA), or an individual atom if that atom is not part of a standard amino acid/nucleotide.
+We'll start by pointing out that goals of the model are a bit different than previous AlphaFold models: instead of just predicting the structure of individual protein sequences (AF2)<d-cite key="jumper2021highly"></d-cite> or protein complexes (AF-multimeter)<d-cite key="evans2021protein"></d-cite> , it predicts the structure of a protein, optionally complexed with other proteins, nucleic acids, or small molecules, all from sequence alone. So while previous AF models only had to represent sequences of standard amino acids, AF3<d-cite key="abramson2024accurate"></d-cite>  has to represent more complex input types, and thus there is a more complex featurization/tokenization scheme. Tokenization is described in its own section, but for now just know that when we say "token" it either represents a single amino acid (for proteins), nucleotide (for DNA/RNA), or an individual atom if that atom is not part of a standard amino acid/nucleotide.
 
 <div class="l-page">
   <iframe src="{{ 'assets/html/2025-04-28-the-illustrated-alphafold/interactive_arch.html' | relative_url }}" frameborder='0' scrolling='no' height="300px" width="100%"></iframe>
