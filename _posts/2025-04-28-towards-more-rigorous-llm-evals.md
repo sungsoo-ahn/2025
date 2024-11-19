@@ -533,8 +533,9 @@ We also quantified the extent to which the performance degradation on GSM-Symbol
 - [Section 4.3] The observed increase in performance variance with rising question complexity is likely an over-interpretation of expected statistical artifacts. The decrease in success probability as complexity grows can be attributed to both increased reasoning difficulty and a higher likelihood of arithmetic errors.
 - [Section 4.4] TODO No-Op results do indeed show statistically significant decrease in performance for all models except ...; taken jointly, ....
 
-**Final thoughts:** We strongly believe that without a rigorous statistical framework, there is a substantial risk of over-interpreting results and drawing misleading conclusions. 
-We hope that this blog post can serve as a tutorial and can help researchers to perform more rigorous LM evaluations!
+**Final thoughts:** 
+We strongly believe that without a rigorous statistical framework, there is a substantial risk of over-interpreting results and drawing misleading conclusions.<d-footnote>Neither the Frequentist nor the Bayesian religion is perfect, but neglecting statistical analysis altogether would be the worst outcome.</d-footnote> 
+We hope that this blog post can serve as a tutorial and can help researchers to get into the habit of thinking about and performing proper statistical evaluations of LLMs!
 
 
 <!-- ### Acknowledgement 
@@ -557,7 +558,7 @@ For robustness purposes, here are the [Clopper-Pearson](https://en.wikipedia.org
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/clopper_0.95.png" 
   class="img-fluid" 
   title="95% Clopper-Pearson intervals for the point estimates of $p_m$." 
-  caption="<b>95% Clopper-Pearson intervals for the point estimates of $p_m$.</b>" 
+  caption="<b>95% Clopper-Pearson intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ estimated from the data reported in Table 1 in the appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
 %}
 
 
@@ -583,14 +584,14 @@ The results: we are able to reject the null for Gemma-7b, Mistral-7b-instruct-v0
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.99.png" 
   class="img-fluid" 
   title="99% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles)." 
-  caption="<b>99% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles).</b>" 
+  caption="<b>99% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ estimated from the data reported in Table 1 in the appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
 %}
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/clopper_0.99.png" 
   class="img-fluid" 
   title="99% Clopper-Pearson confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles)." 
-  caption="<b>99% Clopper-Pearson confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles).</b>" 
+  caption="<b>99% Clopper-Pearson confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ estimated from the data reported in Table 1 in the appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
 %}
 
 ## Logistic regression results
