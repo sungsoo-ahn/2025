@@ -366,9 +366,10 @@ Data contamination, as suggested by the authors, is also a plausible explanation
 
 ### 4.2.2 Considering each model independently: Is the decline in performance statistically significant?
 
-For the purpose of this analysis, let's **assume** that GSM8K and GSM-Symbolic come from the same distribution.
+For the purpose of this analysis, let's **assume** that GSM8K and GSM-Symbolic datasets come from the same distribution.
 
-For many models in Figure 2, the dashed line is in the right tail of the distribution. Additionally, Figure 3 of the paper, reproduced below, reports substantial performance decrease for many other models. So is the performance decline statistically significant, or could it be attributed to normal variation?
+For many models in Figure 2, the dashed line is in the right tail of the distribution. 
+Additionally, Figure 3 of the paper, reproduced below, reports substantial performance decrease for many other models. So is the performance decline statistically significant, or could it be attributed to normal variation?
 
 
 {% include figure.html 
@@ -522,15 +523,18 @@ TODO
 
 There’s huge value in developing new benchmarks and we believe that the proposed GSM-Symbolic can be quite useful! 
 The accompanying analysis, however, can be substantially improved with the help of basic statistics. 
-The frequentist analysis we perform here is particularly suitable, as the Symbolic templates allow us to create an arbitrary number of new datasets (the frequentists' dream).
+The frequentist approach we adopt here is particularly well-suited, as the Symbolic templates allow us to generate an arbitrary number of new datasets<d-footnote>This is the Frequentist's dream! The alternative to Frequentism is Bayesian analysis, which we leave for another blog post.</d-footnote>.
 
-Findings:
-- [Section 4.1] We discuss the assumptions under which variability of performance on GSM-Symbolic is expected and quantifiable. We provide empirical evidence that that variability is indeed expected.
-- [Section 4.2] Mismatch between GSM8K and GSM-Symbolic distributions may explain some of the observed performance differences between models and datasets (in addition to contamination and "lack of reasoning"). The observed performance degradation on GSM-Symbolic is not statistically significant.
-- [Section 4.3] Performance increase and variance increase with question complexity.
-- [Section 4.4] No-Op results do indeed show statistically significant decrease in performance for all models except ...; taken jointly, ....
 
-We strongly believe that without those we risk over-interpreting results and drawing misleading conclusions.
+We summarise our key findings as follows:
+- [Section 4.1] We discussed the assumptions under which variability of performance on GSM-Symbolic is unexpected vs expected and quantifiable. We provided empirical evidence that variability is indeed expected.
+- [Section 4.2] We argued that distribution mismatch between the GSM8K and GSM-Symbolic datasets may explain some of the observed performance decline of models (in addition to contamination and "lack of reasoning"). 
+We also quantified the extent to which the performance degradation on GSM-Symbolic is actually statistically significant. Considering models individually, only 3 out of 25 models show a statistically significant performance decline on GSM-Symbolic (and 1 performs significantly better). Taken together, there is some statistically strong evidence for a performance decline on GSM-Symbolic vs GSM8K.
+- [Section 4.3] The observed increase in performance variance with rising question complexity is likely an over-interpretation of expected statistical artifacts. The decrease in success probability as complexity grows can be attributed to both increased reasoning difficulty and a higher likelihood of arithmetic errors.
+- [Section 4.4] TODO No-Op results do indeed show statistically significant decrease in performance for all models except ...; taken jointly, ....
+
+**Final thoughts:** We strongly believe that without a rigorous statistical framework, there is a substantial risk of over-interpreting results and drawing misleading conclusions. 
+We hope that this blog post can serve as a tutorial and can help researchers to perform more rigorous LM evaluations!
 
 
 <!-- ### Acknowledgement 
