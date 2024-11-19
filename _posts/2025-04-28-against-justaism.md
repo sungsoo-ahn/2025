@@ -48,7 +48,7 @@ Some have asserted that LLMs cannot be said to 'think' because they are 'just...
 In light of the high degree of representational and behavioral alignment observed between LLMs and humans (who ostensibly do 'think') <d-cite key="tuckute2024language"></d-cite>, <d-cite key="binz2024centaur"></d-cite>, we believe there is an onus on the objector to substantiate these deflationary claims. 
 After all, opinions on the reality of LLM 'thought,' 'reasoning,' or 'understanding' (henceforth, 'cognition') have implications both for people's willingness to trust such systems <d-cite key="mitchell2023debate"></d-cite>, to use them as scientific tools, and, ultimately, for their socio-economic impact.  
 
-In what follows, we present two flavors of Justaism, and provide a critical analysis of these positions based on prominent views in cognitive science. We refer to the flavors' prototypical forms but also provide specific examples found in the literature and public discussion on LLM cognition in a companion webpage ([anonymous](anonymous)).
+In what follows, we present two flavors of Justaism, and provide a critical analysis of these positions based on prominent views in cognitive science. We refer to the flavors' prototypical forms but also provide specific examples found in the literature and public discussion on LLM cognition in a companion webpage ([anonymous_link](https://osf.io/6ypn3/?view_only=e9707985ca2041dbaf6844bad30b4238) -> `justaic_instances.md`).
 
 ## Flavors of Justaism
 
