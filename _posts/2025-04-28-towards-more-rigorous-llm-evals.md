@@ -47,6 +47,7 @@ In this post, we argue that LM researchers---especially those working in areas w
 Leveraging techniques from classical statistics, such as confidence intervals and hypothesis tests, will help move the field beyond anecdotal observations and philosophical arguments toward a more scientific understanding of model behavior.
 
 To illustrate this in practice, we outline three key elements of rigorous empirical evaluation and apply them to [Mirzadeh et al. (2024)](https://arxiv.org/pdf/2410.05229) <d-cite key="mirzadeh2024gsm"></d-cite>---a recent paper that examines whether LMs perform "formal reasoning" or rely on "sophisticated pattern matching".
+<!-- Maybe say the original tweet had millions of views, or give some other reason why this paper in particular. -->
 
 # 2. Elements of Rigorous Empirical Evaluation
 
@@ -63,6 +64,7 @@ By being upfront about assumptions, questioning their validity, and investigatin
 > In some sense it [the p-value] offers a first line of defense against being fooled by randomness, separating signal from noise [...]. *"It’s Not the P-Values’ Fault", Yoav Benjamini (2016) <d-cite key="benjamini2016not"></d-cite>*
 
 A second essential step is quantifying uncertainty, using tools like error bars and confidence intervals, which help us gauge the reliability of performance metrics by providing a range of plausible values.
+<!-- "tools like..." "tools such as..." -->
 Additionally, although often criticized, hypothesis tests and p-values can serve as an initial, coarse filter to distinguish signal from noise, laying the groundwork for deeper exploration into the practical significance of the reported results.
 
 
@@ -74,6 +76,7 @@ evaluations.
 
 
 To illustrate these three principles, we use [Mirzadeh et al. (2024)](https://arxiv.org/pdf/2410.05229) as a case study---a recent paper that received substantial attention from the LLM research community (e.g. see [this](https://machinelearning.apple.com/research/gsm-symbolic), [this](https://www.reddit.com/r/singularity/comments/1g1zphu/apple_ai_researchers_question_openais_claims/), or [this](https://x.com/MFarajtabar/status/1844456880971858028)).
+<!-- I see, you say here why that paper, so perhaps it is fine -->
 We review their methods, identify gaps in their analysis, and offer a more rigorous statistical assessment of their claims.
 
 
@@ -101,8 +104,10 @@ Each variable has a specified domain and constraints to ensure valid questions a
 
 For their analysis, the authors select 100 questions from GSM8K and create such a template for each of them.
 Whilst the paper does not specify their selection method, we suppose that these questions were sampled randomly from GSM8K's test set.
+<!-- suppose -> assume , I think is more formal -->
 By sampling values for the variables, 50 new questions are generated from each template. 
 This means that GSM-Symbolic and each of its 4 variants (GSM-M1, GSM-P1, GSM-P2, and GSM-NoOp) contain **50 datasets of 100 samples each**.
+<!-- I liked better the "50 datasets of 100 questions each" because "samples" it is too generic. -->
 
 Throughout this post, when we refer to "GSM8K", we specifically mean those 100 original GSM8K questions that were used to create the templates, not the full GSM8K dataset.
 
@@ -140,6 +145,7 @@ The authors emphasise the "non-negligible variance" in model performance across 
 ### 4.1.1 When is variability *not expected*?
 
 Variability would indeed be unexpected if each resampled question was effectively the same as the original. 
+<!-- XD I like this, very funny --> 
 The implicit assumption here is that if an LM solves (or fails to solve) a given question once, it should always solve (or fail to solve) it when presented with the same problem but with different numbers. 
 In other words, this assumes that LMs never make arithmetic mistakes---a very strong assumption that is not examined or addressed in the paper. 
 
@@ -211,12 +217,13 @@ The number of correct answers (out of 100 questions) on the GSM8K questions are 
 We denote this estimate as $$p^{8K}_{m}$$ to indicate that it is computed from the GSM8K dataset.
 There are different ways to construct CI for the [Binomial proportion](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval). The next figure shows [Wilson score](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval) intervals, with more results included in the Appendix. 
 To put this variability into perspective, we also include the average of the 50 point estimates for the model performance on GSM-Symbolic, which we denote as $$p^{Symb}_{m}$$. <d-footnote>Similarly to $p^{8K}_{m}$, we obtain maximum likelihood estimates of $p^{Symb}_{m}$ from the average accuracy on GSM-Symbolic, reported in Table 1 of the paper.</d-footnote>
+<!-- I like "To put this variability into perspective..." -->
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.95.png" 
   class="img-fluid" 
   title="95% Wilson score confidence intervals" 
-  caption="<b>95% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with the average (over 50 datasets) point estimate of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ estimated from the data reported in Table 1 in the appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
+  caption="<b>95% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with the average (over 50 datasets) point estimate of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ are estimated from the data reported in Table 1 of the appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
 %}
 <!-- <div class="caption">
   "95% Wilson score intervals for the point estimates of $p_m$.
@@ -264,12 +271,17 @@ We visualise this in the next figure, showing the overlap between the 95% Wilson
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/ci_vs_reported.png" 
   class="img-fluid" 
   caption="<b>95% Wilson score confidence intervals for the point estimates of GSM8K accuracy, $p^{8K}_{m}$ (red), and range of accuracies achieved on the 50 GSM-Symbolic datasets, $p^{Symb}_{m}$ (blue).</b> 
-  The latter ranges are not explicitly reported; we approximate them from the histograms in Figure 1 of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper. 
+  The latter ranges are not explicitly reported; we approximate them from the histograms in Figure 1 of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the appendix of the paper. 
+  <!-- Appendix is also fine but needs to be consistent -->
   Since such histograms are not available for all models, we only show the subset of the models for which they are." 
 %}
 
 Note that our confidence intervals tend to be wider than the implied ranges in the figures in the paper, i.e. under the i.i.d. Bernoulli assumption, the expected variation is actually **larger** than what is observed.
 This discrepancy is likely to be explained by the unmodelled correlations between questions---as initially suggested, a more reasonable assumption would be to model the probability of success on a question level, $p_{m,n}$, rather than assuming each question is equally likely to be answered correctly. 
+<!-- the notebook that I added shows this is the case by using Beta-Bernoulli distribution instead of Bernoulli. We can discuss this on Friday, not for this paper-blog, but perhaps for the icml paper version -->
+<!-- "unmodelled correlations between questions" it reads to me like there is correlation between e.g. two questions from the 100 questions, but actually there is correlation between the same question template but between two samples from the 50 samples for that question template.
+I think is clearer if we say:
+This discrepancy is likely explained by a question "template" specific probability of success $p_{m,n}$. -->
 The analysis can be repeated once (if) the detailed question-level data becomes available.
 
 **Verdict:** The observed variability in GSM-Symbolic performance is not inherently surprising, and we provide empirical evidence that it is indeed expected.
@@ -338,7 +350,9 @@ For each example sampled from the corresponding ranges, we estimate the probabil
 <b>Results for Phi-3.5-mini-instruct model.</b> Mean and standard deviation of probabilities over 512 examples.
 </div>
 
-
+<!-- I like these tables, but I prefer reporting standard error of the mean (SEM) instead of standard deviation because SEM decreases with the number of trials (the 512 examples here) as our estimate of the mean (the only thing we care about here) gets more accurate. So reporting the standard deviation is more aligned to when we are more interested in some distribution and not just the mean. This is personal preference and in literature both versions are used, actually I think standard deviation is more often, but I still prefer SEM.
+I think of each of the 512 examples as 512 measurements we make of the probability, so we want an estimate of the error of the measurements i.e. SEM and do not really care about the distribution of the errors of the measurements i.e. the standard deviation. 
+-->
 
 |   Llama   | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 operations |
 |-------|----------|----------|----------|----------|
@@ -359,10 +373,13 @@ Based on the analysis for this question template, we argue that even if the mode
 Extrapolating from this, we suggest that if similar systematic discrepancies are present in other templates, then some (for some models likely substantial) portion of the observed performance decline could be attributed to an increased frequency of arithmetic errors.
 
 **Note:** Using this analysis, we can conclude that the probability of successfully performing all arithmetic operations decreases exponentially as the number of arithmetic operations increases (more on this in Section 4.3).
+<!-- Why not add one line to the tables about what is expected given the original GSM8K values for x,y,z, ans. -->
 
 **Verdict:** We provide some evidence for the existence of a distribution mismatch between GSM8K and GSM-Symbolic, which we believe should be further investigated.
 This mismatch could explain (some of) the performance discrepancies, and we offer some empirical support for this claim.
 Data contamination, as suggested by the authors, is also a plausible explanation, and is not mutually exclusive with distribution mismatch.
+
+<!-- I liked the token analysis you had at some point. It is another evidence why larger numbers are harder. Perhaps consider bringing that discussion back. --> 
 
 
 ### 4.2.2 Considering each model independently: Is the decline in performance statistically significant?
@@ -421,6 +438,7 @@ The remaining 21 out of 25 models do not show a statistically significant differ
 Although for most models there is no significant difference in performance, there is a trend that many models perform worse on GSM-Symbolic compared to GSM8K. 
 To determine if this trend is statistically significant, we use the Wilcoxon signed-rank test, which is a non-parametric paired difference test.<d-footnote>The careful reader would notice that in the previous subsection, we used parametric tests. 
 This was because we do not have access to question-level data which is necessary for a non-parametric test. We would have preferred non-parametric tests as they do not rely on distributional assumptions. [@ILI check]
+<!-- yes, this is all good and correct. I like the "careful reader" XD -->
 </d-footnote>
 
 Before applying the test, we acknowledge two caveats and attempt to address them.
@@ -432,7 +450,7 @@ Additionally, we believe that different sizes within the same model family are n
 Minor version updates (e.g., Mistral v0.1 vs. 0.3, Phi 3 vs. 3.5) are also likely correlated. 
 So, although we have a sample of 25 models, the effective sample size is much smaller.
 
-To address this, we have attempted to create independent sets of models and perform the test on these subsets.
+To address this, we have attempted to create sets of independent models and perform the test on these subsets.
 In each model family, we selected the *latest, largest instruct-tuned version* and repeated this process by also selecting the *smallest* version. 
 This gives us two sets of 7 models, with differences between the two sets indicated in italics:
 
@@ -441,7 +459,10 @@ This gives us two sets of 7 models, with differences between the two sets indica
 - Subset of **smallest** models: *Gemma2-2b-it*, Phi-3.5-mini-instruct, Mistral-7b-instruct-v0.3, Mathstral-7b-v0.1, Llama3-8b-instruct, *GPT-4o-mini*, *o1-mini*.
 
 **Caveat 2: Sample sizes.** The results of GSM-Symbolic are averages across 50 datasets, whilst GSM8K is based on a single sample. 
-Ideally, we would want to compare accuracies on GSM8K vs accuracies on each of the 50 datasets (at the time of writing these are not publicly available). [@ILI check -  can we say something about why this is still valid?]
+Ideally, we would want to compare accuracies on GSM8K vs accuracies on each of the 50 datasets (at the time of writing these are not publicly available). <!--[@ILI check -  can we say something about why this is still valid?] -->
+<!-- You can rephrase it as we are comparing the estimated success probabilities for each of the methods on the two question sets. Noting that the success probability on the GSM8K is estimated with only one sample.
+The test is valid either way, but if the measurements (the probabilities) we are comparing are not accurate then our conclusion will also be invalid. 
+-->
 
 
 Let's define the vectors of success probabilities on GSM8K and GSM-Symbolic as $$p^{8K}_{\text{subset}}=[p^{8K}_{1}, \dots, p^{8K}_{7}]$$ and $$p^{Symb}_{\text{subset}}= [p^{Symb}_{1}, \dots, p^{Symb}_{7}]$$, where the subscript $$\text{subset} \in \{\text{largest}, \text{smallest}\}$$.
@@ -474,11 +495,13 @@ For the **largest** subset of models, both tests show statistically significant 
 When looking at the **smallest** subset of models, the evidence for significant differences is somewhat weaker.
 
 It is important to note that rejecting the null hypothesis, gives us strong evidence that the models perform worse on GSM-Symbolic, but does not imply that the models lack reasoning abilities. 
+<!-- exactly! Very good point. --> 
 As mentioned in Section 4.2.1, the observed performance differences could also be due to distributional differences (for which there is substantial evidence), data contamination, or a combination of both.
 
 **Verdict:** When analysing the results of models individually, there is little evidence of performance differences: out of 25 models, only 3 perform significantly worse on GSM-Symbolic compared to GSM8K, and 1 performs better.
-When we analyse the results of models together, we find some, albeit weak, evidence that models perform worse on GSM-Symbolic. 
+When we analyse the results of models together, we find some, albeit weak, evidence that the models perform worse on GSM-Symbolic. 
 These differences could be due to several factors, including distribution mismatch (see Section 4.2.1), data contamination, or lack of reasoning capabilities.
+<!-- perhaps remove "(see Section 4.2.1)" to make a clearer strong ending statement. Also because it is in the same section as this one and mentioned in the previous paragraph so I think is clear where the distribution mismatch discussion is. -->
 
 ## 4.3 Performance decrease and variance increase with question complexity
 
@@ -504,7 +527,12 @@ As before, we assume that a model $m$ answers questions of varying difficulty le
 The distribution of the total number of correct answers follows a binomial distribution $$\text{Bin}(N=100, p^\text{dif}_{m})$$, with variance equal to $$N \cdot p^\text{dif}_{m} \cdot (1 - p^\text{dif}_{m})$$.
 
 If the probabilities of success decrease with increasing question complexity, i.e. $$p^{\text{dif}=-1}_{m} > p^{\text{dif}=0}_{m} > p^{\text{dif}=1}_{m} > p^{\text{dif}=2}_{m} > 0.5$$, the corresponding variances *must increase*. 
-We believe that this is precisely what we observe in Figure 6: the increase in variance is a trivial consequence of the decrease in probabilities of success, rather than a sign of "pattern-matching" becomeing harder.
+<!-- Why they are all bigger than 0.5? 
+I agree they have to be 0.5 so we can expect the variance to increase but what happens when they go below 0.5 like with Gemma2-9b-it, then they should again decrease the variance but this is not what we observe.
+Also, one other alternative explanation may be again related to the Beta-Bernoulli modelling of the question success probability. Remember how the variance was a lot narrower than expected for the Bernoulli & Binomial model, well now with increasing difficulty the probability of success for each question template becomes more equal (there are fewer easy, trivial questions perhaps), i.e. Beta-Bernoulli -> Bernoulli, so the variance increases and goes closer to the expected ranges for a Binomial distribution. 
+Anyway, I cannot relate at all increasing variance with pattern-matching difficulties or "struggling reasoning capabilities" XD.
+-->
+We believe that this is precisely what we observe in Figure 6: the increase in variance is a trivial consequence of the decrease in probabilities of success, rather than a sign of "pattern-matching" becoming harder.
 
 Regarding the decrease in probability of success itself, it is plausible that reasoning becomes more challenging as additional clauses are introduced, or conversely, easier when clauses are removed, as seen in the M1 template. 
 Importantly, as noted in Section 4.2.1, introducing more clauses necessarily involves more arithmetic operations, which in turn will result in an exponential decline in performance. 
@@ -531,8 +559,12 @@ We summarise our key findings as follows:
 - [Section 4.1] We discussed the assumptions under which variability of performance on GSM-Symbolic is unexpected vs expected and quantifiable. We provided empirical evidence that variability is indeed expected.
 - [Section 4.2] We argued that distribution mismatch between the GSM8K and GSM-Symbolic datasets may explain some of the observed performance decline of models (in addition to contamination and "lack of reasoning"). 
 We also quantified the extent to which the performance degradation on GSM-Symbolic is actually statistically significant. Considering models individually, only 3 out of 25 models show a statistically significant performance decline on GSM-Symbolic (and 1 performs significantly better). Taken together, there is some statistically strong evidence for a performance decline on GSM-Symbolic vs GSM8K.
-- [Section 4.3] The observed increase in performance variance with rising question complexity is likely an over-interpretation of expected statistical artifacts. The decrease in success probability as complexity grows can be attributed to both increased reasoning difficulty and a higher likelihood of arithmetic errors.
+<!-- you mean weak evidence, right? :D --> 
+- [Section 4.3] The observed increase in performance variance with rising question complexity is likely an over-interpretation of expected statistical artefacts. The decrease in success probability as complexity grows can be attributed to both increased reasoning difficulty and a higher likelihood of arithmetic errors.
+<!-- how about longer context windows make the task more difficult? So maybe the models are just forgetful, otherwise the reasoning is the same. This same happens with humans if they need to do all the calculations in their head. -->
 - [Section 4.4] TODO No-Op results do indeed show statistically significant decrease in performance for all models except ...; taken jointly, ....
+<!-- the No-Op supports the context window problems again, especially if the No-Op results are worse then P2 or P1. To examine the context window idea, we can compare the question success based on the question length, but we need the actual questions for that. 
+Also, are some of the models known to be better at handling longer context windows? -->
 
 **Final thoughts:** 
 We strongly believe that without a rigorous statistical framework, there is a substantial risk of over-interpreting results and drawing misleading conclusions.<d-footnote>Neither the Frequentist nor the Bayesian religion is perfect, but neglecting statistical analysis altogether would be the worst outcome.</d-footnote> 
@@ -598,6 +630,7 @@ This setup can be represented by the following directed probabilistic graphical 
 -->
 
 where, for the purpose of this analysis, the bottom-most arrows denote deterministic dependencies. [@MPK can you elaborate on this---maybe say this is ok because of how we sample from the models?]
+<!-- the way I understand this is, once the filler values are sampled and the questions produced, the models will always produce the same answer for a question, i.e. there is no variance due to the model it self (e.g. how there would have been if using dropout for example) -->
 
 Under this model, we have
 $$X_m^{8K} \sim \text{Bernoulli}\left(p_m^{8K}\right)$$ and $$X_m^{Symb} \sim \text{Bernoulli}\left(p_m^{Symb}\right)$$, where $$p_m^{8K}, p_m^{Symb} \in [0, 1]$$ are 
@@ -609,11 +642,14 @@ In this framework, we can describe the experimental setup of Mirzadeh et al. (20
 - **Filler-values $V^{Symb}$**: 50 i.i.d. samples $$v^{Symb}_{i, j}, 1\le j \le 50$$ from each conditional $$\mathbb{P}^{Symb}_{V \vert t_i}$$ for $$1 \le i \le 100$$
 - **Observed data**: for each of these sets of filler-values and each model $$m$$ (in a pre-determined set of 25 language models), we have corresponding observations $$x^{8K}_{m,t_i}$$ and $$x^{Symb}_{m, t_i, j}$$ --- that is, whether model $$m$$ answered correctly the questions $$t_i(v^{8K}_i)$$ and $$t_i\left(v^{Symb}_{i, j}\right)$$, respectively.<d-footnote>We note that this raw data is not made publicly available.</d-footnote>
 - **Accuracy estimates**: from these observations, maximum likelihood estimates can be computed as $$\hat{p}_m^{8K} = \frac{1}{100}\sum_{i=1}^{100} x^{8K}_{m,t_i}$$ and 
-$$\hat{p}_{m, j}^{Symb} = \frac{1}{100}\sum_{i=1}^{100} x^{Symb}_{m,t_i, j}, \; 1 \leq j \leq 50$$. We note that only $$\hat{p}_m^{8K}$$ and the average $$\overline{\hat{p}_m^{8K}} = \frac{1}{50}\sum_{j=1}^{50}\hat{p}_{m, j}^{Symb}$$ are reported in the paper (Table 1, Appendix A.2 in <d-cite key=mirzadeh2024gsm></d-cite>).
+$$\hat{p}_{m, j}^{Symb} = \frac{1}{100}\sum_{i=1}^{100} x^{Symb}_{m,t_i, j}, \; 1 \leq j \leq 50$$. We note that only $$\hat{p}_m^{8K}$$ and the average $$\overline{\hat{p}_m^{Symb}} = \frac{1}{50}\sum_{j=1}^{50}\hat{p}_{m, j}^{Symb}$$ are reported in the paper (Table 1, Appendix A.2 in <d-cite key=mirzadeh2024gsm></d-cite>).
 
 Under the assumptions of this mathematical model, we can think of $$\hat{p}_m^{8K}$$ as an observation from a random variable $$\hat{P}^{8K}_m \sim \frac{1}{100}Bin\left(100,p^{8K}_m\right)$$. Similarly, each $$\hat{p}_{m, j}^{Symb}, \; 1 \le j \le 50$$ is an observation of $$\hat{P}^{Symb}_m \sim \frac{1}{100} Bin\left(100,p^{Symb}_m\right)$$, although we can't assume that these observations are independent, due to the shared templates.  
 
-Throughout this blogpost, the main question we've tackled is: given these observed $$\hat{p}_m^{8K}$$ and $$\overline{\hat{p}_m^{8K}}$$, what evidence is there to believe that $$p^{8K}_m \neq p^{Symb}_m$$ or that $$p^{8K}_m > p^{Symb}_m$$?
+Throughout this blogpost, the main question we've tackled is: given these observed $$\hat{p}_m^{8K}$$ and $$\overline{\hat{p}_m^{Symb}}$$, what evidence is there to believe that $$p^{8K}_m \neq p^{Symb}_m$$ or that $$p^{8K}_m > p^{Symb}_m$$?
+
+<!-- I like the math setup section -->
+
 
 ## Clopper-Pearson confidence intervals
 
@@ -716,12 +752,17 @@ Number of Fisher Scoring iterations: 5
 Paragraph about p-values should go somehwere. Things to say: 
 
 - p-values get misinterpreted; Some "Don'ts" : don't base your conclusions solely on whether an association or effect was found to be “statistically significant”; Don’t believe that an association or effect exists just because it was statistically significant. Don’t believe that an association or effect is absent just because it was not statistically significant. Don’t conclude anything about scientific or practical importance based on statistical significance (or lack thereof).
+<!-- perhaps also about effect sizes and sample sizes, but may be it will be too much textbook statistics -->
 
 ## Should we include some notes on Bayesian analysis?
+
+<!-- we can discuss on Friday, but I think there is already enough content for the blog post, it will make the post too long and less focused.
+-->
 
 ## Computational resources
 
 The extra experiments in this blog post (the addition task discussed in Section 4.1.1) were performed on a single L4 GPU (24GB RAM) on a Lightning AI Cloud instance. 
+<!-- if 24GB is the memory of the GPU perhaps it is best to say VRAM so it is not confused with the RAM memory of the machine it self -->
 The statistical analysis (confidence intervals, p-values) was performed on a laptop.
 
 <!-- 
