@@ -220,7 +220,7 @@ This dual-tiered approach facilitates comprehensive game trajectories.
 After data collections across different tasks, we mix up these samples with calibrated proportions to fine-tune the LLM. Within each training instance, a question-answer pair is presented.
 We denote the question of the $i$-th sample as $X_i$ and the answer as $Y_i$. Our training regimen employs the cross-entropy loss function, a methodological choice that facilitates the model's ability to maximize the likelihood probability of yielding the complate answer upon receiving an input query. Formally, this loss function can be defined as 
 
-$$L_{\theta} = \frac{1}{N}\sum_{i}^{N} \log_{\theta} (Y_i | X_i)$$.
+$$L_{\theta} = \frac{1}{N}\sum_{i}^{N} \log_{\theta} (Y_i \| X_i)$$.
 
 This equation represents the sum of the logarithms of the conditional probabilities of the answers $Y_i$ given the questions $X_i$ across all training samples. The goal is to maximize these probabilities, which in turn minimizes the cross-entropy loss, leading to a model that is better at predicting the answers to the given questions.
 
