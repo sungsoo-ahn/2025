@@ -63,7 +63,9 @@ With AI becoming more interdisciplinary and widespread, the community has begun 
 
 We argue that a focus on anthropomorphic systems design, their behaviors, their evaluation and their use will similarly encourage a deeper interrogation of the ways in which systems are anthropomorphic, the practices that lead to anthropomorphic systems, and the assumptions surrounding the design, deployment, evaluation, and use of these systems, and is thus likely to yield similar benefits. 
 
-<img src="assets/img/2025-04-28-anthropomorphism/4tenets.png" alt="Four components of our call to action" width="300">
+<div style="width: 80%;">
+  {% include figure.html path="assets/img/2025-04-28-anthropomorphism/4tenets.png" class="img-fluid" %}	
+</div>
 <div class="caption">The four key components of our call to action for the ICLR community.</div>
 
 
@@ -74,8 +76,8 @@ This can make it hard to specify appropriate alternative (less human-like) behav
 Understanding what exactly constitutes anthropomorphic behaviors is nonetheless necessary to measure and determine which behaviors should be mitigated and how, and which behaviors may be desirable (if any at all). 
 This requires unpacking the wide range of dynamics and varieties in system outputs that are potentially anthropomorphic. 
 
-<img src="assets/img/2025-04-28-anthropomorphism/examples.png" alt="Examples of anthropomorphic behaviors" width="300">
-<div class="caption">Examples of the wide range of anthropomorphic system behaviors.</div>
+<div style="width: 80%;">
+{% include figure.html path="assets/img/2025-04-28-anthropomorphism/examples.png" class="img-fluid" %}</div><div class="caption">Examples of the wide range of anthropomorphic system behaviors.</div>
 
 
 While a system output including expressions of politeness like "*you're welcome*" and "*please*" (known to contribute to anthropomorphism e.g., <d-cite key="fink2012anthropomorphism"></d-cite>) might in some deployment settings be deemed desirable, 
