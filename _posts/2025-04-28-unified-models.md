@@ -310,8 +310,15 @@ In a unified model, **discrete values** refer to categorical data (*e.g.,* token
 | **Primary Focus**            | Token-level generation (*e.g.,* text prediction).   | Continuous signal refinement (*e.g.,* image generation). |
 
 
+
+<aside class="l-body box-note" markdown="1">
+
+In autoregressive models, encoding an image with discrete values represents pixels or features as categorical indices (*e.g.,* tokens from a **codebook**), while encoding with continuous values directly processes real-valued pixels or features:
+
 {% include figure.html path="assets/img/2025-04-28-unified-models/xfxc6-p9yvb.gif" class="img-fluid" %}
-{% include figure.html path="assets/img/2025-04-28-unified-models/111.mp4" class="img-fluid" %}
+</aside>
+
+
 
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
