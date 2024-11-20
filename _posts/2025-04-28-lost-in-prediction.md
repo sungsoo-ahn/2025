@@ -80,6 +80,7 @@ _styles: >
     var y0 = toc.getBoundingClientRect().top + window.scrollY;
     
     window.addEventListener('scroll', function() {toc.style.transform = `translateY(${Math.max(0, window.scrollY - y0 + 180)}px)`;});
+  }
 </script>
 
 
