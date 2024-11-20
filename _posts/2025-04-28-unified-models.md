@@ -199,6 +199,12 @@ This formula captures the essence of autoregressive generation: predicting each 
 
 **Why Choose Autoregressive Models?**
 
+* **Handling Sequential Data**: Autoregressive models excel at processing and generating sequential data, which is central to many tasks like text, images, and video.
+
+* **Unified Framework for Multimodal Tasks**: They can integrate different modalities (*e.g.,* text, images, audio) by converting them into a unified sequence of tokens, simplifying model design.
+
+* **Easier to Scale Up**: Autoregressive models align well with scaling laws, making them easier to scale up in terms of model size, data, and computational resources.
+
 
 **Autoregressive for Vision**. The process for generating an image can be broken down pixel-by-pixel or patch-by-patch, where each pixel/patch is conditioned on previously generated content.
 Autoregressive models are simple, interpretable, and effective, but their sequential nature can limit efficiency, particularly for long sequences. These characteristics are central to understanding their role in unified multimodal generation tasks.
