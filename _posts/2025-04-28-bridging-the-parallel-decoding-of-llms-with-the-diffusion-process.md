@@ -102,7 +102,7 @@ Table 1. Comparison of CLLMs against fine-tuned baseline models across three dif
 | + lookahead        |125.2           |2.9x   |56.4  |6.7B |
 
 
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/comparison_cllms.png" class="comparison_cllms" %}
+{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/comparison_cllms.jpg" class="comparison_cllms" %}
 
 
 ## Diffusion Process
@@ -145,15 +145,15 @@ The objective mentioned above is analogous to that of Consistency Models, as out
 
 Diffusion-LM develops a non-autoregressive language model based on continuous diffusions, enabling complex, fine-grained controls of text generation. 
 
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/diffu_lm.jpg" class="diffu_lm" %}
+{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/diffu_lm.png" class="diffu_lm" %}
 
 The framework of Diffusion-LM is shown in Figure. To apply a continuous diffusion model to discrete text, Diffusion-LM adds a Markov transition from discrete words $$w$$ to $$x_0$$ in the forward process, parametrized by $$ q(x_0,w) = \mathcal{N}(\text{EMB}(w), 0I)$$. $$\text{EMB}(w_i)$$ is an embedding function that maps each word to a vector in $$\mathbb{R}^d$$. In the reverse process, Diffusion-LM rounds a predicted $$x_0$$ back to discrete text by adding a trainable rounding step, parameterized by $$p_\theta(w,x_0) = \prod_{i=1}^n p_\theta(w_i,x_i)$$, where $$p_\theta(w_i,x_i)$$ is a softmax distribution. Rounding is achieved by choosing the most probable word for each position, according to $$\text{arg max} p_\theta(w,x_0) = \prod_{i=1}^n p_\theta(w_i,x_i)$$. Ideally, this argmax-rounding would be sufficient to map back to discrete text, as the denoising steps should ensure that $$x_0$$ lies exactly on the embedding of some word. The training objectives is:
 
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/diffu_lm_loss.jpg" class="diffu_lm_loss" %}
+{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/diffu_lm_loss.png" class="diffu_lm_loss" %}
 
 **Controllable Text Generation** By performing control on the sequence of continuous latent variables $$x_{0:T}$$ defined by Diffusion-LM, Controllable Text Generation can be achieved. Specifically, controlling $$x_{0:T}$$ is equivalent to decoding from the posterior $$p(x_{0:T},c) = \prod_{t=1}^T p(x_{t-1},x_t, c)$$, and we decompose this joint inference problem into a sequence of control problems at each diffusion step: $$p(x_{t-1},x_t, c) \propto p(x_{t-1},x_t) \cdot p(c,x_{t-1}, x_t)$$. We further simplify $$p(c,x_{t-1}, x_t) = p(c,x_{t-1})$$ via conditional independence assumptions from prior work on controlling diffusions. Consequently, for the $t$-th step, the gradient update on $$x_{t-1}$$ is:
 
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/controllable_generation.jpg" class="controllable_generation" %}
+{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/controllable_generation.png" class="controllable_generation" %}
 
 where both $$\log p(x_{t-1},x_t)$$ and $$\log p(c,x_{t-1})$$ are differentiable: the first term is parameterized by Diffusion-LM, and the second term is parameterized by a neural network classifier. Similar to work in the image setting, we train the classifier on the diffusion latent variables and run gradient updates on the latent space $$x_{t-1}$$ to steer it towards fulfilling the control.
 
