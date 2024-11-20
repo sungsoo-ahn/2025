@@ -197,7 +197,7 @@ $$
 
 This formula captures the essence of autoregressive generation: predicting each token based on the prior sequence of tokens.
 
-**Why Choose Autoregressive Models?**
+**Why Choose Autoregressive Models for Unified Multimodal Model?**
 
 * **Handling Sequential Data**: Autoregressive models excel at processing and generating sequential data, which is central to many tasks like text, images, and video.
 
@@ -239,7 +239,14 @@ $$
 
 where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at step $t$, $ε_θ(x_t, t)$ is the model's noise prediction.
 
-**Why Choose Diffusion Models?**
+
+**Why Involve Diffusion Models for Unified Multimodal Model?**
+
+* **Modeling Spatial Distributions**: Diffusion models are well-suited for modeling complex spatial data distributions, such as images and videos, by gradually refining noise into structured outputs
+
+*  **Faster Inference Compared to Autoregressive Models**: Diffusion models often have faster inference times because they generate images or videos in parallel, unlike autoregressive models that generate step-by-step.
+
+
 
 ## Unified Multimodal Model
 
