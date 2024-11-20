@@ -663,6 +663,8 @@ For completeness, we include 99% confidence intervals for the point estimates of
 
 ## Logistic regression: full results
 
+The logistic regressions were conducted in R (`glm`) on Posit Cloud.
+
 ### Llama-3-8B-Instruct
 ```
 Call:
