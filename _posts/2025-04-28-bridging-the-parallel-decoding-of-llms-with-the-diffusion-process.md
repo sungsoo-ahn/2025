@@ -23,7 +23,7 @@ toc:
   - name: Jacobi Decoding
   - name: Diffusion Process
   - name: Existing Explorations
-    subsections:
+  - subsections:
     - name: CLLMs: Consistency Large Language Models
     - name: Diffusion-LM Improves Controllable Text Generation
     - name: Beyond Autoregression: Discrete Diffusion For Complex Reasoning And Planning
