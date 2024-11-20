@@ -18,11 +18,10 @@ toc:
     - name: Growing Concerns about Anthropomorphic Systems
   - name: A Call to Action for AI Researchers and Practitioners
 ---
-# "I Am the One and Only, Your Cyber BFF":<d-footnote>The title is inspired by a response that a Reddit user received when using the Pi chatbot <d-cite key="PiClaimsToBeChatGPT"></d-cite>.</d-footnote> Understanding the Impact of GenAI Requires Understanding the Impact of Anthropomorphic AI
-
 Anthropomorphism, or attributing human qualities to nonhuman entities, has played a fundamental role in the development of artificial intelligence (AI). From its nascence, the field has aimed to emulate human-like abilities of “learning” and “intelligence,” as exemplified by the Turing test and early books titled *Giant Brains or Machines that Think* <d-cite key="berkeley1949giant,dijkstra1985anthropomorphism"></d-cite>. This legacy continues with modern-day benchmarks on reasoning, problem-solving, and other human-like capabilities.
  
-As state-of-the-art generative AI systems exhibit anthropomorphic behaviors, i.e., outputs that are perceived to be human-like, the anthropomorphism of AI has only become more pervasive.  Despite growing concerns about negative consequences, anthropomorphism remains largely overlooked, underexamined, and vaguely defined in both the development and practice of AI. In this post, we argue that we cannot thoroughly understand the societal impacts of generative AI without understanding the impacts of anthropomorphic AI, and outline a call to action.
+As state-of-the-art generative AI systems exhibit anthropomorphic behaviors, i.e., outputs that are perceived to be human-like, the anthropomorphism of AI has only become more pervasive.  Despite growing concerns about negative consequences, anthropomorphism remains largely overlooked, underexamined, and vaguely defined in both the development and practice of AI. 
+In this post, we argue that we cannot thoroughly understand the societal impacts of generative AI without understanding the impacts of anthropomorphic AI, and outline a call to action.
 
 ## Anthropomorphic AI System Behaviors Are Prevalent Yet Understudied
  
@@ -37,8 +36,7 @@ Many state-of-the-art generative AI (GenAI) systems are increasingly prone to an
 For instance, LLM-based systems have been noted to output text claiming to have tried pizza <d-cite key="pizzatweet"></d-cite>, 
 to have fallen in love with someone <d-cite key="roose2023conversation"></d-cite>, to be human or even better than humans <d-cite key="decosmo2022google"></d-cite>, and to have human-like life experiences <d-cite key="fiesler2024ai"></d-cite>. 
  
-Such *anthropomorphic systems*<d-footnote>We deliberately use the terms *anthropomorphic AI*, *anthropomorphic systems* or *anthropomorphic system behaviors*–systems and system outputs that are *perceived* to be human-like–instead of *agentic systems* <d-cite key="chan2023harms,shavit2023practices"></d-cite> or *human-like AI* <d-cite key="brynjolfsson2023turing"></d-cite> to emphasize that these systems are perceived as human-like or having human-like characteristics, rather than as an immutable characteristic of the system itself; we thus try to steer clear of inadvertently suggesting that AI systems are human or have human-like agency or consciousness. That is, a stone being perceived as human-like does not necessarily imply the stone is human. We similarly avoid ambiguous, speculative, or relative terms whose meanings are likely to change across contexts or over time, such as *advanced AI* <d-cite key="gabriel2024ethics"></d-cite> (a term used since at least the 1980s) or *emergent properties* <d-cite key="rogers2024position"></d-cite>. We instead focus on developers' stated design goals–what systems are intended to do–and in what ways AI outputs might be perceived as human-like, rather than on what systems can or cannot do.
-range from conversational assistants e.g., <d-cite key="abercrombie2021alexa,shanahan2023role"></d-cite> to avatars and chatbots designed as a stand-in for friends, companions, or romantic partners e.g., <d-cite key="AI-romantic-partner,brandtzaeg2022my,laestadius2022too,ruiz2024marshable"></d-cite>, and AI-generated media designed to portray people e.g., <d-cite key="rosner2021ethics,vaccari2020deepfakes"></d-cite>, among a fast-growing number of applications e.g., <d-cite key="agnew2024illusion,mcilroy2022mimetic,ChatGPT-human"></d-cite>.
+Such *anthropomorphic systems* range from conversational assistants e.g., <d-cite key="abercrombie2021alexa,shanahan2023role"></d-cite> to avatars and chatbots designed as a stand-in for friends, companions, or romantic partners e.g., <d-cite key="AI-romantic-partner,brandtzaeg2022my,laestadius2022too,ruiz2024marshable"></d-cite>, and AI-generated media designed to portray people e.g., <d-cite key="rosner2021ethics,vaccari2020deepfakes"></d-cite>, among a fast-growing number of applications e.g., <d-cite key="agnew2024illusion,mcilroy2022mimetic,ChatGPT-human"></d-cite>. Note that we deliberately use the terms *anthropomorphic AI*, *anthropomorphic systems* or *anthropomorphic system behaviors*–systems and system outputs that are *perceived* to be human-like–instead of *agentic systems* <d-cite key="chan2023harms,shavit2023practices"></d-cite> or *human-like AI* <d-cite key="brynjolfsson2023turing"></d-cite> to emphasize that these systems are perceived as human-like or having human-like characteristics, rather than as an immutable characteristic of the system itself; we thus try to steer clear of inadvertently suggesting that AI systems are human or have human-like agency or consciousness. That is, a stone being perceived as human-like does not necessarily imply the stone is human. We similarly avoid ambiguous, speculative, or relative terms whose meanings are likely to change across contexts or over time, such as *advanced AI* <d-cite key="gabriel2024ethics"></d-cite> (a term used since at least the 1980s) or *emergent properties* <d-cite key="rogers2024position"></d-cite>. We instead focus on developers' stated design goals–what systems are intended to do–and in what ways AI outputs might be perceived as human-like, rather than on what systems can or cannot do.
 
 
 ### Growing Concerns about Anthropomorphic Systems
@@ -65,8 +63,7 @@ With AI becoming more interdisciplinary and widespread, the community has begun 
 
 We argue that a focus on anthropomorphic systems design, their behaviors, their evaluation and their use will similarly encourage a deeper interrogation of the ways in which systems are anthropomorphic, the practices that lead to anthropomorphic systems, and the assumptions surrounding the design, deployment, evaluation, and use of these systems, and is thus likely to yield similar benefits. 
 
-{% include figure.html path="assets/img/2025-04-28-anthropomorphism/4tenets.png" class="img-fluid" %}
-
+<img src="assets/img/2025-04-28-anthropomorphism/4tenets.png" alt="Four components of our call to action" width="300">
 <div class="caption">The four key components of our call to action for the ICLR community.</div>
 
 
@@ -77,7 +74,7 @@ This can make it hard to specify appropriate alternative (less human-like) behav
 Understanding what exactly constitutes anthropomorphic behaviors is nonetheless necessary to measure and determine which behaviors should be mitigated and how, and which behaviors may be desirable (if any at all). 
 This requires unpacking the wide range of dynamics and varieties in system outputs that are potentially anthropomorphic. 
 
-{% include figure.html path="assets/img/2025-04-28-anthropomorphism/examples.png" class="img-fluid" %}
+<img src="assets/img/2025-04-28-anthropomorphism/examples.png" alt="Examples of anthropomorphic behaviors" width="300">
 <div class="caption">Examples of the wide range of anthropomorphic system behaviors.</div>
 
 
