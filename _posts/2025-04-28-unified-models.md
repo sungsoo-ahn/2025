@@ -315,7 +315,7 @@ In a unified model, **discrete values** refer to categorical data (*e.g.,* token
 
 In autoregressive models, encoding an image with discrete values represents pixels or features as categorical indices (*e.g.,* tokens from a **codebook**), while encoding with continuous values directly processes real-valued pixels or features:
 
-{% include figure.html path="assets/img/2025-04-28-unified-models/xfxc6-p9yvb.gif" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-unified-models/xfxc6-p9yvb.png" class="img-fluid" %}
 </aside>
 
 
@@ -325,9 +325,8 @@ In autoregressive models, encoding an image with discrete values represents pixe
 
 ## Challenges 
 
-## What's Next for Unified Models?
 
-## Conclusion
+## Conclusion and Future Vision
 
 
 
