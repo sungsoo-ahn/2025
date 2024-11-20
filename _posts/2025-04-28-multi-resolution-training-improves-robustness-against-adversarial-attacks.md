@@ -1,6 +1,6 @@
 ---
 layout: distill
-title: Multi-resolution training improves robustness against adversarial attacks
+title: Multi-Resolution Training Improves Robustness Against Adversarial Attacks
 description: Deep neural networks (DNNs) are now central to critical tasks like traffic sign recognition in autonomous vehicles. However, their known vulnerability to adversarial attacks—small but deliberately crafted input perturbations—poses serious risks. To address this, we propose **multi-resolution training**, a novel method that utilizes lower-resolution information from input images to retain essential features while filtering out adversarial noises. Our approach integrates custom downsampling and upsampling layers within CNNs to enhance robustness. Testing on various DNNs shows effective enhancements in resilience against adversarial attacks, making this technique a promising solution for safer real-world applications.
 
 
@@ -29,24 +29,23 @@ authors:
 #       name: IAS, Princeton 
 
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-Multi-Resolution-Training.bib  
+bibliography: 2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
 toc:
-  - name: Equations
-  - name: Images and Figures
+  - name: DNN Vulnerabilities in Traffic Sign Recognition
+  - name: Multi-Resolution Training
     subsections:
-    - name: Interactive Figures
-  - name: Citations
-  - name: Footnotes
-  - name: Code Blocks
-  - name: Diagrams
-  - name: Tweets
-  - name: Layouts
-  - name: Other Typography?
+    - name: Multi-Resolution CNN Block
+  - name: Experiment
+    subsections:
+    - name: Adversarial Attack
+    - name: Results
+  - name: Conclusion
+  
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
