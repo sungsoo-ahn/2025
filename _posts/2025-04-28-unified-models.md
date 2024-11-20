@@ -287,6 +287,16 @@ For the single-model paradigm, existing methods can primarily be categorized int
 ### Autoregressive Models v.s. Mixed Architectures (AR+Diffusion)
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
+The fundamental difference between Autoregressive Models (*e.g.,* EMU3, Chameleon) and AR+Diffusion Models (*e.g.,* Show-O, Transfusion) lies in their approach: Autoregressive Models still sequentially predict the next token across all modalities, while AR+Diffusion models combine autoregressive generation for discrete tokens (*e.g., text*) with diffusion processes for continuous data (*e.g.,* images and videos).
+
+| **Aspect**             | **Autoregressive Models**                                | **AR+Diffusion Models**                              |
+|-------------------------|---------------------------------------------------------|-----------------------------------------------------|
+| **Generative Fidelity** | Effective for token-based modalities (*e.g.,* text).      | Superior for high-fidelity image and video generation.        |
+| **Unified Framework**   | Simplifies multimodal unification via tokenization.     | Balances discrete and continuous modalities.        |
+| **Training Complexity** | Relatively efficient.                                   | More computationally demanding due to diffusion.    |
+| **Scalability**         | Scales well to large multimodal datasets.               | Requires careful balancing of AR and diffusion.     |
+
+
 
 ### Discrete v.s. Continuous
 
