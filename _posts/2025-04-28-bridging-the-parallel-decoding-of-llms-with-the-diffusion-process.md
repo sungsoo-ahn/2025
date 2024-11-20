@@ -26,7 +26,7 @@ toc:
   - subsections:
     - name: CLLMs: Consistency Large Language Models
     - name: Diffusion-LM Improves Controllable Text Generation
-    - name: Beyond Autoregression: Discrete Diffusion For Complex Reasoning And Planning
+    - name: Beyond Autoregression, Discrete Diffusion For Complex Reasoning And Planning
   - name: Conclusion
 
 # Below is an example of injecting additional post-specific styles.
