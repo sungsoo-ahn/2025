@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Understanding Model Calibration - A gentle introduction and visual exploration of calibration and the expected calibration error (ECE)
-description: To be considered reliable, a model must be calibrated so that its confidence in each decision closely reflects its true outcome. In this blogpost we'll take a look at the most commonly used definition for calibration and then dive into the most popular evaluation measure for model calibration. We'll then cover some of the drawbacks of this measure and how these surfaced the need for additional notions of calibration, which require their own new evaluation measures. This post is not intended to be an in-depth dissection of all works on calibration, nor does it focus on how to calibrate models. Instead, it is meant to provide a gentle introduction to the different notions and their evaluation measures as well as to re-highlight some  issues with a measure that is still widely used to evaluate calibration.
+description: To be considered reliable, a model must be calibrated so that its confidence in each decision closely reflects its true outcome. In this blogpost we'll take a look at the most commonly used definition for calibration and then dive into a frequently used evaluation measure for model calibration. We'll then cover some of the drawbacks of this measure and how these surfaced the need for additional notions of calibration, which require their own new evaluation measures. This post is not intended to be an in-depth dissection of all works on calibration, nor does it focus on how to calibrate models. Instead, it is meant to provide a gentle introduction to the different notions and their evaluation measures as well as to re-highlight some  issues with a measure that is still widely used to evaluate calibration.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -48,7 +48,7 @@ toc:
         #   - name: Multi-class Calibration
         #   - name: Class-wise Calibration
         #   - name: Human Uncertainty Calibration
-  - name: Takeaways
+  - name: Final Thoughts
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
@@ -229,7 +229,7 @@ have proposed a more adaptive binning approach.
 
 Binning-based evaluation with bins containing an equal number of samples are shown to have 
 *lower bias* than a fixed binning approach such as ECE <d-cite key="roelofs2022mitigating"></d-cite>. 
-This leads <d-cite key="roelofs2022mitigating"></d-cite> to urge against using equal width binning and 
+This leads <d-cite key="roelofs2022mitigating"></d-cite> to urge against using equal width binning and to
 suggest the use of an alternative: ECEsweep, which maximizes the number of equal-mass bins while ensuring 
 the calibration function remains monotonic <d-cite key="roelofs2022mitigating"></d-cite>. 
 The Adaptive Calibration Error (ACE) and Threshold Adaptive calibration Error (TACE) are two 
@@ -242,7 +242,7 @@ the KDE-based ECE does so by replacing the bins with non-parametric density esti
 specifically kernel density estimation (KDE) <d-cite key="zhang2020mix"></d-cite>.
 
 ### Only maximum probabilities considered
-Another frequently mentioned drawback of ECE is that it only consideres the maximum estimated probabilities <d-cite key="nixon2019measuring, ashukha2020pitfalls, vaicenavicius2019evaluating, widmann2019calibration, kull2019beyond"></d-cite>. The idea that more than just the maximum confidence should be calibrated, is best illustrated with a simple example <d-cite key="vaicenavicius2019evaluating"></d-cite>:
+Another frequently mentioned drawback of ECE is that it only considers the maximum estimated probabilities <d-cite key="nixon2019measuring, ashukha2020pitfalls, vaicenavicius2019evaluating, widmann2019calibration, kull2019beyond"></d-cite>. The idea that more than just the maximum confidence should be calibrated, is best illustrated with a simple example <d-cite key="vaicenavicius2019evaluating"></d-cite>:
 
 
 <div class="row mt-2">
@@ -254,7 +254,7 @@ Another frequently mentioned drawback of ECE is that it only consideres the maxi
     Image 7 | input example sourced from <d-cite key="schwirten2024ambiguous"></d-cite>
 </div>
 
-Let's say we trained two different models and now both need to determine if the same input image contains a *person*, an *animal* or *no creature*. The two models output vectors with slightly different estimated probabilities, but both have the same maximum confidence for "*no creature*". Since ECE only looks at these top values it would consider these two outputs to be the same. Yet, when we think of real-world applications we might want our self-driving car to act differently in one situation over the other <d-cite key="vaicenavicius2019evaluating"></d-cite>. This restriction to the maxium confidence prompted various authors <d-cite key="vaicenavicius2019evaluating, kull2019beyond, widmann2019calibration"></d-cite> to reconsider the definition of calibration. 
+Let's say we trained two different models and now both need to determine if the same input image contains a *person*, an *animal* or *no creature*. The two models output vectors with slightly different estimated probabilities, but both have the same maximum confidence for "*no creature*". Since ECE only looks at these top values it would consider these two outputs to be the same. Yet, when we think of real-world applications we might want our self-driving car to act differently in one situation over the other <d-cite key="vaicenavicius2019evaluating"></d-cite>. This restriction to the maximum confidence prompted various authors <d-cite key="vaicenavicius2019evaluating, kull2019beyond, widmann2019calibration"></d-cite> to reconsider the definition of calibration. 
 The existing concept of calibration as "confidence calibration" (coined in <d-cite key="kull2019beyond"></d-cite>) makes a distinction between two additional interpretations of confidence: __multi-class__ and __class-wise calibration__.
 
 <br />
@@ -288,7 +288,7 @@ align with the true frequency of class k when considered on its own:
 
 $$ \mathbb{P} (Y  = k \; | \; \hat{p}_k(X)= q_k  ) = q_k \;\;\;\;\;\;  \forall k \in \{1,...,K\}$$
 
-Class-wise calibration is a __*weaker*__ condition  of __multi-class__ calibration as it considers each class probability in __*isolation*__ rather than needing the full vector to align. The image below illustrates this by zooming into a probability estimate for class 1 specifically: $$q_1=0.1$$. Yet again, we assume we have 10 instances for which the model predicted a probability estimate of 0.1 for class 1. We then look at the true class frequency amongst all classes with $$q_1=0.1$$. If the empirical frequency matches $$q_1$$ it is calibrated.
+Class-wise calibration is a __*weaker*__ definition than __multi-class__ calibration as it considers each class probability in __*isolation*__ rather than needing the full vector to align. The image below illustrates this by zooming into a probability estimate for class 1 specifically: $$q_1=0.1$$. Yet again, we assume we have 10 instances for which the model predicted a probability estimate of 0.1 for class 1. We then look at the true class frequency amongst all classes with $$q_1=0.1$$. If the empirical frequency matches $$q_1$$ it is calibrated.
 
 <div class="row mt-2">
     <div class="col-sm mt-3 mt-md-0">
@@ -316,7 +316,7 @@ All the approaches mentioned above __share a key assumption: ground-truth labels
     Image 10 | One-Hot-Vector
 </div>
 
-We have the same image as in our entry example and can see that the chosen label differs between annotators. A common approach to resolving such issues in the labelling process is to use some form of aggregation <d-cite key="paun2022statistical, artstein2008inter"></d-cite>. Let's say that in our example the majority vote is selected, so we end up evaluating how well our model is calibrated against such  'ground truth'. One might think, the image is small and pixelated; of course humans will not be certain about their choice. However,  rather than being an exception such disagreements are widespread <d-cite key="aroyo2024dices, sanders2022ambiguous, schwirten2024ambiguous"></d-cite>. So, when there is a lot of human disagreement in a dataset it might not be a good idea to calibrate against an aggregated 'gold' label <d-cite key="baan2022stop"></d-cite>. Instead of gold labels more and more researchers are using soft or smooth labels with are more representative of the human uncertainty <d-cite key="peterson2019cifar, sanders2022ambiguous, collins2023human"></d-cite>, see example below.
+We have the same image as in our entry example and can see that the chosen label differs between annotators. A common approach to resolving such issues in the labelling process is to use some form of aggregation <d-cite key="paun2022statistical, artstein2008inter"></d-cite>. Let's say that in our example the majority vote is selected, so we end up evaluating how well our model is calibrated against such  'ground truth'. One might think, the image is small and pixelated; of course humans will not be certain about their choice. However,  rather than being an exception such disagreements are widespread <d-cite key="aroyo2024dices, sanders2022ambiguous, schwirten2024ambiguous"></d-cite>. So, when there is a lot of human disagreement in a dataset it might not be a good idea to calibrate against an aggregated 'gold' label <d-cite key="baan2022stop"></d-cite>. Instead of gold labels more and more researchers are using soft or smooth labels which are more representative of the human uncertainty <d-cite key="peterson2019cifar, sanders2022ambiguous, collins2023human"></d-cite>, see example below.
 
 <div class="row mt-2">
     <div class="col-sm mt-3 mt-md-0">
@@ -386,8 +386,8 @@ $$RankCS = \frac{1}{N} \sum_{n=1}^{N} \mathbf{1} (argsort(y_i) = argsort(\hat{p}
 
 where argsort simply returns the indices that would sort an array.
 
-So, __RankCS__  checks if the sorted order of estimated probabilities $$\hat{p}_i$$ matches the sorted order of $$H(y_i)$$ for each sample. 
-If they match for a particular sample $$i$$ one can count it as 1; if not, it can be counted as 0, which is then used to average overall samples N. <d-footnote>In the paper it is stated more generally: If the argsorts match, it means the ranking is aligned, contributing to the overall RankCS score.</d-footnote>
+So, __RankCS__  checks if the sorted order of estimated probabilities $$\hat{p}_i$$ matches the sorted order of $$y_i$$ for each sample. 
+If they match for a particular sample $$i$$ one can count it as 1; if not, it can be counted as 0, which is then used to average over all samples N. <d-footnote>In the paper it is stated more generally: If the argsorts match, it means the ranking is aligned, contributing to the overall RankCS score.</d-footnote>
 
 Since this approach uses ranking it doesn't care about the actual size of the probability values. The two predictions below, while not the same in class probabilies would have the same ranking. This is helpful in assessing the overall ranking capability of models and looks beyond just the maximum confidence. At the same time though, it doesn't fully capture human uncertainty calibration as it ignores the actual probability values.
 
@@ -408,9 +408,23 @@ __DistCE__ has been proposed as an additional evaluation for this notion of cali
 Perhaps future efforts will introduce further measures that combine the benefits of ranking and noise estimation for this notion of calibration.
 
 
+______
 
-## Takeaways
-We have run through the most common definition of calibration, the shortcomings of ECE and how several new notions of calibration exist. 
+
+<!-- ### Visual Overview of all Definitions -->
+
+<div class="row mt-2">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-calibration/calibration_overview.png" class="img-fluid rounded" %}
+    </div>
+</div>
+<div class="caption">
+    Image 15 | Visual Summary: Definitions at a Glance
+</div>
+
+## Final Thoughts
+
+We have run through the most common definition of calibration, the shortcomings of ECE and several new notions of calibration: multi-class, class-wise & human-uncertainty calibration. 
 We also touched on some of the newly proposed evaluation measures and their shortcomings.
 Despite several works arguing against the use of ECE for evaluating calibration, it remains widely used. 
 The aim of this blogpost is to draw attention to these works and their alternative approaches. 
