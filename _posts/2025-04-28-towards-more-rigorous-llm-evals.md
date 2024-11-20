@@ -602,15 +602,13 @@ Under this model, we have
 $$X_m^{8K} \sim \text{Bernoulli}\left(p_m^{8K}\right)$$ and $$X_m^{Symb} \sim \text{Bernoulli}\left(p_m^{Symb}\right)$$, where $$p_m^{8K}, p_m^{Symb} \in [0, 1]$$ are 
 our main parameters of interest.
 
-In this framework, the data analysed in <d-cite key=mirzadeh2024gsm></d-cite> consists of: 
-- 100 templates $$t_1, t_2, \dots, t_{100}$$ sampled independenty from $$\mathbb{P}_T$$
-- one sample $$v^{8K}_i$$ from each conditional $$\mathbb{P}^{8K}_{V \vert t_i}$$ for $$1 \leq i \leq 100$$
-- 50 i.i.d. samples $$v^{Symb}_{i, j}, 1\le j \le 50$$ from each conditional $$\mathbb{P}^{Symb}_{V \vert t_i}$$
-- for each of these and each model $$m$$ (in a pre-determined set of 25 models), the corresponding observations $$x^{8K}_{m,t_i}$$ and $$x^{Symb}_{m, t_i, j}$$ --- that is, whether model $$m$$ answered correctly the questions $$t_i(v^{8K}_i)$$ and $$t_i\left(v^{Symb}_{i, j}\right)$$, respectively.
-- the accuracy estimates $$\hat{p}_m^{8K} = \frac{1}{100}\sum_{i=1}^{100} x^{8K}_{m,t_i}$$ and 
-$$\hat{p}_{m, j}^{Symb} = \frac{1}{100}\sum_{i=1}^{100} x^{Symb}_{m,t_i, j}, \; 1 \leq j \leq 50$$.
-
-Note that only $$\hat{p}_m^{8K}$$ and the average $$\overline{\hat{p}_m^{8K}} = \frac{1}{50}\sum_{j=1}^{50}\hat{p}_{m, j}^{Symb}$$ are reported in the paper (Table 1, Appendix A.2 in <d-cite key=mirzadeh2024gsm></d-cite>).
+In this framework, we can describe the experimental setup of Mirzadeh et al. (2024) <d-cite key=mirzadeh2024gsm></d-cite> and the data obtained from it as follows: 
+- **Templates $T$**: 100 templates $$t_1, t_2, \dots, t_{100}$$ sampled independently from $$\mathbb{P}_T$$
+- **Filler-values $V^{8K}$**: one sample $$v^{8K}_i$$ from each conditional $$\mathbb{P}^{8K}_{V \vert t_i}$$ for $$1 \le i \le 100$$
+- **Filler-values $V^{Symb}$**: 50 i.i.d. samples $$v^{Symb}_{i, j}, 1\le j \le 50$$ from each conditional $$\mathbb{P}^{Symb}_{V \vert t_i}$$ for $$1 \le i \le 100$$
+- **Observed data**: for each of these sets of filler-values and each model $$m$$ (in a pre-determined set of 25 language models), we have corresponding observations $$x^{8K}_{m,t_i}$$ and $$x^{Symb}_{m, t_i, j}$$ --- that is, whether model $$m$$ answered correctly the questions $$t_i(v^{8K}_i)$$ and $$t_i\left(v^{Symb}_{i, j}\right)$$, respectively.<d-footnote>We note that this raw data is not made publicly available.</d-footnote>
+- **Accuracy estimates**: from these observations, maximum likelihood estimates can be computed as $$\hat{p}_m^{8K} = \frac{1}{100}\sum_{i=1}^{100} x^{8K}_{m,t_i}$$ and 
+$$\hat{p}_{m, j}^{Symb} = \frac{1}{100}\sum_{i=1}^{100} x^{Symb}_{m,t_i, j}, \; 1 \leq j \leq 50$$. We note that only $$\hat{p}_m^{8K}$$ and the average $$\overline{\hat{p}_m^{8K}} = \frac{1}{50}\sum_{j=1}^{50}\hat{p}_{m, j}^{Symb}$$ are reported in the paper (Table 1, Appendix A.2 in <d-cite key=mirzadeh2024gsm></d-cite>).
 
 Under the assumptions of this mathematical model, we can think of $$\hat{p}_m^{8K}$$ as an observation from a random variable $$\hat{P}^{8K}_m \sim \frac{1}{100}Bin\left(100,p^{8K}_m\right)$$. Similarly, each $$\hat{p}_{m, j}^{Symb}, \; 1 \le j \le 50$$ is an observation of $$\hat{P}^{Symb}_m \sim \frac{1}{100} Bin\left(100,p^{Symb}_m\right)$$, although we can't assume that these observations are independent, due to the shared templates.  
 
