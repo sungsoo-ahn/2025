@@ -614,13 +614,9 @@ Under the assumptions of this mathematical model, we can think of $$\hat{p}_m^{8
 
 Throughout this blogpost, the main question we've tackled is: given these observed $$\hat{p}_m^{8K}$$ and $$\overline{\hat{p}_m^{8K}}$$, what evidence is there to believe that $$p^{8K}_m \neq p^{Symb}_m$$ or that $$p^{8K}_m > p^{Symb}_m$$?
 
-## Computational resources:
-
-The extra analysis in this blog post (the addition task discussed in Section 4.1.1) was performed on a single L4 GPU (24GB RAM) on a Lightning AI Cloud instance.
-
 ## Clopper-Pearson confidence intervals
 
-For robustness purposes, here are the [Clopper-Pearson](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Clopper–Pearson_interval) confidence intervals as well:
+For robustness purposes, here are the [Clopper-Pearson](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Clopper–Pearson_interval) confidence intervals for the point estimates of $p_m$:
 <!-- {{< figure library="true" src="assets/img/2025-04-28-towards-more-rigorous-llm-evals/clopper_0.95.png" title="95% Clopper-Pearson intervals for the point estimates of $p_m$." numbered="false">}} -->
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/clopper_0.95.png" 
@@ -630,7 +626,8 @@ For robustness purposes, here are the [Clopper-Pearson](https://en.wikipedia.org
 %}
 
 
-The Clopper-Pearson CIs are slightly wider than those obtained using the Wilson score. Using Clopper-Pearson would not have changed any of the results presented in this post. 
+The Clopper-Pearson CIs are slightly wider than those obtained using the Wilson score.
+Using Clopper-Pearson would not have changed any of the results (qualitative or quantitative) presented in this post.
 
 <!-- ## Two-sample binomial proportion test
 
@@ -647,6 +644,7 @@ The test statistic ($p^{8K}_{m} - p^{Symb}_{m}$) / SE($p_{pool}$) is then approx
 The results: we are able to reject the null for Gemma-7b, Mistral-7b-instruct-v0.1 and Phi-2 (performing worse), and Llama3-8b (performing better).  -->
 
 ## 99% Confidence intervals
+For completeness, we include 99% confidence intervals for the point estimates of $$p_m$$:
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.99.png" 
@@ -662,9 +660,9 @@ The results: we are able to reject the null for Gemma-7b, Mistral-7b-instruct-v0
   caption="<b>99% Clopper-Pearson confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ estimated from the data reported in Table 1 in the appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
 %}
 
-## Logistic regression results
+## Logistic regression: full results
 
-Llama results:
+### Llama-3-8B-Instruct
 ```
 Call:
 glm(formula = correct ~ total_digits + carry, family = "binomial", 
@@ -687,7 +685,7 @@ AIC: 928.02
 Number of Fisher Scoring iterations: 7
 ```
 
-Phi results:
+### Phi-3.5-mini-Instruct
 ```
 Call:
 glm(formula = correct ~ total_digits + carry, family = "binomial", 
@@ -717,6 +715,11 @@ Paragraph about p-values should go somehwere. Things to say:
 - p-values get misinterpreted; Some "Don'ts" : don't base your conclusions solely on whether an association or effect was found to be “statistically significant”; Don’t believe that an association or effect exists just because it was statistically significant. Don’t believe that an association or effect is absent just because it was not statistically significant. Don’t conclude anything about scientific or practical importance based on statistical significance (or lack thereof).
 
 ## Should we include some notes on Bayesian analysis?
+
+## Computational resources
+
+The extra experiments in this blog post (the addition task discussed in Section 4.1.1) were performed on a single L4 GPU (24GB RAM) on a Lightning AI Cloud instance. 
+The statistical analysis (confidence intervals, p-values) was performed on a laptop.
 
 <!-- 
 ## Suggested workflow for evaluating language models
