@@ -125,8 +125,9 @@ The paper concludes that LMs “are not performing formal reasoning”.
 
 # 4. Critical analysis and re-evaluation
 
-**Note:** We run some additional simple, small-scale experiments to provide additional empirical evidence for our claims. 
-We will use two of the models that were evaluated in the paper: Llama-3-8B-Instruct and Phi-3.5-mini-Instruct.
+**Note:** 
+We run some additional small-scale experiments to provide empirical evidence for the claims we make in this post. 
+We use two of the models that were evaluated in the paper: Llama-3-8B-Instruct and Phi-3.5-mini-Instruct.
 All code will be made available on GitHub.
 
 
