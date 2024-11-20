@@ -293,7 +293,7 @@ The fundamental difference between Autoregressive Models (*e.g.,* EMU3, Chameleo
 | **Aspect**             | **Autoregressive Models**                                | **AR+Diffusion Models**                              |
 |-------------------------|---------------------------------------------------------|-----------------------------------------------------|
 | **Generative Strategy**  | Iteratively predicts the next token.                    | Predicting all tokens at once by iterative denoising. |
-| **Generative Fidelity** | Effective for token-based sequence. (*e.g.,* text).  | Superior for high-fidelity image and video generation.        |
+| **Generative Fidelity** | Effective for token-based sequence. (*e.g.,* text).  | Superior for high-fidelity image and video generation.    |
 | **Unified Framework**   | Simplifies multimodal unification via tokenization.     | Balances autoregressive and diffusion processes.        |
 | **Training Complexity** | Relatively efficient.                                   | More computationally demanding due to diffusion.    |
 | **Scalability**         | Scales well to large multimodal datasets.               | Requires careful balancing of AR and diffusion.     |
@@ -301,6 +301,15 @@ The fundamental difference between Autoregressive Models (*e.g.,* EMU3, Chameleo
 
 
 ### Discrete v.s. Continuous
+
+In a unified model, **discrete values** refer to categorical data (*e.g.,* tokens or words) predicted sequentially, while **continuous values** involve real-valued data (*e.g.,* pixels or audio signals) that are refined through a denoising process to generate high-quality outputs.
+
+| **Aspect**                  | **Discrete (e.g., Text)**                          | **Continuous (e.g., Images, Audio)**                 |
+|-----------------------------|----------------------------------------------------|------------------------------------------------------|
+| **Data Type**                | Categorical (text tokens).                        | Real-valued (pixels, audio signals, etc.).           |
+| **Primary Focus**            | Token-level generation (*e.g.,* text prediction).   | Continuous signal refinement (*e.g.,* image generation). |
+
+
 
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
