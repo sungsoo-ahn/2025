@@ -346,8 +346,31 @@ In autoregressive models, encoding an image with discrete values represents pixe
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
 
-## Challenges 
+## Challenges in Unified Multimodal Models 
+
+### 1. Technical Challenges
+
+* **Architecture Design Uncertainty**: Autoregressive or Autoregressive + Diffusion Hybrid or Alternative Architectures.
+
+* **Cross-modal Representation Alignment**: Aligning representations across diverse modalities (e.g., text, image, video, and audio) is non-trivial due to their fundamentally different structures.
 
 
-## Conclusion and Future Vision
+### 2. Data Challenges
 
+* **Multimodal Dataset Diversity**: Collecting and curating datasets that cover all relevant modalities, tasks, and domains is resource-intensive and often biased toward specific modalities (e.g., text-heavy datasets).
+
+* **Data Quality and Noise**: Large multimodal datasets often contain noisy or misaligned data, leading to suboptimal performance or spurious correlations.
+
+
+* **Modality Imbalance**: Some modalities, such as text, have abundant training data, while others, like video or audio, are relatively underrepresented, making balanced training challenging.
+
+### 3. Task-Specific Challenges 
+
+* **Balancing Task Generality and Specificity**: In certain specialized downstream tasks, the performance of current unified models falls significantly short compared to large models specifically designed and optimized for those tasks. For example, models like EMU3 and Chameleon currently appear to be far less capable than SORA and other specialized video generation models.
+
+* **Output Modality Compatibility**: Generating compatible outputs across multiple modalities (*e.g.,* synchronizing video frames with audio and text) can be difficult.
+
+
+## Conclusion
+
+Unified multimodal models hold immense potential to revolutionize AI by integrating diverse modalities and tasks into a single framework, enabling unprecedented versatility and generalization.  However, realizing this vision comes with significant challenges, including unresolved trade-offs in architecture design, the complexity of aligning diverse data, and balancing efficiency with scalability.  While current models demonstrate promising progress, their performance on specialized tasks often lags behind domain-specific models, highlighting the need for further innovation.  Future advancements will likely depend on the development of novel architectures that harmonize flexibility, task-specific optimization, and computational efficiency, paving the way for more robust and capable unified models.
