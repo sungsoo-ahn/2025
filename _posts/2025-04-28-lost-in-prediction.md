@@ -65,7 +65,7 @@ _styles: >
     font-weight: 400;
   }
   .highlight {
-    background-color: rgba(219, 164, 0, 0.7);
+    background-color: rgba(219, 164, 0, 0.3);
     font-weight: bold;
   }
 ---
