@@ -66,18 +66,22 @@ _styles: >
   }
   .highlight {
     background-color: #dba400;
+    font-weight: bold;
   }
 ---
 
 <script>
-  var toc = document.getElementsByTagName("d-contents")[0];
-  toc.style.position = 'fixed';
-  toc.style.transition = "transform 0.3s ease-out";
-
-  var y0 = toc.getBoundingClientRect().top + window.scrollY;
+  // Check if the screen is wide enough (e.g., 768px or more)
+  if (window.innerWidth > 768) {
+    var toc = document.getElementsByTagName("d-contents")[0];
+    toc.style.position = 'fixed';
+    toc.style.transition = "transform 0.3s ease-out";
   
-  window.addEventListener('scroll', function() {toc.style.transform = `translateY(${Math.max(0, window.scrollY - y0 + 180)}px)`;});
+    var y0 = toc.getBoundingClientRect().top + window.scrollY;
+    
+    window.addEventListener('scroll', function() {toc.style.transform = `translateY(${Math.max(0, window.scrollY - y0 + 180)}px)`;});
 </script>
+
 
 # What is Narrative Economics?
 
