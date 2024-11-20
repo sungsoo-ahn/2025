@@ -311,6 +311,8 @@ In a unified model, **discrete values** refer to categorical data (*e.g.,* token
 
 
 {% include figure.html path="assets/img/2025-04-28-unified-models/xfxc6-p9yvb.gif" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-unified-models/111.mp4" class="img-fluid" %}
+
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
 
