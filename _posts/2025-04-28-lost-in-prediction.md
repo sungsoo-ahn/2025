@@ -59,7 +59,7 @@ _styles: >
   d-article h1 {
     color: #0078d7 !important;
     font-weight: bold;
-    border-bottom: 3px solid #1d45a9 !important;
+    border-bottom: 3px solid #0078d7 !important;
   }
   d-article h2 {
     font-weight: 400;
