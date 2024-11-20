@@ -289,15 +289,15 @@ For the single-model paradigm, existing methods can primarily be categorized int
 
 The fundamental difference between Autoregressive Models (*e.g.,* EMU3, Chameleon) and AR+Diffusion Models (*e.g.,* Show-O, Transfusion) lies in their approach: Autoregressive Models still sequentially predict the next token across all modalities, while AR+Diffusion models combine autoregressive generation for discrete tokens (*e.g., text*) with diffusion processes for continuous data (*e.g.,* images and videos). The modeling differences between these two approaches are as follows:
 
-<aside class="l-body box-note" markdown="1">
+
 | **Aspect**             | **Autoregressive Models**                                | **AR+Diffusion Models**                              |
 |-------------------------|---------------------------------------------------------|-----------------------------------------------------|
-|**Generative Strategy**  | Iteratively predicts the next token.                    | Predicting all tokens at once by iterative denoising. |
-| **Generative Fidelity** | Effective for token-based one-dimensional sequence modalities. (*e.g.,* text).  | Superior for high-fidelity image and video generation.        |
+| **Generative Strategy**  | Iteratively predicts the next token.                    | Predicting all tokens at once by iterative denoising. |
+| **Generative Fidelity** | Effective for token-based sequence. (*e.g.,* text).  | Superior for high-fidelity image and video generation.        |
 | **Unified Framework**   | Simplifies multimodal unification via tokenization.     | Balances autoregressive and diffusion processes.        |
 | **Training Complexity** | Relatively efficient.                                   | More computationally demanding due to diffusion.    |
 | **Scalability**         | Scales well to large multimodal datasets.               | Requires careful balancing of AR and diffusion.     |
-</aside>
+
 
 
 ### Discrete v.s. Continuous
