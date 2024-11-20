@@ -7,34 +7,24 @@ date: 2025-04-28
 future: true
 htmlwidgets: true
 
-# anonymize when submitting 
 authors:
   - name: Anonymous 
 
-# must be the exact same name as your blogpost
 bibliography: 2025-04-28-anthropomorphism.bib  
 
-# Add a table of contents to your post.
-#   - make sure that TOC names match the actual section names
-#     for hyperlinks within the post to work correctly.
 toc:
   - name: Anthropomorphic AI System Behaviors Are Prevalent Yet Understudied
     subsections:
     - name: Growing Concerns about Anthropomorphic Systems
-  - A Call to Action for AI Researchers and Practitioners
+  - name: A Call to Action for AI Researchers and Practitioners
 ---
-
-# ... your blog post's content ...
-
 # "I Am the One and Only, Your Cyber BFF":<d-footnote>The title is inspired by a response that a Reddit user received when using the Pi chatbot <d-cite key="PiClaimsToBeChatGPT"></d-cite>.</d-footnote> Understanding the Impact of GenAI Requires Understanding the Impact of Anthropomorphic AI
 
 Anthropomorphism, or attributing human qualities to nonhuman entities, has played a fundamental role in the development of artificial intelligence (AI). From its nascence, the field has aimed to emulate human-like abilities of “learning” and “intelligence,” as exemplified by the Turing test and early books titled *Giant Brains or Machines that Think* <d-cite key="berkeley1949giant,dijkstra1985anthropomorphism"></d-cite>. This legacy continues with modern-day benchmarks on reasoning, problem-solving, and other human-like capabilities.
  
 As state-of-the-art generative AI systems exhibit anthropomorphic behaviors, i.e., outputs that are perceived to be human-like, the anthropomorphism of AI has only become more pervasive.  Despite growing concerns about negative consequences, anthropomorphism remains largely overlooked, underexamined, and vaguely defined in both the development and practice of AI. In this post, we argue that we cannot thoroughly understand the societal impacts of generative AI without understanding the impacts of anthropomorphic AI, and outline a call to action.
 
-
 ## Anthropomorphic AI System Behaviors Are Prevalent Yet Understudied
-
  
 In his 1985 lecture, Edsger Dijkstra lamented that anthropomorphism was rampant in computing science, with many of his colleagues perhaps not realizing how pernicious it was, and that "*it is not only the [computing] industry that suffers, so does the science*" <d-cite key="dijkstra1985anthropomorphism"></d-cite>.
 Indeed, anthropomorphism in how we talk about computing systems shapes how people understand and interact with AI and other computing systems <d-cite key="cheng-etal-2024-anthroscore,nass1994computers,reeves1996media"></d-cite>, and is thus at the core of understanding the impacts of these systems on individuals, communities, and society.
