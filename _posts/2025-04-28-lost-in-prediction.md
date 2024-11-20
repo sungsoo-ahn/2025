@@ -8,22 +8,22 @@ htmlwidgets: true
 hidden: false
 
 # Anonymize when submitting
-# authors:
-#   - name: Anonymous
-
 authors:
-  - name: Albert Einstein
-    url: "https://en.wikipedia.org/wiki/Albert_Einstein"
-    affiliations:
-      name: IAS, Princeton
-  - name: Boris Podolsky
-    url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
-    affiliations:
-      name: IAS, Princeton
-  - name: Nathan Rosen
-    url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
-    affiliations:
-      name: IAS, Princeton
+  - name: Anonymous
+
+# authors:
+#   - name: Albert Einstein
+#     url: "https://en.wikipedia.org/wiki/Albert_Einstein"
+#     affiliations:
+#       name: IAS, Princeton
+#   - name: Boris Podolsky
+#     url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
+#     affiliations:
+#       name: IAS, Princeton
+#   - name: Nathan Rosen
+#     url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
+#     affiliations:
+#       name: IAS, Princeton
 
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-lost-in-prediction.bib  
@@ -57,7 +57,7 @@ _styles: >
     font-size: 16px;
   }
   d-article h1 {
-    color: #1d45a9 !important;
+    color: #0078d7 !important;
     font-weight: bold;
     border-bottom: 3px solid #1d45a9 !important;
   }
@@ -65,7 +65,7 @@ _styles: >
     font-weight: 400;
   }
   .highlight {
-    background-color: #ffffc5;
+    background-color: #dba400;
   }
 ---
 
