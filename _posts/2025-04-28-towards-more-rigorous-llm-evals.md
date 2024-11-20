@@ -179,7 +179,7 @@ Accuracy (zero-shot) on a simple addition task. The larger model (Llama-3-8B-Ins
 </div> -->
 
 **Is performing arithmetic part of reasoning?** 
-Solving a word math problem consists of two steps: (1) translating the text to a sequence of operations, and (2) performing the operations correctly.
+Solving a math word problem consists of two steps: (1) translating the text to a sequence of operations, and (2) performing the operations correctly.
 Whilst the first step clearly requires reasoning ability, we argue that the second is more mechanical in nature and should not be considered as part of reasoning.
 To isolate "pure reasoning" capabilities, models could be provided with a calculator, which would help reduce (though not completely eliminate) the confounding effect of arithmetic errors.
 
@@ -354,7 +354,7 @@ In contrast, for the Phi-3.5-mini-instruct model, the effect is substantially la
 Interestingly, this difference is similar to the performance drop observed for this model on the GSM8K vs the GSM-Symbolic datasets, which is $5.9$ percentage points ($88.0\%$ on GSM8K vs $82.1\%$ on GSM-Symbolic).
 
 <!-- It is reasonable to expect that similar.. holds for all models. In other words, -->
-Based on the analysis for this question template, we argue that even if the models execute the "reasoning" process perfectly, i.e. they are able to correctly translate the word math problem into a sequence of arithmetic operations, they would still perform worse on the Symbolic template compared to our proposed template. 
+Based on the analysis for this question template, we argue that even if the models execute the "reasoning" process perfectly, i.e. they are able to correctly translate the math word problem into a sequence of arithmetic operations, they would still perform worse on the Symbolic template compared to our proposed template. 
 Extrapolating from this, we suggest that if similar systematic discrepancies are present in other templates, then some (for some models likely substantial) portion of the observed performance decline could be attributed to an increased frequency of arithmetic errors.
 
 **Note:** Using this analysis, we can conclude that the probability of successfully performing all arithmetic operations decreases exponentially as the number of arithmetic operations increases (more on this in Section 4.3).
@@ -507,7 +507,7 @@ We believe that this is precisely what we observe in Figure 6: the increase in v
 
 Regarding the decrease in probability of success itself, it is plausible that reasoning becomes more challenging as additional clauses are introduced, or conversely, easier when clauses are removed, as seen in the M1 template. 
 Importantly, as noted in Section 4.2.1, introducing more clauses necessarily involves more arithmetic operations, which in turn will result in an exponential decline in performance. 
-This decline will occur even if the models perfectly execute the "reasoning" process of translating the word math problem into a sequence of arithmetic operations.
+This decline will occur even if the models perfectly execute the "reasoning" process of translating the math word problem into a sequence of arithmetic operations.
 To distinguish between these two effects, a more detailed and thorough analysis will be needed.
 
 <!-- The extent to which the decrease in probability of success itself is related to the “reasoning abilities” or "pattern-matching abilities" of a model versus increased probability of making a mistake (as discussed in Section 4.2.1) is beyond the scope of this blog.  -->
@@ -550,16 +550,23 @@ I’d like to Alex Coca, Adam Goliński, Roumen Popov, and ... for their feedbac
 Here we more rigorously describe the mathematical lens which we use to analyse the results from <d-cite key="mirzadeh2024gsm"></d-cite>.
 First, we assume that the questions from GSM8k and GSM-Symbolic are obtained from the following data-generating process:
 
-1. We sample a _template_ $$T$$ from some distribution $$\mathbb{P}_T$$. A template here is defined in the sense of <d-cite key="mirzadeh2024gsm"></d-cite>, that is, it is a mathematical word problem, in which numerical values and certain other objects are
-marked as variables, to be filled-in later. 
-2. The template $$T$$ gives rise to a conditional distribution $$\mathbb{P}_{V\vert T}$$ over the admissible filler-values. We sample a set of such values $$V \sim \mathbb{P}_{V\vert T}(\cdot \vert T)$$ and plug them into the template, 
-producing a pair of a question and an answer $$\left(T(V)_Q, T(V)_A\right)$$.
+1. We sample a _template_ $$T$$ from some distribution $$\mathbb{P}_T$$. 
+A template here is defined in the sense of <d-cite key="mirzadeh2024gsm"></d-cite>, that is, it is a mathematical word problem, in which numerical values (e.g. number of toys) and certain other objects (e.g. names of people) are marked as variables, to be filled-in later. 
+2. The template $$T$$ gives rise to a conditional distribution $$\mathbb{P}_{V\vert T}$$ over the admissible _filler-values_. 
+We sample a set of such filler-values $$V \sim \mathbb{P}_{V\vert T}(\cdot \vert T)$$ and plug them into the template, producing a pair of a question and an answer $$\left(T(V)_Q, T(V)_A\right)$$.
 
-We are interested in whether a Language model $$m$$ answers a question correctly which we model by the random variable
-$$X_m \colon = \mathbb{I}\left(m(T(V)_Q) = T(V)_A\right)$$. The accuracy of a model $$m$$ is then $$p_m \colon = \mathbb{E}[X_m]$$ and the variable $$X_m$$ follows a $$Bernoulli(p_m)$$ distribution.
+We are interested in whether a language model $$m$$ answers a question correctly. 
+We model this with the random variable $$X_m$$, defined as 
 
-In fact, since we care about the difference in model performance on GSM8k and GSM-Symbolic, we postulate that we have two random variables  $$V^{8K}$$ and $$V^{Symb}$$, governed by (potentially) different conditional distributions $$\mathbb{P}^{8K}_{V \vert T}$$ and 
+$$X_m = \mathbb{I}\left(m(T(V)_Q) = T(V)_A\right),$$ 
+
+where $$\mathbb{I}$$ is the indicator function. 
+The accuracy of model $$m$$, denoted as $$p_m$$, is then the expected value of $$X_m$$, i.e., $$p_m = \mathbb{E}[X_m]$$. 
+The variable $$X_m$$ follows a $$\text{Bernoulli}(p_m)$$ distribution.
+
+In fact, since we care about the difference in model performance on GSM8K and GSM-Symbolic, we postulate that we have two random variables  $$V^{8K}$$ and $$V^{Symb}$$, governed by two conditional distributions $$\mathbb{P}^{8K}_{V \vert T}$$ and 
 $$\mathbb{P}^{Symb}_{V \vert T}$$, respectively. 
+These two distributions may be the same or different.
 
 This setup can be represented by the following directed probabilistic graphical model: 
 {% include figure.html 
@@ -589,8 +596,10 @@ This setup can be represented by the following directed probabilistic graphical 
 \end{document}
 -->
 
-where, for the purpose of this analysis, the bottom-most arrows denote deterministic dependencies. Under this model, we have
-$$X_m^{8K} \sim Bernoulli\left(p_m^{8K}\right)$$ and $$X_m^{Symb} \sim Bernoulli\left(p_m^{Symb}\right)$$, where $$p_m^{8K}, p_m^{Symb} \in [0, 1]$$ are 
+where, for the purpose of this analysis, the bottom-most arrows denote deterministic dependencies. [@MPK can you elaborate on this---maybe say this is ok because of how we sample from the models?]
+
+Under this model, we have
+$$X_m^{8K} \sim \text{Bernoulli}\left(p_m^{8K}\right)$$ and $$X_m^{Symb} \sim \text{Bernoulli}\left(p_m^{Symb}\right)$$, where $$p_m^{8K}, p_m^{Symb} \in [0, 1]$$ are 
 our main parameters of interest.
 
 In this framework, the data analysed in <d-cite key=mirzadeh2024gsm></d-cite> consists of: 
