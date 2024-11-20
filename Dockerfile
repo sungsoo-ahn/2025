@@ -1,4 +1,4 @@
-FROM docker.unsee.tech/ruby:latest
+FROM ruby:latest
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
