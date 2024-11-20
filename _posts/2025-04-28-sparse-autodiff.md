@@ -289,8 +289,6 @@ Just like forward-mode, reverse-mode is also matrix-free: **no intermediate Jaco
     Figure 5: Evaluating linear maps in reverse-mode.
 </div>
 
-<!-- TODO: should we add more text here? Not sure anything would be gained and it's notationally bothersome. -->
-
 ### From linear maps back to Jacobians
 
 The linear map formulation allows us to avoid intermediate Jacobian matrices in long chains of function compositions.
@@ -308,7 +306,7 @@ Thus, materializing the full $m \times n$ Jacobian requires one JVP with each of
     Figure 6: Forward-mode AD materializes Jacobians column-by-column.
 </div>
 
-As illustated in Figure 7, we can also **materialize Jacobians row by row** in reverse mode.
+As illustrated in Figure 7, we can also **materialize Jacobians row by row** in reverse mode.
 Unlike forward mode in Figure 6,
 this requires one VJP with each of the $m$ standard basis vectors of the **output space**.
 
@@ -343,7 +341,7 @@ We refer to linear maps as "sparse linear maps" if they materialize to sparse ma
     Figure 8: A sparse Jacobian and its corresponding sparse linear map.
 </div>
 
-Whene functions have many inputs and many outputs,
+When functions have many inputs and many outputs,
 a given output does not always depend on every single input.
 This endows the corresponding Jacobian with a **sparsity pattern**,
 where zero coefficients denote an absence of (first-order) dependency.
@@ -588,7 +586,7 @@ in which the original *primal computation* is propagated alongside index sets, c
 $$ \left\{j \;\Bigg|\; \dfdx{i}{j} \neq 0 \right\} $$
 
 for a given input $\mathbf{x}$. 
-These *local sparsity patterns* are strict subsets of global sparisty patterns,
+These *local sparsity patterns* are strict subsets of global sparsity patterns,
 and can therefore result in fewer colors.
 However, they need to be recomputed when changing the input.
 
@@ -675,13 +673,14 @@ Thus it is quite common to say that HVPs are computed with "forward over reverse
 The complexity of a single HVP scales roughly with the complexity of the function $f$ itself.
 
 The Hessian has a **symmetric** structure (equal to its transpose), which means that matrix-vector products and vector-matrix products coincide.
-This specifity can be exploited in the sparsity detection as well as in the coloring phase.
+This specificity can be exploited in the sparsity detection as well as in the coloring phase.
 
 ### Pattern detection
 
 Detecting the sparsity pattern of the Hessian is more complicated than for the Jacobian.
 This is because, in addition to the usual linear dependencies, we now have to account for **nonlinear interactions** between every pair of coefficients.
-For instance, if $f(x)$ involves a term of the form $x_1 + x_2$, it will not affect the Hessian. On the otherhand, a term $x_1 x_2$ will yield two equal non-zero coefficients, one at position $(1, 2)$ and one at position $(2, 1)$.
+For instance, if $f(x)$ involves a term of the form $x_1 + x_2$, it will not affect the Hessian. 
+On the other hand, a term $x_1 x_2$ will yield two equal non-zero coefficients, one at position $(1, 2)$ and one at position $(2, 1)$.
 Thus, the abstract interpretation system used for detection needs a finer classification of operators, to distinguish between locally linear ones (sum, max) and locally nonlinear ones (product, exp).
 
 ### Symmetric coloring
