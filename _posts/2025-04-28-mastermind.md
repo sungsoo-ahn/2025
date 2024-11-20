@@ -35,17 +35,21 @@ bibliography: 2025-04-28-mastermind.bib
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
 toc:
-  - name: Equations
-  - name: Images and Figures
+  - name: Abstract
+  - name: Introduction
     subsections:
     - name: Interactive Figures
-  - name: Citations
-  - name: Footnotes
-  - name: Code Blocks
-  - name: Diagrams
-  - name: Tweets
-  - name: Layouts
-  - name: Other Typography?
+  - name: MasterMind-Dou
+    subsections:
+    - name: Data Collection
+    - name: Training Pipeline
+  - name: MasterMind-Go
+    subsections:
+    - name: Data Collection
+    - name: Training and Inference Pipeline
+  - name: Experiments
+  - name: Discussion
+  - name: Conclusion
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
@@ -69,40 +73,33 @@ _styles: >
 
 ## Abstract
 
-Large Language Models (LLMs) have demonstrated remarkable capabilities across various fields, yet their reasoning ablities exhibit limitations. Recent studies indicate that incorporating programming code during the training stage can significantly enhance LLMs, attributed to its structured formats, long-term dependencies, and non-duality symbolic representations. Inspired by these works, we attempt to validate whether in decision-making games (for instance, Doudizhu and Go), code training data can play a similar role.  This is based on the intuition that decision-making data not only share similar advantages with code, but also demonstrates the diversity of reasoning logic, making it closer to real-world reasoning tasks. To assess the impact of game data on improving LLMs, we collect extensive offline datasets from two classic games, Doudizhu and Go, and develop a suite of techniques to seamlessly incorporate this data into LLMs' training, resulting in two novel agents named Mastermind-Dou and Mastermind-Go. The experimental findings reveal that, our Mastermind LLMs not only reach competitive levels in corresponding games but also display performance enhancements in unseen and general reasoning tasks.
+Large Language Models (LLMs) have exhibited impressive capabilities across numerous domains, yet they often struggle with complex reasoning and decision-making tasks. As playing games often requires a diversity of reasoning logic, we believe them good sandboxes to evaluate and boost the reasoning ability of LLMs. In this work, we first explore whether LLMs can master complex decision-making games through targeted post-training. To this end, we collect extensive offline datasets from two classic games, Doudizhu and Go, and develop a suite of techniques to effectively incorporate this data into LLM training, resulting in two novel agents: Mastermind-Dou and Mastermind-Go. Our experimental results demonstrate that these Mastermind LLMs achieve competitive performance in their respective games. Additionally, we explore whether integrating decision-making data can enhance the general reasoning abilities of LLMs. Our findings suggest that such post-training significantly improves certain aspects of reasoning, providing valuable insights for optimizing LLM pre-training data collection.
 
 ## Introduction
 
-Language serves as an important role in human communication and the reflection of intricate thought processes. In recent years, the advancement of large language models (LLMs) has made it possible for artificial intelligence to understand and master human language <d-cite key="brown2020language"></d-cite><d-cite key="chowdhery2023palm"></d-cite><d-cite key="touvron2023llama"></d-cite>, achieving human-level performance in various linguistic tasks <d-cite key="wang2019superglue"></d-cite><d-cite key="adiwardana2020towards"></d-cite>. Although modern LLMs can be applied to a variety of tasks in a zero-shot manner, their logical reasoning abilities remain less than satisfactory, due to the absence of a comprehensive understanding of tasks at a deep and holistic level <d-cite key="dziri2024faith"></d-cite>. To address this issue, researchers have conducted a vast array of distinct enhancements, including techniques like Self-Consistency (SC) <d-cite key="wang2022self"></d-cite> and Chain-of-Thought (CoT) <d-cite key="wei2022chain"></d-cite><d-cite key="kim2023cot"></d-cite>
+Language serves as an important role in human communication and the reflection of intricate thought processes. In recent years, the advancement of large language models (LLMs) has made it possible for artificial intelligence to understand and master human language <d-cite key="brown2020language"></d-cite><d-cite key="chowdhery2023palm"></d-cite><d-cite key="touvron2023llama"></d-cite>, achieving human-level performances in various linguistic tasks <d-cite key="wang2019superglue"></d-cite><d-cite key="adiwardana2020towards"></d-cite>. Although modern LLMs can be applied to a variety of tasks in a zero-shot manner, their logical reasoning abilities remain less than satisfactory, due to the absence of a comprehensive understanding of tasks at a deep and holistic level <d-cite key="dziri2024faith"></d-cite>. 
 
-Concurrently, some recent groundbreaking models, such as LLaMA <d-cite key="touvron2023llama"></d-cite> and Alpaca <d-cite key="alpaca"></d-cite>, owe a significant part of their progresses to the integration of code during training. These works argue that leveraging code data improves the intrinsic reasoning skills of foundation models.
-This claim is also supported by subsequent experiments showing that CoT further enhances this advantage <d-cite key="fu2022gptroadmap"></d-cite><d-cite key="wei2022chain"></d-cite>. However, exact mechanisms and causalities underlying this enhancement remain unclear.
-
-There are some intuitions about the relationship between training on code and enhancing reasoning abilities. 1) Pre-training provides LLMs with exposure to the logic inherent in programming languages, thus facilitating the development of systematic reasoning <d-cite key="ma2023training"></d-cite>. 2) The dependencies and data flow within code structures (e.g., curly brackets indicating scope) contribute to the model's capabilities on capturing long-term dependency <d-cite key="wang2022self"></d-cite><d-cite key="ma2023training"></d-cite>. 3) The deterministic nature of code execution ensures non-duality in output for the same input, mitigating ambiguity in LLMs' logical deductions.
-
-While code serve as structured and symbolic data, it may not enclose the full reasoning process and lack textual format diversity expressed in natural language <d-cite key="ma2023training"></d-cite>, which tends to be ambiguous. Consequently, adhering to the paradigm of training LLMs with code may be not enough to generalize across varied tasks. A natural question arises: Is there another alternative data source that can complement code, thereby elevating LLMs from the perspective of data quality and diversity?We find that decision-making game data  with appropriate textual representation could be one of the answers to provide more reasoning examples for LLMs.
-
-
+Research related to the reasoning capabilities of language models often focuses on code or mathematical problems. Researchers typically aim to evaluate and improve the reasoning capabilities of models on these tasks and have devised many approaches, including Self-Consistency (SC) <d-cite key="wang2022self"></d-cite> and Chain-of-Thought (CoT) <d-cite key="wei2022chain"></d-cite><d-cite key="kim2023cot"></d-cite>. However, while code and math serve as structured and symbolic data, it may not enclose the full reasoning process and lack textual format diversity expressed in natural language <d-cite key="ma2023training"></d-cite>, which tends to be ambiguous. Consequently, adhering to the paradigm of evaluating and boosting LLMs with code and math problems may be not enough to generalize across varied tasks. A natural question arises: *Is there another alternative tasks that can complement code and math, thereby better evaluating and elevating LLMs from the perspective of data quality and diversity?* We find that decision-making games  with appropriate textual representation could be one of the answers to provide more reasoning examples for LLMs.
 
 {% include figure.html path="assets/img/2025-04-28-mastermind/overview.png" class="img-fluid" %}
 
+Decision-making games, akin to code and math, usually posses a strict logical structure owing to its native mechanisms such as the state transition and the legal action range <d-cite key="zha2019rlcard"></d-cite>. And the reasoning process in games can usually be split into several stages, simulating humans' step-by-step reasoning process. Moreover, games often contain complex strategies that may involve hierarchical planning <d-cite key="levy2017hierarchical"></d-cite>, gambling operations <d-cite key="silver2017mastering"></d-cite>, cooperative and competitive multi-agent behaviours <d-cite key="lowe2017multi"></d-cite>, which can closely mirror reasoning strategies employed by humans. Additionally, responses from decision-making games under similar actions tend to exhibit consistency or follow a predictable distribution <d-cite key="silver2018general"></d-cite>, fostering stability in the reasoning process.
 
+Furthermore, game data exhibits a unique set of attributes. While code and math data often provides explicit information, game data include uncertainty and imperfect information, akin to real-world decision-making contexts. This imperfection can be further dynamically controlled when preparing training data for LLMs, as elucidated in the next section . Additionally, there are many available open-source agents on games <d-cite key="niu2024lightzero"></d-cite>, enabling automated data collection across diverse environments. And a variety of game simulators <d-cite key="brockman2016openai"></d-cite> allows for the customized generation of desired data. These properties not only diminish the requirements for manual annotation, but also enable the accumulation of larger training datasets for LLMs, which is easy to use for the development of more general agents. Moreover, many popular games like StarCraft <d-cite key="starcraft_ii"></d-cite> and DOTA2 <d-cite key="dota_2"></d-cite> necessitate multi-modal information, stochasticity modelling, and intricate game numerical design, which can therefore provide large models with multifaceted capability requirements.
 
-Decision-making game data, akin to code data, exhibit a strict logical structure owing to its native mechanisms such as the state transition and the legal action range <d-cite key="zha2019rlcard"></d-cite>. And the reasoning process in games can usually be split into several stages, simulating humans' step-by-step reasoning process. Moreover, games often contain complex strategies that may involve hierarchical planning <d-cite key="levy2017hierarchical"></d-cite>, gambling operations <d-cite key="silver2017mastering"></d-cite>, cooperative and competitive multi-agent behaviours <d-cite key="lowe2017multi"></d-cite>, which can closely mirror reasoning strategies employed by humans. Additionally, responses from decision-making games under similar actions tend to exhibit consistency or follow a predictable distribution <d-cite key="silver2018general"></d-cite>, fostering stability in the reasoning process.
-
-Furthermore, game data exhibits a unique set of attributes that distinguish it from code data. While code often provides explicit programmatic information, game data include uncertainty and imperfect information, akin to real-world decision-making contexts. This imperfection can be further dynamically controlled when preparing training data for LLMs, as elucidated in the next section . Additionally, there are many available open-source agents on games <d-cite key="niu2024lightzero"></d-cite>, enabling automated data collection across diverse environments. And a variety of game simulators <d-cite key="brockman2016openai"></d-cite> allows for the customized generation of desired data. These properties not only diminish the requirements for manual annotation, but also enable the accumulation of larger training datasets for LLMs, which is easy to use for the development of more general agents.
-
-To assess and substantiate the potential of decision-making games, we utilize some games to generate training datasets and then fine-tune LLMs with this kind of data. Each of these games can serve as a specialized sandbox environment for empowering LLMs' capabilities. However, it is imperative to recognize that many popular games like StarCraft <d-cite key="starcraft_ii"></d-cite> and DOTA2 <d-cite key="dota_2"></d-cite> necessitate a more advanced comprehension of multi-modal information, stochasticity modelling, and intricate game numerical design, so they are not suitable for current agents based on large language models. Within this context, Doudizhu and Go emerge as more reasonable choices and both of them have already established several powerful agents trained by reinforcement learning.
-
-Specifically, we initially collect datasets encompassing varying levels of strategies and game opponents. We meticulously implement some methods to convert the original game data to proper textual representations, such as the dynamic candidate actions and opponent responses in Doudizhu and the step-by-step natural language analysis in Go.
+In this paper, since we focus only on processing textual information, we conducted exploratory experiments on two tasks, Doudizhu and Go. These two games test incomplete information games and complex multi-step search capabilities, respectively. Unfortunately, we found that current language models performed poorly on these tasks, and could not even understand which strategies were valid, even if we used few-shot learning and determined the final strategy by calculating similarity. Therefore, we aim to train the model by collecting data so that it can master these two tasks.Specifically, we initially collect datasets encompassing varying levels of strategies and game opponents. We meticulously implement some methods to convert the original game data to proper textual representations, such as the dynamic candidate actions and opponent responses in Doudizhu and the step-by-step natural language analysis in Go.
 
 Moreover, we design two techniques to prevent the overfitting of LLMs to complicated game rules, thereby ensuring a focus on the core reasoning process. To address the issue posed by the imperfect information in Doudizhu, we co-train an opponent strategy prediction model to anticipate the most probable actions of opponents in the next turn, providing more insights for LLMs' following selections.
 
 For the accuracy of the score difference calculation in Go, we integrate some tool functions (like code interpreter <d-cite key="schick2024toolformer"></d-cite>). This integration serves to alleviate the cognitive burden on LLMs, enabling them to focus less on numerical details and more on developing a comprehensive game understanding.
+
 By adopting the above data collection and training techniques, we fine-tune some popular open-source LLMs and enhance their logic reasoning and game skills across various dimensions. We call derived models as Mastermind LLMs (agents). The main contributions can be summarized as follows:
 
-- We are the first to introduce the employment of decision-making games as a novel data source for LLMs. Compared to code, we identify the potential of game data and validate their effectiveness of improving the step-by-step reasoning capabilities.
+
+- We introduce decision-making games as a new data source for LLMs, highlighting their potential over code or math problems for enhancing step-by-step reasoning capabilities.
+
 - We have crafted a series of techniques to fine-tune LLMs on two games, Doudizhu and Go, which exhibit hierarchical analytical comprehension and powerful decision-making abilities.
+
 - We conduct thorough ablation experiments to analyze the design of our data collection and training pipeline. All the code, data, and trained agents will be released soon.
 
 ## MasterMind-Dou
@@ -112,7 +109,14 @@ Doudizhu, a popular Chinese card game played by three players, stands out as an 
 ### Data Collection
 
 **Card Textual Representation:**
-To simply and clearly represent the data in Doudizhu, we have chosen to build upon and refine the approach introduced in DouZero <d-cite key="zha2021douzero"></d-cite>. Specifically, each card is translated into an integer, and possible combinations of cards are represented as sorted lists of integers. This approach allows for the straightforward conversion of hand cards and legal actions, considering the complex and dynamically changing decision spaces in Doudizhu.
+To simply and clearly represent the data in Doudizhu, we have chosen to build upon and refine the approach introduced in DouZero <d-cite key="zha2021douzero"></d-cite>. Specifically, each card is translated into an integer, and possible combinations of cards are represented as sorted lists of integers. Their correspondences are listed as below:
+
+| **Card Face** | **Integer** | **Card Face** | **Integer** | **Card Face** | **Integer** | **Card Face**  | **Integer** |
+|---------------|-------------|---------------|-------------|---------------|-------------|----------------|-------------|
+| 3             | 3           | 4             | 4           | 5             | 5           | 6              | 6           |
+| 7             | 7           | 8             | 8           | 9             | 9           | 10             | 10          |
+| J             | 11          | Q             | 12          | K             | 13          | A              | 14          |
+| 2             | 17          | Black Joker   | 20          | Red Joker     | 30          |                |             |
 
 **Preliminary Filtering of Candidate Actions:**
 We discretize and simplify the action space by providing a list of legal actions, a critical step in reducing the complexity of the space that LLM need to consider when making decisions. However, the extensive legal action space in Doudizhu, exceeding 27,000 combinations, poses a challenge in context length and reasoning complexity for LLM. Furthermore, the fluctuating length of legal actions poses a significant obstacle for LLMs to develop adaptable strategies. To tackle this, we utilize a pre-trained Q network from DouZero to obtain the logits for each action and employ Top-$p$ sampling, choosing actions with a combined probability of 25%, thus reducing the action space size while preserving the optimal action sets for winning.
@@ -151,11 +155,26 @@ The format of query is:
 
 > If I play $$action$$, the next two players will play $$action_1$$, $$action_2$$ ... Therefore, I will play $$action$$
 
+Some example contents of these datasets can be viewed in the following table.
+
+<div class="l-page">
+  <iframe src="{{ 'assets/html/2025-04-28-mastermind/doudizhu_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
+</div>
+
 ## Mastermind-Go
 
 Complementing our exploration of Doudizhu, we extend our focus to Go as an additional domain to enhance the reasoning ability of LLMs. In the rules of Go, black and white pieces take turns to be placed on the board, with the ultimate goal of surrounding as large territories on the board as possible.  Compared to Doudizhu, Go possesses higher complexity both in rule and game strategy, thus it requires stronger logical reasoning ability. At the same time, since Go is played in two-dimensional board while the model can only accept one-dimensional sequential input, LLMs must perform implicit modeling of two-dimensional space. This requirement for sequential modeling ability even surpasses that of Doudizhu.
 
-Considering the complexity of Go, we design a curriculum of training tasks in a gradual and step-by-step progression. Our approach prioritizes the infusion of comprehensive thought processes into the LLM's cognitive capabilities underpinning gameplay. This principle is similar to procedure cloning <d-cite key="wei2022chain"></d-cite>, enabling the model to learn more about the underlying logic behind decision-making rather than the simple state-action mapping. This method also aligns with the concept of CoT, which encourages the model to solve problems via a systematic and step-by-step methodology, thereby enhancing its reasoning capabilities.
+To better introduce our design approach, we will first provide a brief overview of the rules of Go. In Go, two players, black and white, alternately place their stones on the intersections of a 19x19 board, with the goal of surrounding the most territory by the end of the game. Our analysis of the game situation can be broken down into several steps, as illustrated in the diagram below:
+
+- The top-left diagram shows the current state of the board, including all past moves made by both black and white players.
+- The top-right diagram shows the ownership status of each intersection on the board (occupied by black, white, or currently undetermined). It is important to note that even if an intersection is currently occupied by one side, it could potentially be reclaimed by the opponent in subsequent moves. This task requires a deep understanding of specific board areas, which may span multiple lines, in order to be executed accurately.
+- The bottom-left diagram presents the current difference in the number of territories held by black and white, as well as the win probability for black.
+- The bottom-right diagram contains a commentary on the current game situation. As can be seen, although black currently leads in territory, the win probability slightly favors white. This is because the black stones in the upper area are surrounded by white, giving white a potential opportunity to gain an advantage. Therefore, evaluating the win probability is a complex process that involves taking multiple factors into account.
+
+{% include figure.html path="assets/img/2025-04-28-mastermind/go_dataset.png" class="img-fluid" height="600px" width="600px"%}
+
+Through the above analysis, we can see that playing Go requires various types of logical reasoning skills and involves a lengthy process. Considering the this property, we design a curriculum of training tasks in a gradual and step-by-step progression. Our approach prioritizes the infusion of comprehensive thought processes into the LLM's cognitive capabilities underpinning gameplay. This principle is similar to procedure cloning <d-cite key="wei2022chain"></d-cite>, enabling the model to learn more about the underlying logic behind decision-making rather than the simple state-action mapping. This method also aligns with the concept of CoT, which encourages the model to solve problems via a systematic and step-by-step methodology, thereby enhancing its reasoning capabilities.
 
 {% include figure.html path="assets/img/2025-04-28-mastermind/go_pipeline.png" class="img-fluid" height="600px" width="600px"%}
 
@@ -185,6 +204,11 @@ The training sample thus adopts the following format:
 
 > The following is a game board of Go. ... Here is the board state: ... Please generate the corresponding explanations. ...
 
+Some example contents of these datasets can be viewed in the following table.
+
+<div class="l-page">
+  <iframe src="{{ 'assets/html/2025-04-28-mastermind/go_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
+</div>
 **Combined Training:**
 Finally, we combine the above data for training as a complete task to boost the LLM. In doing so, Mastermind-Go fully utilizes Go training data from various levels of thought, integrating all knowledge to deliver the optimal decision.
 
@@ -228,13 +252,23 @@ In terms of experimental setup, this study selected the LLaMA-2-7B model as the 
 
 To assess the performance of Doudizhu tasks, our evaluation concentrates on three primary metrics: alignment with expert data via action accuracy (**Act. Acc.**) and thought process matching (**CoT RLsum**), accuracy in forecasting the opponent's card-play probability (**Pred. Acc**). The results are listed in the following table.
 
-|                           | **Act. Acc. ↑** | **CoT. RLsum ↑** | **Pred. Acc. ↑** |
-| ------------------------- | --------------- | ---------------- | ---------------- |
-| LLaMA-2-7B                | 0%              | 0.52             | 0%               |
-| Mastermind-Dou w / o prob | 78%             | N/A              | N/A              |
-| Mastermind-Dou with prob  | **90%**         | **0.98**         | **39%**          |
+To facilitate a better comparison, we evaluated five different methods:
 
-Firstly, the performance on the Doudizhu task, as shown in the table above, demonstrates that the model, after training, has clearly acquired card-playing abilities and exhibits strong generalization capabilities. On previously unseen hands, the model achieves an 87% match with expert data and demonstrates a 98% similarity in thought processes. This indicates that the language model has not merely memorized specific card-playing strategies for certain scenarios but has learned an intrinsic logic of the Doudizhu game, showcasing excellent generalizability. 
+- LLaMA-2-7B (0-shot): Directly inputting the question into the model, allowing the model to generate subsequent thoughts and responses, predicting the final move strategy.
+- LLaMA-2-7B (few-shot): Providing several examples to the model as context, prompting the model to respond in a similar manner and give the final move strategy.
+- LLaMA-2-7B (few-shot): Selecting the most relevant action from all possible actions by calculating the similarity of embeddings, and using it as the final move strategy.
+- Mastermind-Dou w/o prob: Inputting the question into the model, which directly provides the final answer without intermediate reasoning.
+- Mastermind-Dou with prob: Inputting the question into the model, allowing the model to perform step-by-step intermediate reasoning and then provide a comprehensive final answer.
+
+|                                    | **Act. Acc. ↑** | **CoT. RLsum ↑** | **Pred. Acc. ↑** |
+| ---------------------------------- | --------------- | ---------------- | ---------------- |
+| LLaMA-2-7B (0-shot)                | 0%              | 0.52             | 0%               |
+| LLaMA-2-7B (few-shot)              | 21.18%          | N/A              | N/A              |
+| LLaMA-2-7B (few-shot + similarity) | 42.65%          | N/A              | N/A              |
+| Mastermind-Dou w / o prob          | 78%             | N/A              | N/A              |
+| Mastermind-Dou with prob           | **90%**         | **0.98**         | **39%**          |
+
+Firstly, the performance on the Doudizhu task, as shown in the table above, demonstrates that the model before training is not able to grasp the rule of such a card game, resulting in poor performances. After training, the model has clearly acquired card-playing abilities and exhibits strong generalization capabilities. On previously unseen hands, the model achieves an 90% match with expert data and demonstrates a 98% similarity in thought processes. This indicates that the language model has not merely memorized specific card-playing strategies for certain scenarios but has learned an intrinsic logic of the Doudizhu game, showcasing excellent generalizability. 
 
 Additionally, comparing the results with and without Chain-of-Thought (CoT) training reveals that incorporating a thought process can enhance the model's ability to generalize in its final decision-making. It is worth noting, however, that although the overall similarity in thought process is high, achieving perfect prediction of the entire thought chain is challenging, with an accuracy rate of only around 39%. This is likely due to Doudizhu's characteristic of imperfect information, where neither side can fully know the opponent’s hand, making it difficult to perfectly replicate the correct sequence of predictions about the opponent’s moves.
 
@@ -245,11 +279,13 @@ Additionally, comparing the results with and without Chain-of-Thought (CoT) trai
 | Mastermind-Dou with prob  | **90%**       | **41%**            |
 | DouZero (Expert)          | 90%           | 43%                |
 
-We further evaluated the trained agent by conducting match-ups with various open-source solutions, repeating each round 100 times. To ensure fair testing and eliminate the influence of teammate capabilities, our proposed agent was assigned the "landlord" role, while the two "farmer" roles were consistently filled by open-source agents. The results, as shown in the table above, indicate that our proposed agent demonstrates strong performance. Against RLCard as the opponent, our agent achieved a 90% win rate, effectively inheriting the expertise-level performance. Similarly, when pitted against the expert model DouZero<d-cite key="zha2021douzero"></d-cite>, it achieved a 41% win rate, which is very close to DouZero's own expert-level win rate limit of 43%.
+We further evaluated the trained agent by conducting match-ups with various open-source solutions, repeating each round 100 times. To ensure fair testing and eliminate the influence of teammate capabilities, our proposed agent was assigned the "landlord" role, while the two "farmer" roles were consistently filled by open-source agents. The results, as shown in the table above, indicate that the original model cannot even recognize which actions are legal. On the other hand, our proposed agent demonstrates strong performance. Against RLCard as the opponent, our agent achieved a 90% win rate, effectively inheriting the expertise-level performance. Similarly, when pitted against the expert model DouZero<d-cite key="zha2021douzero"></d-cite>, it achieved a 41% win rate, which is very close to DouZero's own expert-level win rate limit of 43%.
 
 Interestingly, analysis reveals that our agent is not merely imitating DouZero’s actions; its strategy is not always aligned with DouZero’s. In some situations, despite DouZero ultimately losing, our agent—using a different strategy—achieved victory. This suggests that the language model may indeed be learning certain high-level strategies rather than simply performing behavior cloning.
 
-[TODO: 或许应该加一局的 replay？视频格式]
+[TODO: agent 听从用户指令的视频]
+
+[TODO: mastermind 赢，但douzero没赢的replay]
 
 #### Go Tasks
 
@@ -273,8 +309,6 @@ The results show that the model accurately estimates the territorial scope for b
 
 {% include figure.html path="assets/img/2025-04-28-mastermind/go_example2.png" class="img-fluid" height="600px" width="600px"%}
 
-[TODO: 或许可以加一个展示效果的 html，点击不同的位置，可以反馈出不同的胜率、下一状态预测等。或者就用目前的图片形式也可？]
-
 #### General Reasoning Tasks
 
 To detect the improvement in reasoning ability of the model trained in decision-making games, we validate Mastermind LLMs on BIG-Bench Hard (BBH)<d-cite key="suzgun2022challenging"></d-cite>, a challenging reasoning dataset for LLM.
@@ -286,6 +320,8 @@ To detect the improvement in reasoning ability of the model trained in decision-
 | Mastermind-Go  | **20.40%**  | 29.45%      | **51.69%** | **39.20%**    | 51.60%     | **60.00%** |
 
 Firstly, we observed a significant performance improvement in the model on specific subsets following Mastermind training, as shown in the table above. This improvement appears most prominently in reasoning tasks that require long-sequence modeling, likely due to the demands of both Go and Doudizhu, which test the model’s ability to make accurate predictions over extended outputs. However, it is also worth noting that the model showed a performance decline on certain tasks, such as [TODO]. This decline is likely due to catastrophic forgetting, where certain capabilities were not reinforced during Mastermind training.
+
+[TODO: BBH 来一些下降的 case 以及原因解释]
 
 To fully address this issue, we believe that introducing these data into the pretraining phase may be necessary to enhance overall performance. However, due to resource constraints, we were unable to implement this idea in the current study, leaving it as a potential direction for future work.
 
@@ -299,6 +335,15 @@ We also conducted additional ablations on other types of large language models (
 | Gemma-7B | 0% | 0.44 |
 | Gemma-2B-Mastermind | 76.69%         | 0.97       |
 | Gemma-7B-Mastermind | **86.27%**     | **0.98**   |
+
+## Discussion
+
+Concurrently, some recent groundbreaking models, such as LLaMA <d-cite key="touvron2023llama"></d-cite> and Alpaca <d-cite key="alpaca"></d-cite>, owe a significant part of their progresses to the integration of code during training. These works argue that leveraging code data improves the intrinsic reasoning skills of foundation models.
+This claim is also supported by subsequent experiments showing that CoT further enhances this advantage <d-cite key="fu2022gptroadmap"></d-cite><d-cite key="wei2022chain"></d-cite>. However, exact mechanisms and causalities underlying this enhancement remain unclear.
+
+There are some intuitions about the relationship between training on code and enhancing reasoning abilities. 1) Pre-training provides LLMs with exposure to the logic inherent in programming languages, thus facilitating the development of systematic reasoning <d-cite key="ma2023training"></d-cite>. 2) The dependencies and data flow within code structures (e.g., curly brackets indicating scope) contribute to the model's capabilities on capturing long-term dependency <d-cite key="wang2022self"></d-cite><d-cite key="ma2023training"></d-cite>. 3) The deterministic nature of code execution ensures non-duality in output for the same input, mitigating ambiguity in LLMs' logical deductions. 
+
+While code serve as structured and symbolic data, it may not enclose the full reasoning process and lack textual format diversity expressed in natural language <d-cite key="ma2023training"></d-cite>, which tends to be ambiguous. Consequently, adhering to the paradigm of training LLMs with code may be not enough to generalize across varied tasks. A natural question arises: Is there another alternative data source that can complement code, thereby elevating LLMs from the perspective of data quality and diversity?
 
 ## Conclusion
 
