@@ -310,7 +310,7 @@ In a unified model, **discrete values** refer to categorical data (*e.g.,* token
 | **Primary Focus**            | Token-level generation (*e.g.,* text prediction).   | Continuous signal refinement (*e.g.,* image generation). |
 
 
-
+{% include figure.html path="assets/img/2025-04-28-unified-models/xfxc6-p9yvb.gif" class="img-fluid" %}
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
 
