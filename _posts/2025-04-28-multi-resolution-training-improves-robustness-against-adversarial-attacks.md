@@ -29,7 +29,7 @@ authors:
 #       name: IAS, Princeton 
 
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-Multi-Resolution-Training.bib  
+bibliography: 2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
