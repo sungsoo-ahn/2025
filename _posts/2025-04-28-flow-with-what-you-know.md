@@ -1453,10 +1453,8 @@ Normalizing flows have the property that they preserve overall probability throu
 
 
 # Summary
-
-We've seen that flow matching and rectified flow models can be conceptualized and even developed using some simple ideas from basic physics. This simplicity, coupled with their power and flexibility have fueled their popularity and even rise to state-of-the-art levels.  
-
-Hopefully, after having read this, you will be better able to  follow the rapid progress in flow-based generative AI in terms of both scholarly and industry output, as well as to have the confidence to expand on these ideas in your own investigations!
+ 
+We've seen that flow matching and rectified flow models can be conceptualized and developed using simple ideas from basic physics. This simplicity, coupled with their power and flexibility, has fueled their rise to state-of-the-art performance. While the toy problem presented here is less demanding than applications like high-resolution image synthesis (for which readers should consult relevant literature<d-cite key="flux_paper"></d-cite>), we hope this introduction has developed your intuition for flow-based generative models. This foundation should help you follow the rapid progress in both academic and industry developments, and give you the confidence to expand on these ideas in your own investigations!
 
 
 
