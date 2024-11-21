@@ -22,7 +22,6 @@ bibliography: 2025-04-28-pcd.bib
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
 toc:
-  - name: "Abstract"
   - name: "Background"
   - name: "Rank Collapse For Long Context Models"
   - name: "Improving Long Range Awareness by low-frequency Perturbation"
@@ -54,65 +53,63 @@ _styles: >
 ## Improving LLM’s Long Range Awareness via Positional Contrastive Decoding
 
 ## Background
-Over the years, the official claimed context length of large language models has gradually increased. Starting from the release of GPT-3.5-Turbo of 16k length on November 6, 2023, commercial models reached support for 128k tokens by early 2024. In the case of open-source models，the release of Llama 3.1 by July 2024 signified the 8-billion-parameter models that could reliably handle contexts of 128k tokens <d-cite key="dubey2024llama"></d-cite>. By mid-2024, nearly all cutting-edge models had adopted 128k tokens as the standard context length.
+The official claimed context length of large language models has gradually increased. Starting from the release of GPT-3.5-Turbo of 16k length on November 6, 2023, commercial models reached support for 128k tokens by early 2024. In the case of open-source models, the release of Llama 3.1 by July 2024 signified the 8-billion-parameter models that could reliably handle contexts of 128k tokens <d-cite key="dubey2024llama"></d-cite>. By mid-2024, nearly all cutting-edge models had adopted 128k tokens as the standard context length.
 
 {% include figure.html path="assets/img/2025-04-28-pcd/image.png" class="img-fluid rounded z-depth-1" %}
 
-However, the effective length of the models falls significantly short of the  claimed length. To evaluate the real capabilities of long-context models, benchmarks typically include retrieval tasks, multi-hop tracking tasks, information aggregation, multi-document question answering, multilingual tasks, and code comprehension. In the RULER benchmark <d-cite key="hsieh2024ruler"></d-cite>, it has been observed that open-source models claiming context lengths of 128k tokens or more generally struggle to maintain effective context lengths beyond 32k tokens. Similarly, in multilingual long-text evaluations <d-cite key="hengle2024multilingual"></d-cite>, open-source models such as Llama3-8B demonstrate effective context lengths between 4k and 8k tokens, falling significantly short of the 128k target. Moreover, the performance of existing models on the Infinite Bench <d-cite key="zhang2024bench"></d-cite> remains far below expectations across various tasks. For instance, in tasks such as Math.Calc and code debugging/running, most models achieve near-zero performance scores.
+However, the effective length of the models falls significantly short of the  claimed length. To evaluate the real capabilities of long-context models, benchmarks typically include retrieval tasks, multi-hop tracking tasks, information aggregation, multi-document question answering, multilingual tasks, and code comprehension. In the RULER benchmark <d-cite key="hsieh2024ruler"></d-cite>, it has been observed that open-source models claiming context lengths of 128k tokens struggle to maintain effective context lengths beyond 32k tokens. Similarly, in multilingual long-context benchmark <d-cite key="hengle2024multilingual"></d-cite>, open-source models such as Llama3-8b demonstrate effective context lengths between 4k and 8k tokens, falling significantly short of the 128k target. Moreover, the performance of existing models on the Infinite Bench <d-cite key="zhang2024bench"></d-cite> remains far below expectations across various tasks. For instance, in tasks such as Math.Calc and code debugging/running, most models achieve near-zero performance scores.
 
-Several studies have explored the reasons why performance degrade within the claimed context length of long-context models. The "lost in the middle" <d-cite key="liu2024lost"></d-cite> reveals that models often focus on the beginning and end of inputs while neglecting middle parts. The InfiniteBench <d-cite key="zhang2024bench"></d-cite> findings contradict the "lost only in the middle" phenomenon, showing that performance degradation in long-context models is not consistently linked to the middle of the input. Instead, it can occur at any point within the context. Furthermore, the "Know but Don’t Tell" hypothesis <d-cite key="lu2024insights"></d-cite> suggests a disconnect between information retrieval and generation. While LLMs can encode the locations of critical information internally, they often fail to utilise this information in outputs. Probing analysis shows that models accurately identify key information in hidden representations but struggle to effectively use it during generation. In addition to these findings,  LongLLAMA <d-cite key="tworkowski2024focused"></d-cite> identifies that Transformers, when handling long context or multi-document inputs, struggle to distinguish important content from irrelevant information, limiting the effectiveness of the attention mechanism.
+Several studies have delved into mechanisms and causes that lead to performance degradation within the claimed context length of long-context models. The "lost in the middle" <d-cite key="liu2024lost"></d-cite> reveals that models often focus on the beginning and end of corpus while neglecting middle parts. Based on it, InfiniteBench <d-cite key="zhang2024bench"></d-cite> findings that performance degradation in long-context models is not consistently linked to the middle of the input. Instead, it can occur at any location within the context. Furthermore, the "Know but Don’t Tell" hypothesis <d-cite key="lu2024insights"></d-cite> suggests a disconnect between information retrieval and generation. Probing analysis shows that models accurately identify key information in hidden representations but struggle to effectively use it during generation. In addition to these findings,  LongLLAMA <d-cite key="tworkowski2024focused"></d-cite> identifies that Transformers, when handling long context or multi-document inputs, struggle to distinguish important content from irrelevant information, limiting the effectiveness of the attention mechanism.
 
-This blog presents a new perspective by examining logits dynamics across different input lengths. Through a detailed, token-level analysis, we identify a phenomenon termed "Rank Collapse," which indicates that the predicted ranking of the correct token tends to statistically deteriorate as the input length increases when task difficulty remains constant.
+This blog presents a new perspective by examining logits dynamics across different input lengths. Through the token-level analysis, we identify a phenomenon termed "Rank Collapse," which indicates that the predicted ranking of the correct token tends to statistically deteriorate as the input length increases when task difficulty remains constant.
+
 ## Rank Collapse For Long Context Models
+To investigate the effect of input length on logits and identify the patterns exhibited by the logits, we designed a key-value retrieval experiment, in which models are required to retrieve the corresponding value for a provided key from a large key-value dictionary.
 
-### Definition
-
-**Rank Collapse** refers to a phenomenon where the predicted ranking of the correct token degrades statistically as the input text length increases, even though the task difficulty remains unchanged.  
-
-### Metrics
-
-To evaluate this problem, the **Mean Reciprocal Rank (MRR)** is employed, a statistical metric commonly used in retrieval systems to measure the effectiveness of retrieval results. The formula for MRR is as follows:
-
+The **Mean Reciprocal Rank (MRR)**, a statistical metric commonly used in retrieval systems to measure the effectiveness of retrieval results, is leveraged to quantify logits pattern. The formula for MRR is as follows:
 $$
 \operatorname{MRR}=\frac{1}{|Q|} \sum_{i=1}^{|Q|} \frac{1}{\operatorname{rank}_{i}}
 $$
+where $$Q$$ represents the number of retrieval attempts, and $$rank_i$$ denotes the rank of the correct answer.
 
-where $Q$ represents the number of retrieval attempts, and $rank_i$ denotes the rank of the correct answer.
-The figure illustrates the phenomenon of Rank Collapse. The model used is Gradient AI's Llama 3 with 262k parameters, and the dataset is a key-value retrieval where both keys and values are random strings. Given a large dictionary, the model retrieves the corresponding value based on the provided key. For each input length, 100 cases were tested. The figure shows the $MRR$ of incorrect cases, meaning the ranking of the label's corresponding token among probabilities in all incorrect predictions. Considering that the overall accuracy and the accuracy of the first token are nearly identical, the ranking of the first token is used here to represent the entire response.
+**Rank Collapse** refers to a phenomenon where the predicted ranking of the correct token degrades statistically as the input text length increases, even though the task difficulty remains unchanged.  
 
+The figure below illustrates the phenomenon of Rank Collapse, depicting the MRR for all incorrect cases. This observation is based on Gradient AI's Llama-3-8B model, which reportedly supports an input length of 262k tokens.
+For each asigned input length, 100 test cases were evaluated.  Considering that the overall accuracy and the accuracy of the first token are nearly identical, the ranking of the first token is used to represent the entire response. For each test case, the ranking of the label's first token among the predicted probabilities is used for the $$MRR$$ calculation.
 {% include figure.html path="assets/img/2025-04-28-pcd/image_1.png" class="img-fluid rounded z-depth-1" %}
+As the sample length increases from 1k to 26k, the MRR gradually decreases from 0.5 to approximately 1/3. This indicates that in incorrect predictions, the average rank of the correct token drops from 2nd to 3nd. 
 
-As the sample length increases from $1k$ to $26k$, the $MRR$ gradually decreases from $0.5$ to approximately $1/3$. This indicates that in incorrect predictions, the average rank of the correct token drops from $2nd$ to $3nd$. By listing the token ranks for $100$ cases at each length, it can be observed that in the vast majority of incorrect examples, the correct token's position is at most rank 8.
+The figure below shows the progression of the top 100 token values at each length. The x-axis represents the vocabulary IDs, where, for simplicity in plotting, the first 100 tokens are selected from the 128,256 IDs and transformed into a range from 1 to 100 in ascending order. It can be observed that, as the length increases, the probability associated with the correct token decreases, reaching its lowest value at 26k, where the correct token is ranked at most 5th.
 
 {% include figure.html path="assets/img/2025-04-28-pcd/image_2.png" class="img-fluid rounded z-depth-1" %}
-
-The figure below illustrates the logits of the top 100 tokens as the context length progressively increases. Blue indicates tokens with higher rankings, whereas red represents the label token. For the purpose of analysis, only the top 100 token IDs from the entire vocabulary are selected, and these token IDs are normalized to the range of 0 to 99 in ascending order based on their original vocabulary IDs.
 
 {% include figure.html path="assets/img/2025-04-28-pcd/image_3.png" class="img-fluid rounded z-depth-1" %}
 
 {% include figure.html path="assets/img/2025-04-28-pcd/10.gif" class="img-fluid rounded z-depth-1" %}
 
-In observing attention distraction under length-induced ranking degradation, it is evident that as the input length increases, the number of incorrect tokens rises while the MRR value decreases. This indicates that the correct answer's rank is gradually lowering but still remains within the top 10. This observation suggests that although the predicted result may be incorrect, the model inherently prioritizes the correct answer, which is positioned near the top in the decoding space. However, due to insufficient confidence, the correct answer is not generated. **This raises the question of whether it is possible to design a decoding strategy that can elevate the rank of the correct token within the decoding space.**
+Rank Collapse reveals that as the input length increases, even though the number of incorrect tokens rises (resulting in a decrease in MRR), the rank of the correct answer gradually declines yet still retains a prominent position within the decoding space.This observation suggests that although the predicted result may be incorrect, the model inherently prioritizes the correct answer, which is positioned near the top in the decoding space. However, due to insufficient confidence, the correct answer is not generated. **This raises the question of whether it is possible to design a decoding strategy that can elevate the rank of the correct token within the decoding space.**
 
 ## Related Works
 
 To augment the long-range awareness of Large Language Models (LLMs), research has primarily focused on four strategies: input design, instruction design, model-driven methods, and data-driven methods. 
 
-Input design, specifically, involves methods such as segment reranking <d-cite key="dsouza2024evaluating, peysakhovich2023attention"></d-cite>, which aims to mitigate the inherent location bias of transformers by rearranging input segments to prioritize pertinent information during inference. However, this approach suffers from the drawbacks of disrupting semantic coherence and incurring significant computational expenses due to the necessity for multiple inferences. Instruction design <d-cite key="zhang2024bench, yu2023paraphrasing">, employs context recalling, prompting the model to access relevant information before completing a task. Despite its potential to remind the model to retrieve information, context recalling does not inherently enhance long-range awareness. Model-driven methods address long-range awareness by modifying attention mechanisms or positional encodings to diminish attention bias and bolster long-distance awareness. For instance, attention calibration techniques segment attention into local and global encodings to achieve a balanced focus <d-cite key="zhang2024found, hsieh2024found"></d-cite>. However, these modifications necessitate retraining the model, which is not only costly but also poses challenges to maintaining stability and generalizability. Data-driven methods, which involve training on synthetic or multi-document QA datasets, have demonstrated efficacy in improving retrieval accuracy <d-cite key="dataartificial, an2024make"></d-cite>. Nevertheless, the high cost of annotating long-form datasets poses a significant barrier to obtaining high-quality, large-scale training corpora.
+Input design, specifically, involves methods such as segment reranking <d-cite key="dsouza2024evaluating, peysakhovich2023attention"></d-cite>, which aims to mitigate the inherent location bias ("lost in the middle") of transformers by rearranging input segments to balance the attention across different positions during inference. However, rearranging suffers from disrupting semantic coherence and incurring computational expenses due to the necessity for multiple inferences and averaging. 
+Instruction design, such as context recalling <d-cite key="zhang2024bench, yu2023paraphrasing"></d-cite>, involves prompting the model to recall and generate relevant information before completing a task. Despite its potential to remind the model to retrieve information, context recalling does not inherently enhance long-range awareness. Model-driven methods address long-range awareness by optimize attention mechanisms or positional encodings to mitigate location bias. For instance, multi-scale positional encoding is designed to balance local and global modeling capability <d-cite key="zhang2024found, hsieh2024found"></d-cite>. However, model driven methods are not only costly but also poses challenges to maintaining stability and generalizability. Data-driven methods, which involve training on synthetic or multi-document QA datasets, have demonstrated efficacy in improving retrieval accuracy <d-cite key="dataartificial, an2024make"></d-cite>. Nevertheless, the extensive time requirements, high difficulty, and significant costs associated with annotating long-form datasets present a major barrier to acquiring high-quality, large-scale training corpora.
 
-Based on the preceding discuss of Rank Collapse, it can be observed that the correct tokens are typically positioned very high in the decoding space. The observation holds significant potential for enhancing long-range awareness and improving rank by devising a decoding strategy that promotes the positioning of these tokens higher in the decoding space.
+
+Based on the preceding discussion of Rank Collapse, it can be observed that the correct tokens are generally ranked near the top of the decoding space. This observation holds potential for improving long-range awareness and could contribute to improving the ranking of these tokens within the decoding space by devising an appropriate decoding strategy.
 
 ## Improving Long Range Awareness by low-frequency Perturbation
 
-Long-Distance Awareness ****is affected by models' positional encodings (PEs) <d-cite key="su2024roformer, press2021train, chi2022kerple"></d-cite>, which are designed with long-term decay: the farther a token is from the current position, the less relevant its information. The high-frequency encoding is primarily responsible for local modeling, while the low-frequency encoding is responsible for global modeling.
+Long-Distance Awareness is affected by models positional encodings <d-cite key="su2024roformer, press2021train, chi2022kerple"></d-cite>, which are designed with long-term decay: the farther a token is from the current position, the less relevant its information. The high-frequency encoding is primarily responsible for local modeling, while the low-frequency encoding is responsible for global modeling. **Improving the model's global modeling capacity requires enhancing the contribution of the low-frequency signal $$F_l$$.**
 
-Assuming a function $G$ takes the high-frequency encoding $F_h$ and low-frequency encoding $F_l$ of the positional encoding as inputs, and outputs the model’s $\text{logits} = G(F_h, F_l)$. Improving the model's global modeling capacity requires enhancing the contribution of the low-frequency signal $F_l$. 
+Assuming a function $$G$$ takes the high-frequency encoding $$F_h$$ and low-frequency encoding $$F_l$$ of the positional encoding as inputs, and outputs the model’s logit $$\mathbf{L} = G(F_h, F_l)$$. 
 
-One way involves amplifying the influence of low-frequency encoding, which is accomplished by the standard produce of long context training. The other way introduces perturbations to adjust the signal without additional training costs. It offers two options: 
+One way involves amplifying the influence of low-frequency encoding, which is accomplished by the standard long context training. The other approach takes an inverse perspective, introducing perturbations: 
 
-(1) Directly perturbing high-frequency encoding to indirectly amplify long-distance awareness: A perturbation $\epsilon_h$ is added into high-frequency encoding as $F_h' = F_h + \epsilon_h$. Then the logits expressed as $\mathbf{L} = G(F_h', F_l)$. However, it is important to emphasize that introducing disturbances to the high-frequency encoding will seriously lead to model collapse.
+(1) Directly perturbing high-frequency encoding to indirectly amplify long-distance awareness: A perturbation $$\epsilon_h$$ is added into high-frequency encoding as $$F_h' = F_h + \epsilon_h$$. Then the logits expressed as $$\mathbf{L} = G(F_h', F_l)$$. However, it is important to emphasize that introducing disturbances to the high-frequency encoding will seriously lead to model collapse.
 
-(2) Initially involving a temporary perturbation of low-frequency encoding, followed by contrastive decoding to reversely amplify long-distance awareness: Perturbing the low-frequency encoding $F_l$, where a perturbation $\epsilon_l$ is added, as $F_l' = F_l + \epsilon_l$. The logits are expressed as $$\mathbf{L}_0 = G(F_h, F_l + \epsilon_l)$$, and the corrected logits $$\mathbf{L}_\alpha$$ are computed as $$\mathbf{L}_\alpha = (1 + \beta) \cdot \mathbf{L}_0 - \beta \cdot {\mathbf{L}}_\delta$$. 
+(2) Initially involving a temporary perturbation of low-frequency encoding, followed by contrastive decoding to reversely amplify long-distance awareness: Perturbing the low-frequency encoding $$F_l$$, where a perturbation $$\epsilon_l$$ is added, as $$F_l\prime = F_l + \epsilon_l$$. The logits are expressed as $$\mathbf{L}_0 = G(F_h, F_l + \epsilon_l)$$, and the corrected logits $$\mathbf{L}_\alpha$$ are computed as $$\mathbf{L}_\alpha = (1 + \beta) \cdot \mathbf{L}_0 - \beta \cdot {\mathbf{L}}_\delta$$. 
 
 Based on the analysis, directly enhancing long-distance capabilities requires training with long-text data, while perturbing the high-frequency encoding can lead to model collapse. However, perturbing the low-frequency encoding followed by contrastive decoding, as a prospective strategy, enhances long-distance awareness without compromising the model's base capabilities.
 
@@ -120,7 +117,7 @@ Based on the analysis, directly enhancing long-distance capabilities requires tr
 
 ### 1. Perturbative Positional Encoding in Low-Frequency encodings
 
-The Rotary Position Embedding utilizes a rotation matrix $R_{\Theta, m}^{d}$ to encode positional information by rotating word embeddings based on their position index $m$. For a given dimension $d$, the rotation matrix $R_{\Theta, m}^{d}$ can be defined as follows:
+The Rotary Position Embedding (RoPE) utilizes a rotation matrix $$R_{\Theta, m}^{d}$$ to encode relative positional information by rotating word embeddings based on their position index $$m$$. For a given dimension $$d$$, the rotation matrix $$R_{\Theta, m}^{d}$$ can be defined as follows:
 
 $$
 f_{\{q,k\}}(\mathbf{x}_m, m) = R_{\Theta, m}^{d} \mathbf{W}_{\{q,k\}} \mathbf{x}_m
@@ -141,9 +138,9 @@ R_{\Theta, m}^{d} =
 \end{pmatrix}
 $$
 
-where  $\Theta = \{ \theta_i = 10000^{-2(i-1)/d}, i \in [1, 2, \ldots, d/2] \}$. The high-frequency part predominantly contribute to local modeling, while the low-frequency part is mainly responsible for global modeling.
+where  $$\Theta = \{ \theta_i = 10000^{-2(i-1)/d}, i \in [1, 2, \ldots, d/2] \}$$. The high-frequency part predominantly contribute to local modeling, while the low-frequency part is mainly responsible for global modeling.
 
-The positional perturbation is added to the low-frequency encodings (the first half) to obtain a noisy rotation matrix $R_{\Theta, m}^{\prime d}$. Let $\sigma$ be the standard deviation of the noise (e.g., $\sigma = 0.03$). We define random noise vectors $\epsilon_{\cos}$ and $\epsilon_{\sin}$ for the low-frequency encodings only: $\epsilon_{\cos} \sim \mathcal{N}(0, \sigma^2), \quad \epsilon_{\sin} \sim \mathcal{N}(0, \sigma^2)$. We add this noise only to the first half of the cosine and sine encodings of the rotation matrix $R_{\Theta, m}^{d}$, resulting in the noisy rotation matrix:
+The positional perturbation is added to the low-frequency encodings (the first half) to obtain a noisy rotation matrix $$R_{\Theta, m}^{\prime d}$$. Let $$\sigma$$ be the standard deviation of the noise (e.g., $$\sigma = 0.03$$). We define random noise vectors $$\epsilon_{\cos}$$ and $$\epsilon_{\sin}$$ for the low-frequency encodings only: $$\epsilon_{\cos} \sim \mathcal{N}(0, \sigma^2), \quad \epsilon_{\sin} \sim \mathcal{N}(0, \sigma^2)$$. We add the perturbation to the first half of the cosine and sine encodings of the rotation matrix $$R_{\Theta, m}^{d}$$, thereby producing the perturbative rotation matrix:
 
 $$
 R_{\Theta, m}^{\prime d} = 
@@ -154,93 +151,60 @@ R_{\Theta, m}^{d} & \text{otherwise}
 \end{pmatrix}
 $$
 
-where $\epsilon_{\cos}$ and $\epsilon_{\sin}$ affect only the low-frequency encodings ($i \leq d/2$), while the remaining encodings remain unchanged. $R_{\Theta, m}^{d,\cos}$ and $R_{\Theta, m}^{d, \sin}$ represent the cosine and sine parts of the positional encoding, respectively.
+Here, $$\epsilon_{\cos}$$ and $$\epsilon_{\sin}$$ affect only the low-frequency encodings ($$i \leq d/2$$), while the rest of the encodings remain unchanged. $$R_{\Theta, m}^{d,\cos}$$ and $$R_{\Theta, m}^{d, \sin}$$ represent the cosine and sine parts of the positional encoding, respectively.
 
 ### 2. Calculating Perturbative Logits
 
-Using the noisy rotation matrix, we compute the noisy positional embeddings. Let the input vectors be $\mathbf{x}_m$ and $\mathbf{x}_n$, then the noisy query and key vectors are:
+Given input vectors $$\mathbf{x}_m$$ and $$\mathbf{x}_n$$, the perturbed query and key vectors are:
 
 $$
 \tilde{\mathbf{q}}_m = R_{\Theta, m}^{d} \mathbf{W}_q \mathbf{x}_m, \quad \tilde{\mathbf{k}}n = R_{\Theta, n}^{d} \mathbf{W}_k \mathbf{x}_n
 $$
 
-where $\mathbf{W}_q$ and $\mathbf{W}_k$ are the query and key weight matrices, respectively.
+where $$\mathbf{W}_q$$ and $$\mathbf{W}_k$$ denote the query and key matrices.
 
-Using these noisy positional embeddings, we perform a forward pass through the model to obtain the noisy logits $\tilde{\mathbf{L}}_{\delta}$:
-
-$$
-\tilde{\mathbf{L}}_{\delta} = f(\tilde{\mathbf{q}}_m, \tilde{\mathbf{k}}_n) 
-$$
-
-where $f(\cdot)$ denotes the forward pass through the model.
+Using these noisy positional embeddings, we perform a forward pass through the model to obtain the noisy logits $$\tilde{\mathbf{L}}_{\delta} = f(\tilde{\mathbf{q}}_m, \tilde{\mathbf{k}}_n) 
+$$, where $$f(\cdot)$$ denotes the forward pass through the model.
 
 ### 3. Calculating Standard Logits
 
-Without adding noise, the positional embeddings for the query and key vectors are:
-
-$$
-\mathbf{q}_m = R_{\Theta, m}^{d} \mathbf{W}_q \mathbf{x}_m, \quad \mathbf{k}_n = R_{\Theta, n}^{d} \mathbf{W}_k \mathbf{x}_n
-$$
-
-Then, we obtain the normal logits $\mathbf{L}_0$ by passing these embeddings through the model:
-
-$$
-\mathbf{L}_0 = f(\mathbf{q}_m, \mathbf{k}_n)
-
-$$
+Without any perturbation, the positional embeddings for the query and key vectors are: $$\mathbf{q}_m = R_{\Theta, m}^{d} \mathbf{W}_q \mathbf{x}_m, \quad \mathbf{k}_n = R_{\Theta, n}^{d} \mathbf{W}_k \mathbf{x}_n$$. Then, we obtain the normal logits $$\mathbf{L}_0$$ by passing these embeddings through the model: $$\mathbf{L}_0 = f(\mathbf{q}_m, \mathbf{k}_n)$$.
 
 ### 4. Logits Calibration via Contrastive Decoding
 
-To calibrate the logits, we combine the normal logits and the mean of the noisy logits as follows, producing the calibrated logits $\mathbf{L}_{\alpha}$:
-
-$$
-\mathbf{L}_{\alpha} = (1 + \beta) \cdot \mathbf{L}_0 - \beta \mathbf{L}_{\delta}
-$$
-
-where $\beta = 1.5$ is a hyper parameter.
+To calibrate the logits, we combine the normal logits and the mean of the noisy logits as follows, producing the calibrated logits $$\mathbf{L}_{\alpha} = (1 + \beta) \cdot \mathbf{L}_0 - \beta \mathbf{L}_{\delta}$$. Here $$\beta$$ is a hyperparameter (set to 1.5) that controls the weighting of the perturbative component relative to the original logits.
 
 ### 5. Next Token Prediction
 
-Using the calibrated logits $\mathbf{L}_{\alpha}$, we predict the next token $\hat{y}$:
-
-$$
-\hat{y} = \arg \max (\mathbf{L}_{\alpha})
-
-$$
-
-Repeat these steps until the sequence generation is complete.
+Using the calibrated logits $$\mathbf{L}_{\alpha}$$, we predict the next token $$\hat{y} = \arg \max (\mathbf{L}_{\alpha})$$. Repeat these steps until the sequence generation is complete.
 
 ### Symbol Summary
 
-- $R_{\Theta, m}^{d}$: Original rotation matrix
-- $R_{\Theta, m}^{d, \prime}$: Perturbative rotation matrix
-- $\epsilon_{\cos}$, $\epsilon_{\sin}$: Positional perturbation
-- $\mathbf{W}_q$, $\mathbf{W}_k$: Wight of query and key
-- $\mathbf{x}_m$, $\mathbf{x}_n$: Word vectors
-- $\mathbf{q}_m$, $\mathbf{k}_n$: Query and key
-- $\tilde{\mathbf{q}}_m$, $\tilde{\mathbf{k}}_n$: Perturbative query and key
-- $\mathbf{L}_0$ Standard logits
-- $\tilde{\mathbf{L}}_{\delta}$: Perturbative logits
-- $\mathbf{L}_{\alpha}$: Calibrated logits
-- $\beta$: Tuning coefficient
+- $$R_{\Theta, m}^{d}$$: Original rotation matrix
+- $$R_{\Theta, m}^{d, \prime}$$: Perturbative rotation matrix
+- $$\epsilon_{\cos}$$, $$\epsilon_{\sin}$$: Positional perturbation
+- $$\mathbf{W}_q$$, $$\mathbf{W}_k$$: Wight of query and key
+- $$\mathbf{x}_m$$, $$\mathbf{x}_n$$: Word vectors
+- $$\mathbf{q}_m$$, $$\mathbf{k}_n$$: Query and key
+- $$\tilde{\mathbf{q}}_m$$, $$\tilde{\mathbf{k}}_n$$: Perturbative query and key
+- $$\mathbf{L}_0$$ Standard logits
+- $$\tilde{\mathbf{L}}_{\delta}$$: Perturbative logits
+- $$\mathbf{L}_{\alpha}$$: Calibrated logits
+- $$\beta$$: Tuning coefficient
 
-## Case Study: PCD effevtively mitigate R**ank Collapse**
+**Case Study: Mitigating Rank Collapse with Positional Contrastive Decoding**
 
-In this case study, the target label (`ffeae470-29ae-4a8c-9c56-9b97d9edf8ac`) and the model's prediction (`cd501c0360f7`) demonstrate a significant discrepancy, revealing challenges in the model's predictive alignment. 
+The case investigates the effectiveness of PCD in addressing rank collapse during a key-value retrieval task using the Llama3-8b-262k model at a sequence length of 16k. Given a specific input, the expected target label was `ffeae470-29ae-4a8c-9c56-9b97d9edf8ac`, while the model's standard decoding incorrectly predicted `cd501c0360f7`. The tokens for `"ffe"` (index 29069), `"FFE"` (index 80194), and `"ff"` (index 544) were chosen as candidate tokens.
 
-To investigate, we analyzed the Top-K (K=18) token indices generated by the model during the prediction step: `4484, 1, 15, 25867, 66, 68, 4578, 791, 544, 69, 7047, 98046, 67, 291, 65, 58923, 29069, 16`. These indices correspond to tokens sampled from the model's probability distribution. 
+For standard decoding, we analyzed the Top-K (K=18) tokens sampled from the model's probability distribution: `4484, 1, 15, 25867, 66, 68, 4578, 791, 544, 69, 7047, 98046, 67, 291, 65, 58923, 29069, 16`. The unrelated token `"cd"` (index 4484) was preferred, while `"ff"` and `"ffe"` ranked at positions 9 and 17. The uppercase `"FFE"` (index 80194) did not appear in the top 18. This illustrates that standard decoding is vulnerable to noise, leading to rank collapse.
 
-Leveraging Positional Contrastive Decoding (PCD), we suppressed high-probability tokens and reevaluated the model's behavior with the following token-to-index mapping: `29069, 80194, 544, 73654, 89649, 3018, 44514, 84985, 68499, 18267, 38058, 78987, 81490, 73522, 14424, 34383, 93021, 1897`. 
-
-From the vocabulary mapping, we identified that `"ffe"` (29069) and related tokens such as `"FFE"` (80194) and `"ff"` (544) are associated with the correct target prefix, whereas the model's standard autoregressive decoding prioritized unrelated tokens like `"cd"` (4484). This behavior illustrates that, without intervention, the model tends to predict distractive tokens rather than aligning with the intended target prefix `"ffe"`. 
-
-After applying PCD, the correct tokens (e.g., `"ffe"`) were significantly re-ranked to earlier positions in the prediction sequence, effectively mitigating the model's focus on distractive elements and improving alignment with the target. This demonstrates the utility of PCD in addressing attention distraction during sequence prediction tasks, particularly in scenarios requiring long and complex outputs.
+Using the proposed PCD, the decoding space included: `29069, 80194, 544, 73654, 89649, 3018, 44514, 84985, 68499, 18267, 38058, 78987, 81490, 73522, 14424, 34383, 93021, 1897`. The correct tokens (`"ffe"`, `"FFE"`, `"ff"`) were re-ranked to the top three positions. This intervention mitigated rank collapse by reducing distractions and improving long-range awareness.
 
 ## Experiments
 
-To demonstrate the effectiveness of PCD, we conducted experiments using various models, strategies, and datasets. We selected the original llama3-8b-8k model, as well as the llama3-8b-262k and llama3-8b-1048k models fine-tuned by Gradient AI on the basis of llama3. The test sets included tasks for key-value retrieval and variable tracking, as well as datasets from Longbench and RULER 16k. We employed decoding methods such as beam search and dola, along with training-free positional encoding correction algorithms like MsPoE.
+To demonstrate the widely effectiveness of PCD, we conducted experiments using various models, strategies, and datasets. We selected the original Llama3-8b-8k model, as well as the Llama3-8b-262k and Llama3-8b-1048k models fine-tuned by Gradient AI on the basis of Llama3. The test sets includes key-value retrieval and variable tracking, as well as Longbench and RULER 16k. We employed decoding methods such as beam search and DoLa, along with training-free positional encoding correction algorithms like MsPoE.
 
-In Table 1, on the task of key-value retrieva, PCD outperforms decoding methods such as beam search and DoLa, as well as MsPoE that utilizes multi-scale Positional IDs, achieving a maximum improvement of 7% without raining.
+In Table 1, on the task of key-value retrieval, PCD outperforms decoding methods such as beam search and DoLa, as well as MsPoE that utilizes multi-scale Positional IDs, achieving a maximum improvement of 7% without training.
 
 {% include figure.html path="assets/img/2025-04-28-pcd/image_4.png" class="img-fluid rounded z-depth-1" %}
 
@@ -256,24 +220,16 @@ Furthermore, we conducted tests on LongBench and RULER. It was observed that PCD
 
 
 ## Conclusion
-
+In this blog, the phenomenon of Rank Collapse is revealed, showing that as the input length increases, the Mean Reciprocal Rank (MRR) declines within the claimed length. The proposed Positional Contrastive Decoding is introduced to mitigate Rank Collapse.
 ### Advantages of PCD
-
-PCD offers notable benefits in enhancing long-text modeling:
-
-1. **Plug-and-Play**: PCD can be seamlessly integrated into existing models with just two lines of code by replacing the attention and sampling functions, effectively improving long-range perception within the model's attention window.
+1. **Plug-and-Play**: PCD can be seamlessly integrated into existing models with just two lines of code by replacing the attention and sampling functions, effectively improving long-range perception within the model's claimed length.
 2. **Training-Free**: PCD does not require additional training, making it highly efficient and straightforward to deploy.
 
 ### Limitations
-
-Despite its strengths, PCD also has certain limitations:
-
-1. **No Extension of Attention Window**: PCD does not increase the model's maximum attention window length, which restricts its application to longer sequences.
-2. **No Improvement for Short-Text Performance**: PCD does not enhance performance on short-text inputs, limiting its scope to scenarios involving long-text processing.
+PCD has limitations in that it does not extend the model's maximum attention window length nor improve performance on short inputs.
 
 ### Future Directions
-
-The fundamental concept underlying contrastive decoding is that context reattention can be achieved through the linear combination of logits. Moving forward, there is potential to design additional "informative" and "distracting" signals for comparative decoding, thereby enhancing the model's preference for different contexts. For instance, in the task of long-text comprehension, one could utilize Retrieval-Augmented Generation (RAG) models to provide informative logits, while employing models that lack extensive training on long contexts to generate distracting signals. The linear combination of these signals could then serve as the final logits, refining the model's ability to discern and prioritize relevant information within complex contextual landscapes.
+The fundamental insight of contrastive decoding is that ****the context reattention can be achieved through the linear combination of logits**. There is also potential to design additional "necessary" or "disturbative" inputs to generate logits that enhance long-context capabilities. For example, logits from the long-context model can be adjusted by adding logits generated by Retrieval-Augmented Generation (RAG) models and subtracting those from short-claimed-length models. By linearly combining these different logits, the model can refine its ability to discern and prioritize relevant information within complex contexts.
 
 ## Code
 
@@ -477,7 +433,7 @@ def _sample(
 					      next_token_logits = calibrated_logits 
                 
                 top_k = 100
-                _, topk_indices_ = torch.topk(next_token_logits_base, top_k, dim=-1)                # 创建一个全为 -inf 的掩码，形状与 next_token_logits 相同
+                _, topk_indices_ = torch.topk(next_token_logits_base, top_k, dim=-1)                
                 mask = torch.full_like(next_token_logits, fill_value=-float('inf'))
                 next_token_logits = mask.scatter(dim=-1, index=topk_indices_, src=next_token_logits.gather(dim=-1, index=topk_indices_))
 
