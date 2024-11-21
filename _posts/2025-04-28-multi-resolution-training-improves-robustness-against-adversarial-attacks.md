@@ -124,10 +124,8 @@ The diagram highlights the image processing using `LP_conv` and `Gaussian_conv` 
    - Utilize downsampling and upsampling to eliminate fine details, including noise, while retaining key structures.  
 
 - **Gaussian_conv Layer**:  
-   - Kernel Size:  
-      - Smaller sizes are computationally efficient, reducing localized noise while preserving edges and fine details. Larger sizes provide broader smoothing, targeting noise over larger areas but with potential detail loss.  
-   - Sigma (𝜎):  
-      - Lower values minimize smoothing, maintaining sharp edges. Higher values deliver more aggressive noise reduction, suitable for removing small noise but may blur finer details.
+   - Kernel Size: Smaller sizes are computationally efficient, reducing localized noise while preserving edges and fine details. Larger sizes provide broader smoothing, targeting noise over larger areas but with potential detail loss.  
+   - Sigma (𝜎): Lower values minimize smoothing, maintaining sharp edges. Higher values deliver more aggressive noise reduction, suitable for removing small noise but may blur finer details.
      
 Both methods show effectiveness for removing small noise while preserving essential image features. The Gaussian filter, in particular, allows for targeted noise removal, offering a balance between computational efficiency and detail preservation.
 
@@ -137,7 +135,8 @@ We integrate the designed CNN block into various DNN architectures, including [R
 ### Adversarial Attacks
 
 - **FGSM attack** 
- - FGSM generates adversarial examples by slightly perturbing the input data in a way that maximizes the model's prediction error while keeping the perturbation imperceptible to humans. The attack works by exploiting the gradients of the loss function with respect to the input data. By taking a step in the direction of the gradient's sign, the attack aims to increase the loss and mislead the model into making incorrect predictions. The FGSM attack can be expressed mathematically as:
+
+FGSM generates adversarial examples by slightly perturbing the input data in a way that maximizes the model's prediction error while keeping the perturbation imperceptible to humans. The attack works by exploiting the gradients of the loss function with respect to the input data. By taking a step in the direction of the gradient's sign, the attack aims to increase the loss and mislead the model into making incorrect predictions. The FGSM attack can be expressed mathematically as:
 
 $$
 x_{\text{adv}} = x + \epsilon \cdot \text{sign}(\nabla_x J(\theta, x, y))
@@ -147,14 +146,14 @@ The adversarial example $$x_{\text{adv}}$$ is generated from the original input 
 
 - **Black-Patch Attack**
 
- -In addition to the FGSM attack, we apply a black-patch attack that does not require knowledge of the DNN structure. This attack randomly places small black patches on images to simulate both real-world physical attacks (e.g., patches manually applied to traffic signs or cameras) and digital attacks (e.g., patches added to input data).
+In addition to the FGSM attack, we apply a black-patch attack that does not require knowledge of the DNN structure. This attack randomly places small black patches on images to simulate both real-world physical attacks (e.g., patches manually applied to traffic signs or cameras) and digital attacks (e.g., patches added to input data).
 
 In the experiments, we used FGSM with $$\epsilon$$ values of 0.01, 0.05, 0.1, and 0.2. For the black-patch attack, we used black patches of size $$3 \times 3$$ pixels and varied the number of patches to 2, 4, 6, and 8 to simulate different levels of perturbations.
 
 {% include figure.html path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image4.jpg" class="img-fluid" %}
 _Example of FGSM and black-patch perturbations_
 
-### Results
+### Results###
 We developed various models by integrating different combinations of our proposed CNN blocks into the base architectures of ResNet18, MobileNetV2, and VGG16. These models were evaluated based on their classification accuracy on the given test dataset, as illustrated in the plots below. 
 
 {% include figure.html path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image5.jpg" class="img-fluid" %}
@@ -173,15 +172,19 @@ The prefixes and suffixes in the model names indicate specific modifications:
 
 
 
-####Overall Insights####
+###Overall Insights###
+
  **Effectiveness of Enhancements**
- -The enhanced models consistently outperform their respective baselines  (ResNet18, MobileNetV2, and VGG16) under both FGSM and black box attacks, demonstrating the overall effectiveness of the proposed LPF and Gaussian blocks in improving model robustness.
+ 
+ The enhanced models consistently outperform their respective baselines  (ResNet18, MobileNetV2, and VGG16) under both FGSM and black box attacks, demonstrating the overall effectiveness of the proposed LPF and Gaussian blocks in improving model robustness.
 
 **Impact of c6 vs. c3 Configurations**
- -The plots reveal that, in general, the c3 configuration outperforms the c6 configuration, indicating that directly processing the 3-channel input through the designed CNN block and feeding it into the main DNNs is more effective than concatenating it with the original image. This trend suggests that the standalone processed features provide sufficient robustness without requiring additional raw feature information.
+
+ The plots reveal that, in general, the c3 configuration outperforms the c6 configuration, indicating that directly processing the 3-channel input through the designed CNN block and feeding it into the main DNNs is more effective than concatenating it with the original image. This trend suggests that the standalone processed features provide sufficient robustness without requiring additional raw feature information.
 
 **Performance Against Adversarial Attacks**
- -The robustness of enhanced models diminishes as the intensity of adversarial perturbations increases (e.g., higher $$\epsilon$$ in FGSM or a larger number of patches in black box attacks). However, the enhanced models, particularly those with gl blocks and c3 configurations, consistently retain higher accuracy compared to baselines across both FGSM and black box attacks. This demonstrates their ability to effectively mitigate the impact of both gradient-based and localized perturbations.
+
+ The robustness of enhanced models diminishes as the intensity of adversarial perturbations increases (e.g., higher $$\epsilon$$ in FGSM or a larger number of patches in black box attacks). However, the enhanced models, particularly those with gl blocks and c3 configurations, consistently retain higher accuracy compared to baselines across both FGSM and black box attacks. This demonstrates their ability to effectively mitigate the impact of both gradient-based and localized perturbations.
 
 
 ## Conclusion
