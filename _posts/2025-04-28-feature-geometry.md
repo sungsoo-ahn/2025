@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Intricacies of Feature Geometry in Large Language Models
-description: We discuss the intricacies around studying the geometry of feature representations in large language models (LLMs). We run ablations challenging the theses of two recent works, the ICML 2024 Mechanistic Interpretability Workshop 1st prize winning paper - The Geometry of Categorical and Hierarchical Concepts in LLMs, and the ICML 2024 paper - The Linear Representation Hypothesis and the Geometry of LLMs. We both theoretically and empirically justify our main takeaway, which is that their orthogonality and polytopes results for categorical and hierarchical concepts are trivially true under the whitening transformation in high-dimensional spaces, and can be observed even in settings where they should not occur.
+description: We discuss several challenges around studying the geometry of feature representations in large language models (LLMs). We run ablations challenging the theses of two recent works, the ICML 2024 Mechanistic Interpretability Workshop 1st prize winning paper - The Geometry of Categorical and Hierarchical Concepts in LLMs, and the ICML 2024 paper - The Linear Representation Hypothesis and the Geometry of LLMs. We theoretically and empirically justify our main takeaway, which is that their orthogonality and polytopes results for categorical and hierarchical concepts are trivially true under the whitening transformation in high-dimensional spaces, and can be observed even in settings where they should not occur. We hope that our work throws light on these challenges and promotes the community to work on deciphering the geometry of a language model's residual stream.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -46,7 +46,7 @@ bibliography: 2025-04-28-feature-geometry.bib
 #   - name: Other Typography?
 
 toc:
-  - name: Overview of the Feature Geometry Papers
+  - name: An Overview of the Feature Geometry Papers
   - name: Ablations
     subsections:
       - name: Semantically Correlated Concepts
@@ -54,7 +54,7 @@ toc:
   - name: Hierarchical features are orthogonal - but so are semantic opposites!?
   - name: Categorical features form simplices - but so do totally random ones!?
   - name: Random Unembeddings Exhibiting the same Geometry
-  - name: Orthogonality and Polytopes in High Dimensions
+  - name: Orthogonality and Polytopes Proofs in High Dimensions
     subsections:
       - name: Orthogonality and the Whitening Transformation
       - name: Case n≥k
@@ -89,11 +89,11 @@ _styles: >
 
 <!-- Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling. -->
 
-## Overview of the Feature Geometry Papers
+## An Overview of the Feature Geometry Papers
 
 Studying the geometry of a language model's embedding space is an important and challenging task because of the various ways concepts can be represented, extracted, and used. Specifically, we want a framework that unifies both *measurement* (of how well a latent explains a feature/concept) and *causal intervention* (how well it can be used to control/steer the model). 
 
-The method described in the two papers we study works as follows: they split the computation of a large language model (LLM) as:
+The method described in the two papers <d-cite key="park2024geometrycategoricalhierarchicalconcepts, park2024linearrepresentationhypothesisgeometry"></d-cite> we study works as follows: they split the computation of a large language model (LLM) as:
 
 $$
 P(y \mid x) = \frac{\exp(\lambda(x)^\top \gamma(y))}{\sum_{y' \in \text{Vocab}} \exp(\lambda(x)^\top \gamma(y'))}
@@ -119,7 +119,7 @@ $$
 $$
 for each concept $Z$ that is causally separable with $W$.
 
-Now, in order to work with concept representations (i.e. look at similarities, projections, etc.), we need to define an inner product. The give the following definition:
+Now, in order to work with concept representations (i.e. look at similarities, projections, etc.), we need to define an inner product. They provide the following definition:
 
 $\textbf{Definition 3.1 (Causal Inner Product).}$ A $\textit{causal inner product}$ $\langle \cdot, \cdot \rangle_\mathcal{C}$ on $\overline{\Gamma} \simeq \mathbb{R}^d$ is an inner product such that 
 $$
@@ -199,7 +199,7 @@ emotions = {
 
 ### Random Nonsensical Concepts
 
-Next, we add a "nonsense" dataset that has five completely random categories where each category is defined by a lot (order of 100) of totally random objects completely unrelated to the top-level categories:
+Next, we add a "nonsense" dataset that has five completely random categories where each category is defined by several (order of 100) completely random objects completely unrelated to the top-level categories:
 
 {% highlight python linenos %}
 nonsense = {
@@ -219,26 +219,22 @@ Now, let's look at their main experimental results (for animals):
 
 {% include figure.html path="assets/img/2025-04-28-feature-geometry/1.png" class="img-fluid" width="50%" height="300px" %}
 <div class="caption">
-      $\ell_{animal} \perp (\ell_{mammal} - \ell_{animal})$, as shown by the original paper.
+      $\ell_{animal} \perp (\ell_{mammal} - \ell_{animal})$, as shown by the original paper. The gray dots represent random tokens from the vocabulary.
 </div>
 
 And this is the first ablation we run -- all emotion words in the 2D span of sadness and emotions:
 
 {% include figure.html path="assets/img/2025-04-28-feature-geometry/2.png" class="img-fluid"%}
 <div class="caption">
-      Caption.
+      Emotion vectors (see the section on "Ablations") plotted in the span of sadness and emotions. As with animals, most emotions seem to follow orthogonality.
 </div>
-
-<!-- ![image](https://hackmd.io/_uploads/HyFMCZcW1g.png =400x400) -->
 
 Specifically, this is what we get for joy vectors in the span of sadness. Note that the orthogonality observed is very similar to that in the case of animal hierarchies.
 
 {% include figure.html path="assets/img/2025-04-28-feature-geometry/3.png" class="img-fluid"%}
 <div class="caption">
-      Caption.
+      Joy and sadness (semantically anti-correlated concepts) also exhibit the same kind of orthogonality under their transformation.
 </div>
-
-<!-- ![image](https://hackmd.io/_uploads/rJWNRWc-kg.png =400x400) -->
 
 Should we really have joy so un-correlated with sadness? Sadness and joy are semantic opposites, so one should expect the vectors to be anti-correlated rather than orthogonal. 
 
@@ -246,11 +242,8 @@ Also, here's the same plot but for completely random, non-sensical concepts:
 
 {% include figure.html path="assets/img/2025-04-28-feature-geometry/4.png" class="img-fluid"%}
 <div class="caption">
-      Caption.
+      The same geometry exhibit by random, non-sense concept vectors.
 </div>
-
-<!-- ![image](https://hackmd.io/_uploads/H1xqRZqZJx.png =400x400) -->
-
 
 It seems like their orthogonality results, while true for hierarchical concepts, are also true for semantically opposite concepts and totally random concepts. In the next section, we will show theoretically that in high-dimensions, random vectors, and in particular those obtained after the whitening transformation, are expected to be trivially orthogonal with a very high probability.
 
@@ -260,44 +253,35 @@ Here is the simplex they find animal categories to form (see Fig. 3 in their [or
 
 {% include figure.html path="assets/img/2025-04-28-feature-geometry/5.jpg" class="img-fluid"%}
 <div class="caption">
-      Caption.
+      Reproducing their polytopes/simplices result from the original paper.
 </div>
-
-<!-- ![blog_1](https://hackmd.io/_uploads/B1UMkf5-kx.jpg) -->
 
 And this is what we get for completely random concepts:
 
 {% include figure.html path="assets/img/2025-04-28-feature-geometry/6.jpg" class="img-fluid"%}
 <div class="caption">
-      Caption.
+      The same kind of polytopes forming for random, non-sensical concepts. Note that the variance of the points is also very similar and not higher than that of semantically meaningful categories.
 </div>
-
-<!-- ![blog_2](https://hackmd.io/_uploads/rkCmyMc-yx.jpg) -->
 
 Thus, while categorical concepts form simplices, so do completely random, non-sensical concepts. Again, as we will show theoretically, randomly made categories are likely to form simplices and polytopes as well, because it is very easy to escape finite convex hulls in high-dimensional spaces.
 
-## Random Unembeddings Exhibiting the same Geometry
+## Random Unembeddings Exhibit Similar Geometry
 
-Here, we show that under the *whitening transformation*, even random (untrained) unembeddings exhibit the same geometry as the trained ones. This gives more empirical evidence that the orthogonality and polytope findings are not novel and do not "emerge" during the training of a language model.
-
-<!-- ![animals-random-unembed-2d](https://hackmd.io/_uploads/ryfUm8eMyl.jpg =400x400) -->
+Here, we show that under the [*whitening transformation*](https://en.wikipedia.org/wiki/Whitening_transformation), even random (untrained) unembeddings exhibit the same geometry as the trained ones. This gives more empirical evidence that the orthogonality and polytope findings are not novel and do not "emerge" during the training of a language model.
 
 {% include figure.html path="assets/img/2025-04-28-feature-geometry/7.jpg" class="img-fluid"%}
 <div class="caption">
       Hierarchical concepts are orthogonal (although with higher variance) even in random (untrained) unembedding spaces.
 </div>
 
-<!-- ![random_animal_3d](https://hackmd.io/_uploads/H1JUX8lGJg.jpg) -->
-
 {% include figure.html path="assets/img/2025-04-28-feature-geometry/8.jpg" class="img-fluid"%}
 <div class="caption">
       Categorical concepts form polytopes even in random (untrained) unembedding spaces.
 </div>
 
+In the next section, we will theoretically show why these orthogonality and polytope results are trivially true in high-dimensions. Since the dimension of the residual stream of the Gemma model they used is $2048$, we claim many of their empirical findings are expected by default and do not show anything specific about the geometry of feature embeddings in trained language models.
 
-## Orthogonality and Polytopes in High Dimensions
-
-Here, we theoretically show why the main orthogonality and polytope results in the paper are trivially true in high-dimensions. Since the dimension of the residual stream of the Gemma model they used is $2048$, we claim many of their empirical findings are expected by default and do not show anything specific about the geometry of feature embeddings in trained language models.
+## Orthogonality and Polytopes Proofs in High Dimensions
 
 ### Orthogonality and the Whitening Transformation
 
@@ -407,7 +391,7 @@ So, orthogonality between linear probes for concepts might be expected by defaul
 ***Note**: This image will be removed in the submission to ICLR.* Why should it be removed? -->
 
 
-### 2. High-Dimensional Convex Hulls are easy to Escape!
+### High-Dimensional Convex Hulls are easy to Escape!
 
 As for the polytope results in their paper (Definition 7, Figure 3 ), a random vector is highly likely to be outside the convex hull of $k$ vectors in high dimensions, so we should expect concepts to "form a polytope" by default. 
 
@@ -415,7 +399,7 @@ Let $$\{ \mathbf{x}_1, \mathbf{x}_2, \dots, \mathbf{x}_k \} \in \mathbb{R}^n$$ b
 
 Since this polytope is contained in a $k$-dimensional subspace inside the larger $n$-dimensional space, its volume is $k<n$ dimensional rather than $n$ dimensional. So it has a n-dimensional [Lebesgue measure](https://en.wikipedia.org/wiki/Lebesgue_measure) of zero. So the probability that another random vector $\mathbf{z}$ lies inside this polytope will be zero. In the real world, our vector coordinates are floating point numbers of finite precision rather than real numbers, so the probability of $\mathbf{z}$ lying inside the polytope will not be exactly zero, but it will still be very small. Thus, it is not surprising that the polytopes spanned by linear probes for $k$ concepts do not intersect with linear probes for other concepts.
 
-Even if we were to look at $k>n$ categorical concepts, `Theorem 1 (Bárány and Füredi (1998))` in this [paper](https://arxiv.org/abs/2110.09485) shows that one would need a very, very high number of categories (of the order of $\frac{2^{1024}}{2048}$) to have a vector that's inside the convex hull.
+Even if we were to look at $k>n$ categorical concepts, [Theorem 1 (Bárány and Füredi (1998))](https://www.cambridge.org/core/journals/canadian-mathematical-bulletin/article/empty-simplices-in-euclidean-space/1F81907C277EE2F91525C44C9DB54316) shows, as described in <d-cite key="lecunextra"></d-cite> that one would need a very, very high number of categories (of the order of $\frac{2^{1024}}{2048}$) to have a vector that's inside the convex hull.
 
 ## Discussion
 
@@ -431,21 +415,21 @@ Recent research has found multiple ways to extract latents representing concepts
 
 #### Linear Contrast/Steering Vectors
 
-If we have a contrast dataset $(x^+, x^-)$ for a feature or behavior, we can use the contrast activations to get a $direction$ in a given layer's activation space that represents the concept. This can also be used to steer models toward or away from it, as is shown in RepE (cite).
+If we have a contrast dataset $(x^+, x^-)$ for a feature or behavior, we can use the contrast activations to get a $direction$ in a given layer's activation space that represents the concept. This can also be used to steer models toward or away from it, as is shown in Representation Engineering <d-cite key="zou2023representationengineeringtopdownapproach"></d-cite>.
 
-One can also extract linear *function vectors* in the activation space by eliciting in-context learning. (https://arxiv.org/pdf/2310.15213)
+One can also extract linear *function vectors* in the activation space by eliciting in-context learning <d-cite key="todd2024functionvectorslargelanguage"></d-cite>.
 
 #### Sparse Autoencoders (SAEs) and Variants
 
-SAEs have been found to be a very scalable method to extract linear representations for a lot of features by learning a sparse reconstruction of a model's activations (https://arxiv.org/pdf/2309.08600). There have been several recent  advancements on SAEs in terms of both methodology and scaling.
+SAEs have been found to be a very scalable method to extract linear representations for a lot of features by learning a sparse reconstruction of a model's activations <d-cite key="cunningham2023sparseautoencodershighlyinterpretable"></d-cite>. There have been several recent  advancements on SAEs in terms of both methodology and scaling.
 
 #### Unsupervised Steering Vectors
 
-[This work](https://www.lesswrong.com/posts/ioPnHKFyy4Cw2Gr2x/mechanistically-eliciting-latent-behaviors-in-language-1) uses an unsupervised method to elicit latent behavior from a language model by finding directions in a layer's activations that cause a maximum change in the activations of a future layer.
+This work <d-cite key="mack2024melbo"></d-cite> uses an unsupervised method to elicit latent behavior from a language model by finding directions in a layer's activations that cause a maximum change in the activations of a future layer.
 
 #### Non-linear Features
 
-While several important concepts are found to have linear representation latents (possibly due to the highly linear structure of the model's architecture), not all features in a language model are represented linearly, as shown by (https://arxiv.org/abs/2405.14860).
+While several important concepts are found to have linear representation latents (possibly due to the highly linear structure of the model's architecture), not all features in a language model are represented linearly, as shown here <d-cite key="engels2024languagemodelfeatureslinear"></d-cite>.
 
 
 ### Future Work
