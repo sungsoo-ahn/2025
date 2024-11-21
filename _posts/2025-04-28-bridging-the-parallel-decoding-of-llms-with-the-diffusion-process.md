@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Bridging the Parallel Decoding of LLMs with the Diffusion Process
-description: In this blog, we introduce Jacobi Decoding, a parallel decoding algorithm for LLMs and its connection to the diffusion process in terms of high-level concepts.
+description: In this blog, we introduce Jacobi Decoding, a parallel decoding algorithm for LLMs and its connection to the diffusion process in terms of high-level concepts. We propose that due to these structural similarities, many techniques developed for diffusion models hold tremendous potential for enhancing the decoding process of LLMs in the future.
 date: 2025-04-28
 future: true
 htmlwidgets: true
