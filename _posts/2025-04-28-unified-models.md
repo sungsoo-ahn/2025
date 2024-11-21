@@ -193,15 +193,18 @@ This formula captures the essence of autoregressive generation: predicting each 
 
 **Why Choose Autoregressive Models for Unified Multimodal Model?**
 
-* **Handling Sequential Data**: Autoregressive models excel at processing and generating sequential data, which is central to many tasks like text, images, and video.
+* **Unified data representation.**: They can integrate different modalities (*e.g.,* text, images, audio) by converting them into a unified sequence of tokens, simplifying model design.
 
-* **Unified Framework for Multimodal Tasks**: They can integrate different modalities (*e.g.,* text, images, audio) by converting them into a unified sequence of tokens, simplifying model design.
 
 * **Easier to Scale Up**: Autoregressive models align well with scaling laws, making them easier to scale up in terms of model size, data, and computational resources.
 
+* **Scalable architecture supported by strong infra**. Standing on the shoulders of giants (LLMs). Both academia and industry have relatively sufficient experiences on training and scaling AR models, in terms of model size, data, and computational resources.
 
-**Autoregressive for Vision**. The process for generating an image can be broken down pixel-by-pixel or patch-by-patch, where each pixel/patch is conditioned on previously generated content.
-Autoregressive models are simple, interpretable, and effective, but their sequential nature can limit efficiency, particularly for long sequences. These characteristics are central to understanding their role in unified multimodal generation tasks.
+
+
+**Autoregressive for Vision**. The process for generating an image can be broken down pixel-by-pixel or patch-by-patch in a raster-scan order, where each pixel/patch is conditioned on previously generated content. Autoregressive models are proven to be simple, interpretable, and effective in processing language. Images, however, are not sequential. Besides, treading image as a flat sequence means that the auto-regressive sequence length (and the computation) grows quadratically<d-cite key="chang2022maskgit"></d-cite>. This misalignment pose challenges of effectiveness of efficiency on AR model, which are central to understanding their role in unified multimodal generation tasks.
+
+
 
 
 
@@ -238,7 +241,7 @@ where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at
 
 * **Modeling Spatial Distributions**: Diffusion models are well-suited for modeling complex spatial data distributions, such as images and videos, by gradually refining noise into structured outputs
 
-*  **Faster Inference Compared to Autoregressive Models**: Diffusion models often have faster inference times because they generate images or videos in parallel, unlike autoregressive models that generate step-by-step.
+*  **Faster Inference Compared to Autoregressive Models**: Diffusion models often have faster inference times because they generate images or videos in parallel with only few steps, unlike autoregressive models that generate token-by-token.
 
 
 
@@ -293,10 +296,10 @@ For the single-model paradigm, existing methods can primarily be categorized int
 
   Architecture\Feature     | **Discrete** | **Continuous** 
 --- | --- | ---
-**Autoregressive** | *Chameleon*<d-cite key="chameleon2024"></d-cite>;*EMU3*<d-cite key="wang2024emu3"></d-cite>; *VILA-U*<d-cite key="wu2024vila"></d-cite>; *LWM*<d-cite key="liu2024world"></d-cite> | *MMAR*<d-cite key="yang2024mmar"></d-cite>
-**AR+Diffusion** | *Show-O*<d-cite key="xie2024showo"></d-cite>; *SEED-X*<d-cite key="ge2024seed"></d-cite>; *LaVIT*<d-cite key="jin2024unified"></d-cite>  | *Transfusion*<d-cite key="zhou2024transfusion"></d-cite>;*MonoFormer*<d-cite key="zhao2024monoformer"></d-cite>
+**Autoregressive** | *LWM*<d-cite key="liu2024world"></d-cite>; *Chameleon*<d-cite key="chameleon2024"></d-cite>; *VILA-U*<d-cite key="wu2024vila"></d-cite>; *EMU3*<d-cite key="wang2024emu3"></d-cite> | *MMAR*<d-cite key="yang2024mmar"></d-cite>
+**AR+Diffusion** | *Show-O*<d-cite key="xie2024showo"></d-cite> | *Transfusion*<d-cite key="zhou2024transfusion"></d-cite>;*MonoFormer*<d-cite key="zhao2024monoformer"></d-cite>
 
-
+<!-- ; *SEED-X*<d-cite key="ge2024seed"></d-cite>; *LaVIT*<d-cite key="jin2024unified"></d-cite>  -->
 
 ### Autoregressive Models v.s. Mixed Architectures (AR+Diffusion)
 <!-- https://poloclub.github.io/transformer-explainer/ -->
@@ -392,6 +395,13 @@ Image-centric alignment models prioritize visual data as the foundational modali
 
 Example: ImageBind
 Functions as an expert model for image-driven multimodal tasks, integrating diverse modalities (e.g., audio, text, depth) into a shared latent space.
+
+### Text-Centric Alignment
+
+### Others
+
+
+
 
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
