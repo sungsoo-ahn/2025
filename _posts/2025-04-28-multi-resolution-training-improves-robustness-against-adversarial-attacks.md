@@ -189,7 +189,7 @@ The prefixes and suffixes in the model names indicate specific modifications:
 **Performance Against Adversarial Attacks**
 
    
-As adversarial perturbations intensify, such as with a higher epsilon ($$\epsilon$$) in the Fast Gradient Sign Method (FGSM) or an increase in patches during black box attacks, the robustness of enhanced models typically diminishes. However, models equipped with **gl** blocks and **c3** configurations still manage to outperform baseline models in terms of accuracy under both FGSM and black box scenarios. Nonetheless, in specific instances illustrated in figures (d) and (e), this combination shows a quicker decline in performance as perturbations grow. Despite this, alternative methods proposed show greater robustness compared to the baselines, indicating that these enhanced models' ability to effectively mitigate the impact of both gradient-based and localized perturbations.
+As adversarial perturbations intensify, such as with a higher ($$\epsilon$$) in the FGSM or an increase in patches during black box attacks, the robustness of enhanced models typically diminishes. However, models equipped with **gl** blocks and **c3** configurations still manage to outperform baseline models in terms of accuracy under both FGSM and black box scenarios. Nonetheless, in specific instances illustrated in figures (d) and (e), this combination shows a quicker decline in performance as perturbations grow. Despite this, alternative methods proposed show greater robustness compared to the baselines, indicating that these enhanced models' ability to effectively mitigate the impact of both gradient-based and localized perturbations.
 
 
 ## Conclusion
