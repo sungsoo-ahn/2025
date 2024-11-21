@@ -157,7 +157,12 @@ _Example of FGSM and black-patch perturbations_
 ### Results
 We developed various models by integrating different combinations of our proposed CNN blocks into the base architectures of ResNet18, MobileNetV2, and VGG16. These models were evaluated based on their classification accuracy on the given test dataset, as illustrated in the plots below. 
 
-{% include figure.html path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image5.jpg" class="img-fluid" <p>.l-page</p> %}
+<div>
+  {% include "figure.html" path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image5.jpg" class="img-fluid" %}
+  <p class="l-page"></p>
+</div>
+
+
 
 The prefixes and suffixes in the model names indicate specific modifications:
 
