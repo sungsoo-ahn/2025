@@ -44,7 +44,7 @@ analysis crucial to reduce bias and improve the reliability of findings.
 
 
 In this post, we argue that LM researchers---especially those working in areas where core concepts lack established definitions---must adopt statistical methods to improve the rigor of their empirical evaluations.
-Leveraging techniques from classical statistics, such as confidence intervals and hypothesis tests, will help move the field beyond anecdotal observations and philosophical arguments toward a more scientific understanding of model behavior.
+Leveraging techniques from classical statistics, such as confidence intervals and hypothesis tests, will help move the field beyond anecdotal observations and philosophical arguments toward a more scientific understanding of model behaviour.
 
 To illustrate this in practice, we outline three key elements of rigorous empirical evaluation and apply them to [Mirzadeh et al. (2024)](https://arxiv.org/pdf/2410.05229) <d-cite key="mirzadeh2024gsm"></d-cite>---a recent paper that examines whether LMs perform "formal reasoning" or rely on "sophisticated pattern matching".
 
@@ -60,10 +60,10 @@ The first step in rigorous evaluation is to clarify assumptions and explore alte
 Experiments can often be designed in ways that unintentionally favour the hypothesis being tested.
 By being upfront about assumptions, questioning their validity, and investigating alternative explanations, researchers will improve the reliability and robustness of their conclusions. 
 
-> In some sense it [the p-value] offers a first line of defense against being fooled by randomness, separating signal from noise [...]. *"It’s Not the P-Values’ Fault", Yoav Benjamini (2016) <d-cite key="benjamini2016not"></d-cite>*
+> In some sense it [the p-value] offers a first line of defence against being fooled by randomness, separating signal from noise [...]. *"It’s Not the P-Values’ Fault", Yoav Benjamini (2016) <d-cite key="benjamini2016not"></d-cite>*
 
 A second essential step is quantifying uncertainty, using tools such as error bars and confidence intervals, which help us gauge the reliability of performance metrics by providing a range of plausible values.
-Additionally, although often criticized, hypothesis tests and p-values can serve as an initial, coarse filter to distinguish signal from noise, laying the groundwork for deeper exploration into the practical significance of the reported results.
+Additionally, although often criticised, hypothesis tests and p-values can serve as an initial, coarse filter to distinguish signal from noise, laying the groundwork for deeper exploration into the practical significance of the reported results.
 
 
 Finally, evaluating models on entirely unseen ("out-of-sample") data is essential for accurately assessing their true 
@@ -73,10 +73,11 @@ As Zhang et al. (2024) highlight, reporting train-test overlap statistics is cru
 evaluations.
 
 
-To illustrate these three principles, we use [Mirzadeh et al. (2024)](https://arxiv.org/pdf/2410.05229) as a case study---a recent paper that received substantial attention from the LLM research community (e.g. see [this](https://machinelearning.apple.com/research/gsm-symbolic), [this](https://www.reddit.com/r/singularity/comments/1g1zphu/apple_ai_researchers_question_openais_claims/), or [this](https://x.com/MFarajtabar/status/1844456880971858028)).
+To illustrate these three principles, we use [Mirzadeh et al. (2024)](https://arxiv.org/pdf/2410.05229) as a case study---a recent paper that received substantial attention from the LLM research community with **millions of views** across social media platforms and the world-wide-web (e.g. see [this](https://machinelearning.apple.com/research/gsm-symbolic), [this](https://www.reddit.com/r/singularity/comments/1g1zphu/apple_ai_researchers_question_openais_claims/), or [this](https://x.com/MFarajtabar/status/1844456880971858028)).
 <!-- I see, you say here why that paper, so perhaps it is fine - [DRI] indeed, I wanted to keep the intro short; can add a bit more fluff around "reach" here though. [TODO] -->
 We review their methods, identify gaps in their analysis, and offer a more rigorous statistical assessment of their claims.
 
+**Note:** Whilst writing this blog post, a great overview of statistical methods suitable for evaluating LMs was published by Miller (2024) <d-cite key="miller2024adding"></d-cite>.
 
 # 3. Summary of [Mirzadeh et al. (2024)](https://arxiv.org/pdf/2410.05229)
 
@@ -189,7 +190,7 @@ Even if a model applies consistent reasoning, it may still make arithmetic error
 **How much variation is expected?**  
 By now, it should be clear that the answer to this question depends on the assumptions we make about the data.
 One reasonable assumption we could make is that each model $$m=1, \dots, 25$$, answers each question $$n=1,\dots,100$$ correctly with some probability $p_{m,n}$.
-Unfortuantely, since the paper does not provide question-level performance data, for the purposes of this analysis, we must further assume that this probability is constant across questions, that is $p_{m,n}=p_m$ for all $n$. 
+Unfortunately, since the paper does not provide question-level performance data, for the purposes of this analysis, we must further assume that this probability is constant across questions, that is $p_{m,n}=p_m$ for all $n$. 
 
 Thus, an LM answering questions is modelled as an independent and identically distributed Bernoulli trial with a model-specific success probability $p_m$.
 Under this assumption, the total number of correct answers on a dataset of size $N=100$ is
@@ -206,6 +207,7 @@ To understand what "expected" variation means under our assumption, we can const
 We highlight that the paper does not report such point estimates, but we can calculate the maximum likelihood estimates of $p_m$ by dividing the number of correct answers by the total number of questions.
 The number of correct answers (out of 100 questions) on the GSM8K questions are reported in the second column of Table 1 in the Appendix of the paper. 
 We denote this estimate as $$p^{8K}_{m}$$ to indicate that it is computed from the GSM8K dataset.
+
 There are different ways to construct CI for the [Binomial proportion](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval). The next figure shows [Wilson score](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval) intervals, with more results included in the Appendix. 
 To put this variability into perspective, we also include the average of the 50 point estimates for the model performance on GSM-Symbolic, which we denote as $$p^{Symb}_{m}$$. <d-footnote>Similarly to $p^{8K}_{m}$, we obtain maximum likelihood estimates of $p^{Symb}_{m}$ from the average accuracy on GSM-Symbolic, reported in Table 1 of the paper.</d-footnote>
 
@@ -213,7 +215,7 @@ To put this variability into perspective, we also include the average of the 50 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.95.png" 
   class="img-fluid" 
   title="95% Wilson score confidence intervals" 
-  caption="<b>95% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with the average (over 50 datasets) point estimate of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ are estimated from the data reported in Table 1 of the appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
+  caption="<b>95% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with the average (over 50 datasets) point estimate of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ are estimated from the data reported in Table 1 of the Appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
 %}
 
 
@@ -420,7 +422,7 @@ We use Fisher exact test for the binomial proportion for all models, reporting t
   Llama3-8b performs statistically better on GSM-Symbolic than on GSM8K." 
 %}
 
-When analyzing the models independently at the 5% significance level, we find that four models---Gemma-7b, Mistral-7b-instruct-v0.1, Phi-2, and Llama3-8b (indicated with (*) in the figure above)---exhibit statistically significant differences 
+When analysing the models independently at the 5% significance level, we find that four models---Gemma-7b, Mistral-7b-instruct-v0.1, Phi-2, and Llama3-8b (indicated with (*) in the figure above)---exhibit statistically significant differences 
 in performance based on the two-sided test.
 Among these four models, Llama3-8b performs statistically better on GSM-Symbolic compared to GSM8K, whilst the other three perform worse on GSM-Symbolic.
 The remaining 21 out of 25 models do not show a statistically significant difference in performance between GSM8K and GSM-Symbolic.
@@ -451,12 +453,8 @@ This gives us two sets of 7 models, with differences between the two sets indica
 
 - Subset of **smallest** models: *Gemma2-2b-it*, Phi-3.5-mini-instruct, Mistral-7b-instruct-v0.3, Mathstral-7b-v0.1, Llama3-8b-instruct, *GPT-4o-mini*, *o1-mini*.
 
-**Caveat 2: Sample sizes.** The results of GSM-Symbolic are averages across 50 datasets, whilst GSM8K is based on a single sample. 
-Ideally, we would want to compare accuracies on GSM8K vs accuracies on each of the 50 datasets (at the time of writing these are not publicly available). 
-<!-- You can rephrase it as we are comparing the estimated success probabilities for each of the methods on the two question sets. Noting that the success probability on the GSM8K is estimated with only one sample.
-The test is valid either way, but if the measurements (the probabilities) we are comparing are not accurate then our conclusion will also be invalid. 
-DRI: Thanks! DRI: TODO
--->
+**Caveat 2: Different sample sizes.** We note that the success probability on GSM8K is estimated from only one sample (of 100 questions) and the success probability on GSM-Symbolic is estimated from 50 samples (each containing 100 questions).
+Whilst the test is valid, inaccurate measurements of the estimated success probabilities would lead to invalid conclusions.  
 
 
 Let's define the vectors of success probabilities on GSM8K and GSM-Symbolic as $$p^{8K}_{\text{subset}}=[p^{8K}_{1}, \dots, p^{8K}_{7}]$$ and $$p^{Symb}_{\text{subset}}= [p^{Symb}_{1}, \dots, p^{Symb}_{7}]$$, where the subscript $$\text{subset} \in \{\text{largest}, \text{smallest}\}$$.
@@ -585,17 +583,17 @@ The accompanying analysis, however, can be substantially improved with the help 
 The frequentist approach we adopt here is particularly well-suited, as the Symbolic templates allow us to generate an arbitrary number of new datasets<d-footnote>This is the Frequentist's dream! The alternative to Frequentism is Bayesian analysis, which we leave for another blog post.</d-footnote>.
 
 
-We summarise our key findings as follows:
-- [Section 4.1] We discussed the assumptions under which variability of performance on GSM-Symbolic is unexpected vs expected and quantifiable. We provided empirical evidence that variability is indeed expected.
-- [Section 4.2] We argued that distribution mismatch between the GSM8K and GSM-Symbolic datasets may explain some of the observed performance decline of models (in addition to contamination and "lack of reasoning"). 
+Key findings from each subsection are summarised below:
+- [**Section 4.1**] We discussed the assumptions under which variability of performance on GSM-Symbolic is unexpected vs expected and quantifiable. We provided empirical evidence that variability is indeed expected.
+- [**Section 4.2**] We argued that distribution mismatch between the GSM8K and GSM-Symbolic datasets may explain some of the observed performance decline of models (in addition to contamination and "lack of reasoning"). 
 We also quantified the extent to which the performance degradation on GSM-Symbolic is actually statistically significant. Considering models individually, only 3 out of 25 models show a statistically significant performance decline on GSM-Symbolic (and 1 performs significantly better). Taken together, there is some evidence for a performance decline on GSM-Symbolic vs GSM8K.
 <!-- you mean weak evidence, right? :D 
 DRI lol, I wrote "statistically strong" as synonym for "statistically significant" (for which which there is some indeed). Maybe we say just "some evidence"? --> 
-- [Section 4.3] The observed increase in performance variance with rising question complexity is likely an over-interpretation of expected statistical artefacts. The decrease in success probability as complexity grows can be attributed to both increased reasoning difficulty and a higher likelihood of arithmetic errors.
+- [**Section 4.3**] The observed increase in performance variance with rising question complexity is likely an over-interpretation of expected statistical artefacts. The decrease in success probability as complexity grows can be attributed to both increased reasoning difficulty and a higher likelihood of arithmetic errors.
 <!-- how about longer context windows make the task more difficult? So maybe the models are just forgetful, otherwise the reasoning is the same. This same happens with humans if they need to do all the calculations in their head. 
 DRI: Yeah good point! I'll add this as a possible explanation in the previous section too. Though worth saying that these are pretty short questions and I think they'll fit in the training context of all the models (but worth checking); issues tend to start arising when we start extrapolating beyond the training context length.
 -->
-- [Section 4.4] The performance decline on the GSM-NoOp dataset is highly statistically significant. We believe that investigating the NoOp results in more detail could provide genuine insights into the models' reasoning capabilities.
+- [**Section 4.4**] The performance decline on the GSM-NoOp dataset is highly statistically significant. We believe that investigating the NoOp results in more detail could provide genuine insights into the models' reasoning capabilities.
 <!-- the No-Op supports the context window problems again, especially if the No-Op results are worse then P2 or P1. To examine the context window idea, we can compare the question success based on the question length, but we need the actual questions for that. 
 Also, are some of the models known to be better at handling longer context windows? 
 DRI: The context for all these questions is quite small, so I dont think it's a primary driver for this big underperformance. I genuinely think the authors did a very poor job at running this experiemnt, can explain more when we meet on Fri.
@@ -680,9 +678,9 @@ In this framework, we can describe the experimental setup of Mirzadeh et al. (20
 - **Accuracy estimates**: from these observations, maximum likelihood estimates can be computed as $$\hat{p}_m^{8K} = \frac{1}{100}\sum_{i=1}^{100} x^{8K}_{m,t_i}$$ and 
 $$\hat{p}_{m, j}^{Symb} = \frac{1}{100}\sum_{i=1}^{100} x^{Symb}_{m,t_i, j}, \; 1 \leq j \leq 50$$. We note that only $$\hat{p}_m^{8K}$$ and the average $$\overline{\hat{p}_m^{Symb}} = \frac{1}{50}\sum_{j=1}^{50}\hat{p}_{m, j}^{Symb}$$ are reported in the paper (Table 1, Appendix A.2 in <d-cite key=mirzadeh2024gsm></d-cite>).
 
-Under the assumptions of this mathematical model, we can think of $$\hat{p}_m^{8K}$$ as an observation from a random variable $$\hat{P}^{8K}_m \sim \frac{1}{100}Bin\left(100,p^{8K}_m\right)$$. Similarly, each $$\hat{p}_{m, j}^{Symb}, \; 1 \le j \le 50$$ is an observation of $$\hat{P}^{Symb}_m \sim \frac{1}{100} Bin\left(100,p^{Symb}_m\right)$$, although we can't assume that these observations are independent, due to the shared templates.  
+Under the assumptions of this mathematical model, we can think of $$\hat{p}_m^{8K}$$ as an observation from a random variable $$\hat{P}^{8K}_m \sim \frac{1}{100}Bin\left(100,p^{8K}_m\right)$$. Similarly, each $$\hat{p}_{m, j}^{Symb}, \; 1 \le j \le 50$$ is an observation of $$\hat{P}^{Symb}_m \sim \frac{1}{100} Bin\left(100,p^{Symb}_m\right)$$. We can't assume that these observations are independent, due to the shared templates.  
 
-Throughout this blogpost, the main question we've tackled is: given these observed $$\hat{p}_m^{8K}$$ and $$\overline{\hat{p}_m^{Symb}}$$, what evidence is there to believe that $$p^{8K}_m \neq p^{Symb}_m$$ or that $$p^{8K}_m > p^{Symb}_m$$?
+In this blogpost, the main question we've tackled is: given these observed $$\hat{p}_m^{8K}$$ and $$\overline{\hat{p}_m^{Symb}}$$, what evidence is there to believe that $$p^{8K}_m \neq p^{Symb}_m$$ or that $$p^{8K}_m > p^{Symb}_m$$?
 
 <!-- I like the math setup section 
 DRI: @MPK - Well done and thanks for writing it down :)
@@ -697,7 +695,7 @@ For robustness purposes, here are the [Clopper-Pearson](https://en.wikipedia.org
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/clopper_0.95.png" 
   class="img-fluid" 
   title="95% Clopper-Pearson intervals for the point estimates of $p_m$." 
-  caption="<b>95% Clopper-Pearson intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ estimated from the data reported in Table 1 in the appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
+  caption="<b>95% Clopper-Pearson intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ estimated from the data reported in Table 1 in the Appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
 %}
 
 
@@ -725,14 +723,14 @@ For completeness, we include 99% confidence intervals for the point estimates of
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.99.png" 
   class="img-fluid" 
   title="99% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles)." 
-  caption="<b>99% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ estimated from the data reported in Table 1 in the appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
+  caption="<b>99% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ estimated from the data reported in Table 1 in the Appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
 %}
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/clopper_0.99.png" 
   class="img-fluid" 
   title="99% Clopper-Pearson confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles)." 
-  caption="<b>99% Clopper-Pearson confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ estimated from the data reported in Table 1 in the appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
+  caption="<b>99% Clopper-Pearson confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with point estimates of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ estimated from the data reported in Table 1 in the Appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
 %}
 
 ## Logistic regression: full results
