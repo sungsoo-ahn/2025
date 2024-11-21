@@ -426,10 +426,48 @@ Where:
 
 
 ### Text-Centric Alignment
+Text-Centric Alignment is an approach where text embeddings act as the anchor or central hub for aligning different modalities like images, audio, and video. It relies on pre-trained large language models (LLMs) to generate text representations that allow other modalities to be mapped into a common embedding space. The alignment between modalities is achieved by projecting them into the text space and optimizing for similarity.
+
+<aside class="l-body box-note" markdown="1">
 
 
+TextBind<d-cite key="li2023textbind"></d-cite> is a multimodal alignment framework that uses text embeddings as the central anchor, allowing other modalities like images and audio to be aligned in a shared semantic space. As shown in the image below:
+
+
+{% include figure.html path="assets/img/2025-04-28-unified-models/1732205074481.jpg" class="img-fluid" %}
+</aside>
+
+Text-Centric Alignment Formulation:
+
+* **1. Text Embedding Space:** Let $T$ represent the text modality, which is encoded by a pre-trained language model to produce an embedding vector $t$. The text embedding $t$ is:
+
+$$
+\mathbf{t} = \text{LLM}(T)
+$$
+
+* **2. Modality Embedding:** Other modalities, such as images $𝐼$, audio $𝐴$, or video $𝑉$, are encoded into their respective embedding spaces using dedicated encoders. For instance, the image $𝐼$ is encoded as $𝑖$ using a vision model:
+
+$$
+\mathbf{i} = \text{VisionEncoder}(I)
+$$
+
+Similarly, audio $𝐴$ is encoded as $𝑎$ using an audio encoder:
+
+$$
+\mathbf{a} = \text{AudioEncoder}(A)
+$$
+
+* **2. Aligning Modalities with Text:** Once we have embeddings for both text and the other modalities, the goal is to align them in a shared embedding space. This alignment can be done using a **contrastive loss** or other similarity-based loss functions. The alignment objective is:
+
+$$
+\mathcal{L}_{\text{align}} = - \log \frac{\exp(\text{sim}(\mathbf{t}, \mathbf{m}) / \tau)}{\sum_{i=1}^N \exp(\text{sim}(\mathbf{t}, \mathbf{m}_i) / \tau)}
+$$
+
+Where $𝑚$ represents the embedding of a modality (image, audio, etc.). $sim(⋅,⋅)$ is the similarity function (*e.g.,* cosine similarity). *𝜏* is the temperature hyperparameter that controls the sharpness of the distribution. *𝑁* is the number of possible modality samples.
 
 ### Others
+
+
 
 
 
