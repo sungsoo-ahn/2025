@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Multi-resolution training improves robustness against adversarial attacks
-description: Deep neural networks (DNNs) are now central to critical tasks like traffic sign recognition in autonomous vehicles. However, their vulnerability to adversarial attacks—small but deliberately crafted input perturbations—poses serious risks. To address this, we propose multi-resolution training, a novel method that utilizes lower-resolution information from input images to retain essential features while filtering out adversarial noises. Our approach integrates custom downsampling and upsampling layers into DNNs to enhance robustness. Testing on various DNNs shows effective enhancements in resilience against adversarial attacks, making this technique a promising solution for safer real-world applications.
+description: Deep neural networks (DNNs) are now central to critical tasks like traffic sign recognition in autonomous vehicles. However, their vulnerability to adversarial attacks—small but deliberately crafted input perturbations—poses serious risks. To address this, we propose multi-resolution training, a novel method that utilizes lower-resolution information from input images to retain essential features while filtering out adversarial noises. Our approach integrates custom downsampling and upsampling layers into DNNs to enhance robustness. Testing on various DNNs shows effective enhancements in robustness against adversarial attacks, making this technique a promising solution for safer real-world applications.
 
 
 date: 2025-04-28
@@ -193,4 +193,4 @@ As adversarial perturbations intensify, such as with a higher epsilon ($$\epsilo
 
 
 ## Conclusion
-DNNs are crucial for tasks like traffic sign recognition but remain vulnerable to adversarial attacks, posing significant challenges for their safe deployment. This blog post introduced a multi-resolution training approach that enhances model robustness by the integration of custom LPF and Gaussian CNN blocks. Our method demonstrated consistent improvements in resilience across different architectures, including ResNet18, MobileNetV2, and VGG16. These findings underscore the potential of multi-resolution training to mitigate adversarial risks, paving the way for safer and more reliable applications of DNNs in real-world scenarios.
+DNNs are crucial for tasks like traffic sign recognition but remain vulnerable to adversarial attacks, posing significant challenges for their safe deployment. This blog post introduced a multi-resolution training approach that enhances model robustness by the integration of custom LPF and Gaussian CNN blocks. Our method demonstrated consistent improvements in robustness across different architectures, including ResNet18, MobileNetV2, and VGG16. These findings underscore the potential of multi-resolution training to mitigate adversarial risks, paving the way for safer and more reliable applications of DNNs in real-world scenarios.
