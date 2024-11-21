@@ -467,11 +467,41 @@ $$
 
 Where $𝑚$ represents the embedding of a modality (image, audio, etc.). $sim(⋅,⋅)$ is the similarity function (*e.g.,* cosine similarity). *𝜏* is the temperature hyperparameter that controls the sharpness of the distribution. *𝑁* is the number of possible modality samples.
 
-### Others
+### Generalized
+Generalized Alignment is an approach to multimodal learning that does not center any single modality, like text or image, but instead creates a unified space for all modalities based on a knowledge base or feature-centered approach. This method aims to align different modalities by utilizing shared characteristics derived from a broader knowledge base, rather than anchoring on one modality's features.
+
+In generalized alignment, the learning model is trained to map various modalities (e.g., text, images, audio) into a shared feature space without giving preference to one modality over others. The alignment is based on common semantic features or concepts that exist across modalities, allowing the model to learn more flexible, cross-modal relationships.
 
 
+<aside class="l-body box-note" markdown="1">
+
+UniBind is an example of a generalized alignment framework. Unlike traditional approaches, UniBind does not use text or image as the central anchor for aligning modalities. Instead, it builds alignment using a knowledge base or feature-centered representation. As shown in the image below:
 
 
+{% include figure.html path="assets/img/2025-04-28-unified-models/1732206695874.jpg" class="img-fluid" %}
+</aside>
+
+Formulation for Generalized Alignment:
+
+* **1. Feature Representations:** Let $M_i$ represent the embeddings for each modality $𝑖$, where $M_i$ could be the image, text, or audio features. The model aims to align all modality embeddings $M_i$ into a common shared space $F$ based on their knowledge base features:
+
+$$
+M_i = FeatureExtractor_i(M_i)  # i can represent different modalities (image, text, audio)
+$$
+
+* **2. Knowledge Base Representation:** The knowledge base $𝐾$ represents a shared space that captures the common semantic features of all modalities:
+
+$$
+K = KnowledgeBase(F)  # Extracting features that are common across modalities
+$$
+
+* **3. Alignment Objective:** The learning objective is to map each modality embedding to the knowledge base space $𝐾$ while maintaining their relationships:
+
+$$
+L_{align} = - log \frac{exp(sim(M_i, K_i) / τ)}{\sum_{j=1}^{N} exp(sim(M_i, K_j) / τ)}
+$$
+
+Where $M_i$ is the embedding of modality $i$ (image, text, audio). $K_i$ is the corresponding knowledge base embedding for the modality. $sim(., .)$ is the similarity function (*e.g.,* cosine similarity). $τ$ is the temperature hyperparameter that controls the sharpness of the distribution. $N$ is the number of modality samples.
 
 
 <!-- https://poloclub.github.io/transformer-explainer/ -->
