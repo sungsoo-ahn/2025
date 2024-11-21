@@ -127,7 +127,7 @@ Figure 4. Diffusion Forcing, a new training paradigm where a diffusion model is 
 
 An exciting trend in current research is centered on combining large language models (LLMs) with diffusion processes. A series of studies have demonstrated the potential of diffusion language models (DLMs) in achieving controllable text generation, parallel text generation, and global planning, effectively addressing major drawbacks found in the autoregressive (AR) approach. 
 
-### CLLMs: Consistency Large Language Models
+### CLLMs: Consistency Large Language Models <d-cite key="koucllms"></d-cite>
 
 The speedup effect of Jacobi decoding for vanilla LLMs is minimal in practice. The reason is that AR-trained LLMs can usually generate only one correct token in each Jacobi iteration as such models can rarely yield a correct token when there are incorrect preceding tokens. To address this, we propose to adapt pre-trained LLMs to consistently map any point $$y$$ on the Jacobi trajectory $J$ to the fixed point $$y^∗$$.
 
