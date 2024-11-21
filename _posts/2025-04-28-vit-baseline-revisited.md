@@ -393,7 +393,13 @@ just fall back to training on 100% of the training data.
 2. The reference implementation sets [`shuffle_buffer_size = 250_000`](https://github.com/google-research/big_vision/blob/46b2456f54b9d4f829d1925b78943372b376153d/big_vision/configs/vit_s16_i1k.py#L49)
 which is only 20% of the training set, so the training data is not fully shuffled. To fit the data in
 a TensorBook, we need to further reduce it to `150_000` and [revive the `utils.accumulate_gradient()`](https://github.com/EIFY/big_vision/commit/e2f74c170d926ab73846ceb9b0d9aad2aa5814af)
-function to train with gradient accumulation. 1 and 2 result in 76.74% top-1 validation set accuracy.
+function to train with gradient accumulation. 1 and 2 result in 76.74% top-1 validation set accuracy <d-footnote>Perhaps it's worth noting that training on multiple devices vs. single device is not fully equivalent due to the Mixup implementation. With Mixup, the model is trained with <d-cite key="zhang2018mixup"></d-cite>
+$$
+\begin{align*}
+  \tilde{x} &= \lambda x_i + (1 - \lambda) x_j\\
+  \tilde{y} &= \lambda y_i + (1 - \lambda) y_j
+\end{align*}
+$$ where $(x_i, y_i)$ and $(x_j, y_j)$ are (feature vector, one-hot label) sampled from training data and $\lambda$ is randomly sampled from $[0,1]$. In common implementations including that of Big Vision and torchvision, $\lambda$ is only sampled once per batch and $(x_i, y_i)$ and $(x_j, y_j)$ are always from the same batch. Since each device does such <a href="https://github.com/google-research/big_vision/blob/46b2456f54b9d4f829d1925b78943372b376153d/big_vision/train.py#L290-L291">sampling independently</a> in Big Vision, each global batch contains samples mixed-up with $n$ different $\lambda$ values when the model is trained with $n$ devices. That said, we don't expect this to make a difference. Furthermore since both TPUv3-8 and 8x A100-SXM4-40GB have 8 devices total, the Mixup implementation becomes equivalent again after (7.)</d-footnote>.
 
 3. We fix the Contrast transform bug [described above](#randaugment).
 
@@ -410,7 +416,7 @@ in torchvision.
 
 7. Lastly, we test whether [fully shuffling the training set](https://www.tensorflow.org/api_docs/python/tf/data/Dataset#fully_shuffling_all_the_data)
 helps model performance. We set [`config.input.shuffle_buffer_size = 1281167`](https://github.com/EIFY/big_vision/blob/5adab5c5985f0cd9b2e5fd887a58c062866ab092/big_vision/configs/vit_s16_i1k_8_gpu.py#L50)
-and train a model on a 8x A100-SXM4-40GB instance on [Lambda](https://lambdalabs.com/) with 1-6 but
+and train a model on a 8x A100-SXM4-40GB [Lambda](https://lambdalabs.com/) instance with 1-6 but
 no gradient accumulation. The model reaches [76.85% top-1 validation set accuracy](https://api.wandb.ai/links/eify/huigfbka).
 
 8. There is one discrepancy that we choose to ignore: In the Big Vision implementation of the Inception crop
@@ -584,9 +590,8 @@ And our own repo should be no exception.
     ```
 
     Remove `--torchvision-inception-crop` for faithful replication of <d-cite key="beyer2022better"></d-cite>, i.e. with TF-like Inception crop.
-    Experimentally step/s hits a plateau with 64-112 workers on a Lambda 8x A100-SXM4-40GB instance but the `no-randaug-no-mixup` experiment is
-    still faster (17h30m vs. 1d for 300 epochs), suggesting that the GPUs are sometimes waiting for data augmentation. Adjust both `N_WORKERS`
-    and `N_THREADS` for your machiine.
+    Experimentally step/s hits a plateau with 64-112 workers on a Lambda 8x A100-SXM4-40GB instance. Adjust both `N_WORKERS`
+    and `N_THREADS` for your machine.
 
    * Single-node, single-GPU:
     Replace `torchrun` with `python` and remove `--multiprocessing-distributed`. You may need to use gradient accumulation to make sure $$\left( \frac{\text{batch-size}}{\text{accum-freq}} \right)$$ samples fit in the GPU RAM:
