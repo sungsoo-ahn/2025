@@ -299,17 +299,26 @@ For the single-model paradigm, existing methods can primarily be categorized int
 
   Architecture\Feature     | **Discrete** | **Continuous** 
 --- | --- | ---
-**Autoregressive** | *Chameleon*<d-cite key="chameleon2024"></d-cite>;*EMU3*<d-cite key="wang2024emu3"></d-cite> | *MMAR*<d-cite key="yang2024mmar"></d-cite>
-**AR+Diffusion** | *Show-O*<d-cite key="xie2024showo"></d-cite>; *VILA-U*<d-cite key="wu2024vila"></d-cite>; *LWM*<d-cite key="liu2024world"></d-cite> | *Transfusion*<d-cite key="zhou2024transfusion"></d-cite>;*MonoFormer*<d-cite key="zhao2024monoformer"></d-cite>
+**Autoregressive** | *Chameleon*<d-cite key="chameleon2024"></d-cite>;*EMU3*<d-cite key="wang2024emu3"></d-cite>; *VILA-U*<d-cite key="wu2024vila"></d-cite>; *LWM*<d-cite key="liu2024world"></d-cite> | *MMAR*<d-cite key="yang2024mmar"></d-cite>
+**AR+Diffusion** | *Show-O*<d-cite key="xie2024showo"></d-cite>; *SEED-X*<d-cite key="ge2024seed"></d-cite>; *LaVIT*<d-cite key="jin2024unified"></d-cite>  | *Transfusion*<d-cite key="zhou2024transfusion"></d-cite>;*MonoFormer*<d-cite key="zhao2024monoformer"></d-cite>
 
 
 
 ### Autoregressive Models v.s. Mixed Architectures (AR+Diffusion)
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
-The fundamental difference between Autoregressive Models (*e.g.,* EMU3, Chameleon) and AR+Diffusion Models (*e.g.,* Show-O, Transfusion) lies in their approach: Autoregressive Models still sequentially predict the next token across all modalities, while AR+Diffusion models combine autoregressive generation for discrete tokens (*e.g., text*) with diffusion processes for continuous data (*e.g.,* images and videos). The modeling differences between these two approaches are as follows:
 
 
+The fundamental difference between Autoregressive Models (*e.g.,* EMU3, Chameleon) and AR+Diffusion Models (*e.g.,* Show-O, Transfusion) lies in their approach.Autoregressive Models still sequentially predict the next token across all modalities, while AR+Diffusion models combine autoregressive generation for discrete tokens (*e.g., text*) with diffusion processes for continuous data (*e.g.,* images and videos). 
+
+<aside class="l-body box-note" markdown="1">
+Autoregressive (AR) models and mixed architectures (AR + diffusion) differ in how they handle data, particularly for high-dimensional modalities like images and videos. AR models treat all modalities uniformly by sequentially predicting the next token, which works well for temporal tasks but struggles with capturing spatial dependencies. In contrast, mixed architectures combine AR for global structure and diffusion for spatial modeling, allowing all tokens to interact during generation. This results in more coherent outputs for image and video tasks, as diffusion handles spatial distributions through parallel denoising. While AR models are simple and efficient, mixed architectures offer better performance for spatial data at the cost of increased complexity and computational demand.
+
+{% include figure.html path="assets/img/2025-04-28-unified-models/11581732176566_.pic.jpg" class="img-fluid" %}
+</aside>
+
+
+The modeling differences and the respective strengths and weaknesses of these two approaches are outlined below:
 | **Aspect**             | **Autoregressive Models**                                | **AR+Diffusion Models**                              |
 |-------------------------|---------------------------------------------------------|-----------------------------------------------------|
 | **Generative Strategy**  | Iteratively predicts the next token.                    | Predicting all tokens at once by iterative denoising. |
@@ -319,11 +328,39 @@ The fundamental difference between Autoregressive Models (*e.g.,* EMU3, Chameleo
 | **Scalability**         | Scales well to large multimodal datasets.               | Requires careful balancing of AR and diffusion.     |
 
 
-#### Autoregressive-based Models
+
+#### Autoregressive-based Models with Discrete Valued Tokenizer
+Autoregressive-based models with discrete-valued tokenizers, including Chameleon, EMU3, leverage a unified tokenization framework to process diverse modalities such as text, images, and video. These models transform multimodal inputs into discrete token sequences, enabling a shared representation for both generation and understanding tasks.
 
 
-####  Mixed Architectures
+**Advantage - Unified Tokenization**. All input data, regardless of modality, is converted into discrete tokens using techniques like VQ-VAE<d-cite key="van2017neural"></d-cite>. This allows seamless integration of text, image, and video data into a single autoregressive sequence.
 
+**Limitations - Inference Speed**. Token-by-token generation leads to slower inference times, particularly for long sequences like video.
+
+#### Autoregressive-based Models with Continuous Valued Tokenizer
+Autoregressive models with continuous-valued tokenizers, such as MMAR, introduce an alternative approach to unified multimodal modeling by representing data as continuous latent representations instead of discrete tokens. This method offers unique advantages in modeling high-dimensional data like images and videos while maintaining the flexibility of autoregressive frameworks.
+
+**Advantage - Continuous Representations:**. Unlike discrete tokenization, these models use continuous embeddings to represent inputs, providing a richer and more compact encoding of complex modalities like video and high-resolution images.
+
+**Limitations - Task Flexibility:**: While excellent for understanding tasks, these models may require additional tuning to handle diverse generative tasks effectively.
+
+#### Mixed Architectures with Discrete Valued Tokenizer
+Mixed architectures that combine autoregressive (AR) and diffusion models, such as Show-O and SEED-X, represent an innovative approach to unified multimodal modeling. These architectures leverage the strengths of both AR and diffusion frameworks while operating on discrete-valued tokenized inputs, aiming to address the limitations of each individual method.
+
+
+
+**Advantage - Unified Tokenization for Text and Image/Video**. Both AR and diffusion processes operate on tokenized representations, enabling seamless integration of diverse modalities such as text, images, and video within the same framework. Additionally, diffusion models excel at modeling spatial distributions, making them particularly effective for image and video generation tasks. Furthermore, inference with diffusion models tends to be faster because they process data in parallel, unlike autoregressive models that predict tokens sequentially.
+
+**Limitations - Computational Overhead and Model Complexity**. Combining AR and diffusion significantly increases training and inference costs due to the sequential nature of AR and the iterative steps of diffusion. The hybrid approach introduces architectural complexity, making optimization and implementation more challenging.
+
+#### Mixed Architectures with Continuous Tokenizer
+Mixed architectures utilizing continuous tokenizers, such as Transfusion and MonoFormer, represent a cutting-edge approach to unified multimodal modeling. By combining autoregressive (AR) and diffusion frameworks with continuous latent representations, these models aim to balance efficiency, scalability, and high-quality performance across generation and understanding tasks.
+
+
+
+**Advantage - Continuous Tokenization and Diffusion Model**. Inputs are represented as compact continuous-valued embeddings rather than discrete tokens, offering a more flexible and efficient approach to handling high-dimensional multimodal inputs. Additionally, diffusion models, with their iterative denoising process, are particularly well-suited for generation tasks in image and video modalities.
+
+**Advantage - Training Complexity**. The hybrid nature of these architectures requires careful optimization, as interactions between AR and diffusion components in continuous space can be challenging to balance.
 
 ### Discrete v.s. Continuous
 
