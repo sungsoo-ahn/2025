@@ -486,13 +486,13 @@ Formulation for Generalized Alignment:
 * **1. Feature Representations:** Let $M_i$ represent the embeddings for each modality $𝑖$, where $M_i$ could be the image, text, or audio features. The model aims to align all modality embeddings $M_i$ into a common shared space $F$ based on their knowledge base features:
 
 $$
-M_i = FeatureExtractor_i(M_i)  # i can represent different modalities (image, text, audio)
+M_i = FeatureExtractor_i(M_i)  
 $$
 
 * **2. Knowledge Base Representation:** The knowledge base $𝐾$ represents a shared space that captures the common semantic features of all modalities:
 
 $$
-K = KnowledgeBase(F)  # Extracting features that are common across modalities
+K = KnowledgeBase(F)  
 $$
 
 * **3. Alignment Objective:** The learning objective is to map each modality embedding to the knowledge base space $𝐾$ while maintaining their relationships:
