@@ -28,7 +28,7 @@ toc:
       - name: "4.2.2 Considering each model independently: Is the decline in performance statistically significant?"
       - name: "4.2.3 Considering all models together: Is the decline in performance statistically significant?"
     - name: 4.3 Performance decrease and variance increase with question complexity
-    - name: 4.4 Performance decline on the No-Op dataset
+    - name: 4.4 Performance decline on the NoOp dataset
   - name: 5. Conclusion
 ---
 
@@ -89,7 +89,7 @@ The authors propose GSM-Symbolic, a variant of the well-established GSM8K benchm
 The authors also construct four variants of GSM-Symbolic by modifying question difficulty:
 - GSM-M1: An easier version that removes one clause from each question.
 - GSM-P1 and GSM-P2: Progressively harder versions that add one or two extra clauses respectively.
-- GSM-NoOp: A version that adds "seemingly relevant but ultimately irrelevant information" that should have no operational significance (No-Op).
+- GSM-NoOp: A version that adds "seemingly relevant but ultimately irrelevant information" that should have no operational significance (NoOp).
 
 To generate GSM-Symbolic and the variants, the authors create "templates" from GSM8K questions by identifying modifiable variables whilst preserving the underlying logic. 
 Each variable has a specified domain and constraints to ensure valid questions and answers. Here's an example template:
@@ -121,7 +121,7 @@ The key findings are:
 
 - Sensitivity to question complexity: As complexity of the questions increases, “the performance [of models] decreases and the variance increases”, which is said to suggest that “models are not performing formal reasoning”, and that the increase in variance is “in line with the pattern-matching hypothesis”.
 
-- Impact of irrelevant information: Introducing a clause of no operational significance (No-Op), leads to large performance degradation across models, suggesting “deeper issues in their reasoning processes”.
+- Impact of irrelevant information: Introducing a clause of no operational significance (NoOp), leads to large performance degradation across models, suggesting “deeper issues in their reasoning processes”.
 
 The paper concludes that LMs “are not performing formal reasoning”.
 
@@ -542,8 +542,41 @@ Whilst models can of course handle longer contexts by utilising various context 
 **Verdict:** The emphasis on “non-negligible variance” and “increase in variance” throughout the paper appears to be an over-interpretation of expected statistical artifacts. 
 The decrease in probability of success as question complexity increases can be due to both increased difficulty in reasoning and increased probability of making an arithmetic mistake.
 
-## 4.4 Performance decline on the No-Op dataset
-TODO
+## 4.4 Performance decline on the NoOp dataset
+
+All models perform substantially worse on the NoOp dataset compared to GSM8K, as shown in Figure 8 (a) of the paper:
+
+{% include figure.html 
+  path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fig8_gsm.png" 
+  class="img-fluid" 
+  caption="<b>Figure 8(a) from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>.</b> Note that the $y$-axis scales in (b) and (c) are different for different models."
+%}
+
+We repeat the independent and paired tests and indeed find that all models perform significantly worse on the NoOp dataset compared to GSM8K.
+
+{% include figure.html 
+  path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/fisher_pvalues_NoOp.png"
+  class="img-fluid" 
+  title="Fisher exact test" 
+  caption="<b>Fisher exact test: p-values for two-sided and one-sided tests across models.</b>
+  The grey line represents the 5% significance level, and the black line represents the 1% significance level. 
+  Models marked with (*) indicate that the null hypothesis can be rejected at the 5% significance level in favor of the two-sided alternative.
+  All models perform significantly worse on the NoOp dataset compared to GSM8K." 
+%}
+
+| Subset of Models | Two-sided p-value | One-sided p-value |
+|------------------|-------------------|-------------------|
+| **Largest**          | 0.016        | 0.008       |
+| **Smallest**         | 0.016      | 0.008      |
+
+<div class="caption">
+<b>Results of the Wilcoxon signed-rank test for the two subsets of models.</b> The results confirm that the difference in performance between GSM8K and GSM-NoOp is highly statistically significant.
+</div>
+
+The NoOp results present the most interesting results from the point of view of reasoning vs pattern-matching debate.
+For example, the results in Figure 8 (b) and (c) might suggest that the models in fact struggle to pattern-match (in context) as there is no signficiant improvement in performance when NoOp examples are provided in context.
+We believe there is scope for a range of ablations, such as prompting the model that "not all information might be relevant," to gain deeper understanding of reasoning capabilities.
+
 
 ## 5. Conclusion
 
@@ -562,7 +595,7 @@ DRI lol, I wrote "statistically strong" as synonym for "statistically significan
 <!-- how about longer context windows make the task more difficult? So maybe the models are just forgetful, otherwise the reasoning is the same. This same happens with humans if they need to do all the calculations in their head. 
 DRI: Yeah good point! I'll add this as a possible explanation in the previous section too. Though worth saying that these are pretty short questions and I think they'll fit in the training context of all the models (but worth checking); issues tend to start arising when we start extrapolating beyond the training context length.
 -->
-- [Section 4.4] TODO No-Op results do indeed show statistically significant decrease in performance for all models except ...; taken jointly, ....
+- [Section 4.4] The performance decline on the GSM-NoOp dataset is highly statistically significant. We believe that investigating the NoOp results in more detail could provide genuine insights into the models' reasoning capabilities.
 <!-- the No-Op supports the context window problems again, especially if the No-Op results are worse then P2 or P1. To examine the context window idea, we can compare the question success based on the question length, but we need the actual questions for that. 
 Also, are some of the models known to be better at handling longer context windows? 
 DRI: The context for all these questions is quite small, so I dont think it's a primary driver for this big underperformance. I genuinely think the authors did a very poor job at running this experiemnt, can explain more when we meet on Fri.
