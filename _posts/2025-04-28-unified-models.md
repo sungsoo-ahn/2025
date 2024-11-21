@@ -38,19 +38,13 @@ toc:
     subsections:
     - name: Autoregressive Model
     - name: Diffusion Model
-  - name: Unified Multimodal Models
-  - name: Challenges and Future Work
-  - name: to be removed
+  - name: Single Model for Unified Multimodal Models
     subsections:
-    - name: Images and Figures
-    - name: Interactive Figures
-    - name: Citations
-    - name: Footnotes
-    - name: Code Blocks
-    - name: Diagrams
-    - name: Tweets
-    - name: Layouts
-    - name: Other Typography?
+    - name: Preliminary
+    - name: Autoregressive Models v.s. Mixed Architectures (AR+Diffusion)
+    - name: Discrete v.s. Continuous
+  - name: Multi-Experts for Unified Multimodal Models
+  - name: Challenges and Future Work
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
@@ -248,7 +242,7 @@ where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at
 
 
 
-## Unified Multimodal Model
+## Single Model for Unified Multimodal Model
 
 ### Preliminary
 Unified multimodal models represent a pivotal advancement in artificial intelligence, aiming to integrate and process multiple data modalities (*e.g.,* text, images, audio, and video) within a single model framework. These models are designed for understanding and generating across modalities, offering flexibility and efficiency that surpass traditional task-specific or modality-specific approaches. 
@@ -330,6 +324,7 @@ The modeling differences and the respective strengths and weaknesses of these tw
 
 
 
+
 **Autoregressive-based Models with Discrete Valued Tokenizer**.
 Autoregressive-based models with discrete-valued tokenizers, including Chameleon, EMU3, leverage a unified tokenization framework to process diverse modalities such as text, images, and video. These models transform multimodal inputs into discrete token sequences, enabling a shared representation for both generation and understanding tasks.
 
@@ -380,8 +375,23 @@ In autoregressive models, encoding an image with discrete values represents pixe
 
 
 
+## Multi-Experts for Unified Multimodal Models
 
+Unlike single, monolithic models trained to handle all modalities and tasks simultaneously, **multi-expert architectures** offer an alternative approach: leveraging specialized expert modules that align, process, and fuse information across diverse modalities. These architectures not only enable task-specific optimization but also facilitate the integration of pre-trained expert models, such as incorporating external capabilities into frameworks like ImageBind. Multi-experts are typically categorized based on their alignment focus: Image-Centric Alignment, Text-Centric Alignment, and Generalized Alignment methods.
 
+| **Aspect**                 | **Image-Centric (e.g., ImageBind<d-cite key="girdhar2023imagebind"></d-cite>)**         | **Text-Centric (e.g., TextBind<d-cite key="li2023textbind"></d-cite>)**            | **Generalized (e.g., UniBind<d-cite key="lyu2024unibind"></d-cite>)**                |
+|----------------------------|--------------------------------------------|---------------------------------------------|-----------------------------------------------|
+| **Alignment Focus**         | Visual-first                              | Text-first                                  | Balanced across all modalities                |
+| **Integration Capability**  | Fuses pre-trained visual-centric models   | Leverages pre-trained language models       | Incorporates multi-expert pre-trained modules |
+| **Strengths**               | Robust spatial and visual correlations    | Strong text-based reasoning and generation  | Versatile, supports diverse tasks             |
+| **Limitations**             | Limited in text/audio-heavy tasks         | Struggles with purely visual or auditory tasks | Increased computational complexity            |
+
+### Image-Centric Alignment
+
+Image-centric alignment models prioritize visual data as the foundational modality for cross-modal interactions, aligning other modalities such as text, audio, or motion with visual embeddings.
+
+Example: ImageBind
+Functions as an expert model for image-driven multimodal tasks, integrating diverse modalities (e.g., audio, text, depth) into a shared latent space.
 
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
