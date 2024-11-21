@@ -123,7 +123,7 @@ Also, note that <b><i>there is no explicit "rectification" mechanism</i></b> in 
 
 # How Do FM/RF Models Work?
 
-To gain a deep understanding of how models work, having an executable toy model is often a key instructional tool.  This tutorial is written as an executable Jupyter notebook ([Anonymous Colab link here](https://colab.research.google.com/drive/1LfFgfvykgZOi9fcduE_Zkt1QYJxPKNtx?usp=sharing)), though you can make sense of it without the code, so we will typically collapse or hide the code. But if you want to see it, you can expand the drop-down arrows.  
+To gain a deep understanding of how models work, having an executable toy model is often a key instructional tool.  This tutorial is written as an executable Jupyter notebook<d-footnote>Anonymized Colab link: <a href="https://tinyurl.com/iclr-2025-flow-blogpost-colab">https://tinyurl.com/iclr-2025-flow-blogpost-colab</a></d-footnote>, though you can make sense of it without the code, so we will typically collapse or hide the code. But if you want to see it, you can expand the drop-down arrows.  
 
 For instance, the code starts with importing packages...
 
@@ -1073,13 +1073,23 @@ viz_parabola_with_steps()
 While the results for $s=0.5$ are better than the others, we see that *none* of these examples make it all the way around the parabola (to the point (1,1))! If we're going to be using the endpoints integrated from the flow matching model as proxies for the true target data, we should have some confidence that those endpoints are actually "reaching" the target data. We could add more (smaller) steps to the integration, but there's another way: upgrade the integration (i.e. sampling) operation to a higher order of accuracy.
 
 
+<div class="callout-block">
+<b>Note:</b> Although retraining the flow-matching model with time warping isn't "required," it can improve results by better sampling the domain where accurate velocity approximations matter most.
+The <a href="https://tinyurl.com/iclr-2025-flow-blogpost-colab">executable version of this post</a> offers the option to retrain at this point, but for our toy problem the improvement is minimal.
+</div>
 
 
 ###  Better Integration / Sampling 
 
 Although forward Euler is surprisingly popular in ML circles, those with simulation backgrounds eye it with suspicion: despite being fast (*per step*) and easy to implement, it's also highly inaccurate and can lead to instabilities. The poor accuracy may not be an issue when everything's an approximation anyway, but we can do a lot better. 
 
-People who work with diffusion models know this, e.g. [Katherine Crowson's k-diffusion package](https://github.com/crowsonkb/k-diffusion) offers a bevy of integration choices. For now, we'll just implement the popular 4th-order Runge-Kutta (RK4) scheme. Per step, it's more "expensive" than forward Euler in that each RK4 step requires 4 function evaluations instead of forward Euler's single evaluation, and RK4 requires some extra storage, but the advantages you gain in accuracy are seriously worth it (e.g., because you can take much longer steps in time). Even with just a handful of RK4 steps, we can totally smoke the earlier forward Euler results:
+People who work with diffusion models know this, e.g. 
+[Katherine Crowson's k-diffusion package](https://github.com/crowsonkb/k-diffusion) offers a bevy of integration choices. 
+For now, we'll just implement the popular 4th-order Runge-Kutta (RK4) scheme. 
+Per step, it's more "expensive" than forward Euler in that each RK4 step requires 4 function evaluations instead of 
+forward Euler's single evaluation, and RK4 requires some extra storage, but the advantages you gain in accuracy are seriously worth 
+it. Since our learned flow trajectories are *smooth*, a few large steps with a higher-order integrator like RK4 can totally smoke the 
+earlier forward Euler results.
 
 
 <details>
@@ -1425,7 +1435,7 @@ How to move on from 2D dots to things like images, text, audio,...etc? We need o
 
 ## Diffusion Models
 
-Diffusion models, aka "score-based models" are similar to flow models in that the former also learn a vector field (the "score function") that serves to differentially transform the points in the sample.  The difference is that flow models are deterministic, whereas diffusion models are constantly injecting fresh noise, as if they are simulating actual Brownian motion  <d-cite key="brownian_motion"></d-cite> rather than the macroscopic flow.  To turn our flow model into a diffusion model, we could add "jitter," i.e. inject noise at every step.  The variance of that jitter as a function of time would correspond directly to the "noise schedule" of diffusion model<d-footnote>Technically, the trajectory and the (variance of the) jitter would be *the same quantity* for diffusion models, and the choice of constant velocity during training is akin to a choice of (constant-total-amplitude) noise schedule. However, diffusion models and flow models are not fully equivalent, and I am a bit hesitant to delineate 1-to-1 correspondences between them.</d-footnote>.  There's a lot more than can be said about the many connections between diffusion models and flow-based models that is probably being said elsewhere. For brevity's sake we'll move on for now. ;-) 
+Diffusion models, aka "score-based models" are similar to flow models in that the former also learn a vector field (the "score function") that serves to differentially transform the points in the sample.  The difference is that flow models are deterministic, whereas diffusion models are constantly injecting fresh noise, as if they are simulating actual Brownian motion  <d-cite key="brownian_motion"></d-cite> rather than the macroscopic flow.  To turn our flow model into a diffusion model, we could add "jitter," i.e. inject noise at every step.  The variance of that jitter as a function of time would correspond directly to the "noise schedule" of diffusion model<d-footnote>Technically, the trajectory and the (variance of the) jitter would be *the same quantity* for diffusion models, and the choice of constant velocity during training is akin to a choice of (constant-total-amplitude) noise schedule. However, diffusion models and flow models are not fully equivalent, and I am a bit hesitant to delineate 1-to-1 correspondences between them.</d-footnote>.  One practical difference is that curved flow-matching trajectories, being smooth, benefit greatly from higher-order integration schemes like RK4, whereas the non-smooth stochastic trajectories of diffusion models benefit less from such schemes. There's more than can be said about the many connections between diffusion models and flow-based models, however for brevity's sake we'll regard these as beyond the scope of this tutorial.  
  
 
 ## Optimal Transport 
