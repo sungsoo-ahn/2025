@@ -327,6 +327,26 @@ The modeling differences and the respective strengths and weaknesses of these tw
 
 
 
+### Discrete v.s. Continuous
+
+In a unified model, **discrete values** refer to categorical data (*e.g.,* tokens or words) predicted sequentially, while **continuous values** involve real-valued data (*e.g.,* pixels or audio signals) that are refined through a denoising process to generate high-quality outputs.
+
+| **Aspect**                  | **Discrete (e.g., Text)**                          | **Continuous (e.g., Images, Audio)**                 |
+|-----------------------------|----------------------------------------------------|------------------------------------------------------|
+| **Data Type**                | Categorical (text tokens).                        | Real-valued (pixels, audio signals, etc.).           |
+| **Primary Focus**            | Token-level generation (*e.g.,* text prediction).   | Continuous signal refinement (*e.g.,* image generation). |
+| **Training Complexity**      | High due to long sequences.                         | Moderate but requires sophisticated alignment.         |
+| **Encoding Approach**        | Requires codebook for quantization, potential errors.      | No codebook, direct continuous embeddings, avoids quantization errors. |
+
+
+<aside class="l-body box-note" markdown="1">
+
+In autoregressive models, encoding an image with discrete values represents pixels or features as categorical indices (*e.g.,* tokens from a **codebook**), while encoding with continuous values directly processes real-valued pixels or features:
+
+{% include figure.html path="assets/img/2025-04-28-unified-models/xfxc6-p9yvb.png" class="img-fluid" %}
+</aside>
+
+### Disscusion for Single-Model Paradigm
 
 **Autoregressive-based Models with Discrete Valued Tokenizer**.
 Autoregressive-based models with discrete-valued tokenizers, including Chameleon, EMU3, leverage a unified tokenization framework to process diverse modalities such as text, images, and video. These models transform multimodal inputs into discrete token sequences, enabling a shared representation for both generation and understanding tasks.
@@ -358,24 +378,6 @@ Mixed architectures utilizing continuous tokenizers, such as Transfusion and Mon
 
 *Advantage - Training Complexity*. The hybrid nature of these architectures requires careful optimization, as interactions between AR and diffusion components in continuous space can be challenging to balance.
 
-### Discrete v.s. Continuous
-
-In a unified model, **discrete values** refer to categorical data (*e.g.,* tokens or words) predicted sequentially, while **continuous values** involve real-valued data (*e.g.,* pixels or audio signals) that are refined through a denoising process to generate high-quality outputs.
-
-| **Aspect**                  | **Discrete (e.g., Text)**                          | **Continuous (e.g., Images, Audio)**                 |
-|-----------------------------|----------------------------------------------------|------------------------------------------------------|
-| **Data Type**                | Categorical (text tokens).                        | Real-valued (pixels, audio signals, etc.).           |
-| **Primary Focus**            | Token-level generation (*e.g.,* text prediction).   | Continuous signal refinement (*e.g.,* image generation). |
-| **Training Complexity**      | High due to long sequences.                         | Moderate but requires sophisticated alignment.         |
-| **Encoding Approach**        | Requires codebook for quantization, potential errors.      | No codebook, direct continuous embeddings, avoids quantization errors. |
-
-
-<aside class="l-body box-note" markdown="1">
-
-In autoregressive models, encoding an image with discrete values represents pixels or features as categorical indices (*e.g.,* tokens from a **codebook**), while encoding with continuous values directly processes real-valued pixels or features:
-
-{% include figure.html path="assets/img/2025-04-28-unified-models/xfxc6-p9yvb.png" class="img-fluid" %}
-</aside>
 
 
 
@@ -418,9 +420,9 @@ $$
 $$
 
 Where:
-- \( \text{sim}(q, k) \): Similarity function, such as cosine similarity.
-- \( \tau \): Temperature parameter that controls the sharpness of the distribution.
-- \( N \): Total number of candidates (including both positive and negative samples).
+- $\( \text{sim}(q, k) \)$: Similarity function, such as cosine similarity.
+- $\( \tau \)$: Temperature parameter that controls the sharpness of the distribution.
+- $\( N \)$: Total number of candidates (including both positive and negative samples).
 
 
 
