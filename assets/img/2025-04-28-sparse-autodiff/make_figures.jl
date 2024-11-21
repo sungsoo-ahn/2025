@@ -181,8 +181,7 @@ function draw!(M::DrawMatrix, center::Point)
             val = mat[i, j]
             cell_color = convert(HSL, mat_colors[i, j])
             (; h, s, l) = cell_color
-            l_new = iszero(val) ? 1.0 : l * scale(abs(val), 0, absmax, 1.65, 0.65)
-            cell_color_background = HSL(h, s, l_new)
+            cell_color_background = cell_bg_color(cell_color, val, absmax)
 
             # Draw rectangle
             setcolor(cell_color_background)
@@ -222,8 +221,143 @@ function draw!(M::DrawMatrix, center::Point)
     return setdash("solid")
 end
 
+function cell_bg_color(cell_color::HSL, val, absmax)
+    (; h, s, l) = cell_color
+    l_new = iszero(val) ? 1.0 : l * scale(abs(val), 0, absmax, 1.65, 0.65)
+    return HSL(h, s, l_new)
+end
+
 luma(c::Colorant) = luma(convert(RGB, c))
 luma(c::RGB) = 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b # using BT. 709 coefficients
+
+#==================#
+# Bicolored Matrix #
+#==================#
+
+Base.@kwdef struct DrawBiMatrix <: Drawable
+    mat::Matrix{Float64}
+    color::HSL{Float64} = color_black
+    cellsize::Float64 = CELLSIZE
+    padding_inner::Float64 = PADDING
+    padding_outer::Float64 = 1.75 * PADDING
+    border_inner::Float64 = 0.75
+    border_outer::Float64 = 2.0
+    dashed::Bool = false
+    show_text::Bool = false
+    mat_text::Matrix{String} = map(default_cell_text, mat)
+    colors_rows = fill(color, size(mat))
+    colors_cols = fill(color, size(mat))
+    absmax::Float64 = maximum(abs, mat)
+    height::Float64 =
+        size(mat, 1) * (cellsize + padding_inner) - padding_inner + 2 * padding_outer
+    width::Float64 =
+        size(mat, 2) * (cellsize + padding_inner) - padding_inner + 2 * padding_outer
+end
+
+function draw!(M::DrawBiMatrix, center::Point)
+    # Destructure DrawMatrix for convenience
+    (;
+        mat,
+        color,
+        cellsize,
+        padding_inner,
+        padding_outer,
+        border_inner,
+        border_outer,
+        dashed,
+        show_text,
+        mat_text,
+        colors_rows,
+        colors_cols,
+        absmax,
+        height,
+        width,
+    ) = M
+
+    rows, cols = size(mat)
+
+    # Apply offset
+    xcenter, ycenter = center
+    # Compute top left edge of matrix
+    x0 =
+        xcenter - (cols / 2) * (cellsize + padding_inner) + padding_inner / 2 -
+        padding_outer
+    y0 =
+        ycenter - (rows / 2) * (cellsize + padding_inner) + padding_inner / 2 -
+        padding_outer
+
+    setline(1)
+    for i = 1:rows
+        for j = 1:cols
+            # Calculate cell position (corner of matrix entry)
+            x = x0 + (j - 1) * (cellsize + padding_inner) + padding_outer
+            y = y0 + (i - 1) * (cellsize + padding_inner) + padding_outer
+
+            tl = Point(x, y)
+            tr = Point(x + cellsize, y)
+            bl = Point(x, y + cellsize)
+            br = Point(x + cellsize, y + cellsize)
+
+            ## Column coloring (lower triangle)
+
+            # Calculate color based on normalized value
+            val = mat[i, j]
+            cell_color = convert(HSL, colors_cols[i, j])
+            (; h, s, l) = cell_color
+            cell_color_background = HSL(h, s, iszero(val) ? 1.0 : l * 1.3)
+
+            # Draw triangle
+            setcolor(cell_color_background)
+            poly([tl, bl, br], :fill)
+
+            # Draw border
+            setline(border_inner)
+            setcolor(cell_color)
+            iszero(val) && setcolor("lightgray")
+            poly([tl, bl, br], :stroke)
+
+            ## Row coloring (upper triangle)
+
+            # Calculate color based on normalized value
+            val = mat[i, j]
+            cell_color = convert(HSL, colors_rows[i, j])
+            (; h, s, l) = cell_color
+            cell_color_background = HSL(h, s, iszero(val) ? 1.0 : l * 1.3)
+
+            # Draw triangle
+            setcolor(cell_color_background)
+            poly([tl, tr, br], :fill)
+
+            # Draw border
+            setline(border_inner)
+            setcolor(cell_color)
+            iszero(val) && setcolor("lightgray")
+            poly([tl, tr, br], :stroke)
+
+            ## Add text showing matrix value
+
+            if show_text
+                fontsize(min(cellsize ÷ 3, 14))
+                setcolor(HSL(h, s, 0.15)) # dark
+                iszero(val) && setcolor("lightgray")
+                text(
+                    mat_text[i, j],
+                    Point(x + cellsize / 2, y + cellsize / 2);
+                    halign = :center,
+                    valign = :middle,
+                )
+            end
+        end
+    end
+
+    # Draw border
+    setline(border_outer)
+    setcolor(color)
+    dashed && setdash([7.0, 4.0])
+    setlinejoin("miter")
+    rect(Point(x0, y0), width, height, :stroke)
+    return setdash("solid")
+end
 
 #==========#
 # Operator #
@@ -362,6 +496,7 @@ DFdn = DrawMatrix(; mat = F, color = color_F, dashed = true, show_text = true)
 DEq = DrawText(; text = "=")
 DTimes = DrawText(; text = "⋅")
 DCirc = DrawText(; text = "∘")
+DArrow = DrawText(; text = "→")
 
 DJF = DrawOverlay(; text = L"J_{f}(x)", color = color_F)
 DJG = DrawOverlay(; text = L"J_{g}(x)", color = color_G)
@@ -883,7 +1018,6 @@ function sparse_ad_forward_decompression()
         show_text = true,
         mat_colors = fill(mc2, m, 1),
     )
-    DArrow = DrawText(; text = "→")
 
     ## Position drawables
     drawables = [DSv1, DSv2, DEq, DS]
@@ -985,7 +1119,6 @@ function sparse_ad_reverse_decompression()
         show_text = true,
         mat_colors = fill(mc2, 1, n),
     )
-    DArrow = DrawText(; text = "→")
 
     ## Position drawables
     drawables = [DSv1, DEq, DS]
@@ -1066,13 +1199,6 @@ function forward_mode_sparse()
     end
 end
 
-
-function colored_matrix()
-    setup!()
-
-
-end
-
 function colored_graph(column_colors)
     setup!()
 
@@ -1114,6 +1240,40 @@ function colored_graph(column_colors)
     draw!(Position(DS, Point(80, 0)))
 end
 
+function bicoloring()
+    setup!()
+    B = [
+        0.519495 0.666885 -1.25661 -0.4849956 1.294274
+        0.90514 0.0 0.0 0.0 0.0
+        1.47566 0.0 0.0 0.0 0.0
+        -1.29473 0.0 0.0 0.0 0.0
+    ]
+
+    # All colors:
+    # blue, orange, green, purple, lightblue, vermillion, yellow
+    colors_cols = [
+        mc1 mc1 mc1 mc1 mc1
+        mc2 mc2 mc2 mc2 mc2
+        mc2 mc2 mc2 mc2 mc2
+        mc2 mc2 mc2 mc2 mc2
+    ]
+    colors_rows = [
+        mc2 mc1 mc1 mc1 mc1
+        mc2 mc1 mc1 mc1 mc1
+        mc2 mc1 mc1 mc1 mc1
+        mc2 mc1 mc1 mc1 mc1
+    ]
+
+    DB = DrawBiMatrix(;
+        mat = B,
+        color = color_F,
+        dashed = true,
+        show_text = true,
+        colors_rows,
+        colors_cols,
+    )
+    draw!(Position(DB, Point(0, 0)))
+end
 
 # This one is huge, avoid SVG and PDF:
 @png big_conv_jacobian() 1600 1200 joinpath(@__DIR__, "big_conv_jacobian")
@@ -1171,3 +1331,5 @@ var"@save" = var"@svg" # var"@pdf"
     @__DIR__,
     "colored_graph_suboptimal",
 )
+
+@save bicoloring() 120 100 joinpath(@__DIR__, "bicoloring")
