@@ -157,10 +157,8 @@ _Example of FGSM and black-patch perturbations_
 ### Results
 We developed various models by integrating different combinations of our proposed CNN blocks into the base architectures of ResNet18, MobileNetV2, and VGG16. These models were evaluated based on their classification accuracy on the given test dataset, as illustrated in the plots below. 
 
-<div>
+
 {% include figure.html path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image5.jpg" class="img-fluid"%}
-  <p>.l-page</p> 
-</div>
 
 
 
@@ -190,7 +188,8 @@ The prefixes and suffixes in the model names indicate specific modifications:
 
 **Performance Against Adversarial Attacks**
 
-   As the intensity of adversarial perturbations increases, such as a higher epsilon ($$\epsilon$$) in FGSM or more patches in black box attacks, the robustness of enhanced models generally decreases. However, these enhanced models, especially those featuring **gl** blocks and **c3** configurations, consistently maintain higher accuracy compared to baseline models across both FGSM and black box attacks. The exception is with MobileNetv2, where the combination of gl block and c6 configuration performs best. This suggests that these models' ability to effectively mitigate the impact of both gradient-based and localized perturbations.
+   
+As adversarial perturbations intensify, such as with a higher epsilon ($$\epsilon$$) in the Fast Gradient Sign Method (FGSM) or an increase in patches during black box attacks, the robustness of enhanced models typically diminishes. However, models equipped with **gl** blocks and **c3** configurations still manage to outperform baseline models in terms of accuracy under both FGSM and black box scenarios. Nonetheless, in specific instances illustrated in figures (d) and (e), this combination shows a quicker decline in performance as perturbations grow. Despite this, alternative methods proposed show greater robustness compared to the baselines, indicating that these enhanced models' ability to effectively mitigate the impact of both gradient-based and localized perturbations.
 
 
 ## Conclusion
