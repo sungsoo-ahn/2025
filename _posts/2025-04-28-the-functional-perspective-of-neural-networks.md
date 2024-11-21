@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: The Functional Perspective of Neural Networks
-description: Common wisdom suggests that neural networks trained on the same dataset reaching the same accuracy and loss can be considered equivalent. However, when considering neural networks as functional representations of their input space, it becomes clear that they represent distinct functions that enable predictive capacity. In this blog post, we review functional perspectives used to understand the success of neural network ensembles on more modern architectures. We concurrently define weak and strong functional similarity analysis that assesses the functional diversity of neural networks with increasing fidelity; we identify the data primacy effect while elucidating the pitfalls of traditional approaches when considering neural networks from a functional perspective.  
+description: Common wisdom suggests that neural networks trained on the same dataset reaching the same accuracy and loss can be considered equivalent. However, when considering neural networks as functional representations of their input space, it becomes clear that they represent distinct functions that enable predictive capacity. In this blog post, we review functional perspectives used to understand the success of neural network ensembles on more modern architectures with increasing fidelity; as a result of this analysis, we identify the data primacy effect while elucidating the pitfalls of traditional comparison when considering neural networks from a functional perspective.
 date: 2025-04-28
 future: true
 htmlwidgets: true
