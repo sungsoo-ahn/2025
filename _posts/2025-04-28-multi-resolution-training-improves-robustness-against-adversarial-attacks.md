@@ -43,7 +43,6 @@ toc:
   - name: Experiment
     subsections:
     - name: Adversarial Attacks  
-    subsections:
     - name: Results   
   - name: Conclusion
 
@@ -68,26 +67,28 @@ _styles: >
 ---
 ## DNN Vulnerabilities
 
-Recent research has demonstrated that DNNs are surprisingly vulnerable to adversarial examples, where small modifications to input data can result in significant incorrect predictions<d-cite key="szegedy2014intriguing"></d-cite><d-cite key="goodfellow2015explaining"></d-cite>. This susceptibility arises from DNNs' inherent linearity in high-dimensional spaces and limited generalization. This vulnerability is especially concerning for traffic sign recognition systems, which rely exclusively on DNNs processing camera images without additional error correction sources. Many research efforts have been made on attacks targeting these systems, as they are particularly susceptible and easily exploited in real-world scenarios<d-cite key="pavlitska2023adversarial"></d-cite>. Early research into adversarial attacks on traffic sign recognition typically involved physical methods, such as affixing stickers to traffic signs<d-cite key="eykholt2018robust"></d-cite>, replacing signs with versions that included embedded perturbations<d-cite key="pavlitska2023adversarial"></d-cite>, or placing patches directly on camera lenses<d-cite key="zolfi2021translucent"></d-cite>. While these methods can be effective, they require manual effort and are often noticeable to drivers. 
+Recent research has demonstrated that DNNs are surprisingly vulnerable to adversarial examples, where small modifications to input data can result in significant incorrect predictions<d-cite key="szegedy2014intriguing"></d-cite><d-cite key="goodfellow2015explaining"></d-cite>. This susceptibility arises from DNNs' inherent linearity in high-dimensional spaces and limited generalization. This vulnerability is especially concerning for traffic sign recognition systems, which rely exclusively on DNNs processing camera images without additional error correction sources. 
 
-To address these limitations, researchers have shifted their focus to direct attacks on DNN inputs. One of the first developed techniques is the Fast Gradient Sign Method (FGSM), which uses the gradients of the loss function relative to the input data to create perturbations that maximize the loss and result in misclassification<d-cite key="goodfellow2015explaining"></d-cite>. Subsequent developments include the Projected Gradient Descent (PGD) approach<d-cite key="madry2018towards"></d-cite>. Other significant adversarial algorithms are the Jacobian-based Saliency Map Attack (JSMA)<d-cite key="papernot2017practical"></d-cite>, Papernot's attack<d-cite key="papernot2016limitations"></d-cite>, and the Carlini and Wagner (C&W) attack<d-cite key="carlini2017towards"></d-cite>, all contributing to the evolving landscape of adversarial machine learning. Despite the proliferation of these attack methods, defense and mitigation strategies, particularly for traffic sign classification tasks, have received significantly less attention. The common approach to enhancing the robustness of DNNs is adversarial training, which involves incorporating adversarial attack samples into the training dataset<d-cite key="zhang2022adversarial"></d-cite>. Training a model with only one or a limited range of adversarial examples leaves it susceptible to other types of attacks, necessitating the inclusion of diverse adversarial examples during training. Consequently, this approach is not universal and can demand significant training effort.
+Many research efforts have been made on attacks targeting these systems, as they are particularly susceptible and easily exploited in real-world scenarios<d-cite key="pavlitska2023adversarial"></d-cite>. Early research into adversarial attacks on traffic sign recognition typically involved physical methods, such as affixing stickers to traffic signs<d-cite key="eykholt2018robust"></d-cite>, replacing signs with versions that included embedded perturbations<d-cite key="pavlitska2023adversarial"></d-cite>, or placing patches directly on camera lenses<d-cite key="zolfi2021translucent"></d-cite>. While these methods can be effective, they require manual effort and are often noticeable to drivers. 
 
+To address these limitations, researchers have shifted their focus to direct attacks on DNN inputs. One of the first developed techniques is the Fast Gradient Sign Method (FGSM), which uses the gradients of the loss function relative to the input data to create perturbations that maximize the loss and result in misclassification<d-cite key="goodfellow2015explaining"></d-cite>. Subsequent developments include the Projected Gradient Descent (PGD) approach<d-cite key="madry2018towards"></d-cite>. Other significant adversarial algorithms are the Jacobian-based Saliency Map Attack (JSMA)<d-cite key="papernot2017practical"></d-cite>, Papernot's attack<d-cite key="papernot2016limitations"></d-cite>, and the Carlini and Wagner (C&W) attack<d-cite key="carlini2017towards"></d-cite>, all contributing to the evolving adversarial machine learning. 
 
 
 {% include figure.html path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image1.jpg" class="img-fluid" %}
 
+Despite the proliferation of these attack methods, defense and mitigation strategies, particularly for traffic sign classification tasks, have received significantly less attention. The common approach to enhancing the robustness of DNNs is adversarial training, which incorporates adversarial attack samples into the training dataset<d-cite key="zhang2022adversarial"></d-cite>. Training a model with only one or a limited range of adversarial examples leaves it susceptible to other types of attacks, necessitating the inclusion of diverse adversarial examples during training. Consequently, this approach is not universal and can demand significant training effort.
 
 ## Multi-resolution training
 
-We propose a novel multi-resolution training approach to enhance DNN architectures by incorporating an additional CNN block prior to the main network. This block processes traffic sign images by first downsampling them to a lower resolution through decimation and then upsampling them back to the original resolution via interpolation. The block outputs either a 3-channel RGB image directly fed into the network or a 6-channel output obtained by concatenating the processed image with the original. The CNN block utilizes layers with filters designed using various downsampling techniques, such as low-pass and Gaussian filtering. This approach effectively reduces the impact of subtle, high-frequency adversarial perturbations while preserving the essential features of traffic signs, thereby improving the robustness of DNNs against adversarial attacks.
+We propose a novel multi-resolution training approach by enhancing DNN architectures with integration of an additional CNN block prior to the main network. This block processes traffic sign images by first downsampling them to a lower resolution through decimation and then upsampling them back to the original resolution via interpolation. The block outputs either a 3-channel RGB image directly fed into the network or a 6-channel output obtained by concatenating the processed image with the original. The CNN block utilizes layers with filters designed using various downsampling techniques, such as low-pass and Gaussian filtering. This approach effectively reduces the impact of subtle, high-frequency adversarial perturbations while preserving the essential features of traffic signs, thereby improving the robustness of DNNs against adversarial attacks.
 
 
 {% include figure.html path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image2.jpg" class="img-fluid" %}
 
 ### Multi-resolution CNN block
-The multi-resolution process is implemented through a custom-designed CNN block, which includes a downsampling CNN layer with multiple filter options, followed by a standard bilinear interpolation layer for upsampling.
+The multi-resolution image process is implemented through a custom-designed CNN block, which includes a downsampling CNN layer with multiple filter options, followed by a standard bilinear interpolation layer for upsampling.
 
-The first option utilizes a simple 1D low-pass filter defined as $$h_\text{lp} = [\frac{1}{4}, \frac{1}{2}, \frac{1}{4}]$$, commonly used for its simplicity and effectiveness in smoothing operations, approximating a half-band low-pass filter. The corresponding 2D filter used in the `LP_conv` layer is computed as:
+The **first option** utilizes a simple 1D low-pass filter defined as $$h_\text{lp} = [\frac{1}{4}, \frac{1}{2}, \frac{1}{4}]$$, commonly used for its simplicity and effectiveness in smoothing operations, approximating a half-band low-pass filter. The corresponding 2D filter used in the `LP_conv` layer is computed as:
 
 $$ h_\text{lp-2D}[n_\text{1}, n_\text{2}] = h_\text{lp} \cdot h_\text{lp}^T, $$
 
@@ -102,9 +103,9 @@ h_\text{lp-2D} =
 \end{bmatrix}.
 $$
 
-This 2D filter effectively smooths input data, making it ideal for downsampling in the multi-resolution framework.
+This 2D filter effectively smooths input image data, making it ideal for downsampling in the multi-resolution framework.
 
-The second option is a Gaussian filter, which offers more customization and smoother outputs. The normalized 1D Gaussian filter is defined as:
+The **second option** is a Gaussian filter, which offers more customization and smoother outputs. The normalized 1D Gaussian filter is defined as:
 
 $$
 h_\text{g}[n] = \frac{\exp\left(-0.5 \left(\frac{n}{\sigma}\right)^2\right)}{\sum_{n} \exp\left(-0.5 \left(\frac{n}{\sigma}\right)^2\right)},
@@ -117,40 +118,38 @@ $$ h_\text{g-2D}[n_\text{1}, n_\text{2}] = h_\text{g} \cdot h_\text{g}^T $$
 By adjusting the kernel size $$z$$ and the standard deviation $${\sigma}$$, the `Gaussian_conv` layer can achieve varying levels of smoothing, offering enhanced flexibility. This design ensures that the multi-resolution training framework adapts to different filtering needs while maintaining computational efficiency.
 
 {% include figure.html path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image3.jpg" class="img-fluid" %}
-The diagram highlights the image processing using 'LP_conv' and 'Gaussian_conv' layers. 
+The diagram highlights the image processing using `LP_conv` and `Gaussian_conv` layers. 
 
 - **LP_conv Layer**:  
-   - Able to utilize downsampling and upsampling to eliminate fine details, including noise, while retaining key structures.  
+   - Utilize downsampling and upsampling to eliminate fine details, including noise, while retaining key structures.  
 
-- **Customizable Gaussian_conv Layer**:  
-   - **Kernel Size**:  
-      - Smaller sizes are computationally efficient, reducing localized noise while preserving edges and fine details.  
-      - Larger sizes provide broader smoothing, targeting noise over larger areas but with potential detail loss.  
-   - **Sigma (𝜎)**:  
-      - Lower values minimize smoothing, maintaining sharp edges.  
-      - Higher values deliver more aggressive noise reduction, suitable for removing small noise but may blur finer details.
+- **Gaussian_conv Layer**:  
+   - Kernel Size:  
+      - Smaller sizes are computationally efficient, reducing localized noise while preserving edges and fine details. Larger sizes provide broader smoothing, targeting noise over larger areas but with potential detail loss.  
+   - Sigma (𝜎):  
+      - Lower values minimize smoothing, maintaining sharp edges. Higher values deliver more aggressive noise reduction, suitable for removing small noise but may blur finer details.
      
-Both methods show effectiveness for removing small noise while preserving essential image features. The Gaussian filter, in particular, allows for targeted noise removal, offering a balance between computational efficiency and detail preservation depending on the task requirements.
+Both methods show effectiveness for removing small noise while preserving essential image features. The Gaussian filter, in particular, allows for targeted noise removal, offering a balance between computational efficiency and detail preservation.
 
 ## Experiment
-We integrate the designed CNN block into various DNN architectures, including ResNet18, MobileNetV2, and VGG16. These models are trained on the widely used German Traffic Sign Recognition Benchmark [(GTSRB) dataset](https://pytorch.org/vision/0.17/generated/torchvision.datasets.GTSRB.html), which contains 43 classes of traffic signs, split into 39,209 training images and 12,630 test images. To evaluate the robustness of the trained models, we test them using the FGSM attack and a black-box patch attack.
+We integrate the designed CNN block into various DNN architectures, including [ResNet18](https://pytorch.org/vision/main/models/generated/torchvision.models.resnet18.html), [MobileNetV2](https://pytorch.org/vision/main/models/generated/torchvision.models.mobilenet_v2.html), and [VGG16](https://pytorch.org/vision/main/models/generated/torchvision.models.vgg16.html). These models are trained on the widely used German Traffic Sign Recognition Benchmark [(GTSRB) dataset](https://pytorch.org/vision/0.17/generated/torchvision.datasets.GTSRB.html), which contains 43 classes of traffic signs, split into 39,209 training images and 12,630 test images. To evaluate the robustness of the trained models, we test them using the FGSM attack and a black-patch attack.
 
 ### Adversarial Attacks
 
--FGSM attack 
-FGSM generates adversarial examples by slightly perturbing the input data in a way that maximizes the model's prediction error while keeping the perturbation imperceptible to humans. The attack works by exploiting the gradients of the loss function with respect to the input data. By taking a step in the direction of the gradient's sign, the attack aims to increase the loss and mislead the model into making incorrect predictions. The FGSM attack can be expressed mathematically as:
+- **FGSM attack** 
+ - FGSM generates adversarial examples by slightly perturbing the input data in a way that maximizes the model's prediction error while keeping the perturbation imperceptible to humans. The attack works by exploiting the gradients of the loss function with respect to the input data. By taking a step in the direction of the gradient's sign, the attack aims to increase the loss and mislead the model into making incorrect predictions. The FGSM attack can be expressed mathematically as:
 
 $$
 x_{\text{adv}} = x + \epsilon \cdot \text{sign}(\nabla_x J(\theta, x, y))
 $$
 
-The adversarial example $$x_{\text{adv}}$$ is generated from the original input $$x$$ using a perturbation factor $$\epsilon$$ to control the level of adversarial noise. The sign of the gradient of the loss $$J$$ (calculated with respect to $$x$$) indicates the direction of modification. $$theta$$ is the model paramter and $$y$$ indicates the true label. FSGM is considered as a white-box attack as it requires the prior knowdlege of the neural entwork structure and parameters. 
+The adversarial example $$x_{\text{adv}}$$ is generated from the original input $$x$$ using a perturbation factor $$\epsilon$$ to control the level of adversarial noise. The sign of the gradient of the loss $$J$$ (calculated with respect to $$x$$) indicates the direction of modification. $$\theta$$ is the model paramter and $$y$$ indicates the true label. FSGM is considered as a white-box attack as it requires the prior knowdlege of the neural entwork structure and parameters. 
 
--Patch Attack
+- **Black-Patch Attack**
 
-In addition to the FGSM attack, we apply a patch attack that does not require knowledge of the DNN structure. This attack involves randomly placing small black patches on images to simulate both real-world physical attacks (e.g., patches manually applied to traffic signs or cameras) and digital attacks (e.g., patches added to input data).
+ -In addition to the FGSM attack, we apply a black-patch attack that does not require knowledge of the DNN structure. This attack randomly places small black patches on images to simulate both real-world physical attacks (e.g., patches manually applied to traffic signs or cameras) and digital attacks (e.g., patches added to input data).
 
-In our experiments, we used FGSM with $$\epsilon$$ values of 0.01, 0.05, 0.1, and 0.2. For the patch attack, we used black patches of size $$3 \times 3$$ pixels and varied the number of patches to 2, 4, 6, and 8 to simulate different levels of perturbations.
+In the experiments, we used FGSM with $$\epsilon$$ values of 0.01, 0.05, 0.1, and 0.2. For the black-patch attack, we used black patches of size $$3 \times 3$$ pixels and varied the number of patches to 2, 4, 6, and 8 to simulate different levels of perturbations.
 
 {% include figure.html path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image4.jpg" class="img-fluid" %}
 _Example of FGSM and black-patch perturbations_
@@ -174,16 +173,16 @@ The prefixes and suffixes in the model names indicate specific modifications:
 
 
 
-- **Overall Insights**
-  - **Effectiveness of Enhancements**
-     -The enhanced models consistently outperform their respective baselines  (ResNet18, MobileNetV2, and VGG16) under both FGSM and black box attacks, demonstrating the overall effectiveness of the proposed LPF and Gaussian blocks in improving model robustness.
+####Overall Insights####
+ **Effectiveness of Enhancements**
+ -The enhanced models consistently outperform their respective baselines  (ResNet18, MobileNetV2, and VGG16) under both FGSM and black box attacks, demonstrating the overall effectiveness of the proposed LPF and Gaussian blocks in improving model robustness.
 
-  - **Impact of c6 vs. c3 Configurations**
-     -The plots reveal that, in general, the c3 configuration outperforms the c6 configuration, indicating that directly processing the 3-channel input through the designed CNN block and feeding it into the main DNNs is more effective than concatenating it with the original image. This trend suggests that the standalone processed features provide sufficient robustness without requiring additional raw feature information.
+**Impact of c6 vs. c3 Configurations**
+ -The plots reveal that, in general, the c3 configuration outperforms the c6 configuration, indicating that directly processing the 3-channel input through the designed CNN block and feeding it into the main DNNs is more effective than concatenating it with the original image. This trend suggests that the standalone processed features provide sufficient robustness without requiring additional raw feature information.
 
-  - **Performance Against Adversarial Attacks**
-     -The robustness of enhanced models diminishes as the intensity of adversarial perturbations increases (e.g., higher $$\epsilon$$ in FGSM or a larger number of patches in black box attacks). However, the enhanced models, particularly those with gl blocks and c3 configurations, consistently retain higher accuracy compared to baselines across both FGSM and black box attacks. This demonstrates their ability to effectively mitigate the impact of both gradient-based and localized perturbations.
+**Performance Against Adversarial Attacks**
+ -The robustness of enhanced models diminishes as the intensity of adversarial perturbations increases (e.g., higher $$\epsilon$$ in FGSM or a larger number of patches in black box attacks). However, the enhanced models, particularly those with gl blocks and c3 configurations, consistently retain higher accuracy compared to baselines across both FGSM and black box attacks. This demonstrates their ability to effectively mitigate the impact of both gradient-based and localized perturbations.
 
 
 ## Conclusion
-Deep neural networks (DNNs) are crucial for tasks like traffic sign recognition but remain vulnerable to adversarial attacks, posing significant challenges for their safe deployment. This blog post introduced a multi-resolution training approach that enhances model robustness by leveraging lower-resolution information to retain essential features while filtering out adversarial noise. Through the integration of custom LPF and Gaussian blocks, our method demonstrated consistent improvements in resilience across different architectures, including ResNet18, MobileNetV2, and VGG16. Notably, the **c3 configuration** and **gl block** emerged as the most effective design choices. These findings underscore the potential of multi-resolution training to mitigate adversarial risks, paving the way for safer and more reliable applications of DNNs in real-world scenarios.
+DNNs are crucial for tasks like traffic sign recognition but remain vulnerable to adversarial attacks, posing significant challenges for their safe deployment. This blog post introduced a multi-resolution training approach that enhances model robustness by the integration of custom LPF and Gaussian CNN blocks. Our method demonstrated consistent improvements in resilience across different architectures, including ResNet18, MobileNetV2, and VGG16. Notably, the **c3 configuration** and **gl block** emerged as the most effective design choices. These findings underscore the potential of multi-resolution training to mitigate adversarial risks, paving the way for safer and more reliable applications of DNNs in real-world scenarios.
