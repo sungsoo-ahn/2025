@@ -74,7 +74,6 @@ evaluations.
 
 
 To illustrate these three principles, we use [Mirzadeh et al. (2024)](https://arxiv.org/pdf/2410.05229) as a case study---a recent paper that received substantial attention from the LLM research community with **millions of views** across social media platforms and the world-wide-web (e.g. see [this](https://machinelearning.apple.com/research/gsm-symbolic), [this](https://www.reddit.com/r/singularity/comments/1g1zphu/apple_ai_researchers_question_openais_claims/), or [this](https://x.com/MFarajtabar/status/1844456880971858028)).
-<!-- I see, you say here why that paper, so perhaps it is fine - [DRI] indeed, I wanted to keep the intro short; can add a bit more fluff around "reach" here though. [TODO] -->
 We review their methods, identify gaps in their analysis, and offer a more rigorous statistical assessment of their claims.
 
 **Note:** Whilst writing this blog post, a great overview of statistical methods suitable for evaluating LMs was published by Miller (2024) <d-cite key="miller2024adding"></d-cite>.
@@ -155,8 +154,8 @@ Even when solving the same problem with different numbers or subjects, humans ca
 The same applies to LMs. 
 
 We demonstrate this empirically by looking at the performance of LMs on a basic addition task with varying **digit lengths** (e.g. "What is 147 + 562?"). 
-Consistent with prior literature that examines the impact of digit length on arithmetic performance [TODO CITE], we find that as the numbers get larger, accuracy declines, showing that simple arithmetic is not perfectly reliable.
-We go beyond digit length and also consider how the number of **carry operations** affects performance on this addition task. 
+Consistent with prior literature (see e.g. <d-cite key="muffo2023evaluating"></d-cite>, <d-cite key="yuan2023well"></d-cite>), we find that as the numbers get larger, accuracy declines, thus showing that simple arithmetic is not perfectly reliable.
+We go beyond digit length and also consider how the number of **carry operations** affects performance on this simple addition task. 
 The figure below illustrates how the probability of answering a question correctly is affected by the number of digits $d$ of the numbers being added and the number of carry operations involved in the sum.
 
 {% include figure.html 
