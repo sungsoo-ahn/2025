@@ -1,7 +1,7 @@
 ---
 layout: distill
-title: Multi-Resolution Training Improves Robustness Against Adversarial Attacks
-description: Deep neural networks (DNNs) are now central to critical tasks like traffic sign recognition in autonomous vehicles. However, their known vulnerability to adversarial attacks—small but deliberately crafted input perturbations—poses serious risks. To address this, we propose **multi-resolution training**, a novel method that utilizes lower-resolution information from input images to retain essential features while filtering out adversarial noises. Our approach integrates custom downsampling and upsampling layers within CNNs to enhance robustness. Testing on various DNNs shows effective enhancements in resilience against adversarial attacks, making this technique a promising solution for safer real-world applications.
+title: Multi-resolution training improves robustness against adversarial attacks
+description: Deep neural networks (DNNs) are now central to critical tasks like traffic sign recognition in autonomous vehicles. However, their vulnerability to adversarial attacks—small but deliberately crafted input perturbations—poses serious risks. To address this, we propose multi-resolution training, a novel method that utilizes lower-resolution information from input images to retain essential features while filtering out adversarial noises. Our approach integrates custom downsampling and upsampling layers into DNNs to enhance robustness. Testing on various DNNs shows effective enhancements in resilience against adversarial attacks, making this technique a promising solution for safer real-world applications.
 
 
 date: 2025-04-28
@@ -29,23 +29,23 @@ authors:
 #       name: IAS, Princeton 
 
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks.bib  
+bibliography: 2025-04-28-Multi-Resolution-Training.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
 toc:
-  - name: DNN Vulnerabilities in Traffic Sign Recognition
-  - name: Multi-Resolution Training
+  - name: DNN Vulnerabilities
+  - name: Multi-resolution training
     subsections:
-    - name: Multi-Resolution CNN Block
+    - name: Multi-resolution CNN block
   - name: Experiment
     subsections:
-    - name: Adversarial Attack
-    - name: Results
+    - name: Adversarial Attacks  
+    subsections:
+    - name: Results   
   - name: Conclusion
-  
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
@@ -66,11 +66,11 @@ _styles: >
     font-size: 16px;
   }
 ---
-## DNN Vulnerabilities in Traffic Sign Recognition
+## DNN Vulnerabilities
 
-Recent studies have shown that DNNs are vulnerable to adversarial examples, where small modifications to input data can result in incorrect predictions<d-cite key="gregor2015draw"></d-cite>. This susceptibility arises from DNNs' inherent linearity in high-dimensional spaces and limited generalization. This vulnerability is especially concerning for traffic sign recognition systems, which rely exclusively on DNNs processing camera images without additional error correction sources. Many research efforts have been made on attacks targeting these systems, as they are particularly susceptible and easily exploited in real-world scenarios. Early research into adversarial attacks on traffic sign recognition typically involved physical methods, such as affixing stickers to traffic signs<d-cite key="gregor2015draw"></d-cite>, replacing signs with versions that included embedded perturbations<d-cite key="gregor2015draw"></d-cite>, or placing patches directly on camera lenses<d-cite key="gregor2015draw"></d-cite>. While these methods can be effective, they require manual effort and are often noticeable to drivers. 
+Recent research has demonstrated that DNNs are surprisingly vulnerable to adversarial examples, where small modifications to input data can result in significant incorrect predictions<d-cite key="szegedy2014intriguing"></d-cite><d-cite key="goodfellow2015explaining"></d-cite>. This susceptibility arises from DNNs' inherent linearity in high-dimensional spaces and limited generalization. This vulnerability is especially concerning for traffic sign recognition systems, which rely exclusively on DNNs processing camera images without additional error correction sources. Many research efforts have been made on attacks targeting these systems, as they are particularly susceptible and easily exploited in real-world scenarios<d-cite key="pavlitska2023adversarial"></d-cite>. Early research into adversarial attacks on traffic sign recognition typically involved physical methods, such as affixing stickers to traffic signs<d-cite key="eykholt2018robust"></d-cite>, replacing signs with versions that included embedded perturbations<d-cite key="pavlitska2023adversarial"></d-cite>, or placing patches directly on camera lenses<d-cite key="zolfi2021translucent"></d-cite>. While these methods can be effective, they require manual effort and are often noticeable to drivers. 
 
-To address these limitations, researchers have shifted their focus to direct attacks on DNN inputs. One of the first developed techniques is the Fast Gradient Sign Method (FGSM), which uses the gradients of the loss function relative to the input data to create perturbations that maximize the loss and result in misclassification<d-cite key="gregor2015draw"></d-cite>. Subsequent developments include the Projected Gradient Descent (PGD) approach<d-cite key="gregor2015draw"></d-cite>. Other significant adversarial algorithms are the Jacobian-based Saliency Map Attack (JSMA)<d-cite key="gregor2015draw"></d-cite>, Papernot's attack<d-cite key="gregor2015draw"></d-cite>, and the Carlini and Wagner (C&W) attack<d-cite key="gregor2015draw"></d-cite>, all contributing to the evolving landscape of adversarial machine learning. Despite the proliferation of these attack methods, defense and mitigation strategies, particularly for traffic sign classification tasks, have received significantly less attention. The common approach to enhancing the robustness of DNNs is adversarial training, which involves incorporating adversarial attack samples into the training dataset<d-cite key="gregor2015draw"></d-cite>. Training a model with only one or a limited range of adversarial examples leaves it susceptible to other types of attacks, necessitating the inclusion of diverse adversarial examples during training. Consequently, this approach is not universal and can demand significant training effort.
+To address these limitations, researchers have shifted their focus to direct attacks on DNN inputs. One of the first developed techniques is the Fast Gradient Sign Method (FGSM), which uses the gradients of the loss function relative to the input data to create perturbations that maximize the loss and result in misclassification<d-cite key="goodfellow2015explaining"></d-cite>. Subsequent developments include the Projected Gradient Descent (PGD) approach<d-cite key="madry2018towards"></d-cite>. Other significant adversarial algorithms are the Jacobian-based Saliency Map Attack (JSMA)<d-cite key="papernot2017practical"></d-cite>, Papernot's attack<d-cite key="papernot2016limitations"></d-cite>, and the Carlini and Wagner (C&W) attack<d-cite key="carlini2017towards"></d-cite>, all contributing to the evolving landscape of adversarial machine learning. Despite the proliferation of these attack methods, defense and mitigation strategies, particularly for traffic sign classification tasks, have received significantly less attention. The common approach to enhancing the robustness of DNNs is adversarial training, which involves incorporating adversarial attack samples into the training dataset<d-cite key="zhang2022adversarial"></d-cite>. Training a model with only one or a limited range of adversarial examples leaves it susceptible to other types of attacks, necessitating the inclusion of diverse adversarial examples during training. Consequently, this approach is not universal and can demand significant training effort.
 
 
 
@@ -79,7 +79,7 @@ To address these limitations, researchers have shifted their focus to direct att
 
 ## Multi-resolution training
 
-We propose a novel multi-resolution training approach  that enhances the DNN architecture by incorporating an additional CNN block before the main network. This block first downsamples traffic sign images to a lower resolution via decimation and then upsamples them back to their original resolution via interpolation for further processing by the network. The CNN block incorporates layers with filters designed using various downsampling techniques, such as low-pass filtering, Gaussian filtering, and median filtering. This method helps mitigate subtle attacks characterized by small, high-frequency perturbations while preserving the essential features of the original traffic signs, thereby enhancing the DNNs' robustness against adversarial attacks.     
+We propose a novel multi-resolution training approach to enhance DNN architectures by incorporating an additional CNN block prior to the main network. This block processes traffic sign images by first downsampling them to a lower resolution through decimation and then upsampling them back to the original resolution via interpolation. The block outputs either a 3-channel RGB image directly fed into the network or a 6-channel output obtained by concatenating the processed image with the original. The CNN block utilizes layers with filters designed using various downsampling techniques, such as low-pass and Gaussian filtering. This approach effectively reduces the impact of subtle, high-frequency adversarial perturbations while preserving the essential features of traffic signs, thereby improving the robustness of DNNs against adversarial attacks.
 
 
 {% include figure.html path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image2.jpg" class="img-fluid" %}
@@ -133,388 +133,57 @@ The diagram highlights the image processing using 'LP_conv' and 'Gaussian_conv' 
 Both methods show effectiveness for removing small noise while preserving essential image features. The Gaussian filter, in particular, allows for targeted noise removal, offering a balance between computational efficiency and detail preservation depending on the task requirements.
 
 ## Experiment
-We integrate the designed CNN block on diffefernt DNNs, including Resnet 18 
+We integrate the designed CNN block into various DNN architectures, including ResNet18, MobileNetV2, and VGG16. These models are trained on the widely used German Traffic Sign Recognition Benchmark [(GTSRB) dataset](https://pytorch.org/vision/0.17/generated/torchvision.datasets.GTSRB.html), which contains 43 classes of traffic signs, split into 39,209 training images and 12,630 test images. To evaluate the robustness of the trained models, we test them using the FGSM attack and a black-box patch attack.
 
-### Adversarial Attack
-We deployed two adversarial attacks on the traffic signs including the FGSM attack and the patch attack. The FGSM attack is one of the earliest and most representative adversarial attack. It is considered as a white-box attack as it requires the prior knowdlege of the neural entwork structure, parameters and 
-This theme supports rendering beautiful math in inline and display modes using [MathJax 3](https://www.mathjax.org/) engine.
-You just need to surround your math expression with `$$`, like `$$ E = mc^2 $$`.
-If you leave it inside a paragraph, it will produce an inline expression, just like $$ E = mc^2 $$.
+### Adversarial Attacks
+
+-FGSM attack 
+FGSM generates adversarial examples by slightly perturbing the input data in a way that maximizes the model's prediction error while keeping the perturbation imperceptible to humans. The attack works by exploiting the gradients of the loss function with respect to the input data. By taking a step in the direction of the gradient's sign, the attack aims to increase the loss and mislead the model into making incorrect predictions. The FGSM attack can be expressed mathematically as:
+
+$$
+x_{\text{adv}} = x + \epsilon \cdot \text{sign}(\nabla_x J(\theta, x, y))
+$$
+
+The adversarial example $$x_{\text{adv}}$$ is generated from the original input $$x$$ using a perturbation factor $$\epsilon$$ to control the level of adversarial noise. The sign of the gradient of the loss $$J$$ (calculated with respect to $$x$$) indicates the direction of modification. $$theta$$ is the model paramter and $$y$$ indicates the true label. FSGM is considered as a white-box attack as it requires the prior knowdlege of the neural entwork structure and parameters. 
+
+-Patch Attack
+
+In addition to the FGSM attack, we apply a patch attack that does not require knowledge of the DNN structure. This attack involves randomly placing small black patches on images to simulate both real-world physical attacks (e.g., patches manually applied to traffic signs or cameras) and digital attacks (e.g., patches added to input data).
+
+In our experiments, we used FGSM with $$\epsilon$$ values of 0.01, 0.05, 0.1, and 0.2. For the patch attack, we used black patches of size $$3 \times 3$$ pixels and varied the number of patches to 2, 4, 6, and 8 to simulate different levels of perturbations.
+
+{% include figure.html path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image4.jpg" class="img-fluid" %}
+_Example of FGSM and black-patch perturbations_
+
 ### Results
-To use display mode, again surround your expression with `$$` and place it as a separate paragraph.
-Here is an example:
+We developed various models by integrating different combinations of our proposed CNN blocks into the base architectures of ResNet18, MobileNetV2, and VGG16. These models were evaluated based on their classification accuracy on the given test dataset, as illustrated in the plots below. 
 
-$$
-\left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
-$$
+{% include figure.html path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image5.jpg" class="img-fluid" %}
 
-Note that MathJax 3 is [a major re-write of MathJax](https://docs.mathjax.org/en/latest/upgrading/whats-new-3.0.html) 
-that brought a significant improvement to the loading and rendering speed, which is now 
-[on par with KaTeX](http://www.intmath.com/cg5/katex-mathjax-comparison.php).
+The prefixes and suffixes in the model names indicate specific modifications:
+
+- **Prefixes:**
+  - **lpf_**: Models integrated with the designed `LPF_conv` block.
+  - **gs_**: Models integrated with the designed `Gaussian_conv` block using a filter size of \(3 \times 3\) and sigma of 0.5.
+  - **gm_**: Models integrated with the designed `Gaussian_conv` block using a filter size of \(5 \times 5\) and sigma of 1.5.
+  - **gl_**: Models integrated with the designed `Gaussian_conv` block using a filter size of \(7 \times 7\) and sigma of 2.5.
+
+- **Suffixes:**
+  - **_c3**: The CNN block outputs a processed 3-channel image, which is then fed into the main DNNs for processing.
+  - **_c6**: The CNN block concatenates the processed 3-channel image with the original image to create a 6-channel input for the main DNNs (the DNNs are adjusted to accept a 6-channel input for compatibility).
+
+
+
+- **Overall Insights**
+  - **Effectiveness of Enhancements**
+     -The enhanced models consistently outperform their respective baselines  (ResNet18, MobileNetV2, and VGG16) under both FGSM and black box attacks, demonstrating the overall effectiveness of the proposed LPF and Gaussian blocks in improving model robustness.
+
+  - **Impact of c6 vs. c3 Configurations**
+     -The plots reveal that, in general, the c3 configuration outperforms the c6 configuration, indicating that directly processing the 3-channel input through the designed CNN block and feeding it into the main DNNs is more effective than concatenating it with the original image. This trend suggests that the standalone processed features provide sufficient robustness without requiring additional raw feature information.
+
+  - **Performance Against Adversarial Attacks**
+     -The robustness of enhanced models diminishes as the intensity of adversarial perturbations increases (e.g., higher $$\epsilon$$ in FGSM or a larger number of patches in black box attacks). However, the enhanced models, particularly those with gl blocks and c3 configurations, consistently retain higher accuracy compared to baselines across both FGSM and black box attacks. This demonstrates their ability to effectively mitigate the impact of both gradient-based and localized perturbations.
+
 
 ## Conclusion
-
-## Images and Figures
-
-Its generally a better idea to avoid linking to images hosted elsewhere - links can break and you
-might face losing important information in your blog post.
-To include images in your submission in this way, you must do something like the following:
-
-```markdown
-{% raw %}{% include figure.html path="assets/img/2025-04-28-distill-example/iclr.png" class="img-fluid" %}{% endraw %}
-```
-
-which results in the following image:
-
-{% include figure.html path="assets/img/2025-04-28-distill-example/iclr.png" class="img-fluid" %}
-
-To ensure that there are no namespace conflicts, you must save your asset to your unique directory
-`/assets/img/2025-04-28-[SUBMISSION NAME]` within your submission.
-
-Please avoid using the direct markdown method of embedding images; they may not be properly resized.
-Some more complex ways to load images (note the different styles of the shapes/shadows):
-
-<div class="row mt-3">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-distill-example/9.jpg" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-distill-example/7.jpg" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    A simple, elegant caption looks good between image rows, after each row, or doesn't have to be there at all.
-</div>
-
-<div class="row mt-3">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-distill-example/8.jpg" class="img-fluid z-depth-2" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-distill-example/10.jpg" class="img-fluid z-depth-2" %}
-    </div>
-</div>
-
-<div class="row mt-3">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-distill-example/11.jpg" class="img-fluid"  %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-distill-example/12.jpg" class="img-fluid" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-distill-example/7.jpg" class="img-fluid" %}
-    </div>
-</div>
-
-### Interactive Figures
-
-Here's how you could embed interactive figures that have been exported as HTML files.
-Note that we will be using plotly for this demo, but anything built off of HTML should work
-(**no extra javascript is allowed!**).
-All that's required is for you to export your figure into HTML format, and make sure that the file
-exists in the `assets/html/[SUBMISSION NAME]/` directory in this repository's root directory.
-To embed it into any page, simply insert the following code anywhere into your page.
-
-```markdown
-{% raw %}{% include [FIGURE_NAME].html %}{% endraw %} 
-```
-
-For example, the following code can be used to generate the figure underneath it.
-
-```python
-import pandas as pd
-import plotly.express as px
-
-df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/earthquakes-23k.csv')
-
-fig = px.density_mapbox(
-    df, lat='Latitude', lon='Longitude', z='Magnitude', radius=10,
-    center=dict(lat=0, lon=180), zoom=0, mapbox_style="stamen-terrain")
-fig.show()
-
-fig.write_html('./assets/html/2025-04-28-distill-example/plotly_demo_1.html')
-```
-
-And then include it with the following:
-
-```html
-{% raw %}<div class="l-page">
-  <iframe src="{{ 'assets/html/2025-04-28-distill-example/plotly_demo_1.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
-</div>{% endraw %}
-```
-
-Voila!
-
-<div class="l-page">
-  <iframe src="{{ 'assets/html/2025-04-28-distill-example/plotly_demo_1.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
-</div>
-
-## Citations
-
-Citations are then used in the article body with the `<d-cite>` tag.
-The key attribute is a reference to the id provided in the bibliography.
-The key attribute can take multiple ids, separated by commas.
-
-The citation is presented inline like this: <d-cite key="gregor2015draw"></d-cite> (a number that displays more information on hover).
-If you have an appendix, a bibliography is automatically created and populated in it.
-
-Distill chose a numerical inline citation style to improve readability of citation dense articles and because many of the benefits of longer citations are obviated by displaying more information on hover.
-However, we consider it good style to mention author last names if you discuss something at length and it fits into the flow well — the authors are human and it’s nice for them to have the community associate them with their work.
-
-***
-
-## Footnotes
-
-Just wrap the text you would like to show up in a footnote in a `<d-footnote>` tag.
-The number of the footnote will be automatically generated.<d-footnote>This will become a hoverable footnote.</d-footnote>
-
-***
-
-## Code Blocks
-
-This theme implements a built-in Jekyll feature, the use of Rouge, for syntax highlighting.
-It supports more than 100 languages.
-This example is in C++.
-All you have to do is wrap your code in a liquid tag:
-
-{% raw  %}
-{% highlight c++ linenos %}  <br/> code code code <br/> {% endhighlight %}
-{% endraw %}
-
-The keyword `linenos` triggers display of line numbers. You can try toggling it on or off yourself below:
-
-{% highlight c++ %}
-
-int main(int argc, char const \*argv[])
-{
-string myString;
-
-    cout << "input a string: ";
-    getline(cin, myString);
-    int length = myString.length();
-
-    char charArray = new char * [length];
-
-    charArray = myString;
-    for(int i = 0; i < length; ++i){
-        cout << charArray[i] << " ";
-    }
-
-    return 0;
-}
-
-{% endhighlight %}
-
-***
-
-## Diagrams
-
-This theme supports generating various diagrams from a text description using [jekyll-diagrams](https://github.com/zhustec/jekyll-diagrams){:target="\_blank"} plugin.
-Below, we generate a few examples of such diagrams using languages such as [mermaid](https://mermaid-js.github.io/mermaid/){:target="\_blank"}, [plantuml](https://plantuml.com/){:target="\_blank"}, [vega-lite](https://vega.github.io/vega-lite/){:target="\_blank"}, etc.
-
-**Note:** different diagram-generation packages require external dependencies to be installed on your machine.
-Also, be mindful of that because of diagram generation the first time you build your Jekyll website after adding new diagrams will be SLOW.
-For any other details, please refer to [jekyll-diagrams](https://github.com/zhustec/jekyll-diagrams){:target="\_blank"} README.
-
-**Note:** This is not supported for local rendering! 
-
-The diagram below was generated by the following code:
-
-{% raw %}
-```
-{% mermaid %}
-sequenceDiagram
-    participant John
-    participant Alice
-    Alice->>John: Hello John, how are you?
-    John-->>Alice: Great!
-{% endmermaid %}
-```
-{% endraw %}
-
-{% mermaid %}
-sequenceDiagram
-participant John
-participant Alice
-Alice->>John: Hello John, how are you?
-John-->>Alice: Great!
-{% endmermaid %}
-
-***
-
-## Tweets
-
-An example of displaying a tweet:
-{% twitter https://twitter.com/rubygems/status/518821243320287232 %}
-
-An example of pulling from a timeline:
-{% twitter https://twitter.com/jekyllrb maxwidth=500 limit=3 %}
-
-For more details on using the plugin visit: [jekyll-twitter-plugin](https://github.com/rob-murray/jekyll-twitter-plugin)
-
-***
-
-## Blockquotes
-
-<blockquote>
-    We do not grow absolutely, chronologically. We grow sometimes in one dimension, and not in another, unevenly. We grow partially. We are relative. We are mature in one realm, childish in another.
-    —Anais Nin
-</blockquote>
-
-***
-
-
-## Layouts
-
-The main text column is referred to as the body.
-It is the assumed layout of any direct descendants of the `d-article` element.
-
-<div class="fake-img l-body">
-  <p>.l-body</p>
-</div>
-
-For images you want to display a little larger, try `.l-page`:
-
-<div class="fake-img l-page">
-  <p>.l-page</p>
-</div>
-
-All of these have an outset variant if you want to poke out from the body text a little bit.
-For instance:
-
-<div class="fake-img l-body-outset">
-  <p>.l-body-outset</p>
-</div>
-
-<div class="fake-img l-page-outset">
-  <p>.l-page-outset</p>
-</div>
-
-Occasionally you’ll want to use the full browser width.
-For this, use `.l-screen`.
-You can also inset the element a little from the edge of the browser by using the inset variant.
-
-<div class="fake-img l-screen">
-  <p>.l-screen</p>
-</div>
-<div class="fake-img l-screen-inset">
-  <p>.l-screen-inset</p>
-</div>
-
-The final layout is for marginalia, asides, and footnotes.
-It does not interrupt the normal flow of `.l-body`-sized text except on mobile screen sizes.
-
-<div class="fake-img l-gutter">
-  <p>.l-gutter</p>
-</div>
-
-***
-
-## Other Typography?
-
-Emphasis, aka italics, with *asterisks* (`*asterisks*`) or _underscores_ (`_underscores_`).
-
-Strong emphasis, aka bold, with **asterisks** or __underscores__.
-
-Combined emphasis with **asterisks and _underscores_**.
-
-Strikethrough uses two tildes. ~~Scratch this.~~
-
-1. First ordered list item
-2. Another item
-⋅⋅* Unordered sub-list. 
-1. Actual numbers don't matter, just that it's a number
-⋅⋅1. Ordered sub-list
-4. And another item.
-
-⋅⋅⋅You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
-
-⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
-⋅⋅⋅Note that this line is separate, but within the same paragraph.⋅⋅
-⋅⋅⋅(This is contrary to the typical GFM line break behavior, where trailing spaces are not required.)
-
-* Unordered lists can use asterisks
-- Or minuses
-+ Or pluses
-
-[I'm an inline-style link](https://www.google.com)
-
-[I'm an inline-style link with title](https://www.google.com "Google's Homepage")
-
-[I'm a reference-style link][Arbitrary case-insensitive reference text]
-
-[I'm a relative reference to a repository file](../blob/master/LICENSE)
-
-[You can use numbers for reference-style link definitions][1]
-
-Or leave it empty and use the [link text itself].
-
-URLs and URLs in angle brackets will automatically get turned into links. 
-http://www.example.com or <http://www.example.com> and sometimes 
-example.com (but not on Github, for example).
-
-Some text to show that the reference links can follow later.
-
-[arbitrary case-insensitive reference text]: https://www.mozilla.org
-[1]: http://slashdot.org
-[link text itself]: http://www.reddit.com
-
-Here's our logo (hover to see the title text):
-
-Inline-style: 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
-
-Reference-style: 
-![alt text][logo]
-
-[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
-
-Inline `code` has `back-ticks around` it.
-
-```javascript
-var s = "JavaScript syntax highlighting";
-alert(s);
-```
- 
-```python
-s = "Python syntax highlighting"
-print(s)
-```
- 
-```
-No language indicated, so no syntax highlighting. 
-But let's throw in a <b>tag</b>.
-```
-
-Colons can be used to align columns.
-
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
-
-There must be at least 3 dashes separating each header cell.
-The outer pipes (|) are optional, and you don't need to make the 
-raw Markdown line up prettily. You can also use inline Markdown.
-
-Markdown | Less | Pretty
---- | --- | ---
-*Still* | `renders` | **nicely**
-1 | 2 | 3
-
-> Blockquotes are very handy in email to emulate reply text.
-> This line is part of the same quote.
-
-Quote break.
-
-> This is a very long line that will still be quoted properly when it wraps. Oh boy let's keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can *put* **Markdown** into a blockquote. 
-
-
-Here's a line for us to start with.
-
-This line is separated from the one above by two newlines, so it will be a *separate paragraph*.
-
-This line is also a separate paragraph, but...
-This line is only separated by a single newline, so it's a separate line in the *same paragraph*.
+Deep neural networks (DNNs) are crucial for tasks like traffic sign recognition but remain vulnerable to adversarial attacks, posing significant challenges for their safe deployment. This blog post introduced a multi-resolution training approach that enhances model robustness by leveraging lower-resolution information to retain essential features while filtering out adversarial noise. Through the integration of custom LPF and Gaussian blocks, our method demonstrated consistent improvements in resilience across different architectures, including ResNet18, MobileNetV2, and VGG16. Notably, the **c3 configuration** and **gl block** emerged as the most effective design choices. These findings underscore the potential of multi-resolution training to mitigate adversarial risks, paving the way for safer and more reliable applications of DNNs in real-world scenarios.
