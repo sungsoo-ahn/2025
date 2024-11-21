@@ -19,7 +19,9 @@ toc:
     subsections:  
     - name: True Positive Rate Experiment  
     - name: False Positive Rate Experiment  
-  - name: The Problem with Temporally Shifted Benchmarks  
+  - name: The Problem with Temporally Shifted Benchmarks
+  - subsections:
+    - name: Why These Benchmarks Are Misleading
   - name: Reflections on Machine Learning Awards  
   - name: Conclusion  
 
@@ -27,19 +29,19 @@ toc:
 
 ## Introduction
 
-At EMNLP 2024, the Best Paper Award was given to **"Pretraining Data Detection for Large Language Models: A Divergence-based Calibration Method"** ([arXiv:2409.14781v4](https://arxiv.org/html/2409.14781v4)). The paper addresses Membership Inference Attacks (MIAs), a key issue in machine learning related to privacy. The authors propose a new calibration method and introduce **PatentMIA**, a benchmark using temporally shifted patent data, to demonstrate its effectiveness.
+At EMNLP 2024, the [Best Paper Award](https://x.com/emnlpmeeting/status/1857176180128198695/photo/1) was given to **"Pretraining Data Detection for Large Language Models: A Divergence-based Calibration Method"**<d-cite key="zhang2024pretraining"></d-cite>. The paper addresses Membership Inference Attacks (MIAs), a key issue in machine learning related to privacy. The authors propose a new calibration method and introduce **PatentMIA**, a benchmark utilizing temporally shifted patent data to validate their approach.
 
-The method initially seems promising: it recalibrates attack models using a divergence metric between the outputs of a target model and a reference model, claiming improved performance on true and false positives. However, when we looked closer, we found major flaws in how the experiments were designed and how the method was evaluated. Here, we critically analyze the paper and its broader implications.
+The method initially seems promising: it recalibrates model probabilities using a divergence metric between the outputs of a target model and a token-frequency map derived from auxiliary data, claiming improved detection of member and non-member samples. However, upon closer examination, we identified significant shortcomings in both the experimental design and evaluation methodology.  In this post, we critically analyze the paper and its broader implications.
 
 ---
 
 ## Method Overview  
 
-The proposed method tries to fix a known issue with MIAs: models often fail to properly separate member and non-member samples. To address this, the authors use a divergence metric between two models (a target and a reference) to recalibrate the attack probabilities.  
+The proposed method tries to fix a known issue with MIAs: models often fail to properly separate member and non-member samples. To address this, the authors use an auxiliary data-source to compute token-level frequencies, which are then used to recelibrate token-wise model logits. This normalization aims to adjust token-level model probabilities based on their natural frequency or rarity, aligning with membership inference practices such as reference model calibration<d-cite key="carlini2022membership"></d-cite>.
 
 They also introduce **PatentMIA**, a benchmark that uses temporally shifted patents as data. The idea is to test whether the model can identify if a patent document was part of its training data or not.  
 
-While this approach sounds interesting, our experiments show that the results are driven by flaws in the benchmark design and don’t hold up under more rigorous testing.  
+While this approach sounds interesting, our experiments suggest that the reported results are influenced by limitations in the benchmark design.
 
 ---
 
@@ -49,14 +51,19 @@ We ran two key experiments to test the paper’s claims: one for true positives 
 
 ### True Positive Rate Experiment  
 
-This experiment checks if the method can correctly distinguish member data from non-member data when both are drawn from the **same distribution**. We used train and validation splits from **The Pile** dataset, which ensures there are no temporal or distributional differences between the two sets.  
+This experiment checks if the method can correctly distinguish member data from non-member data when both are drawn from the **same distribution**. We used train and validation splits from **The Pile** dataset, which ensures there are no temporal or distributional differences between the two sets. Below we report results for the *Wikipedia* split.
+
+| Model              | AUC | TPR@5%FPR |
+| :---------------- | :---------: | ----: |
+| [Pythia-6.9B](https://huggingface.co/EleutherAI/pythia-6.9b) |   ?   | ? |
+| [GPT-NeoX-20B](https://huggingface.co/EleutherAI/gpt-neox-20b) | ?   | ? |
 
 **Result:**  
 The method performed no better than random guessing. This means that the reported improvements in the paper were likely due to exploiting differences in the data distribution, not actual improvements in detecting membership.  
 
 ### False Positive Rate Experiment  
 
-Next, we checked how often the method falsely identifies data as "member" when it has never been part of the training set. To do this, we used the **WikiMIA** dataset but replaced the training data with unrelated validation data from **The Pile Wiki**.  
+Next, we checked how often the method falsely identifies data as "member" when it has never been part of the training set. To do this, we used the **WikiMIA** dataset but replaced the training data with unrelated validation data from the *Wikipedia* split of **The Pile**.  
 
 **Result:**  
 The method flagged a high number of false positives. It frequently identified non-member data as part of the training set, revealing that it was relying on temporal or distribution artifacts rather than truly detecting membership.  
@@ -93,6 +100,6 @@ If awards are to truly highlight excellence, they must emphasize thoroughness, r
 
 ## Conclusion  
 
-The EMNLP 2024 Best Paper promised to solve a significant challenge in membership inference, but it falls short under careful scrutiny. The proposed method fails both in distinguishing members and non-members under rigorous conditions and in avoiding false positives when the data is untrained. Furthermore, its reliance on **PatentMIA** exemplifies a larger issue with using temporally shifted benchmarks to claim progress.  
+The EMNLP 2024 Best Paper sought to address a pressing challenge in membership inference but falls short under careful scrutiny. The proposed method fails both in distinguishing members and non-members under rigorous conditions and in avoiding false positives when the data is untrained. Furthermore, its reliance on **PatentMIA** exemplifies a larger issue with using temporally shifted benchmarks to claim progress.  
 
-Machine learning research needs to prioritize rigor over hype. Awards should reflect this by rewarding robust and reproducible work, rather than methods that exploit well-known flaws in evaluation practices. Only then can we ensure that the field moves forward in a meaningful way.
+For the field to advance meaningfully, greater emphasis must be placed on rigorous evaluation practices. Awards should reflect this by rewarding work with robust and thorough evaluations, rather than methods that (knowingly or otherwise) exploit well-known flaws in evaluation practices. Only then can we ensure that the field moves forward in a meaningful way.
