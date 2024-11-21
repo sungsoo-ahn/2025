@@ -300,7 +300,7 @@ For the single-model paradigm, existing methods can primarily be categorized int
   Architecture\Feature     | **Discrete** | **Continuous** 
 --- | --- | ---
 **Autoregressive** | *Chameleon*<d-cite key="chameleon2024"></d-cite>;*EMU3*<d-cite key="wang2024emu3"></d-cite> | *MMAR*<d-cite key="yang2024mmar"></d-cite>
-**AR+Diffusion** | *Show-O*<d-cite key="xie2024showo"></d-cite> | *Transfusion*<d-cite key="zhou2024transfusion"></d-cite>;*MonoFormer* 
+**AR+Diffusion** | *Show-O*<d-cite key="xie2024showo"></d-cite>; *VILA-U*<d-cite key="wu2024vila"></d-cite>; *LWM*<d-cite key="liu2024world"></d-cite> | *Transfusion*<d-cite key="zhou2024transfusion"></d-cite>;*MonoFormer*<d-cite key="zhao2024monoformer"></d-cite>
 
 
 
@@ -318,6 +318,11 @@ The fundamental difference between Autoregressive Models (*e.g.,* EMU3, Chameleo
 | **Training Complexity** | Relatively efficient.                                   | More computationally demanding due to diffusion.    |
 | **Scalability**         | Scales well to large multimodal datasets.               | Requires careful balancing of AR and diffusion.     |
 
+
+#### Autoregressive-based Models
+
+
+####  Mixed Architectures
 
 
 ### Discrete v.s. Continuous
