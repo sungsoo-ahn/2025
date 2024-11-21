@@ -299,7 +299,7 @@ For the single-model paradigm, existing methods can primarily be categorized int
 **Autoregressive** | *LWM*<d-cite key="liu2024world"></d-cite>; *Chameleon*<d-cite key="chameleon2024"></d-cite>; *VILA-U*<d-cite key="wu2024vila"></d-cite>; *EMU3*<d-cite key="wang2024emu3"></d-cite> | *MMAR*<d-cite key="yang2024mmar"></d-cite>
 **AR+Diffusion** | *Show-O*<d-cite key="xie2024showo"></d-cite> | *Transfusion*<d-cite key="zhou2024transfusion"></d-cite>;*MonoFormer*<d-cite key="zhao2024monoformer"></d-cite>
 
-<!-- ; *SEED-X*<d-cite key="ge2024seed"></d-cite>; *LaVIT*<d-cite key="jin2024unified"></d-cite>  -->
+
 
 ### Autoregressive Models v.s. Mixed Architectures (AR+Diffusion)
 <!-- https://poloclub.github.io/transformer-explainer/ -->
@@ -335,15 +335,15 @@ Autoregressive-based models with discrete-valued tokenizers, including Chameleon
 
 *Limitations - Inference Speed*. Token-by-token generation leads to slower inference times, particularly for long sequences like video.
 
-**Autoregressive-based Models with Continuous Valued Tokenizer**
+**Autoregressive-based Models with Continuous Valued Tokenizer**.
 Autoregressive models with continuous-valued tokenizers, such as MMAR, introduce an alternative approach to unified multimodal modeling by representing data as continuous latent representations instead of discrete tokens. This method offers unique advantages in modeling high-dimensional data like images and videos while maintaining the flexibility of autoregressive frameworks.
 
 *Advantage - Continuous Representations:*. Unlike discrete tokenization, these models use continuous embeddings to represent inputs, providing a richer and more compact encoding of complex modalities like video and high-resolution images.
 
 *Limitations - Task Flexibility*: While excellent for understanding tasks, these models may require additional tuning to handle diverse generative tasks effectively.
 
-**Mixed Architectures with Discrete Valued Tokenizer**
-Mixed architectures that combine autoregressive (AR) and diffusion models, such as Show-O and SEED-X, represent an innovative approach to unified multimodal modeling. These architectures leverage the strengths of both AR and diffusion frameworks while operating on discrete-valued tokenized inputs, aiming to address the limitations of each individual method.
+**Mixed Architectures with Discrete Valued Tokenizer.**
+Mixed architectures that combine autoregressive (AR) and diffusion models, such as Show-O, represent an innovative approach to unified multimodal modeling. These architectures leverage the strengths of both AR and diffusion frameworks while operating on discrete-valued tokenized inputs, aiming to address the limitations of each individual method.
 
 
 
@@ -369,6 +369,7 @@ In a unified model, **discrete values** refer to categorical data (*e.g.,* token
 | **Training Complexity**      | High due to long sequences.                         | Moderate but requires sophisticated alignment.         |
 | **Encoding Approach**        | Requires codebook for quantization, potential errors.      | No codebook, direct continuous embeddings, avoids quantization errors. |
 
+
 <aside class="l-body box-note" markdown="1">
 
 In autoregressive models, encoding an image with discrete values represents pixels or features as categorical indices (*e.g.,* tokens from a **codebook**), while encoding with continuous values directly processes real-valued pixels or features:
@@ -382,21 +383,51 @@ In autoregressive models, encoding an image with discrete values represents pixe
 
 Unlike single, monolithic models trained to handle all modalities and tasks simultaneously, **multi-expert architectures** offer an alternative approach: leveraging specialized expert modules that align, process, and fuse information across diverse modalities. These architectures not only enable task-specific optimization but also facilitate the integration of pre-trained expert models, such as incorporating external capabilities into frameworks like ImageBind. Multi-experts are typically categorized based on their alignment focus: Image-Centric Alignment, Text-Centric Alignment, and Generalized Alignment methods.
 
-| **Aspect**                 | **Image-Centric (e.g., ImageBind<d-cite key="girdhar2023imagebind"></d-cite>)**         | **Text-Centric (e.g., TextBind<d-cite key="li2023textbind"></d-cite>)**            | **Generalized (e.g., UniBind<d-cite key="lyu2024unibind"></d-cite>)**                |
+| **Aspect**                 | **Image-Centric (e.g., ImageBind<d-cite key="girdhar2023imagebind"></d-cite>)**         | **Text-Centric (e.g., TextBind<d-cite key="li2023textbind"></d-cite>; *SEED-X*<d-cite key="ge2024seed"></d-cite>; *LaVIT*<d-cite key="jin2024unified"></d-cite> )**            | **Generalized (e.g., UniBind<d-cite key="lyu2024unibind"></d-cite>)**                |
 |----------------------------|--------------------------------------------|---------------------------------------------|-----------------------------------------------|
 | **Alignment Focus**         | Visual-first                              | Text-first                                  | Balanced across all modalities                |
 | **Integration Capability**  | Fuses pre-trained visual-centric models   | Leverages pre-trained language models       | Incorporates multi-expert pre-trained modules |
 | **Strengths**               | Robust spatial and visual correlations    | Strong text-based reasoning and generation  | Versatile, supports diverse tasks             |
 | **Limitations**             | Limited in text/audio-heavy tasks         | Struggles with purely visual or auditory tasks | Increased computational complexity            |
 
+
 ### Image-Centric Alignment
 
-Image-centric alignment models prioritize visual data as the foundational modality for cross-modal interactions, aligning other modalities such as text, audio, or motion with visual embeddings.
+<!-- Image-centric alignment models prioritize visual data as the foundational modality for cross-modal interactions, aligning other modalities such as text, audio, or motion with visual embeddings. -->
 
-Example: ImageBind
-Functions as an expert model for image-driven multimodal tasks, integrating diverse modalities (e.g., audio, text, depth) into a shared latent space.
+Image-centric alignment model refers to the use of images as the core pivot to connect various data modalities. Images are highly structured and versatile representations that can be naturally associated with other modalities like text, audio, or sensor data. 
+
+
+<aside class="l-body box-note" markdown="1">
+
+ImageBind<d-cite key="girdhar2023imagebind"></d-cite> is a multimodal learning model introduced by Meta that aligns different modalities (*e.g.,* images, text, audio) into a shared image embedding space. Its key innovation lies in binding various modalities with images as the central anchor, enabling seamless interaction across domains even without paired training data for every modality pair. As shown in the image below, the illustration is sourced from ImageBind:
+
+{% include figure.html path="assets/img/2025-04-28-unified-models/23.44.15.png" class="img-fluid" %}
+</aside>
+
+Here’s how ImageBind achieves this:
+
+* **Cross-Modal Alignment**: Each modality (text, audio, sensor data, etc.) is independently encoded into the same shared embedding space. The model does not require direct pairwise data between all modalities. Instead, it binds each modality to images, which indirectly links the modalities.
+
+* **InfoNCE Loss**: InfoNCE loss is used to align embeddings of different modalities. For instance, it maximizes the similarity between embeddings of an image and its corresponding text while minimizing the similarity with unrelated texts.
+
+The InfoNCE loss is defined as:
+
+$$
+\mathcal{L}_{\text{InfoNCE}} = - \log \frac{\exp(\text{sim}(q, k^+)/\tau)}{\sum_{i=1}^N \exp(\text{sim}(q, k_i)/\tau)}
+$$
+
+Where:
+- \( \text{sim}(q, k) \): Similarity function, such as cosine similarity.
+- \( \tau \): Temperature parameter that controls the sharpness of the distribution.
+- \( N \): Total number of candidates (including both positive and negative samples).
+
+
+
 
 ### Text-Centric Alignment
+
+
 
 ### Others
 
