@@ -368,8 +368,8 @@ In a unified model, **discrete values** refer to categorical data (*e.g.,* token
 |-----------------------------|----------------------------------------------------|------------------------------------------------------|
 | **Data Type**                | Categorical (text tokens).                        | Real-valued (pixels, audio signals, etc.).           |
 | **Primary Focus**            | Token-level generation (*e.g.,* text prediction).   | Continuous signal refinement (*e.g.,* image generation). |
-
-
+| **Training Complexity**      | High due to long sequences.                         | Moderate but requires sophisticated alignment.         |
+| **Encoding Approach**        | Requires codebook for quantization, potential errors.      | No codebook, direct continuous embeddings, avoids quantization errors. |
 
 <aside class="l-body box-note" markdown="1">
 
