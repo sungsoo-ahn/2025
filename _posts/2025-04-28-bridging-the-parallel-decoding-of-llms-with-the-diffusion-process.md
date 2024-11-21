@@ -84,11 +84,13 @@ $$
 
 Here, the superscript $$^{(j)}$$ denotes the iteration count. It's evident that each equation corresponds to standard autoregressive decoding. However, the difference lies in the dependency: while autoregressive decoding relies on precise preceding tokens, Jacobi Decoding solves for all tokens simultaneously, based on an imperfect initial guess. As illustrated in the following diagram, starting from a set of random guesses, the predicted sequence continually refines itself. Each iteration produces a more accurate sequence, which in turn yields even better predictions in the next iteration, ultimately converging to the autoregressive decoding result. The driving signal toward accuracy in this process is actually provided by the prefix $$x$$.
 
+Figure 1. Illustration of the parallel decoding process. <d-cite key="koucllms"></d-cite>
+
 {% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/jacobi-decoding.png" class="jacobi-decoding" %}
 
 However, although these equations are mathematically in closed form, in practice, an LLM pre-trained in an autoregressive manner (based on precise preceding tokens) may not consistently achieve the same results when predicting with imprecise preceding tokens. Additionally, experiments have observed that even correctly predicted tokens are sometimes replaced in subsequent iterations, leading to unnecessary step wastage. Some works, such as Lookahead Decoding <d-cite key="fubreak"></d-cite> and CLLM <d-cite key="koucllms"></d-cite>, have introduced improvements to Jacobi Decoding for enhanced stability and speed. The most advanced Jacobi Decoding methods can achieve decoding rates 2-4 times faster with minimal performance sacrifice.
 
-Table 1. Comparison of CLLMs against fine-tuned baseline models across three different generation modes. Notably, CLLMs exhibit the ability of fast consistency generation while maintaining lower memory and computational demands. <d-cite key="koucllms"></d-cite>
+Table 1. Comparison of parallel decoding strategies (Jacobi and lookahead) against AR decoding on finetuned models and CLLMs. Notably, CLLMs exhibit the ability of fast consistency generation while maintaining lower memory and computational demands. <d-cite key="koucllms"></d-cite>
 
 | Methods            |Speed (tokens/s)|Speedup|Metric|Size |
 |---------------------|------------------|---------|--------|------|
@@ -102,6 +104,8 @@ Table 1. Comparison of CLLMs against fine-tuned baseline models across three dif
 | + lookahead        |125.2           |2.9x   |56.4  |6.7B |
 
 
+Figure 2. Comparison of Jacobi decoding against AR decoding. <d-cite key="koucllms"></d-cite>
+
 {% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/comparison_cllms.jpg" class="comparison_cllms" %}
 
 
@@ -113,7 +117,7 @@ If we view each iteration of Jacobi Decoding as a state transition between token
 
 Due to these structural similarities, many techniques developed for diffusion models may be transferable to Jacobi Decoding in the future. For example, diffusion models perform sequence editing naturally by adding noise and then denoising, which could enable faster text editing, refinement, or style transfer based on Jacobi Decoding. When working with a longer input text, Jacobi Decoding could be significantly faster than in-context learning approaches in autoregressive decoding. Moreover, for editing tasks where a well-initialized token sequence is already available, Jacobi Decoding would likely be more stable than using random token initialization in text generation. Diffusion Forcing <d-cite key="chendiffusion"></d-cite> also takes the similar concept.
 
-Figure 1. Diffusion Forcing, a new training paradigm where a diffusion model is trained to denoise a set of tokens with independent per-token noise levels.
+Figure 4. Diffusion Forcing, a new training paradigm where a diffusion model is trained to denoise a set of tokens with independent per-token noise levels.
 
 {% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/diffusion_forcing.jpg" class="diffusion_forcing" %}
 
