@@ -73,10 +73,10 @@ toc:
     subsections:
     - name: Necessary packages
     - name: Test function
-    - name: Dense Jacobian
+    - name: Backend switch
     - name: Preparation
-    - name: Performance benefits
     - name: Coloring visualization
+    - name: Performance benefits
 
 
 # Below is an example of injecting additional post-specific styles.
@@ -665,7 +665,7 @@ A crucial hyperparameter is the choice of ordering, for which various criteria h
 
 More advanced coloring techniques can use both modes, such as **bicoloring**.
 
-<!-- TODO -->
+<!-- TODO: this will be Figure 20 -->
 *TODO*
 
 
@@ -755,11 +755,12 @@ It takes a vector $\mathbf{x} \in \mathbb{R}^n$ and outputs a slightly shorter v
 In pure Julia, this is written as follows (using the built-in `diff` recursively):
 
 ```julia
-function iter_diff(x, k) 
-    if k == 0 
-        return x 
+function iter_diff(x, k)
+    if k == 0
+        return x
     else
-        return diff(iter_diff(x, k-1))
+        y = iter_diff(x, k - 1)
+        return diff(y)
     end
 end
 ```
@@ -779,9 +780,9 @@ julia> iter_diff([1, 4, 9, 16], 2)
  2
 ```
 
-### Dense Jacobian
+### Backend switch
 
-The key concept behind DifferentiationInterface.jl is that of *backends*.
+The key concept behind DifferentiationInterface.jl is that of **backends**.
 There are several AD systems in Julia, each with different features and tradeoff, that can be accessed them through a common API.
 Here, we use ForwardDiff.jl as our AD backend:
 
@@ -829,7 +830,7 @@ We now show that sparsity also unlocks faster computation of the Jacobian itself
 
 ### Preparation
 
-Sparsity pattern detection and matrix coloring are performed in a so-called "preparation step", whose output can be reused across several calls to `jacobian` (as long as the pattern stays the same).
+Sparsity pattern detection and matrix coloring are performed in a so-called "preparation step", whose output can be **reused across several calls** to `jacobian` (as long as the pattern stays the same).
 
 Thus, to extract more performance, we can create this object once
 
@@ -881,44 +882,59 @@ julia> ncolors(prep)
 4
 ```
 
-This discrepancy typically gets larger as the input grows: it is not rare for the number of columns to be a constant that does not depend on $n$.
-It is the key driver of ASD performance.
-
-### Performance benefits
-
-Here we present a benchmark for a slightly larger input, $n = 1000$ and $k = 10$.
-It can be obtained with the following code:
-
-```julia
-using DifferentiationInterfaceTest
-scen = Scenario{:jacobian,:out}(iter_diff, rand(1000); contexts=(Constant(10),))
-data = benchmark_differentiation([dense_backend, sparse_backend], [scen]; benchmark=:full)
-```
-
-In the table below:
-
-- the column "sparse" tells us which backend we are using
-- the column "prepared" tells us whether or not preparation is included in the measurements (for dense AD preparation is essentially trivial)
-- the column "time" contains the execution time in seconds
-- the column "bytes" contains the allocated memory in bytes
-
-| **sparse** | **prepared** | **time**  | **bytes** |
-|-----------:|-------------:|----------:|----------:|
-| false      | true         | 2.732e-02 | 1.679e+08 |
-| false      | false        | 2.183e-02 | 1.679e+08 |
-| true       | true         | 1.923e-04 | 1.943e+06 |
-| true       | false        | 2.995e-03 | 1.323e+07 |
-
-<!-- TODO: update benchmarks to new function (re-run Pluto) -->
-
-As shown in the table, even when we include the overhead of pattern detection and coloring, the sparse backend is around $5 \times$ faster than the dense backend.
-The speedup becomes $100 \times$ once we discard this overhead, which can be amortized over several `jacobian` computations.
-
 ### Coloring visualization
+
+We just saw that there is a discrepancy between the number of different colors $c$ and the input size $n$.
+This ratio $n / c$ typically gets larger as the input grows, which makes sparse differentiation more and more competitive.
+
+We illustrate this with the Jacobians of `iter_diff` for several values of $n$ and $k$:
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/demo/banded.png" class="img-fluid" %}
 <div class="caption">
-    Figure 20: Colored Jacobian sparsity patterns of the iterated difference toy problem over growing input dimension $n$ and iterations $k$. 
+    Figure 21: Coloring numbers are often agnostic to the input size.  
 </div>
+
+The main takeaway of Figure 21 is that **the number of colors does not depend on the dimension** $n$, only on the number of iterations $k$.
+In fact, `iter_diff` with $k$ iterations gives rise to a banded Jacobian with $k+1$ bands, for which we can easily verify that the optimal coloring uses as many colors as bands, i.e. $c = k+1$.
+For this particular case, the greedy coloring happens to find the optimal solution.
+
+### Performance benefits
+
+Here we present a benchmark for the Jacobian of `iter_diff` with varying $n$ and fixed $k$.
+Our goal is to find out when sparse differentiation becomes relevant.
+Benchmark data can be generated with the following code:
+
+```julia
+using DifferentiationInterfaceTest
+scenarios = [
+    Scenario{:jacobian, :out}(iter_diff, rand(n); contexts=(Constant(k),))
+    for n in round.(Int, 10 .^ (0:0.3:4))
+]
+data = benchmark_differentiation(
+    [dense_backend, sparse_backend],
+    scenarios;
+    benchmark=:full
+)
+```
+
+It gives rise to the following performance curves (lower is better):
+
+{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/demo/benchmark.png" class="img-fluid" %}
+<div class="caption">
+    Figure 22: Performance benefits of sparsity  
+</div>
+
+As we can see on Figure 22, there are three main regimes:
+
+1. For very small inputs, we gain nothing by leveraging sparsity.
+2. For medium-sized inputs, sparsity handling is only useful if we can amortize the cost of detection and coloring.
+3. For very large inputs, even the overhead of detection and coloring is worth paying as part of a sparse Jacobian computation.
+
+Importantly, sparsity can yield an **asymptotic speedup** and not just a constant one.
+Indeed, the cost of a JVP for `iter_diff` scales with $kn$.
+Sparse differentiation requires $c$ JVPs instead of $n$, so with $c = k+1$ here its total cost scales as $\Theta(k^2 n)$ instead of $\Theta(k n^2)$.
+Thus, on the log-log plot of Figure 22, the sparse curve (without detection) has a slope of $1$ while the standard curve has a slope of $2$.
+
+Although the specific thresholds between regimes are problem-dependent, our conclusions hold in general.
 
 <!-- TODO: add comments -->
