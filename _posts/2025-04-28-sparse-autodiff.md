@@ -27,7 +27,6 @@ hidden: false
 # TODO before submission:
 # - revert CI workflows
 # - check correct figure caption numbering and references
-# - check accessibility – color-blindness
 # - check correct rendering of SVGs on multiple browsers
 
 authors:
@@ -64,6 +63,7 @@ toc:
     subsections:
     - name: Graph formulation
     - name: Greedy algorithm
+    - name: Bicoloring
   - name: Second order
     subsections:
     - name: Hessians
@@ -71,6 +71,14 @@ toc:
     - name: Pattern detection
     - name: Symmetric coloring
   - name: Demonstration
+    subsections:
+    - name: Necessary packages
+    - name: Test function
+    - name: Dense Jacobian
+    - name: Preparation
+    - name: Performance benefits
+    - name: Coloring visualization
+
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
@@ -208,10 +216,9 @@ We consider a convolutional filter of size $5 \times 5$, a single input channel 
 An input of size $28 \times 28 \times 1$ results in a $576 \times 784$ Jacobian, the structure of which is shown in Figure 2.
 All the white coefficients are **structural zeros**.
 
-If we materialize the entire Jacobian as a dense matrix:
-
-- we waste time computing coefficients which are mostly zero;
-- we waste memory storing those zero coefficients.
+If we materialize the entire Jacobian as a dense matrix, 
+we waste time computing coefficients which are mostly zero
+and memory storing those zero coefficients.
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/big_conv_jacobian.png" class="img-fluid" %}
 <div class="caption">
@@ -220,7 +227,8 @@ If we materialize the entire Jacobian as a dense matrix:
 
 In modern neural network architectures, which can contain over one trillion parameters,
 computing intermediate Jacobians is not only inefficient: it exceeds available memory.
-AD circumvents this limitation using **linear maps**, lazy operators that act exactly like matrices but without materializing them.
+AD circumvents this limitation by using **linear maps**, 
+lazy operators that act exactly like matrices but without materializing them.
 
 The differential $Df: \mathbf{x} \longmapsto Df(\mathbf{x})$ is a linear map which provides the best linear approximation of $f$ around a given point $\vx$.
 We can rephrase  the chain rule as a **composition of linear maps** instead of a product of matrices:
@@ -251,13 +259,13 @@ linear maps are best thought of as black-box functions.
 
 Now that we have translated the compositional structure of our function $f$ into a compositional structure of linear maps, we can evaluate them by propagating **materialized vectors** through them.
 
+Figure 4 illustrates the propagation of a vector $\mathbf{v}_1 \in \mathbb{R}^n$ from the right-hand side.
+Since we propagate in the order of the original function evaluation, this is called **forward-mode AD**.
+
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/forward_mode_eval.svg" class="img-fluid" %}
 <div class="caption">
     Figure 4: Evaluating linear maps in forward-mode.
 </div>
-
-Figure 4 illustrates the propagation of a vector $\mathbf{v}_1 \in \mathbb{R}^n$ from the right-hand side.
-Since we propagate in the order of the original function evaluation, this is called **forward-mode AD**.
 
 In the first step, we evaluate $Dg(\mathbf{x})(\mathbf{v}_1)$.
 Since this operation by definition corresponds to 
@@ -327,7 +335,7 @@ who typically refer to reverse-mode AD as *backpropagation*.
 ### Sparse matrices
 
 Sparse matrices are matrices in which most elements are zero.
-We refer to linear maps as "sparse linear maps" if they materialize to sparse matrices.
+As shown in Figure 8, we refer to linear maps as "sparse linear maps" if they materialize to sparse matrices.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -371,17 +379,20 @@ If these columns are known to be **orthogonal**,
 the sum can be uniquely decomposed into its components, a process known as **decompression**.
 Thus, a single JVP is enough to compute the nonzero coefficients of several columns at once.
 
+This specific example using JVPs corresponds to sparse forward-mode AD 
+and is visualized in Figure 9, where all orthogonal columns have been colored in matching hues.
+By computing a single JVP with the vector $\mathbf{e}_1 + \mathbf{e}_2 + \mathbf{e}_5$, 
+we materialize the sum of the first, second and fifth column of our Jacobian.
+
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/sparse_ad.svg" class="img-fluid" %}
 <div class="caption">
     Figure 9: Materializing multiple orthogonal columns of a Jacobian in forward-mode.
 </div>
 
-This specific example using JVPs corresponds to sparse forward-mode AD 
-and is visualized in Figure 9, where all orthogonal columns have been colored in matching hues.
-By computing a single JVP with the vector $\mathbf{e}_1 + \mathbf{e}_2 + \mathbf{e}_5$, 
-we materialize the sum of the first, second and fifth column of our Jacobian.
-Then, we assign the values in the resulting vector back to the appropriate Jacobian entries.
-This final decompression step is shown in Figure X.
+
+A second JVP with the vector  $\mathbf{e}_3 + \mathbf{e}_4$ materializes the sum of the remaining columns. 
+We the assign the values in the resulting vectors back to the appropriate Jacobian entries.
+This final decompression step is shown in Figure 10.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -392,10 +403,10 @@ This final decompression step is shown in Figure X.
     </div>
 </div>
 <div class="caption">
-    Figure X: Materializing a Jacobian with forward-mode ASD: (a) compressed evaluation of orthogonal columns (b) decompression to Jacobian matrix
+    Figure 10: Materializing a Jacobian with forward-mode ASD: (a) compressed evaluation of orthogonal columns (b) decompression to Jacobian matrix
 </div>
 
-The same idea can also be applied to reverse mode AD, as shown in Figure Y.
+The same idea can also be applied to reverse mode AD, as shown in Figure 11.
 Instead of leveraging orthogonal columns, we rely on orthogonal rows.
 We can then materialize multiple rows in a single VJP.
 
@@ -408,7 +419,7 @@ We can then materialize multiple rows in a single VJP.
     </div>
 </div>
 <div class="caption">
-    Figure Y: Materializing a Jacobian with reverse-mode ASD: (a) compressed evaluation of orthogonal rows (b) decompression to Jacobian matrix
+    Figure 11: Materializing a Jacobian with reverse-mode ASD: (a) compressed evaluation of orthogonal rows (b) decompression to Jacobian matrix
 </div>
 
 ### Sparsity pattern detection and coloring
@@ -419,12 +430,12 @@ the structure of the Jacobian is completely unknown.
 In other words, **we cannot tell which rows and columns are orthogonal without first materializing a Jacobian matrix.**
 But if we fully materialize a Jacobian via traditional AD, ASD isn't needed at all.
 
-The solution to this problem is shown in Figure 10 (a):
+The solution to this problem is shown in Figure 12 (a):
 in order to find orthogonal columns (or rows), we don't need to materialize the full Jacobian.
 Instead, it is enough to **detect the sparsity pattern** of the Jacobian.
 This binary-valued pattern contains enough information to deduce orthogonality.
 From there, we use a **coloring algorithm** to group mutually orthogonal columns (or rows) together.
-Such a coloring can be visualized on Figure 10 (b), 
+Such a coloring can be visualized on Figure 12 (b), 
 where the yellow columns will be evaluated together (first JVP) 
 and the light blue ones will be evaluated together (second JVP), 
 for a total of 2 JVPs instead of 5.
@@ -438,7 +449,7 @@ for a total of 2 JVPs instead of 5.
     </div>
 </div>
 <div class="caption">
-    Figure 10: The first two steps of ASD: (a) sparsity pattern detection, (b) coloring of the sparsity pattern.
+    Figure 12: The first two steps of ASD: (a) sparsity pattern detection, (b) coloring of the sparsity pattern.
 </div>
 
 To sum up, ASD consists of four steps:
@@ -492,24 +503,24 @@ we can instead represent the sparsity pattern of the $i$-th column of a Jacobian
 
 $$ \left\{j \;\Bigg|\; \dfdx{i}{j} \neq 0\right\} . $$
 
-These equivalent sparsity pattern representations are illustrated in Figure 11.
+These equivalent sparsity pattern representations are illustrated in Figure 13.
 Each row index set tells us **which inputs influenced a given output**, at the first-order. For instance, output $i=2$ was influenced by inputs $j=4$ and $j=5$.
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/sparsity_pattern_representations.svg" class="img-fluid" %}
 <div class="caption">
-    Figure 11: Sparsity pattern representations: (a) original matrix, (b) binary pattern, (c) row index sets.
+    Figure 13: Sparsity pattern representations: (a) original matrix, (b) binary pattern, (c) row index sets.
 </div>
 
 ### Efficient propagation
 
-Figure 12 shows the traditional forward-AD pass we want to avoid:
+Figure 14 shows the traditional forward-AD pass we want to avoid:
 propagating a full identity matrix through a linear map would materialize the Jacobian of $f$, 
 but also all intermediate linear maps.
 As previously discussed, this is not a viable option due to its inefficiency and high memory requirements.
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/forward_mode_naive.svg" class="img-fluid" %}
 <div class="caption">
-    Figure 12: Materializing a Jacobian forward-mode. 
+    Figure 14: Materializing a Jacobian forward-mode. 
     Due to high memory requirements for intermediate Jacobians, this approach is inefficient or impossible.  
 </div>
 
@@ -518,11 +529,11 @@ An alternative view on this vector is that it corresponds to the index set repre
 
 Our goal is to propagate this index set such that we get an output vector of index sets 
 that corresponds to the Jacobian sparsity pattern.
-This idea is visualized in Figure 13.
+This idea is visualized in Figure 15.
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/forward_mode_sparse.svg" class="img-fluid" %}
 <div class="caption">
-    Figure 13: Propagating an index set through a linear map to obtain a sparsity pattern.  
+    Figure 15: Propagating an index set through a linear map to obtain a sparsity pattern.  
 </div>
 
 ### Abstract interpretation
@@ -538,18 +549,18 @@ x_1 x_2 + \text{sgn}(x_3)\\
 \text{sgn}(x_3) \frac{x_4}{2}
 \end{bmatrix} \, .$$
 
-The corresponding computational graph is shown in Figure 14,
+The corresponding computational graph is shown in Figure 16,
 where circular nodes correspond to elementary operators,
 in this case addition, multiplication, division and the sign function.
 Scalar inputs $x_i$ and outputs $y_j$ are shown in rectangular nodes.
 Instead of evaluating the original compute graph for a given input $\mathbf{x}$,
 <!-- (also called *primal computation*) -->
 all inputs are seeded with their respective input index sets.
-Figure 14 annotates these index sets on the edges of the computational graph.
+Figure 16 annotates these index sets on the edges of the computational graph.
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/compute_graph.png" class="img-fluid" %}
 <div class="caption">
-    Figure 14: Computational graph of the function $ f(\vx) = x_1 + x_2x_3 + \text{sgn}(x_4) $, annotated with corresponding index sets.  
+    Figure 16: Computational graph of the function $ f(\vx) = x_1 + x_2x_3 + \text{sgn}(x_4) $, annotated with corresponding index sets.  
 </div>
 
 Our sparsity detection system must now perform **abstract interpretation** of our computational graph.
@@ -563,7 +574,7 @@ The sign function has a zero-valued derivative for any input value.
 It therefore doesn't propagate the index set of its input. 
 Instead, it returns an empty set.
 
-Figure 14 shows the resulting output index sets $\\{1, 2\\}$ and $\\{4\\}$ for outputs 1 and 2 respectively.
+Figure 16 shows the resulting output index sets $\\{1, 2\\}$ and $\\{4\\}$ for outputs 1 and 2 respectively.
 These match the analytic Jacobian
 
 $$ J_f(x) = \begin{bmatrix}
@@ -610,27 +621,31 @@ Let us build a graph $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ with vertex set 
 such that each column is a vertex of the graph, and two vertices are connected if and only if their respective columns share a non-zero index.
 Put differently, an edge between vertices $j_1$ and $j_2$ means that columns $j_1$ and $j_2$ are not orthogonal.
 
-{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/colored_graph.svg" class="img-fluid" %}
-<div class="caption">
-    Figure X: Optimal graph coloring.
-</div>
-
-{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/colored_graph_suboptimal.svg" class="img-fluid" %}
-<div class="caption">
-    Figure X: Suboptimal graph coloring. Node 1 could be colored in yellow, leading to redundant computations of matrix-vector products.
-</div>
-
-{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/colored_graph_infeasible.svg" class="img-fluid" %}
-<div class="caption">
-    Figure X: Infeasible graph coloring. Nodes 2 and 4 on the graph are adjacent, but share a color. This results in overlapping columns.
-</div>
-
 We want to assign to each vertex $j$ a color $c(j)$, such that any two adjacent vertices $(j_1, j_2) \in \mathcal{E}$ have different colors $c(j_1) \neq c(j_2)$.
 This constraint ensures that columns in the same color group are indeed orthogonal.
 If we can find a coloring which uses the smallest possible number of distinct colors, it will minimize the number of groups, and thus the computational cost of the AD step.
 
+Figure 17 shows an optimal coloring using two colors, 
+whereas Figure 18 uses a suboptimal third color, requiring an extra JVP to materialize the Jacobian 
+and therefore increasing the computational cost of ASD.
+Figure 19 shows an infeasible graph coloring: Nodes 2 and 4 on the graph are adjacent, but share a color. This results in overlapping columns.
+
+{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/colored_graph.svg" class="img-fluid" %}
+<div class="caption">
+    Figure 17: Optimal graph coloring.
+</div>
+
+{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/colored_graph_suboptimal.svg" class="img-fluid" %}
+<div class="caption">
+    Figure 18: Suboptimal graph coloring. Node 1 could be colored in yellow.
+</div>
+
+{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/colored_graph_infeasible.svg" class="img-fluid" %}
+<div class="caption">
+    Figure 19: Infeasible graph coloring. Nodes 2 and 4 are adjacent on the graph, but share a color.
+</div>
+
 If we perform column coloring, forward-mode AD is required, while reverse-mode AD is needed for row coloring.
-Note that more advanced coloring techniques could use both modes, such as **bicoloring**.
 
 <aside class="l-body box-note" markdown="1">
 <!-- TODO -->
@@ -639,12 +654,21 @@ There are more efficient representations, e.g. *TODO*
 
 ### Greedy algorithm
 
-Unfortunately, the graph coloring problem is NP-hard, meaning that there is (probably) no way to solve it polynomially for every instance.
+Unfortunately, the graph coloring problem is NP-hard, meaning that there currently is no way to solve it polynomially for every instance.
 The optimal solution is known only for specific patterns, such as banded matrices.
 However, efficient heuristics exist that generate good enough solutions in reasonable time.
 The most widely used heuristic is the greedy algorithm, which processes vertices one after the other.
 This algorithm assigns to each vertex the smallest color that is not already present among its neighbors, and it never backtracks.
 A crucial hyperparameter is the choice of ordering, for which various criteria have been proposed.
+
+
+### Bicoloring
+
+More advanced coloring techniques can use both modes, such as **bicoloring**.
+
+<!-- TODO -->
+*TODO*
+
 
 ## Second order
 
@@ -667,7 +691,7 @@ $$ \nabla^2 f (\mathbf{x}) = J_{\nabla f}(\mathbf{x}) $$
 
 An HVP computes the product of the Hessian matrix with a vector, which can be viewed as the JVP of the gradient (a gradient which is itself computed via a VJP of $f$):
 
-$$ \nabla^2 f(x) (\mathbf{v}) = D[\nabla f](\mathbf{x})(\mathbf{v}) $$
+$$ \nabla^2 f(\mathbf{x}) (\mathbf{v}) = D[\nabla f](\mathbf{x})(\mathbf{v}) $$
 
 Thus it is quite common to say that HVPs are computed with "forward over reverse" AD.
 The complexity of a single HVP scales roughly with the complexity of the function $f$ itself.
@@ -679,7 +703,7 @@ This specificity can be exploited in the sparsity detection as well as in the co
 
 Detecting the sparsity pattern of the Hessian is more complicated than for the Jacobian.
 This is because, in addition to the usual linear dependencies, we now have to account for **nonlinear interactions** between every pair of coefficients.
-For instance, if $f(x)$ involves a term of the form $x_1 + x_2$, it will not affect the Hessian. 
+For instance, if $f(\mathbf{x})$ involves a term of the form $x_1 + x_2$, it will not affect the Hessian. 
 On the other hand, a term $x_1 x_2$ will yield two equal non-zero coefficients, one at position $(1, 2)$ and one at position $(2, 1)$.
 Thus, the abstract interpretation system used for detection needs a finer classification of operators, to distinguish between locally linear ones (sum, max) and locally nonlinear ones (product, exp).
 
@@ -729,7 +753,13 @@ It takes a vector $\mathbf{x} \in \mathbb{R}^n$ and outputs a slightly shorter v
 In pure Julia, this is written as follows (using the built-in `diff` recursively):
 
 ```julia
-iter_diff(x, k) = k == 0 ? x : diff(iter_diff(x, k-1))
+function iter_diff(x, k) 
+    if k == 0 
+        return x 
+    else
+        return diff(iter_diff(x, k-1))
+    end
+end
 ```
 
 Let us check that the function returns what we expect:
@@ -879,11 +909,14 @@ In the table below:
 
 <!-- TODO: update benchmarks to new function (re-run Pluto) -->
 
-As you can see, even when we include the overhead of pattern detection and coloring, the sparse backend is around $5 \times$ faster than the dense backend.
+As shown in the table, even when we include the overhead of pattern detection and coloring, the sparse backend is around $5 \times$ faster than the dense backend.
 The speedup becomes $100 \times$ once we discard this overhead, which can be amortized over several `jacobian` computations.
 
 ### Coloring visualization
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/demo/banded.png" class="img-fluid" %}
+<div class="caption">
+    Figure 20: Colored Jacobian sparsity patterns of the iterated difference toy problem over growing input dimension $n$ and iterations $k$. 
+</div>
 
 <!-- TODO: add comments -->
