@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Intricacies of Feature Geometry in Large Language Models
-description: We discuss several challenges around studying the geometry of feature representations in large language models (LLMs). We run ablations challenging the theses of two recent works, the ICML 2024 Mechanistic Interpretability Workshop 1st prize winning paper - The Geometry of Categorical and Hierarchical Concepts in LLMs, and the ICML 2024 paper - The Linear Representation Hypothesis and the Geometry of LLMs. We theoretically and empirically justify our main takeaway, which is that their orthogonality and polytopes results for categorical and hierarchical concepts are trivially true under the whitening transformation in high-dimensional spaces, and can be observed even in settings where they should not occur. We hope that our work throws light on these challenges and promotes the community to work on deciphering the geometry of a language model's residual stream.
+description: We discuss several challenges around studying the geometry of feature representations in large language models (LLMs). We run ablations challenging the theses of two recent works, the ICML 2024 Mechanistic Interpretability Workshop 1st prize winning paper - The Geometry of Categorical and Hierarchical Concepts in LLMs, and the ICML 2024 paper - The Linear Representation Hypothesis and the Geometry of LLMs. We theoretically and empirically justify our main takeaway, which is that their orthogonality and polytopes results for categorical and hierarchical concepts are trivially true under the whitening transformation in high-dimensional spaces, and can be observed even in settings where they should not occur.
 date: 2025-04-28
 future: true
 htmlwidgets: true
