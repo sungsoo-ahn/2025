@@ -43,7 +43,8 @@ toc:
   - name: Experiment
     subsections:
     - name: Adversarial Attacks  
-    - name: Results   
+    - name: Results  
+    - name: Key Insights 
   - name: Conclusion
 
 # Below is an example of injecting additional post-specific styles.
@@ -153,10 +154,10 @@ In the experiments, we used FGSM with $$\epsilon$$ values of 0.01, 0.05, 0.1, an
 {% include figure.html path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image4.jpg" class="img-fluid" %}
 _Example of FGSM and black-patch perturbations_
 
-### Results###
+### Results
 We developed various models by integrating different combinations of our proposed CNN blocks into the base architectures of ResNet18, MobileNetV2, and VGG16. These models were evaluated based on their classification accuracy on the given test dataset, as illustrated in the plots below. 
 
-{% include figure.html path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image5.jpg" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-multi-resolution-training-improves-robustness-against-adversarial-attacks/image5.jpg" class="img-fluid" <p>.l-page</p> %}
 
 The prefixes and suffixes in the model names indicate specific modifications:
 
@@ -172,20 +173,20 @@ The prefixes and suffixes in the model names indicate specific modifications:
 
 
 
-###Overall Insights###
+### Key Insights
 
  **Effectiveness of Enhancements**
  
- The enhanced models consistently outperform their respective baselines  (ResNet18, MobileNetV2, and VGG16) under both FGSM and black box attacks, demonstrating the overall effectiveness of the proposed LPF and Gaussian blocks in improving model robustness.
+   The enhanced models consistently outperform their respective baselines  (ResNet18, MobileNetV2, and VGG16) under both FGSM and black box attacks, demonstrating the overall effectiveness of the proposed LPF and Gaussian blocks in improving model robustness.
 
 **Impact of c6 vs. c3 Configurations**
 
- The plots reveal that, in general, the c3 configuration outperforms the c6 configuration, indicating that directly processing the 3-channel input through the designed CNN block and feeding it into the main DNNs is more effective than concatenating it with the original image. This trend suggests that the standalone processed features provide sufficient robustness without requiring additional raw feature information.
+   The plots reveal that, in general, the c3 configuration outperforms the c6 configuration, indicating that directly processing the 3-channel input through the designed CNN block and feeding it into the main DNNs is more effective than concatenating it with the original image. This trend suggests that the standalone processed features provide sufficient robustness without requiring additional raw feature information.
 
 **Performance Against Adversarial Attacks**
 
- The robustness of enhanced models diminishes as the intensity of adversarial perturbations increases (e.g., higher $$\epsilon$$ in FGSM or a larger number of patches in black box attacks). However, the enhanced models, particularly those with gl blocks and c3 configurations, consistently retain higher accuracy compared to baselines across both FGSM and black box attacks. This demonstrates their ability to effectively mitigate the impact of both gradient-based and localized perturbations.
+   As the intensity of adversarial perturbations increases, such as a higher epsilon ($$\epsilon$$) in FGSM or more patches in black box attacks, the robustness of enhanced models generally decreases. However, these enhanced models, especially those featuring **gl** blocks and **c3** configurations, consistently maintain higher accuracy compared to baseline models across both FGSM and black box attacks. The exception is with MobileNetv2, where the combination of gl block and c6 configuration performs best. This suggests that these models' ability to effectively mitigate the impact of both gradient-based and localized perturbations.
 
 
 ## Conclusion
-DNNs are crucial for tasks like traffic sign recognition but remain vulnerable to adversarial attacks, posing significant challenges for their safe deployment. This blog post introduced a multi-resolution training approach that enhances model robustness by the integration of custom LPF and Gaussian CNN blocks. Our method demonstrated consistent improvements in resilience across different architectures, including ResNet18, MobileNetV2, and VGG16. Notably, the **c3 configuration** and **gl block** emerged as the most effective design choices. These findings underscore the potential of multi-resolution training to mitigate adversarial risks, paving the way for safer and more reliable applications of DNNs in real-world scenarios.
+DNNs are crucial for tasks like traffic sign recognition but remain vulnerable to adversarial attacks, posing significant challenges for their safe deployment. This blog post introduced a multi-resolution training approach that enhances model robustness by the integration of custom LPF and Gaussian CNN blocks. Our method demonstrated consistent improvements in resilience across different architectures, including ResNet18, MobileNetV2, and VGG16. These findings underscore the potential of multi-resolution training to mitigate adversarial risks, paving the way for safer and more reliable applications of DNNs in real-world scenarios.
