@@ -1083,8 +1083,8 @@ The <a href="https://tinyurl.com/iclr-2025-flow-blogpost-colab">executable versi
 
 Although forward Euler is surprisingly popular in ML circles, those with simulation backgrounds eye it with suspicion: despite being fast (*per step*) and easy to implement, it's also highly inaccurate and can lead to instabilities. The poor accuracy may not be an issue when everything's an approximation anyway, but we can do a lot better. 
 
-People who work with diffusion models know this, e.g. 
-[Katherine Crowson's k-diffusion package](https://github.com/crowsonkb/k-diffusion) offers a bevy of integration choices. 
+People who work with diffusion models know this. For example,
+Katherine Crowson's k-diffusion package<d-footnote>https://github.com/crowsonkb/k-diffusion</d-footnote> offers a bevy of integration choices. 
 For now, we'll just implement the popular 4th-order Runge-Kutta (RK4) scheme. 
 Per step, it's more "expensive" than forward Euler in that each RK4 step requires 4 function evaluations instead of 
 forward Euler's single evaluation, and RK4 requires some extra storage, but the advantages you gain in accuracy are seriously worth 
