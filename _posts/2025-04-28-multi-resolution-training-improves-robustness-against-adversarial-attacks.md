@@ -166,9 +166,9 @@ The prefixes and suffixes in the model names indicate specific modifications:
 
 - **Prefixes:**
   - **lpf_**: Models integrated with the designed `LPF_conv` block.
-  - **gs_**: Models integrated with the designed `Gaussian_conv` block using a filter size of \(3 \times 3\) and sigma of 0.5.
-  - **gm_**: Models integrated with the designed `Gaussian_conv` block using a filter size of \(5 \times 5\) and sigma of 1.5.
-  - **gl_**: Models integrated with the designed `Gaussian_conv` block using a filter size of \(7 \times 7\) and sigma of 2.5.
+  - **gs_**: Models integrated with the designed `Gaussian_conv` block using a filter size of $$3 \times 3$$ and $$\sigma$$ of 0.5.
+  - **gm_**: Models integrated with the designed `Gaussian_conv` block using a filter size of $$5 \times 5$$ and $$\sigma$$ of 1.5.
+  - **gl_**: Models integrated with the designed `Gaussian_conv` block using a filter size of $$7 \times 7$$ and $$\sigma$$ of 2.5.
 
 - **Suffixes:**
   - **_c3**: The CNN block outputs a processed 3-channel image, which is then fed into the main DNNs for processing.
