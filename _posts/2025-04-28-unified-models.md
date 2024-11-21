@@ -486,22 +486,22 @@ Formulation for Generalized Alignment:
 * **1. Feature Representations:** Let $M_i$ represent the embeddings for each modality $𝑖$, where $M_i$ could be the image, text, or audio features. The model aims to align all modality embeddings $M_i$ into a common shared space $F$ based on their knowledge base features:
 
 $$
-M_i = FeatureExtractor_i(M_i)  
+M_i = \text{FeatureExtractor}_i(M_i)  
 $$
 
 * **2. Knowledge Base Representation:** The knowledge base $𝐾$ represents a shared space that captures the common semantic features of all modalities:
 
 $$
-K = KnowledgeBase(F)  
+K = \text{KnowledgeBase}(F)  
 $$
 
 * **3. Alignment Objective:** The learning objective is to map each modality embedding to the knowledge base space $𝐾$ while maintaining their relationships:
 
 $$
-L_{align} = - log \frac{exp(sim(M_i, K_i) / τ)}{\sum_{j=1}^{N} exp(sim(M_i, K_j) / τ)}
+L_{\text{align}} = - log \frac{\text{exp}(\text{sim}(M_i, K_i) / τ)}{\sum_{j=1}^{N} \text{exp}(\text{sim}(M_i, K_j) / τ)}
 $$
 
-Where $M_i$ is the embedding of modality $i$ (image, text, audio). $K_i$ is the corresponding knowledge base embedding for the modality. $sim(., .)$ is the similarity function (*e.g.,* cosine similarity). $τ$ is the temperature hyperparameter that controls the sharpness of the distribution. $N$ is the number of modality samples.
+Where $M_i$ is the embedding of modality $i$ (image, text, audio). $K_i$ is the corresponding knowledge base embedding for the modality. $\text{sim}(., .)$ is the similarity function (*e.g.,* cosine similarity). $τ$ is the temperature hyperparameter that controls the sharpness of the distribution. $N$ is the number of modality samples.
 
 
 <!-- https://poloclub.github.io/transformer-explainer/ -->
