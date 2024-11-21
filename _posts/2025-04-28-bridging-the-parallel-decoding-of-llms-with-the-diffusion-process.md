@@ -171,7 +171,8 @@ where both $$\log p(x_{t-1},x_t)$$ and $$\log p(c,x_{t-1})$$ are differentiable:
 
 Consequently, the difficulty of learning various subgoals can differ significantly. Given only the left context, some subgoals may require substantially more data to learn or may even be infeasible to learn. To address the issue of subgoal imbalance, this paper introduces multi-granularity diffusion modeling (MDM), which incorporates an additional token-level reweighting mechanism to enhance training efficiency:
 
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/mdm.jpg" class="mdm" %}
+{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/mdm.jpg" class="mdm" style="width: 50%;" %}
+
 
 where $$v(x_t,n)$$ is the adaptive token-level reweighting term. Setting larger $$v(x_t,n)$$ emphasizes harder tokens. This approach prioritizes different subgoals based on their difficulty during the learning process, leading to more effective learning outcomes and faster convergence.
 
