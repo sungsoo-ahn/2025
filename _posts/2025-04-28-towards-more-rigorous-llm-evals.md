@@ -519,7 +519,9 @@ It is reasonable to expect that a model will perform better on easier datasets a
 As before, we assume that a model $m$ answers questions of varying difficulty levels $$\text{dif}=-1, 0, 1, 2$$ as independent and identically distributed Bernoulli trials with a success probability of $$p^{\text{dif}}_{m}$$. 
 The distribution of the total number of correct answers follows a binomial distribution $$\text{Bin}(N=100, p^\text{dif}_{m})$$, with variance equal to $$N \cdot p^\text{dif}_{m} \cdot (1 - p^\text{dif}_{m})$$.
 
-If the probabilities of success decrease with increasing question complexity, i.e. $$p^{\text{dif}=-1}_{m} > p^{\text{dif}=0}_{m} > p^{\text{dif}=1}_{m} > p^{\text{dif}=2}_{m} > 0.5$$, the corresponding variances *must increase*. 
+If the probabilities of success decrease with increasing question complexity, i.e. $$p^{\text{dif}=-1}_{m} > p^{\text{dif}=0}_{m} > p^{\text{dif}=1}_{m} > p^{\text{dif}=2}_{m} > 0.5$$, the corresponding variances *must increase*.<d-footnote>We note that the average success probability on GSM-P2, $p^{\text{dif}=2}_{m}$, does fall below 0.5 for the models in the first row of Figure 6. Our point is still valid in these cases since $p^{\text{dif}=2}_{m}$ is closer to 0.5 than $p^{\text{dif}=1}_{m}$ and hence the variability on GSM-P2 is still expected to be larger than on GSM-P1. We would expect to see decrease in variance in cases where $0.5 > p^{\text{dif}=-1}_{m} > p^{\text{dif}=0}_{m} > p^{\text{dif}=1}_{m} > p^{\text{dif}=2}_{m}$.</d-footnote> 
+We believe that this is precisely what we observe in Figure 6: the increase in variance is a trivial consequence of the decrease in probabilities of success, rather than a sign of "pattern-matching" becoming harder.
+
 <!-- Why they are all bigger than 0.5? 
 I agree they have to be 0.5 so we can expect the variance to increase but what happens when they go below 0.5 like with Gemma2-9b-it, then they should again decrease the variance but this is not what we observe.
 DRI: yeah, I'm not sure what the best way to present this is; Althoug Gemma2-9b-it does fall under 50% accuracy for P2, 1-accuracy on p2 is stil lower than accuracy on P1 (which is above 60%), so we are still in the same pattern of "increasign variance". It would have been good if the authors included e.g. Gemma results (or any that have <0.5 success prob on GSM8K/GSM-Symbolic).  I think I'll  try to explain this in a footnote as I don't want to overcomplicate the exposision;
@@ -527,12 +529,14 @@ DRI: yeah, I'm not sure what the best way to present this is; Althoug Gemma2-9b-
 Also, one other alternative explanation may be again related to the Beta-Bernoulli modelling of the question success probability. Remember how the variance was a lot narrower than expected for the Bernoulli & Binomial model, well now with increasing difficulty the probability of success for each question template becomes more equal (there are fewer easy, trivial questions perhaps), i.e. Beta-Bernoulli -> Bernoulli, so the variance increases and goes closer to the expected ranges for a Binomial distribution. 
 Anyway, I cannot relate at all increasing variance with pattern-matching difficulties or "struggling reasoning capabilities" XD.
 -->
-We believe that this is precisely what we observe in Figure 6: the increase in variance is a trivial consequence of the decrease in probabilities of success, rather than a sign of "pattern-matching" becoming harder.
 
 Regarding the decrease in probability of success itself, it is plausible that reasoning becomes more challenging as additional clauses are introduced, or conversely, easier when clauses are removed, as seen in the M1 template. 
 Importantly, as noted in Section 4.2.1, introducing more clauses necessarily involves more arithmetic operations, which in turn will result in an exponential decline in performance. 
 This decline will occur even if the models perfectly execute the "reasoning" process of translating the math word problem into a sequence of arithmetic operations.
 To distinguish between these two effects, a more detailed and thorough analysis will be needed.
+
+We hypothesise that another reason for the decrease in performance could be the increasing length of the questions and the chain of thoughts required to solve them.<d-footnote>For example, the Phi-mini series of models has a default context length of 4K tokens<d-cite key="abdin2024phi"></d-cite>.</d-footnote>
+Whilst models can of course handle longer contexts by utilising various context length extension techniques, past research suggests that performance tends to degrade when we go beyond the training context length. [CITE @MPK can you add some citations? Can we say this is especially true for smaller models?].
 
 
 **Verdict:** The emphasis on “non-negligible variance” and “increase in variance” throughout the paper appears to be an over-interpretation of expected statistical artifacts. 
