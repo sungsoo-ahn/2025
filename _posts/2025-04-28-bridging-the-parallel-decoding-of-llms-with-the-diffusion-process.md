@@ -145,11 +145,11 @@ Alternatively, the adjacent states $$y(j), y(j+1)$$ in the Jacobi trajectory J a
 
 {% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/ar_loss.jpg" class="img-fluid" %}
 
-The objective mentioned above is analogous to that of Consistency Models, as outlined by Song et al. in 2023. Consistency Models effectively address the limitations encountered by diffusion models, which are hindered by a slow iterative sampling process. By mapping any point along the probability flow ordinary differential equation (ODE) of the diffusion process back to the original point, which corresponds to the initial image, in just a single step, consistency models significantly streamline the process and enhance efficiency.
+The objective mentioned above is analogous to that of Consistency Models, as outlined by Song <d-cite key="song2023consistency"></d-cite>. Consistency Models effectively address the limitations encountered by diffusion models, which are hindered by a slow iterative sampling process. By mapping any point along the probability flow ordinary differential equation (ODE) of the diffusion process back to the original point, which corresponds to the initial image, in just a single step, consistency models significantly streamline the process and enhance efficiency.
 
 ### Diffusion-LM Improves Controllable Text Generation
 
-Diffusion-LM develops a non-autoregressive language model based on continuous diffusions, enabling complex, fine-grained controls of text generation. 
+Diffusion-LM <d-cite key="li2022diffusion"></d-cite> develops a non-autoregressive language model based on continuous diffusions, enabling complex, fine-grained controls of text generation. 
 
 {% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/diffu_lm.png" class="diffu_lm" %}
 
@@ -163,7 +163,7 @@ The framework of Diffusion-LM is shown in Figure. To apply a continuous diffusio
 
 where both $$\log p(x_{t-1},x_t)$$ and $$\log p(c,x_{t-1})$$ are differentiable: the first term is parameterized by Diffusion-LM, and the second term is parameterized by a neural network classifier. Similar to work in the image setting, we train the classifier on the diffusion latent variables and run gradient updates on the latent space $$x_{t-1}$$ to steer it towards fulfilling the control.
 
-### Beyond Autoregression: Discrete Diffusion For Complex Reasoning And Planning
+### Beyond Autoregression: Discrete Diffusion For Complex Reasoning And Planning <d-cite key="ye2024beyond"></d-cite>
 
 **The generation of individual tokens may not inherently follow an autoregressive pattern.** Consider the example in Figure, where the input for the task consists of a set of shuffled edges from the graph shown below. At the end of the input sequence, the start and goal nodes are specified to indicate the path the model needs to find. The objective of this task is to identify the correct path in the graph and output its constituent edges. The complexity of this problem arises from distracting factors (highlighted in orange) that potentially mislead the path selection. For instance, at node 7, with the goal being node 9, the model must plan over a distance of 3 nodes to determine that the correct next choice should be node 5 rather than 0. We define this span as the Planning Distance (PD), a parameter adjustable in our synthetic task data. Intuitively, as the PD increases, the model faces greater difficulty in learning to determine the correct subsequent node.
 
