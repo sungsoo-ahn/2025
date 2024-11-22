@@ -1,7 +1,7 @@
 ---
 layout: distill
-title: How to edit algorithms for the SMACv2 environment
-description: Your blog post's abstract.
+title: "Inside SMACv2: Building and Extending MARL Algorithms"
+description: 
   The SMACv2 environment provides a robust platform for testing and developing Multi-Agent Reinforcement Learning (MARL) algorithms, but navigating its codebase can be challenging. This blog post serves as a comprehensive guide to understanding the structure of MARL algorithms within the SMACv2 framework. By breaking down the key components—such as agent networks, mixer networks, and transformation networks—we demystify how these algorithms are implemented and highlight the critical locations in the codebase for editing or extending functionality. We also provide a step-by-step walkthrough for adding new algorithms to the framework, lowering the barrier to entry for researchers and developers. Whether you're seeking to adapt existing algorithms or contribute novel approaches, this guide equips you with the necessary knowledge to navigate and enhance the SMACv2 ecosystem.
 date: 2025-04-28
 future: true
@@ -109,6 +109,11 @@ Now let's take an example algorithm and see where the parts of it are located. W
   {% include figure.html path="assets/img/2025-04-28-how-to-edit-algorithms-on-the-smacv2-env/QPLEX_agent_network.png" class="img-fluid" %}
   </div>
 This agent network is found in src -> modules -> agents -> rnn_agent.py. There are two outputs to the `forward` function: 
+
+```
+return q.view(b, a, -1), h.view(b, a, -1)
+```
+
 - q : The q is $Q_i(\tau_i, a_i)$ in the diagram above. 
 <!-- <span style="color: red;">Maybe mention its shape.</span> -->
 
@@ -123,8 +128,8 @@ This agent network is found in src -> modules -> agents -> rnn_agent.py. There a
   {% include figure.html path="assets/img/2025-04-28-how-to-edit-algorithms-on-the-smacv2-env/QPLEX_transformation_network.png" class="img-fluid" %}
   </div>
 
-
-Found in src -> modules -> mixers -> dmaq_general.py. There are two main operations happening here: calculating the output of the MLP and calculating the Weighted Sum. Let's see what is happening in both of these operations.
+The transformation network is the top brown part of Figure (c) in the architecture.
+In the repository, this is found in src -> modules -> mixers -> dmaq_general.py. There are two main operations happening here: calculating the output of the MLP and calculating the Weighted Sum. Let's see what is happening in both of these operations.
 
 
 **(a) Calculating the output of the MLP**
@@ -180,8 +185,7 @@ Here max\_q\_i are the V values because $$V_i(\tau) = max_{a_i} Q(\tau, a_i)$$
   {% include figure.html path="assets/img/2025-04-28-how-to-edit-algorithms-on-the-smacv2-env/QPLEX_mixing_network.png" class="img-fluid" %}
   </div>
 
-
-The mixing network for the QPLEX algorithm is in the same file as the transformation network. Found in src -> modules -> mixers -> dmaq_general.py. There are 
+The mixing network is Figure (a) in the architecture. In the repository, the mixing network for the QPLEX algorithm is in the same file as the transformation network. Found in src -> modules -> mixers -> dmaq_general.py. There are 
 four main operations happening here: calculating the output of the MLP, calculating the Dot Product, summing over the $$V_i$$ values and summing the $$V_{tot}$$ and the $$A_{tot}$$. Below we explain these four operations:
 
 **(a) Calculating the output of the MLP**
@@ -254,21 +258,28 @@ Found in src -> learners -> dmaq_qatten_learner.py
 1. Initialised as zeros
 2. Masking
 3. Shape
-  Batch_Size = B , Timestep = T, Agents = A
-  1. state = (B, T, state_dim)
-  2. obs = (B, T, A, obs_dim)
-  3. actions = (B, T, A, 1) #chosen actions
-  4. avail_actions = (B, T, A, n_actions) # n_actions is the total number of actions that an agents can take.
-  5. probs = (B, T, A, 1) #probabilities of the chosen action
-  6. reward = (B, T, 1)
-  7. terminated = (B, T, 1)
-  8. actions_onehot = (B, T, A, n_actions)
+
+
+
+
 
 
 action selection is done using EpsilonGreedyActionSelector found in src -> components -> action_selectors.py
 
 lamdba return -->
 
+### Shapes of some key elements:
+
+B = batch size, T = total number of timesteps in an episode, A = number of agents
+
+1. state = (B, T, state_dim)
+2. obs = (B, T, A, obs_dim)
+3. actions = (B, T, A, 1) #chosen actions
+4. avail_actions = (B, T, A, n_actions) # n_actions is the total number of actions that an agents can take.
+5. probs = (B, T, A, 1) # probabilities of the chosen action
+6. reward = (B, T, 1)
+7. terminated = (B, T, 1)
+8. actions_onehot = (B, T, A, n_actions)
 
 
 
@@ -287,7 +298,7 @@ Steps:
 
 1. Procedurally generated, so seed does not work (link github issue here).
 2. We never really use the joint trajectory $$\mathbf{\tau}$$. It is assumed that adding the information of the state to $$\tau_i$$ gives us a good representation of $$\mathbf{\tau}$$.
-3. batch_size and batch_size_run refer to two different concepts, though their names are used interchangeably in the codebase. batch_size represents the training batch size used to sample episodes from the buffer, while batch_size_run denotes the number of parallel environments configured for algorithm execution.  
+3. `batch_size` and `batch_size_run` refer to two different concepts, though their names are used interchangeably in the codebase. `batch_size` represents the training batch size used to sample episodes from the buffer, while `batch_size_run` denotes the number of parallel environments configured for algorithm execution.  
 
 
 
