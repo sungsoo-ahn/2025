@@ -2,8 +2,7 @@
 layout: distill
 title: How to edit algorithms for the SMACv2 environment
 description: Your blog post's abstract.
-  Please add your abstract or summary here and not in the main body of your text. 
-  Do not include math/latex or hyperlinks.
+  The SMACv2 environment provides a robust platform for testing and developing Multi-Agent Reinforcement Learning (MARL) algorithms, but navigating its codebase can be challenging. This blog post serves as a comprehensive guide to understanding the structure of MARL algorithms within the SMACv2 framework. By breaking down the key components—such as agent networks, mixer networks, and transformation networks—we demystify how these algorithms are implemented and highlight the critical locations in the codebase for editing or extending functionality. We also provide a step-by-step walkthrough for adding new algorithms to the framework, lowering the barrier to entry for researchers and developers. Whether you're seeking to adapt existing algorithms or contribute novel approaches, this guide equips you with the necessary knowledge to navigate and enhance the SMACv2 ecosystem.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -97,7 +96,6 @@ Note: If there are any errors in this explanation or if you think this blog woul
 <!-- 5. <span style="color: red;">The training loop</span>
 - parallel_runner.py -->
 
-
 ## QPLEX Algorithm
 
 Now let's take an example algorithm and see where the parts of it are located. We chose to start with the QPLEX algorithm. The architecture for the QPLEX algorithm <d-cite key="QPLEX"></d-cite> is shown below.
@@ -114,7 +112,7 @@ This agent network is found in src -> modules -> agents -> rnn_agent.py. There a
 - q : The q is $Q_i(\tau_i, a_i)$ in the diagram above. 
 <!-- <span style="color: red;">Maybe mention its shape.</span> -->
 
-- h : The h represents $$h_i^t$$, i.e., the next hidden state fo the GRU in the diagram above.
+- h : The h represents $$h_i^t$$, i.e., the next hidden state of the GRU in the diagram above.
 
 
 
@@ -256,7 +254,15 @@ Found in src -> learners -> dmaq_qatten_learner.py
 1. Initialised as zeros
 2. Masking
 3. Shape
-
+  Batch_Size = B , Timestep = T, Agents = A
+  1. state = (B, T, state_dim)
+  2. obs = (B, T, A, obs_dim)
+  3. actions = (B, T, A, 1) #chosen actions
+  4. avail_actions = (B, T, A, n_actions) # n_actions is the total number of actions that an agents can take.
+  5. probs = (B, T, A, 1) #probabilities of the chosen action
+  6. reward = (B, T, 1)
+  7. terminated = (B, T, 1)
+  8. actions_onehot = (B, T, A, n_actions)
 
 
 action selection is done using EpsilonGreedyActionSelector found in src -> components -> action_selectors.py
@@ -281,6 +287,7 @@ Steps:
 
 1. Procedurally generated, so seed does not work (link github issue here).
 2. We never really use the joint trajectory $$\mathbf{\tau}$$. It is assumed that adding the information of the state to $$\tau_i$$ gives us a good representation of $$\mathbf{\tau}$$.
+3. batch_size and batch_size_run refer to two different concepts, though their names are used interchangeably in the codebase. batch_size represents the training batch size used to sample episodes from the buffer, while batch_size_run denotes the number of parallel environments configured for algorithm execution.  
 
 
 
