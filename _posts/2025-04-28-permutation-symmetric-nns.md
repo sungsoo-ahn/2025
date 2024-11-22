@@ -40,14 +40,8 @@ _styles: >
     text-align: center;
     font-size: 16px;
   }
-  #hidden {
+  :checked + * + div {
   display: none;
-  background: #cccccc;
-  height: 500px;
-  width: 500px;
-  }
-  :checked + * + #hidden {
-  display: block;
   }
 ---
 
@@ -205,7 +199,7 @@ $$
 y=f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2} & x_{3}\end{bmatrix} \right) =f\left( \begin{bmatrix} x_{3} & x_{0} & x_{1} & x_{2}\end{bmatrix} \right)
 $$
 
-<input type="checkbox" id="my_checkbox" style="display:none;">
+<input type="checkbox" id="my_checkbox" style="display:none;" checked="True" />
 <label for="my_checkbox">Show/hide</label>
 
 <div id="hidden">
