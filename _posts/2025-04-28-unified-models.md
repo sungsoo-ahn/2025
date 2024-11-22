@@ -34,17 +34,23 @@ bibliography: 2025-04-28-unified-models.bib
 #   - please use this format rather than manually creating a markdown table of contents.
 toc:
   - name: Introduction
-  - name: Background:Autoregressive and Diffusion
+  - name: Background
     subsections:
     - name: Autoregressive Model
     - name: Diffusion Model
+    - name: Taxonomy of Unified Multimodal Models
   - name: Single Model for Unified Multimodal Models
     subsections:
     - name: Preliminary
     - name: Autoregressive Models v.s. Mixed Architectures (AR+Diffusion)
     - name: Discrete v.s. Continuous
   - name: Multi-Experts for Unified Multimodal Models
-  - name: Challenges and Future Work
+    subsections:
+    - name: Image-Centric Alignment
+    - name: Text-Centric Alignment
+    - name: Generalized Alignment
+  - name: Challenges in Unified Multimodal Models
+  - name: Conclusion
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
@@ -176,8 +182,15 @@ In recent years, the field of multimodal understanding and generation has seen s
 
 Unity concept resonates deeply in the context of unified models for multimodal understanding and generation. This blog aims to explore the recent developments in unified multimodal models, reviewing their current state and outlining the future directions for research and application. We will delve into the principles behind autoregressive and diffusion models, shedding light on their unique characteristics and how they can be effectively combined. Ultimately, we will discuss whether the future of unified models lies in one of these paradigms, or if a hybrid approach holds the key to even greater advancements.
 
+<aside class="l-body box-note" markdown="1">
+Based on model architectures, unified multimodal models can be categorized into two primary divisions: single models and multi-expert models. 
+Further, single models can be classified into pure autoregressive architectures and mixed architectures:
 
-## Background: Autoregressive and Diffusion
+{% include figure.html path="assets/img/2025-04-28-unified-models/flowchart.png" class="img-fluid" %}
+</aside>
+
+
+## Background
 
 ### Autoregressive Model
 Autoregressive (AR) sequence generation is a method where a sequence is generated token by token, with each token predicted based on the preceding ones. 
@@ -245,6 +258,34 @@ where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at
 
 
 
+### Taxonomy of Unified Multimodal Models
+
+<aside class="l-body box-note" markdown="1">
+Based on model architectures, unified multimodal models can be categorized into two primary divisions: single models and multi-expert models. 
+Further, single models can be classified into pure autoregressive architectures and mixed architectures:
+
+{% include figure.html path="assets/img/2025-04-28-unified-models/flowchart.png" class="img-fluid" %}
+</aside>
+
+
+
+| Feature                  | Single Models                          | Multi-Expert Models                    |
+|--------------------------|----------------------------------------|----------------------------------------|
+| **Architecture**         | Unified model with shared parameters  | Specialized sub-models for each modality |
+| **Scalability**          | Less flexible for adding new modalities | Easily extendable by adding new experts |
+| **Performance**          | Balanced across modalities             | Optimized for each modality individually |
+| **Complexity**           | Simpler pipeline                      | Higher due to fusion and coordination   |
+| **Use Cases**            | General-purpose multimodal tasks       | Tasks requiring high modality-specific performance |
+
+The key difference between **Single Models** and Multi-Expert Models lies in their approach to handling modalities. Single models use a unified architecture with shared parameters to process all modalities in a common space, offering simplicity and generalization but limited flexibility for adding new modalities. A great example of this is Chameleon, which processes all modalities using a single unified autoregressive architecture in the same feature space.
+
+In contrast, **Multi-Expert Models** rely on specialized sub-models or experts tailored for each modality, providing better modality-specific performance and scalability. For instance, ImageBind employs separate pre-trained encoders for different modalities (*e.g.,* images, text, audio) to extract features independently and aligns them into a shared embedding space for optimization. This approach allows it to leverage the strengths of pre-trained models while maintaining flexibility for each modality. However, the reliance on multiple encoders adds complexity due to the need for fusion and alignment mechanisms.
+
+
+
+
+
+
 ## Single Model for Unified Multimodal Model
 
 ### Preliminary
@@ -282,12 +323,7 @@ $$
 *2. Mixed Architectures*. Combine autoregressive and diffusion methods, leveraging their respective strengths, as seen in models like Show-O.
 
 
-<aside class="l-body box-note" markdown="1">
-Based on model architectures, unified multimodal models can be categorized into two primary divisions: single models and multi-expert models. 
-Further, single models can be classified into pure autoregressive architectures and mixed architectures:
 
-{% include figure.html path="assets/img/2025-04-28-unified-models/flowchart.png" class="img-fluid" %}
-</aside>
 
 
 
