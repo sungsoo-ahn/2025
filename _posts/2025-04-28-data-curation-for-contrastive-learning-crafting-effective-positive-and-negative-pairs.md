@@ -25,7 +25,7 @@ authors:
 #      name: IAS, Princeton
 
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs.bib
+bibliography: 2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs.bib
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -87,7 +87,7 @@ $$ z_i$$ is the representation of the anchor sample and $$ z_i^+$$ ​is the rep
 
 ## Taxonomy and overview of methodologies to create positive and negative pairs for contrastive learning:
 
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/contrastive_taxonomy.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/contrastive_taxonomy.png" class="img-fluid" %}
 <div class="caption">
     Figure 1: Taxonomy for data curation.
 </div>
@@ -154,7 +154,7 @@ $$
 NN(z, \mathcal{Q}) = argmin_{q \in \mathcal{Q}} || z - q ||_{2}
 $$
 
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/NNCLR.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/NNCLR.png" class="img-fluid" %}
 <div class="caption">
     Figure 2: Overview of NNCLR training. <d-cite key="dwibedi2021little"></d-cite>.
 </div>
@@ -162,24 +162,24 @@ To obtain nearest-neighbors, NNCLR utilizes a support set that keeps embeddings 
 
 
 However, relying entirely on the first neighbour holds back the real potential of the approach. Mean Shift for Self-Supervised Learning (MSF) <d-cite key="koohpayegani2021mean"></d-cite> proposes the **use of k neighbours to increase the generalization capability of the model.** MSF employs simple mean-shift algorithm that learns representations by grouping images together without contrasting between them or adopting much of prior on the structure or number of the clusters as shown in Figure 3 below.
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/MSF.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/MSF.png" class="img-fluid" %}
 <div class="caption">
 Figure 3: Similar to BYOL, MSF maintains two encoders (“target” and “online”). The online encoder is updated with gradient descent while the target encoder is the moving average of the online encoder. It augments an image twice and feed to both encoders. It adds the target embedding to the memory bank and look for its nearest neighbors in the memory bank. The target embedding itself will be the first nearest neighbor. It shifts the embedding of the input image towards the mean of its nearest neighbors to minimize the summation of those distances. Ideally, we can average the set of nearest neighbors to come up with a single target embedding, but since averaging is dependent on the choice of loss function, we simply minimize the summation of distances. <d-cite key="koohpayegani2021mean"></d-cite>.
 </div>
 It simply “shifts” the embedding of each image to be close to the “mean” of the neighbors of its augmentation. Since the closest neighbor is always another augmentation of the same image, the model is identical to BYOL when using only one nearest neighbor instead of K nearest neighbors.
 
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/knn_each_epoch_MSF.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/knn_each_epoch_MSF.png" class="img-fluid" %}
 <div class="caption"> 
 Figure 4: For a random query images, this diagram shows how the nearest neighbors evolve at the learning time. Initially, NNs are not semantically quite related, but are close in low-level features. This signal is bootstrapped in the learning method and results in NNs of the late epochs which are mostly semantically related to the query image. <d-cite key="estepa2023all4one"></d-cite>
 </div>
 
 **MSF suffers from high computation as the objective function needs to be computed for each neighbour (k times).** All4One <d-cite key="estepa2023all4one"></d-cite>  contrasts information from multiple
 neighbours in a more efficient way by avoiding multiple computations of the objective function as shown in Figure 5 below.
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/nnclr_all4one.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/nnclr_all4one.png" class="img-fluid" %}
 <div class="caption"> 
 Figure 5: While NNCLR  only contrast the first neighbour, All4One creates representations that contain contextual information from the k NNs and contrast it in a single objective computation. It proposes the use of a new embedding constructed by a self attention mechanism, such as a transformer encoder, that combines the extracted neighbour representations in a single representation containing contextual information about all of them. Hence, we are able to contrast all the neighbours’ information on a single objective computation. It makes use of a Support Set that actively stores the representations computed during the training <d-cite key="dwibedi2021little"></d-cite> so that it can extract the required neighbours. </div>
 
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/All4One.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/All4One.png" class="img-fluid" %}
 <div class="caption">
 Figure 6: Complete architecture of All4One framework. Feature, Centroid and Neighbour contrast objective functions are indicated by red, purple, and green respectively. All4One uses three different objective functions that contrast different representations: Centroid objective contrasts the contextual information extracted from multiple neighbours while the Neighbour objective assures diversity <d-cite key="dwibedi2021little"></d-cite>. Additionally, the Feature contrast objective measures the correlation of the generated features and increases their independence. <d-cite key="estepa2023all4one"></d-cite>
 </div>
@@ -190,7 +190,7 @@ All4One uses three different objective functions that contrast different represe
 ### 3. Synthetic data generation for positive pairs:
 
 In <d-cite key="wu2023synthetic"></d-cite>, the authors propose a data generation framework to improve contrastive learning training by joint sample generation and contrastive learning. **The generator is jointly learned with the main model to dynamically customize hard samples based on the training state of the main model. Besides, a pair of data generators are proposed to generate similar but distinct samples as positive pairs. In joint learning, the hardness of a positive pair is progressively increased by decreasing their similarity.**
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/GAN_based_synthetic_framework_image.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/GAN_based_synthetic_framework_image.png" class="img-fluid" %}
 <div class="caption">
 Figure 7: (Left) Generation of hard samples and hard positive pairs, and the joint learning of generator and the main contrastive model. It generates two similar but distinct raw samples, and use two views of each raw sample (four views in total) as positives, which are then fed into standard CL frameworks (e.g. SimCLR) for learning. No additional training data is used and no labels are used in the entire training pipeline. (Right) By joint learning, the generated positive pair becomes progressively harder by tracking the training state of the main model. These hard positive pairs help the main model cluster distinct yet similar objects
 for better representations. <d-cite key="wu2023synthetic"></d-cite>
@@ -204,7 +204,7 @@ Positives (CLSP), which integrates additional synthetic positives into conventio
 contrastive training schema.** These synthetic positives exhibit rich deformations
 and diverse backgrounds, allowing the model to emphasize generic features beyond naive data augmentation. Specifically, the diffusion based  method  in <d-cite key="zeng2024contrastive"></d-cite> employs the unconditional diffusion model to generate positives. Apart from their high-fidelity image generation ability, diffusion models have also shown excellent visual representation learning ability, even in the absence of labeled information.
 
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/diffusion.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/diffusion.png" class="img-fluid" %}
 <div class="caption">
 Figure 8: Overview of the proposed CLSP framework, we use a diffusion model to
 generate an additional positive to increase the positive diversity for better representation
@@ -228,7 +228,7 @@ CLSP training. This method can be extended to several frameworks including SimCL
 Supervised contrastive learning (SupCon) <d-cite key="khosla2020supervised"></d-cite> proposes a loss for supervised learning that builds on the contrastive self-supervised literature by leveraging label information. The novelty in this work is to consider many positives per anchor in addition to many negatives (as opposed to self-supervised contrastive learning which uses only a single positive). **These positives are drawn from samples of the same class as the anchor, rather than being data augmentations of the anchor, as done in self-supervised learning.**
 
 
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/Supcon.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/Supcon.png" class="img-fluid" %}
 <div class="caption">
 Figure 9: Supervised vs. self-supervised contrastive losses: The self-supervised contrastive loss (left, Eq. 1)
 contrasts a single positive for each anchor (i.e., an augmented version of the same image) against a set of
@@ -251,7 +251,7 @@ By including all positives in a batch—augmentation-based samples and others wi
 
 In another paper <d-cite key="ghose2023tailoring"></d-cite>, the authors applies a similar logic for selecting positive pairs in real-time. The authors propose a method that allows a robot to learn visual object representations based on a few examples provided by humans. This approach leverages contrastive learning to develop object representations that align with human expectations. **By incorporating incremental human supervision, the robot can adapt its understanding of objects to meet specific human requirements, enhancing its performance in sorting and recycling tasks. Positive pairs are formed by grouping images of objects that share the same human-provided label. This process enables the robot to associate different visual instances of the same object category, improving its generalization capabilities.**
 
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/recyling.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/recyling.png" class="img-fluid" %}
 <div class="caption">
 Figure 10: Data pairs are constructed using randomly applied data augmentations.
 The extracted features are fed into three jointly trained heads. The Instance Projection Head projects the features into a space where each row denotes an augmentation of an image and uses the instance loss to minimize the distance between two augmentations of the same image. The Cluster Projection Head projects feature vectors into a space where each column denotes each instance’s cluster assignments, and the cluster loss minimizes the distance between instances belonging to a cluster. Finally, the Human-Supervised Head minimizes the distance between each human-selected example. <d-cite key="ghose2023tailoring"></d-cite>
@@ -265,7 +265,7 @@ Similarly, Oracle-guided Contrastive Clustering (OCC) <d-cite key="wang2022oracl
 
 ### 5. Attribute-based pairing technique:
 Attribute-based pairing entails selecting positive pairs based on criteria defined by end application. For instance, Geography-aware self supervised learning <d-cite key="ayush2021geography"></d-cite> **use temporal positive pairs from spatially aligned images over time.**
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/Geography_aware_framework.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/Geography_aware_framework.png" class="img-fluid" %}
 <div class="caption">
 Figure 11: Left shows the original MoCo-v2 framework. Right shows the schematic overview of Geography-aware self supervised learning approach. <d-cite key="ayush2021geography"></d-cite>
 </div>
@@ -289,7 +289,7 @@ similarities could still remain. For instance, key features of a construction si
 
 Similarly, The paper "Focus on the Positives: Self-Supervised Learning for Biodiversity Monitoring"  <d-cite key="pantazis2021focus"></d-cite>  addresses the challenge of learning effective representations from unlabeled image collections, particularly those captured by static monitoring cameras used in biodiversity studies.  **This study leverages the natural variations present in sequential images from static cameras, utilizing contextual information such as spatial and temporal relationships to identify high-probability positive pairs—images likely depicting the same visual concept.**
 
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/wildlife.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/wildlife.png" class="img-fluid" %}
 <div class="caption">
 Figure 12: Conventional SSL typically generates augmented pairs of an input source image. Those are then passed to the model (right). Instead, we advocate that the careful selection of image pairs based on their context similarity (e.g. in space or
 time), generates more varied and useful image pairs that result in more informative visual representations. <d-cite key="pantazis2021focus"></d-cite>
@@ -332,7 +332,7 @@ MoCHi, "(M)ixing (o)f (C)ontrastive (H)ard negat(i)ves" <d-cite key="Hardnegativ
 
 Another method named Uncertainty and Representativeness Mixing (UnReMix) for contrastive training <d-cite key="unremix"></d-cite>, introduces a method designed to enhance contrastive learning by selecting hard negative samples based on three key factors: **anchor similarity, model uncertainty and representativeness** ensuring that negative samples are similar to the anchor point, making them challenging for the model to distinguish. UnReMix utilizes uncertainty to penalize false hard negatives and pairwise distance among negatives
 to select representative examples.
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/Unremix.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/Unremix.png" class="img-fluid" %}
 <div class="caption">
 Figure 13: Overview of the proposed hard negative sampling technique, UnReMix. Given an anchor
 and a set of negative samples, UnReMix computes an importance score for each negative sample, by linearly interpolating between gradient-based uncertainty, anchor similarity and representativeness indicators, capturing desirable negative sample properties, i.e., samples that are truly negative (P1), in close vicinity to the anchor (P2) and representative of the sample population (P3). <d-cite key="unremix"></d-cite>
@@ -356,14 +356,14 @@ distant on average from other negative examples in the batch, and satisfies P3.
 
 ### 2. Removal of False Negatives:
 Boosting Contrastive Self-Supervised Learning with False Negative Cancellation <d-cite key="huynh2022boosting"></d-cite> introduces methods to identify these false negatives and propose two strategies to mitigate their impact: elimination and attraction. False negatives are samples from different images with the same semantic content, therefore they should hold certain similarity (e.g., dog features). **A false negative may not be as similar to the anchor as it is to other augmentations of the same image, as each augmentation only holds a specific view of the object.   Contrasting false negatives induces two critical issues in representation learning: discarding semantic information and slow convergence.** This paper <d-cite key="huynh2022boosting"></d-cite> proposes novel approaches to identify false negatives, as well as two strategies to mitigate their effect, i.e. false negative elimination and attraction. **False Negative Elimination identifies potential false negatives and excludes them from the negative sample set**, preventing the model from learning misleading distinctions. In **False Negative Attraction**, instead of excluding false negatives, **this strategy reclassifies them as positives, encouraging the model to learn representations that acknowledge their semantic similarity.**
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/boosting_fn.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/boosting_fn.png" class="img-fluid" %}
 <div class="caption">
 Figure 14: False negatives in contrastive learning. Without knowledge of labels, automatically selected negative pairs could actually belong to the same semantic category, creating false negatives. <d-cite key="huynh2022boosting"></d-cite>
 </div>
 False negatives hinder the convergence of contrastive learning-based objectives due to the appearance
 of contradicting objectives. For instance, in Figure 14, the dog’s head on the left is attracted to its fur (positive pair), but repelled from similar fur of another dog image on the right (negative pair), creating contradicting objectives.
 
-{% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/boosting_fn_2.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/boosting_fn_2.png" class="img-fluid" %}
 <div class="caption">
 Figure 15: Overview of the proposed framework. Left: Original definition of the anchor, positive, and negative samples in contrastive learning. Middle: Identification of false negatives (blue). Right: false negative cancellation strategies, i.e. elimination and attraction. <d-cite key="huynh2022boosting"></d-cite>
 </div>
@@ -380,7 +380,7 @@ learning (i.e., where an anchor is attracted to samples having the same semantic
 
 ### 3. Synthetic Hard Negative Samples for Contrastive Learning:
 Synthetic Hard Negative Samples for Contrastive Learning <d-cite key="dong2024synthetic"></d-cite> proposes a method to enhance contrastive learning by generating synthetic hard negative samples. This approach **involves mixing existing negative samples in the feature space to create more challenging negatives, encouraging the model to learn more discriminative representations. To address the issue of false negatives—samples incorrectly labeled as negative but semantically similar to the anchor, this paper incorporates a debiasing mechanism, ensuring the model focuses on truly dissimilar negative samples.**
- {% include figure.html path="assets/img/2025-04-28-data_curation_for_contrastive_learning_crafting_effective_positive_and_negative_pairs/synthetic.png" class="img-fluid" %}
+ {% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/synthetic.png" class="img-fluid" %}
 <div class="caption">
 Figure 14: The architecture of SSCL. Given a batch of N images, this method first applies data augmentation and then encode and projection head to obtain two batch feature vectors (2N). For one image, it generates new harder negative samples by synthesizing negative samples from the 2N-2 remaining images. The red dashed arrow indicates the projection of the feature vector.We then combine the original samples with the newly synthesized ones to compute the contrastive loss. <d-cite key="dong2024synthetic"></d-cite>
 </div>
