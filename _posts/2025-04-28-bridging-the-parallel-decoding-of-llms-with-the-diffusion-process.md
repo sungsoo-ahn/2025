@@ -106,7 +106,7 @@ Table 1. Comparison of parallel decoding strategies (Jacobi and lookahead) again
 
 Figure 2. Comparison of Jacobi decoding against AR decoding. <d-cite key="koucllms"></d-cite>
 
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/comparison_cllms.jpg" class="comparison_cllms" %}
+{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/comparison_cllms2.jpg" class="comparison_cllms" %}
 
 
 ## Diffusion Process
