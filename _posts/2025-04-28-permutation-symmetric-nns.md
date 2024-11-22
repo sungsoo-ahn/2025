@@ -46,14 +46,14 @@ _styles: >
 ## I. In Theory - Paramterizing Symmetric Functions in Taylor Series
 
 Speaking of permutation invariance, you may already have your faviorite ways to design invariant neural networks for certain types of problems. 
-But here we'll introduce a simple yet general Taylor series-based technique necessary for studying complex equivariance patterns. Specifically, we need to enable efficient universal learners -- that can represent any such invariant or equivariant functions. 
+But here we'll introduce a simple yet general Taylor series-based technique necessary for studying complex symmetry patterns. Specifically, we need to enable efficient universal learners -- that can represent any such invariant or equivariant functions. 
 For advanced readers, the general idea follows [Equivariant Multilayer Perceptrons (EMLP)](https://github.com/mfinzi/equivariant-MLP) but with a high-order twist. 
 
 Given the desired input-output shapes and symmetry constraints, we would proceed as the following: 
-1) Express a general function that matches the input-output shapes in Taylor series form, 
-2) Map the symmetry constraints into equations about the Taylor series coefficients,
-3) Solve the equations for free parameters and the parameter sharing patterns, and parameterize the function using the free parameters,
-4) Simplify the parameterization for efficient computation.
+1. Express a general function that matches the input-output shapes in Taylor series form, 
+2. Map the symmetry constraints into equations about the Taylor series coefficients,
+3. Solve the equations for free parameters and the parameter sharing patterns, and parameterize the function using the free parameters,
+4. Simplify the parameterization for efficient computation.
 
 Let's start from 1D permutation invariance as an example to demonstrate how the technique works.
 
