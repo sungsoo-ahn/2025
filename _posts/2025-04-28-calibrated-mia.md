@@ -57,11 +57,13 @@ Below we report results for the *Wikipedia* split.
 
 | Model              | AUC | TPR@5%FPR |
 | :---------------- | :---------: | ----: |
-| [Pythia-6.9B](https://huggingface.co/EleutherAI/pythia-6.9b) |   0.542   | 0.071 |
-| [GPT-NeoX-20B](https://huggingface.co/EleutherAI/gpt-neox-20b) | ?   | ? |
+| [Pythia-6.9B](https://huggingface.co/EleutherAI/pythia-6.9b) |   0.542 | 0.071 |
+| [GPT-NeoX-20B](https://huggingface.co/EleutherAI/gpt-neox-20b) | 0.600 | 0.103 |
 
 **Result:**  
-The method performed only a bit better than random guessing, and remains comparable to most standalone membership inference attacks. For reference, AUC with the baseline LOSS and zlib <d-cite key="carlini2021extracting"></d-cite> attacks for Pythia-6.9B are .526 and .536 respectively, while it is .618 when using a reference-model (Table 12 in <d-cite key="duan2024membership"></d-cite>). Reported improvements in the paper were thus likely due to exploiting differences in the data distribution, rather than actual improvements in detecting membership.  
+The method performed only a bit better than the LOSS attack, and remains comparable to most standalone membership inference attacks. For reference, AUC with the baseline LOSS and zlib <d-cite key="carlini2021extracting"></d-cite> attacks for Pythia-6.9B are .526 and .536 respectively, while it is .618 when using a reference-model (Table 12 in <d-cite key="duan2024membership"></d-cite>). Similarly, using LOSS and zlib yeild AUCs of 0.563 and 0.572 respectively.
+
+Reported improvements in the paper were thus likely due to exploiting differences in the data distribution, rather than actual improvements in detecting membership.  
 
 ### False Positive Rate Experiment  
 
