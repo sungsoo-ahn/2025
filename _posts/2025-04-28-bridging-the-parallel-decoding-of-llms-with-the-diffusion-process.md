@@ -187,7 +187,7 @@ where both $$\log p(x_{t-1},x_t)$$ and $$\log p(c,x_{t-1})$$ are differentiable:
 Figure 5. An illustration of the planning task. <d-cite key="ye2024beyond"></d-cite>
 
 
-<div style="width: 70%; margin: 0 auto;"> <div class="col-sm mt-3 mt-md-0">
+<div style="width: 60%; margin: 0 auto;"> <div class="col-sm mt-3 mt-md-0">
 {% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/the_planning_task2.jpg" class="the_planning_task" %}
 </div></div>
 
