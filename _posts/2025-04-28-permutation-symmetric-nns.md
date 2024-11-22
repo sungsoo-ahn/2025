@@ -311,6 +311,15 @@ $$
 
 This only holds when the coefficients match, that is for any $(i,j,k)$, $$c_{ijk}=\alpha^{i+j+k} c_{ijk}$$. That means only terms with $i+j+k=0$ would have non-zero coefficients. For example, $\frac{xy}{z^2}$. Within terms up to order-2, that is $i,j,k\in \left\{ -2,-1,0,1,2 \right\}$, the degrees of freedom is $19$ out of $5^3=125$ as the following
 
+<table>
+<tr><th>(i,j,k)</th><th>DoF</th></tr>
+<tr><td>0,0,0</td><td>1</td></tr>
+<tr><td>-1,0,1</td><td>6</td></tr>
+<tr><td>-2,0,2</td><td>6</td></tr>
+<tr><td>-2,1,1</td><td>3</td></tr>
+<tr><td>2,-1,-1</td><td>3</td></tr>
+</table>
+
 | (i,j,k) | DoF |
 |:-------:|:---:|
 | 0,0,0   | 1   |
