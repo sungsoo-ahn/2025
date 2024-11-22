@@ -1,6 +1,6 @@
 ---
 layout: distill
-title: MasterMind
+title: MasterMind: Empowering LLMs for Strategic Game Mastery
 description: When LLMs encounter strategic decision-making games such as DouDiZhu or Go, a fascinating interplay emerges between advanced computational intelligence and intricate human-designed game mechanics. Our pioneering exploration delves into the complex reasoning logic and the upper limits of LLMs' strategic capabilities within these games. Furthermore, these games may serve as potent evaluative tools and catalysts for enhancing the logical reasoning prowess of LLMs, offering the potential to uncover new dimensions of their thought processes and inference mechanisms.
 date: 2025-04-28
 future: true
