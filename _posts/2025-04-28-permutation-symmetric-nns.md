@@ -40,16 +40,16 @@ _styles: >
     text-align: center;
     font-size: 16px;
   }
-.collapse a{
-  display: block;
-  background: #cdf;
-}
-.collapse > div{
-  display:none;
-}
-.collapse > div:target{
-  display:block; 
-}
+    .collapse a{
+    display: block;
+    background: #cdf;
+    }
+    .collapse > div{
+    display:none;
+    }
+    .collapse > div:target{
+    display:block; 
+    }
 ---
 
 
