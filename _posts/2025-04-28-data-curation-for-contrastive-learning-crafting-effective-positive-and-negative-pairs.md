@@ -401,8 +401,8 @@ Another method named Uncertainty and Representativeness Mixing (UnReMix) for con
 {% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/Unremix.png" class="img-fluid" %}
 <div class="caption">
 Figure 13: Overview of the proposed hard negative sampling technique, UnReMix. Given an anchor
-and a set of negative samples, UnReMix computes an importance score for each negative sample, by linearly interpolating between gradient-based uncertainty, anchor similarity and representativeness indicators, capturing desirable negative sample properties, i.e., samples that are truly negative (P1), in close vicinity to the anchor (P2) and representative of the sample population (P3) (from <d-cite key="unremix"></d-cite>
-</div>).
+and a set of negative samples, UnReMix computes an importance score for each negative sample, by linearly interpolating between gradient-based uncertainty, anchor similarity and representativeness indicators, capturing desirable negative sample properties, i.e., samples that are truly negative (P1), in close vicinity to the anchor (P2) and representative of the sample population (P3) (from <d-cite key="unremix"></d-cite>)
+</div>.
 
 - *Anchor Similarity (P1):* This property assesses how closely a potential negative sample resembles the anchor (the reference data point). Incorporating anchor similarity ensures that selected negative samples are challenging, as they are similar to the anchor yet belong to different classes, thereby providing informative gradients for the model.
 
