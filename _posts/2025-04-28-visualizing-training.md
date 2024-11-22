@@ -205,7 +205,7 @@ After fitting the HMM, we can cluster checkpoints by predicting each checkpoint'
 
 We notice that the HMM segments training into three phases, which roughly align with the **memorization, generalization,** and **convergence** phases in grokking. This is interesting because the HMM only sees weight statistics—it has no access to loss values. Thus, the behavioral changes we observe in the loss curves are reflected in the underlying weight dynamics. For a deeper dive on using HMMs to analyze training dynamics, see Hu et al. (2023)<d-cite key="hu2023latent"></d-cite>.
 
-> Summary: Use the hidden Markov model to cluster checkpoints. Clusters can reflect changes in the model or phase transitions.
+> Summary: Use the HMM to cluster checkpoints. Clusters can reflect changes in the model or phase transitions.
 
 # Conclusion
 
