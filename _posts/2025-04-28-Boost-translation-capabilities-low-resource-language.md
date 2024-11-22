@@ -1,7 +1,6 @@
-
 ---
 layout: distill
-title: 
+title: Boost translation capabilities of low resource languages
 description: Language Models are increasingly recognized for their potential in translation tasks. Researchers are actively exploring the most effective architectures, prompting formats, and fine-tuning techniques for these tasks. Further, the use of LLMs in low-resource machine translation is still emerging. This study evaluates methods that combine In-Context Learning (ICL) with fine-tuning scenarios where language data is scarce.
 
 Our strategy involves two steps: first, introducing translation examples from languages closely related to the target language; second, using embeddings to include similar examples to the source language for few-shot ICL. We hypothesize that this approach helps LLMs access their hidden translation capabilities.
@@ -15,8 +14,46 @@ future: true
 htmlwidgets: true
 hidden: false
 
+authors:
+  - name: Anonymous
+  - name: Anonymous
+  - name: Anonymous
+  - name: Anonymous
 
-bibliography: 2025-04-28-Low-resource-language-translation.bib  
+# must be the exact same name as your blogpost
+bibliography: 2025-04-28-Boost-translation-capabilities-low-resource-language.bib
+
+# Add a table of contents to your post.
+#   - make sure that TOC names match the actual section names
+#     for hyperlinks within the post to work correctly. 
+#   - please use this format rather than manually creating a markdown table of contents.
+toc:
+  - name: Introduction
+  - name: Related Work
+    subsections:
+    - name: In-Context Learning
+    - name: Fine-Tuning
+  - name: Methodology
+  - name: Experiments
+    subsections:
+    - name: Language similarity
+    - name: Models
+    - name: Datasets
+    - name: Trainable parameters
+    - name: Tokens
+    - name: Parameters
+      subsections:
+      - name: Trainining Prameters
+      - name: Quantization
+      - name: LoRA 
+      - name: Text generation
+    - name: Baselines
+  - name: Results
+  - name: Discussion
+  - name: Appendix
+
+
+---
 
 
 ***
@@ -38,12 +75,7 @@ We find that when the models are fine-tuned by constructing the prompt as mentio
 ***
 
 ## Related Work
-todo: add what makes this method better -> alignemnt to languages with finetuning
-todo: why do some models perform worse and some model better -> multilingual model performs better
-todo: grammatical errors
-todo: embeddings how does it work -> done
-todo: why does pivot language work -> wrote about this
-todo: will existing techniques and fintuning make any difference when we are constrained by data and resources
+
 
 ### In-Context Learning
 
@@ -68,7 +100,7 @@ The technique of including ICL examples during fine-tuning has also proven effec
    Our main goal here is to determine if adding a pivot language translations, a language that is similar to the low resource target language into the few shot demonstration will improve translation performance.
 
    {% include figure.html path="assets/img/2025-04-28-Boost-translation-capabilities-low-resource-language/Flowcharts.png" class="img-fluid" %}
-   
+
     We began by evaluating the performance of pretrained language models on the translation tasks for our target languages without any fine-tuning or prompt adjustments. This initial assessment established a baseline and highlighted the limitations of these models in handling low-resource languages. Recognizing the potential of ICL to improve translation tasks, we implemented few-shot learning by including relevant examples in the input prompts during inference. Our goal was to determine whether adding similar sentences as examples would enhance the models' translation performance. To select the most relevant few-shot examples, we employed the following approach. We used the all-MiniLM-L12-v2 sentence transformer model <d-cite key="reimers-2019-sentence-bert"></d-cite> to generate vector embeddings for all sentences in our training dataset. This model was chosen for its balance between computational efficiency and embedding quality. The embeddings were stored in a vector database using the lancedb. For each source sentence to be translated, we generated its embedding and calculated cosine similarity scores with the embeddings in the vector database. We retrieved the top five most similar sentences based on cosine similarity scores. These sentences, along with their translations, were included in the prompt as few-shot examples, formatted consistently with the models' requirements. We utilized two advanced language models for our experiments. Unbabel's Tower models <d-cite key="alves2024tower"></d-cite> are context-aware translation models fine-tuned from Llama 2. Designed to handle contextual information effectively, they are well-suited for translation tasks involving nuanced language structures. Nous Research's Llama 3 <d-cite key="Hermes-2-Pro-Llama-3-8B"></d-cite> is a multilingual model capable of handling multiple languages, including those not seen during pretraining. Its architecture allows for effective adaptation to new language pairs. When it comes to translation we determine if a model instruction tuned specifically for translation task can perform better than a multilingual model trained on several languages. For each language pair (English-Konkani and English-Tunisian Arabic), we compiled a dataset of 1,000 sentence pairs. The sentences were sourced from publicly available parallel corpora56, ensuring a diverse representation of language use. The training data was formatted according to the prompt structures recommended for each model. Examples of these prompt templates are provided in the Appendix. During fine-tuning, the retrieved similar sentences were included in the prompts to reinforce the models' ability to translate sentences similar to those in the training data. The fine-tuning was conducted on Google Colab Pro using NVIDIA A100 GPUs making this approach accessible.
 We used BLEU scores <d-cite key="papineni-etal-2002-bleu"></d-cite>, calculated using SacreBLEU, to assess the translation quality of each model. BLEU scores provide a standard metric for comparing the similarity between machine-generated translations and reference translations.
 
@@ -256,8 +288,6 @@ The results from the experiment emphasize the importance of using a high-quality
 
 ***
 
-## Acknowledgement
-I would like to thank David Dale for his critical input in understanding how best to adapt a language model to translate to low resource languages. 
 
 ## Appendix
 
@@ -308,3 +338,6 @@ To generate translations during evaluation, the following parameters were applie
 These parameters are commonly employed in text generation tasks to control output length, randomness, and termination criteria. 
 
 While prompt tuning shows potential, its effectiveness for low-resource languages remains a challenge. Refining the mechanisms to optimize prompt tuning for such scenarios is left for future work.
+
+## Acknowledgement
+I would like to thank David Dale for his critical input in understanding how best to adapt a language model to translate to low resource languages. 
