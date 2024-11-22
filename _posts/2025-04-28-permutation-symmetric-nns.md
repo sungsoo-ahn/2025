@@ -43,6 +43,8 @@ _styles: >
   #hidden {
   display: none;
   background: #cccccc;
+  height: 500px;
+  width: 500px;
   }
   :checked + * + #hidden {
   display: block;
@@ -204,6 +206,7 @@ y=f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2} & x_{3}\end{bmatrix} \right) =f\l
 $$
 
 <input type="checkbox" id="my_checkbox" style="display:none;">
+<label for="my_checkbox">Show/hide</label>
 
 <div id="hidden">
 
@@ -268,7 +271,6 @@ Computing the 2nd order term naively would require $O(N^2)$ multiplies for lengt
 
 </div>
 
-<label for="my_checkbox">Show/hide</label>
 
 **B. Scale.** Parameterize function 
 $$
