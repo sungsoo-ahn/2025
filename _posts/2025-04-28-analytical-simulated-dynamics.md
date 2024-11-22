@@ -1,20 +1,8 @@
 ---
 layout: distill
-title: Analytical learning dynamics of simple neural networks
+title: A primer on the analytical learning dynamics of nonlinear neural networks
 description:
-    The learning dynamics of neural networks—in particular, how parameters change over time during 
-    training—describe how data, architecture and algorithm interact in time to produce 
-    a trained neural network model.
-    Characterizing these dynamics in general remains an open problem in machine learning,
-    but, handily, restricting the setting allows careful empirical studies and even analytical results.
-    In this blog post, we introduce approaches to analyzing the learning dynamics of 
-    neural networks,
-    with a focus on a particular setting that permits an explicit analytical 
-    expression for the generalization error of a neural network trained with online gradient descent.
-    We provide an accessible mathematical formulation of this analysis
-     alongside a `JAX` codebase to implement both simulation of the analytical
-    system of ordinary differential equations and neural network training in this setting.
-    We conclude with discussion of how this analytical paradigm has been used to investigate generalization in neural networks and beyond.
+    The learning dynamics of neural networks—in particular, how parameters change over time during training—describe how data, architecture, and algorithm interact in time to produce a trained neural network model. Characterizing these dynamics in general remains an open problem in machine learning, but, handily, restricting the setting allows careful empirical studies and even analytical results. In this blog post, we review approaches to analyzing the learning dynamics of nonlinear neural networks, focusing on a particular setting that permits an explicit analytical expression for the generalization error of a nonlinear neural network trained with online gradient descent. We provide an accessible mathematical formulation of this analysis and a `JAX` codebase to implement simulation of the analytical system of ordinary differential equations alongside neural network training in this setting. We conclude with a discussion of how this analytical paradigm has been used to investigate generalization in neural networks and beyond.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -402,8 +390,6 @@ Even under review at ICLR 2025!
 
 **Acknowledgements.** 
 We thank 
-[Stefano Sarao Mannelli](https://stefsmlab.github.io/)
-for historical perspectives
-and 
-[Jin Hwa Lee](https://jinhl9.github.io/)
-for invaluable help in narrowing down details of the implementation.
+[Stefano Sarao Mannelli](https://stefsmlab.github.io/) for historical perspectives,
+[Jin Hwa Lee](https://jinhl9.github.io/) for starter code for the analytical ODEs in NumPy,
+and [Nishil Patel](https://jinhl9.github.io/) for invaluable help in narrowing down details of the implementation.
