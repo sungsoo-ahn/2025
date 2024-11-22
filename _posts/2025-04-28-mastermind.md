@@ -317,9 +317,19 @@ To detect the improvement in reasoning ability of the model trained in decision-
 | Mastermind-Dou | 20.00%      | **35.62%**  | 49.44%     | 35.60%        | **62.80%** | 56.80%     |
 | Mastermind-Go  | **20.40%**  | 29.45%      | **51.69%** | **39.20%**    | 51.60%     | **60.00%** |
 
+
+
 Firstly, we observed a significant performance improvement in the model on specific subsets following Mastermind training, as shown in the table above. This improvement appears most prominently in reasoning tasks that require long-sequence modeling, likely due to the demands of both Go and Doudizhu, which test the model’s ability to make accurate predictions over extended outputs. However, it is also worth noting that the model showed a performance decline on certain tasks, such as [TODO]. This decline is likely due to catastrophic forgetting, where certain capabilities were not reinforced during Mastermind training.
 
-[TODO: BBH 来一些下降的 case 以及原因解释]
+
+
+| Acc.           | **Penguins in a table** | **Disambiguation qa** | **Snarks** | **RuinNames** | **Hyper.** | **Nav.**   |
+| -------------- | ------------------- | ----------- | ---------- | ------------- | ---------- | ---------- |
+| LLaMA-2-7B     | 12.00%              | 31.51%      | 47.75%     | 32.80%        | 51.60%     | 53.60%     |
+| Mastermind-Dou | 20.00%              | **35.62%**  | 49.44%     | 35.60%        | **62.80%** | 56.80%     |
+| Mastermind-Go  | **20.40%**          | 29.45%      | **51.69%** | **39.20%**    | 51.60%     | **60.00%** |
+
+
 
 To fully address this issue, we believe that introducing these data into the pretraining phase may be necessary to enhance overall performance. However, due to resource constraints, we were unable to implement this idea in the current study, leaving it as a potential direction for future work.
 

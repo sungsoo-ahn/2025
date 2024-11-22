@@ -16,7 +16,7 @@
 #go-task2:target { display: block; }
 #go-task3:target { display: block; }
             table {
-                width: 100%;
+                width: 60%;
                 border-collapse: collapse;
                 margin-bottom: 20px;
             }
@@ -40,7 +40,6 @@
         </style>
     </head>
     <body>
-        <h1>Dataset Card</h1>
         <form>
             <label for="dataset-select">Select Dataset:</label>
             <select id="dataset-select" name="dataset-select" onchange="location.hash=this.value">
@@ -56,7 +55,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>sentence</th><th>answer</th>
+                        <th>question</th><th>answer</th>
                     </tr>
                 </thead>
                 <tbody>
