@@ -61,13 +61,13 @@ Let's start from 1D permutation invariance as an example to demonstrate how the 
 ### I.1 Example: 1D permutation invariance
 
 Let's say we want to make a function 
-```math
+$$
 y=f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2}\end{bmatrix} \right)
-```
+$$
 invariant to permutation of $x_0$, $x_1$, $x_2$.
 
 Consider the Taylor series
-```math
+$$
 \begin{aligned}
 f&\left(\begin{bmatrix}x_{0} & x_{1} & x_{2}\end{bmatrix}\right) \\
 = & a + 
@@ -82,10 +82,10 @@ f&\left(\begin{bmatrix}x_{0} & x_{1} & x_{2}\end{bmatrix}\right) \\
 \begin{bmatrix} x_{0} \\ x_{1} \\ x_{2} \end{bmatrix}
 + \ldots
 \end{aligned}
-```
+$$
 
 Since we want $f(\cdot)$ to be invariant to any permutation matrix $P$, the invariant constraint says 
-```math
+$$
 f\left(\begin{bmatrix}x_{0} \\ x_{1} \\ x_{2}\end{bmatrix}\right)=f\left(
     \begin{bmatrix} 
       &   &  \\
@@ -93,10 +93,10 @@ f\left(\begin{bmatrix}x_{0} \\ x_{1} \\ x_{2}\end{bmatrix}\right)=f\left(
       &   &  
     \end{bmatrix} 
     \begin{bmatrix}x_{0} \\ x_{1} \\ x_{2}\end{bmatrix}\right)
-```
+$$
 For our Taylor series form, because of the uniqueness of Taylor series, all order-k coefficients on the left hand side need to match the corresponding order-k coefficients on the right hand side. That is for any permutation matrix $P$ we have
 
-```math
+$$
 \begin{aligned}
 a = & a \\
 \begin{bmatrix} b_0 & b_1 & b_2\end{bmatrix}  = &
@@ -130,30 +130,30 @@ a = & a \\
     \end{bmatrix} \\
 & \ldots
 \end{aligned}
-```
+$$
 These equations are all linear equations about coefficients $a$, $b_i$ and $c_{ij}$. So we can just enumerate all $P$ to get all the equations, and then solve them. For $b_i$ for example, enumerating different permutations $P$ would give
 
-```math
+$$
 \begin{bmatrix} b_0 \\ b_1 \\ b_2\end{bmatrix}  = 
 \begin{bmatrix} b_0 \\ b_2 \\ b_1\end{bmatrix}  = 
 \begin{bmatrix} b_1 \\ b_0 \\ b_2\end{bmatrix}  = 
 \begin{bmatrix} b_1 \\ b_2 \\ b_0\end{bmatrix}  = 
 \begin{bmatrix} b_2 \\ b_0 \\ b_1\end{bmatrix}  = 
 \begin{bmatrix} b_2 \\ b_1 \\ b_0\end{bmatrix} 
-```
+$$
 
 That is more than enough to say $b_0=b_1=b_2$. So the order-1 term has only 1 degree of freedom.
 
 For $c_i$ there are more equations, but it turns out that solving the equations across all permutations would yield 
-```math
+$$
 c_{00}=c_{11}=c_{22} \\
 c_{01}=c_{10}=c_{10}=c_{12}=c_{20}=c_{21}
-```
+$$
 So the order 2 term has 2 degrees of freedom, one for the diagonal and one for the off-diagonal.
 
 Apply what we have learned, we can now write
 
-```math
+$$
 \begin{aligned}
 y=&f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2}\end{bmatrix} \right)\\
 = & a + 
@@ -168,17 +168,17 @@ y=&f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2}\end{bmatrix} \right)\\
 \begin{bmatrix} x_{0} \\ x_{1} \\ x_{2} \end{bmatrix}
 + \ldots
 \end{aligned}
-```
+$$
 For a total of 4 free parameters up to order 2, instead of 13 free parameters without the invariance constraint. More generally, for $N$ inputs, we still only need 4 parameters to express any permutation invariant function, whereas a non-invariant function needs $N^2+N+1$ parameters. In practice, parameterizing with symmetry often **reduces parameter count** exponentially. 
 
 We can further simplify by focusing on the free parameters
-```math
+$$
 \begin{aligned}
 y=&f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2}\end{bmatrix} \right)\\
 = & a + b \sum_i x_i + (c_0-c_1) \sum_i x_i^2 + c_1 \sum_{i} \sum_{j} x_i x_j + \ldots \\
 = & a + b \sum_i x_i + (c_0-c_1) \sum_i x_i^2 + c_1 (\sum_{i}x_i )^2 + \ldots
 \end{aligned}
-```
+$$
 An important effect of this simplification is **reduced compute**. It now requires $O(N)$ compute for $N$ inputs instead of $O(N^2)$ for order-2.  
 
 In math terms, the number of free parameters is the dimensionality of the null space of the symmetry equations. The free parameters can be numerically solved from the basis of this null space which is one of the many innovations in [1]. But note that as the basis is often not unique, numerical solutions can vary by a linear combination and therefore may not be compute-optimal, so further simplification is still needed.
@@ -189,9 +189,9 @@ Although we didn't unroll order-3 and higher terms because they are difficult to
 If you are interested in going a little deeper, test yourself on the following list of exercises and gain new insights. Click to expand the reference solution. 
 
 **A. 1D translation.** Parameterize function 
-```math
+$$
 y=f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2} & x_{3}\end{bmatrix} \right) =f\left( \begin{bmatrix} x_{3} & x_{0} & x_{1} & x_{2}\end{bmatrix} \right)
-```
+$$
 
 <details>
 
@@ -201,7 +201,7 @@ Solution
 
 
 According to equivariant constraints, the coefficients of the Taylor series satisfy
-```math
+$$
 \begin{aligned}
 a = & a \\
 \begin{bmatrix} b_0 & b_1 & b_2 & b_3\end{bmatrix}  = &
@@ -222,9 +222,9 @@ a = & a \\
 \end{bmatrix} 
 & \ldots
 \end{aligned}
-```
+$$
 Which means there are 6 free parameters up to order-2.
-```math
+$$
 \begin{aligned}
 b_0=b_1=&b_2=b_3 \\
 c_{00}=c_{11}=&c_{22}=c_{33} \\
@@ -232,12 +232,12 @@ c_{01}=c_{12}=&c_{23}=c_{30} \\
 c_{02}=c_{13}=&c_{20}=c_{31} \\
 c_{03}=c_{10}=&c_{21}=c_{32} \\
 \end{aligned}
-```
+$$
 Considering Hessian transpose symmetry, we would additionally have $c_{01}=c_{03}$ and reduce number of free parameters to 5. For now, let us assume that multiply among $x_i$ does not commute.
 
 The parameterization with 6 parameters has an unrolled circular convolution on the order-2 term.
 
-```math
+$$
 \begin{aligned}
 y=&f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2} & x_{3}\end{bmatrix} \right)\\
 = & a + 
@@ -253,7 +253,7 @@ y=&f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2} & x_{3}\end{bmatrix} \right)\\
 \begin{bmatrix} x_{0} \\ x_{1} \\ x_{2} \\ x_{3} \end{bmatrix}
 + \ldots
 \end{aligned}
-```
+$$
 
 Computing the 2nd order term naively would require $O(N^2)$ multiplies for length-$N$ input. But because the coefficients implement a circular convolution operation,  fast fourier transform would reduce compute complexity down to $N\log{N}$.
 
@@ -262,9 +262,9 @@ Computing the 2nd order term naively would require $O(N^2)$ multiplies for lengt
 
 
 **B. Scale.** Parameterize function 
-```math
+$$
 y=f\left( \begin{bmatrix}x_{0} & x_{1} &x_{2}\end{bmatrix} \right) =f\left(\alpha \begin{bmatrix}x_{1} & x_{2} & x_{0}\end{bmatrix} \right)
-```
+$$
 For any $\alpha\ne0$.
 
 <details>
@@ -275,29 +275,29 @@ Solution
 
 With Taylor series, you'll run into a conclusion that no terms could exist and $y=a$. That is because scale invariant functions are often not smooth at $x_i=0$ so Taylor series could not capture them. Let us instead look into Laurent Series
 
-```math
+$$
 \begin{aligned}
 y=&f\left( \begin{bmatrix}x_{0} & x_{1} &x_{2}\end{bmatrix} \right) \\
 =&\sum_{i=-\infty}^{\infty} \sum_{j=-\infty}^{\infty} \sum_{k=-\infty}^{\infty} c_{ijk} x_0^i x_1^j x_2^k 
 \end{aligned}
-```
+$$
 
 Applying the invariant constraint
 
-```math
+$$
 \begin{aligned}
 \sum_{i=-\infty}^{\infty} \sum_{j=-\infty}^{\infty} \sum_{k=-\infty}^{\infty} c_{ijk} x_0^i x_1^j x_2^k 
 =
 \sum_{i=-\infty}^{\infty} \sum_{j=-\infty}^{\infty} \sum_{k=-\infty}^{\infty} \alpha^{i+j+k} c_{ijk} x_0^i x_1^j x_2^k 
 \end{aligned}
-```
+$$
 
 This only holds when the coefficients match, that is for any $(i,j,k)$
-```math
+$$
 \begin{aligned}
 c_{ijk}=\alpha^{i+j+k} c_{ijk}
 \end{aligned}
-```
+$$
 That is only terms with $i+j+k=0$ would have non-zero coefficients. For example, $\frac{xy}{z^2}$. Within terms up to order-2, that is $i,j,k\in \left\{ -2,-1,0,1,2 \right\}$, the degrees of freedom is $19$ out of $5^3=125$ as the following
 
 | (i,j,k) | DoF |
@@ -309,31 +309,31 @@ That is only terms with $i+j+k=0$ would have non-zero coefficients. For example,
 | 2,-1,-1 | 3   |
 
 The full parameterization is
-```math
+$$
 \begin{aligned}
 f&\left( \begin{bmatrix}x_{0} & x_{1} &x_{2}\end{bmatrix} \right) \\
 =&a + \sum_{i}\sum_{j\ne i} b_{ij} \frac{x_i}{x_j} + \sum_{i}\sum_{j\ne i} c_{ij} \frac{x_i^2}{x_j^2} + d_0 \frac{x_1 x_2}{x_0^2} + d_1 \frac{x_0 x_2}{x_1^2} + d_2 \frac{x_0 x_1}{x_2^2} + e_0 \frac{x_0^2}{x_1 x_2} + e_1 \frac{x_1^2}{x_0 x_2} + e_2 \frac{x_2^2}{x_0 x_1} 
 \end{aligned}
-```
+$$
 
 Nevertheless, for scale invariance it is easier to reparameterize the input with
-```math
+$$
 z_0=\frac{x_0}{\sqrt{x_0^2+x_1^2+x_2^2}} \quad
 z_1=\frac{x_1}{\sqrt{x_0^2+x_1^2+x_2^2}} \quad
 z_2=\frac{x_2}{\sqrt{x_0^2+x_1^2+x_2^2}}
-```
+$$
 and express
 
-```math
+$$
 y=f\left( \begin{bmatrix}x_{0} & x_{1} &x_{2}\end{bmatrix} \right) =g\left(z_1,z_2\right)
-```
+$$
 
 </details>
 
 **C. 1D permutation with latent.** Parameterize function 
-```math
+$$
 y=f\left( \begin{bmatrix}x_{0} & x_{1} \\ x_{2} & x_{3}\end{bmatrix} \right) =f\left( \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\begin{bmatrix}x_{0} & x_{1} \\ x_{2} & x_{3}\end{bmatrix} \right)
-```
+$$
 
 <details>
 
@@ -342,7 +342,7 @@ Solution
 </summary>
 
 According to the equivariant constraint, the coefficients of the Taylor series satisfy
-```math
+$$
 \begin{aligned}
 a = & a \\
 \begin{bmatrix} b_0 & b_1 & b_2 & b_3\end{bmatrix}  = &
@@ -362,9 +362,9 @@ a = & a \\
     c_{12} & c_{13} & c_{10} & c_{11} \\
 \end{bmatrix} 
 \end{aligned}
-```
+$$
 Solving the equations gives
-```math
+$$
 \begin{aligned}
 \begin{bmatrix}b_0 & b_1\end{bmatrix}=&\begin{bmatrix}b_2 & b_3\end{bmatrix} \\
 
@@ -387,10 +387,10 @@ Solving the equations gives
     c_{30} & c_{31} \\
 \end{bmatrix} 
 \end{aligned}
-```
+$$
 If we view the rows of inputs as vectors, the coefficients can be partitioned into blocks that process those vectors, and the row-permutation invariant constraint leads to parameter sharing at the block level. We can parameterize
 
-```math
+$$
 \begin{aligned}
 f&\left( \begin{bmatrix}x_{0} & x_{1}\end{bmatrix}, \begin{bmatrix}x_{2} & x_{3}\end{bmatrix} \right) \\
 =&a + 
@@ -429,15 +429,15 @@ f&\left( \begin{bmatrix}x_{0} & x_{1}\end{bmatrix}, \begin{bmatrix}x_{2} & x_{3}
 \begin{bmatrix}d_0 & d_1\\d_2 & d_3\end{bmatrix}
 \begin{bmatrix}x_0+x_2 \\ x_1+x_3\end{bmatrix}
 \end{aligned}
-```
+$$
 The size of order-$k$ coefficient blocks for processing length-$H$ latent vectors is $H^k$. This is already much better than the full coefficients $(NH)^k$ for a set of $N$ vectors but is still large. Now, the bread and butter of deep learning comes in, namely 1) stacking more layers, 2) low-rank factorization and 3) non-linearities which we'll discuss more in Section II.
 
 </details>
 
 **D. 2D permutation.** Parameterize function 
-```math
+$$
 y=f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right) =f\left( \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right) = f\left(\begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix}\begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix} \right)
-```
+$$
 
 <details>
 
@@ -446,7 +446,7 @@ Solution
 </summary>
 
 According to the equivariant constraint, the coefficients of the Taylor series satisfy
-```math
+$$
 \begin{aligned}
 \begin{bmatrix} b_0 & b_1 & b_2 & b_3\end{bmatrix} = &
 \begin{bmatrix} b_2 & b_3 & b_0 & b_1\end{bmatrix} =
@@ -473,10 +473,10 @@ According to the equivariant constraint, the coefficients of the Taylor series s
     c_{21} & c_{20} & c_{23} & c_{22} \\
 \end{bmatrix} 
 \end{aligned}
-```
+$$
 
 Solving the equations gives the following parameterization with 6 degrees of freedom
-```math
+$$
 \begin{aligned}
 y=&f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right)\\
 = & a + 
@@ -492,17 +492,17 @@ y=&f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right
 \begin{bmatrix} x_{00} \\ x_{01} \\ x_{10} \\ x_{11} \end{bmatrix}
 + \ldots
 \end{aligned}
-```
+$$
 
 Let us perform a bit of merging and simplification
-```math
+$$
 \begin{aligned}
 y=&f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right)\\
 = & a + b \sum_i \sum_j x_{ij} + (c_0-c_1-c_2-c_3) \sum_i \sum_j x_{ij}^2\\
 &+ (c_1-c_3) \sum_i (\sum_j x_{ij})^2+(c_2-c_3) \sum_j (\sum_i x_{ij})^2  + c_3 (\sum_i \sum_j x_{ij})^2
 + \ldots
 \end{aligned}
-```
+$$
 
 An interesting pattern emerges, that all terms are some forms of tensor contractions. In fact, this seems to be true for all flavors of permutation symmetry and the motivation behind Section II. Don't believe it? Try another case below!
 
@@ -510,9 +510,9 @@ An interesting pattern emerges, that all terms are some forms of tensor contract
 
 
 **E. 2D joint permutation.** Parameterize function 
-```math
+$$
 y=f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right) =f\left( \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\right)
-```
+$$
 
 <details>
 
@@ -521,7 +521,7 @@ Solution
 </summary>
 
 According to the equivariant constraint, the coefficients of the Taylor series satisfy
-```math
+$$
 \begin{aligned}
 \begin{bmatrix} b_0 & b_1 & b_2 & b_3\end{bmatrix} = &
 \begin{bmatrix} b_3 & b_2 & b_1 & b_0\end{bmatrix} 
@@ -540,10 +540,10 @@ According to the equivariant constraint, the coefficients of the Taylor series s
     c_{03} & c_{02} & c_{01} & c_{00} \\
 \end{bmatrix} 
 \end{aligned}
-```
+$$
 
 Solving the equations gives the following parameterization with 11 degrees of freedom
-```math
+$$
 \begin{aligned}
 y=&f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right)\\
 = & a + 
@@ -559,9 +559,9 @@ y=&f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right
 \begin{bmatrix} x_{00} \\ x_{01} \\ x_{10} \\ x_{11} \end{bmatrix}
 + \ldots
 \end{aligned}
-```
+$$
 With Hessian transpose symmetry, we may further have $c_1=c_4$ and $c_2=c_7$ which reduces free parameters count down to 9, still 3 more than regular 2D permutation invariance. If you squint really hard (and maybe try Exercise D), there exists a tensor contraction form:
-```math
+$$
 \begin{aligned}
 f&\left( \{x_{ij}\} \right)\\
 = & a + b_0' \sum_i x_{ii} + b_1' \sum_i \sum_j x_{ij} + 
@@ -573,16 +573,16 @@ c_0' \sum_i x_{ii}^2
 + c_6' \sum_i \sum_j x_{ij} x_{ji}  
 + \ldots
 \end{aligned}
-```
+$$
 What's different from regular 2D permutation invariance are terms involving diagonal and transpose. Also all tensor contractions here are at or below $O(N)$ compute for input size $\sqrt{N}\times \sqrt{N}$, which is exponentially less compute than $O(N^2)$ for the default Taylor series.
 
 </details>
 
 
 **F. 1D permutation equivariance.** Parameterize function 
-```math
+$$
 \begin{bmatrix}y_{0} \\ y_{1} \\y_{2}\end{bmatrix}=F\left( \begin{bmatrix}x_{0} \\ x_{1} \\ x_{2}\end{bmatrix} \right) =F\left( \begin{bmatrix}&&\\&P&\\&&\end{bmatrix}\begin{bmatrix}x_{0} \\ x_{1} \\ x_{2}\end{bmatrix} \right)
-```
+$$
 For any permutation $P$.
 
 
@@ -593,7 +593,7 @@ Solution
 </summary>
 
 The Taylor series up to order 1 can be expressed as
-```math
+$$
 \begin{aligned}
 &\begin{bmatrix}y_{0} \\ y_{1} \\y_{2}\end{bmatrix}=F\left( \begin{bmatrix}x_{0} \\ x_{1} \\ x_{2}\end{bmatrix} \right) \\
 &=\begin{bmatrix}a_0 \\ a_1 \\a_2\end{bmatrix}
@@ -607,9 +607,9 @@ b_{20} & b_{21} & b_{22}
 +
 \ldots
 \end{aligned}
-```
+$$
 The equivariant constraints are for any $P$
-```math
+$$
 \begin{bmatrix}
 b_{00} & b_{01} & b_{02} \\ 
 b_{10} & b_{11} & b_{12} \\
@@ -631,10 +631,10 @@ b_{20} & b_{21} & b_{22}
  & P & \\ 
  & & \\ 
 \end{bmatrix}
-```
+$$
 Which is identical to the invariant constraints on order-2 terms. In general, the parameterization of an equivariant function up to order-k is very much the same as an invariant function up to order-(k+1). In the case of 1D permutation equivariance, the order-1 parameterization would be
 
-```math
+$$
 \begin{aligned}
 &\begin{bmatrix}y_{0} \\ y_{1} \\y_{2}\end{bmatrix}=F\left( \begin{bmatrix}x_{0} \\ x_{1} \\ x_{2}\end{bmatrix} \right) \\
 &=\begin{bmatrix}a \\ a \\a\end{bmatrix}
@@ -648,17 +648,17 @@ b_{1} & b_{1} & b_{0}
 +
 \ldots
 \end{aligned}
-```
+$$
 Rewriting in tensor contraction form using [einsum](https://pytorch.org/docs/stable/generated/torch.einsum.html) notations
 
-```math
+$$
 \begin{aligned}
 Y=&F\left( X \right) \\
 =& a \cdot \text{einsum(`i->i',X)} 
 + (b_0-b_1) \cdot \text{einsum(`i,i->i',X,X)} \\
 &+ b_1 \cdot \text{einsum(`i,j->i',X,X)} 
 \end{aligned} 
-```
+$$
 
 
 </details>
@@ -716,13 +716,13 @@ Primer: Tensor contractions and the einsum notation
 </summary> 
 
 Intuitively, tensor contractions like
-```math
+$$
 Y_{ij}=\sum_k \sum_l X_{ik} X_{lk} X_{lj} 
-```
+$$
 create a new tensor that has the same shape as the input while summing over unused dimensions. They achieve a permutation equivariant effect. And tensor contractions like
-```math
+$$
 y=\sum_i \sum_j \sum_k \sum_l X_{ik} X_{lk} X_{lj} 
-```
+$$
 that sum over all dimensions achieve a permutation invariant effect. 
 
 As the math equations can get quite long, we will use the [einsum notation](https://numpy.org/doc/stable/reference/generated/numpy.einsum.html) which represents a tensor contraction using the indices involved. It is widely used across deep learning frameworks to denote tensor contractions. For example,
