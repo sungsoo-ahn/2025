@@ -82,6 +82,7 @@ Below we report results for the *Wikipedia* split (closer to 0.5 is better since
 
 
 The results in the table above show that DC-PDD is susceptible to showing high false positives, aking to simple methods like LOSS. Notably, the AUC values in such a false-positive setting are significantly higher than in the previous experiment, indicating that the method clearly captures temporal or distributional artifacts rather than true membership.
+
 ---
 
 ## The Problem with Temporally Shifted Benchmarks  
