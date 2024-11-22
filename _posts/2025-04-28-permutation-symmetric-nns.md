@@ -717,7 +717,7 @@ In this section, we have learned that
 5. Parameterization of equivariant functions are tied to parameterization of invariant functions
 6. Permutation invariant and equivariant functions can be parameterized solely using tensor contraction terms.
 
-A Taylor series parameterization is sound in theory. In practice however, functions compound and high order interactions are common. Taylor series often provides too little relevant capacity and too much irrelevant capacity to be useful. Engineering is key in the journey to create universal learners of equivariant functions. In the next section, we'll focus on permutation symmetry and design a family of practical invariant and equivariant networks for various flavors of permutation symmetry.
+A Taylor series parameterization is sound in theory. In practice however, functions compound and high order interactions are common. Taylor series often provides too little relevant capacity and too much irrelevant capacity to be useful. Engineering is key in the journey to create universal learners of symmetric functions. In the next section, we'll focus on permutation symmetry and design a family of practical invariant and equivariant networks for various flavors of permutation symmetry.
 
 
 ## II Engineering a Network with Permutation Symmetry
@@ -740,7 +740,7 @@ In the following table we list a few common problems with different types of per
 
 | Problem       | Illustration  | Symmetry type  | Dependency |
 | ------------- |:-------------:|:--------------:|:---------- |
-|               |               |                |            |
+|               |  {% include figure.html path="assets/img/2025-04-28-permutation-symmetric-nns/aa.png" class="img-fluid" %}             |                |            |
 
 Multiple dimensions, joint permutation and dependency are common themes here. To aid discussions, we also use a custom notation to describe the specific type of permutation symmetry, to capture both the input shape and the unique permutation axes. A fully independent batch dimension Z and a non-symmetric latent dimension H may be added optionally.
 
