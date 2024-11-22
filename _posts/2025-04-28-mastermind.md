@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: MasterMind
-description: We use decision-making games to evaluate and boost the logical reasoning capabilities of LLMs, and find that the result models not only reach competitive levels in the corresponding games but also display performance enhancements in general reasoning tasks.
+description: When LLMs encounter strategic decision-making games such as DouDiZhu or Go, a fascinating interplay emerges between advanced computational intelligence and intricate human-designed game mechanics. Our pioneering exploration delves into the complex reasoning logic and the upper limits of LLMs' strategic capabilities within these games. Furthermore, these games may serve as potent evaluative tools and catalysts for enhancing the logical reasoning prowess of LLMs, potentially unveiling novel dimensions of LLM thought processes and inference mechanisms.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -75,7 +75,7 @@ _styles: >
 
 ## Abstract
 
-Large Language Models (LLMs) have exhibited impressive capabilities across numerous domains, yet they often struggle with complex reasoning and decision-making tasks. As playing games often requires a diversity of reasoning logic, we believe them good sandboxes to evaluate and boost the reasoning ability of LLMs. In this work, we first explore whether LLMs can master complex decision-making games through targeted post-training. To this end, we collect extensive offline datasets from two classic games, Doudizhu and Go, and develop a suite of techniques to effectively incorporate this data into LLM training, resulting in two novel agents: Mastermind-Dou and Mastermind-Go. Our experimental results demonstrate that these Mastermind LLMs achieve competitive performance in their respective games. Additionally, we explore whether integrating decision-making data can enhance the general reasoning abilities of LLMs. Our findings suggest that such post-training significantly improves certain aspects of reasoning, providing valuable insights for optimizing LLM pre-training data collection.
+Large Language Models (LLMs) have exhibited impressive capabilities across numerous domains, yet they often struggle with complex reasoning and decision-making tasks. As playing games often requires a diversity of reasoning logic, we believe them good sandboxes to evaluate and boost the reasoning ability of LLMs. In this work, we first explore whether LLMs can master complex decision-making games through targeted post-training. To this end, we collect extensive offline datasets from two classic games, Doudizhu and Go, and develop a suite of techniques to effectively incorporate this data into LLM training, resulting in two novel agents: Mastermind-Dou and Mastermind-Go. Our experimental results demonstrate that these Mastermind LLMs achieve competitive performance in their respective games. Additionally, we explore whether integrating decision-making data can enhance the general reasoning abilities of LLMs. Our findings suggest that such post-training improves certain aspects of reasoning, providing valuable insights for optimizing LLM data collection.
 
 ## Introduction
 
@@ -98,10 +98,8 @@ For the accuracy of the score difference calculation in Go, we integrate some to
 By adopting the above data collection and training techniques, we fine-tune some popular open-source LLMs and enhance their logic reasoning and game skills across various dimensions. We call derived models as Mastermind LLMs (agents). The main contributions can be summarized as follows:
 
 
+- We develop a series of techniques to fine-tune LLMs on two games, *Doudizhu* and *Go*, showcasing competitive performance in their respective tasks.
 - We introduce decision-making games as a new data source for LLMs, highlighting their potential over code or math problems for enhancing step-by-step reasoning capabilities.
-
-- We have crafted a series of techniques to fine-tune LLMs on two games, Doudizhu and Go, which exhibit hierarchical analytical comprehension and powerful decision-making abilities.
-
 - We conduct thorough ablation experiments to analyze the design of our data collection and training pipeline. All the code, data, and trained agents will be released soon.
 
 ## MasterMind-Dou
@@ -160,7 +158,7 @@ The format of query is:
 Some example contents of these datasets can be viewed in the following table.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-04-28-mastermind/doudizhu_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="60%"></iframe>
+  <iframe src="{{ 'assets/html/2025-04-28-mastermind/doudizhu_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
 
 ## Mastermind-Go
@@ -209,8 +207,9 @@ The training sample thus adopts the following format:
 Some example contents of these datasets can be viewed in the following table.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-04-28-mastermind/go_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="60%"></iframe>
+  <iframe src="{{ 'assets/html/2025-04-28-mastermind/go_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
+
 **Combined Training:**
 Finally, we combine the above data for training as a complete task to boost the LLM. In doing so, Mastermind-Go fully utilizes Go training data from various levels of thought, integrating all knowledge to deliver the optimal decision.
 
