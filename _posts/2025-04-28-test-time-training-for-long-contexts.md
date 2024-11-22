@@ -29,9 +29,9 @@ toc:
 
 # 1. Challenges in long context understanding for Large Language Models (LLMs)
 
-Lengthy sequences, often extending to millions of tokens, are prevalent in real-world applications such as long-form books <d-cite key="kočiský2017narrativeqareadingcomprehensionchallenge"></d-cite>, weeks or months of multi-turn conversations <d-cite key="feng2021sequencetosequenceapproachdialoguestate"></d-cite><d-cite key="wu2024longmemevalbenchmarkingchatassistants"></d-cite><d-cite key="cho2024spectrumspeakerenhancedpretraininglong"></d-cite>, high-resolution video <d-cite key="tapaswi2016movieqaunderstandingstoriesmovies"></d-cite> or audio signals, and multimodal applications <d-cite key="zhang2024longclipunlockinglongtextcapability"></d-cite>. Expanding the context window enables models to capture dependencies across broader spans of text, enhancing coherence, comprehension, and accuracy in tasks that demand reasoning over extended content.
+Lengthy sequences, often spanning millions of tokens, are prevalent in real-world applications such as long-form books <d-cite key="kočiský2017narrativeqareadingcomprehensionchallenge"></d-cite>, weeks or months of multi-turn conversations <d-cite key="feng2021sequencetosequenceapproachdialoguestate"></d-cite><d-cite key="wu2024longmemevalbenchmarkingchatassistants"></d-cite><d-cite key="cho2024spectrumspeakerenhancedpretraininglong"></d-cite>, high-resolution video or audio signals <d-cite key="tapaswi2016movieqaunderstandingstoriesmovies"></d-cite>, and multimodal scenarios <d-cite key="zhang2024longclipunlockinglongtextcapability"></d-cite>. Expanding the context window enables models to capture dependencies across broader spans of text, enhancing coherence, comprehension, and accuracy in tasks that demand reasoning over extended content.
 
-The limited context window of LLMs often hampers their ability to fully grasp a user's query or task input and deliver optimal performance. This limitation introduces several challenges:
+The limited context window of LLMs often hampers their ability to fully grasp a user's query or task input and deliver optimal performance. Modern long context LLMs have extended the size of their context windows to 128K, 200K, or even 2M tokens. However, this introduces several challenges:
 
 - The computational complexity of the self-attention mechanism grows quadratically with the context length, restricting the model's capacity to handle extended texts efficiently.
 
@@ -39,40 +39,52 @@ The limited context window of LLMs often hampers their ability to fully grasp a 
 
 - Additionally, capturing long-range dependencies across dispersed information in raw texts remains challenging, making advanced comprehension and reasoning even more difficult.
 
-# 2. Why do we need Test-Time Training (TTT) for long contexts?
+# 2. Why do we need Long Input Fine-Tuning for long contexts?
 
-To address these challenges, various techniques have been developed to extend the sequence length of LLMs, including efficient transformers, external memory mechanisms, and recurrent memory structures<d-cite key="lu2024controlled"></d-cite> <d-cite key="wang2024beyond"></d-cite> <d-cite key="huang2023advancing"></d-cite> <d-cite key="xiong2023effective"></d-cite>. Among these, two prominent approaches have gained significant attention: *Retrieval-Augmented Generation (RAG)* <d-cite key="lewis2020retrieval"></d-cite> <d-cite key="xu2023retrieval"></d-cite> <d-cite key="jiang2024longrag"></d-cite> and *Fine-tuning for Longer Context Windows*<d-cite key="chen2023longlora"></d-cite><d-cite key="peng2023yarn"></d-cite>:
+Various techniques have been developed to extend the sequence length that LLMs can handle, including efficient transformers, external memory mechanisms, and recurrent memory structures<d-cite key="lu2024controlled"></d-cite> <d-cite key="wang2024beyond"></d-cite> <d-cite key="huang2023advancing"></d-cite> <d-cite key="xiong2023effective"></d-cite>. Among these, two prominent approaches have gained significant attention: *Retrieval-Augmented Generation (RAG)* <d-cite key="lewis2020retrieval"></d-cite> <d-cite key="xu2023retrieval"></d-cite> <d-cite key="jiang2024longrag"></d-cite> and *Fine-tuning for Longer Context Windows*<d-cite key="chen2023longlora"></d-cite><d-cite key="peng2023yarn"></d-cite>:
 
-- *RAG* is prone to information loss when conditioned on inaccurate retrievals and may produce hallucinations if the retrieved context contains significant noise.
+- *RAG* stores the extra knowledge in **external databases** and retrieves relevant knowledge on need. However, it is prone to information loss when conditioned on inaccurate retrievals and may produce hallucinations if the retrieved context contains significant noise.
 
-- *Fine-tuning for longer contexts*, while effective, is computationally intensive. Moreover, inference becomes highly inefficient due to processing the entire lengthy context.
+- *Fine-tuning for longer contexts* extends the context window of a pre-trained model and fine-tunes on long documents for adaptation. This method still stores the extra knowledge **in context**. While effective, the inference can become highly inefficient due to processing the entire lengthy context. Moreover, no matter how much the context window length of an LLM is extended, there will still be scenarios involving texts too long to process in context. 
+  
 
-No matter how much the context window length of an LLM is extended, there will always be scenarios involving texts too long to process in their entirety. In real-world applications, relying solely on *in-context learning (ICL)*<d-cite key="dong2022survey"></d-cite> to acquire new knowledge is insufficient. To address this, we propose **leveraging in-parameter knowledge by fine-tuning the model with inputs during inference, regardless of the input length**.
+<!-- In real-world applications, relying solely on *in-context learning (ICL)*<d-cite key="dong2022survey"></d-cite> to acquire new knowledge is insufficient. To address this,  -->
 
-In this blog, we present a novel framework, **TTT for Long Context**, designed to enhance the long-context capabilities of any short-context model. Our approach offers the following advantages:
+In this blog, we explore a third way to store the extra knowledge in the lengthy input. Instead of relying on external databases or extended context window, we propose to leverage **in-parameter knowledge** by
+directly **fine-tuning the long input into the model parameters** and using the fine-tuned model for inference. 
 
-1. **On-the-fly long-context training.** The framework dynamically adapts model parameters to process lengthy inputs as needed, avoiding the resource-intensive process of offline fine-tuning for long-text models or inference on entire long texts. By incorporating segmentation strategies, it effectively **overcomes the challenges associated with fine-tuning on long texts within a short context window**.
+<!-- This method regardless of the input length**. -->
 
-2. **Improved long-context ICL with TTT.** The framework provides an efficient approach to long-context comprehension by combining ICL with TTT. For tasks that require integrating new knowledge, the incorporation of truncated ICL further enhances the model's ability to dynamically utilize relevant information.
+Our novel framework, **Long Input Fine-Tuning (LIFT)**, is designed to enhance the long-context capabilities of any short-context model. It offers the following advantages:
 
-3. **Significant improvement in long-context tasks.** Our evaluations across various benchmarks demonstrate that tasks such as summarization and more complex scenarios, like timeline reordering and reading comprehension, benefit greatly from our method. Moreover, supervised fine-tuning prior to applying TTT further enhances the model's performance on downstream tasks.
+1. **On-the-fly long-context training.** The framework dynamically adapts model parameters to process lengthy inputs as needed, avoiding the resource-intensive processes of offline fine-tuning for long-context models and inference on the entire long input. 
+  
+<!-- By incorporating segmentation strategies, it effectively **overcomes the challenges associated with fine-tuning on long texts within a short context window**. -->
+
+2. **Unlimited input length.** No matter how long the input is, our framework can fine-tune the knowledge into the parameters by segmenting the input into partially overlapping blocks and performing language modeling on them in parallel. Thus, it eliminates the input length restrictions associated with in-context learning (ICL).
+
+<!-- 2. **Improved long-context learning.** The framework effectively improves the long-context comprehension ability of LLMs. For tasks that require integrating new knowledge, the incorporation of truncated ICL further enhances the model's ability to dynamically utilize relevant information. -->
+
+3. **Significant improvement in long-context tasks.** Our evaluations across various benchmarks demonstrate that LIFT greatly benefits tasks such as summarization and complex scenarios like timeline reordering and reading comprehension. Moreover, incorporating supervised fine-tuning prior to applying LIFT further enhances the model's performance on downstream tasks.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure1_method.png" class="img-fluid" title="Figure 1" %}
 <div class="caption">Figure 1. Overview of our method compared with existing methods like truncation, RAG, long context fine-tuning.</div>
 
-# 3. What is TTT for Long Context?
+# 3. What is Long Input Fine-Tuning (LIFT) for Long Context?
 
-As discussed earlier, our method features fine-tuning and inference only on short texts, ensuring high efficiency. In this section, we present how we implement this approach and address potential issues.
+As discussed earlier, our method features fine-tuning and inference with only a short-context model, ensuring high efficiency. In this section, we present how we implement LIFT and address the associated challenges.
 
-- In Section 3.1, we introduce our basic setup, which involves training on context segments.
-- In Section 3.2, we compensate for potential capability loss and enable the model to perform reasoning over long contexts by incorporating auxiliary tasks (AT) during TTT.
-- In Section 3.3, we further refine the model by supervised fine-tuning it on a diverse set of synthetic tasks, making it familiar with our TTT paradigm.
+- In Section 3.1, we introduce our basic setup, which involves training on segments of long input.
+- In Section 3.2, we compensate for potential capability loss and enable the model to perform reasoning over long input by incorporating auxiliary tasks (AT) during fine-tuning.
+- In Section 3.3, we further refine the model by supervised fine-tuning it on a diverse set of long documents and synthetic tasks, making it familiar with our LIFT paradigm and adapts to new long texts better.
 
-## 3.1. Training with context segments
+## 3.1. Training with input segments
 
-LLMs access knowledge either from contexts or their parameters. Unlike ICL, we propose storing test-time knowledge in the parameters by fine-tuning the model on the given context, which is known as **Test-Time Training (TTT)** <d-cite key="liang2023comprehensivesurveytesttimeadaptation"></d-cite><d-cite key="sun2024learninglearntesttime"></d-cite><d-cite key="sun2020testtimetrainingselfsupervisiongeneralization"></d-cite>.
+LLMs access knowledge either from contexts or their parameters. Unlike ICL, we propose storing test-time knowledge in the parameters by fine-tuning the model on the given long input.
 
-We formalize memorizing the context as a language modeling task. Let the context be $$\mathbf{x}=(x_ {1},x_ {2},\dots,x_ {L})$$, where $$L$$ is a very large number. The objective function for the language modeling task is defined as
+<!-- which is known as **Test-Time Training (TTT)** <d-cite key="liang2023comprehensivesurveytesttimeadaptation"></d-cite><d-cite key="sun2024learninglearntesttime"></d-cite><d-cite key="sun2020testtimetrainingselfsupervisiongeneralization"></d-cite>. -->
+
+We formalize memorizing the input as a language modeling task. Let the input be $$\mathbf{x}=(x_ {1},x_ {2},\dots,x_ {L})$$, where $$L$$ is a very large number. The objective function for the language modeling task is defined as
 
 $$
 \mathcal{L}_ {LM}(\mathbf{x};\theta)=\sum_ {i=1}^{L}\log\mathbb{P}(x_ {i}\mid \mathbf{x}_ {1:i-1};\theta),
@@ -80,7 +92,7 @@ $$
 
 where $$\theta$$ is the parameters.
 
-However, directly fine-tuning the model on a long text of length $$L$$ incurs a computational complexity of $$\mathcal{O}(L^{2})$$. A straightforward approach is to truncate $$\mathbf{x}$$ into non-overlapping short segments, denoted as $$\mathbf{x}_ {l_ {1}:r_ {1}},\dots,\mathbf{x}_ {l_ {K}:r_ {K}}$$, as illustrated in Figure 2. The objective function for the language modeling task with the short segments is expressed as
+However, directly fine-tuning the model on a long text of length $$L$$ incurs a computational complexity of $$\mathcal{O}(L^{2})$$ and becomes infeasible when the base model has a context window shorter than $$L$$. A straightforward approach is to truncate $$\mathbf{x}$$ into non-overlapping short segments, denoted as $$\mathbf{x}_ {l_ {1}:r_ {1}},\dots,\mathbf{x}_ {l_ {K}:r_ {K}}$$, as illustrated in Figure 2. The objective function for the language modeling task with the short segments is expressed as
 
 $$
 \mathcal{L}_ {TTT}(\mathbf{x};\theta)=\sum_ {k=1}^{K}\mathcal{L}_ {LM}(\mathbf{x}_ {l_ {k},r_ {k}};\theta).
@@ -97,11 +109,11 @@ $$
 \end{aligned}
 $$
 
-Here $$s$$ controls the length of the overlaps. Empirically, taking $$s=\frac{3}{8}\ell$$ has proven sufficient, which introduces only constant computational complexity overhead.
+Here $$s$$ controls the length of the overlaps. Empirically, taking $$s=\frac{3}{8}\ell$$ proves sufficient in our experiments, which introduces only constant computational complexity overhead.
 
 ## 3.2. Training with auxiliary tasks
 
-Fine-tuning a pretrained LLM for a specific task risks damaging its other capabilities. Similarly, while fine-tuning on the a specific context helps the model memorize the context, it probably degrades other abilities, such as instruction-following. Moreover, effectively memorizing the long context doesn't mean the model can reason based on the long context.
+Fine-tuning a pretrained LLM for a specific task risks damaging its other capabilities. Similarly, while fine-tuning on the input helps the model memorize the input, it probably degrades other abilities, such as instruction-following. Moreover, effectively memorizing the long input doesn't mean the model can reason based on it.
 
 To mitigate potential capability loss and enable the model to reason based on the long context, we propose synthesizing auxiliary question-answering (QA) tasks, denoted as $$(\mathbf{q}_ {i},\mathbf{a}_ {i})_ {i=1}^{m}$$, based on the long context. The objective function of the auxiliary tasks is defined as
 
@@ -120,13 +132,13 @@ There are no strict constraints on the method used to synthesize $$(\mathbf{q}_ 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure2_segmentation.png" class="img-fluid" title="Figure 2" %}
 <div class="caption">Figure 2. Comparison between our segmentation method and the trivial segmentation method.</div>
 
-## 3.3. Further improving with pre-TTT Supervised Fine-Tuning
+## 3.3. Further improvement with pre-LIFT Supervised Fine-Tuning
 
-While our method is applicable to any model capable of test-time fine-tuning, we suggest that pretrained LLMs are unfamiliar with our training method, which leads to suboptimal results. We hypothesize that performance on downstream tasks can be enhanced by learning a new set of parameters through multiple rounds of TTT with auxiliary tasks, a process commonly known as **Supervised Fine-Tuning (SFT)**, which has been shown to be effective for long-context downstream tasks <d-cite key="beltagy2020longformerlongdocumenttransformer"></d-cite><d-cite key="zaheer2021bigbirdtransformerslonger"></d-cite>.
+While our framework LIFT is applicable to any model capable of fine-tuning, we suggest that pretrained LLMs may be unfamiliar with our training method, which leads to suboptimal results. We hypothesize that performance on downstream tasks can be enhanced by learning a new set of parameters through multiple rounds of LIFT with auxiliary tasks, a process commonly known as **Supervised Fine-Tuning (SFT)**, which has been shown to be effective for long-context downstream tasks <d-cite key="beltagy2020longformerlongdocumenttransformer"></d-cite><d-cite key="zaheer2021bigbirdtransformerslonger"></d-cite>. Based on this SFT model, we will then apply the normal LIFT process to further fine-tune the model on the given test input.
 
-We propose an intial fine-tuning phase where the model is trained on a large corpus, combined with QA tasks synthesized based on the corpus. **To ensure the model becomes familiar with our training method, the supervised fine-tuning (SFT) tasks are designed to closely resemble those used in our TTT framework.** Unlike our main approach, where the model is fine-tuned on a single piece of long text, the SFT phase involves fine-tuning on multiple pieces of long text simultaneously, preventing it from overfitting.
+The SFT process involves training the model on a large corpus of long texts, combined with QA tasks synthesized based on the corpus. **To ensure the model becomes familiar with our LIFT method, the supervised fine-tuning (SFT) tasks are designed to closely resemble those used in our LIFT framework.** Unlike our main approach, where the model is fine-tuned on a single piece of long text, the SFT phase involves fine-tuning on multiple pieces of long text simultaneously, preventing it from overfitting.
 
-Formally, we selected the corpus $$(\mathbf{x}^{(i)})_ {i=1}^{N}$$ independently of the test data. For each $$\mathbf{x}^{(i)}$$, we synthesize a set of QA tasks $$(\mathbf{q}_ {j}^{(i)},\mathbf{a}_ {j}^{(i)})_ {j=1}^{K}$$. The objective function for SFT is defined as
+Formally, we select the corpus $$(\mathbf{x}^{(i)})_ {i=1}^{N}$$ independent of the test datasets. For each $$\mathbf{x}^{(i)}$$, we synthesize a set of QA tasks $$(\mathbf{q}_ {j}^{(i)},\mathbf{a}_ {j}^{(i)})_ {j=1}^{K}$$. The objective function for SFT is defined as
 
 $$
 \mathcal{L}_ {SFT}\Big(\big(\mathbf{x}^{(i)}, (\mathbf{q}_ {j}^{(i)},\mathbf{a}_ {j}^{(i)})_ {j=1}^{K}\big)_ {i=1}^{N};\theta\Big)=\frac{1}{N}\sum_ {i=1}^{N}\left(\mathcal{L}_ {TTT}(\mathbf{x}^{(i)};\theta)+\gamma\cdot\mathcal{L}_ {AT}((\mathbf{q}_ {j}^{(i)},\mathbf{a}_ {j}^{(i)})_ {j=1}^{K};\theta)\right).
