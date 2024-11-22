@@ -13,7 +13,7 @@ authors:
   - name: Anonymous
 
 # must be the exact same name as your blogpost
-bibliography: 2025-11-09-linear-gnn-convergence-restated.bib  
+bibliography: 2025-04-28-linear-gnn-convergence-restated.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -54,7 +54,7 @@ The key idea here is to think of the loss function of a linear GNN as a function
 Here, we imagine each **step** in the optimization process as moving forward through a tiny **time interval**. For each **discrete** time point $t=1,2,...,T$, the gradients for learnable weights to loss decide how the weights would be changed, and thus, further decide *how quickly* the curve of loss surges up or down at these time points.
 
 
-{% include figure.html path="assets/img/fig1-V3.png" class="img-fluid" caption='<b>Weights optimization and loss over time</b>. The left figure is for abstract visual representation, sourced from <a href="https://www.freepik.com/premium-ai-image/abstract-landscape-exploring-blue-pink-contour-lines_88044644.htm"> here</a>.' %}
+{% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig1-V3.png" class="img-fluid" caption='<b>Weights optimization and loss over time</b>. The left figure is for abstract visual representation, sourced from <a href="https://www.freepik.com/premium-ai-image/abstract-landscape-exploring-blue-pink-contour-lines_88044644.htm"> here</a>.' %}
 
 
 Now, let the time intervals get infinitely closer and closer. Then the discrete optimization process becomes **continuous**. At any time, correspondingly at any point in the weights' landscape, how fast the loss changes is determined and bounded by a simple expression. <d-footnote> <b>Hint</b>: We'll see how to derive it! </d-footnote> 
@@ -62,13 +62,13 @@ Now, let the time intervals get infinitely closer and closer. Then the discrete 
 The loss is like a light particle *swimming* through a *velocity field*; how fast it surges is controlled by the field **anywhere** as it swims
 This is why this methodology is called **gradient dynamics**.
 
-{% include figure.html path="assets/img/fig2-V2.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig2-V2.png" class="img-fluid" %}
 
 
 By connecting the dots, now the *continuous* change in loss can be described by an Ordinary Differential Equation (ODE). With some gradient calculations and simplifications, the result comes down to this beautiful expression:
 
 
-{% include figure.html path="assets/img/fig3-V3.png" width="100" %}
+{% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig3-V3.png" width="100" %}
 
 Surprising<d-footnote>
 <!-- TODO: Add sth here. To see how strong it is, ... -->
@@ -186,7 +186,7 @@ When differentiating matrices, we often use the Kronecker product together with 
   <b>$\mathrm{vec}[\cdot]$ operator</b>. The $\mathrm{vec}[\cdot]$ operator is used to transform a matrix into a vector by stacking its columns on top of one another in a single column vector. For example, if $A$ is an $m \times n$ matrix, $\mathrm{vec}[A]$ rearranges all the <b>columns</b> of $A$ into a vector of size $mn \times 1$. 
   <br><br>
   <b>Kronecker product</b>. The Kronecker product, denoted by $\otimes$, is an operation on two matrices $A$ and $B$, resulting in a block matrix. Specifically, for an $m \times n$ matrix $A$ and a $p \times q$ matrix $B$, the Kronecker product $A \otimes B$ is an $mp \times nq$ matrix formed by multiplying each element of $A$ by the entire matrix $B$. </d-footnote> for their basic definitions if you need! We also put an illustrative image here: 
-  {% include figure.html path="assets/img/fig0_1.png" width="100" %}
+  {% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig0_1.png" width="100" %}
 
 
 - We'll frequently encounter the following commonly used expression in the sections ahead.  
@@ -230,13 +230,13 @@ $$ L = \| \tilde{W}_H \tilde{G}_H - Y \|_{\mathrm{F}}^2. $$
 
 It is easy to get $\nabla_{\tilde{W}_H}L = 2(\hat{Y}-Y)\tilde{G}_H^{\top}$. 
 
-{% include figure.html path="assets/img/fig4-V4.png" width="100" %}
+{% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig4-V4.png" width="100" %}
 
 
 Now, let's proceed by deriving gradients for all the learnable weight matrices. 
 The backpropagation process is illustrated in the image below.
 
-{% include figure.html path="assets/img/fig5-V3.png" width="100" %}
+{% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig5-V3.png" width="100" %}
 
 Let's write out the expressions:
 
@@ -447,8 +447,6 @@ $$
 
 where $L^*_H$ stands for the optimal loss for this $H$-layer linear GNN.
 
----
-
 Combining the derivation to $L$, Eq.(\ref{dynamics}) comes into: 
 
 $$
@@ -457,6 +455,8 @@ $$
      \frac{\mathrm{d}}{\mathrm{d} t}L \leq - 4\lambda_{\rm min}\sigma^2_{\rm min}(\tilde{G}_H) (L - L^*_H).
 \end{equation}
 $$
+
+---
 
 ### Step 3. Solving the ODE.
 
@@ -546,13 +546,13 @@ Now, let's dive into the chaos — think a bit deeper, and question what really 
 
 The paper we're talking about makes a bold claim. But does it always hold up in practice? Do real GNNs (when framed as a regression problem) truly guarantee convergence?
 
-{% include figure.html path="assets/img/fig0_2.png" width="100" caption="Theorem in the paper."%}
+{% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig0_2.png" width="100" caption="Theorem in the paper."%}
 
 Some gaps are pretty obvious, and the author points them out: typical GNNs aren't linear, and researchers use more advanced optimizers than just gradient descent. However, there’s a subtler issue regarding the continuous perspective behind it.
 
 Take another look at these two diagrams I drew earlier:
 
-{% include figure.html path="assets/img/fig2_1.png" width="100" %}
+{% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig2_1.png" width="100" %}
 
 ### Dynamics at Discrete Moments.
 
