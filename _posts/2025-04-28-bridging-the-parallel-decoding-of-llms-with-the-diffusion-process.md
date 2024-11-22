@@ -136,16 +136,20 @@ CLLMs is jointly optimized with two losses, one guaranteeing the prediction of m
 **Consistency Loss.** For a prompt x with the Jacobi trajectory $$J$$ , directly push CLLM to output $$y^∗$$ with $$y$$ as the input by minimizing the following loss:
 
 $$
-\mathcal{L}_{GC} = \mathbb{E}_{(x, \mathcal{I}) \sim \mathcal{D}, y \sim \mathcal{I}} \left[ \sum_{i=1}^{n} D \left( q_{\theta^-} (\cdot | y_{<i}^{*}, x) \| q_{\theta} (\cdot | y_{<i}, x) \right) \right]
+\mathcal{L}_{GC} = \mathbb{E}_{(x, \mathcal{I}) \sim \mathcal{D}, y \sim \mathcal{I}} [ \sum_{i=1}^{n} D ( q_{\theta^-} (\cdot | y_{<i}^{*}, x) \| q_{\theta} (\cdot | y_{<i}, x) ) ]
 $$
 
 Alternatively, the adjacent states $$y(j), y(j+1)$$ in the Jacobi trajectory J are demanded to yield the same outputs:
 
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/consistency_loss2.jpg" class="consistency_loss2" %}
+$$
+\mathcal{L}_{LC} = \mathbb{E}_{(x, \mathcal{I}) \sim \mathcal{D}, (y^{(j)}, y^{(j+1)}) \sim \mathcal{I}} [ \sum_{i=1}^{n} D ( q_{\theta^-} (\cdot | y_{<i}^{(j+1)}, x) \| q_{\theta} (\cdot | y_{<i}^{(j)}, x) ) ].
+$$
 
-**AR Loss.** To avoid deviating from the distribution of the target LLM, we incorporate the traditional AR loss based on the generation l of the target LLM p:
+**AR Loss.** To avoid deviating from the distribution of the target LLM, we incorporate the traditional AR loss based on the generation $$l$$ of the target LLM $$p$$:
 
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/ar_loss.jpg" class="img-fluid" %}
+$$
+\mathcal{L}_{AR} = \mathbb{E}_{(x, l) \sim \mathcal{D}} [ - \sum_{i=1}^{N} \log q_{\theta}(l_i \mid l_{<i}, x) ].
+$$
 
 The objective mentioned above is analogous to that of Consistency Models, as outlined by Song <d-cite key="song2023consistency"></d-cite>. Consistency Models effectively address the limitations encountered by diffusion models, which are hindered by a slow iterative sampling process. By mapping any point along the probability flow ordinary differential equation (ODE) of the diffusion process back to the original point, which corresponds to the initial image, in just a single step, consistency models significantly streamline the process and enhance efficiency.
 
@@ -157,11 +161,19 @@ Diffusion-LM <d-cite key="li2022diffusion"></d-cite> develops a non-autoregressi
 
 The framework of Diffusion-LM is shown in Figure. To apply a continuous diffusion model to discrete text, Diffusion-LM adds a Markov transition from discrete words $$w$$ to $$x_0$$ in the forward process, parametrized by $$ q(x_0,w) = \mathcal{N}(\text{EMB}(w), 0I)$$. $$\text{EMB}(w_i)$$ is an embedding function that maps each word to a vector in $$\mathbb{R}^d$$. In the reverse process, Diffusion-LM rounds a predicted $$x_0$$ back to discrete text by adding a trainable rounding step, parameterized by $$p_\theta(w,x_0) = \prod_{i=1}^n p_\theta(w_i,x_i)$$, where $$p_\theta(w_i,x_i)$$ is a softmax distribution. Rounding is achieved by choosing the most probable word for each position, according to $$\text{arg max} p_\theta(w,x_0) = \prod_{i=1}^n p_\theta(w_i,x_i)$$. Ideally, this argmax-rounding would be sufficient to map back to discrete text, as the denoising steps should ensure that $$x_0$$ lies exactly on the embedding of some word. The training objectives is:
 
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/diffu_lm_loss.png" class="diffu_lm_loss" %}
+$$
+\mathcal{L}_{\text{vlb}}^{e2e}(\mathbf{w}) = \mathbb{E}_{q_{\phi}(\mathbf{x}_0 | \mathbf{w})} [ \mathcal{L}_{\text{vlb}}(\mathbf{x}_0) + \log q_{\phi}(\mathbf{x}_0 | \mathbf{w}) - \log p_{\theta}(\mathbf{w} | \mathbf{x}_0) ],
+$$
 
-**Controllable Text Generation** By performing control on the sequence of continuous latent variables $$x_{0:T}$$ defined by Diffusion-LM, Controllable Text Generation can be achieved. Specifically, controlling $$x_{0:T}$$ is equivalent to decoding from the posterior $$p(x_{0:T},c) = \prod_{t=1}^T p(x_{t-1},x_t, c)$$, and we decompose this joint inference problem into a sequence of control problems at each diffusion step: $$p(x_{t-1},x_t, c) \propto p(x_{t-1},x_t) \cdot p(c,x_{t-1}, x_t)$$. We further simplify $$p(c,x_{t-1}, x_t) = p(c,x_{t-1})$$ via conditional independence assumptions from prior work on controlling diffusions. Consequently, for the $t$-th step, the gradient update on $$x_{t-1}$$ is:
+$$
+\mathcal{L}_{\text{simple}}^{e2e}(\mathbf{w}) = \mathbb{E}_{q_{\phi}(\mathbf{x}_0, \mathbf{x}_1 | \mathbf{w})} [ \mathcal{L}_{\text{simple}}(\mathbf{x}_0) + \| \text{Emb}(\mathbf{w}) - \mu_{\theta}(\mathbf{x}_1, 1) \|^2 - \log p_{\theta}(\mathbf{w} | \mathbf{x}_0) ].
+$$
 
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/controllable_generation.png" class="controllable_generation" %}
+**Controllable Text Generation** By performing control on the sequence of continuous latent variables $$x_{0:T}$$ defined by Diffusion-LM, Controllable Text Generation can be achieved. Specifically, controlling $$x_{0:T}$$ is equivalent to decoding from the posterior $$p(x_{0:T},c) = \prod_{t=1}^T p(x_{t-1},x_t, c)$$, and we decompose this joint inference problem into a sequence of control problems at each diffusion step: $$p(x_{t-1},x_t, c) \propto p(x_{t-1},x_t) \cdot p(c,x_{t-1}, x_t)$$. We further simplify $$p(c,x_{t-1}, x_t) = p(c,x_{t-1})$$ via conditional independence assumptions from prior work on controlling diffusions. Consequently, for the $$t$$-th step, the gradient update on $$x_{t-1}$$ is:
+
+$$
+\nabla_{\mathbf{x}_{t-1}} \log p(\mathbf{x}_{t-1} \mid \mathbf{x}_t, \mathbf{c}) = \nabla_{\mathbf{x}_{t-1}} \log p(\mathbf{x}_{t-1} \mid \mathbf{x}_t) + \nabla_{\mathbf{x}_{t-1}} \log p(\mathbf{c} \mid \mathbf{x}_{t-1}).
+$$
 
 where both $$\log p(x_{t-1},x_t)$$ and $$\log p(c,x_{t-1})$$ are differentiable: the first term is parameterized by Diffusion-LM, and the second term is parameterized by a neural network classifier. Similar to work in the image setting, we train the classifier on the diffusion latent variables and run gradient updates on the latent space $$x_{t-1}$$ to steer it towards fulfilling the control.
 
@@ -175,7 +187,9 @@ where both $$\log p(x_{t-1},x_t)$$ and $$\log p(c,x_{t-1})$$ are differentiable:
 
 Consequently, the difficulty of learning various subgoals can differ significantly. Given only the left context, some subgoals may require substantially more data to learn or may even be infeasible to learn. To address the issue of subgoal imbalance, this paper introduces multi-granularity diffusion modeling (MDM), which incorporates an additional token-level reweighting mechanism to enhance training efficiency:
 
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/mdm.jpg" class="mdm" %}
+$$
+L_{MDM} = \sum_{n=1}^{N} \sum_{t=1}^{T} w(t) v(\mathbf{x}_{t,n}) u(\mathbf{x}_0, \mathbf{x}_t, n; \boldsymbol{\theta}),
+$$
 
 
 where $$v(x_t,n)$$ is the adaptive token-level reweighting term. Setting larger $$v(x_t,n)$$ emphasizes harder tokens. This approach prioritizes different subgoals based on their difficulty during the learning process, leading to more effective learning outcomes and faster convergence.
