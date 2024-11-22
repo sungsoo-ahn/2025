@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: MasterMind
-description: When LLMs encounter strategic decision-making games such as DouDiZhu or Go, a fascinating interplay emerges between advanced computational intelligence and intricate human-designed game mechanics. Our pioneering exploration delves into the complex reasoning logic and the upper limits of LLMs' strategic capabilities within these games. Furthermore, these games may serve as potent evaluative tools and catalysts for enhancing the logical reasoning prowess of LLMs, potentially unveiling novel dimensions of LLM thought processes and inference mechanisms.
+description: When LLMs encounter strategic decision-making games such as DouDiZhu or Go, a fascinating interplay emerges between advanced computational intelligence and intricate human-designed game mechanics. Our pioneering exploration delves into the complex reasoning logic and the upper limits of LLMs' strategic capabilities within these games. Furthermore, these games may serve as potent evaluative tools and catalysts for enhancing the logical reasoning prowess of LLMs, offering the potential to uncover new dimensions of their thought processes and inference mechanisms.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -160,6 +160,7 @@ Some example contents of these datasets can be viewed in the following table.
 <div class="l-page">
   <iframe src="{{ 'assets/html/2025-04-28-mastermind/doudizhu_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
 </div>
+
 
 ## Mastermind-Go
 
