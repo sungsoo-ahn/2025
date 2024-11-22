@@ -238,14 +238,14 @@ The backpropagation process is illustrated in the image below.
 
 {% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig5-V3.png" width="100" %}
 
-Let's write out the expressions:
+Let's write out the explict expressions of gradients:
 
 $$
 \begin{eqnarray}
 \label{gradients}
 \begin{aligned}
     \nabla_{W} L &= \nabla_{\tilde{W}_H} L (B_{(H)} \cdots B_{(1)})^\top, \\
-    \nabla_{B_{\ell}} L &= (W B_{(H)}\cdots B_{(\ell+1)})^\top \nabla_{\tilde{W}_H} L  (B_{(\ell-1)} \cdots B_{(1)})^\top, \ell = 1, \ldots, H,
+    \nabla_{B_{\ell}} L &= (W B_{(H)}\cdots B_{(\ell+1)})^\top \nabla_{\tilde{W}_H} L  (B_{(\ell-1)} \cdots B_{(1)})^\top, \ell = 1, \ldots, H.
 \end{aligned}
 \end{eqnarray}
 $$
