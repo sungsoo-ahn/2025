@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Perpetual Text Generation Using Dynamic Temperature Adjustment
-description: Large Lnaugage Models have demonstrated proficiency across all fields, and has seen huge advancements in the last couple years. However, they often falter when generating extended outputs. This limitation restricts their effectiveness in application requiring sustained text production. We introduce the concept of perpetuity, defining a model's ability to continue generating new tokens indefinitely. To overcome the challenge of early termination, we propose a novel method called Perpetual Text Generation using Dynamic Temperature Adjustment.
+description: Large Language Models have demonstrated proficiency across all fields, and has seen huge advancements in the last couple years. However, they often falter when generating extended outputs. This limitation restricts their effectiveness in application requiring sustained text production. We introduce the concept of perpetuity, defining a model's ability to continue generating new tokens indefinitely. To overcome the challenge of early termination, we propose a novel method called Perpetual Text Generation using Dynamic Temperature Adjustment.
 date: 2025-11-22
 future: true
 htmlwidgets: true
@@ -34,7 +34,7 @@ bibliography: 2025-11-22-perpetual-text.bib
 #   - please use this format rather than manually creating a markdown table of contents.
 toc:
   - name: Introduction
-  - name: When do Models stop Generating Tokens?
+  - name: When do Models stop Generating New Tokens?
   - name: Motivating Experiements
     subsections:
     - name: Block-wise Analysis
@@ -69,22 +69,75 @@ _styles: >
 
 Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling.
 
-## Equations
+# Introduction
 
-This theme supports rendering beautiful math in inline and display modes using [MathJax 3](https://www.mathjax.org/) engine.
-You just need to surround your math expression with `$$`, like `$$ E = mc^2 $$`.
-If you leave it inside a paragraph, it will produce an inline expression, just like $$ E = mc^2 $$.
+The AI revolution taking place in the last half decade has been headlined by Large Language Models (LLMs). These transformer models have demonstrated proficiency in a variety of tasks across all fields, and many are adopting LLMs into their regular workflow. Such examples include extended literature reviews, research papers and reports, and even the recent GPT-o1 model, which requires long output for its chain-of-thought reasoning.
 
-To use display mode, again surround your expression with `$$` and place it as a separate paragraph.
-Here is an example:
+The unique ability of these models to quickly follow and execute instructions makes it an important and effective tool. However, with rising demand comes rising expectations of model abilities.
 
-$$
-\left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
-$$
+In the last couple of years alone, there have been drastic improvements in LLMs including context capacity, speed, and logical reasoning. One of the most notable is the ability to input long contexts to models beyond the pretraining sequence length.
 
-Note that MathJax 3 is [a major re-write of MathJax](https://docs.mathjax.org/en/latest/upgrading/whats-new-3.0.html) 
-that brought a significant improvement to the loading and rendering speed, which is now 
-[on par with KaTeX](http://www.intmath.com/cg5/katex-mathjax-comparison.php).
+But what about the *ability to produce long outputs*? We’ve improved language models with the freedom to listen and understand, but we have yet to *provide them the ability to respond with outputs with equal and/or longer lengths*.
+
+We define a large language model’s ability to respond to a prompt as **perpetuity**. In technical terms, perpetuity is the ability of a model to continue generating new tokens. I The current token generation process is sometimes misleading by the nonsensical nature of “\n \n \n” data. We found this led to the generation of a halt <EOS> token, which stops output generation. 
+
+To combat decreasing entropy leading to the generation of the EOS token, we propose a new method: **Perpetual Text Generation using Dynamic Temperature Adjustment**. By dynamically increasing temperature, we provide the model with an opportunity to produce alternative continuations – therefore prolonging output. 
+
+# When do Models Stop Generating New Tokens?
+
+In transformer-based language models, particularly decoder-only architectures used for text generation, the process of generating tokens continues sequentially until a stopping criterion is met. 
+
+There are a couple of ways that a model can do this:
+### Setting a max_token parameter
+By setting a maximum number of tokens, you can override the model's default tendencies and encourage it to produce longer outputs. However, simply increasing the token limit doesn't guarantee that the model will generate more extended content, as it may still generate the EOS token prematurely due to its learned patterns.
+
+### Hitting a stopping criterion <EOS> token
+- If no max_token parameter is set, then the model continues generating tokens until it outputs the <EOS> token, indicating that it should stop.
+- Training with <EOS> Tokens: During training, models are exposed to sequences that conclude with a special end-of-sequence token, often denoted as <EOS> (ref: llama 2 paper) or <|eot_id|> (ref: llama 3 paper). This token signifies the completion of a coherent piece of text.
+- Learned Termination Behavior: Through exposure to these tokens, the model learns to predict an <EOS> token when it determines that a logical conclusion has been reached in the context of the generated text.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Images and Figures
