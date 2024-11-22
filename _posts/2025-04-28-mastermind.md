@@ -277,6 +277,7 @@ Additionally, comparing the results with and without Chain-of-Thought (CoT) trai
 |                           | v.s. RLCard ↑ | **v.s. DouZero ↑** |
 | ------------------------- | ------------- | ------------------ |
 | LLaMA-2-7B                | 0%            | 0%                 |
+| LLaMA-2-7B (few-shot)     | 12%           | 3%                 |
 | Mastermind-Dou w / o prob | 78%           | 33%                |
 | Mastermind-Dou with prob  | **90%**       | **41%**            |
 | DouZero (Expert)          | 90%           | 43%                |
