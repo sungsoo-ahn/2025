@@ -188,6 +188,10 @@ Figure 5. An illustration of the planning task. <d-cite key="ye2024beyond"></d-c
 {% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/the_planning_task.jpg" class="the_planning_task" %}
 </div></div>
 
+<div style="width: 70%; margin: 0 auto;"> <div class="col-sm mt-3 mt-md-0">
+{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/the_planning_task.jpg" class="the_planning_task" %}
+</div></div>
+
 Consequently, the difficulty of learning various subgoals can differ significantly. Given only the left context, some subgoals may require substantially more data to learn or may even be infeasible to learn. To address the issue of subgoal imbalance, this paper introduces multi-granularity diffusion modeling (MDM), which incorporates an additional token-level reweighting mechanism to enhance training efficiency:
 
 $$
