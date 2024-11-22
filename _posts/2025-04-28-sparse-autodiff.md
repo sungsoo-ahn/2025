@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: An Illustrated Guide to Automatic Sparse Differentiation
-description: In numerous applications of machine learning, Hessians and Jacobians exhibit sparsity, a property that can be leveraged to vastly accelerate their computation. While the usage of automatic differentiation in machine learning is ubiquitous, automatic sparse differentiation (ASD) remains largely unknown. This post demystifies ASD by explaining its key components and their roles in the computation of both sparse Jacobians and Hessians. We conclude with a practical demonstration showcasing the performance benefits of ASD.
+description: In numerous applications of machine learning, Hessians and Jacobians exhibit sparsity, a property that can be leveraged to vastly accelerate their computation. While the usage of automatic differentiation in machine learning is ubiquitous, automatic sparse differentiation (ASD) remains largely unknown. This post introduces ASD, explaining its key components and their roles in the computation of both sparse Jacobians and Hessians. We conclude with a practical demonstration showcasing the performance benefits of ASD.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -235,8 +235,8 @@ and we waste memory storing those zero coefficients.
 
 In modern neural network architectures, which can contain over one trillion parameters,
 computing intermediate Jacobians is not only inefficient: it exceeds available memory.
-AD circumvents this limitation by using **linear maps**, 
-lazy operators that act exactly like matrices but without explicitly storing every coefficient in memory.
+AD circumvents this limitation by using **linear maps, lazy operators that act exactly like matrices** 
+but without explicitly storing every coefficient in memory.
 
 The differential $Df: \mathbf{x} \longmapsto Df(\mathbf{x})$ is a linear map which provides the best linear approximation of $f$ around a given point $\mathbf{x}$.
 We can rephrase  the chain rule as a **composition of linear maps** instead of a product of matrices:
@@ -291,6 +291,7 @@ $$ \vvc{3} = \Dfc(\vvc{1}) = \Jfc \cdot \vvc{1} \, ,$$
 
 the JVP of our composed function $f$.
 
+The computational cost of one JVP of $f$ is approximately the same as the cost of one evaluation of $f$. 
 **Note that we did not compute intermediate Jacobian matrices at any point** – we only propagated vectors through linear maps.
 
 ### Reverse-mode AD
@@ -304,37 +305,42 @@ resulting in **reverse-mode AD**, shown in Figure 5.
 </div>
 
 This is commonly called a **vector-Jacobian product** (VJP) or **pullback**.
-Just like forward mode, reverse mode is also matrix-free: **no intermediate Jacobians are computed at any point**.
+Just like forward mode, the cost of one VJP of $f$ is approximately the same as the cost of one evaluation of $f$. 
+Reverse mode is also matrix-free: **no intermediate Jacobians are computed at any point**.
 
 ### From linear maps back to Jacobians
 
-The linear map formulation allows us to avoid intermediate Jacobian matrices in long chains of function compositions.
-But can we use this machinery to recover the Jacobian of the composition $f$ itself?
+This machinery can be used to turn a composed linear map (lazy matrix representation) 
+into a dense matrix in a computationally expensive process we call **materialization**.
+Counterintuitively, this process does not **materialize any intermediate Jacobians**.
 
-As shown in Figure 6, we can **compute Jacobians column by column** in forward mode.
-Evaluating the linear map $Df(\mathbf{x})$ on the $i$-th standard basis vector yields the $i$-th column of the Jacobian $J_f(\mathbf{x})$:
+Figure 6 demonstrates how to **materialize Jacobians column by column** in forward mode.
+Evaluating the linear map $Df(\mathbf{x})$ on the $i$-th standard basis vector materializes the $i$-th column of the Jacobian $J_{f}(\mathbf{x})$:
 
 $$ \Dfc(\vbc{i}) = \left( \Jfc \right)_\colorv{i,:} $$
 
 Thus, recovering the full $m \times n$ Jacobian requires one JVP with each of the $n$ standard basis vectors of the **input space**.
+Once again, we distinguish between linear maps and materialized matrices by using dashed and solid lines respectively:
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/forward_mode.svg" class="img-fluid" %}
 <div class="caption">
-    Figure 6: Forward-mode AD reconstructs Jacobians column-by-column.
+    Figure 6: Forward-mode AD materializes Jacobians column-by-column.
 </div>
 
-As illustrated in Figure 7, we can also **compute Jacobians row by row** in reverse mode.
+As illustrated in Figure 7, we can also **materialize Jacobians row by row** in reverse mode.
 Unlike forward mode in Figure 6,
 this requires one VJP with each of the $m$ standard basis vectors of the **output space**.
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/reverse_mode.svg" class="img-fluid" %}
 <div class="caption">
-    Figure 7: Reverse-mode AD reconstructs Jacobians row-by-row.
+    Figure 7: Reverse-mode AD materializes Jacobians row-by-row.
 </div>
+
+These processes of materialization are computationally expensive due the fact that each JVP and VJP costs approximately as much as the evaluation of the function $f$ itself.
 
 <aside class="l-body box-note" markdown="1">
 Since neural networks are usually trained using scalar loss functions,
-reverse-mode AD only requires the evaluation of a single VJP to compute a gradient, which is rather cheap (see Baur and Strassen <d-cite key="baurComplexityPartialDerivatives1983"></d-cite>).
+reverse-mode AD only requires the evaluation of a single VJP to materialize a gradient, which is rather cheap (see Baur and Strassen <d-cite key="baurComplexityPartialDerivatives1983"></d-cite>).
 This makes reverse-mode AD the method of choice for machine learners,
 who typically use the term backpropagation.
 </aside>
@@ -344,7 +350,7 @@ who typically use the term backpropagation.
 ### Sparse matrices
 
 Sparse matrices are matrices in which most elements are zero.
-As shown in Figure 8, we refer to linear maps as "sparse linear maps" if their matrix representation in the standard basis is sparse.
+As shown in Figure 8, we refer to linear maps as "sparse linear maps" if they materialize to sparse matrices.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -373,7 +379,7 @@ We say that two columns or rows of the Jacobian matrix are **structurally orthog
 In other words, the sparsity patterns of the columns are non-overlapping vectors,
 whose dot product is always zero regardless of their actual values.
 
-The core idea of ASD is that **we can compute multiple structurally orthogonal columns (or rows) with a single JVP (or VJP).**
+The core idea of ASD is that **we can materialize multiple structurally orthogonal columns (or rows) with a single JVP (or VJP).**
 This trick was first suggested in 1974 by Curtis, Powell and Reid <d-cite key="curtisEstimationSparseJacobian1974"></d-cite>.
 Since linear maps are additive, it always holds that for a set of basis vectors,
 
@@ -395,7 +401,7 @@ we obtain the sum of the first, second and fifth column of our Jacobian.
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/sparse_ad.svg" class="img-80" %}
 <div class="caption">
-    Figure 9: Computing structurally orthogonal columns of a Jacobian in forward mode.
+    Figure 9: Materializing structurally orthogonal columns of a Jacobian in forward mode.
 </div>
 
 
@@ -412,12 +418,12 @@ This final decompression step is shown in Figure 10.
     </div>
 </div>
 <div class="caption">
-    Figure 10: Computing a Jacobian with forward-mode ASD: (a) compressed evaluation of orthogonal columns (b) decompression to Jacobian matrix
+    Figure 10: Materializing a Jacobian with forward-mode ASD: (a) compressed evaluation of orthogonal columns (b) decompression to Jacobian matrix
 </div>
 
 The same idea can also be applied to reverse-mode AD, as shown in Figure 11.
 Instead of leveraging orthogonal columns, we rely on orthogonal rows.
-We can then compute multiple rows in a single VJP.
+We can then materialize multiple rows in a single VJP.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -428,7 +434,7 @@ We can then compute multiple rows in a single VJP.
     </div>
 </div>
 <div class="caption">
-    Figure 11: Computing a Jacobian with reverse-mode ASD: (a) compressed evaluation of orthogonal rows (b) decompression to Jacobian matrix
+    Figure 11: Materializing a Jacobian with reverse-mode ASD: (a) compressed evaluation of orthogonal rows (b) decompression to Jacobian matrix
 </div>
 
 ### Pattern detection and coloring
@@ -436,11 +442,11 @@ We can then compute multiple rows in a single VJP.
 Unfortunately, our initial assumption had a major flaw.
 Since AD only gives us a composition of linear maps and linear maps are black-box functions,
 the structure of the Jacobian is completely unknown.
-In other words, **we cannot tell which rows and columns form structurally orthogonal groups** without first obtaining a Jacobian matrix.
-But if we compute this Jacobian via traditional AD, then ASD isn't necessary anymore.
+In other words, **we cannot tell which rows and columns form structurally orthogonal groups** without first materializing a Jacobian matrix.
+But if we materialize this Jacobian via traditional AD, then ASD isn't necessary anymore.
 
 The solution to this problem is shown in Figure 12 (a):
-in order to find structurally orthogonal columns (or rows), we don't need to compute the full Jacobian.
+in order to find structurally orthogonal columns (or rows), we don't need to materialize the full Jacobian.
 Instead, it is enough to **detect the sparsity pattern** of the Jacobian.
 This binary-valued pattern contains enough information to deduce structural orthogonality.
 From there, we use a **coloring algorithm** to group orthogonal columns (or rows) together.
@@ -524,7 +530,7 @@ For instance, output $i=2$ was influenced by inputs $j=4$ and $j=5$.
 ### Efficient propagation
 
 Figure 14 shows the traditional forward mode pass we want to avoid:
-propagating a full identity matrix through a linear map would compute the Jacobian matrix of $f$, 
+propagating a full identity matrix through a linear map would materialize the Jacobian matrix of $f$, 
 but also all intermediate linear maps.
 As previously discussed, this is not a viable option due to its inefficiency and high memory requirements.
 
@@ -629,7 +635,7 @@ This constraint ensures that columns in the same color group are indeed structur
 If we can find a coloring which uses the smallest possible number of distinct colors, it will minimize the number of groups, and thus the computational cost of the AD step.
 
 Figure 17 shows an optimal coloring using two colors, 
-whereas Figure 18 uses a suboptimal third color, requiring an extra JVP to compute the Jacobian 
+whereas Figure 18 uses a suboptimal third color, requiring an extra JVP to materialize the Jacobian 
 and therefore increasing the computational cost of ASD.
 Figure 19 shows an infeasible coloring: vertices 2 and 4 on the graph are adjacent, but share a color.
 This results in overlapping columns.
@@ -665,8 +671,8 @@ A crucial hyperparameter is the choice of ordering, for which various criteria h
 A more advanced coloring technique called **bicoloring** allows combining forward and reverse modes, because the recovery of the Jacobian leverages both columns (JVPs) and rows (VJPs) <d-cite key="hossainComputingSparseJacobian1998"></d-cite> <d-cite key="colemanEfficientComputationSparse1998"></d-cite>.
 
 Figure 20 shows bicoloring on a toy example in which no pair of columns or rows is structurally orthogonal.
-Even with ASD, the Jacobian computation would require $5$ JVPs in forward-mode or $4$ VJPs in reverse mode.
-However, if we use both modes simultaneously, we can recover the full Jacobian by computing only $1$ JVP and $1$ VJP.
+Even with ASD, materializing the Jacobian would require $5$ JVPs in forward-mode or $4$ VJPs in reverse mode.
+However, if we use both modes simultaneously, we can materialize the full Jacobian by computing only $1$ JVP and $1$ VJP.
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/bicoloring.svg" class="img-50" %}
 <div class="caption">
