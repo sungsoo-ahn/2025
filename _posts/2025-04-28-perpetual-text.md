@@ -2,7 +2,7 @@
 layout: distill
 title: Perpetual Text Generation Using Dynamic Temperature Adjustment
 description: Large Language Models have demonstrated proficiency across all fields, and has seen huge advancements in the last couple years. However, they often falter when generating extended outputs. This limitation restricts their effectiveness in application requiring sustained text production. We introduce the concept of perpetuity, defining a model's ability to continue generating new tokens indefinitely. To overcome the challenge of early termination, we propose a novel method called Perpetual Text Generation using Dynamic Temperature Adjustment.
-date: 2025-11-22
+date: 2025-04-28
 future: true
 htmlwidgets: true
 hidden: false
