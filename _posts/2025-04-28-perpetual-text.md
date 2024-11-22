@@ -26,7 +26,7 @@ authors:
       name: IAS, Princeton
 
 # must be the exact same name as your blogpost
-bibliography: 2025-11-22-perpetual-text.bib  
+bibliography: 2025-04-28-perpetual-text.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
