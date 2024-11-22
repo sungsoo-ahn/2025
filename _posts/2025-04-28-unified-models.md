@@ -345,7 +345,16 @@ The fundamental difference between Autoregressive Models (*e.g.,* EMU3, Chameleo
 Autoregressive (AR) models and mixed architectures (AR + diffusion) differ in how they handle data, particularly for high-dimensional modalities like images and videos. AR models treat all modalities uniformly by sequentially predicting the next token, which works well for temporal tasks but struggles with capturing spatial dependencies. In contrast, mixed architectures combine AR for global structure and diffusion for spatial modeling, allowing all tokens to interact during generation. This results in more coherent outputs for image and video tasks, as diffusion handles spatial distributions through parallel denoising. While AR models are simple and efficient, mixed architectures offer better performance for spatial data at the cost of increased complexity and computational demand.
 
 {% include figure.html path="assets/img/2025-04-28-unified-models/11581732176566_.pic.jpg" class="img-fluid" %}
+
+
 </aside>
+
+Autoregressive models and mixed architectures (such as AR+Diffusion) differ primarily in the type of attention mechanisms they employ, which significantly impacts their performance and the way they handle modality alignment: 
+
+* **Autoregressive Models-Causal Attention:** Using causal masks where tokens only attend to their previous tokens. This creates a strict unidirectional flow of information.
+
+* **AR+Diffusion-Full Attention:**  Using full attention masks (bi-directional), allowing tokens to attend to both past and future tokens. This enables a richer, more flexible way of modeling the relationships between different parts of the input. 
+
 
 
 The modeling differences and the respective strengths and weaknesses of these two approaches are outlined below:
@@ -500,7 +509,7 @@ $$
 
 Where $𝑚$ represents the embedding of a modality (image, audio, etc.). $sim(⋅,⋅)$ is the similarity function (*e.g.,* cosine similarity). *𝜏* is the temperature hyperparameter that controls the sharpness of the distribution. *𝑁* is the number of possible modality samples.
 
-### Generalized
+### Generalized Alignment
 Generalized Alignment is an approach to multimodal learning that does not center any single modality, like text or image, but instead creates a unified space for all modalities based on a knowledge base or feature-centered approach. This method aims to align different modalities by utilizing shared characteristics derived from a broader knowledge base, rather than anchoring on one modality's features.
 
 In generalized alignment, the learning model is trained to map various modalities (e.g., text, images, audio) into a shared feature space without giving preference to one modality over others. The alignment is based on common semantic features or concepts that exist across modalities, allowing the model to learn more flexible, cross-modal relationships.
