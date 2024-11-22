@@ -40,6 +40,13 @@ _styles: >
     text-align: center;
     font-size: 16px;
   }
+  #hidden {
+  display: none;
+  background: #cccccc;
+  }
+  :checked + #hidden {
+  display: block;
+  }
 ---
 
 
@@ -49,13 +56,13 @@ Speaking of permutation invariance, you may already have your faviorite ways to 
 But here we'll introduce a simple yet general Taylor series-based technique necessary for studying complex symmetry patterns. Specifically, we need to enable efficient universal learners -- that can represent any such invariant or equivariant functions. 
 For advanced readers, the general idea follows [Equivariant Multilayer Perceptrons (EMLP)](https://github.com/mfinzi/equivariant-MLP) but with a high-order twist. 
 
-Given the desired input-output shapes and symmetry constraints, we would proceed as the following: 
-1. Express a general function that matches the input-output shapes in Taylor series form, 
-2. Map the symmetry constraints into equations about the Taylor series coefficients,
-3. Solve the equations for free parameters and the parameter sharing patterns, and parameterize the function using the free parameters,
+Given the desired input-output shapes and symmetry constraints, we would proceed with the following steps: 
+1. Express a general function that matches the input-output shapes in Taylor series form.
+2. Map the symmetry constraints into equations about the Taylor series coefficients.
+3. Solve the equations for free parameters and the parameter sharing patterns, and parameterize the function using the free parameters.
 4. Simplify the parameterization for efficient computation.
 
-Let's start from 1D permutation invariance as an example to demonstrate how the technique works.
+Let's start from 1D permutation invariance as an example to demonstrate how the process works.
 
 
 ### I.1 Example: 1D permutation invariance
@@ -196,12 +203,10 @@ $$
 y=f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2} & x_{3}\end{bmatrix} \right) =f\left( \begin{bmatrix} x_{3} & x_{0} & x_{1} & x_{2}\end{bmatrix} \right)
 $$
 
-<details>
+<input type="checkbox" id="my_checkbox" style="display:none;">
+<label for="my_checkbox">Show/hide</label>
 
-<summary> 
-Solution
-</summary>
-
+<div id="hidden">
 
 According to equivariant constraints, the coefficients of the Taylor series satisfy
 
@@ -223,7 +228,7 @@ a = & a \\
     c_{21} & c_{22} & c_{23} & c_{20} \\
     c_{31} & c_{32} & c_{33} & c_{30} \\
     c_{01} & c_{02} & c_{03} & c_{00} \\
-\end{bmatrix} 
+\end{bmatrix}  \\
 & \ldots
 \end{aligned}
 $$
@@ -240,9 +245,7 @@ c_{03}=c_{10}=&c_{21}=c_{32} \\
 \end{aligned}
 $$
 
-Considering Hessian transpose symmetry, we would additionally have $c_{01}=c_{03}$ and reduce number of free parameters to 5. For now, let us assume that multiply among $x_i$ does not commute.
-
-The parameterization with 6 parameters has an unrolled circular convolution on the order-2 term.
+Considering Hessian transpose symmetry, we would additionally have $c_{01}=c_{03}$ and that reduces number of free parameters to 5. The parameterization with 6 parameters has an unrolled circular convolution on the order-2 term.
 
 $$
 \begin{aligned}
@@ -262,11 +265,9 @@ y=&f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2} & x_{3}\end{bmatrix} \right)\\
 \end{aligned}
 $$
 
-Computing the 2nd order term naively would require $O(N^2)$ multiplies for length-$N$ input. But because the coefficients implement a circular convolution operation,  fast fourier transform would reduce compute complexity down to $N\log{N}$.
+Computing the 2nd order term naively would require $O(N^2)$ multiplies for length-$N$ input. But because the coefficients implement a circular convolution operation,  fast fourier transforms would reduce compute complexity down to $N\log{N}$.
 
-
-</details>
-
+</div>
 
 **B. Scale.** Parameterize function 
 $$
