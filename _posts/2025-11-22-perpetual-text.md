@@ -35,7 +35,7 @@ bibliography: 2025-11-22-perpetual-text.bib
 toc:
   - name: Introduction
   - name: When do Models stop Generating New Tokens?
-  - name: Motivating Experiements
+  - name: Motivating Experiments
     subsections:
     - name: Block-wise Analysis
     - name: Token-wise Analysis
@@ -95,3 +95,27 @@ By setting a maximum number of tokens, you can override the model's default tend
 - If no max_token parameter is set, then the model continues generating tokens until it outputs the <EOS> token, indicating that it should stop.
 - Training with <EOS> Tokens: During training, models are exposed to sequences that conclude with a special end-of-sequence token, often denoted as <EOS> (ref: llama 2 paper) or <|eot_id|> (ref: llama 3 paper). This token signifies the completion of a coherent piece of text.
 - Learned Termination Behavior: Through exposure to these tokens, the model learns to predict an <EOS> token when it determines that a logical conclusion has been reached in the context of the generated text.
+
+### Probability Distribution and Sampling Methods:
+- Next Token Prediction: At each generation step, the model computes a probability distribution over the vocabulary for the next token, conditioned on all previously generated tokens.
+- Likelihood of <EOS> Token: The probability assigned to the <EOS> token depends on the context. If the model assesses that the generated content forms a complete thought or sentence, it increases the probability of selecting <EOS>.
+- Sampling Strategies: The choice of sampling method (e.g., greedy search, beam search, top-k sampling, nucleus sampling) can affect when the <EOS> token is selected. Some methods may favor high-probability tokens, potentially leading to earlier termination.
+
+When no explicit maximum token limit is set, the stopping point relies heavily on the model's ability to predict when a piece of text should logically end. As previous work (Xiong et al., 2024; Fu et al., 2024) has shown models often “cap” their output lengths based on the upper limits present in their SFT datasets, even if they were exposed to longer sequences during pre-training. The model's training data plays a crucial role here; if it includes diverse examples of text lengths and proper use of <EOS> tokens in the retraining process, the model is better equipped to determine appropriate stopping points.
+
+# Motivating Experiments
+To further explore how these factors influence the model's stopping behavior, we conducted a series of experiments to identify trends that may be causing the convergence to the <EOS> token. 
+
+Our first experiment examines the variance and uncertainty in the “blocks” leading up to the EOS token generation. Since the probability of a token can exhibit significant variance, a block-wise trend is analyzed instead of a token-wise trend. A block is defined as a group of consecutive tokens within a sequence. The average probability of a specific token within each block is then calculated to represent its probability in that block. 
+
+Our second experiment examines the tokens leading up to the <EOS> token. 
+
+### Block-Wise Analysis
+Observation: All four metrics show an increasing probability of EOS token, decreasing information content, decreasing entropy, and decreasing varentropy. 
+
+[image goes here]
+
+### Token-Wise Analysis
+
+[image goes here]
+
