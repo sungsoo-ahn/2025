@@ -40,15 +40,21 @@ _styles: >
     text-align: center;
     font-size: 16px;
   }
+    .my_dropdown{
+    display: block;
+    background: #eee;
+    }
     .my_dropdown a{
     display: block;
     background: #cdf;
     }
     .my_dropdown > div{
     display:none;
+    background: #eee;
     }
     .my_dropdown > div:target{
     display:block; 
+    background: #eee;
     }
 ---
 
@@ -279,11 +285,10 @@ y=f\left( \begin{bmatrix}x_{0} & x_{1} &x_{2}\end{bmatrix} \right) =f\left(\alph
 $$
 For any $\alpha\ne0$.
 
-<details>
+<div class="my_dropdown">
+<a href="#targ_2">Solution</a>
+<div id="targ_2">
 
-<summary> 
-Solution
-</summary>
 
 With Taylor series, you'll run into a conclusion that no terms could exist and $y=a$. That is because scale invariant functions are often not smooth at $x_i=0$ so Taylor series could not capture them. Let us instead look into Laurent Series
 
@@ -337,18 +342,17 @@ $$
 y=f\left( \begin{bmatrix}x_{0} & x_{1} &x_{2}\end{bmatrix} \right) =g\left(z_1,z_2\right)
 $$
 
-</details>
+</div>
+</div>
 
 **C. 1D permutation with latent.** Parameterize function 
 $$
 y=f\left( \begin{bmatrix}x_{0} & x_{1} \\ x_{2} & x_{3}\end{bmatrix} \right) =f\left( \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\begin{bmatrix}x_{0} & x_{1} \\ x_{2} & x_{3}\end{bmatrix} \right)
 $$
 
-<details>
-
-<summary> 
-Solution
-</summary>
+<div class="my_dropdown">
+<a href="#targ_3">Solution</a>
+<div id="targ_3">
 
 According to the equivariant constraint, the coefficients of the Taylor series satisfy
 
@@ -446,18 +450,18 @@ $$
 
 The size of order-$k$ coefficient blocks for processing length-$H$ latent vectors is $H^k$. This is already much better than the full coefficients $(NH)^k$ for a set of $N$ vectors but is still large. Now, the bread and butter of deep learning comes in, namely 1) stacking more layers, 2) low-rank factorization and 3) adding non-linearities which we'll discuss more in Section II.
 
-</details>
+</div>
+</div>
 
 **D. 2D permutation.** Parameterize function 
 $$
 y=f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right) =f\left( \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right) = f\left(\begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix}\begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix} \right)
 $$
 
-<details>
+<div class="my_dropdown">
+<a href="#targ_3">Solution</a>
+<div id="targ_3">
 
-<summary> 
-Solution
-</summary>
 
 According to the equivariant constraint, the coefficients of the Taylor series satisfy
 
@@ -523,7 +527,8 @@ $$
 
 An interesting pattern emerges, that all terms are some forms of tensor contractions. In fact, this seems to be true for all flavors of permutation symmetry and the motivation behind Section II. Don't believe it? Try another case below!
 
-</details>
+</div>
+</div>
 
 
 **E. 2D joint permutation.** Parameterize function 
@@ -531,11 +536,9 @@ $$
 y=f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right) =f\left( \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\right)
 $$
 
-<details>
-
-<summary> 
-Solution
-</summary>
+<div class="my_dropdown">
+<a href="#targ_3">Solution</a>
+<div id="targ_3">
 
 According to the equivariant constraint, the coefficients of the Taylor series satisfy
 
@@ -598,7 +601,8 @@ $$
 
 What's different from regular 2D permutation invariance are terms involving diagonal and transpose. Also all tensor contractions here are at or below $O(N)$ compute for input size $\sqrt{N}\times \sqrt{N}$, which is exponentially less compute than $O(N^2)$ for the default Taylor series.
 
-</details>
+</div>
+</div>
 
 
 **F. 1D permutation equivariance.** Parameterize function 
@@ -608,11 +612,10 @@ $$
 For any permutation $P$.
 
 
-<details>
+<div class="my_dropdown">
+<a href="#targ_3">Solution</a>
+<div id="targ_3">
 
-<summary> 
-Solution
-</summary>
 
 The Taylor series up to order 1 can be expressed as
 
@@ -688,7 +691,8 @@ Y=&F\left( X \right) \\
 $$
 
 
-</details>
+</div>
+</div>
 
 
 ### I.3 What we have learned so far
