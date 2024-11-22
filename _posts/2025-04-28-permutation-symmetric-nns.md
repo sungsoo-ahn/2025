@@ -41,7 +41,7 @@ _styles: >
     font-size: 16px;
   }
   #hidden {
-  display: block;
+  display: none;
   background: #cccccc;
   }
   :checked + * + #hidden {
