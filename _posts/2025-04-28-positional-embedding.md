@@ -70,18 +70,18 @@ Later, (Dosovitskiy et al. [2021] <d-cite key="50650"></d-cite>) applied this co
 
 ### Self-Attention Mechanism:
 
-The self-attention mechanism processes sequences by representing each element as a vector of embedding dimension $$d$$. For a sequence of length $$L$$ and embedding dimension $$d$$, the input is represented as a matrix $$X \in \mathbb{R}^{d \times L}$$.
+The self-attention mechanism processes sequences by representing each element as a vector of embedding dimension $$d$$. For a sequence of length $$L$$ and embedding dimension $$d$$, the input is represented as a matrix $$X \in \mathbb{R}^{L \times d}$$.
 
-The mechanism employs three learnable weight matrices: $$W_Q,W_K,$$ and $$W_V$$ $$\in \mathbb{R}^{d \times d_k}$$, where $$d_k$$ represents the dimensionality of the projected subspaces. These matrices transform the input into queries, keys, and values respectively:
+The mechanism employs three learnable weight matrices: $$W_Q,W_K,$$ and $$W_V$$ $$\in \mathbb{R}^{d \times d_{model}}$$, where $$d_{model}$$ represents the dimensionality of the projected subspaces. These matrices transform the input into queries, keys, and values respectively:
 
 $$
-Q = W_Q^T \, X  \;\;\;\;\;\;\;\; K = W_K^T \, X  \;\;\;\;\;\;\;\; V = W_V^T \, X
+Q = X\,W_Q   \;\;\;\;\;\;\;\; K = X \, W_K  \;\;\;\;\;\;\;\; V = X \, W_V
 $$
 
 The attention matrix is computed using the following formula:
 
 $$
-\text{Attention}(Q, K) = \text{softmax}(QK^T/√d_k)
+\text{Attention}(Q, K) = \text{softmax}(QK^T/√d_{model})
 $$
 
 $$
@@ -91,25 +91,28 @@ $$
 With respect to each token, let $$x_i$$ be the context vector for $$i^{\text{th}}$$ token, the corresponding query, key and value vectors, $$\mathbf{q_i}, \mathbf{k_i}$$ and $$\mathbf{v_i}$$ are defined as follows:
 
 $$
-\mathbf{q_i} = W_Q^T \:x_i \; \; \; \; \; \; \mathbf{k_i} = W_K^T \:x_i \; \; \; \; \; \; \mathbf{v_i} = W_V^T \:x_i
+\mathbf{q_i} = x_i \: W_Q \; \; \; \; \; \; \mathbf{k_i} = x_i \: W_K \; \; \; \; \; \; \mathbf{v_i} = x_i\:W_V
 $$
 
-and $$N$$ being total number of tokens the self attention is formulated as:
+and $$N$$ being total number of tokens , the attention score between the  $$m_{th}$$ token (query) and the $$n_{th}$$ token (key) is formulated as
 
 $$
-a_{m,n} = \frac{\exp\left( \frac{\mathbf{q}_m^\top \mathbf{k}_n}{\sqrt{d}} \right)}{\sum_{j=1}^{N} \exp\left( \frac{\mathbf{q}_m^\top \mathbf{k}_j}{\sqrt{d}} \right)}
+a_{m,n} = \frac{\exp\left( \frac{\mathbf{q}_m \mathbf{k}_n^\top}{\sqrt{d}} \right)}{\sum_{j=1}^{N} \exp\left( \frac{\mathbf{q}_m \mathbf{k}_j^\top}{\sqrt{d}} \right)}
 $$
+
+and $$\mathbf{z}_m$$ (output vector) for the $$m_{th}$$ token is calculated as
 
 $$
 \mathbf{z}_m = \sum_{n=1}^{N} a_{m,n} \mathbf{v}_n
 $$
+
 
 ### Multi-Head Attention
 
 In multi-head attention, the computation is extended across h parallel attention heads. Each $$head_i$$ operates as:
 
 $$
-\text{head}_i = \text{Attention}(Q\,W_{Q_i}, K\,W_{K_i}, V\,W_{V_i})
+\text{head}_i = \text{Attention}(Q\,W_Q^i, K\,W_K^i, V\,W_V^i)
 $$
 
 The outputs from all heads are concatenated and projected back to the original dimensionality:
@@ -119,7 +122,13 @@ $$
 
 $$
 
-where $$W_O \in \mathbb{R}^{hd_k \times d}$$ is a learned matrix that maps the concatenated attention outputs back into the original space.
+where $$W_O \in \mathbb{R}^{hd_k \times d_{model}} , 
+W_i^Q \in \mathbb{R}^{d_{\text{model}} \times d_k}
+, 
+W_i^K \in \mathbb{R}^{d_{\text{model}} \times d_k}, \ 
+W_i^V \in \mathbb{R}^{d_{\text{model}} \times d_k}, \ \text{and } 
+W^O \in \mathbb{R}^{h d_k \times d_{\text{model}}}$$ are learned matrices.
+Note $$ d_{model} = h \times d_{k}$$ and $$ Q,K,V \in \mathbb{R}^{ L\times d_{\text{model}}}$$
 
 ## Absolute Positional Embeddings
 
@@ -173,14 +182,14 @@ However, subsequent research challenged these assumptions. Studies found that ab
 
 ### Learned Positional Embeddings
 
-In addition to sinusoidal positional embedding, (Vaswani et al. [2017] <d-cite key="46201"></d-cite>) also explored learned positional encoding. They explored using a set of trainable vectors $$p \in \mathbb{R}^{d \times L}$$ where $$L$$ represents the maximum sequence length as positional embeddings. This method was applied in the (BERT [2018] <d-cite key="devlin2018bert"></d-cite>) and (GPT [2019] <d-cite key="radford2019language"></d-cite>) models as an alternative to sinusoidal positional encoding. However, it did not yield significant performance improvements over sinusoidal positional embedding. Moreover, the upper bound $$L$$ limited the method's ability to extrapolate to sequences longer than $$L$$ without using interpolation techniques. Also, it introduces more trainable parameters, which increases the model's size and computational cost.
+In addition to sinusoidal positional embedding, (Vaswani et al. [2017] <d-cite key="46201"></d-cite>) also explored learned positional encoding. They explored using a set of trainable vectors $$p \in \mathbb{R}^{L \times d}$$ where $$L$$ represents the maximum sequence length as positional embeddings. This method was applied in the (BERT [2018] <d-cite key="devlin2018bert"></d-cite>) and (GPT [2019] <d-cite key="radford2019language"></d-cite>) models as an alternative to sinusoidal positional encoding. However, it did not yield significant performance improvements over sinusoidal positional embedding. Moreover, the upper bound $$L$$ limited the method's ability to extrapolate to sequences longer than $$L$$ without using interpolation techniques. Also, it introduces more trainable parameters, which increases the model's size and computational cost.
 
 ## Relative Positional Embeddings
 
 Unlike absolute positional encodings, which create embeddings for each position independently, relative positional embeddings focus on capturing the pairwise relationships between tokens in a sequence. Also rather than directly adding the embeddings to the context vectors, the relative positional information is added to keys and values during the attention calculation. Hence 
 
 $$
-\mathbf{q_m} = W_Q^T \:x_m \; \; \; \; \; \; \mathbf{k_n'} = W_K^T \:(x_n+ \tilde{p}_r^k)\; \; \; \; \; \; \mathbf{v_n'} = W_V^T \:(x_n+ \tilde{p}_r^v)
+\mathbf{q_m} = x_m \:W_Q \; \; \; \; \; \; \mathbf{k_n'} = (x_n+ \tilde{p}_r^k)\:W_K\; \; \; \; \; \; \mathbf{v_n'} = (x_n+ \tilde{p}_r^v)\:W_V
 $$
 
 where $$\tilde{\mathbf{p}}_r^k, \tilde{\mathbf{p}}_r^v \in \mathbb{R}^d$$ are trainable relative positional embeddings and $$r = clip(m-n, Rmin, Rmax)$$  represents the relative distance between the two tokens at positions $m$ and $n$. The maximum relative position is clipped, assuming a precise relative position is not useful beyond a certain distance. Further, clipping the maximum distance enables the model to extrapolate at inference time. However, this approach may not encode useful information about the absolute position of the token, which is useful in 2D tasks like Image Classification
@@ -500,6 +509,11 @@ We trained all our models using the following hyperparameter scheme and high per
 ## Results
 
 {% include figure.html path="assets/img/2025-04-28-positional-embedding/results.png" %}
+
+<div class="caption">
+    Note: Values correspond to Top-1 validation set accuracy
+</div>
+
 
 | Resolution | Standard Vision Transformer | Vision Transformer without positional encoding | Vision Transformer with 2D mixed-frequency RoPE | Vision Transformer with 2D ALiBi |
 |------------|------------------------------|---------------------------------------------|-------------------------------------------------|--------------------------------|
