@@ -42,10 +42,9 @@ _styles: >
   }
   #hidden {
   display: block;
-  height: 500px;
   background: #cccccc;
   }
-  :checked + #hidden {
+  :checked + * + #hidden {
   display: block;
   }
 ---
