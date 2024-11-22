@@ -366,15 +366,15 @@ $$
 and plug $\nabla_{\tilde{W}_H} L=2(\hat{Y}-Y)\tilde{G}_H^{\top}$ into the expression above,  we have
 
 $$
-\begin{equation}
-\begin{aligned}
+\begin{eqnarray}
 \label{dynamics}
+\begin{aligned}
     \frac{\mathrm{d} }{\mathrm{d} t}L 
     \leq & - \lambda_{\rm min}\cdot \Vert \mathrm{vec} [\nabla_{\tilde{W}_H} L] \Vert^2_2 \\
     = & - 4\lambda_{\rm min}\cdot((\tilde{G}_H \otimes I_{m_y})\mathrm{vec} [\hat{Y}-Y])^\top ((\tilde{G}_H \otimes I_{m_y})\mathrm{vec} [\hat{Y}-Y]) \\
     = & - 4\lambda_{\rm min}\cdot \textcolor{blue}{\underbrace{\mathrm{vec}[\hat{Y}-Y]^\top \left[ \tilde{G}^\top_H \otimes I_{m_y} \right] \left[ \tilde{G}_H \otimes I_{m_y} \right] \mathrm{vec}[\hat{Y}-Y]}_{\textrm{Eq.(*)}}}.
 \end{aligned}
-\end{equation}
+\end{eqnarray}
 $$
 
 Next, let's bound $\textrm{Eq.(*)}$.
@@ -409,11 +409,6 @@ $$
 
 Now, we split $$\mathrm{vec}[\hat{Y}-Y]$$ into two parts:  
 
-<!-- $$
-\mathrm{vec}[\hat{Y}-Y] = 
-\underbrace{\mathrm{vec}[Y^*-Y]}_{\text{\textbf{orthogonal} to the column space of $\tilde{G}_H^{\top} \otimes I_{m_y}$}}
-%  -  \underbrace{\mathrm{vec}[Y^*-\hat{Y}]_{\textbf{inside} to [\tilde{G}_H^{\top} \otimes I_{m_y}]}
-$$ -->
 
 $$
 \mathrm{vec}[\hat{Y}-Y] = 
@@ -421,11 +416,6 @@ $$
 - \underbrace{\mathrm{vec}[Y^*-\hat{Y}]}_{\text{resides in [$\tilde{G}_H^{\top} \otimes I_{m_y}$]}}. 
 $$
 
-<!-- $$\mathrm{vec}[Y^*-Y]$$  and  $$\mathrm{vec}[Y^*-\hat{Y}]$$ . -->
-
-
-<!-- Now, we decompose $$\mathrm{vec}[\hat{Y} - Y]$$ into the difference of two parts: $$\mathrm{vec}[Y^* - Y]$$ and $$\mathrm{vec}[Y^* - \hat{Y}]$$.  -->
-<!-- The first part is guaranteed to be orthogonal to the column space of $$\tilde{G}_H^{\top} \otimes I_{m_y}$$, while the second part lies entirely within the column space of $$\tilde{G}_H \otimes I_{m_y}$$. -->
 
 Thus we have 
 
