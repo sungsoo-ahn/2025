@@ -529,11 +529,11 @@ The paper we're talking about makes a bold claim. But does it always hold up in 
 
 Some gaps are pretty obvious, and the author points them out: typical GNNs aren't linear, and researchers use more advanced optimizers than just gradient descent. However, there’s a subtler issue regarding the continuous perspective behind it.
 
+### Dynamics at Discrete Moments.
+
 Take another look at these two diagrams I drew earlier:
 
 {% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig2_1.png" width="100" %}
-
-### Dynamics at Discrete Moments.
 
 When I drew the illustration, I was thinking about the dynamics we're trying to capture. 
 But besides these time points, there are **sharp upward surges**. 
