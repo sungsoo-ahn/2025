@@ -40,16 +40,16 @@ toc:
     - name: Diffusion Model
     - name: Preliminary of Unified Models
     - name: Taxonomy of Unified Models
-  - name: Single Model for Unified Multimodal Models
+  - name: Single Model
     subsections:
     - name: Autoregressive Models v.s. Mixed Architectures (AR+Diffusion)
     - name: Discrete v.s. Continuous
-  - name: Multi-Experts for Unified Multimodal Models
+  - name: Multi-Experts
     subsections:
     - name: Image-Centric Alignment
     - name: Text-Centric Alignment
     - name: Generalized Alignment
-  - name: Challenges in Unified Multimodal Models
+  - name: Challenges
   - name: Conclusion
 
 # Below is an example of injecting additional post-specific styles.
@@ -233,7 +233,7 @@ where $β_t$ is the noise schedule, $\mathcal{N}$ refers to Gaussian distributio
 **Reverse Process**. The reverse process learns to denoise $x_T$ back to $x_0$ through a neural network $p_θ$, parameterized as:
 
 $$
-p_θ(x_{t-1} | x_t) = \mathcal{N}(x_{t-1}; μ_θ(x_t, t), Σ_θ(x_t, t)),
+p_θ(x_{t-1} | x_t) = \mathcal{N}(x_{t-1}; μ_θ(x_t, t), Σ_θ(x_t, t)).
 $$
 
 During sampling, we start from pure Gaussian noise $x_T ~ \mathcal{N}(0, I)$ and iteratively sample $x_{t-1}$ from $p_θ$ until $x_0$ is reconstructed.
@@ -267,14 +267,14 @@ Unified multimodal models represent a pivotal advancement in artificial intellig
 Unified models are trained to understand relationships and interactions across multiple modalities (*e.g.,* text, image, audio). For example, given a pair $(x_{\text{image}}, x_{\text{text}})$, the model learns a joint representation $z$ such that:
 
 $$
-z = f_{\text{Unified Model}}(x_{\text{image}}, x_{\text{text}})
+z = f_{\text{Unified Model}}(x_{\text{image}}, x_{\text{text}}).
 $$
 
 * **Multimodal Generation**: 
 These models synthesize cross-modal outputs. For instance, generating text $x_{\text{video}}$ from text $x_{\text{text}}$ and image $x_{\text{image}}$ can be formulated as:
 
 $$
-x_{\text{video}} = f_{\text{Unified Model}}(x_{\text{text}},x_{\text{image}})
+x_{\text{video}} = f_{\text{Unified Model}}(x_{\text{text}},x_{\text{image}}).
 $$
 
 * **Cross-Modal Alignment or Generative Alignment**:
@@ -284,16 +284,16 @@ A key design choice in unified models is the method of aligning modalities:
 1) **Cross-Modal Alignment**. Aligning feature spaces of diverse modalities into a unified latent space. Formally, given $x_i$ and $y_j$ from different modalities, the goal is to minimize their alignment loss $\mathcal{L}_{\text{align}}$:
 
 $$
-\mathcal{L}_{\text{align}} = \| f_{\text{Unified Model}}(x_i) - f_{\text{Unified Model}}(x_j) \|_2^2
+\mathcal{L}_{\text{align}} = \| f_{\text{Unified Model}}(x_i) - f_{\text{Unified Model}}(x_j) \|_2^2.
 $$
 
 2) **Generative Alignment**. Models such as Show-O and Transfusion bypass explicit alignment by directly using generative loss to learn the relationships between modalities. This approach models the inter-modality relationships through tasks like sequence prediction or output reconstruction, focusing on generation rather than explicit feature alignment. For a pair of modalities $x_{\text{src}}$ and $x_{\text{tgt}}$, the loss function is a weighted sum of generative losses for each task:
 
 $$
-\mathcal{L}_{\text{unified}} = \sum_{k=1}^K \lambda_k \mathcal{L}_{\text{gen}}^k
+\mathcal{L}_{\text{unified}} = \sum_{k=1}^K \lambda_k \mathcal{L}_{\text{gen}}^k, 
 $$
 
-Where $K$ is the number of modality pairs, $\mathcal{L}_{\text{gen}}^k$ is the generative loss for the $k$-th modality pair, $\lambda_k$ is a weight balancing the importance of each task.
+where $K$ is the number of modality pairs, $\mathcal{L}_{\text{gen}}^k$ is the generative loss for the $k$-th modality pair, $\lambda_k$ is a weight balancing the importance of each task.
 
 
 
@@ -336,7 +336,7 @@ In contrast, **Multi-Expert Models** rely on specialized sub-models or experts t
 
 
 
-## Single Model for Unified Multimodal Model
+## Single Model
 
 
 
@@ -438,7 +438,7 @@ Mixed architectures utilizing continuous tokenizers, such as Transfusion and Mon
 
 
 
-## Multi-Experts for Unified Multimodal Models
+## Multi-Experts
 
 Unlike single, monolithic models trained to handle all modalities and tasks simultaneously, **multi-expert architectures** offer an alternative approach: leveraging specialized expert modules that align, process, and fuse information across diverse modalities. These architectures not only enable task-specific optimization but also facilitate the integration of pre-trained expert models, such as incorporating external capabilities into frameworks like ImageBind. Multi-experts are typically categorized based on their alignment focus: Image-Centric Alignment, Text-Centric Alignment, and Generalized Alignment methods.
 
@@ -473,7 +473,7 @@ Here’s how ImageBind achieves this:
 The InfoNCE loss is defined as:
 
 $$
-\mathcal{L}_{\text{InfoNCE}} = - \log \frac{\exp(\text{sim}(q, k^+)/\tau)}{\sum_{i=1}^N \exp(\text{sim}(q, k_i)/\tau)}
+\mathcal{L}_{\text{InfoNCE}} = - \log \frac{\exp(\text{sim}(q, k^+)/\tau)}{\sum_{i=1}^N \exp(\text{sim}(q, k_i)/\tau)},
 $$
 
 Where:
@@ -564,7 +564,7 @@ Where $M_i$ is the embedding of modality $i$ (image, text, audio). $K_i$ is the 
 <!-- https://poloclub.github.io/transformer-explainer/ -->
 
 
-## Challenges in Unified Multimodal Models 
+## Challenges
 
 ### 1. Technical Challenges
 
