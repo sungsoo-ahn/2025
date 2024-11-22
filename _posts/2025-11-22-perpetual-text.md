@@ -113,12 +113,16 @@ Our second experiment examines the tokens leading up to the <EOS> token.
 ### Block-Wise Analysis
 Observation: All four metrics show an increasing probability of EOS token, decreasing information content, decreasing entropy, and decreasing varentropy. 
 
-<img src="/assets/img/2025-11-22-perpetual-text/eos_token_stats_blockwise_100.png" width="800px;" alt=""/>
-
+<div align="center">
+  <img align="center" src="/assets/img/2025-11-22-perpetual-text/eos_token_stats_blockwise_100.png" width="800px;" alt=""/>
+  <br>
+  Figure 1: Block-Wise Analysis
+</div>
+<br><br>
 As observed, the average probability of the EOS token appearing per block spikes during the 8th block. This indicates that the model increasingly believes its current output sequence should end soon. Consequently, we see a decrease in the average information content of the EOS token per block.
 
 We can define information content as $I(x) = -log_{2}P(x)$
-where $I(x) represents the information content of a token $x$ in a sequence, and $P(x) is the probability of $x$ occuring. A decrease in information content corresponds to an increase in the probability of the EOS token, reflecting the model's growing confidence in concluding the sequence.
+where $I(x)$ represents the information content of a token $x$ in a sequence, and $P(x)$ is the probability of $x$ occuring. A decrease in information content corresponds to an increase in the probability of the EOS token, reflecting the model's growing confidence in concluding the sequence.
 
 Entropy measures the uncertainty or randomness in the probability distribution of generated tokens. A decreasing entropy indicates that the uncertainty is reducing, with the model's predictions narrowing to a smaller set of higher-probability tokens. This leads to less variability in the generated tokens.
 
@@ -131,18 +135,30 @@ From this experiment, we observe that there is a factor within the blocks causin
 Observation: Competition between the EOS token and the new line token (\n)
 
 
-<img src="/assets/img/2025-11-22-perpetual-text/eos_token_stats_blockwise_100.png" width="800px;" alt=""/>
-  
+<div align="center">
+  <img src="/assets/img/2025-11-22-perpetual-text/prob_dist_0.png" width="700px;" alt=""/>
+  <br>
+  Figure 2: Token-Wise Analysis, 0
+</div>
+<br><br>
 
-Another observation we had was that the EOS and (\n) tokens were competing against each other in the final token generations. In figure 2, we can see that the new line token was predicted 3 times before the EOS token took over for highest probability.
-Since the model is deciding between \n or EOS, we can say that the *previous tokens are getting less effective to the next predictions*. This means that the model is not able to provide more consistent context related to the previous tokens, and therefore wants to “halt” or go to new context. 
+Another observation we had was that the EOS and (\n) tokens were competing against each other in the final token generations.
+In figure 2, we can see that based on the previous context of the new line token (\n), the highest probable token is *again*, the new line token. 
+
+<div align="center">
+  <img src="/assets/img/2025-11-22-perpetual-text/prob_dist_4.png" width="700px;" alt=""/>
+  <br>
+  Figure 3: Token-Wise Analysis, 3
+</div>
+<br><br>
+In figure 3, we can see that the new line token was predicted 3 times before the EOS token took over for highest probability (with a period inbetween). Since the model is deciding between \n or EOS, we can say that the *previous tokens are getting less effective to the next predictions*. This means that the model is not able to provide more consistent context related to the previous tokens, and therefore wants to “halt” or go to new context. 
 
 # Proposed Methods
 From our Motivating Experiments, we observed decreasing entropy and increasing EOS token probability in the blocks leading up to halted output. We also observed certain token combinations that may heavily increase the chance of EOS token generation.
 
 **We propose a few methods to bypass the model's desire to halt:**
 
-### Suppressing the EOS Token
+## Suppressing the EOS Token
 [Link to CodeBase](https://github.com/Perpetual-text/iclr2025/blob/main/long_generate.py#L17)
 
 The first method involves suppressing the EOS token during the token generation process to prevent th emodel from ending the sequence prematurely.
@@ -163,7 +179,7 @@ The first method involves suppressing the EOS token during the token generation 
 - The suppression of the EOS token alone may not be sufficient to prevent premature termination, as the model compensates by generating alternative concluding tokens.
 - Further strategies are needed to guide the model toward producing more extended and coherent continuations.
 
-### Modified Sampling Method Post-EOS Token
+## Modified Sampling Method Post-EOS Token
 [Link to CodeBase](https://github.com/Perpetual-text/iclr2025/blob/main/long_generate.py#L82)   
 
 The second method modifies the sampling strategy after the model predicts the EOS token to encourage more diverse continuations and avoid abrupt endings.
@@ -181,7 +197,7 @@ The second method modifies the sampling strategy after the model predicts the EO
 - While the increased randomness can prevent the model from ending the sequence prematurely, it may compromise the coherence and relevance of the generated text.
 - Balancing stochasticity and coherence is crucial to ensure that the generated sequences remain contextually appropriate.
 
-### Regenerating Tokens Prior to the EOS Token
+## Regenerating Tokens Prior to the EOS Token
 [Link to CodeBase](https://github.com/Perpetual-text/iclr2025/blob/main/long_generate.py#L153)   
 The third method involves regenerating a portion of the sequence preceding the EOS token to provide the model with an opportunity to produce alternative continuations.
 
@@ -199,7 +215,7 @@ The third method involves regenerating a portion of the sequence preceding the E
 - However, the loss of context may negatively impact the coherence and relevance of the generated text.
 - Fine-tuning the backstep parameter is essential to balance the trade-off between removing the influence of the EOS token and maintaining sufficient context for coherent generation.
 
-### Regnerating the Resampling Tokens Prior to the EOS Token with Dynamic Temperature Adjustment
+## Regnerating the Resampling Tokens Prior to the EOS Token with Dynamic Temperature Adjustment
 [Link to CodeBase](https://github.com/Perpetual-text/iclr2025/blob/main/long_generate.py#L242)  
 The fourth method enhances the previous approach by incorporating a dynamic temperature adjustment during the regeneration of tokens, aiming to improve both diversity and coherence in the generated sequence.
 
