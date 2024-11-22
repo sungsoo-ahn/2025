@@ -109,10 +109,10 @@ This 2D filter effectively smooths input image data, making it ideal for downsam
 The **second option** is a Gaussian filter, which offers more customization and smoother outputs. The normalized 1D Gaussian filter is defined as:
 
 $$
-h_\text{g}[n] = \frac{\exp\left(-0.5 \left(\frac{n}{\sigma}\right)^2\right)}{\sum_{n} \exp\left(-0.5 \left(\frac{n}{\sigma}\right)^2\right)},
+h_\text{g}[n] = \frac{\exp\left(-0.5 \left(\frac{n}{\sigma}\right)^2\right)}{\sum_{n} \exp\left(-0.5 \left(\frac{n}{\sigma}\right)^2\right)}
 $$
 
-where $$n$$ denotes the indices, represented as $$(-\frac{z-1}{2}, \ldots, 0, \ldots, \frac{z-1}{2})$$, $$z$$ is the filter size, and $${\sigma}$$ is the standard deviation, which controls the spread of the filter. The resulting 2D Gaussian filter applied in the `Gaussian_conv` layer is computed as:
+where $$n$$ denotes the indices, represented as $$ (-\frac{z-1}{2}, \ldots, 0, \ldots, \frac{z-1}{2}) $$. $$z$$ is the filter size, and $${\sigma}$$ is the standard deviation, which controls the spread of the filter. The resulting 2D Gaussian filter applied in the `Gaussian_conv` layer is computed as:
 
 $$ h_\text{g-2D}[n_\text{1}, n_\text{2}] = h_\text{g} \cdot h_\text{g}^T $$
 
