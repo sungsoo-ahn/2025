@@ -222,7 +222,7 @@ $$
 y=f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2} & x_{3}\end{bmatrix} \right) =f\left( \begin{bmatrix} x_{3} & x_{0} & x_{1} & x_{2}\end{bmatrix} \right)
 $$
 
-<div class="my_dropdown">
+<div class="my_dropdown" tabindex="1">
 <a>Solution</a> 
 <div>
 
@@ -295,7 +295,7 @@ y=f\left( \begin{bmatrix}x_{0} & x_{1} &x_{2}\end{bmatrix} \right) =f\left(\alph
 $$
 For any $\alpha\ne0$.
 
-<div class="my_dropdown">
+<div class="my_dropdown" tabindex="1">
 <a href="#targ_2">Solution</a>
 <div id="targ_2">
 
@@ -330,14 +330,6 @@ This only holds when the coefficients match, that is for any $(i,j,k)$, $$c_{ijk
 <tr><td>2,-1,-1</td><td>3</td></tr>
 </table>
 
-| (i,j,k) | DoF |
-|:-------:|:---:|
-| 0,0,0   | 1   |
-| -1,0,1  | 6   |
-| -2,0,2  | 6   |
-| -2,1,1  | 3   |
-| 2,-1,-1 | 3   |
-
 The full parameterization is
 
 $$
@@ -369,7 +361,7 @@ $$
 y=f\left( \begin{bmatrix}x_{0} & x_{1} \\ x_{2} & x_{3}\end{bmatrix} \right) =f\left( \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\begin{bmatrix}x_{0} & x_{1} \\ x_{2} & x_{3}\end{bmatrix} \right)
 $$
 
-<div class="my_dropdown">
+<div class="my_dropdown" tabindex="1">
 <a href="#targ_3">Solution</a>
 <div id="targ_3">
 
@@ -477,7 +469,7 @@ $$
 y=f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right) =f\left( \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right) = f\left(\begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix}\begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix} \right)
 $$
 
-<div class="my_dropdown">
+<div class="my_dropdown" tabindex="1">
 <a href="#targ_4">Solution</a>
 <div id="targ_4">
 
@@ -555,7 +547,7 @@ $$
 y=f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right) =f\left( \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\right)
 $$
 
-<div class="my_dropdown">
+<div class="my_dropdown" tabindex="1">
 <a href="#targ_5">Solution</a>
 <div id="targ_5">
 
@@ -631,7 +623,7 @@ $$
 For any permutation $P$.
 
 
-<div class="my_dropdown">
+<div class="my_dropdown" tabindex="1">
 <a href="#targ_6">Solution</a>
 <div id="targ_6">
 
