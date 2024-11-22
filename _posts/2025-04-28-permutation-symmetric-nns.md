@@ -40,9 +40,16 @@ _styles: >
     text-align: center;
     font-size: 16px;
   }
-  :checked + * + div {
-  display: none;
-  }
+.collapse a{
+  display: block;
+  background: #cdf;
+}
+.collapse > div{
+  display:none;
+}
+.collapse > div:target{
+  display:block; 
+}
 ---
 
 
@@ -199,10 +206,10 @@ $$
 y=f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2} & x_{3}\end{bmatrix} \right) =f\left( \begin{bmatrix} x_{3} & x_{0} & x_{1} & x_{2}\end{bmatrix} \right)
 $$
 
-<p>
-<input type="checkbox" id="my_checkbox" style="display:none;" checked="True" />
-<label for="my_checkbox">Show/hide</label>
-<div id="hidden">
+<div class="collapse">
+<a href="#targ_1">Solution</a>
+<div id="targ_1">
+
 According to equivariant constraints, the coefficients of the Taylor series satisfy
 
 $$
@@ -263,7 +270,7 @@ $$
 Computing the 2nd order term naively would require $O(N^2)$ multiplies for length-$N$ input. But because the coefficients implement a circular convolution operation,  fast fourier transforms would reduce compute complexity down to $N\log{N}$.
 
 </div>
-</p>
+</div>
 
 
 **B. Scale.** Parameterize function 
