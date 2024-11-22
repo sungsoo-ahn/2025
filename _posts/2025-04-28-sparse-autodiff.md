@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: An Illustrated Guide to Automatic Sparse Differentiation
-description: In numerous applications of machine learning, Hessians and Jacobians exhibit sparsity, a property that can be leveraged to vastly accelerate their computation. While the usage of automatic differentiation (AD) in machine learning is ubiquitous, automatic sparse differentiation (ASD) remains largely unknown. This post demystifies ASD by explaining its key components and their roles in the computation of both sparse Jacobians and Hessians. We conclude with a practical demonstration showcasing the performance benefits of ASD.
+description: In numerous applications of machine learning, Hessians and Jacobians exhibit sparsity, a property that can be leveraged to vastly accelerate their computation. While the usage of automatic differentiation in machine learning is ubiquitous, automatic sparse differentiation (ASD) remains largely unknown. This post demystifies ASD by explaining its key components and their roles in the computation of both sparse Jacobians and Hessians. We conclude with a practical demonstration showcasing the performance benefits of ASD.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -55,6 +55,7 @@ toc:
     - name: Necessary packages
     - name: Test function
     - name: Backend switch
+    - name: Jacobian computation
     - name: Preparation
     - name: Coloring visualization
     - name: Performance benefits
@@ -78,6 +79,34 @@ _styles: >
         margin: 12px 0;
         text-align: center;
         font-size: 16px;
+    }
+    .img-90 {
+        max-width: 90%;
+        height: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .img-80 {
+        max-width: 80%;
+        height: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .img-70 {
+        max-width: 70%;
+        height: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .img-50 {
+        max-width: 50%;
+        height: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
     /* Adapted from Andreas Kirsch https://github.com/iclr-blogposts/2024/blob/c111fe06039524fcb60a76c1e9bed26667d30fcf/_posts/2024-05-07-dpi-fsvi.md  */
     .box-note {
@@ -145,8 +174,7 @@ We start out with a short introduction to traditional AD,
 covering the computation of Jacobians in both forward and reverse mode.
 We then dive into the two primary components of ASD:
 **sparsity pattern detection** and **matrix coloring**.
-Having described the computation of sparse Jacobians,
-we move on to sparse Hessians.  
+Having described the computation of sparse Jacobians, we move on to sparse Hessians.  
 We conclude with a practical demonstration of ASD,
 providing performance benchmarks and guidance on when to use ASD over AD.
 
@@ -166,11 +194,11 @@ The insights gained from this toy example should translate directly to more deep
 For a function $f: \mathbb{R}^{n} \rightarrow \mathbb{R}^{m}$ and a point of linearization $\mathbf{x} \in \mathbb{R}^{n}$,
 the Jacobian $J_f(\mathbf{x})$ is the $m \times n$ matrix of first-order partial derivatives, whose $(i,j)$-th entry is
 
-$$ \big( \Jf \big)_{i,j} = \dfdx{i}{j} \in \sR . $$
+$$ \big( \Jf \big)_{i,j} = \dfdx{i}{j} \in \sR \, . $$
 
 For a composed function 
 
-$$ \colorf{f} = \colorh{h} \circ \colorg{g}, $$
+$$ \colorf{f} = \colorh{h} \circ \colorg{g} \, , $$
 
 the **multivariate chain rule** tells us that we obtain the Jacobian of $f$ by **multiplying** the Jacobians of $h$ and $g$:
 
@@ -200,7 +228,7 @@ If we represent the Jacobian of each convolutional layer as a dense matrix,
 we waste time computing coefficients which are mostly zero,
 and we waste memory storing those zero coefficients.
 
-{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/big_conv_jacobian.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/big_conv_jacobian.png" class="img-70" %}
 <div class="caption">
     Figure 2: Structure of the Jacobian of a tiny convolutional layer.
 </div>
@@ -210,10 +238,10 @@ computing intermediate Jacobians is not only inefficient: it exceeds available m
 AD circumvents this limitation by using **linear maps**, 
 lazy operators that act exactly like matrices but without explicitly storing every coefficient in memory.
 
-The differential $Df: \mathbf{x} \longmapsto Df(\mathbf{x})$ is a linear map which provides the best linear approximation of $f$ around a given point $\vx$.
+The differential $Df: \mathbf{x} \longmapsto Df(\mathbf{x})$ is a linear map which provides the best linear approximation of $f$ around a given point $\mathbf{x}$.
 We can rephrase  the chain rule as a **composition of linear maps** instead of a product of matrices:
 
-$$ \Dfc = \colorf{\D{(h \circ g)}{\vx}} = \Dhc \circ \Dgc .$$
+$$ \Dfc = \colorf{\D{(h \circ g)}{\vx}} = \Dhc \circ \Dgc \, .$$
 
 Note that all terms in this formulation of the chain rule are linear maps.
 A new visualization for our toy example can be found in Figure 3b.
@@ -250,16 +278,16 @@ Since we propagate in the order of the original function evaluation ($g$ then $h
 In the first step, we evaluate $Dg(\mathbf{x})(\mathbf{v}_1)$.
 Since this operation by definition corresponds to 
 
-$$ \vvc{2} = \Dgc(\vvc{1}) = \Jgc \cdot \vvc{1} \;\in \sR^p ,$$
+$$ \vvc{2} = \Dgc(\vvc{1}) = \Jgc \cdot \vvc{1} \;\in \sR^p \, ,$$
 
 it is commonly called a **Jacobian-vector product** (JVP) or **pushforward**.
-The resulting vector $\vv_2$ is then used to compute the subsequent JVP 
+The resulting vector $\mathbf{v}_2$ is then used to compute the subsequent JVP 
 
-$$ \vvc{3} = \Dhc(\vvc{2}) = \Jhc \cdot \vvc{2} \;\in \sR^m ,$$
+$$ \vvc{3} = \Dhc(\vvc{2}) = \Jhc \cdot \vvc{2} \;\in \sR^m \, ,$$
 
 which in accordance with the chain rule is equivalent to 
 
-$$ \vvc{3} = \Dfc(\vvc{1}) = \Jfc \cdot \vvc{1} ,$$
+$$ \vvc{3} = \Dfc(\vvc{1}) = \Jfc \cdot \vvc{1} \, ,$$
 
 the JVP of our composed function $f$.
 
@@ -353,7 +381,7 @@ $$ \Dfc(\vbc{i}+\ldots+\vbc{j})
 = \underbrace{\Dfc(\vbc{i})}_{\left( \Jfc \right)_\colorv{i,:}} 
 + \ldots
 + \underbrace{\Dfc(\vbc{j})}_{\left( \Jfc \right)_\colorv{j,:}} 
-. $$
+\, . $$
 
 The components of the sum on the right-hand side each correspond to a column of the Jacobian.
 If these columns are known to be structurally orthogonal,
@@ -365,7 +393,7 @@ and is visualized in Figure 9, where all structurally orthogonal columns have be
 By computing a single JVP with the vector $\mathbf{e}_1 + \mathbf{e}_2 + \mathbf{e}_5$, 
 we obtain the sum of the first, second and fifth column of our Jacobian.
 
-{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/sparse_ad.svg" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/sparse_ad.svg" class="img-80" %}
 <div class="caption">
     Figure 9: Computing structurally orthogonal columns of a Jacobian in forward mode.
 </div>
@@ -456,7 +484,7 @@ there are also many possible approaches to sparsity pattern detection,
 each with its own advantages and tradeoffs.
 The work of Dixon <d-cite key="dixonAutomaticDifferentiationLarge1990"></d-cite> in the 1990's was among the first of many papers on this subject,
 most of which can be classified into operator overloading or source transformation techniques.
-There are also ways to detect a sparsity pattern by probing the Jacobian coefficients with AD<d-cite key="griewankDetectingJacobianSparsity2002"></d-cite> but we do not linger on them here.
+There are also ways to detect a sparsity pattern by probing the Jacobian coefficients with AD<d-cite key="griewankDetectingJacobianSparsity2002"></d-cite>, but we do not linger on them here.
 
 The method we present corresponds to a binary version of a forward-mode AD system, similar in spirit to <d-cite key="dixonAutomaticDifferentiationLarge1990"></d-cite> and <d-cite key="bischofEfficientComputationGradients1996"></d-cite>,
 in which performance is gained by representing matrix rows as index sets.
@@ -473,16 +501,16 @@ $$ \big( \Jf \big)_{i,:}
     \dfdx{i}{1} &
     \ldots      &
     \dfdx{i}{n}
-\end{bmatrix} .
+\end{bmatrix} \, .
 $$
 
 However, since we are only interested in the binary pattern 
 
-$$ \left[\dfdx{i}{j} \neq 0\right]_{1 \le j \le n} , $$
+$$ \left[\dfdx{i}{j} \neq 0\right]_{1 \le j \le n} \, , $$
 
 we can instead represent the sparsity pattern of the $i$-th row of a Jacobian by the corresponding **index set of non-zero values**
 
-$$ \left\{j \;\Bigg|\; \dfdx{i}{j} \neq 0\right\} . $$
+$$ \left\{j \;\Bigg|\; \dfdx{i}{j} \neq 0\right\} \, . $$
 
 These equivalent sparsity pattern representations are illustrated in Figure 13.
 Each row index set tells us **which inputs influenced a given output**, at the first-order.
@@ -495,15 +523,14 @@ For instance, output $i=2$ was influenced by inputs $j=4$ and $j=5$.
 
 ### Efficient propagation
 
-Figure 14 shows the traditional forward-AD pass we want to avoid:
+Figure 14 shows the traditional forward mode pass we want to avoid:
 propagating a full identity matrix through a linear map would compute the Jacobian matrix of $f$, 
 but also all intermediate linear maps.
 As previously discussed, this is not a viable option due to its inefficiency and high memory requirements.
 
 {% include figure.html path="assets/img/2025-04-28-sparse-autodiff/forward_mode_naive.svg" class="img-fluid" %}
 <div class="caption">
-    Figure 14: Computation of a full Jacobian matrix in forward mode. 
-    Due to high memory requirements for intermediate Jacobians, this approach is inefficient or impossible.  
+    Figure 14: Propagating an identity matrix in forward mode to obtain the Jacobian.
 </div>
 
 Instead, we initialize an input vector with index sets corresponding to the identity matrix. 
@@ -540,9 +567,9 @@ Instead of evaluating the original compute graph for a given input $\mathbf{x}$,
 all inputs are seeded with their respective input index sets.
 Figure 16 annotates these index sets on the edges of the computational graph.
 
-{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/compute_graph.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/compute_graph.png" class="img-90" %}
 <div class="caption">
-    Figure 16: Computational graph of the function $ f(\vx) = x_1 + x_2x_3 + \text{sgn}(x_4) $, annotated with corresponding index sets.  
+    Figure 16: Computational graph of the function $ f(\mathbf{x}) = x_1 + x_2x_3 + \text{sgn}(x_4) $, annotated with corresponding index sets.  
 </div>
 
 Abstract interpretation means that we imbue the computational graph with a different meaning.
@@ -607,17 +634,17 @@ and therefore increasing the computational cost of ASD.
 Figure 19 shows an infeasible coloring: vertices 2 and 4 on the graph are adjacent, but share a color.
 This results in overlapping columns.
 
-{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/colored_graph.svg" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/colored_graph.svg" class="img-80" %}
 <div class="caption">
     Figure 17: Optimal graph coloring.
 </div>
 
-{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/colored_graph_suboptimal.svg" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/colored_graph_suboptimal.svg" class="img-80" %}
 <div class="caption">
     Figure 18: Suboptimal graph coloring (vertex 1 could be colored in yellow).
 </div>
 
-{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/colored_graph_infeasible.svg" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/colored_graph_infeasible.svg" class="img-80" %}
 <div class="caption">
     Figure 19: Infeasible graph coloring (vertices 2 and 4 are adjacent on the graph, but share a color).
 </div>
@@ -637,13 +664,13 @@ A crucial hyperparameter is the choice of ordering, for which various criteria h
 
 A more advanced coloring technique called **bicoloring** allows combining forward and reverse modes, because the recovery of the Jacobian leverages both columns (JVPs) and rows (VJPs) <d-cite key="hossainComputingSparseJacobian1998"></d-cite> <d-cite key="colemanEfficientComputationSparse1998"></d-cite>.
 
-Figure 19 shows bicoloring on a toy example in which no pair of columns or rows is structurally orthogonal.
+Figure 20 shows bicoloring on a toy example in which no pair of columns or rows is structurally orthogonal.
 Even with ASD, the Jacobian computation would require $5$ JVPs in forward-mode or $4$ VJPs in reverse mode.
-If we use both modes simultaneously, we can recover the full Jacobian by computing only $1$ JVP and $1$ VJP.
+However, if we use both modes simultaneously, we can recover the full Jacobian by computing only $1$ JVP and $1$ VJP.
 
-{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/bicoloring.svg" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/bicoloring.svg" class="img-50" %}
 <div class="caption">
-    Figure 19: Bicoloring on a toy example with a dense row and a dense column.
+    Figure 20: Bicoloring on a toy example with a dense row and a dense column.
 </div>
 
 ## Second order
@@ -651,7 +678,7 @@ If we use both modes simultaneously, we can recover the full Jacobian by computi
 While first-order automatic differentiation AD focuses on computing the gradient or Jacobian, 
 second-order AD extends the same ideas to the **Hessian** matrix
 
-$$ \nabla^2 f (\mathbf{x}) = \left(\frac{\partial^2 f(\mathbf{x})}{\partial x_i ~ \partial x_j} \right)_{i,j} $$
+$$ \nabla^2 f (\mathbf{x}) = \left(\frac{\partial^2 f(\mathbf{x})}{\partial x_i ~ \partial x_j} \right)_{i,j} \, .$$
 
 The Hessian contains second-order partial derivatives of a scalar function, essentially capturing the curvature of the function at a point.
 This is particularly relevant in **optimization**, where the Hessian provides crucial information about the function's local behavior.
@@ -663,7 +690,7 @@ By incorporating second-order information, optimization algorithms converge more
 For second-order AD, the key subroutine is the **Hessian-vector product (HVP)**.
 The Hessian is the Jacobian matrix of the gradient function $\nabla f: \mathbf{x} \mapsto \nabla f(\mathbf{x})$, that is,
 
-$$ \nabla^2 f (\mathbf{x}) = J_{\nabla f}(\mathbf{x}) $$
+$$ \nabla^2 f (\mathbf{x}) = J_{\nabla f}(\mathbf{x}) \, .$$
 
 An HVP computes the product of the Hessian matrix with a vector, which can be viewed as the JVP of the gradient function.
 
@@ -683,7 +710,7 @@ This specificity can be exploited in the sparsity detection as well as in the co
 
 Detecting the sparsity pattern of the Hessian is more complicated than for the Jacobian.
 This is because, in addition to the usual linear dependencies, we now have to account for **nonlinear interactions** in the computational graph.
-The operator overloading method of Walther <d-cite key="waltherComputingSparseHessians2008"></d-cite> was a pioneering effort towards Hessian sparsity detection, although more efficient alternatives quickly emerged <d-cite key="gowerNewFrameworkComputation2012">.
+The operator overloading method of Walther <d-cite key="waltherComputingSparseHessians2008"></d-cite> was a pioneering effort towards Hessian sparsity detection, although more efficient alternatives quickly emerged <d-cite key="gowerNewFrameworkComputation2012"></d-cite>.
 
 For instance, if $f(\mathbf{x})$ involves a term of the form $x_1 + x_2$, it will not directly affect the Hessian.
 However, we cannot ignore this term, since multiplying it with $x_3$ to obtain an output $f(\mathbf{x}) = (x_1 + x_2)\,x_3$ 
@@ -722,10 +749,9 @@ Here are the packages we will use for this demonstration.
 - [DifferentiationInterface.jl](https://github.com/JuliaDiff/DifferentiationInterface.jl) <d-cite key="dalleJuliaDiffDifferentiationInterfacejlDifferentiationInterfacev06232024"></d-cite>: High-level interface bringing all of these together, originally inspired by <d-cite key="schaferAbstractDifferentiationjlBackendAgnosticDifferentiable2022"></d-cite>.
 
 This modular pipeline comes as a replacement and extension of a previous ASD system in Julia <d-cite key="gowdaSparsityProgrammingAutomated2019"></d-cite>.
-
 We also use a few other packages for data manipulation <d-cite key="bouchet-valatDataFramesjlFlexibleFast2023"></d-cite> and visualization <d-cite key="danischMakiejlFlexibleHighperformance2021"></d-cite>.
 
-Like in any other language, the first step is importing the dependencies.
+Like in any other language, the first step is importing the dependencies:
 
 ```julia
 using DifferentiationInterface
@@ -783,7 +809,11 @@ coloring_algorithm = GreedyColoringAlgorithm()  # from SparseMatrixColorings
 asd = AutoSparse(ad; sparsity_detector, coloring_algorithm)
 ```
 
-We can now compute the Jacobian of `iter_diff` (with respect to $\mathbf{x}$) using either backend, and compare the results:
+### Jacobian computation
+
+We can now compute the Jacobian of `iter_diff` (with respect to $\mathbf{x}$) using either backend, and compare the results.
+Just like AD, ASD is fully automatic.
+It doesn't require the user to change any code besides specifying a backend:
 
 ```julia
 julia> x, k = rand(10), 3;
@@ -902,7 +932,7 @@ data = benchmark_differentiation(
 
 It gives rise to the following performance curves (lower is better):
 
-{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/demo/benchmark.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-sparse-autodiff/demo/benchmark.png" class="img-90" %}
 <div class="caption">
     Figure 22: Performance benefits of sparsity  
 </div>
@@ -926,7 +956,7 @@ By now, the reader should have a better understanding of how sparsity can be use
 
 But should it always be used? Here are a list of criteria to consider when choosing between AD and ASD:
 
-- **Which derivative is needed?** In a purely gradient-based algorithm, sparsity will be useless: it can only speed up derivatives like the Jacobian and Hessian which have a matrix form.
+- **Which derivative is needed?** When computing gradients of scalar functions using reverse mode, sparsity can't be leveraged, as only a single VJP is required. In practice, ASD only speeds up derivatives like the Jacobian and Hessian which have a matrix form.
 - **What operations will be performed on the derivative matrix?** For a single matrix-vector product $J \mathbf{v}$, the linear map will always be faster. But if we want to solve linear systems $J \mathbf{v} = \mathbf{y}$, then it may be useful to compute the full matrix first to leverage sparse factorization routines.
 - **How expensive is the function at hand?** This directly impacts the cost of a JVP, VJP or HVP, which scales with the cost of one function evaluation.
 - **How sparse would the matrix be?** This dictates the efficiency of sparsity detection and coloring, as well as the number of matrix-vector products necessary. While it may be hard to get an exact estimate, concepts like partial separability can help provide upper bounds <d-cite key="gowerComputingSparsityPattern2014"></d-cite>. In general, the relation between the number of colors $c$ and the dimension $n$ is among the most crucial quantities to analyze.
