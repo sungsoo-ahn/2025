@@ -59,8 +59,6 @@ _styles: >
   }
 ---
 
-Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling.
-
 ## Introduction
 With the approximate human knowledge, large language models have revolutionized the way of simulations of social and psychological phenomena <d-cite key="Park2023GenerativeAgents"></d-cite> and <d-cite key="gao2023s"></d-cite>. By processing and generating human-like language, LLMs offer unprecedented opportunities to model complex interactions and behaviors that were previously challenging to simulate. This capability opens doors to exploring societal trends, market dynamics, and individual psychological states through a new lens.
 
