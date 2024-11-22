@@ -424,7 +424,7 @@ ______
 
 ## Final Thoughts
 
-We have run through the most common definition of calibration, the shortcomings of ECE and several new notions of calibration: multi-class, class-wise & human-uncertainty calibration. 
+We have run through the most common definition of calibration, the shortcomings of ECE and additional notions of calibration: multi-class, class-wise & human-uncertainty calibration. 
 We also touched on some of the newly proposed evaluation measures and their shortcomings.
 Despite several works arguing against the use of ECE for evaluating calibration, it remains widely used. 
 The aim of this blogpost is to draw attention to these works and their alternative approaches. 
