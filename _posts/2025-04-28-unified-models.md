@@ -182,12 +182,7 @@ In recent years, the field of multimodal understanding and generation has seen s
 
 Unity concept resonates deeply in the context of unified models for multimodal understanding and generation. This blog aims to explore the recent developments in unified multimodal models, reviewing their current state and outlining the future directions for research and application. We will delve into the principles behind autoregressive and diffusion models, shedding light on their unique characteristics and how they can be effectively combined. Ultimately, we will discuss whether the future of unified models lies in one of these paradigms, or if a hybrid approach holds the key to even greater advancements.
 
-<aside class="l-body box-note" markdown="1">
-Based on model architectures, unified multimodal models can be categorized into two primary divisions: single models and multi-expert models. 
-Further, single models can be classified into pure autoregressive architectures and mixed architectures:
 
-{% include figure.html path="assets/img/2025-04-28-unified-models/flowchart.png" class="img-fluid" %}
-</aside>
 
 
 ## Background
