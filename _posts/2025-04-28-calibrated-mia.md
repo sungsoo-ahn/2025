@@ -61,17 +61,27 @@ Below we report results for the *Wikipedia* split.
 | [GPT-NeoX-20B](https://huggingface.co/EleutherAI/gpt-neox-20b) | 0.600 | 0.103 |
 
 **Result:**  
-The method performed only a bit better than the LOSS attack, and remains comparable to most standalone membership inference attacks. For reference, AUC with the baseline LOSS and zlib <d-cite key="carlini2021extracting"></d-cite> attacks for Pythia-6.9B are .526 and .536 respectively, while it is .618 when using a reference-model (Table 12 in <d-cite key="duan2024membership"></d-cite>). Similarly, using LOSS and zlib yeild AUCs of 0.563 and 0.572 respectively.
+The method performed only a bit better than the LOSS attack, and remains comparable to most standalone membership inference attacks. For reference, AUC with the baseline LOSS and zlib <d-cite key="carlini2021extracting"></d-cite> attacks for Pythia-6.9B are 0.526 and 0.536 respectively, while it is 0.618 when using a reference-model (Table 12 in <d-cite key="duan2024membership"></d-cite>). Similarly, using LOSS and zlib yeild AUCs of 0.563 and 0.572 respectively.
 
-Reported improvements in the paper were thus likely due to exploiting differences in the data distribution, rather than actual improvements in detecting membership.  
+Reported improvements in the paper (Table 2 <d-cite key="zhang2024pretraining"></d-cite> showing AUCs of 0.7 and higher) were thus likely due to exploiting differences in the data distribution, rather than actual improvements in detecting membership.  
 
 ### False Positive Rate Experiment  
 
-Next, we checked how often the method falsely identifies data as "member" when it has never been part of the training set. To do this, we used the **WikiMIA** dataset but replaced the training data with unrelated validation data from the *Wikipedia* split of **The Pile**.  
+Next, we checked how often the method falsely identifies data as "member" when it has never been part of the training set. To do this, we used the **WikiMIA** dataset but replaced the training data with unrelated validation data from the *Wikipedia* split of **The Pile**. This means that we can say with certainty that the Pythia and GPT-neox models did not train on either split. We follow the experimental setup of in Section 3 of <d-cite key="maini2024llm"></d-cite> for this analysis.
 
 **Result:**  
 The method flagged a high number of false positives. It frequently identified non-member data as part of the training set, revealing that it was relying on temporal or distribution artifacts rather than truly detecting membership.  
 
+Below we report results for the *Wikipedia* split (closer to 0.5 is better since both splits are non-members).
+
+| Model              | AUC for DC-PDD <d-cite key="zhang2024pretraining"></d-cite> | AUC for LOSS <d-cite key="carlini2021extracting"></d-cite> |
+| :---------------- | :---------: | ----: |
+| [Pythia-6.9B](https://huggingface.co/EleutherAI/pythia-6.9b) |   0.667 | 0.636 |
+| [GPT-Neo-125M](https://huggingface.co/EleutherAI/gpt-neo-125m) | 0.689 | 0.671 |
+| [GPT-Neox-20b](https://huggingface.co/EleutherAI/gpt-neox-20b) | 0.637 | 0.656 |
+
+
+The results in the table above show that DC-PDD is susceptible to showing high false positives, aking to simple methods like LOSS. Notably, the AUC values in such a false-positive setting are significantly higher than in the previous experiment, indicating that the method clearly captures temporal or distributional artifacts rather than true membership.
 ---
 
 ## The Problem with Temporally Shifted Benchmarks  
