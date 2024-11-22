@@ -148,7 +148,7 @@ In figure 2, we can see that based on the previous context of the new line token
 <div align="center">
   <img src="/assets/img/2025-11-22-perpetual-text/prob_dist_4.png" width="700px;" alt=""/>
   <br>
-  Figure 3: Token-Wise Analysis, 3
+  Figure 3: Token-Wise Analysis, 4
 </div>
 <br><br>
 In figure 3, we can see that the new line token was predicted 3 times before the EOS token took over for highest probability (with a period inbetween). Since the model is deciding between \n or EOS, we can say that the *previous tokens are getting less effective to the next predictions*. This means that the model is not able to provide more consistent context related to the previous tokens, and therefore wants to “halt” or go to new context. 
@@ -171,7 +171,7 @@ The first method involves suppressing the EOS token during the token generation 
 **Observations:**
 - Despite the suppression of the EOS token, the model tends to generate tokens that are semantically similar to the EOS token, such as "The end" or "Conclusion."
 
-~~\<EOS\>~~ The end. \<EOS\>
+<div align="center">~~\<EOS\>~~ The end. \<EOS\></div>
 
 - This behavior suggests that the model implicitly seeks to conclude the sequence by generating ending phrases, even when the EOS token is unavailable.
 
