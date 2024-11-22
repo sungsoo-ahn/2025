@@ -306,9 +306,9 @@ Reverse mode is also matrix-free: **no intermediate Jacobians are computed at an
 
 ### From linear maps back to Jacobians
 
-This machinery can be used to turn a composed linear map (lazy matrix representation) 
+This machinery can be used to turn a composed linear map (a lazy matrix representation) 
 into a dense matrix in a computationally expensive process we call **materialization**.
-Counterintuitively, this process does not **materialize any intermediate Jacobians**.
+Counterintuitively, this process **does not materialize any intermediate Jacobians**.
 
 Figure 6 demonstrates how to **materialize Jacobians column by column** in forward mode.
 Evaluating the linear map $Df(\mathbf{x})$ on the $i$-th standard basis vector materializes the $i$-th column of the Jacobian $J_{f}(\mathbf{x})$:
