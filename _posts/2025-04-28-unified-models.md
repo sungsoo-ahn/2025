@@ -178,7 +178,7 @@ categories:
 
 {% include figure.html path="assets/img/2025-04-28-unified-models/21.07.44.png" class="img-fluid" %}
 
-In recent years, the field of multimodal understanding and generation has seen significant advancements, particularly with the rise of unified models capable of addressing a wide range of tasks. Notable examples include Meta’s Transfusion<d-cite key="zhou2024transfusion"></d-cite>, NUS’s Show-O<d-cite key="xie2024showo"></d-cite>, and BAAI’s EMU3<d-cite key="wang2024emu3"></d-cite>, which have set the stage for a growing trend: the development of single models that can process and generate information across multiple modalities, such as text, images, and more. These unified models utilize a variety of techniques, including pure autoregressive methods, diffusion-based approaches, or even hybrid combinations of both.
+In recent years, the field of multimodal understanding and generation has seen significant advancements, particularly with the rise of unified models capable of addressing a wide range of tasks. Notable examples include Meta’s Transfusion<d-cite key="zhou2024transfusion"></d-cite>, NUS’s Show-o<d-cite key="xie2024showo"></d-cite>, and BAAI’s EMU3<d-cite key="wang2024emu3"></d-cite>, which have set the stage for a growing trend: the development of single models that can process and generate information across multiple modalities, such as text, images, and more. These unified models utilize a variety of techniques, including pure autoregressive methods, diffusion-based approaches, or even hybrid combinations of both.
 
 
 
@@ -277,12 +277,25 @@ $$
 x_{\text{video}} = f_{\text{Unified Model}}(x_{\text{text}},x_{\text{image}})
 $$
 
-* **Cross-Modal Alignment (Loss)**:
-A key challenge is aligning feature spaces of diverse modalities into a unified latent space. Formally, given $x_i$ and $y_j$ from different modalities, the goal is to minimize their alignment loss $\mathcal{L}_{\text{align}}$:
+* **Cross-Modal Alignment or Generative Alignment**:
+
+A key design choice in unified models is the method of aligning modalities:
+
+1) **Cross-Modal Alignment**. Aligning feature spaces of diverse modalities into a unified latent space. Formally, given $x_i$ and $y_j$ from different modalities, the goal is to minimize their alignment loss $\mathcal{L}_{\text{align}}$:
 
 $$
 \mathcal{L}_{\text{align}} = \| f_{\text{Unified Model}}(x_i) - f_{\text{Unified Model}}(x_j) \|_2^2
 $$
+
+2) **Generative Alignment**. Models such as Show-O and Transfusion bypass explicit alignment by directly using generative loss to learn the relationships between modalities. This approach models the inter-modality relationships through tasks like sequence prediction or output reconstruction, focusing on generation rather than explicit feature alignment. For a pair of modalities $x_{\text{src}}$ and $x_{\text{tgt}}$, the loss function is a weighted sum of generative losses for each task:
+
+$$
+\mathcal{L}_{\text{unified}} = \sum_{k=1}^K \lambda_k \mathcal{L}_{\text{gen}}^k
+$$
+
+Where $K$ is the number of modality pairs, $\mathcal{L}_{\text{gen}}^k$ is the generative loss for the $k$-th modality pair, $\lambda_k$ is a weight balancing the importance of each task.
+
+
 
 * **Model Architectures**:
 
@@ -291,7 +304,7 @@ From the perspective of model architectures, unified multimodal systems can gene
 *1. Autoregressive Models*.  Predict the next token or step $x_{t+1}$ based on past inputs $x_{\leq t}$, examples include EMU3.
 
 
-*2. Mixed Architectures*. Combine autoregressive and diffusion methods, leveraging their respective strengths, as seen in models like Show-O.
+*2. Mixed Architectures*. Combine autoregressive and diffusion methods, leveraging their respective strengths, as seen in models like Show-o.
 
 
 
@@ -332,7 +345,7 @@ For the single-model paradigm, existing methods can primarily be categorized int
   Architecture\Feature     | **Discrete** | **Continuous** 
 --- | --- | ---
 **Autoregressive** | *LWM*<d-cite key="liu2024world"></d-cite>; *Chameleon*<d-cite key="chameleon2024"></d-cite>; *VILA-U*<d-cite key="wu2024vila"></d-cite>; *EMU3*<d-cite key="wang2024emu3"></d-cite> | *MMAR*<d-cite key="yang2024mmar"></d-cite>
-**AR+Diffusion** | *Show-O*<d-cite key="xie2024showo"></d-cite> | *Transfusion*<d-cite key="zhou2024transfusion"></d-cite>;*MonoFormer*<d-cite key="zhao2024monoformer"></d-cite>
+**AR+Diffusion** | *Show-o*<d-cite key="xie2024showo"></d-cite> | *Transfusion*<d-cite key="zhou2024transfusion"></d-cite>;*MonoFormer*<d-cite key="zhao2024monoformer"></d-cite>
 
 
 
@@ -341,7 +354,7 @@ For the single-model paradigm, existing methods can primarily be categorized int
 
 
 
-The fundamental difference between Autoregressive Models (*e.g.,* EMU3, Chameleon) and AR+Diffusion Models (*e.g.,* Show-O, Transfusion) lies in their approach.Autoregressive Models still sequentially predict the next token across all modalities, while AR+Diffusion models combine autoregressive generation for discrete tokens (*e.g., text*) with diffusion processes for continuous data (*e.g.,* images and videos). 
+The fundamental difference between Autoregressive Models (*e.g.,* EMU3, Chameleon) and AR+Diffusion Models (*e.g.,* Show-o, Transfusion) lies in their approach.Autoregressive Models still sequentially predict the next token across all modalities, while AR+Diffusion models combine autoregressive generation for discrete tokens (*e.g., text*) with diffusion processes for continuous data (*e.g.,* images and videos). 
 
 <aside class="l-body box-note" markdown="1">
 Autoregressive (AR) models and mixed architectures (AR + diffusion) differ in how they handle data, particularly for high-dimensional modalities like images and videos. AR models treat all modalities uniformly by sequentially predicting the next token, which works well for temporal tasks but struggles with capturing spatial dependencies. In contrast, mixed architectures combine AR for global structure and diffusion for spatial modeling, allowing all tokens to interact during generation. This results in more coherent outputs for image and video tasks, as diffusion handles spatial distributions through parallel denoising. While AR models are simple and efficient, mixed architectures offer better performance for spatial data at the cost of increased complexity and computational demand.
@@ -407,7 +420,7 @@ Autoregressive models with continuous-valued tokenizers, such as MMAR, introduce
 *Limitations - Task Flexibility*: While excellent for understanding tasks, these models may require additional tuning to handle diverse generative tasks effectively.
 
 **Mixed Architectures with Discrete Valued Tokenizer.**
-Mixed architectures that combine autoregressive (AR) and diffusion models, such as Show-O, represent an innovative approach to unified multimodal modeling. These architectures leverage the strengths of both AR and diffusion frameworks while operating on discrete-valued tokenized inputs, aiming to address the limitations of each individual method.
+Mixed architectures that combine autoregressive (AR) and diffusion models, such as Show-o, represent an innovative approach to unified multimodal modeling. These architectures leverage the strengths of both AR and diffusion frameworks while operating on discrete-valued tokenized inputs, aiming to address the limitations of each individual method.
 
 
 
