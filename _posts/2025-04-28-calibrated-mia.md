@@ -58,6 +58,7 @@ Below we report results for the *Wikipedia* split.
 | Model              | AUC | TPR@5%FPR |
 | :---------------- | :---------: | ----: |
 | [Pythia-6.9B](https://huggingface.co/EleutherAI/pythia-6.9b) |   0.542 | 0.071 |
+| [GPT-Neo-125M](https://huggingface.co/EleutherAI/gpt-neo-125m) | ????? | ????? |
 | [GPT-NeoX-20B](https://huggingface.co/EleutherAI/gpt-neox-20b) | 0.600 | 0.103 |
 
 **Result:**  
@@ -67,12 +68,12 @@ Reported improvements in the paper (Table 2 <d-cite key="zhang2024pretraining"><
 
 ### False Positive Rate Experiment  
 
-Next, we checked how often the method falsely identifies data as "member" when it has never been part of the training set. To do this, we used the **WikiMIA** dataset but replaced the training data with unrelated validation data from the *Wikipedia* split of **The Pile**. This means that we can say with certainty that the Pythia and GPT-neox models did not train on either split. We follow the experimental setup of in Section 3 of <d-cite key="maini2024llm"></d-cite> for this analysis.
+Next, we checked how often the method falsely identifies data as "member" when it has never been part of the training set. To do this, we used the **WikiMIA**<d-cite key="shi2023detecting"></d-cite> dataset but replaced the training data with unrelated validation data from the *Wikipedia* split of **The Pile**. This means that we can say with certainty that the Pythia and GPT-neox models did not train on either split. We follow the experimental setup of in Section 3 of <d-cite key="maini2024llm"></d-cite> for this analysis.
 
 **Result:**  
 The method flagged a high number of false positives. It frequently identified non-member data as part of the training set, revealing that it was relying on temporal or distribution artifacts rather than truly detecting membership.  
 
-Below we report results for the *Wikipedia* split (closer to 0.5 is better since both splits are non-members).
+Below we report results for the *Wikipedia* split. Note that in this setting, a scorecloser to 0.5 is better since both splits are non-members.
 
 | Model              | AUC for DC-PDD <d-cite key="zhang2024pretraining"></d-cite> | AUC for LOSS <d-cite key="carlini2021extracting"></d-cite> |
 | :---------------- | :---------: | ----: |
@@ -81,7 +82,7 @@ Below we report results for the *Wikipedia* split (closer to 0.5 is better since
 | [GPT-Neox-20b](https://huggingface.co/EleutherAI/gpt-neox-20b) | 0.637 | 0.656 |
 
 
-The results in the table above show that DC-PDD is susceptible to showing high false positives, aking to simple methods like LOSS. Notably, the AUC values in such a false-positive setting are significantly higher than in the previous experiment, indicating that the method clearly captures temporal or distributional artifacts rather than true membership.
+The results in the table above show that DC-PDD is susceptible to showing high false positives, akin to simple methods like LOSS. Notably, the AUC values in such a false-positive setting are significantly higher than in the previous experiment, indicating that the method clearly captures temporal or distributional artifacts rather than true membership.
 
 ---
 
