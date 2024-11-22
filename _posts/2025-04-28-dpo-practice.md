@@ -143,7 +143,7 @@ Here, $\tau$ corresponds to $(s, a)$ in Equation 9. Thus, PPO's objective ($O_p$
 
 ### Monte Carlo Method vs. Temporal Difference Learning
 
-In DPO, rewards for each action (the entire response) are sampled and averaged, similar to a Monte Carlo method.  The probability of generating a response (Equation 6) can be considered a reshaped reward.  DPO treats the entire response as an action, potentially overlooking important tokens and introducing high variance in reward estimation.  Accurate reward estimation requires at least $O(m^n)$ samples (vocabulary size $m$, maximum response length $n$), making DPO sample-inefficient.
+In DPO, rewards for each action (the entire response) are sampled and averaged, similar to a Monte Carlo method.  The probability of generating a response (Equation 6) can be considered a reshaped reward.  DPO treats the entire response as an action, potentially overlooking important tokens and introducing high variance in reward estimation.  Accurate reward estimation requires at least $O(m^n)$ samples (vocabulary size $m$, maximum response length $n$) <d-cite key="xie2024exploratory"></d-cite>, making DPO sample-inefficient.
 
 PPO estimates token-wise rewards, identifying important tokens but potentially introducing bias. It uses GAE, a form of n-step TD learning. TD learning learns the value function based on the difference between estimated values of consecutive states.  The TD error is:
 
