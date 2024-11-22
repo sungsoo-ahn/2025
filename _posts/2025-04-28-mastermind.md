@@ -158,7 +158,7 @@ The format of query is:
 Some example contents of these datasets can be viewed in the following table.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-04-28-mastermind/doudizhu_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-04-28-mastermind/doudizhu_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="400px" width="100%"></iframe>
 </div>
 
 
@@ -208,7 +208,7 @@ The training sample thus adopts the following format:
 Some example contents of these datasets can be viewed in the following table.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-04-28-mastermind/go_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-04-28-mastermind/go_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="400px" width="100%"></iframe>
 </div>
 
 **Combined Training:**
