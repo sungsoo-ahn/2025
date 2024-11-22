@@ -171,14 +171,16 @@ categories:
 <!-- <aside class="l-body box-note" markdown="1"> -->
 <!-- </aside> -->
 
+
+<blockquote>
+“Unity is strength... when there is teamwork and collaboration, wonderful things can be achieved.” — Mattie Stepanek
+</blockquote>
+
 {% include figure.html path="assets/img/2025-04-28-unified-models/21.07.44.png" class="img-fluid" %}
 
 In recent years, the field of multimodal understanding and generation has seen significant advancements, particularly with the rise of unified models capable of addressing a wide range of tasks. Notable examples include Meta’s Transfusion<d-cite key="zhou2024transfusion"></d-cite>, NUS’s Show-O<d-cite key="xie2024showo"></d-cite>, and BAAI’s EMU3<d-cite key="wang2024emu3"></d-cite>, which have set the stage for a growing trend: the development of single models that can process and generate information across multiple modalities, such as text, images, and more. These unified models utilize a variety of techniques, including pure autoregressive methods, diffusion-based approaches, or even hybrid combinations of both.
 
 
-<blockquote>
-“Unity is strength... when there is teamwork and collaboration, wonderful things can be achieved.” — Mattie Stepanek
-</blockquote>
 
 Unity concept resonates deeply in the context of unified models for multimodal understanding and generation. This blog aims to explore the recent developments in unified multimodal models, reviewing their current state and outlining the future directions for research and application. We will delve into the principles behind autoregressive and diffusion models, shedding light on their unique characteristics and how they can be effectively combined. Ultimately, we will discuss whether the future of unified models lies in one of these paradigms, or if a hybrid approach holds the key to even greater advancements.
 
@@ -251,6 +253,17 @@ where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at
 
 *  **Faster Inference Compared to Autoregressive Models**: Diffusion models often have faster inference times because they generate images or videos in parallel with only few steps, unlike autoregressive models that generate token-by-token.
 
+
+To further summarize and compare the pros and cons of Diffusion Models and Autoregressive Models, we present the table below:
+
+| **Model Type**          | **Pros**                                                                 | **Cons**                                                                 |
+|--------------------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------|
+| **Diffusion Models**     | - Excellent at modeling complex spatial distributions (image/video) due to iterative refinement. | - Computationally expensive during training and inference.             |
+|                          | - Leverages bi-directional (full) attention for holistic context understanding. | - Slower generation process due to multiple iterative steps.           |
+|                          | - Well-suited for tasks requiring high-quality generative capabilities.  | - More challenging to scale for sequential tasks.                      |
+| **Autoregressive Models**| - Efficient and fast at generation, producing outputs token by token.   | - Limited context awareness due to unidirectional (causal) attention.  |
+|                          | - Simpler training and inference pipeline.                              | - May struggle with capturing global relationships in the input data.  |
+|                          | - Natural fit for sequential and time-sensitive tasks (e.g., text generation). | - Often less flexible in handling complex multimodal relationships.     |
 
 
 
