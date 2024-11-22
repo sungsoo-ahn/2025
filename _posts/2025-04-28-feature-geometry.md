@@ -1,7 +1,8 @@
 ---
 layout: distill
 title: Intricacies of Feature Geometry in Large Language Models
-description: We discuss several challenges around studying the geometry of feature representations in large language models (LLMs). We run ablations challenging the theses of two recent works, the ICML 2024 Mechanistic Interpretability Workshop 1st prize winning paper - The Geometry of Categorical and Hierarchical Concepts in LLMs, and the ICML 2024 paper - The Linear Representation Hypothesis and the Geometry of LLMs. We theoretically and empirically justify our main takeaway, which is that their orthogonality and polytopes results for categorical and hierarchical concepts are trivially true under the whitening transformation in high-dimensional spaces, and can be observed even in settings where they should not occur.
+description: Studying the geometry of a language model's embedding space is an important and challenging task because of the various ways concepts can be represented, extracted, and used. Specifically, we want a framework that unifies both measurement (of how well a latent explains a feature/concept) and causal intervention (how well it can be used to control/steer the model). We discuss several challenges with using some recent approaches to study the geometry of categorical and hierarchical concepts in large language models (LLMs) and both theoretically and empirically justify our main takeaway, which is that their orthogonality and polytopes results are trivially true in high-dimensional spaces, and can be observed even in settings where they should not occur.
+
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -91,9 +92,9 @@ _styles: >
 
 ## An Overview of the Feature Geometry Papers
 
-Studying the geometry of a language model's embedding space is an important and challenging task because of the various ways concepts can be represented, extracted, and used. Specifically, we want a framework that unifies both *measurement* (of how well a latent explains a feature/concept) and *causal intervention* (how well it can be used to control/steer the model). 
+We present several ablations results and theoretical arguments highlighting challenges with the theses of two recent works, the [**ICML 2024 Mechanistic Interpretability Workshop**](https://icml2024mi.pages.dev/) **1st prize** winning paper - [The Geometry of Categorical and Hierarchical Concepts in LLMs](https://arxiv.org/abs/2406.01506v1) <d-cite key="park2024geometrycategoricalhierarchicalconcepts"></d-cite>, and the **ICML 2024** paper - [The Linear Representation Hypothesis and the Geometry of LLMs](https://arxiv.org/abs/2311.03658) <d-cite key="park2024linearrepresentationhypothesisgeometry"></d-cite>.
 
-The method described in the two papers <d-cite key="park2024geometrycategoricalhierarchicalconcepts, park2024linearrepresentationhypothesisgeometry"></d-cite> we study works as follows: they split the computation of a large language model (LLM) as:
+The methodology described in the two papers we study is as follows -- they split the computation of a large language model (LLM) as:
 
 $$
 P(y \mid x) = \frac{\exp(\lambda(x)^\top \gamma(y))}{\sum_{y' \in \text{Vocab}} \exp(\lambda(x)^\top \gamma(y'))}
@@ -105,13 +106,13 @@ where:
 
 They formalize a notion of a *binary concept* as a latent variable $W$ that is caused by the context $X$ and causes output $Y(W=w)$ depending only on the value of $w \in W$.
 
-> Crucially, this restricts their methodology to only work with concepts that can be differentiated by single-token counterfactual pairs of outputs. For instance, it is not clear how to define several important concepts such as "sycophancy" and "truthfulness" using their formalism.
+> Comment: Crucially, this restricts their methodology to only work with concepts that can be differentiated by single-token counterfactual pairs of outputs. For instance, it is not clear how to define several important concepts such as "sycophancy" and "truthfulness" using their formalism.
 
 They then define linear representations of a concept in both the embedding and unembedding spaces:
 
-In the unembedding space, $\barγ_W$ is considered a representation of a concept W if $γ(Y (1)) − γ(Y (0)) = \alpha\barγ_W$ almost surely, where $\alpha > 0$.
+In the unembedding space, $\barγ_W$ is considered a representation of a concept W if $$ \gamma (Y (1)) − \gamma (Y (0)) = \alpha\bar \gamma_W $$ almost surely, where $\alpha > 0$.
 
-> This definition has the hidden assumption that each pair $(Y(0), Y(1))$ sampled from the vocabulary would only correspond to a unique concept. For instance, ("king", "queen") can correspond to a variety of concepts such as "$\text{male}\implies \text{female}$", "$\text{k-words}\implies \text{q-words}$", and "$\text{n'th card}\implies \text{(n-1)'th card}$" in a deck of playing cards.
+> Comment: This definition has the hidden assumption that each pair $(Y(0), Y(1))$ sampled from the vocabulary would only correspond to a unique concept. For instance, ("king", "queen") can correspond to a variety of concepts such as "male ⇒ female", "k-words ⇒ q-words", and "n'th card ⇒ (n-1)'th card" in a deck of playing cards.
 
 In the embedding space, they say that $\bar{\lambda}_W$ is a representation of a concept $W$ if we have $\lambda_1 - \lambda_0 \in \text{Cone}(\bar{\lambda}_W)$ for any context embeddings $\lambda_0, \lambda_1 \in \Lambda$ that satisfy
 $$
@@ -119,7 +120,7 @@ $$
 $$
 for each concept $Z$ that is causally separable with $W$.
 
-Now, in order to work with concept representations (i.e. look at similarities, projections, etc.), we need to define an inner product. They provide the following definition:
+Now, in order to work with concept representations (i.e. look at similarities, projections, etc.), we need to define an inner product. They provide the following definition <d-cite key="park2024linearrepresentationhypothesisgeometry"></d-cite>:
 
 $\textbf{Definition 3.1 (Causal Inner Product).}$ A $\textit{causal inner product}$ $\langle \cdot, \cdot \rangle_\mathcal{C}$ on $\overline{\Gamma} \simeq \mathbb{R}^d$ is an inner product such that 
 $$
@@ -127,9 +128,9 @@ $$
 $$
 for any pair of causally separable concepts $W$ and $Z$.
 
-> Note that this definition allows the inner product $<a,b>=0 \forall (a,b) : a\ne b$ to be a causal inner product. As we show, the whitening transformation they apply as an explicit example of a causal inner product does indeed make almost everything almost orthogonal.
+> Comment: Note that this definition allows the inner product $<a,b>=0 \forall (a,b) : a\ne b$ to be a causal inner product. As we show, the whitening transformation they apply as an explicit example of a causal inner product does indeed make almost everything almost orthogonal.
 
-This choice turns out to have the key property that it unifies the unembedding and embedding representations:
+This choice turns out to have the key property that it unifies the unembedding and embedding representations <d-cite key="park2024linearrepresentationhypothesisgeometry"></d-cite>:
 
 $\textbf{Theorem 3.2 (Unification of Representations).}$ Suppose that, for any concept $W$, there exist concepts $$ \{ Z_i \} _{i=1}^{d-1} $$ such that each $$Z_i$$ is causally separable with $$W$$ and $$\{ \overline{\gamma}_W \} \cup \{ \overline{\gamma}_{Z_i} \}_{i=1}^{d-1}$$ is a basis of $$\mathbb{R}^d$$. If $$\langle \cdot, \cdot \rangle_\mathcal{C}$$ is a causal inner product, then the Riesz isomorphism $$\overline{\gamma} \mapsto \langle \overline{\gamma}, \cdot \rangle_\mathcal{C}$$, for $$\overline{\gamma} \in \overline{\Gamma}$$, maps the unembedding representation $$\overline{\gamma}_W$$ of each concept $$W$$ to its embedding representation $$\overline{\lambda}_W$$:
 
@@ -140,7 +141,7 @@ $$
 ---
 
 
-For an explicit example of a causal inner product, they consider the *whitening transformation* using the covariance matrix of the unembedding vectors as follows:
+For an explicit example of a causal inner product, they consider the *whitening transformation* using the covariance matrix of the unembedding vectors as follows <d-cite key="park2024linearrepresentationhypothesisgeometry"></d-cite>:
 
 $$
 g(y) = \text{Cov}(\gamma)^{-1/2} (\gamma(y) - \mathbb{E}[\gamma])
@@ -154,13 +155,15 @@ $$
 \bar{\ell}_w = (\tilde{g}_w^\top\mathbb{E}(g_w)) \tilde{g}_w, \text{where} \,\,\,\, \tilde{g}_w = \frac{\text{Cov}(g_w)^\dagger\mathbb{E}(g_w)}{\|\text{Cov}(g_w)^\dagger\mathbb{E}(g_w)\|_2}
 $$
 
-Given such a vector representation $l_w$ for binary concepts (where $\ell_{w_1} - \ell_{w_0}$ is the linear representation of $w_0 \Rightarrow w_1$), the following orthogonality relations hold:
+These are their main orthogonality results <d-cite key="park2024geometrycategoricalhierarchicalconcepts"></d-cite>:
+
+$\textbf{Theorem 8 (Hierarchical Orthogonality).}$ Suppose there exist such vector representations $l_w$ for binary concepts (where $\ell_{w_1} - \ell_{w_0}$ is the linear representation of $w_0 \Rightarrow w_1$), the following orthogonality relations hold:
 
 $$
 \ell_w \perp (\ell_z - \ell_w) \quad \text{for } z \prec w
 $$
 
-> This illustrates that for hierarchical concepts mammal $\prec$ animal, we have $\ell_{animal} \perp (\ell_{mammal} - \ell_{animal})$. They prove this holds true and empirically validate it by plotting various animal representation points in the 2D span of the vectors for *animal* and *mammal*.
+> Comment: This illustrates that for hierarchical concepts mammal $\prec$ animal, we have $\ell_{animal} \perp (\ell_{mammal} - \ell_{animal})$. They prove this holds true and empirically validate it by plotting various animal representation points in the 2D span of the vectors for *animal* and *mammal*.
 
 $$
 \ell_w \perp (\ell_{z_1} - \ell_{z_0}) \quad \text{for } \{z_0, z_1\} \prec w
@@ -176,11 +179,11 @@ $$
 (\ell_{w_1} - \ell_{w_0}) \perp (\ell_{w_2} - \ell_{w_1}) \quad \text{for } w_2 \prec w_1 \prec w_0
 $$
 
-> Lastly, they show that in their transformed space, categorical features form polytopes in $n$-dimensions. They empirically show these results to hold in the [Gemma-2B](https://ai.google.dev/gemma) model and use the WordNet hierarchy to validate them at scale.
+Lastly, they show that in their transformed space, categorical features form polytopes in $n$-dimensions. They empirically show these results to hold in the [Gemma-2B](https://ai.google.dev/gemma) model and use the WordNet hierarchy to validate them at scale.
 
 ## Ablations
 
-To study concepts that do not form such semantic categories and hierarchies, we add the following two datasets:
+While we find the dataset they study (animal categories and hierarchies) to indeed exhibit the geometry they predict, to study concepts that do not form such semantic categories and hierarchies, we add the following two datasets:
 
 ### Semantically Correlated Concepts
 
@@ -215,7 +218,7 @@ Please see the reproducibility statement in the end for the exact details of our
 
 ## Hierarchical features are orthogonal - but so are semantic opposites!?
 
-Now, let's look at their main experimental results (for animals):
+Now, let's look at their main experimental results for animal hierarchies (see Fig. 2 in their [original paper](https://arxiv.org/pdf/2406.01506v1)):
 
 {% include figure.html path="assets/img/2025-04-28-feature-geometry/1.png" class="img-fluid" width="50%" height="300px" %}
 <div class="caption">
@@ -267,7 +270,7 @@ Thus, while categorical concepts form simplices, so do completely random, non-se
 
 ## Random Unembeddings Exhibit Similar Geometry
 
-Here, we show that under the [*whitening transformation*](https://en.wikipedia.org/wiki/Whitening_transformation), even random (untrained) unembeddings exhibit the same geometry as the trained ones. This gives more empirical evidence that the orthogonality and polytope findings are not novel and do not "emerge" during the training of a language model.
+Here, we show that under the [*whitening transformation*](https://en.wikipedia.org/wiki/Whitening_transformation), even random (completely untrained) unembeddings exhibit similar geometry as the trained ones. This gives more empirical evidence that the orthogonality and polytope findings are trivially true and do not "emerge" during the training of a language model.
 
 {% include figure.html path="assets/img/2025-04-28-feature-geometry/7.jpg" class="img-fluid"%}
 <div class="caption">
@@ -287,15 +290,15 @@ In the next section, we will theoretically show why these orthogonality and poly
 
 Many of the paper’s claims and empirical findings are about the orthogonality of various linear probes for concepts in unembedding space. Importantly though, "orthogonal" here is defined using an inner product after a whitening transformation. Under this definition, most concept probes are going to end up being almost orthogonal by default. 
 
-To explain why this happens, we will first dicsuss a simplified case where we assume that we are studying the representations in a language model with residual stream width $n$ equal to or greater than the number of tokens in its dictionary $k$. In this case, all the orthogonality results shown in `Theorem 8` of the paper would exactly hold for any arbitrary concept hierachies we make up. So observing that the relationships in `Theorem 8` hold for a set of linear concept probes would not tell us anything about whether the model uses these concepts or not.
+To explain why this happens, we will first discuss a simplified case where we assume that we are studying the representations in a language model with *residual stream* width $n$ equal to or greater than the number of *tokens in its dictionary* $k$. In this case, all the orthogonality results shown in `Theorem 8` of the paper would exactly hold for any arbitrary concept hierachies we make up. So observing that the relationships in `Theorem 8` hold for a set of linear concept probes would not tell us anything about whether the model uses these concepts or not.
 
-Then, we will discuss real models like `Gemma-2B` that have a residual stream width smaller than the number of tokens in their dictionary. For such models, the results in `Theorem 8` would not automatically hold for any set of concepts we make up. But in high dimensions, the theorem would still be expected to hold approximately, with most concept vectors ending up almost orthogonal. Most of the emprirical results for orthogonality the paper shows in e.g. `Fig. 2` and `Fig. 4` are consistent with this amount of almost-orthogonality that would be expected by default.
+Then, we will discuss real models like `Gemma-2B` that have a residual stream width smaller than the number of tokens in their dictionary. For such models, the results in `Theorem 8` would not automatically hold for any set of concepts we make up. But in high dimensions, the theorem would still be expected to hold approximately, with most concept vectors ending up almost orthogonal. Most of the emprirical results for orthogonality the paper shows (see our section on empirical results) are consistent with this amount of almost-orthogonality that would be expected by default.
 
 ### Case $n\geq k:$
 
 The whitening transformation will essentially attempt to make all the vocabulary vectors as orthogonal to each other as possible. When the dimensionality $n$ is greater than the number of vectors $k$ (i.e., $n > k$), the whitening transformation can make the vectors exactly orthogonal.
 
-Let $$\{ \mathbf{x}_1, \mathbf{x}_2, \dots, \mathbf{x}_k \} \in \mathbb{R}^n $$ be zero-mean random vectors with covariance matrix $\Sigma$, where $n > k$. Then there exists a whitening transformation $W = \Sigma^{-1/2}$ such that the transformed vectors $\{\mathbf{y}_i = W\mathbf{x}_i\}_{i=1}^k$ satisfy:
+Let $$\{ \mathbf{x}_1, \mathbf{x}_2, \dots, \mathbf{x}_k \} \in \mathbb{R}^n $$ be zero-mean random vectors with covariance matrix $\Sigma$, where $n > k$. Then there exists a whitening transformation $W = \Sigma^{-1/2}$ such that the transformed vectors $$\{ \mathbf{y}_i = W\mathbf{x}_i \}_{i=1}^k$$ satisfy:
 
 $$
 \mathbb{E}[\mathbf{y}_i^\top\mathbf{y}_j] = \delta_{ij}
@@ -304,43 +307,51 @@ $$
 where $\delta_{ij}$ is the [Kronecker delta](https://en.wikipedia.org/wiki/Kronecker_delta#:~:text=In%20mathematics%2C%20the%20Kronecker%20delta,example%2C%20because%20%2C%20whereas%20because%20.).
 
 **Proof:**
-1. Consider the eigendecomposition $\Sigma = U\Lambda U^\top$, where $\Lambda = \text{diag}(\lambda_1, \dots, \lambda_k)$.
 
-2. Define $W = \Lambda^{-1/2}U^\top$. Then for any $i, j$:
-  $$
-  \begin{aligned}
-  \mathbb{E}[\mathbf{y}_i^\top\mathbf{y}_j] &= \mathbb{E}[(W\mathbf{x}_i)^\top(W\mathbf{x}_j)] \\
+$1.$ Consider the eigendecomposition $\Sigma = U\Lambda U^\top$, where $$ \Lambda = \text{diag}(\lambda_1, \dots, \lambda_k) $$ .
+
+$2.$ Define $W = \Lambda^{-1/2}U^\top$. Then for any $i, j$:
+
+$$
+\begin{aligned}
+\mathbb{E}[\mathbf{y}_i^\top\mathbf{y}_j] &= \mathbb{E}[(W\mathbf{x}_i)^\top(W\mathbf{x}_j)] \\
   &= W\mathbb{E}[\mathbf{x}_i\mathbf{x}_j^\top]W^\top \\
   &= W\Sigma W^\top = I_k
   \end{aligned}
   $$
 
-3. If $n > k$, we can extend $W$ to an $n \times n$ orthogonal matrix that preserves the orthogonality property.
+$3.$ If $n > k$, we can extend $W$ to an $n \times n$ orthogonal matrix that preserves the orthogonality property.
 
 This matters, because if the dictionary embeddings are orthogonal, the relationships for concept vectors the paper derives will hold for completely made-up concept hierachies. They don’t have to be related to the structure of the language or the geometry of the original, untransformed unembedding matrix of the model at all. 
 
-As an example, consider a dictionary with $k=6$ tokens and a residual stream of width $n=6$. The tokens could, for instance, just be the first six letters of the alphabet, namely $\text{\{a, b, c, d, e, f\}}$. Following the convention of the paper, we will call the unembedding vectors of the tokens $\ell_a, \ell_b,\dots, \ell_f$.
+As an example, consider a dictionary with $k=6$ tokens and a residual stream of width $n=6$. The tokens could, for instance, just be the first six letters of the alphabet, namely $\text{\{a, b, c, d, e, f\}}$. Following the convention of the paper, we will call the unembedding vectors of the tokens $$\ell_a, \ell_b,\dots, \ell_f$$ .
 
 Due the the whitening transformation, these vectors will be orthogonal under the causal inner product:
 
 $\ell_a \cdot \ell_b=0$
-$\dots$
+
+$\cdots$
+
 $\ell_e \cdot \ell_f=0$
 
 The relationships described in `Theorem 8` of the paper will then hold for any hierarchical categorization schemes of concepts defined over these tokens. The concepts do not need to be meaningful in any way, and they do not need to have anything to do with the statistical relationship between the six tokens in the training data.
 
-For example, let us declare the binary concept $\text{{blegg, rube}}$. Tokens $\text{{a, b, c}}$ are "bleggs", and tokens $\text{{d, e, f}}$ are "rubes". We further categorize each "blegg" as being one of $\text{{lant, nant, blip}}$, making a categorical concept. Token "a" is a "lant", "b" is a "nant" and "c" is a "blip".
+For example, let us declare the binary concept $$\text{\{blegg, rube\}}$$. Tokens $\text{{a, b, c}}$ are "bleggs", and tokens $\text{{d, e, f}}$ are "rubes". We further categorize each "blegg" as being one of $\text{{lant, nant, blip}}$, making a categorical concept. Token "a" is a "lant", "b" is a "nant" and "c" is a "blip".
 
 We can create a linear probe $l_{\text{blegg}}$ that checks whether the current token vector is a 'blegg'.  It returns a nonzero value b_blegg/b_rube if the token is a 'blegg', and a value of 0 if it is a 'rube'  (see `Theorem 4` in the paper). 
 
 We could train the probe with LDA like the paper does, but in this case, the setup is simple enough that the answer can be found immediately. In the whitened coordinate system, we write:
 
 $\ell_{\text{blegg}}=\ell_a+\ell_b+\ell_c$
+
 $\ell_{\text{rube}}=\ell_d+\ell_e+\ell_f$
 
 Constructing linear probes for 'lant' 'nant' and 'blip' is also straigthforward:
+
 $\ell_{\text{lant}}=\ell_a$
+
 $\ell_{\text{nant}}=\ell_b$
+
 $\ell_{\text{blip}}=\ell_c$
 
 
@@ -348,7 +359,9 @@ $\ell_{\text{blip}}=\ell_c$
 Following the paper's definitions, {'lant','nant', 'blip'} is subordinate to {'blegg','rube'}. We see that `Theorems 8 (a,b,c)` in the paper that illustrated in their `Figure 2` will hold for these vectors.
 
 8 (a) $\ell_{\text{blegg}}\cdot(\ell_{\text{lant}}-\ell_{\text{blegg}})=0$
+
 8 (b) $\ell_{\text{blegg}}\cdot(\ell_{\text{lant}}-\ell_{\text{nant}})=0$
+
 8 \(c) $(\ell_{\text{blegg}}-\ell_{\text{rube}})\cdot(\ell_{\text{lant}}-\ell_{\text{nant}})=0$
 
 So, in a $n$-dimensional space containing unembedding vectors for $n=k$ dictionary elements, Theorem 8 will hold for any self consistent categorisation scheme. Theorem 8 will also keep holding if we replace the unembedding matrix $W_{\text{unembed}}\in \mathbb{R}^{k\times n}$ with a randomly chosen full rank matrix. Due to the whitening applied by the ‘causal inner product’, the concepts we make up do not need to have any relationship to the geometry of the unembedding vectors in the model.
@@ -382,7 +395,9 @@ In fact, the [Johnson–Lindenstrauss lemma](https://en.wikipedia.org/wiki/Johns
 So, going back to our example in the previous section, if the vectors $\ell_{a}, \dots,\ell_{f}$ are approximately orthogonal instead of orthogonal, then, the linear probes for the concepts {'blegg','rube'}, {'lant','nant', 'blip'} we made up would still mostly satisfy Theorem 8, up to terms $\mathcal{O}(\frac{1}{\sqrt{n}})$:
 
 8 (a) $\ell_{\text{blegg}}\cdot(\ell_{\text{lant}}-\ell_{\text{blegg}})=\mathcal{O}(\frac{1}{\sqrt{n}})$
+
 8 (b) $\ell_{\text{blegg}}\cdot(\ell_{\text{lant}}-\ell_{\text{nant}})=\mathcal{O}(\frac{1}{\sqrt{n}})$
+
 8 \(c) $(\ell_{\text{blegg}}-\ell_{\text{rube}})\cdot(\ell_{\text{lant}}-\ell_{\text{nant}})=\mathcal{O}(\frac{1}{\sqrt{n}})$
 
 So, orthogonality between linear probes for concepts might be expected by default, up to terms $\mathcal{O}(\frac{1}{\sqrt{n}})$ that will become very small for big models with large residual stream widths $n$. To exceed this baseline, the causal inner product between vector representations would need to be clearly smaller than $\mathcal{O}(\frac{1}{\sqrt{n}})$. 
@@ -405,7 +420,7 @@ Even if we were to look at $k>n$ categorical concepts, [Theorem 1 (Bárány and 
 
 ### Conclusion
 
-We show that the orthogonality and polytope results observed by recent works are a trivial consequence of the whitening transformation and the high dimensionality of the representation spaces. 
+We provide theoretical and empirical justification that the orthogonality and polytope results observed by recent works are a trivial consequence of the whitening transformation and the high dimensionality of the representation spaces. 
 
 A transformation where opposite concepts seem orthogonal doesn't seem good for studying models. It breaks our semantic model of associating directions with concepts and makes steering both ways impossible. Thus, more work needs to be done in order to study concept representations in language models.
 
