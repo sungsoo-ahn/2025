@@ -201,9 +201,7 @@ $$
 
 <input type="checkbox" id="my_checkbox" style="display:none;" checked="True" />
 <label for="my_checkbox">Show/hide</label>
-
 <div id="hidden">
-
 According to equivariant constraints, the coefficients of the Taylor series satisfy
 
 $$
