@@ -560,19 +560,19 @@ The limitation of this approach was pointed out by an anonymous reviewer of the 
 Even so, the method that study the discrete optimization process from a continuous viewpoint is widely adopted <d-cite key="Saxe2013"></d-cite><d-cite key="Huang2020"></d-cite><d-cite key="Ji2020"></d-cite><d-cite key="Kawaguchi2021"></d-cite><d-cite key="Arora2018"></d-cite><d-cite key="Arora2019"></d-cite>.
 
 What's more, 
-we notice that similar approach is also adopted in many other scientific areas, such as establishing mathematical models of epidemic diseases. We refer the readers to the SI and SIS models introduce [here](http://www.networksciencebook.com/chapter/10#epidemic) on Albert-László Barabási's website.
+we notice that similar approach is also adopted in many other scientific areas, such as establishing mathematical models of **epidemic diseases**. We refer the readers to the SI and SIS models introduced [HERE](http://www.networksciencebook.com/chapter/10#epidemic) on Albert-László Barabási's website.
 
 So, while this approach has its own unique value, we should carefully consider if the approximation error is tolerable before using it for analysis and modeling.
 
-It's not just about whether there's a gap — it's about whether we recognize it and are willing to accept it.
+It's not just about "whether there's a gap" — it's about "whether we recognize it and are willing to accept it". 
 
 
 ## Conclusion 
 
-In this blog post, we introduce an important conclusion in the field of GNN optimization using vivid language and illustrations. We build on the author's proof strategy, providing a clear yet detailed background. For the proof, we offer intuitive explanations and concise steps, making it easier for readers to follow. We also point out a small error in the original proof.
+In this blog post, we introduce an important theorem in the field of GNN optimization using vivid language and illustrations. Our flow builds upon the original paper's proof strategy, with a clear yet detailed background provided. For the proof, we offer intuitive explanations and concise steps, making it easier for readers to follow. We also point out a small error in the original proof.
 
-We believe that the methodology of this paper can not only helps in understanding the optimization of GNNs, but may also be applicable to other similar architectures, such as SSMs (State Space Models). And our post would lead the researchers to engage in more discussions on the topic.
+We believe that the methodology of this paper can not only help in understanding the optimization of GNNs, but may also be applicable to **other  architectures** that share some similarities, such as SSMs (State Space Models). And our post would lead more researchers to engage in the topics.
 
-One of the advantages of writing in blog format is that we can discuss related ideas more comprehensively. For instance, we acknowledge the strengths of the paper while also discussing, in a balanced manner, the overlooked aspects of the gradient dynamics method. By incorporating discussions from both inside and outside the field, we help readers understand why this issue exists and why it has been overlooked to some extent.
+One of the advantages of writing in blog format is that we can discuss related ideas more comprehensively. For instance, we acknowledge the strengths of the paper while also discussing, in a balanced manner, the overlooked aspects of the gradient dynamics method. By incorporating discussions from both inside and outside the neural network field, we help readers understand why this issue exists and why it has been overlooked to some extent.
 
 Thanks for reading! We hope you enjoyed this post and found it helpful. 
