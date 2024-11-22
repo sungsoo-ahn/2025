@@ -113,7 +113,15 @@ Our second experiment examines the tokens leading up to the <EOS> token.
 ### Block-Wise Analysis
 Observation: All four metrics show an increasing probability of EOS token, decreasing information content, decreasing entropy, and decreasing varentropy. 
 
-[image goes here]
+<div style="display: flex; justify-content: space-between;">
+  <div style="flex: 1; margin-right: 10px;">
+    <img src="assets/img/2025-11-22-perpetual-text/eos_token_stats_blockwise_100.png" alt="Image 1" style="width: 100%; height: auto;">
+  </div>
+</div>
+<div class="caption">
+  A simple, elegant caption looks good between image rows, after each row, or doesn't have to be there at all.
+</div>
+
 
 ### Token-Wise Analysis
 
