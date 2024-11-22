@@ -7,51 +7,54 @@
         <style>
             body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
         }
         @media (prefers-color-scheme: dark) {
-    body {
-        background-color: #121212;
-        color: #e0e0e0;
-    }
+        body {
+            background-color: #121212; /* 暗模式背景 */
+            color: #e0e0e0; /* 浅灰色字体 */
+        }
 
-    table {
-        background-color: #1e1e1e;
-        color: #e0e0e0;
-        border-color: #333;
-    }
+        table {
+            background-color: #1e1e1e; /* 表格背景（较深灰色） */
+            color: #e0e0e0; /* 表格字体颜色（浅灰） */
+            border-color: #333; /* 边框颜色（更深的灰色） */
+        }
 
-    th {
-        background-color: #333;
-        color: #e0e0e0;
-    }
+        th {
+            background-color: #333; /* 表头背景（稍浅灰色） */
+            color: #e0e0e0; /* 表头字体颜色 */
+        }
 
-    td {
-        border-color: #333;
-    }
+        td {
+            border-color: #333; /* 单元格边框颜色 */
+        }
 
-    details > summary {
-        color: #b3b3b3; /* 摘要字体颜色 */
-    }
-}
+        details > summary {
+            color: #b3b3b3; /* 摘要的字体颜色 */
+        }
+        }
+        .container {
+            padding: 20px;
+            max-width: 1000px;
+            margin: auto;
+        }
         .section {
             display: none;
         }
+        /* Show the targeted section */
         #doudizhu:target {
             display: block;
         }
-        #doudizhu {
-            max-height: 300px; /* 容器最大高度 */
-            overflow-y: auto; /* 启用滚动条 */
-            border: 1px solid #ccc; /* 边框包围表格 */
-            padding: 10px; /* 内边距 */
-            box-sizing: border-box; /* 包括 padding */
-        }
         table {
-            width: 100%; /* 表格宽度 */
-            border-collapse: collapse; /* 合并边框 */
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
         }
         table, th, td {
-            border: 1px solid #ddd; /* 表格边框 */
+            border: 1px solid #ddd;
         }
         th, td {
             padding: 8px;
@@ -63,8 +66,26 @@
         details > summary {
             cursor: pointer;
         }
+        /* Default section display */
         body:not(:has(:target)) #doudizhu {
             display: block;
+        }
+        #doudizhu {
+            max-height: 300px; /* 容器最大高度 */
+            overflow-y: auto; /* 启用滚动条 */
+            border: 1px solid #ccc; /* 边框包围表格 */
+            padding: 10px; /* 内边距 */
+            box-sizing: border-box; /* 包括 padding */
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        select {
+            padding: 8px;
+            font-size: 16px;
+        }
+        h2 {
+            margin-top: 0;
         }
         </style>
     </head>
