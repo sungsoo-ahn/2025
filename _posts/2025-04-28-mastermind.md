@@ -1,9 +1,7 @@
 ---
 layout: distill
 title: MasterMind
-description: Your blog post's abstract.
-  Please add your abstract or summary here and not in the main body of your text. 
-  Do not include math/latex or hyperlinks.
+description: We use decision-making games to evaluate and boost the logical reasoning capabilities of LLMs, and find that the result models not only reach competitive levels in the corresponding games but also display performance enhancements in general reasoning tasks.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -48,6 +46,10 @@ toc:
     - name: Data Collection
     - name: Training and Inference Pipeline
   - name: Experiments
+    subsections:
+    - name: Evaluation Settings
+    - name: Results
+    - name: Ablations
   - name: Discussion
   - name: Conclusion
 
@@ -317,19 +319,15 @@ To detect the improvement in reasoning ability of the model trained in decision-
 | Mastermind-Dou | 20.00%      | **35.62%**  | 49.44%     | 35.60%        | **62.80%** | 56.80%     |
 | Mastermind-Go  | **20.40%**  | 29.45%      | **51.69%** | **39.20%**    | 51.60%     | **60.00%** |
 
+Firstly, we observed a significant performance improvement in the model on specific subsets following Mastermind training, as shown in the table above. This improvement appears most prominently in reasoning tasks that require long-sequence modeling, likely due to the demands of both Go and Doudizhu, which test the model’s ability to make accurate predictions over extended outputs. 
 
+| Acc.           | **Disambiguation qa** | Date Understanding | Geometric Shapes | Deduction Three Objects |
+| -------------- | ----------- | ---------- | ------------- | ------------- |
+| LLaMA-2-7B     | **46.8%** | **60.4%** | **19.2%** | **55.2** |
+| Mastermind-Dou | 32.4% | 22.8% | 0% | 41.6 |
+| Mastermind-Go  | 44.8% | 57.6% | 7.6% | 51.2 |
 
-Firstly, we observed a significant performance improvement in the model on specific subsets following Mastermind training, as shown in the table above. This improvement appears most prominently in reasoning tasks that require long-sequence modeling, likely due to the demands of both Go and Doudizhu, which test the model’s ability to make accurate predictions over extended outputs. However, it is also worth noting that the model showed a performance decline on certain tasks, such as [TODO]. This decline is likely due to catastrophic forgetting, where certain capabilities were not reinforced during Mastermind training.
-
-
-
-| Acc.           | **Penguins in a table** | **Disambiguation qa** |      |      |      |      |
-| -------------- | ------------------- | ----------- | ---------- | ------------- | ---------- | ---------- |
-| LLaMA-2-7B     | 26.7%                   |                       |      |      |      |      |
-| Mastermind-Dou |                         |                       |      |      |      |      |
-| Mastermind-Go  |                         |                       |      |      |      |      |
-
-
+However, it is important to note that the model exhibited a decline in performance on certain tasks, as highlighted in the table above. This decline is likely attributable to catastrophic forgetting—a phenomenon where certain skills or knowledge, such as information about dates and spatial figures, were not adequately reinforced during the Mastermind training process.
 
 To fully address this issue, we believe that introducing these data into the pretraining phase may be necessary to enhance overall performance. However, due to resource constraints, we were unable to implement this idea in the current study, leaving it as a potential direction for future work.
 
@@ -346,12 +344,11 @@ We also conducted additional ablations on other types of large language models (
 
 ## Discussion
 
-Concurrently, some recent groundbreaking models, such as LLaMA <d-cite key="touvron2023llama"></d-cite> and Alpaca <d-cite key="alpaca"></d-cite>, owe a significant part of their progresses to the integration of code during training. These works argue that leveraging code data improves the intrinsic reasoning skills of foundation models.
-This claim is also supported by subsequent experiments showing that CoT further enhances this advantage <d-cite key="fu2022gptroadmap"></d-cite><d-cite key="wei2022chain"></d-cite>. However, exact mechanisms and causalities underlying this enhancement remain unclear.
+Concurrently, some recent groundbreaking models, such as LLaMA <d-cite key="touvron2023llama"></d-cite>, Alpaca <d-cite key="alpaca"></d-cite> and Deepseek <d-cite key="shao2024deepseekmath"></d-cite>, owe a significant part of their progresses to the integration of code and math problems during training. These works argue that leveraging code and math data improves the intrinsic reasoning skills of foundation models. This claim is also supported by subsequent experiments showing that CoT further enhances this advantage <d-cite key="fu2022gptroadmap"></d-cite><d-cite key="wei2022chain"></d-cite>.
 
-There are some intuitions about the relationship between training on code and enhancing reasoning abilities. 1) Pre-training provides LLMs with exposure to the logic inherent in programming languages, thus facilitating the development of systematic reasoning <d-cite key="ma2023training"></d-cite>. 2) The dependencies and data flow within code structures (e.g., curly brackets indicating scope) contribute to the model's capabilities on capturing long-term dependency <d-cite key="wang2022self"></d-cite><d-cite key="ma2023training"></d-cite>. 3) The deterministic nature of code execution ensures non-duality in output for the same input, mitigating ambiguity in LLMs' logical deductions. 
+Several insights help explain this phenomenon: 1) Pre-training provides LLMs with exposure to the logic inherent in programming and mathematical languages, thus facilitating the development of systematic reasoning <d-cite key="ma2023training"></d-cite>. 2) The dependencies and logic flow within these contents  contribute to the model's capabilities on capturing long-term dependency <d-cite key="wang2022self"></d-cite><d-cite key="ma2023training"></d-cite>. 3) The deterministic nature of code execution and math derivation ensures non-duality in output for the same input, mitigating ambiguity in LLMs' logical deductions. 
 
-While code serve as structured and symbolic data, it may not enclose the full reasoning process and lack textual format diversity expressed in natural language <d-cite key="ma2023training"></d-cite>, which tends to be ambiguous. Consequently, adhering to the paradigm of training LLMs with code may be not enough to generalize across varied tasks. A natural question arises: Is there another alternative data source that can complement code, thereby elevating LLMs from the perspective of data quality and diversity?
+We posit that data generated from decision-making games shares similar advantages, while introducing unique challenges such as **uncertainty** and **imperfect information**. Our experiments reveal that such data contributes to improving general reasoning abilities. Consequently, we propose that similar synthetic data generation strategies be incorporated into future pre-training phases of large models to enhance the logical structure and diversity of reasoning challenges in the training dataset.
 
 ## Conclusion
 
