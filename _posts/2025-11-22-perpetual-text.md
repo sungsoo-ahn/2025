@@ -1,10 +1,8 @@
 ---
 layout: distill
-title: Sample Blog Post
-description: Your blog post's abstract.
-  Please add your abstract or summary here and not in the main body of your text. 
-  Do not include math/latex or hyperlinks.
-date: 2025-04-28
+title: Perpetual Text Generation Using Dynamic Temperature Adjustment
+description: Large Lnaugage Models have demonstrated proficiency across all fields, and has seen huge advancements in the last couple years. However, they often falter when generating extended outputs. This limitation restricts their effectiveness in application requiring sustained text production. We introduce the concept of perpetuity, defining a model's ability to continue generating new tokens indefinitely. To overcome the challenge of early termination, we propose a novel method called Perpetual Text Generation using Dynamic Temperature Adjustment.
+date: 2025-11-22
 future: true
 htmlwidgets: true
 hidden: false
@@ -28,24 +26,26 @@ authors:
       name: IAS, Princeton
 
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-distill-example.bib  
+bibliography: 2025-11-22-perpetual-text.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
 toc:
-  - name: Equations
-  - name: Images and Figures
+  - name: Introduction
+  - name: When do Models stop Generating Tokens?
+  - name: Motivating Experiements
     subsections:
-    - name: Interactive Figures
-  - name: Citations
-  - name: Footnotes
-  - name: Code Blocks
-  - name: Diagrams
-  - name: Tweets
-  - name: Layouts
-  - name: Other Typography?
+    - name: Block-wise Analysis
+    - name: Token-wise Analysis
+  - name: Proposed Methods
+    subsections:
+    - name: Suppressing the EOS 
+    - name: Modified Sampling Method Post-EOS
+    - name: Regnerating Prior to EOS
+    - name: Regenerating and Resampling Prior to EOS with Dynamic Temperature Adjustment
+  - name: Conclusion and Looking Forward
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
