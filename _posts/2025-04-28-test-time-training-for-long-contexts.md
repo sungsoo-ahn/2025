@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Test-Time Training for Long Contexts
-description: Long context understanding remains challenging for large language models due to their limited context windows. This blog introduces Test-Time Training (TTT) for Long Contexts, a novel framework that enhances LLM performance on long-context tasks by adapting model parameters to the context at test time. TTT enables efficient processing of lengthy inputs without the computational burden of offline fine-tuning. The framework is further enhanced by integrating in-context learning and pre-TTT supervised fine-tuning. Experimental results highlight consistent improvements across popular benchmarks, demonstrating TTT's effectiveness in boosting model performance and memory efficiency. This blog also provides a comprehensive analysis of the strengths and limitations of TTT on long context understanding, offering valuable directions for future research.
+description: Long context understanding remains challenging for large language models due to their limited context windows. This blog introduces Long Input Fine-Tuning (LIFT) for Long Contexts, a novel framework that enhances LLM performance on long-context tasks by adapting model parameters to the context at test time. LIFT enables efficient processing of lengthy inputs without the computational burden of offline fine-tuning. The framework is further enhanced by integrating in-context learning and pre-LIFT supervised fine-tuning. Experimental results highlight consistent improvements across popular benchmarks, demonstrating LIFT's effectiveness in boosting model performance and memory efficiency. This blog also provides a comprehensive analysis of the strengths and limitations of LIFT on long context understanding, offering valuable directions for future research.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -20,8 +20,8 @@ bibliography: 2025-04-28-test-time-training-for-long-contexts.bib
 #   - please use this format rather than manually creating a markdown table of contents.
 toc:
   - name: 1. Challenges in long context understanding for Large Language Models (LLMs)
-  - name: 2. Why do we need Test-Time Training (TTT) for long contexts?
-  - name: 3. What is TTT for Long Context?
+  - name: 2. Why do we need Long Input Fine-Tuning for long contexts?
+  - name: 3. What is Long Input Fine-Tuning (LIFT) for Long Context?
   - name: 4. Experiements and deep analysis
   - name: 5. Limitations and future works
   - name: Appendix
@@ -95,7 +95,7 @@ where $$\theta$$ is the parameters.
 However, directly fine-tuning the model on a long text of length $$L$$ incurs a computational complexity of $$\mathcal{O}(L^{2})$$ and becomes infeasible when the base model has a context window shorter than $$L$$. A straightforward approach is to truncate $$\mathbf{x}$$ into non-overlapping short segments, denoted as $$\mathbf{x}_ {l_ {1}:r_ {1}},\dots,\mathbf{x}_ {l_ {K}:r_ {K}}$$, as illustrated in Figure 2. The objective function for the language modeling task with the short segments is expressed as
 
 $$
-\mathcal{L}_ {TTT}(\mathbf{x};\theta)=\sum_ {k=1}^{K}\mathcal{L}_ {LM}(\mathbf{x}_ {l_ {k},r_ {k}};\theta).
+\mathcal{L}_ {input}(\mathbf{x};\theta)=\sum_ {k=1}^{K}\mathcal{L}_ {LM}(\mathbf{x}_ {l_ {k},r_ {k}};\theta).
 $$
 
 Is there any information lost? Yes, **the sequential order of the segments** is lost. Since there is no overlap between the adjacent segments, the model cannot infer the correct order of the segments.
@@ -124,7 +124,7 @@ $$
 Following the mechanism of mix training <d-cite key="AllenZhu-icml2024-tutorial"></d-cite>, which asserts that LLMs can only learn to perform inference based on $$\mathbf{x}$$ when trained simultaneously on both $$\mathbf{x}$$ and $$(\mathbf{q}_ {i},\mathbf{a}_ {i})_ {i=1}^{m}$$, we propose jointly optimizing the two objective functions, i.e.,
 
 $$
-\mathcal{L}(\mathbf{x},(\mathbf{q}_ {i},\mathbf{a}_ {i})_ {i=1}^{m};\theta)=\mathcal{L}_ {TTT}(\mathbf{x};\theta)+\gamma\cdot\mathcal{L}_ {AT}((\mathbf{q}_ {i},\mathbf{a}_ {i})_ {i=1}^{m};\theta).
+\mathcal{L}(\mathbf{x},(\mathbf{q}_ {i},\mathbf{a}_ {i})_ {i=1}^{m};\theta)=\mathcal{L}_ {input}(\mathbf{x};\theta)+\gamma\cdot\mathcal{L}_ {AT}((\mathbf{q}_ {i},\mathbf{a}_ {i})_ {i=1}^{m};\theta).
 $$
 
 There are no strict constraints on the method used to synthesize $$(\mathbf{q}_ {i},\mathbf{a}_ {i})_ {i=1}^{m}$$ based on $$\mathbf{x}$$, except that is should avoid computationally expensive operations on $$\mathbf{x}$$, such as inference over the entire $$\mathbf{x}$$. In our experiments, we extract several short segments from $$\mathbf{x}$$ and use a pretrained LLM to generate QA pairs based on the segments.
@@ -141,7 +141,7 @@ The SFT process involves training the model on a large corpus of long texts, com
 Formally, we select the corpus $$(\mathbf{x}^{(i)})_ {i=1}^{N}$$ independent of the test datasets. For each $$\mathbf{x}^{(i)}$$, we synthesize a set of QA tasks $$(\mathbf{q}_ {j}^{(i)},\mathbf{a}_ {j}^{(i)})_ {j=1}^{K}$$. The objective function for SFT is defined as
 
 $$
-\mathcal{L}_ {SFT}\Big(\big(\mathbf{x}^{(i)}, (\mathbf{q}_ {j}^{(i)},\mathbf{a}_ {j}^{(i)})_ {j=1}^{K}\big)_ {i=1}^{N};\theta\Big)=\frac{1}{N}\sum_ {i=1}^{N}\left(\mathcal{L}_ {TTT}(\mathbf{x}^{(i)};\theta)+\gamma\cdot\mathcal{L}_ {AT}((\mathbf{q}_ {j}^{(i)},\mathbf{a}_ {j}^{(i)})_ {j=1}^{K};\theta)\right).
+\mathcal{L}_ {SFT}\Big(\big(\mathbf{x}^{(i)}, (\mathbf{q}_ {j}^{(i)},\mathbf{a}_ {j}^{(i)})_ {j=1}^{K}\big)_ {i=1}^{N};\theta\Big)=\frac{1}{N}\sum_ {i=1}^{N}\left(\mathcal{L}_ {input}(\mathbf{x}^{(i)};\theta)+\gamma\cdot\mathcal{L}_ {AT}((\mathbf{q}_ {j}^{(i)},\mathbf{a}_ {j}^{(i)})_ {j=1}^{K};\theta)\right).
 $$
 
 # 4. Experiements and deep analysis
@@ -153,48 +153,48 @@ To evaluate our method, we choose two models for evaluation:
 
 We compare the following methods:
 - ICL with truncation (noted as *ICL*)
-- TTT without ICL (noted as *TTT_only*)
-- TTT for long context with ICL (noted as *ICL+TTT*)
+- LIFT without ICL (noted as *LIFT_only*)
+- LIFT with ICL (noted as *ICL+LIFT*)
 
 
 We evaluate our method on four popular long-context benchmarks *LooGLE* <d-cite key="li2023loogle"></d-cite>, *LongBench* <d-cite key="bai2023longbench"></d-cite>, *Bamboo* <d-cite key="dong2023bamboo"></d-cite> and *QuALITY* <d-cite key="pang2021quality"></d-cite>. They are mainly used for comprehensive and overall evaluation, covering a wide variety of application scenarios. Specifically, we focus on QA tasks in LooGLE and representative tasks in LongBench, with as longer average length as possible. The evaluation metrics are task-specific and consistent with the respective original benchmarks. 
 
-## TTT generally strengthens long context understanding when combined with ICL
+### LIFT generally strengthens long context understanding when combined with ICL
 
-For LooGLE, as shown in Table 1, ICL+TTT consistently achieves the highest scores across both LongQA and shortQA tasks for both models. The TTT approach is particularly **effective in the ShortQA task**, which doesn't rely on long dependencies. However, TTT_only performs the worst among all the settings. We observe that TTT_only struggles to retrieve the original context. While overfitting the model on the context enables the model to precisely memorize the context, it destroys the original capabilities of the model, resulting in even worse performance.
+For LooGLE, as shown in Table 1, ICL+LIFT consistently achieves the highest scores across both LongQA and shortQA tasks for both models. LIFT is particularly **effective in the ShortQA task**, which doesn't rely on long dependencies. However, LIFT_only performs the worst among all the settings. We observe that LIFT_only struggles to retrieve the original input. While overfitting the model on the input enables the model to precisely memorize the input, it destroys the original capabilities of the model, resulting in even worse performance.
 
-LLaMa-3 benefits more with the combination of ICL and TTT (ICL+TTT) than GPT-3.5, showing notable improvements in GPT4_score: from 30.88 (ICL) to 33.42 in LongQA, and from 44.23 to 50.44 in ShortQA. These results highlight that **TTT significantly improves the performance of ICL, particularly for models with shorter context windows**.
+LLaMa-3 benefits more with the combination of ICL and LIFT (ICL+LIFT) than GPT-3.5, showing notable improvements in GPT4_score: from 30.88 (ICL) to 33.42 in LongQA, and from 44.23 to 50.44 in ShortQA. These results highlight that **LIFT significantly improves the performance of ICL, particularly for models with shorter context windows**.
 
 Notably, both models perform particularly poorly on LongQA, with accuracy falling below 50%. This underscores that modeling long dependencies in extended contexts remains a significant challenge for existing models.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table1_loogle.png" class="img-fluid" title="Table 1" %}
 <div class="caption">Table 1. Performance on LooGLE under different settings</div>
 
-For LongBench, as shown in Table 2, LLaMa-3 exhibits substantial improvements when integrating ICL and TTT, reaffirming that TTT is particularly beneficial for models with shorter context lengths. As expected, GPT-3.5, with longer context window and superior ICL capabilities, outperforms LLaMa-3 on all tasks except GovReport.
+For LongBench, as shown in Table 2, LLaMa-3 exhibits substantial improvements when integrating ICL and LIFT, reaffirming that LIFT is particularly beneficial for models with shorter context lengths. As expected, GPT-3.5, with longer context window and superior ICL capabilities, outperforms LLaMa-3 on all tasks except GovReport.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table2_longbench.png" class="img-fluid" title="Table 2" %}
 <div class="caption">Table 2. Performance of each task in LongQA for Llama3</div>
 
-## TTT shows significant improvement on specific tasks
+### LIFT shows significant improvement on specific tasks
 
-Table 3 presents detailed experimental results across four LongQA tasks from LooGLE. LLaMa-3 benefits more from ICL+TTT, with notable improvements in specific tasks, particularly in **Comprehension & Reasoning** (40.88 → 44.83) and **Timeline Reorder** (22.33 → 26.51). These results demonstrate that TTT enhances ICL by providing a more comprehensive overview of the entire lengthy input by fine-tuning the long context directly into the parameters.
+Table 3 presents detailed experimental results across four LongQA tasks from LooGLE. LLaMa-3 benefits more from ICL+LIFT, with notable improvements in specific tasks, particularly in **Comprehension & Reasoning** (40.88 → 44.83) and **Timeline Reorder** (22.33 → 26.51). These results demonstrate that LIFT enhances ICL by providing a more comprehensive overview of the entire lengthy input by fine-tuning the long context directly into the parameters.
 
-However, TTT does not yield any improvement in tasks such as Multiple Information Retrieval and even slightly degrades the performances in Computation for both models. This indicates that TTT may not significantly impact all tasks and could introduce slight noise in some cases. At the same time, the performances variations are closely related to the specific capabilities required by each task and the inherent strengths of the model.
+However, LIFT does not yield any improvement in tasks such as Multiple Information Retrieval and even slightly degrades the performances in Computation for both models. This indicates that LIFT may not significantly impact all tasks and could introduce slight noise in some cases. At the same time, the performances variations are closely related to the specific capabilities required by each task and the inherent strengths of the model.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table3_loogle_task.png" class="img-fluid" title="Table 3" %}
 <div class="caption">Table 3. Performance on LongBench under different settings</div>
 
-In Table 2 on LongBench, ICL+TTT consistently outperforms both ICL and TTT_only on Narrativeqa and Qmsum for both models. Notable improvements are observed in Narrativeqa, where performance increases from 20.73 to 25.84. However, the results for Musique and GovReport exhibit different trends between the two models. LLaMa-3 shows a slight improvement on GovReport but experiences a significant drop on Musique, whereas GPT-3.5 demonstrates the opposite pattern.
+In Table 2 on LongBench, ICL+LIFT consistently outperforms both ICL and LIFT_only on Narrativeqa and Qmsum for both models. Notable improvements are observed in Narrativeqa, where performance increases from 20.73 to 25.84. However, the results for Musique and GovReport exhibit different trends between the two models. LLaMa-3 shows a slight improvement on GovReport but experiences a significant drop on Musique, whereas GPT-3.5 demonstrates the opposite pattern.
 
-Interestingly, PassageRetrievalEN exhibits a significant drop when combining TTT with ICL, suggesting that the TTT is applicable and effective to specific tasks. This encourages us to fine-tune the model at task level.
+Interestingly, PassageRetrievalEN exhibits a significant drop when combining LIFT with ICL, suggesting that the LIFT is applicable and effective to specific tasks. This encourages us to fine-tune the model at task level.
 
-## TTT can be further enhanced with supervised fine-tuning
+## LIFT can be further enhanced with pre-LIFT supervised fine-tuning
 
-Encouraged by the significant improvement observed in the timeline-reorder task from LooGLE, we aim to further enhance the performance of TTT on similar tasks like sorting and reordering, by incorporating auxiliary tasks (AT) (Section 3.2) and SFT (Section 3.3). The results are illustrated in Table 4.
+Encouraged by the significant improvement observed in the timeline-reorder task from LooGLE, we aim to further enhance the performance of LIFT on similar tasks like sorting and reordering, by incorporating auxiliary tasks (AT) (Section 3.2) and pre-LIFT SFT (Section 3.3). The results are illustrated in Table 4.
 
-Comparing the results of ICL+TTT w/ and w/o AT, as well as ICL+SFT+TTT w/ and w/o AT, we observe that AT bring negligible improvement or even slightly degrades performance. A possible explanation is that the number of synthesized samples in our evaluation is insuffcient, potentially causing the model to overfit to these tasks. However, it's impractical to synthesise a huge number of training samples at test time due to unacceptable computational cost. Striking a balance between efficiency and effectiveness when using AT at test time remains a significant challenge and requires further exploration.
+Comparing the results of ICL+LIFT w/ and w/o AT, as well as ICL+SFT+LIFT w/ and w/o AT, we observe that AT bring negligible improvement or even slightly degrades performance. A possible explanation is that the number of synthesized samples in our evaluation is insuffcient, potentially causing the model to overfit to these tasks. However, it's impractical to synthesise a huge number of training samples at test time due to unacceptable computational cost. Striking a balance between efficiency and effectiveness when using AT at test time remains a significant challenge and requires further exploration.
 
-In contrast, we find TTT w/o AT consistently improves performance. While SFT greatly improves the performance (which is reasonable since the tasks used during the SFT phase are similar to those at test time), TTT can further boost performance (comparing ICL+TTT to ICL, as well as ICL+SFT+TTT to ICL+SFT), highlighting the effectiveness of our method.
+In contrast, we find LIFT w/o AT consistently improves performance. While SFT greatly improves the performance (which is reasonable since the tasks used in the SFT process are similar to those at test time), LIFT can further boost performance (comparing ICL+LIFT to ICL, as well as ICL+SFT+LIFT to ICL+SFT), highlighting the effectiveness of our method.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table4_at_sft.png" class="img-fluid" title="Table 4" %}
 <div class="caption">Table 4. Coordinate score on specific task in Bamboo, LooGLE, and QuALITY using AT and SFT.</div>
@@ -206,52 +206,52 @@ Benefiting from our truncation strategy (Section 3.1), the computational complex
 We plot the GPU time against the input length along with the fitted curve in Figure 3.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure3_efficiency.png" class="img-fluid" title="Figure 3" %}
-<div class="caption">Figure 3. GPU time vs. input length for TTT and ICL. The dashed lines represent the fitted curves, showing linear growth for TTT and quadratic growth for ICL. The red cross indicates the input length at which ICL runs out of memory.</div>
+<div class="caption">Figure 3. GPU time vs. input length for LIFT and ICL. The dashed lines represent the fitted curves, showing linear growth for LIFT and quadratic growth for ICL. The red cross indicates the input length at which ICL runs out of memory.</div>
 
-First, we observe that our method is significantly more **memory-efficient** than ICL. Notably, ICL runs out of memory when the input length exceeds 90k tokens. Upon closer inspection, we find that the cache of hidden states for previous tokens consumes most of the memory in ICL. In contrast, our method is capable of **handling arbitrarily long inputs**. Our truncation strategy ensures that our method only involves fine-tuning and inference on short text segments, eliminating the need for extensive caching.
+First, we observe that LIFT is significantly more **memory-efficient** than ICL. Notably, ICL runs out of memory when the input length exceeds 90k tokens. Upon closer inspection, we find that the cache of hidden states for previous tokens consumes most of the memory in ICL. In contrast, LIFT is capable of **handling arbitrarily long inputs**. Our truncation strategy ensures that LIFT only involves fine-tuning and inference on short text segments, eliminating the need for extensive caching.
 
-Empirically, we find that the time cost of ICL grows quadratically with input length, while our method scales linearly. However, we also observe that the constant factor in the computational complexity of our method is non-negligible. As a result, our method only surpasses ICL in time efficiency when the input length exceeds a certain threshold above 200k tokens. The primary cost of our method arises from the multi-epoch Test Time Training (TTT). We propose that by designing tasks that are more aligned with the strengths of TTT, the efficiency of the TTT method can be significantly improved.
+Empirically, we find that the time cost of ICL grows quadratically with input length, while our method scales linearly. However, we also observe that the constant factor in the computational complexity of LIFT is non-negligible. As a result, our method only surpasses ICL in time efficiency when the input length exceeds a certain threshold above 200k tokens. The primary cost of our method arises from the multi-epoch fine-tuning. We propose that by designing tasks that are more aligned with the strengths of LIFT, the efficiency of the LIFT framework can be significantly improved.
 
 # 5. Limitations and future works
 
-1. **Limitations of TTT without ICL**\\
+1. **Limitations of LIFT without ICL**\\
   While we often employ truncated contexts to simplify inference on lengthy texts, this approach is proven insufficient for tasks that demand precise information extraction from extended contexts, such as the Needle in a Haystack (NIAH) task (shown in Appendix A). For those tasks, ICL remains indispensable.
 
-2. **More advanaded TTT methods**\\
-  We introduce an intuitive strategy, TTT, for handling long contexts, showcasing its potential to address challenges associated with lengthy inputs. However, pretrained LLMs may not naturally align with our training methods. To bridge this gap, we incorporate SFT. Our vision is to generalize the concept of TTT to any pretrained LLM, enhancing its flexibility and adaptability without requiring extensive retraining.
+2. **More advanced LIFT methods**\\
+  We introduce an intuitive strategy, LIFT, for handling long contexts, showcasing its potential to address challenges associated with lengthy inputs. However, pretrained LLMs may not be naturally familiar with LIFT framework. To bridge this gap, we incorporate pre-LIFT SFT, but our vision is to generalize the LIFT framework to any pretrained LLM, enhancing its flexibility and adaptability without requiring extensive retraining.
 
-3. **Strategy to extract parametric knowledge after TTT**\\
-  Through TTT, embedding source text into the model's internal parameters enhances its familiarity with the original content and strengthens memory retention. However, the effectiveness of downstream tasks still depends on the model's ability to autonomously extract and utilize the parametric knowledge gained during TTT. Our experiments (Appendix B) reveal that explicitly providing task-relevant knowledge outperforms using TTT alone. Furthermore, supplying task-relevant knowledge to the model after applying TTT still significantly improves the performance. This underscores the potential of developing strategies to effectively trigger and leverage TTT-acquired knowledge for downstream tasks, making it a promising direction for further research and exploration.
+3. **Strategy to extract parametric knowledge after LIFT**\\
+  Through LIFT, embedding the inputs into the model's internal parameters enhances its familiarity with the inputs. However, the effectiveness of downstream tasks still depends on the model's ability to autonomously extract and utilize the parametric knowledge gained during LIFT. Our experiments (Appendix B) reveal that explicitly providing task-relevant knowledge outperforms using LIFT alone. Furthermore, supplying task-relevant knowledge to the model after applying LIFT still significantly improves the performance. This underscores the potential of developing strategies to effectively trigger and leverage LIFT-acquired knowledge for downstream tasks, making it a promising direction for further research and exploration.
 
-4. **Challenges using TTT with auxiliary tasks**\\
+4. **Challenges using LIFT with auxiliary tasks**\\
   Our findings reveal that auxiliary tasks offer minimal benefit and can even degrade performance due to overfitting. Additionally, simply fine-tuning the model on long texts does not inherently endow it with robust reasoning capabilities over such texts. These observations underscore the necessity for more effective strategies to harness the in-parameter knowledge of LLMs, enabling them to reason efficiently and accurately over extended contexts.
 
 # Appendix
 
 ## A. Results on Needle-in-a-Haystack (NIAH)
 
-We present the experimental results in the NIAH<d-cite key="niah"></d-cite> task in Figure 4, as further analysis of the pros and cons of our methods and directions for future works. The task requires accurate retrieval from the contexts. We adopt a strong long-context model, Llama-3.1-8B-Instruct, as the baseline and apply the TTT method to the model.
+We present the experimental results in the NIAH<d-cite key="niah"></d-cite> task in Figure 4, as further analysis of the pros and cons of LIFT and directions for future works. The task requires accurate retrieval from the contexts. We adopt a strong long-context model, Llama-3.1-8B-Instruct, as the baseline and apply the LIFT framework to the model.
 
-The maximum context length of our test is 100K, which is within the 128K context window of Llama-3.1-8B-Instruct. As expected, the baseline achieves nearly perfect performance. However, TTT slightly degrades the performance and the degradation seems irregular.
+The maximum context length of our test is 100K, which is within the 128K context window of Llama-3.1-8B-Instruct. As expected, the baseline achieves nearly perfect performance. However, LIFT slightly degrades the performance and the degradation seems irregular.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure4_1_Needle-Long-Baseline.png" class="img-fluid" title="Figure 4(1)" %}
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure4_2_Needle-Long-TTT.png" class="img-fluid" title="Figure 4(2)" %}
-<div class="caption">Figure 4. Performance on NIAH: ICL (top) vs. TTT (bottom)</div>
+<div class="caption">Figure 4. Performance on NIAH: ICL (top) vs. LIFT (bottom)</div>
 
-The reason for the degradation may be that TTT introduces more noise to the model. While most parts of the context are irrelevant to the answer, TTT asks the model to memorize all the context. The model is likely to be misled by the large amount of irrelevant information through the TTT method.
+The reason for the degradation may be that LIFT introduces more noise to the model. While most parts of the context are irrelevant to the answer, LIFT asks the model to memorize all the context. The model is likely to be misled by the large amount of irrelevant information.
 
-As summarized in Section 5, precise memorization can be challenging for TTT. On the one hand, TTT can't accurately memorize the context while avoiding overfitting. On the other hand, TTT is likely to be misled when most information is irrelevant to the answer. Future works may improve TTT methods from these two aspects.
+As summarized in Section 5, precise memorization can be challenging for LIFT. On the one hand, LIFT can't accurately memorize the context while avoiding overfitting. On the other hand, LIFT is likely to be misled when most information is irrelevant to the answer. Future works may improve the LIFT framework from these two aspects.
 
-## B. TTT can perform much better with extracted evidence
+## B. LIFT can perform much better with extracted evidence
 
 For a task in LooGLE, the relevant evidences are provided as a sequence of multiple relevant information retrieved from long context for further computation, reorder, reasoning and comprehension to obtain the final answer.
 
-We make further studies on whether extracting relevant evidence can further enhance the long context understanding after TTT. In Table 5, it highlights the effectiveness of integrating evidences and combining it with TTT in greatly improving the model's performance, which leaves space for futher enhancement on the strategy of TTT. While TTT alone provides modest improvements, the most substantial gains are observed when evidences are integrated into the ICL process, either with or without TTT. 
+We make further studies on whether extracting relevant evidence can further enhance the long context understanding after LIFT. In Table 5, it highlights the effectiveness of integrating evidences and combining it with LIFT in greatly improving the model's performance, which leaves space for futher enhancement on the strategy of LIFT. While LIFT alone provides modest improvements, the most substantial gains are observed when evidences are integrated into the ICL process, either with or without LIFT.
 
-Table 4 further expands the performance in Table 3 on specific tasks in LongQA in LooGLE. The combination of evidences, TTT and ICL clearly outperforms the other configurations across all metrics, **highlighting the importance of extracting relevant knowledge from parameters and executing explicit step-by-step reasoning in more complex tasks like long dependency QA**. The incorporation of evidences helps the model ground its inferences resulting in a more refined and contextually accurate response generation.
+Table 4 further expands the performance in Table 3 on specific tasks in LongQA in LooGLE. The combination of evidences, ICL+LIFT clearly outperforms the other configurations across all metrics, **highlighting the importance of extracting relevant knowledge from parameters and executing explicit step-by-step reasoning in more complex tasks like long dependency QA**. The incorporation of evidences helps the model ground its inferences resulting in a more refined and contextually accurate response generation.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table5_loogle_evd.png" class="img-fluid" title="Table 5" %}
-<div class="caption">Table 5. Performance with extracted evidence of Llama3 on LongQA</div>
+<div class="caption">Table 5. Performance with extracted evidence of Llama3 in LongQA</div>
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table6_loogle_task_evd.png" class="img-fluid" title="Table 6" %}
 <div class="caption">Table 6. Performance with extracted evidence of each task in LongQA for Llama3</div>
