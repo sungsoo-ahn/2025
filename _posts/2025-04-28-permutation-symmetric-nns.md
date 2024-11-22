@@ -296,8 +296,8 @@ $$
 For any $\alpha\ne0$.
 
 <div class="my_dropdown" tabindex="1">
-<a href="#targ_2">Solution</a>
-<div id="targ_2">
+<a>Solution</a>
+<div>
 
 
 With Taylor series, you'll run into a conclusion that no terms could exist and $y=a$. That is because scale invariant functions are often not smooth at $x_i=0$ so Taylor series could not capture them. Let us instead look into Laurent Series
@@ -362,8 +362,8 @@ y=f\left( \begin{bmatrix}x_{0} & x_{1} \\ x_{2} & x_{3}\end{bmatrix} \right) =f\
 $$
 
 <div class="my_dropdown" tabindex="1">
-<a href="#targ_3">Solution</a>
-<div id="targ_3">
+<a>Solution</a>
+<div>
 
 According to the equivariant constraint, the coefficients of the Taylor series satisfy
 
@@ -470,8 +470,8 @@ y=f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right)
 $$
 
 <div class="my_dropdown" tabindex="1">
-<a href="#targ_4">Solution</a>
-<div id="targ_4">
+<a>Solution</a>
+<div>
 
 
 According to the equivariant constraint, the coefficients of the Taylor series satisfy
@@ -548,8 +548,8 @@ y=f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right)
 $$
 
 <div class="my_dropdown" tabindex="1">
-<a href="#targ_5">Solution</a>
-<div id="targ_5">
+<a>Solution</a>
+<div>
 
 According to the equivariant constraint, the coefficients of the Taylor series satisfy
 
@@ -624,8 +624,8 @@ For any permutation $P$.
 
 
 <div class="my_dropdown" tabindex="1">
-<a href="#targ_6">Solution</a>
-<div id="targ_6">
+<a>Solution</a>
+<div>
 
 
 The Taylor series up to order 1 can be expressed as
@@ -690,14 +690,14 @@ b_{1} & b_{1} & b_{0}
 \end{aligned}
 $$
 
-Rewriting in tensor contraction form using [einsum](https://pytorch.org/docs/stable/generated/torch.einsum.html) notations
+Rewriting in tensor contraction form using <p><a href="https://numpy.org/doc/stable/reference/generated/numpy.einsum.html">Numpy's einsum</a></p> notations
 
 $$
 \begin{aligned}
 Y=&F\left( X \right) \\
-=& a \cdot \text{einsum(`i->i',X)} 
-+ (b_0-b_1) \cdot \text{einsum(`i,i->i',X,X)} \\
-&+ b_1 \cdot \text{einsum(`i,j->i',X,X)} 
+=& a \cdot \text{einsum('i->i',X)} 
++ (b_0-b_1) \cdot \text{einsum('i,i->i',X,X)} \\
+&+ b_1 \cdot \text{einsum('i,j->i',X,X)} 
 \end{aligned} 
 $$
 
