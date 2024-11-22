@@ -8,7 +8,7 @@ htmlwidgets: true
 hidden: false
 
 # Anonymize when submitting
-# authors:
+# authors:  
 #   - name: Anonymous
 
 authors:
