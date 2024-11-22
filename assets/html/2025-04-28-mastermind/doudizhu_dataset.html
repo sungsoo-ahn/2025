@@ -8,6 +8,31 @@
             body {
             font-family: Arial, sans-serif;
         }
+        @media (prefers-color-scheme: dark) {
+        body {
+            background-color: #121212; /* 暗模式背景 */
+            color: #e0e0e0; /* 浅灰色字体 */
+        }
+
+        table {
+            background-color: #1e1e1e; /* 表格背景（较深灰色） */
+            color: #e0e0e0; /* 表格字体颜色（浅灰） */
+            border-color: #333; /* 边框颜色（更深的灰色） */
+        }
+
+        th {
+            background-color: #333; /* 表头背景（稍浅灰色） */
+            color: #e0e0e0; /* 表头字体颜色 */
+        }
+
+        td {
+            border-color: #333; /* 单元格边框颜色 */
+        }
+
+        details > summary {
+            color: #b3b3b3; /* 摘要的字体颜色 */
+        }
+        }
         .section {
             display: none;
         }
