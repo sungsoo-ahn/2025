@@ -84,13 +84,13 @@ $$
 
 Here, the superscript $$^{(j)}$$ denotes the iteration count. It's evident that each equation corresponds to standard autoregressive decoding. However, the difference lies in the dependency: while autoregressive decoding relies on precise preceding tokens, Jacobi Decoding solves for all tokens simultaneously, based on an imperfect initial guess. As illustrated in the following diagram, starting from a set of random guesses, the predicted sequence continually refines itself. Each iteration produces a more accurate sequence, which in turn yields even better predictions in the next iteration, ultimately converging to the autoregressive decoding result. The driving signal toward accuracy in this process is actually provided by the prefix $$x$$.
 
-Figure 1. Illustration of the parallel decoding process. <d-cite key="koucllms"></d-cite>
+*Figure 1. Illustration of the parallel decoding process.* <d-cite key="koucllms"></d-cite>
 
 {% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/jacobi-decoding.png" class="jacobi-decoding" %}
 
 However, although these equations are mathematically in closed form, in practice, an LLM pre-trained in an autoregressive manner (based on precise preceding tokens) may not consistently achieve the same results when predicting with imprecise preceding tokens. Additionally, experiments have observed that even correctly predicted tokens are sometimes replaced in subsequent iterations, leading to unnecessary step wastage. Some works, such as Lookahead Decoding <d-cite key="fubreak"></d-cite> and CLLM <d-cite key="koucllms"></d-cite>, have introduced improvements to Jacobi Decoding for enhanced stability and speed. The most advanced Jacobi Decoding methods can achieve decoding rates 2-4 times faster with minimal performance sacrifice.
 
-Table 1. Comparison of parallel decoding strategies (Jacobi and lookahead) against AR decoding on finetuned models and CLLMs. Notably, CLLMs exhibit the ability of fast consistency generation while maintaining lower memory and computational demands. <d-cite key="koucllms"></d-cite>
+*Table 1. Comparison of parallel decoding strategies (Jacobi and lookahead) against AR decoding on finetuned models and CLLMs. Notably, CLLMs exhibit the ability of fast consistency generation while maintaining lower memory and computational demands.* <d-cite key="koucllms"></d-cite>
 
 | Methods            |Speed (tokens/s)|Speedup|Metric|Size |
 |---------------------|------------------|---------|--------|------|
@@ -104,7 +104,7 @@ Table 1. Comparison of parallel decoding strategies (Jacobi and lookahead) again
 | + lookahead        |125.2           |2.9x   |56.4  |6.7B |
 
 
-Figure 2. Comparison of Jacobi decoding against AR decoding. <d-cite key="koucllms"></d-cite>
+*Figure 2. Comparison of Jacobi decoding against AR decoding.* <d-cite key="koucllms"></d-cite>
 
 {% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/comparison_cllms2.jpg" class="comparison_cllms" %}
 
@@ -113,7 +113,7 @@ Figure 2. Comparison of Jacobi decoding against AR decoding. <d-cite key="koucll
 
 If we view each iteration of Jacobi Decoding as a state transition between tokens, it actually shares many formal similarities with discrete diffusion models. In CLLM <d-cite key="koucllms"></d-cite>, the authors incorporated the consistency loss used in consistency models for diffusion into autoregressive LLMs based on Jacobi Decoding, effectively reducing the number of iterations needed and achieving promising results. Recently, SpecDiff <d-cite key="christopher2024speculative"></d-cite> followed a draft-and-verify paradigm, using a small discrete diffusion language model to generate a draft, followed by a stronger autoregressive LLM to select acceptable tokens. In essence, if we consider Jacobi Decoding as a discrete diffusion process from noise to data, we could use the autoregressive LLM itself to provide the draft, closely resembling the Lookahead Decoding <d-cite key="fubreak"></d-cite> solution.
 
-Figure 3. Diffusion process of consistency models. <d-cite key="koucllms"></d-cite>
+*Figure 3. Diffusion process of consistency models.* <d-cite key="koucllms"></d-cite>
 
 <div style="width: 80%; margin: 0 auto;"> <div class="col-sm mt-3 mt-md-0">
 {% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/consistency_model.jpg" class="jacobi_traj" %}
@@ -121,7 +121,7 @@ Figure 3. Diffusion process of consistency models. <d-cite key="koucllms"></d-ci
 
 Due to these structural similarities, many techniques developed for diffusion models may be transferable to Jacobi Decoding in the future. For example, diffusion models perform sequence editing naturally by adding noise and then denoising, which could enable faster text editing, refinement, or style transfer based on Jacobi Decoding. When working with a longer input text, Jacobi Decoding could be significantly faster than in-context learning approaches in autoregressive decoding. Moreover, for editing tasks where a well-initialized token sequence is already available, Jacobi Decoding would likely be more stable than using random token initialization in text generation. Diffusion Forcing <d-cite key="chendiffusion"></d-cite> also takes the similar concept.
 
-Figure 4. Diffusion Forcing, a new training paradigm where a diffusion model is trained to denoise a set of tokens with independent per-token noise levels.
+*Figure 4. Diffusion Forcing, a new training paradigm where a diffusion model is trained to denoise a set of tokens with independent per-token noise levels.*
 
 {% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/diffusion_forcing.jpg" class="diffusion_forcing" %}
 
@@ -159,7 +159,8 @@ The objective mentioned above is analogous to that of Consistency Models, as out
 
 Diffusion-LM <d-cite key="li2022diffusion"></d-cite> develops a non-autoregressive language model based on continuous diffusions, enabling complex, fine-grained controls of text generation. 
 
-Figure 5. A graphical model representing the forward and reverse diffusion processes. In addition to the original diffusion models, Diffusion-LM adds a Markov transition between $$x_0$$ and $$w$$. <d-cite key="li2022diffusion"></d-cite>
+*Figure 5. A graphical model representing the forward and reverse diffusion processes. In addition to the original diffusion models, Diffusion-LM adds a Markov transition between $$x_0$$ and $$w$$.* <d-cite key="li2022diffusion"></d-cite>
+
 {% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/diffu_lm2.png" class="diffu_lm" %}
 
 The framework of Diffusion-LM is shown in Figure. To apply a continuous diffusion model to discrete text, Diffusion-LM adds a Markov transition from discrete words $$w$$ to $$x_0$$ in the forward process, parametrized by $$ q(x_0,w) = \mathcal{N}(\text{EMB}(w), 0I)$$. $$\text{EMB}(w_i)$$ is an embedding function that maps each word to a vector in $$\mathbb{R}^d$$. In the reverse process, Diffusion-LM rounds a predicted $$x_0$$ back to discrete text by adding a trainable rounding step, parameterized by $$p_\theta(w,x_0) = \prod_{i=1}^n p_\theta(w_i,x_i)$$, where $$p_\theta(w_i,x_i)$$ is a softmax distribution. Rounding is achieved by choosing the most probable word for each position, according to $$\text{arg max} p_\theta(w,x_0) = \prod_{i=1}^n p_\theta(w_i,x_i)$$. Ideally, this argmax-rounding would be sufficient to map back to discrete text, as the denoising steps should ensure that $$x_0$$ lies exactly on the embedding of some word. The training objectives is:
@@ -172,7 +173,7 @@ $$
 \mathcal{L}_{\text{simple}}^{e2e}(\mathbf{w}) = \mathbb{E}_{q_{\phi}(\mathbf{x}_0, \mathbf{x}_1 | \mathbf{w})} [ \mathcal{L}_{\text{simple}}(\mathbf{x}_0) + \| \text{Emb}(\mathbf{w}) - \mu_{\theta}(\mathbf{x}_1, 1) \|^2 - \log p_{\theta}(\mathbf{w} | \mathbf{x}_0) ].
 $$
 
-**Controllable Text Generation** By performing control on the sequence of continuous latent variables $$x_{0:T}$$ defined by Diffusion-LM, Controllable Text Generation can be achieved. Specifically, controlling $$x_{0:T}$$ is equivalent to decoding from the posterior $$p(x_{0:T},c) = \prod_{t=1}^T p(x_{t-1},x_t, c)$$, and we decompose this joint inference problem into a sequence of control problems at each diffusion step: $$p(x_{t-1},x_t, c) \propto p(x_{t-1},x_t) \cdot p(c,x_{t-1}, x_t)$$. We further simplify $$p(c,x_{t-1}, x_t) = p(c,x_{t-1})$$ via conditional independence assumptions from prior work on controlling diffusions. Consequently, for the $$t$$-th step, the gradient update on $$x_{t-1}$$ is:
+**Controllable Text Generation.** By performing control on the sequence of continuous latent variables $$x_{0:T}$$ defined by Diffusion-LM, Controllable Text Generation can be achieved. Specifically, controlling $$x_{0:T}$$ is equivalent to decoding from the posterior $$p(x_{0:T},c) = \prod_{t=1}^T p(x_{t-1},x_t, c)$$, and we decompose this joint inference problem into a sequence of control problems at each diffusion step: $$p(x_{t-1},x_t, c) \propto p(x_{t-1},x_t) \cdot p(c,x_{t-1}, x_t)$$. We further simplify $$p(c,x_{t-1}, x_t) = p(c,x_{t-1})$$ via conditional independence assumptions from prior work on controlling diffusions. Consequently, for the $$t$$-th step, the gradient update on $$x_{t-1}$$ is:
 
 $$
 \nabla_{\mathbf{x}_{t-1}} \log p(\mathbf{x}_{t-1} \mid \mathbf{x}_t, \mathbf{c}) = \nabla_{\mathbf{x}_{t-1}} \log p(\mathbf{x}_{t-1} \mid \mathbf{x}_t) + \nabla_{\mathbf{x}_{t-1}} \log p(\mathbf{c} \mid \mathbf{x}_{t-1}).
@@ -184,7 +185,7 @@ where both $$\log p(x_{t-1},x_t)$$ and $$\log p(c,x_{t-1})$$ are differentiable:
 
 **The generation of individual tokens may not inherently follow an autoregressive pattern.** Consider the example in Figure, where the input for the task consists of a set of shuffled edges from the graph shown below. At the end of the input sequence, the start and goal nodes are specified to indicate the path the model needs to find. The objective of this task is to identify the correct path in the graph and output its constituent edges. The complexity of this problem arises from distracting factors (highlighted in orange) that potentially mislead the path selection. For instance, at node 7, with the goal being node 9, the model must plan over a distance of 3 nodes to determine that the correct next choice should be node 5 rather than 0. We define this span as the Planning Distance (PD), a parameter adjustable in our synthetic task data. Intuitively, as the PD increases, the model faces greater difficulty in learning to determine the correct subsequent node.
 
-Figure 5. An illustration of the planning task. <d-cite key="ye2024beyond"></d-cite>
+*Figure 6. An illustration of the planning task.* <d-cite key="ye2024beyond"></d-cite>
 
 
 <div style="width: 60%; margin: 0 auto;"> <div class="col-sm mt-3 mt-md-0">
