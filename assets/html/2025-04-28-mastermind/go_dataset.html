@@ -7,37 +7,66 @@
         <title>Dataset Card</title>
         <style>
             body {
-                font-family: Arial, sans-serif;
-            }
-            .section {
-                display: none;
-            }
-            #go-task1:target { display: block; }
-#go-task2:target { display: block; }
-#go-task3:target { display: block; }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 20px;
-                margin: 20px auto;
-            }
-            table, th, td {
-                border: 1px solid #ddd;
-            }
-            th, td {
-                padding: 8px;
-                text-align: left;
-            }
-            th {
-                background-color: #f4f4f4;
-            }
-            details > summary {
-                cursor: pointer;
-            }
-            /* Default section display */
-            body:not(:has(:target)) #go-task1 {
-                display: block;
-            }
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .section {
+            display: none;
+        }
+        /* Show the targeted section */
+        #go-task1:target,
+        #go-task2:target,
+        #go-task3:target {
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        details > summary {
+            cursor: pointer;
+        }
+        /* Default section display */
+        body:not(:has(:target)) #go-task1 {
+            display: block;
+        }
+        #go-task1,
+        #go-task2,
+        #go-task3 {
+            max-height: 300px; /* 容器最大高度 */
+            overflow-y: auto; /* 启用滚动条 */
+            border: 1px solid #ccc; /* 边框包围表格 */
+            padding: 10px; /* 内边距 */
+            box-sizing: border-box; /* 包括 padding */
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        select {
+            padding: 8px;
+            font-size: 16px;
+        }
+        h2 {
+            margin-top: 0;
+        }
         </style>
     </head>
     <body>

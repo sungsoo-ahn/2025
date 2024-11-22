@@ -4,37 +4,43 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dataset Card</title>
         <style>
             body {
-                font-family: Arial, sans-serif;
-            }
-            .section {
-                display: none;
-            }
-            #doudizhu:target { display: block; }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 20px;
-            }
-            table, th, td {
-                border: 1px solid #ddd;
-            }
-            th, td {
-                padding: 8px;
-                text-align: left;
-            }
-            th {
-                background-color: #f4f4f4;
-            }
-            details > summary {
-                cursor: pointer;
-            }
-            /* Default section display */
-            body:not(:has(:target)) #doudizhu {
-                display: block;
-            }
+            font-family: Arial, sans-serif;
+        }
+        .section {
+            display: none;
+        }
+        #doudizhu:target {
+            display: block;
+        }
+        #doudizhu {
+            max-height: 300px; /* 容器最大高度 */
+            overflow-y: auto; /* 启用滚动条 */
+            border: 1px solid #ccc; /* 边框包围表格 */
+            padding: 10px; /* 内边距 */
+            box-sizing: border-box; /* 包括 padding */
+        }
+        table {
+            width: 100%; /* 表格宽度 */
+            border-collapse: collapse; /* 合并边框 */
+        }
+        table, th, td {
+            border: 1px solid #ddd; /* 表格边框 */
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        details > summary {
+            cursor: pointer;
+        }
+        body:not(:has(:target)) #doudizhu {
+            display: block;
+        }
         </style>
     </head>
     <body>
