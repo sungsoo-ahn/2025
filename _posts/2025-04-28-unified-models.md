@@ -489,7 +489,7 @@ $$
 \mathbf{t} = \text{LLM}(T)
 $$
 
-* **2. Modality Embedding:** Other modalities, such as images $I$, audio $A$, or video $V$, are encoded into their respective embedding spaces using dedicated encoders. For instance, the image $I$ is encoded as $i$ using a vision model:
+* **2. Modality Embedding:** Other modalities, such as images $I$, audio $A$, or video $V$, are encoded into their respective embedding spaces using dedicated encoders. For instance, the image $I$ is encoded as $\mathbf{i}$ using a vision model:
 
 $$
 \mathbf{i} = \text{VisionEncoder}(I)
@@ -507,7 +507,7 @@ $$
 \mathcal{L}_{\text{align}} = - \log \frac{\exp(\text{sim}(\mathbf{t}, \mathbf{m}) / \tau)}{\sum_{i=1}^N \exp(\text{sim}(\mathbf{t}, \mathbf{m}_i) / \tau)}
 $$
 
-Where $m$ represents the embedding of a modality (image, audio, etc.). $\text{sim}(*)$ is the similarity function (*e.g.,* cosine similarity). *\tau* is the temperature hyperparameter that controls the sharpness of the distribution. *N* is the number of possible modality samples.
+Where $m$ represents the embedding of a modality (image, audio, etc.). $\text{sim}()$ is the similarity function (*e.g.,* cosine similarity). $\tau$ is the temperature hyperparameter that controls the sharpness of the distribution. *N* is the number of possible modality samples.
 
 ### Generalized Alignment
 Generalized Alignment is an approach to multimodal learning that does not center any single modality, like text or image, but instead creates a unified space for all modalities based on a knowledge base or feature-centered approach. This method aims to align different modalities by utilizing shared characteristics derived from a broader knowledge base, rather than anchoring on one modality's features.
