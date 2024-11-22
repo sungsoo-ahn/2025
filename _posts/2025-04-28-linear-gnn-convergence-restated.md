@@ -393,7 +393,6 @@ Denote the SVD decomposition of  $$\tilde{G}_H^{\top} \otimes I_{m_y}$$ to be $$
 $$
 \begin{equation*}
 \begin{aligned}
-% \textcolor{blue}{\text{red part}}
 \textcolor{blue}{\textrm{Eq.(*)}}
 &= \mathrm{vec}[\hat{Y}-Y]^{\top} U (\Sigma)^2 U^{\top} \mathrm{vec}[\hat{Y}-Y] 
 & \textcolor{gray}{\text{(SVD of $\tilde{G}_H^{\top} \otimes I_{m_y}$)}}
@@ -403,8 +402,6 @@ $$
 \\ 
 & \geq \sigma_{\mathrm{min}}^2(\tilde{G}_H) \cdot \Vert  \mathbf{P} \mathrm{vec}[\hat{Y}-Y]\Vert_2^2 
 & \textcolor{gray}{\text{(Projector to the column space)}}
-
-% \\
 \end{aligned}
 \end{equation*}
 $$ 
@@ -464,8 +461,6 @@ Having Eq.(\ref{L_grad}), and use the fact that $\frac{\mathrm{d} }{\mathrm{d} t
 
 $$
 \begin{equation*}
-  % \label{ode}
-    % \frac{\mathrm{d}}{\mathrm{d} t}(L- L^*_H) \leq - 4\lambda_{\rm min}((B_{(H)}\cdots B_{(1)})^\top (B_{(H)}\cdots B_{(1)}))\sigma^2_{\rm min}(\tilde{G}_H) (L - L^*_H),
      \frac{\mathrm{d}}{\mathrm{d} t}(L- L^*_H) \leq - 4\lambda_{\rm min}\sigma^2_{\rm min}(\tilde{G}_H) (L - L^*_H).
 \end{equation*}
 $$
@@ -481,7 +476,6 @@ $$
     & 
     \\
     & \leq  (L_0 - L^*_H) e^{-4   \lambda^{(H)}_T \sigma^2_{\rm min}(\tilde{G}_H) T} 
-    % & \lambda^{(H)}_T := \text{$\mathop{\rm inf}_{t \in [0,T]} {\lambda_{\rm min}((B_{(H),t}\cdots B_{(1),t})^\top (B_{(H),t}\cdots B_{(1),t})) }$}
     \\ 
     & = (L_0 - L^*_H) e^{-4 \lambda^{(H)}_T \sigma^2_{\rm min}(X (S^H)_{*\mathcal{I}}) T}, 
     & 
