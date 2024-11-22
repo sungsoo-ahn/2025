@@ -44,9 +44,19 @@ _styles: >
     display: block;
     background: #eee;
     }
-    .my_dropdown a{
+    .my_dropdown:focus{
     display: block;
+    outline: none;
+    background: #eee;
+    }
+    .my_dropdown:focus div{
+    display: block;
+    background: #eee;
+    }
+    .my_dropdown a{
     background: #cdf;
+    cursor: pointer;
+    display: block;
     }
     .my_dropdown > div{
     display:none;
@@ -213,8 +223,8 @@ y=f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2} & x_{3}\end{bmatrix} \right) =f\l
 $$
 
 <div class="my_dropdown">
-<a href="#targ_1">Solution</a>
-<div id="targ_1">
+<a>Solution</a> 
+<div>
 
 According to equivariant constraints, the coefficients of the Taylor series satisfy
 
@@ -468,8 +478,8 @@ y=f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right)
 $$
 
 <div class="my_dropdown">
-<a href="#targ_3">Solution</a>
-<div id="targ_3">
+<a href="#targ_4">Solution</a>
+<div id="targ_4">
 
 
 According to the equivariant constraint, the coefficients of the Taylor series satisfy
@@ -546,8 +556,8 @@ y=f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right)
 $$
 
 <div class="my_dropdown">
-<a href="#targ_3">Solution</a>
-<div id="targ_3">
+<a href="#targ_5">Solution</a>
+<div id="targ_5">
 
 According to the equivariant constraint, the coefficients of the Taylor series satisfy
 
@@ -622,8 +632,8 @@ For any permutation $P$.
 
 
 <div class="my_dropdown">
-<a href="#targ_3">Solution</a>
-<div id="targ_3">
+<a href="#targ_6">Solution</a>
+<div id="targ_6">
 
 
 The Taylor series up to order 1 can be expressed as
