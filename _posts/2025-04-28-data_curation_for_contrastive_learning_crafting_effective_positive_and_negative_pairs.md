@@ -397,7 +397,7 @@ The process involves the following steps:
 Thus, this method not only generates amore diverse set of challenging negative samples but also conducts weighted sampling while ensuring the truthfulness of these negative samples.
 
 
-## Discussion:
+## Discussion
 
 ### Drawback of generating positive pairs from same instance:
 *Same-instance positive pairs*, generated through augmentations like random cropping or color distortion, **have inherent limitations in capturing diverse variations such as different viewpoints, object deformations, or semantic similarities across instances within the same class**. These approaches place the burden of generalization on the augmentation pipeline, which may fail to encompass the full range of real-world data variations, leading to suboptimal representations. To address these limitations, multi-instance positive pair techniques offer diverse alternatives.
@@ -425,7 +425,7 @@ Another **challenges with generating negative pairs is computational efficiency.
 
 The definition and **selection of negatives often depend on the domain and task.** For instance, in multimodal contrastive learning, negatives must account for cross-modal discrepancies, such as the semantic gap between text and images. Similarly, in temporal tasks, negatives from non-overlapping time intervals may introduce unwanted biases. Tailoring negative selection strategies to the specific characteristics of the domain is essential for achieving optimal results.
 
-## Open Research Questions:
+## Open Research Questions
 ### Balancing Diversity vs Relevance in pairs:
 
 Balancing diversity and semantic alignment in positive pair creation is a critical challenge in contrastive learning. Both factors are essential: **diversity ensures robustness and generalization, while semantic alignment guarantees meaningful and task-relevant representations.** Striking the right balance between these two can significantly impact the performance of the learned embeddings. **Diversity improves generalization across unseen domains or test data.** It also  encourages the model to focus on core semantic features rather than superficial patterns. However, **excessive diversity can dilute semantic similarity,** making it harder for the model to learn meaningful representations.
