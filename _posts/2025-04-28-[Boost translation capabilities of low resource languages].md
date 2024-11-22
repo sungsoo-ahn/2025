@@ -1,13 +1,7 @@
 ---
 layout: distill
 title: Boost translation capabilities of low resource languages
-description: Language Models are increasingly recognized for their potential in translation tasks. Researchers are actively exploring the most effective architectures, prompting formats, and fine-tuning techniques for these tasks. Further, the use of LLMs in low-resource machine translation is still emerging. This study evaluates methods that combine In-Context Learning (ICL) with fine-tuning scenarios where language data is scarce.
-
-Our strategy involves two steps: first, introducing translation examples from languages closely related to the target language; second, using embeddings to include similar examples to the source language for few-shot ICL. We hypothesize that this approach helps LLMs access their hidden translation capabilities.
-
-We test our methods on two language clusters: Konkani and Tunisian Arabic, using models from 2 LLM families. The first model is tailored for machine translation tasks, though not specifically with data from the target language clusters. The second model is trained in several languages and is known for its multilingual capabilities.
-
-Our evaluations show that models fine-tuned with this technique perform well given these constraints. Through this paper, we hope to make LLMs more accessible to communities speaking low-resource languages.
+description: Language Models are increasingly recognized for their potential in translation tasks. Researchers are actively exploring the most effective architectures, prompting formats, and fine-tuning techniques for these tasks. Further, the use of LLMs in low-resource machine translation is still emerging. This study evaluates methods that combine In-Context Learning (ICL) with fine-tuning scenarios where language data is scarce. Our strategy involves two steps first, introducing translation examples from languages closely related to the target language; second, using embeddings to include similar examples to the source language for few-shot ICL. We hypothesize that this approach helps LLMs access their hidden translation capabilities. We test our methods on two language clusters Konkani and Tunisian Arabic, using models from 2 LLM families. The first model is tailored for machine translation tasks, though not specifically with data from the target language clusters. The second model is trained in several languages and is known for its multilingual capabilities. Our evaluations show that models fine-tuned with this technique perform well given these constraints. Through this paper, we hope to make LLMs more accessible to communities speaking low-resource languages.
 
 date: 2025-04-28
 future: true
