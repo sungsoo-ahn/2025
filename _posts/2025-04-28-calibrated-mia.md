@@ -1,7 +1,7 @@
 ---
 layout: distill  
-title: "Reassessing EMNLP 2024’s Best Paper: Does Divergence-Based Calibration for MIAs Hold Up? " 
-description: "<strong>TLDR: No.</strong><br>
+title: "Reassessing EMNLP 2024’s Best Paper: Does Divergence-Based Calibration for MIAs Hold Up?" 
+description: "<strong>TL;DR: No.</strong><br>
 A critical analysis of the EMNLP Best Paper proposing a divergence-based calibration for Membership Inference Attacks (MIAs). We explore its experimental shortcomings, issues with temporally shifted benchmarks, and what this means for machine learning awards."
 date: 2025-04-28  
 future: true  
