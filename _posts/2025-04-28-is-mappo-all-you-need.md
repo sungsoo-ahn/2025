@@ -339,9 +339,9 @@ We also cite the experimental results from these papers themselves below,
 </div>
 
 From the experimental results, we can see that 
->The centralized value function of MAPPO does not provide effective performance improvements. The independent value functions for each agent make the multi-agent learning more robust. 
+>💡The centralized value function of MAPPO does not provide effective performance improvements. The independent value functions for each agent make the multi-agent learning more robust. 
 
->Introducing global information into the value function improves the learning efficiency of IPPO.
+>💡Introducing global information into the value function improves the learning efficiency of IPPO.
 
 ### Discussion
 
