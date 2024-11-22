@@ -158,7 +158,7 @@ The format of query is:
 Some example contents of these datasets can be viewed in the following table.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-04-28-mastermind/doudizhu_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-04-28-mastermind/doudizhu_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="60%"></iframe>
 </div>
 
 ## Mastermind-Go
@@ -207,7 +207,7 @@ The training sample thus adopts the following format:
 Some example contents of these datasets can be viewed in the following table.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-04-28-mastermind/go_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
+  <iframe src="{{ 'assets/html/2025-04-28-mastermind/go_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="60%"></iframe>
 </div>
 **Combined Training:**
 Finally, we combine the above data for training as a complete task to boost the LLM. In doing so, Mastermind-Go fully utilizes Go training data from various levels of thought, integrating all knowledge to deliver the optimal decision.
@@ -323,11 +323,11 @@ Firstly, we observed a significant performance improvement in the model on speci
 
 
 
-| Acc.           | **Penguins in a table** | **Disambiguation qa** | **Snarks** | **RuinNames** | **Hyper.** | **Nav.**   |
+| Acc.           | **Penguins in a table** | **Disambiguation qa** |      |      |      |      |
 | -------------- | ------------------- | ----------- | ---------- | ------------- | ---------- | ---------- |
-| LLaMA-2-7B     | 12.00%              | 31.51%      | 47.75%     | 32.80%        | 51.60%     | 53.60%     |
-| Mastermind-Dou | 20.00%              | **35.62%**  | 49.44%     | 35.60%        | **62.80%** | 56.80%     |
-| Mastermind-Go  | **20.40%**          | 29.45%      | **51.69%** | **39.20%**    | 51.60%     | **60.00%** |
+| LLaMA-2-7B     | 26.7%                   |                       |      |      |      |      |
+| Mastermind-Dou |                         |                       |      |      |      |      |
+| Mastermind-Go  |                         |                       |      |      |      |      |
 
 
 
