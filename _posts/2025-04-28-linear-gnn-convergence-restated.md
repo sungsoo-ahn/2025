@@ -363,17 +363,15 @@ $$
 
 <!-- the minimal eigenvalue of  -->
 <!-- $(B_{(H)}\cdots B_{(1)})^\top (B_{(H)}\cdots B_{(1)})$ as $\lambda_\mathrm{min}$  -->
-and plug $\nabla_{\tilde{W}_H} L=2(\hat{Y}-Y)\tilde{G}_H^{\top}$ into the expression above,  
-we have
+and plug $\nabla_{\tilde{W}_H} L=2(\hat{Y}-Y)\tilde{G}_H^{\top}$ into the expression above,  we have
 
 $$
 \begin{equation}
-\label{dynamics}
 \begin{aligned}
+\label{dynamics}
     \frac{\mathrm{d} }{\mathrm{d} t}L 
     \leq & - \lambda_{\rm min}\cdot \Vert \mathrm{vec} [\nabla_{\tilde{W}_H} L] \Vert^2_2 \\
     = & - 4\lambda_{\rm min}\cdot((\tilde{G}_H \otimes I_{m_y})\mathrm{vec} [\hat{Y}-Y])^\top ((\tilde{G}_H \otimes I_{m_y})\mathrm{vec} [\hat{Y}-Y]) \\
-    % = & - 4\lambda_{\rm min}\cdot \textcolor{blue}{\underbrace{\mathrm{vec}[\hat{Y}-Y]^\top \left[ \tilde{G}^\top_H \otimes I_{m_y} \right] \left[ \tilde{G}_H \otimes I_{m_y} \right] \mathrm{vec}[\hat{Y}-Y]}_{\text{"red part"}}}.
     = & - 4\lambda_{\rm min}\cdot \textcolor{blue}{\underbrace{\mathrm{vec}[\hat{Y}-Y]^\top \left[ \tilde{G}^\top_H \otimes I_{m_y} \right] \left[ \tilde{G}_H \otimes I_{m_y} \right] \mathrm{vec}[\hat{Y}-Y]}_{\textrm{Eq.(*)}}}.
 \end{aligned}
 \end{equation}
