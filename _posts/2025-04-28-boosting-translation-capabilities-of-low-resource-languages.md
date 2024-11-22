@@ -59,7 +59,6 @@ _styles: >
 ***
 
 
-todo: the citations are not as expected so change that
 
 ## Introduction
 
@@ -114,7 +113,7 @@ We used BLEU scores <d-cite key="papineni-etal-2002-bleu"></d-cite>, calculated 
 ### Language similarity
 In this work, we hypothesize that for low-resource target languages, adding a high-resource pivot language—one that the model is likely trained on and shares the same script—can help the model produce more higher quality translations. The choice of a suitable pivot language may depend on factors such as data availability, whether the model has been pretrained on the language, and whether it belongs to the same language family as described in Ethnologue. Quantitatively measuring the similarity between the pivot and target languages to ensure that the data added during in-context learning is relevant, as noisy data can degrade translation quality <d-cite key="agrawal2022context"></d-cite>.
 
-Jaccard Similarity can be used to measure the similarity between the parallel corpus. This metric measures the similarity between two sets, often represented as the ratio of the intersection (shared elements) to the union (total unique elements) of those sets. In this case the measure can be used to check the overlap of words between the pivot language and the target language <d-cite key="Majumdar2022ta"></d-cite>. Jaccard similarity quantifies the vocabulary or structural overlap, yielding a value between 0 and 1. High Jaccard similarity between two languages typically indicates shared vocabulary. We hypothesize that leveraging this overlap, along with selecting pivot languages from language families classified by Ethnologue, increases the likelihood of accurate translations. 
+Jaccard Similarity can be used to measure the similarity between the parallel corpus. This metric measures the similarity between two sets, often represented as the ratio of the intersection (shared elements) to the union (total unique elements) of those sets. In this case the measure can be used to check the overlap of words between the pivot language and the target language. Jaccard similarity quantifies the vocabulary or structural overlap, yielding a value between 0 and 1. High Jaccard similarity between two languages typically indicates shared vocabulary. We hypothesize that leveraging this overlap, along with selecting pivot languages from language families classified by Ethnologue, increases the likelihood of accurate translations. 
 
 Although other measures of lexical similarity exists, Jaccard similarity is interpretable and allows to measure the similarity between the parallel corpus for low resource languages where the regionally satandardized wordlist is not available <d-cite key="ethnologue2024"></d-cite>. 
 
