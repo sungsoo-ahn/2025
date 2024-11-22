@@ -6,7 +6,7 @@ description: Language Models are increasingly recognized for their potential in 
 
 Our strategy involves two steps: first, introducing translation examples from languages closely related to the target language; second, using embeddings to include similar examples to the source language for few-shot ICL. We hypothesize that this approach helps LLMs access their hidden translation capabilities.
 
-We test our methods on two language clusters: Konkani and Tunisian Arabic, using models from three LLM families. The first model is for general chat and instruction following, trained with limited non-English data. The second model is tailored for machine translation tasks, though not specifically with data from the target language clusters. The third model is trained in several languages and is known for its multilingual capabilities.
+We test our methods on two language clusters: Konkani and Tunisian Arabic, using models from 2 LLM families. The first model is tailored for machine translation tasks, though not specifically with data from the target language clusters. The second model is trained in several languages and is known for its multilingual capabilities.
 
 Our evaluations show that models fine-tuned with this technique perform well given these constraints. Through this paper, we hope to make LLMs more accessible to communities speaking low-resource languages.
 
@@ -38,50 +38,36 @@ We find that when the models are fine-tuned by constructing the prompt as mentio
 ***
 
 ## Related Work
+todo: add what makes this method better -> alignemnt to languages with finetuning
+todo: why do some models perform worse and some model better -> multilingual model performs better
+todo: grammatical errors
+todo: embeddings how does it work
+todo: why does pivot language work -> wrote about this
+todo: convert results into charts
+todo: will existing techniques and fintuning make any difference when we are constrained by data and resources
 
 ### In-Context Learning
 
-In-Context Learning (ICL) has gained popularity in recent times, significantly enhancing the responses of Large Language Models (LLMs). Unlike traditional approaches where parameters are optimized through training or fine-tuning, LLMs perform tasks merely by conditioning on input-output examples during ICL. This process enables the patterns and structures learned during training to generate appropriate responses. Essentially, the LLM is not explicitly trained to learn from examples in the way we might think. Instead, the pretraining of LLMs focuses on next-token prediction, a foundational task that involves generating the next word based on the context of the words that precede it. Through ICL, latent concepts from the pretraining data are utilized to adapt the foundational next-token prediction capabilities of the LLM, enabling it to perform tasks it was not originally trained for.
+ICL has gained popularity for improving the accuracy of LLM responses in downstream tasks without updating the model's weights. Unlike traditional fine-tuning or pretraining—where model weights are adjusted—ICL allows LLMs to perform tasks by conditioning on input-output examples provided in the prompt. This process enables LLMs to utilize patterns and structures learned during pretraining to generate appropriate responses. Pretraining focuses on next-token prediction, generating the next word based on the preceding context. Through ICL, latent concepts from the pretraining data are activated, adapting the LLM's next-token prediction capabilities to perform tasks it wasn't originally trained for. The extensive training on vast amounts of text equips the LLM to handle a variety of tasks without further weight adjustments. When presented with an ICL prompt, the LLM "locates" previously learned concepts or knowledge within its training data. These concepts act as latent variables, encapsulating various document-level statistics and information that the model was exposed to during its training phase <d-cite key="xie2021explanation"></d-cite>.
 
-The extensive training on vast amounts of text equips the LLM to handle a variety of tasks without further training. When presented with an ICL prompt, the LLM uses this prompt to "locate" a previously learned concept or knowledge within its vast training data. Here, a concept acts as a latent variable, encapsulating various document-level statistics and information that the model has been exposed to during its training phase <d-cite key="xie2021explanation"></d-cite>.
+However, while ICL has shown promise in data used during pretraining, its effectiveness in low-resource languages that the model was not exposed to during pretraining remains underexplored. Since low-resource languages are underrepresented in pretraining data, LLMs may lack the necessary latent concepts to perform tasks in these languages effectively. Our research aims to address this gap by leveraging fine-tuning techniques in conjunction with ICL to enhance translation quality for low-resource languages like Konkani and Tunisian Arabic. By incorporating linguistically related pivot languages and embedding-based example selection, we seek to activate latent translation capabilities within LLMs, even when data is scarce.
 
-ICL has proven to be useful in translation tasks as well. <d-cite key="moslem2023adaptive"></d-cite> demonstrate its effectiveness, particularly through the use of few-shot ICL for translation tasks. This approach improves real-time adaptive machine translation (MT), offering a potentially new avenue for improving the responsiveness and accuracy of translation systems. They show that the translation quality achieved with few-shot ICL can surpass that of strong encoder-decoder MT systems, especially for languages with abundant resources. They hypothesize that during the unsupervised pretraining phase, the model develops pattern recognition abilities, characteristic of autoregressive decoder-only models. During inference, these patterns are applied to execute translation tasks effectively.
+ICL has proven to be useful in translation tasks as well. <d-cite key="moslem2023adaptive"></d-cite> demonstrates its effectiveness, particularly through the use of few-shot ICL for translation tasks. This approach improves real-time adaptive machine translation and provides a way to enhance translations. They show that the translation quality achieved with few-shot ICL can surpass that of strong encoder-decoder MT systems, especially for high-resource languages. They hypothesize that during the unsupervised pretraining phase, the model develops pattern recognition abilities characteristic of autoregressive decoder-only models. During inference, these patterns are applied to execute translation tasks effectively. They also explore translation from English to Kinyarwanda, which is a low-resource language. This work considers the GPT-3.5 and BLOOM models but does not explore open-source models. They also do not fine-tune the models. They explain that tokenization could be the reason why translations for languages like Arabic and Kinyarwanda do not perform well. In this work, we aim to overcome these limitations by fine-tuning the models and also analyzing how these languages are tokenized.
 
-<d-cite key="agrawal2022context"></d-cite> highlight how translation quality and the domain of in-context examples affect the performance of LLMs in translation tasks. It is shown that a single-shot, noisy, unrelated example can detrimentally affect the output quality. Incorporating similar examples, identified based on n-gram overlap with the test source, significantly enhances the translation quality of the outputs.
-
-ICL has also shown significant promise in translation tasks. <d-cite key="moslem2023adaptive"></d-cite> demonstrate its effectiveness, particularly through the use of few-shot ICL, to enhance translation performance. This approach improves real-time adaptive machine translation (MT), presenting a potential avenue for advancing the responsiveness and accuracy of translation systems. Their findings suggest that translation quality achieved with few-shot ICL can surpass even robust encoder-decoder MT systems, especially for languages with abundant resources. They hypothesize that during unsupervised pretraining, the model develops pattern recognition abilities characteristic of autoregressive decoder-only models, which are then applied during inference to perform translation tasks effectively.
-
-<d-cite key="agrawal2022context"></d-cite> emphasize that translation quality and the type of in-context examples used can significantly impact LLM performance in translation tasks. Their study shows that a single-shot, noisy, or unrelated example can degrade output quality, while including more relevant examples—selected based on n-gram overlap with the test source—substantially enhances translation quality.
-
-This method outperforms a strong kNN-MT baseline in half of the tested out-of-domain datasets. Similar examples to the test source are retrieved from a datastore containing pairs of source text and their corresponding translations. Retrieval is facilitated by BM25, an unsupervised and efficient method that provides additional context to the model.
+<d-cite key="agrawal2022context"></d-cite> shows that translation quality and the type of in-context examples used can significantly impact LLM performance in translation tasks. Their study indicates that a single-shot, noisy, or unrelated example can degrade output quality, while including more relevant examples—selected based on n-gram overlap with the test source—substantially enhances translation quality. This method outperforms a strong kNN-MT baseline in half of the tested out-of-domain datasets. Similar examples to the test source are retrieved from a datastore containing pairs of source text and their corresponding translations. Retrieval is facilitated by BM25, an unsupervised and efficient method that provides additional context to the model. In their work, they mostly focus on selecting relevant examples for few-shot demonstrations and translations to and from German and Russian, which are high-resource languages. In our work, we aim to expand on this by adding a pivot language and further fine-tuning decoder-only models.
 
 ### Fine-Tuning
 
-In the previous section, we primarily focused on improving translations using ICL examples. However, translation performance can also be enhanced by fine-tuning models. <d-cite key="li2023eliciting"></d-cite> show that the ability of LLMs to execute translation tasks depends on their comprehension of translation instructions and the degree of alignment between different languages. By applying multilingual fine-tuning alongside translation instructions, LLMs can effectively learn to translate even between language pairs that were not seen during the instruction tuning phase. Their fine-tuning approach not only improves translation capabilities for language pairs included in the training but also for new, unseen language pairs.
+LLMs demonstrate strong translation capabilities even though they are not trained with parallel corpora in the pretraining stage. In the previous section, we primarily focused on improving translations using ICL examples. However, translation performance can also be enhanced by fine-tuning models. <d-cite key="li2023eliciting"></d-cite> shows that the ability of LLMs to execute translation tasks depends on their comprehension of translation instructions and the degree of alignment between different languages. By applying multilingual fine-tuning alongside translation instructions, LLMs can effectively learn to translate even between language pairs that were not seen during the instruction tuning phase. Their fine-tuning approach not only improves translation capabilities for language pairs included in the training but also for new, unseen language pairs. In their work, they use open-source LLM models and limit their data to 1,000 examples per language pair. They also make use of a pivot language, but in a different sense. For example, they use English as a pivot while translating between unseen language pairs to improve translation performance during fine-tuning. In our work, we explore the scenario where the target is an unseen language and the pivot language is a high-resource language. We also propose adding few-shot demonstrations to establish alignment between language pairs.
 
-The technique of including ICL examples during fine-tuning has also proven effective beyond translation tasks. <d-cite key="fatehkia2024t"></d-cite> demonstrate that in question-answering tasks, retrieving similar document chunks from embeddings and including them in the prompt of a fine-tuned LLM yields better performance than either method alone.
+The technique of including ICL examples during fine-tuning has also proven effective beyond translation tasks. <d-cite key="fatehkia2024t"></d-cite> demonstrates that in question-answering tasks, retrieving similar document chunks from embeddings and including them in the prompt of a fine-tuned LLM yields better performance than either method alone. We aim to apply this technique by retrieving similar examples using a sentence transformer model <d-cite key="reimers-2019-sentence-bert"></d-cite> to determine whether this approach will improve language alignment and, ultimately, translation quality.
 
 ***
 
 ## Methodology
 
-Previous studies have shown that carefully selecting relevant examples can significantly enhance in-context learning (ICL) for translation tasks. Our approach leverages ICL, specifically through few-shot examples, to improve translation performance.
-
-First, we assess the performance of pretrained models on the translation task for the target languages. This initial evaluation establishes a baseline for comparison.
-
-Next, we fine-tune the pretrained models using a consistent prompt format during both training and inference phases. This approach ensures that any observed improvements can be attributed to the fine-tuning process. We prioritize adding sentences that closely match the sentence we aim to translate as few-shot examples in the prompt. By selecting these highly relevant examples, we seek to improve the model’s accuracy in executing the translation task.
-
-To implement our methodology, we first populate a vector database with training samples and calculate cosine similarity scores to identify the examples most similar to the source sentence we wish to translate. We use the all-MiniLM-L12-v2 model to generate vector embeddings <d-cite key="reimers-2019-sentence-bert"></d-cite>. Then, 5 of the most similar sentences, are added to the prompt in the same format as few-shot learning examples.
-
-The overall prompt format is adjusted based on the model in use. The specific prompt templates used are provided in the appendix.
-
-Our experiments are conducted using Unbable Tower models, which are specialized, context-aware translation models fine-tuned from Llama2. Additionally, we utilize Nous Research's fine-tuned Llama3 model <d-cite key="Hermes-2-Pro-Llama-3-8B"></d-cite>, which is a multilingual model. These models possesses unique capabilities, allowing us to evaluate which model performs best in translating to a previously unseen language.
-
-In this study, we also fine-tune the models to assess translation outcomes from English to the target language, maintaining the prompt format as recommended for each original model.
-
-The fine-tuning process leverages training data arranged in the format described above. Using specifically formatted prompts during both training and inference is known to improve model performance. By applying prompts consistently in this format to both pretrained and fine-tuned models, we can assess whether fine-tuning has indeed enhanced performance.
-
-BLEU scores, calculated using SacreBLEU, were obtained for each model on the test set. For comparison with existing machine translation systems, we used Bing to calculate the score for Konkani. For Tunisian Arabic, which is supported by NLLB, the BLEU score was calculated using NLLB.
+We began by evaluating the performance of pretrained language models on the translation tasks for our target languages without any fine-tuning or prompt adjustments. This initial assessment established a baseline and highlighted the limitations of these models in handling low-resource languages. Recognizing the potential of ICL to improve translation tasks, we implemented few-shot learning by including relevant examples in the input prompts during inference. Our goal was to determine whether adding similar sentences as examples would enhance the models' translation performance. To select the most relevant few-shot examples, we employed the following approach. We used the all-MiniLM-L12-v2 sentence transformer model <d-cite key="reimers-2019-sentence-bert"></d-cite> to generate vector embeddings for all sentences in our training dataset. This model was chosen for its balance between computational efficiency and embedding quality. The embeddings were stored in a vector database using the lancedb. For each source sentence to be translated, we generated its embedding and calculated cosine similarity scores with the embeddings in the vector database. We retrieved the top five most similar sentences based on cosine similarity scores. These sentences, along with their translations, were included in the prompt as few-shot examples, formatted consistently with the models' requirements. We utilized two advanced language models for our experiments. Unbabel's Tower models <d-cite key="alves2024tower"></d-cite> are context-aware translation models fine-tuned from Llama 2. Designed to handle contextual information effectively, they are well-suited for translation tasks involving nuanced language structures. Nous Research's Llama 3 <d-cite key="Hermes-2-Pro-Llama-3-8B"></d-cite> is a multilingual model capable of handling multiple languages, including those not seen during pretraining. Its architecture allows for effective adaptation to new language pairs. When it comes to translation we determine if a model instruction tuned specifically for translation task can perform better than a multilingual model trained on several languages. For each language pair (English-Konkani and English-Tunisian Arabic), we compiled a dataset of 1,000 sentence pairs. The sentences were sourced from publicly available parallel corpora56, ensuring a diverse representation of language use. The training data was formatted according to the prompt structures recommended for each model. Examples of these prompt templates are provided in the Appendix. During fine-tuning, the retrieved similar sentences were included in the prompts to reinforce the models' ability to translate sentences similar to those in the training data. The fine-tuning was conducted on Google Colab Pro using NVIDIA A100 GPUs making this approach accessible.
+We used BLEU scores <d-cite key="papineni-etal-2002-bleu"></d-cite>, calculated using SacreBLEU, to assess the translation quality of each model. BLEU scores provide a standard metric for comparing the similarity between machine-generated translations and reference translations.
 
 ***
 
@@ -97,8 +83,11 @@ Although other measures of lexical similarity exists, Jaccard similarity is inte
 In our case, a Jaccard similarity score of 62 between Marathi and Konkani suggests a substantial overlap, with the two languages sharing about 62% of their linguistic elements, such as words, phrases, or structures. We also calculated the Jaccard similarity between Tunisian Arabic and Modern Standard Arabic, which resulted in a score of 56%. While Jaccard similarity is not an essential criterion, it supports our selection of effective pivot and source languages. In future work, we aim to explore whether correlation between lexical similarity and translation performance exists.
 
 ### Models
+todo: languages supported
+todo: types of translation tasks supported
+In this experiment, we evaluate the performance of two models: Unbabel/TowerInstruct-7B-v0.2 d-cite key="alves2024tower"></d-cite>, and NousResearch/Hermes-2-Pro-Llama-3-8B <d-cite key="Hermes-2-Pro-Llama-3-8B"></d-cite>. The Hermes-2-Pro-Llama-3 model is a fine-tuned version of Llama3, known for its multilingual capabilities. 
 
-In this experiment, we evaluate the performance of two models: Unbabel/TowerInstruct-7B-v0.2 d-cite key="alves2024tower"></d-cite>, and NousResearch/Hermes-2-Pro-Llama-3-8B <d-cite key="Hermes-2-Pro-Llama-3-8B"></d-cite>. The Hermes-2-Pro-Llama-3 model is a fine-tuned version of Llama3, known for its multilingual capabilities. Tower Instruct is fine-tuned from the Llama2 model specifically for translation-related tasks such as Machine Translation (MT) and Automatic Post-Editing (APE) <d-cite key="alves2024tower"></d-cite>. The Tower Base model is first fine-tuned from Llama2 using monolingual and parallel corpora, while Tower Instruct is then fine-tuned from Tower Base with specific instructions for translation tasks. Although Tower Instruct performs well on translation tasks, it is not expected to excel in languages it was not exposed to during training.
+Tower Instruct is fine-tuned from Tower base model wh model specifically for translation-related tasks such as Machine Translation (MT) and Automatic Post-Editing (APE) <d-cite key="alves2024tower"></d-cite>. The Tower Base model is first fine-tuned from Llama2 using monolingual and parallel corpora, while Tower Instruct is then fine-tuned from Tower Base with specific instructions for translation tasks. Although Tower Instruct performs well on translation tasks, it is not expected to excel in languages it was not exposed to during training.
 
 Our strategic selection of these models is designed to assess their effectiveness in translating languages outside their initial training sets. Despite Tower Instruct’s specialized training in translation, it has not been directly exposed to the specific low-resource languages focused on in this experiment, offering a unique test of its adaptability to unseen languages.
 
@@ -107,15 +96,11 @@ For this experiment, we focused on two low-resource languages. The first is Konk
 
 The Konkani parallel corpus was constructed using a dataset open-sourced by AI4Bharat, which also contributed to the training set for the IndicTrans2 model <d-cite key="gala2023indictrans2"></d-cite>. This corpus includes English, Marathi, and Konkani. Despite having access to a larger dataset, we intentionally limited the training set to approximately 900 records to simulate a low-resource language scenario.
 
-Given the experiment’s reliance on a pivot language included in the ICL examples, Marathi was selected as the pivot language due to its wider prevalence in western India and its linguistic similarity to Konkani.
+Given the experiment’s reliance on a pivot language included in the ICL examples, Marathi was selected as the pivot language due to its wider prevalence in western India and its linguistic similarity to Konkani. The test set for Konkani consisted of 200 records.
 
-The test set for Konkani consisted of 200 records.
+For Tunisian Arabic, the corpus was derived from the work described in <d-cite key="bouamor-etal-2014-multidialectal"></d-cite>, with Modern Standard Arabic chosen as the pivot language. The parallel corpus for Tunisian Arabic contained 1,000 records, with 900 used in the training set and 100 used in the test set.
 
-For Tunisian Arabic, the corpus was derived from the work described in <d-cite key="bouamor-etal-2014-multidialectal"></d-cite>, with Modern Standard Arabic chosen as the pivot language.
-
-The parallel corpus for Tunisian Arabic contained 1,000 records, with 900 used in the training set and 100 used in the test set.
-
-Our aim is to replicate the translation performance for low-resource languages that typically have limited data available. An additional motivation for selecting these languages was their use of non-Latin scripts. By working with a small training or ICL set of around 1,000 records, we explore whether it is possible to enhance translation performance under such resource constraints.
+Our aim was to replicate the translation performance for low-resource languages that typically have limited data available. An additional motivation for selecting these languages was their use of non-Latin scripts. By working with a small training or ICL set of approximately 1,000 records, we aimed to explore whether it is possible to enhance translation performance under such resource constraints.
 
 ### Trainable parameters
 This work deals with scenarios where only few hundred rows of data is available. In such scenarios we try to see what the model size, finetuning technique should be. <d-cite key="zhang2024scaling"></d-cite> highlights that with limited data, finetuning methods like prompt tuning (where embeddings are adjusted) or LoRA (Low-Rank Adaptation) prove particularly effective. With Parameter-Efficient Fine-Tuning (PEFT), even increasing the data yielded modest performance improvements. For instance, using LoRA on the Llama 3 8B model brought the trainable parameters down to 176,242,688, or just 2% of the model’s total parameters. In this work we mainly focus on LORA for finetuning. 
@@ -150,9 +135,6 @@ For the Arabic language cluster, token counts and other metrics are as follows. 
 Across languages, we can observe that the dataset for Konkani translation is richer compared to the dataset for Tunisian Arabic, as evidenced by the higher English token counts. This richness of the dataset will likely influence model performance.
 
 Analyzing these metrics is critical to assess the quality of the dataset and its potential impact on translation accuracy. In future work, it would be valuable to explore the relationship between token counts in the dataset and model performance, especially for translation tasks to unseen languages. Understanding these dynamics could further improve fine-tuning strategies and dataset construction for multilingual models.
-
-
-
 
 
 ### Parameters
@@ -227,24 +209,21 @@ BLEU scores, calculated using SacreBLEU, were obtained for each model on the tes
 
 In the prompt for In-Context Learning (ICL), few-shot examples were constructed by selecting sentences that closely resemble the source sentence for translation—in this case, English. The prompt included 5 examples of translations from English to Marathi and then to Konkani. Initially, we assessed the performance of the pre-trained models.
 
-The BLEU scores were calculated for the two models. Without any fine-tuning and using only similar examples as few-shot demonstrations, it was observed that the model often did not produce high-quality translations. The responses contained Latin characters and occasionally included comments on the translations. The models were then fine-tuned both with and without the addition of pivot language translations. It was found that incorporating high-resource pivot translations improved the BLEU score and made the translations less noisy.
+The BLEU scores were calculated for the two models. Without any fine-tuning and using only similar examples as few-shot demonstrations, it was observed that the model often did not produce high-quality translations. The responses contained Latin characters and occasionally included comments on the translations. In these cases the translations were processed further. The models were then fine-tuned both with and without the addition of pivot language translations. It was found that incorporating high-resource pivot translations improved the BLEU score and made the translations less noisy.
 
-The results are highlighted below. The more performant general-purpose model, Llama 3, outperformed Tower, a fine-tuned version of Llama 2. Notably, these results are based on only 800 training samples, which suggests that this technique for translations can be widely accessible. Additionally, Konkani was chosen for this study because its script is non-Latin, making it valuable to investigate how language models trained primarily on Latin-character data handle translations for such languages
+The results are highlighted below. The more performant general-purpose model, Nous Hermes Llama3 model, outperformed Tower Instruct, a fine-tuned version of Llama 2. Notably, these results are based on only around 800 training samples, which suggests that this technique for translations can be widely accessible. Additionally, Konkani was chosen for this study because its script is non-Latin, making it valuable to investigate how language models trained primarily on Latin-character data handle translations for such languages
 
 | **Model**                                 | **BLEU Score** |
 |-------------------------------------------|----------------|
 | Baseline (Bing Translate)                 | 40.90         |
-| Tower Instruct                            | 3.21          |
-| Tower Instruct fine-tuned without pivot   | 11.39         |
-| Tower Instruct fine-tuned with pivot      | 13.56         |
+| Tower Instruct                            | 7.28         |
+| Tower Instruct fine-tuned without pivot   | 8.39         |
+| Tower Instruct fine-tuned with pivot      | 10.56         |
 | Nous Hermes Llama3                        | 7.26           |
 | Nous Hermes Llama3 fine-tuned without pivot | 13.22       |
 | Nous Hermes Llama3 fine-tuned with pivot  | 18.50         |
 
 **Table:** Konkani language BLEU scores for various models. This table compares the performance of baseline and fine-tuned models with and without a pivot language.
-
-Since NLLB supports Tunisian Arabic, we used it to establish the BLEU score for this language as well, again translating directly from English to Tunisian Arabic without a pivot language.
-Tunisian Arabic is supported by NLLB, which was used to establish the baseline for Tunisian Arabic translations. As with Konkani, the performance of Tunisian Arabic translations was first evaluated using a pre-trained model.
 
 Tunisian Arabic is supported by NLLB, which was used as the baseline for Tunisian Arabic translations. Similar to the approach taken with Konkani, the performance of Tunisian Arabic translations was initially evaluated using a pre-trained model.
 
@@ -252,30 +231,26 @@ Following fine-tuning, the models showed improved performance.
 
 To further validate the robustness of the methodology, an expanded test set was created. For Konkani, 200 additional samples were selected from AI4Bharat and tested. These samples were randomly chosen and were not part of the original training dataset. The BLEU score for this expanded test set was calculated. Similarly, for Tunisian Arabic, a parallel corpus of the Bible was constructed at the verse level.
 
-However, the BLEU score for Tunisian Arabic dropped significantly to around 8 when tested on this new corpus. This decline may be attributed to the dissimilarity between the constructed corpus and the training dataset, underscoring the importance of selecting high-quality data that closely resembles the test set when applying translations in practice.
+
 
 | Model                              | BLEU Score |
 |------------------------------------|------------|
 | Baseline (NLLB)                    | 4.68       |
-| tower instruct                     |        |
-| tower instruct fine-tune without pivot |       |
-| tower instruct fine-tune with pivot  |       |
-| Nous Hermes Llama3                 |        |
-| Nous Hermes Llama3 fine-tune without pivot |  |
-| Nous Hermes Llama3 fine-tune with pivot |  |
+| tower instruct                     | 3.71       |
+| tower instruct fine-tune without pivot | 4.33      |
+| tower instruct fine-tune with pivot  | 5.13      |
+| Nous Hermes Llama3                 |  2.05      |
+| Nous Hermes Llama3 fine-tune without pivot | 5.21 |
+| Nous Hermes Llama3 fine-tune with pivot | 7.00  |
 
 **Table:** Tunisian Arabic language BLEU scores for various models. This table compares the performance of baseline and fine-tuned models with and without adding pivot language.
 
-Following fine-tuning, model performance showed improvement.
-
-To further validate the robustness of our methodology, an expanded test set was created. For the Konkani dataset, 200 additional samples were randomly selected from AI4Bharat and tested. These samples were not part of the original training dataset, and the BLEU score for this expanded test set was calculated. Similarly, for Tunisian Arabic, a parallel corpus was constructed using Bible verses as aligned text at the verse level.
-
-
+For the arabic cluster the finetuning has improved performance however we see that the BLEU scores are not very high. This can be attributed to the quality of data. 
 
 ***
 
 ## Discussion
-
+todo: add that this is a guide to make it practical so that anyone can be able to take it up. All they will need is a colab notebook, 1000 rows of data and minimal compute. even 2 languag pair is enough the third language pair can be constructed using google translate etc. This is to bridge the gap and take the lessons that have worked in some scenarios so it is clear when it can be put into good use
 Much of the existing research has focused on high-resource languages or those closely related to English. In this paper, we examine translation involving two relatively low-resource languages and offer a practical guide for achieving high translation performance with minimal resources. The fine-tuning process described here is computationally efficient, requiring only 1,000 samples. This approach could make these models more accessible to communities that speak lesser-known languages.
 
 We hypothesize that by adding translation examples that include a pivot language in In-Context Learning (ICL), the model can tap into latent concepts to perform translation tasks effectively, even for languages it has not been previously exposed to.
@@ -283,6 +258,10 @@ We hypothesize that by adding translation examples that include a pivot language
 However, this methodology has certain limitations. One significant challenge is the dependency on identifying a high-resource language that is linguistically similar to the target language. Additionally, building parallel corpora across multiple languages can be challenging due to limited data availability. In our experiments, we also observed that training data quality is crucial; ideally, the data should resemble the types of content on which the translations will be tested.
 
 The results from the expanded test set emphasize the importance of using a high-quality, diverse dataset for both fine-tuning and constructing ICL examples, as these factors critically influence the effectiveness of the methodology.
+
+todo: explain the limitations of BLEU score 
+todo: explain the tokenization of languages in llm and unseen language and cocpets 
+todo: explain how finetuning especially in PEFT is different from the pretraining. what layers does this change. why ICL will not be effective
 
 ***
 
@@ -338,8 +317,3 @@ To generate translations during evaluation, the following parameters were applie
 These parameters are commonly employed in text generation tasks to control output length, randomness, and termination criteria. 
 
 While prompt tuning shows potential, its effectiveness for low-resource languages remains a challenge. Refining the mechanisms to optimize prompt tuning for such scenarios is left for future work.
-
-
-
-
-
