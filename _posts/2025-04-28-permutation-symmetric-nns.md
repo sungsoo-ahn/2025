@@ -40,14 +40,14 @@ _styles: >
     text-align: center;
     font-size: 16px;
   }
-    .collapse a{
+    .my_dropdown a{
     display: block;
     background: #cdf;
     }
-    .collapse > div{
+    .my_dropdown > div{
     display:none;
     }
-    .collapse > div:target{
+    .my_dropdown > div:target{
     display:block; 
     }
 ---
@@ -206,7 +206,7 @@ $$
 y=f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2} & x_{3}\end{bmatrix} \right) =f\left( \begin{bmatrix} x_{3} & x_{0} & x_{1} & x_{2}\end{bmatrix} \right)
 $$
 
-<div class="collapse">
+<div class="my_dropdown">
 <a href="#targ_1">Solution</a>
 <div id="targ_1">
 
