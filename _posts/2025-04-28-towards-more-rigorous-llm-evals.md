@@ -1,7 +1,8 @@
 ---
 layout: distill
 title: "Towards more rigorous evaluations of language models"
-description: "As language models become increasingly sophisticated and existing benchmarks approach saturation, the need for rigorous evaluation methods grows more pressing. Many evaluations lack the statistical rigour needed to draw meaningful conclusions, leading to a potential over-confidence in results that might not hold up under scrutiny or replication. This post advocates for bringing fundamental statistical principles to language model evaluation, demonstrating how basic statistical analysis can provide more reliable insights into model capabilities and limitations."
+description: "As language models (LMs) become increasingly sophisticated and existing benchmarks approach saturation, the need for rigorous evaluation methods grows more pressing. Many evaluations lack the statistical rigour needed to draw meaningful conclusions, leading to a potential over-confidence in results that might not hold up under scrutiny or replication. This post advocates for bringing fundamental statistical principles to language model evaluation, demonstrating how basic statistical analysis can provide more reliable insights into model capabilities and limitations.
+We show how to conduct this type of analysis using a recent paper as a case study. We hope this post serves as a tutorial for LM researchers aiming to enhance the rigor of their empirical evaluations."
 
 authors:
 - anonymous
