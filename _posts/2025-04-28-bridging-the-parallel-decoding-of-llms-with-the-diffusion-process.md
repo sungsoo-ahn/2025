@@ -158,7 +158,7 @@ The objective mentioned above is analogous to that of Consistency Models, as out
 Diffusion-LM <d-cite key="li2022diffusion"></d-cite> develops a non-autoregressive language model based on continuous diffusions, enabling complex, fine-grained controls of text generation. 
 
 Figure 5. A graphical model representing the forward and reverse diffusion processes. In addition to the original diffusion models, Diffusion-LM adds a Markov transition between $$x_0$$ and $$w$$. <d-cite key="li2022diffusion"></d-cite>
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/diffu_lm.png" class="diffu_lm" %}
+{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/diffu_lm2.png" class="diffu_lm" %}
 
 The framework of Diffusion-LM is shown in Figure. To apply a continuous diffusion model to discrete text, Diffusion-LM adds a Markov transition from discrete words $$w$$ to $$x_0$$ in the forward process, parametrized by $$ q(x_0,w) = \mathcal{N}(\text{EMB}(w), 0I)$$. $$\text{EMB}(w_i)$$ is an embedding function that maps each word to a vector in $$\mathbb{R}^d$$. In the reverse process, Diffusion-LM rounds a predicted $$x_0$$ back to discrete text by adding a trainable rounding step, parameterized by $$p_\theta(w,x_0) = \prod_{i=1}^n p_\theta(w_i,x_i)$$, where $$p_\theta(w_i,x_i)$$ is a softmax distribution. Rounding is achieved by choosing the most probable word for each position, according to $$\text{arg max} p_\theta(w,x_0) = \prod_{i=1}^n p_\theta(w_i,x_i)$$. Ideally, this argmax-rounding would be sufficient to map back to discrete text, as the denoising steps should ensure that $$x_0$$ lies exactly on the embedding of some word. The training objectives is:
 
@@ -184,12 +184,9 @@ where both $$\log p(x_{t-1},x_t)$$ and $$\log p(c,x_{t-1})$$ are differentiable:
 
 Figure 5. An illustration of the planning task. <d-cite key="ye2024beyond"></d-cite>
 
-<div style="width: 70%; margin: 0 auto;"> <div class="col-sm mt-3 mt-md-0">
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/the_planning_task.jpg" class="the_planning_task" %}
-</div></div>
 
 <div style="width: 70%; margin: 0 auto;"> <div class="col-sm mt-3 mt-md-0">
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/the_planning_task.jpg" class="the_planning_task" %}
+{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/the_planning_task2.jpg" class="the_planning_task" %}
 </div></div>
 
 Consequently, the difficulty of learning various subgoals can differ significantly. Given only the left context, some subgoals may require substantially more data to learn or may even be infeasible to learn. To address the issue of subgoal imbalance, this paper introduces multi-granularity diffusion modeling (MDM), which incorporates an additional token-level reweighting mechanism to enhance training efficiency:
