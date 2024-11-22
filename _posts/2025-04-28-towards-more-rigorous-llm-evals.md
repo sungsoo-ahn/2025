@@ -535,7 +535,7 @@ To distinguish between these two effects, a more detailed and thorough analysis 
 
 We hypothesise that another reason for the decrease in performance could be the increasing length of the questions and the chain of thoughts required to solve them.<d-footnote>For example, the Phi-mini series of models has a default context length of 4K tokens<d-cite key="abdin2024phi"></d-cite>.</d-footnote>
 Whilst models can of course handle longer contexts by utilising various context length extension techniques, past research suggests that performance tends to degrade when we go beyond the training context length. 
-<!-- [CITE @MPK can you add some citations? Can we say this is especially true for smaller models?]. -->
+<!-- [CITE @MK can you add some citations? Can we say this is especially true for smaller models?]. -->
 
 
 **Verdict:** The emphasis on “non-negligible variance” and “increase in variance” throughout the paper appears to be an over-interpretation of expected statistical artifacts. 
@@ -663,7 +663,7 @@ This setup can be represented by the following directed probabilistic graphical 
 -->
 
 where, for the purpose of this analysis, the bottom-most arrows denote deterministic dependencies. 
-<!-- [@MPK can you elaborate on this---maybe say this is ok because of how we sample from the models?] -->
+<!-- [@MK can you elaborate on this---maybe say this is ok because of how we sample from the models?] -->
 <!-- the way I understand this is, once the filler values are sampled and the questions produced, the models will always produce the same answer for a question, i.e. there is no variance due to the model it self (e.g. how there would have been if using dropout for example)
 DRI: Yes exactly, but this is because we are using what is called "greedy decoding" (which is generally the norm when you interact with these models)
 -->
