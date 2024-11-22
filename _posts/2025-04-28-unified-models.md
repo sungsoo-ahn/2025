@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Towards Unified Multimodal Models:Trends and Insights
-description: Recent advancements in unified models for multimodal understanding and generation, including works like Transfusion, ImageBind, and EMU3, highlight the trend towards frameworks capable of diverse tasks. These models typically fall into two categories:single models, which use a unified architecture to process multiple modalities, and multi-expert models, where specialized sub-models are used for each modality. Multi-expert models include different alignment strategies such as Image-Centric Alignment (e.g., ImageBind), Text-Centric Alignment (e.g., TextBind), and others, each focusing on aligning specific modalities for more flexible integration. The single models explore techniques like pure autoregressive methods, diffusion-based approaches, or a combination of both. This blog provides a comprehensive overview of unified multimodal models, reviewing current developments and discussing key design principles, including the use of autoregressive and diffusion mechanisms.
+description: Recent advancements in unified models for multimodal understanding and generation, including works like Transfusion, Next-GPT, and EMU3, highlight the trend towards frameworks capable of diverse tasks. These models typically fall into two categories:single models, which use a unified architecture to process multiple modalities, and multi-expert models, where specialized sub-models are used for each modality. Multi-expert models include different alignment strategies such as Image-Centric Alignment (e.g., Next-GPT), Text-Centric Alignment (e.g., TextBind), and others, each focusing on aligning specific modalities for more flexible integration. The single models explore techniques like pure autoregressive methods, diffusion-based approaches, or a combination of both. This blog provides a comprehensive overview of unified multimodal models, reviewing current developments and discussing key design principles, including the use of autoregressive and diffusion mechanisms.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -208,11 +208,11 @@ This formula captures the essence of autoregressive generation: predicting each 
 
 * **Easier to Scale Up**: Autoregressive models align well with scaling laws, making them easier to scale up in terms of model size, data, and computational resources.
 
-* **Scalable architecture supported by strong infra**. Standing on the shoulders of giants (LLMs). Both academia and industry have relatively sufficient experiences on training and scaling AR models, in terms of model size, data, and computational resources.
+* **Extensive Experience an Strong infra**. Standing on the shoulders of giants (LLMs). Both academia and industry have relatively sufficient experiences on training and scaling AR models.
 
 
 
-**Autoregressive for Vision**. The process for generating an image can be broken down pixel-by-pixel or patch-by-patch in a raster-scan order, where each pixel/patch is conditioned on previously generated content. Autoregressive models are proven to be simple, interpretable, and effective in processing language. Images, however, are not sequential. Besides, treading image as a flat sequence means that the auto-regressive sequence length (and the computation) grows quadratically<d-cite key="chang2022maskgit"></d-cite>. This misalignment pose challenges of effectiveness of efficiency on AR model, which are central to understanding their role in unified multimodal generation tasks.
+**Autoregressive for Vision**. The process for generating an image can be broken down pixel-by-pixel or patch-by-patch in a raster-scan order, where each pixel/patch is conditioned on previously generated content. Autoregressive models have been shown to be simple, interpretable, and effective in processing language. Images, however, are not sequential. Besides, treating image as flat sequences means that the autoregressive grows quadratically in sequence length (and the computation) <d-cite key="chang2022maskgit"></d-cite>. This misalignment poses challenges to the effectiveness and efficiency of AR models, which is critical to understanding their role in unified multimodal generation tasks.
 
 
 
@@ -258,7 +258,7 @@ where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at
 
 
 ### Preliminary of Unified Models
-Unified multimodal models represent a pivotal advancement in artificial intelligence, aiming to integrate and process multiple data modalities (*e.g.,* text, images, audio, and video) within a single model framework. These models are designed for understanding and generating across modalities, offering flexibility and efficiency that surpass traditional task-specific or modality-specific approaches. 
+Unified multimodal models represent a pivotal advancement in artificial intelligence, aiming to integrate and process multiple data modalities (*e.g.,* text, images, audio, and video) within a single model framework. These models are designed for understanding and generating data across modalities, offering flexibility and efficiency that surpass traditional task-specific or modality-specific approaches. 
 
 
 **Key Concepts in Unified Multimodal Models:**
@@ -271,7 +271,7 @@ z = f_{\text{Unified Model}}(x_{\text{image}}, x_{\text{text}}).
 $$
 
 * **Multimodal Generation**: 
-These models synthesize cross-modal outputs. For instance, generating text $x_{\text{video}}$ from text $x_{\text{text}}$ and image $x_{\text{image}}$ can be formulated as:
+These models synthesize cross-modal outputs. For instance, generating video $x_{\text{video}}$ from text $x_{\text{text}}$ and image $x_{\text{image}}$ can be formulated as:
 
 $$
 x_{\text{video}} = f_{\text{Unified Model}}(x_{\text{text}},x_{\text{image}}).
@@ -442,7 +442,7 @@ Mixed architectures utilizing continuous tokenizers, such as Transfusion and Mon
 
 Unlike single, monolithic models trained to handle all modalities and tasks simultaneously, **multi-expert architectures** offer an alternative approach: leveraging specialized expert modules that align, process, and fuse information across diverse modalities. These architectures not only enable task-specific optimization but also facilitate the integration of pre-trained expert models, such as incorporating external capabilities into frameworks like ImageBind. Multi-experts are typically categorized based on their alignment focus: Image-Centric Alignment, Text-Centric Alignment, and Generalized Alignment methods.
 
-| **Aspect**                 | **Image-Centric (e.g., ImageBind<d-cite key="girdhar2023imagebind"></d-cite>)**         | **Text-Centric (e.g., TextBind<d-cite key="li2023textbind"></d-cite>; *SEED-X*<d-cite key="ge2024seed"></d-cite>; *LaVIT*<d-cite key="jin2024unified"></d-cite> )**            | **Generalized (e.g., UniBind<d-cite key="lyu2024unibind"></d-cite>)**                |
+| **Aspect**                 | **Image-Centric (e.g., ImageBind<d-cite key="girdhar2023imagebind"></d-cite>)**         | **Text-Centric (e.g., *Next-GPT*<d-cite key="wu2023next"></d-cite>; *TextBind*<d-cite key="li2023textbind"></d-cite>; *SEED-X*<d-cite key="ge2024seed"></d-cite>; *CoDi*<d-cite key="tang2024any"></d-cite>; *LaVIT*<d-cite key="jin2024unified"></d-cite> )**            | **Generalized (e.g., UniBind<d-cite key="lyu2024unibind"></d-cite>)**                |
 |----------------------------|--------------------------------------------|---------------------------------------------|-----------------------------------------------|
 | **Alignment Focus**         | Visual-first                              | Text-first                                  | Balanced across all modalities                |
 | **Integration Capability**  | Fuses pre-trained visual-centric models   | Leverages pre-trained language models       | Incorporates multi-expert pre-trained modules |
