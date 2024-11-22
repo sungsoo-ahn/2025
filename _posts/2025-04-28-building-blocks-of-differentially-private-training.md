@@ -26,7 +26,7 @@ authors:
       name: Anonymous
 
 # must be the exact same name as your blogpost
-bibliography: 2024-04-28-building-blocks-of-differentially-private-training.bib  
+bibliography: 2025-04-28-building-blocks-of-differentially-private-training.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -128,7 +128,7 @@ Then, we can look at the relation between $$\varepsilon$$ and the $$\sigma$$ nee
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/first_salary_plot.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/first_salary_plot.png" class="img-fluid rounded z-depth-1" %}
     </div>
  
 </div>
@@ -179,7 +179,7 @@ Taking this one step further, <d-cite key=balle2018analytic></d-cite> proposed t
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/three_sigma.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/three_sigma.png" class="img-fluid rounded z-depth-1" %}
     </div> 
 </div>
 
@@ -234,7 +234,7 @@ and so on.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/composition.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/composition.png" class="img-fluid rounded z-depth-1" %}
     </div> 
 </div>
 <div class="caption">
@@ -261,10 +261,10 @@ To get some intuition of the tuning of $C$ and $T$, let's try a training run wit
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/gradients_cdf.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/gradients_cdf.png" class="img-fluid rounded z-depth-1" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="/assets/img/2024-04-28-building-blocks-of-differentially-private-training/gradients_hist.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="/assets/img/2025-04-28-building-blocks-of-differentially-private-training/gradients_hist.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -274,7 +274,7 @@ Now let's look at the test loss and accuracy. In the no DP setting, it looks lik
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/simple_training_acc_loss.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/simple_training_acc_loss.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -284,14 +284,14 @@ Loss and accuracy curves for training without DP, starts indicate locations of s
 Now, going back to our goal of DP training, depending on the number of iterations $$T$$, let's try to calculate the noise level $$\sigma$$ needed for $$\varepsilon=1$$, $$\delta=10^{-6}$$, and $$C=30$$. 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/advanced_comp_sigma.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/advanced_comp_sigma.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 That's actually a lot of noise to inject into GD. Let's just try training for $$100$$ iterations to see the current state of progress. 
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/advanced_comp_training.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/advanced_comp_training.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 
@@ -343,7 +343,7 @@ Armed with RDP and it's cleaner composition result, let's retry the experiments 
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/rdp_comp_sigma.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/rdp_comp_sigma.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 
@@ -351,7 +351,7 @@ This is more encouraging. We need a way smaller noise for the same exact privacy
 
 <div class="row mt-3">f
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/rdp_comp_training.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/rdp_comp_training.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 
@@ -385,7 +385,7 @@ Those building blocks allow us to finally recover the DP-SGD algorithm<d-cite ke
 The tight analysis through RDP and privacy amplification allows training SGD with reasonable noise scales. For example, let's try to train for the previous setting with a subsampling rate $$q=0.05$$.
  <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/subsampled_rdp_comp.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/subsampled_rdp_comp.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 
@@ -397,7 +397,7 @@ Using subsampling, we get a basically the same noise levels for SGD as GD. Howev
 Let's try another training trial this time with SGD. 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/subsample_training.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/subsample_training.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 
@@ -501,7 +501,7 @@ To illustrate a possible structure of the matrices $$B$$ and $$C$$. We use the m
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/matrix_structure.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/matrix_structure.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -512,7 +512,7 @@ Figure generated from the code of C.A. Choquette-Choo, et al. <d-cite key=choque
 Note that we strongly care about the structure of $$C^{-1}$$ as it modulates the correlation between the noise added at different iterations. Thus, let's plot the distribution of the elements in $$C^{-1}$$. 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/distribution_c_inv.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/distribution_c_inv.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 
@@ -525,7 +525,7 @@ where $$A_{[i,:]}$$ is the $$i$$-th row of $$A$$. Thus, the total variance of th
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/noise_acc.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/noise_acc.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 
@@ -539,7 +539,7 @@ Now let's go back to the running MNIST training setting, where we train a two-la
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2024-04-28-building-blocks-of-differentially-private-training/mat_fact_train.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/mat_fact_train.png" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 
