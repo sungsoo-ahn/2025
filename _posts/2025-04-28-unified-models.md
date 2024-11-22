@@ -351,9 +351,9 @@ Autoregressive (AR) models and mixed architectures (AR + diffusion) differ in ho
 
 Autoregressive models and mixed architectures (such as AR+Diffusion) differ primarily in the type of attention mechanisms they employ, which significantly impacts their performance and the way they handle modality alignment: 
 
-* **Autoregressive Models-Causal Attention:** Using causal masks where tokens only attend to their previous tokens. This creates a strict unidirectional flow of information.
+* **AR-Causal Attention:** Using causal masks where tokens only attend to their previous tokens. This creates a strict unidirectional flow of information.
 
-* **AR+Diffusion-Full Attention:**  Using full attention masks (bi-directional), allowing tokens to attend to both past and future tokens. This enables a richer, more flexible way of modeling the relationships between different parts of the input. 
+* **Diffusion-Full Attention:**  Using full attention masks (bi-directional), allowing tokens to attend to both past and future tokens. This enables a richer, more flexible way of modeling the relationships between different parts of the input. 
 
 
 
@@ -489,13 +489,13 @@ $$
 \mathbf{t} = \text{LLM}(T)
 $$
 
-* **2. Modality Embedding:** Other modalities, such as images $𝐼$, audio $𝐴$, or video $𝑉$, are encoded into their respective embedding spaces using dedicated encoders. For instance, the image $𝐼$ is encoded as $𝑖$ using a vision model:
+* **2. Modality Embedding:** Other modalities, such as images $I$, audio $A$, or video $V$, are encoded into their respective embedding spaces using dedicated encoders. For instance, the image $I$ is encoded as $i$ using a vision model:
 
 $$
 \mathbf{i} = \text{VisionEncoder}(I)
 $$
 
-Similarly, audio $𝐴$ is encoded as $𝑎$ using an audio encoder:
+Similarly, audio $A$ is encoded as $\mathbf{a}$ using an audio encoder:
 
 $$
 \mathbf{a} = \text{AudioEncoder}(A)
@@ -507,7 +507,7 @@ $$
 \mathcal{L}_{\text{align}} = - \log \frac{\exp(\text{sim}(\mathbf{t}, \mathbf{m}) / \tau)}{\sum_{i=1}^N \exp(\text{sim}(\mathbf{t}, \mathbf{m}_i) / \tau)}
 $$
 
-Where $𝑚$ represents the embedding of a modality (image, audio, etc.). $sim(⋅,⋅)$ is the similarity function (*e.g.,* cosine similarity). *𝜏* is the temperature hyperparameter that controls the sharpness of the distribution. *𝑁* is the number of possible modality samples.
+Where $m$ represents the embedding of a modality (image, audio, etc.). $\text{sim}(*)$ is the similarity function (*e.g.,* cosine similarity). *\tau* is the temperature hyperparameter that controls the sharpness of the distribution. *N* is the number of possible modality samples.
 
 ### Generalized Alignment
 Generalized Alignment is an approach to multimodal learning that does not center any single modality, like text or image, but instead creates a unified space for all modalities based on a knowledge base or feature-centered approach. This method aims to align different modalities by utilizing shared characteristics derived from a broader knowledge base, rather than anchoring on one modality's features.
@@ -517,7 +517,7 @@ In generalized alignment, the learning model is trained to map various modalitie
 
 <aside class="l-body box-note" markdown="1">
 
-UniBind is an example of a generalized alignment framework. Unlike traditional approaches, UniBind does not use text or image as the central anchor for aligning modalities. Instead, it builds alignment using a knowledge base or feature-centered representation. As shown in the image below:
+UniBind<d-cite key="lyu2024unibind"></d-cite> is an example of a generalized alignment framework. Unlike traditional approaches, UniBind does not use text or image as the central anchor for aligning modalities. Instead, it builds alignment using a knowledge base or feature-centered representation. As shown in the image below:
 
 
 {% include figure.html path="assets/img/2025-04-28-unified-models/1732206695874.jpg" class="img-fluid" %}
@@ -525,19 +525,19 @@ UniBind is an example of a generalized alignment framework. Unlike traditional a
 
 Formulation for Generalized Alignment:
 
-* **1. Feature Representations:** Let $M_i$ represent the embeddings for each modality $𝑖$, where $M_i$ could be the image, text, or audio features. The model aims to align all modality embeddings $M_i$ into a common shared space $F$ based on their knowledge base features:
+* **1. Feature Representations:** Let $M_i$ represent the embeddings for each modality $i$, where $M_i$ could be the image, text, or audio features. The model aims to align all modality embeddings $M_i$ into a common shared space $F$ based on their knowledge base features:
 
 $$
 M_i = \text{FeatureExtractor}_i(M_i)  
 $$
 
-* **2. Knowledge Base Representation:** The knowledge base $𝐾$ represents a shared space that captures the common semantic features of all modalities:
+* **2. Knowledge Base Representation:** The knowledge base $K$ represents a shared space that captures the common semantic features of all modalities:
 
 $$
 K = \text{KnowledgeBase}(F)  
 $$
 
-* **3. Alignment Objective:** The learning objective is to map each modality embedding to the knowledge base space $𝐾$ while maintaining their relationships:
+* **3. Alignment Objective:** The learning objective is to map each modality embedding to the knowledge base space $K$ while maintaining their relationships:
 
 $$
 L_{\text{align}} = - log \frac{\text{exp}(\text{sim}(M_i, K_i) / τ)}{\sum_{j=1}^{N} \text{exp}(\text{sim}(M_i, K_j) / τ)}
