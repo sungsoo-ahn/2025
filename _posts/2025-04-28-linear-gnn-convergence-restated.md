@@ -532,7 +532,7 @@ Now, let's dive into the chaos — think a bit deeper, and question what really 
 <!-- We love to make the theorem in the introduced paper clear and engaging.  -->
 <!-- Now, let's face the chaos — It's time to think deeper and question the essentials. -->
 
-> **Note**： In this part, we remind readers that the continuous time perspective is an approximation, with inherent errors within it are overlooked, leading to potentially overconfident conclusions. Nonetheless, treating discrete events as continuous has proven effective, not only in neural network analysis but also in various other scientific fields. We believe this approach is valuable, as long as we remain mindful of its limitations and recognize what has truly been achieved.
+> **Note**： In this part, we remind readers that the continuous time perspective is an approximation. However, the inherent errors are often overlooked, leading to potentially overconfident conclusions. Nonetheless, treating discrete events as continuous has proven effective, not only in neural network analysis but also in various other scientific fields. We believe this approach is valuable, as long as we remain mindful of its limitations and recognize what has truly been achieved.
 
 ### The Overlooked Gap. 
 
