@@ -199,6 +199,7 @@ $$
 y=f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2} & x_{3}\end{bmatrix} \right) =f\left( \begin{bmatrix} x_{3} & x_{0} & x_{1} & x_{2}\end{bmatrix} \right)
 $$
 
+<p>
 <input type="checkbox" id="my_checkbox" style="display:none;" checked="True" />
 <label for="my_checkbox">Show/hide</label>
 <div id="hidden">
@@ -262,6 +263,7 @@ $$
 Computing the 2nd order term naively would require $O(N^2)$ multiplies for length-$N$ input. But because the coefficients implement a circular convolution operation,  fast fourier transforms would reduce compute complexity down to $N\log{N}$.
 
 </div>
+</p>
 
 
 **B. Scale.** Parameterize function 
