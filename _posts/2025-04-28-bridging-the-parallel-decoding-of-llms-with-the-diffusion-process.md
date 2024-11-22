@@ -136,19 +136,19 @@ CLLMs is jointly optimized with two losses, one guaranteeing the prediction of m
 **Consistency Loss.** For a prompt x with the Jacobi trajectory $$J$$ , directly push CLLM to output $$y^∗$$ with $$y$$ as the input by minimizing the following loss:
 
 $$
-\mathcal{L}_{GC} = \mathbb{E}_{(x, \mathcal{I}) \sim \mathcal{D}, y \sim \mathcal{I}} [ \sum_{i=1}^{n} D ( q_{\theta^-} (\cdot | y_{<i}^{*}, x) \| q_{\theta} (\cdot | y_{<i}, x) ) ]
+\mathcal{L}_{GC} = \mathbb{E}_{(x, \mathcal{I}) \sim \mathcal{D}, y \sim \mathcal{I}} [ \sum_{i=1}^{n} D ( q_{\theta^-} (\cdot | y_{:i}^{*}, x) \| q_{\theta} (\cdot | y_{:i}, x) ) ]
 $$
 
 Alternatively, the adjacent states $$y(j), y(j+1)$$ in the Jacobi trajectory J are demanded to yield the same outputs:
 
 $$
-\mathcal{L}_{LC} = \mathbb{E}_{(x, \mathcal{I}) \sim \mathcal{D}, (y^{(j)}, y^{(j+1)}) \sim \mathcal{I}} [ \sum_{i=1}^{n} D ( q_{\theta^-} (\cdot | y_{<i}^{(j+1)}, x) \| q_{\theta} (\cdot | y_{<i}^{(j)}, x) ) ].
+\mathcal{L}_{LC} = \mathbb{E}_{(x, \mathcal{I}) \sim \mathcal{D}, (y^{(j)}, y^{(j+1)}) \sim \mathcal{I}} [ \sum_{i=1}^{n} D ( q_{\theta^-} (\cdot | y_{:i}^{(j+1)}, x) \| q_{\theta} (\cdot | y_{:i}^{(j)}, x) ) ].
 $$
 
 **AR Loss.** To avoid deviating from the distribution of the target LLM, we incorporate the traditional AR loss based on the generation $$l$$ of the target LLM $$p$$:
 
 $$
-\mathcal{L}_{AR} = \mathbb{E}_{(x, l) \sim \mathcal{D}} [ - \sum_{i=1}^{N} \log q_{\theta}(l_i \mid l_{<i}, x) ].
+\mathcal{L}_{AR} = \mathbb{E}_{(x, l) \sim \mathcal{D}} [ - \sum_{i=1}^{N} \log q_{\theta}(l_i \mid l_{:i}, x) ].
 $$
 
 The objective mentioned above is analogous to that of Consistency Models, as outlined by Song <d-cite key="song2023consistency"></d-cite>. Consistency Models effectively address the limitations encountered by diffusion models, which are hindered by a slow iterative sampling process. By mapping any point along the probability flow ordinary differential equation (ODE) of the diffusion process back to the original point, which corresponds to the initial image, in just a single step, consistency models significantly streamline the process and enhance efficiency.
@@ -196,4 +196,4 @@ where $$v(x_t,n)$$ is the adaptive token-level reweighting term. Setting larger 
 
 ## Conclusion
 
-Given that autoregressive models currently dominate language modeling, exploring alternative decoding methods remains valuable for research.
+As autoregressive models continue to dominate the landscape of language modeling, the exploration of alternative decoding methods remains a crucial area of research. Jacobi Decoding, recognized as a parallel decoding technique, presents a compelling strategy for enhancing the efficiency of large language models (LLMs). By harnessing the parallel processing capabilities inherent in GPUs, Jacobi Decoding can markedly accelerate the decoding process, rendering it more suitable for real-time applications. Furthermore, the relationship between Jacobi Decoding and the diffusion process offers novel insights that can inform the development of more efficient decoding methodologies for LLMs.
