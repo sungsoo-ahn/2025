@@ -115,7 +115,9 @@ If we view each iteration of Jacobi Decoding as a state transition between token
 
 Figure 3. Diffusion process of consistency models. <d-cite key="koucllms"></d-cite>
 
+<div style="width: 80%; margin: 0 auto;"> <div class="col-sm mt-3 mt-md-0">
 {% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/consistency_model.jpg" class="jacobi_traj" %}
+</div></div>
 
 Due to these structural similarities, many techniques developed for diffusion models may be transferable to Jacobi Decoding in the future. For example, diffusion models perform sequence editing naturally by adding noise and then denoising, which could enable faster text editing, refinement, or style transfer based on Jacobi Decoding. When working with a longer input text, Jacobi Decoding could be significantly faster than in-context learning approaches in autoregressive decoding. Moreover, for editing tasks where a well-initialized token sequence is already available, Jacobi Decoding would likely be more stable than using random token initialization in text generation. Diffusion Forcing <d-cite key="chendiffusion"></d-cite> also takes the similar concept.
 
