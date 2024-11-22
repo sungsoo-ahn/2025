@@ -48,7 +48,7 @@ toc:
 # If you use this post as a template, delete this _styles block.
 
 ---
-In an era of rapid technological advancement and resource constraints, repurposing has emerged as a crucial strategy for sustainable innovation and efficient problem-solving. The ability to adapt existing solutions to new challenges promotes efficiency. Repurposing allows us to maximize the utility of our resources, reduce waste, and find novel solutions to complex problems while adapting existing solutions to new challenges. There are several use cases, from transforming industrial waste into valuable products to repurposing drugs for new medical treatments.
+In an era of rapid technological advancement and resource constraints, repurposing has emerged as a crucial strategy for sustainable innovation and efficient problem-solving. The ability to adapt existing solutions to new goals promotes efficiency. Repurposing allows us to maximize the utility of our resources, reduce waste, and find novel solutions to complex problems while adapting existing solutions to new challenges. There are several use cases, from transforming industrial waste into valuable products to repurposing drugs for new medical treatments.
 
 This blog post aims at exploring the boundaries of creative problem solving (CPS) and proposes repurposing as a valid solution for those limitations. The section on CPS is based on <d-cite key="nair-etal-2024-creative"></d-cite>. The original paper contains a wider overview of computational creativity and creative problem solving. 
 
@@ -56,14 +56,14 @@ This blog post aims at exploring the boundaries of creative problem solving (CPS
 
 ## Creative Problem Solving
 
-Creative Problem Solving is defined as the cognitive process of searching and coming up with creative and novel solutions to a given problem <d-cite key="Duncker1945OnP"></d-cite>. This ability has proven to be non-trivial for systems, as it requires creativity, commonsense reasoning, and compositionality <d-cite key="davidson2022creativity"></d-cite>. Additionally, creative oproblem solving can be achieved through planning, learning, or a hybrid methods. 
+Creative Problem Solving is defined as the cognitive process of searching and coming up with creative and novel solutions to a given problem <d-cite key="Duncker1945OnP"></d-cite>. This ability has proven to be non-trivial for systems, as it requires creativity, commonsense reasoning, and compositionality <d-cite key="davidson2022creativity"></d-cite>. Additionally, creative problem solving can be achieved through planning, learning, or hybrid methods. 
 
 ### Definition of Creative Problem Solving
 
 We borrow and adapt the mathematical formalization from the creative problem solving framework proposed by <d-cite key="gizzi2022creative"></d-cite> and further developed by <d-cite key="nair-etal-2024-creative"></d-cite> which follows the existing machine learning formalism.
 
-In this framework, _concepts_ are defined as either states of the environment and/or agent or actions. $$C_X$$ it the set of
-all concepts relating to $$X$$, with $$X$$ being environment states $$S$$ or actions $$A$$. In the creative problem solving framework, a goal $$G$$ is unachievable if the conceptual space $$C_X$$ is insufficient. To achieve the goal $$G$$, the agent needs to discover a new conceptual space $$C_X' \not\subset C_X$$ such that $$C_X' = f(C_X)$$. _Creative problem solving_ is the process of finding $$f$$ to apply to the current conceptual space $$C_X$$ to find $$C'_X$$.
+In this framework, _concepts_ are defined as either states of the environment or actions. $$C_X$$ is the set of
+all concepts relating to $$X$$, with $$X$$ being environment states $$S$$ and/or actions $$A$$. In the creative problem solving framework, a goal $$G$$ is unachievable if the conceptual space $$C_X$$ is insufficient. To achieve the goal $$G$$, the agent needs to discover a new conceptual space $$C_X' \not\subset C_X$$ such that $$C_X' = f(C_X)$$. _Creative problem solving_ is the process of finding $$f$$ to apply to the current conceptual space $$C_X$$ to find $$C'_X$$.
 
 But what is a __conceptual space__? According to <d-cite key="boden2004creative"></d-cite>:
 
@@ -82,7 +82,7 @@ accomplishing the goal by modifying the agent’s initial conceptual space into 
 </div>
 
 <h4>Example: </h4>
-<aside style="padding:20px;background-color:#4545f1;font: 16px bold" class="box-important l-body"> 
+<aside style="padding:20px;background-color:#a7a7fa;font: 16px bold" class="box-important l-body"> 
   <p> We borrow the simplified example from <d-cite key="nair-etal-2024-creative"></d-cite> illustrating a robot with the goal $G$ of transferring beans from a jar to a cooker: $G = in $(beans, cooker). The initial state is defined as $C_S = in$(beans, jar), $hasContainability$(spoon). The actions are defined as $C_A = scoop$(beans, $Z, loc_s, loc_d)$, where $Z$ refers to an object that satisfies $hasContainability(\cdot)$. 
 </p>
 <p>
@@ -112,7 +112,7 @@ to achieve a goal $$G$$.
 Unlike creative problem solving, which expands the conceptual space, repurposing focuses on finding new mappings between existing resources and concepts based on their shared properties.
 
 The success of repurposing depends on three key factors:
-1. The existing conceptual space C_X
+1. The existing conceptual space $$C_X$$
 2. The properties of available resources identified through $$p(R)$$
 3. The adaptability ($$a$$) of the available resources $$R$$, which quantifies how efficiently the existing resources can be repurposed to meet the new goal. It's a measure of the flexibility of our resources and the efficiency of our repurposing solution. We define the adaptability score as:
 $$a = 1 - \frac{n}{N}$$, where:
@@ -133,19 +133,19 @@ A higher adaptability score suggests a more efficient repurposing solution, as i
     Repurposing works within the existing conceptual space by identifying and leveraging shared properties (P₁, P₂, P₃) among available concepts (c₁, c₂, c₃) to achieve goal G (whire requires property P₂).
 </div>
 
-Therefore, repurposing finds a function $$r$$ where:
-$$r: (C_X, R, p) → G$$
+Therefore, repurposing finds a function $$g$$ where:
+$$g: (C_X, R, p) → G$$
 where $$r$$ is a new interpretation/mapping function that achieves $$G$$ using the same $$C_X$$ by leveraging the properties identified by $$p$$.
 
 Let us recall the previous example used to describe creative problem solving. For repurposing, the same example becomes:
 
 <h4>Example:</h4>
-<aside style="padding:20px;background-color:#4545f1;font: 16px bold" class="box-important l-body">
+<aside style="padding:20px;background-color:#a7a7fa;font: 16px bold" class="box-important l-body">
  <p> Let's consider the same robot with the same goal of transferring beans from a jar to a cooker: $G = in $(beans, cooker). The initial state is defined as $C_S = in$(beans, jar), $hasContainability$(spoon). The actions are defined as $C_A = scoop$(beans, $Z, loc_s, loc_d)$, where $Z$ refers to an object that satisfies $hasContainability(\cdot)$. Let $P = \{$hasContainability, isTransparent$, ...\}$ be the set of properties for the resources available (in this case only the glass), and $R = \{$glass$\}$ be the set of available resources (no spoon available). The property mapping function $p$ reveals that $p$(glass) = $hasContainability$, indicating that the glass shares the crucial property needed for the scooping action. </p>
 <p>
 In the repurposing framework, when the robot doesn't have a spoon but has a glass, it:
 
-(i) uses $p$ to identify that glass has the required containability property; (ii) maps the glass to fulfill the role of $X$ in the scoop action; (iii) achieves $G$ using the existing conceptual space $C_X = {C_S \cup C_A}$ and resource $R$ through $r(C_X, R, p)$.</p>
+(i) uses $p$ to identify that glass has the required containability property; (ii) maps the glass to fulfill the role of $X$ in the scoop action; (iii) achieves $G$ using the existing conceptual space $C_X = {C_S \cup C_A}$ and resource $R$ through $g(C_X, R, p)$.</p>
 
 </aside>
 
@@ -236,7 +236,7 @@ On the other hand, repurposing focuses on finding new uses for existing resource
 - $$C_X = C_S ∪ C_A$$
     where:
         - $$C_S = \{$$pasta dish, Italian cuisine, high-carb meal$$\}$$
-        - $$C_ = \{$$cook, prepare ingredients, serve$$\}$$
+        - $$C_A = \{$$cook, prepare ingredients, serve$$\}$$
 
         Property mapping function $$p$$ identifies:
         - $$p$$(pasta) = \{$$hasCarbs, hasTexture$$\}$$
