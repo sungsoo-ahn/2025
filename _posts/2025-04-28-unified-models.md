@@ -1,6 +1,6 @@
 ---
 layout: distill
-title: Towards Unified Multimodal Models:A Review and Future Vision
+title: Towards Unified Multimodal Models:Trends and Insights
 description: Recent advancements in unified models for multimodal understanding and generation, such as Transfusion of Meta, Show-O of NUS, and EMU3 of BAAI, highlight a growing trend toward single models capable of handling diverse tasks. These models explore pure autoregressive methods, diffusion-based approaches, or their combinations. Inspired by these works, this blog provides an overview of unified multimodal models, reviews current developments, and offers insights into potential future directions. We also discuss the principles of autoregressive and diffusion models and explore whether the future of unified models lies in one of these paradigms or a hybrid approach.
 date: 2025-04-28
 future: true
