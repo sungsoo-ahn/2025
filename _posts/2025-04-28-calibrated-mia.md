@@ -58,7 +58,7 @@ Below we report results for the *Wikipedia* split.
 | Model              | AUC | TPR@5%FPR |
 | :---------------- | :---------: | ----: |
 | [Pythia-6.9B](https://huggingface.co/EleutherAI/pythia-6.9b) |   0.542 | 0.071 |
-| [GPT-Neo-125M](https://huggingface.co/EleutherAI/gpt-neo-125m) | ????? | ????? |
+| [GPT-Neo-125M](https://huggingface.co/EleutherAI/gpt-neo-125m) | 0.492 | 0.054 |
 | [GPT-NeoX-20B](https://huggingface.co/EleutherAI/gpt-neox-20b) | 0.600 | 0.103 |
 
 **Result:**  
