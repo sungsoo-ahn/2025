@@ -1,6 +1,6 @@
 ---
 layout: distill
-title: Rethinking LLM Simulation
+title: Can LLM Simulations Truly Reflect Humanity? A Deep Dive
 description: Simulation powered by Large Language Models (LLMs) has become a promising method for exploring complex human social behaviors. However, utilizing LLMs for simulation reveals significant challenges, particularly in their ability to faithfully replicate intricate human behaviors and societal dynamics. This blog revisits LLM-based simulations by emphasizing both their limitations and the necessities for advancing LLM simulations. By critically examining these challenges, we aim to offer actionable insights and strategies for enhancing the applicability of LLM simulations in human society in the future.
 date: 2025-04-28
 future: true
