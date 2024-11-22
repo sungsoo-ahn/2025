@@ -246,7 +246,7 @@ $$
 Instead of describing the learning using the gradient descent updates for the weights, we can describe it in terms of
 the order parameters. To do this, we simply multiply the gradient updates equation by $(W^{*}_{n})^{T}/N$ to obtain $R$ 
 updates
-and by $W_{j}^{T}/N$ to obtain $Q$ updates. Starting with the $R$ updates, we have
+and by $(W_{j}^{u+1})^{T}/N$ to obtain $Q$ updates. Starting with the $R$ updates, we have
 
 $$ \begin{align}
 \frac{W_{i}^{u+1}(W_{n}^{*})^{T}}{N} & = \frac{W_{i}^{u}(W_{n}^{*})^{T}}{N} + \frac{\eta_{W}}{NB}\sum_{s=1}^{B} 
@@ -261,8 +261,61 @@ From this equation, we defined $dt=1/N$, and by moving $R_{in}^{u}$ to the left 
 taking the *thermodynamic limit* $N \rightarrow \infty$, we obtain the time derivative of $R_{in}$ as
 
 $$ 
-\frac{d R_{in}}{d t} = \left< \eta_{W} \Delta_{s}^{u} g'(\lambda_{i}^{u}) \rho_{n}^{u} \right>
+\frac{d R_{in}}{d t} = \eta_{W} \left< \Delta_{s}^{u} g'(\lambda_{i}^{u}) \rho_{n}^{u} \right>
 $$
+
+where we define the *local fields* 
+
+$$\lambda_{i}^{u} = \frac{W_{i}x_{s}^{u}}{\sqrt{N}} \hspace{0.3cm} \text{and} \hspace{0.3cm} \rho_{n}^{u} = \frac{(W_
+{n}^{*})^{T}x_{s}^{u}}{\sqrt{N}}.$$
+
+The equation for $\frac{dR_{in}}{dt}$ is now in a convenient form, where the local fields are simply a gaussian 
+scalar as $x \sim \mathcal{N}(0, I)$, and the expectation because an integral over gaussian distribution with 
+covariances defined by the order parameters. Before solving this expectation, let's derive the same equation for the 
+oder paramater $Q$ (slightly trickier). We go back to the gradient descent update equation for the weights, and 
+multiply by $(W_{j}^{u+1})
+^{T}/N$ and $(W_{j}^{u})
+^{T}/N$ giving
+
+$$ \begin{align} 
+\frac{W_{i}^{u+1}(W_{j}^{u+1})^{T}}{N} & = \frac{W_{i}^{u}(W_{j}^{u+1})^{T}}{N} + \frac{\eta_{W}}{NB}\sum_{s=1}^{B} 
+\Delta_{s}^{u} \cdot g'\left( \lambda_{i}^
+{u} \right) \cdot \frac{x_{s}^{u}}{\sqrt{N}}(W_{j}^{u+1})^{T}, \\
+Q^{u+1}_{ij} & = \frac{W_{i}^{u}}{N}\left( W_{j}^{u} + \frac{\eta_{W}}{B}\sum_{s=1}^{B} \Delta_{s}^{u} \cdot g'\left
+( \frac{W_{j}x_{s}^{u}}{\sqrt{N}} \right) \cdot \frac{x_{s}^{u}}{\sqrt{N}} \right)^{T} \\
+& + \frac{\eta_{W}}{NB}\sum_{s=1}^{B} \Delta_{s}^{u} \cdot g'\left( \lambda_{i}^ {u} \right) \cdot \frac{x_{s}^{u}}
+{\sqrt{N}} \left( W_{j}^{u} + \frac{\eta_{W}}{B}\sum_{s=1}^{B} \Delta_{s}^{u} \cdot g'\left
+( \frac{W_{j}x_{s}^{u}}{\sqrt{N}} \right) \cdot \frac{x_{s}^{u}}{\sqrt{N}} \right)^{T}, \\
+Q^{u+1}_{ij} & = Q^{u}_{ij} + \frac{\eta_{W}dt}{B}\sum_{s=1}^{B} \Delta_{s}^{u} \cdot g'\left( \lambda_{j}^ {u} 
+\right) \lambda_{i}^{u} + \frac{\eta_{W}dt}{B}\sum_{s=1}^{B} \Delta_{s}^{u} \cdot g'\left( \lambda_{i}^{u} 
+\right) \lambda_{j}^{u} \\
+& + \frac{\eta_{W}^{2}dt}{B^{2}}\sum_{s=1}^{B}\sum_{s'=1}^{B} \Delta_{s}^{u} \Delta_{s'}^{u}g'\left( \lambda_{i}^{u}
+\right)g'\left( \lambda_{j}^{u} \right) \frac{x_{s}^{u}(x_{s}^{u})^{T}}{N}.
+\end{align} $$
+
+Now dividing by $dt$ and taking the limit $N \rightarrow \infty$, (hence $dt \rightarrow 0$), $\frac{x_{s}^{u}(x_{s}
+^{y})^{T}}{N} \rightarrow 1 $ by the central limit theorem, and expectations over $s$ and $s'$ are $0$ as they are 
+independent samples, we obtain the time 
+derivative of $Q_{ij}$ as
+
+$$ 
+\frac{dQ_{ij}}{dt} = \eta_{W} \left< \Delta_{s}^{u} g'(\lambda_{j}^{u}) \lambda_{i}^{u} \right> + \eta_{W} \left< 
+\Delta_{s}^{u} g'(\lambda_{i}^{u}) \lambda_{j}^{u} \right> + \eta_{W}^{2} \left< (\Delta_{s}^{u})^{2} g'(\lambda_{i}^
+{u}) g'(\lambda_{j}^{u}) \right>
+$$
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Fig1: Saad and Solla results.
 
