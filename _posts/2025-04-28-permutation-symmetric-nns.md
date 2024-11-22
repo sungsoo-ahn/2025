@@ -19,8 +19,8 @@ bibliography: 2025-04-28-permutation-symmetric-nns.bib
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
 toc:
-  - name: In Theory - Paramterizing Symmetric Functions in Taylor Series
-  - name: Engineering a Network with Permutation Symmetry
+  - name: I. In Theory - Paramterizing Symmetric Functions in Taylor Series
+  - name: II. Engineering a Network with Permutation Symmetry
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
@@ -67,9 +67,10 @@ $$
 invariant to permutation of $x_0$, $x_1$, $x_2$.
 
 Consider the Taylor series
+
 $$
 \begin{aligned}
-f&\left(\begin{bmatrix}x_{0} & x_{1} & x_{2}\end{bmatrix}\right) \\
+f & \left( \begin{bmatrix}x_{0} & x_{1} & x_{2}\end{bmatrix} \right) \\
 = & a + 
 \begin{bmatrix} b_0 & b_1 & b_2\end{bmatrix} 
 \begin{bmatrix} x_0 \\ x_1 \\ x_2 \end{bmatrix} +
@@ -85,6 +86,7 @@ f&\left(\begin{bmatrix}x_{0} & x_{1} & x_{2}\end{bmatrix}\right) \\
 $$
 
 Since we want $f(\cdot)$ to be invariant to any permutation matrix $P$, the invariant constraint says 
+
 $$
 f\left(\begin{bmatrix}x_{0} \\ x_{1} \\ x_{2}\end{bmatrix}\right)=f\left(
     \begin{bmatrix} 
@@ -94,6 +96,7 @@ f\left(\begin{bmatrix}x_{0} \\ x_{1} \\ x_{2}\end{bmatrix}\right)=f\left(
     \end{bmatrix} 
     \begin{bmatrix}x_{0} \\ x_{1} \\ x_{2}\end{bmatrix}\right)
 $$
+
 For our Taylor series form, because of the uniqueness of Taylor series, all order-k coefficients on the left hand side need to match the corresponding order-k coefficients on the right hand side. That is for any permutation matrix $P$ we have
 
 $$
@@ -131,6 +134,7 @@ a = & a \\
 & \ldots
 \end{aligned}
 $$
+
 These equations are all linear equations about coefficients $a$, $b_i$ and $c_{ij}$. So we can just enumerate all $P$ to get all the equations, and then solve them. For $b_i$ for example, enumerating different permutations $P$ would give
 
 $$
@@ -145,13 +149,9 @@ $$
 That is more than enough to say $b_0=b_1=b_2$. So the order-1 term has only 1 degree of freedom.
 
 For $c_i$ there are more equations, but it turns out that solving the equations across all permutations would yield 
-$$
-c_{00}=c_{11}=c_{22} \\
-c_{01}=c_{10}=c_{10}=c_{12}=c_{20}=c_{21}
-$$
-So the order 2 term has 2 degrees of freedom, one for the diagonal and one for the off-diagonal.
+$$c_{00}=c_{11}=c_{22}$$ and $$c_{01}=c_{10}=c_{10}=c_{12}=c_{20}=c_{21}$$. So the order 2 term has 2 degrees of freedom, one for the diagonal and one for everywhere else.
 
-Apply what we have learned, we can now write
+Applying what we have learned, we can now write
 
 $$
 \begin{aligned}
