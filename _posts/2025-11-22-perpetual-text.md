@@ -164,13 +164,16 @@ The first method involves suppressing the EOS token during the token generation 
 [Link to CodeBase](https://github.com/Perpetual-text/iclr2025/blob/main/long_generate.py#L82)   
 
 The second method modifies the sampling strategy after the model predicts the EOS token to encourage more diverse continuations and avoid abrupt endings.
+
 **Implementation Details:**
 - Detection of EOS Prediction: When the model predicts the EOS token, the sampling method is altered for subsequent token generations.
 - Increased Stochasticity: A more stochastic sampling approach is employed, such as increasing the sampling temperature or using techniques like top-k or nucleus (top-p) sampling with higher thresholds.
 - Continued Generation: The model continues to generate tokens using the adjusted sampling method, promoting diversity in the generated text.
+
 **Observations:**
 - Introducing higher stochasticity after the EOS token prediction can lead to significant changes in the generated content.
 - The tokens generated immediately after the evicted EOS token may diverge drastically from the previous context, potentially resulting in incoherent or contextually irrelevant continuations.
+ 
 **Implications:**
 - While the increased randomness can prevent the model from ending the sequence prematurely, it may compromise the coherence and relevance of the generated text.
 - Balancing stochasticity and coherence is crucial to ensure that the generated sequences remain contextually appropriate.
@@ -183,9 +186,11 @@ The third method involves regenerating a portion of the sequence preceding the E
 - Backstep Hyperparameter: A hyperparameter called 'backstep' determines the number of tokens to remove from the end of the generated sequence when the EOS token is predicted.
 - Cache Adjustment: Corresponding entries in the model's key and value cache matrices are also removed to reflect the truncated sequence.
 - Resumed Generation: The model resumes token generation from the truncated state, attempting to generate a different continuation without the influence of the previously predicted EOS token.
+
 **Observations:**
 - By removing preceding tokens, the model loses some contextual information, which may increase the entropy of its predictions.
 - The reduced context can lead to less coherent continuations, as the model has fewer preceding tokens to inform its next predictions.
+
 **Implications:**
 - This method can help avoid premature endings by allowing the model to explore alternative continuations.
 - However, the loss of context may negatively impact the coherence and relevance of the generated text.
@@ -202,10 +207,12 @@ The fourth method enhances the previous approach by incorporating a dynamic temp
   - Gradual Decrease: The sampling temperature is gradually decreased with each subsequent token generation.
   - Temperature Function: A scheduling function determines the rate at which the temperature decreases, returning to the original temperature by the time the model reaches the position of the previously predicted EOS token.
 - Continued Generation: The model continues generating tokens using this dynamic temperature adjustment until the sequence is complete.
+
 **Observations:**
 - The initial high temperature encourages the model to explore a wider range of possible continuations, reducing the likelihood of repeating the same ending.
 - Gradually decreasing the temperature helps the model focus its predictions, enhancing the coherence and consistency of the generated text.
 - This method has been observed to produce longer sequences with more contextually appropriate continuations compared to the previous methods.
+
 **Implications:**
 - Dynamic temperature adjustment effectively balances the need for diversity and coherence in regenerated sequences.
 - By carefully controlling the sampling temperature, the model is guided toward producing novel continuations without sacrificing relevance to the preceding context.
