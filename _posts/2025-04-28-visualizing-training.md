@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: How to visualize training dynamics in neural networks
-description: "Deep learning practitioners typically rely on training and validation loss curves to understand neural network training dynamics. However, these aggregate metrics can mask important behavioral changes and learning patterns. This blog post demonstrates how classical data analysis tools can provide deeper insights into training dynamics. Using modular addition as a case study, we show how Principal Component Analysis (PCA) can reveal how models learn different data subsets over time, and how Hidden Markov Models (HMMs) can automatically identify distinct training phases by analyzing weight statistics. This blog post suggests that traditional statistical methods remain valuable tools for understanding modern deep learning systems."
+description: "Deep learning practitioners typically rely on training and validation loss curves to understand neural network training dynamics. This blog post demonstrates how classical data analysis tools like PCA and hidden Markov models can reveal how neural networks learn different data subsets and identify distinct training phases. We show that traditional statistical methods remain valuable for understanding the training dynamics of modern deep learning systems."
 date: 2025-04-28
 future: true
 htmlwidgets: true
