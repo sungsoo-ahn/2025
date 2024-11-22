@@ -29,7 +29,6 @@ bibliography: 2025-04-28-analytical-simulated-dynamics.bib
 toc:
 - name: "Background"
   subsections:
-    - name: Empirical studies of neural network dynamics 
     - name: Theoretical analyses of neural network dynamics 
     - name: Statistical physics for neural network dynamics 
       subsections:
@@ -38,7 +37,6 @@ toc:
           subsections:
             - name: "The classical analysis"
             - name: "Modern extensions of the analysis"
-- name: "Notation"
 - name: "Methods"
   subsections: 
     - name: Simulating the ordinary differential equations
@@ -56,16 +54,27 @@ toc:
     - name: The analytical frontier
 ---
 
-
-
-
-- place the framework in the broader context of DL theory
-
 ## Background
 
-### Empirical studies of neural network dynamics 
+The dynamics of learning in artificial neural networks capture how the parameters of a network change over time during training as a function of the data, architecture, and algorithm. 
+These dynamics describe how the parameters, and thus the internal representations and external behaviors of the network, evolve during training.
+In neural networks with at least one hidden layer, these dynamics are *nonlinear* even when the activation function is linear, making them challenging to characterize.
+
+[### Empirical studies of neural network dynamics]: # 
 
 ### Theoretical analyses of neural network dynamics 
+
+Theoretical approaches to understanding neural network learning dynamics have revealed two distinct training regimes.
+The first regime, known as *lazy training*,<d-cite key="chizat2019lazy"></d-cite> occurs when network parameters stay close to their initialization throughout training, which can be induced by initializing with small weights.
+In this regime, the network behaves similarly to a kernel method, with dynamics characterized by the *neural tangent kernel* (NTK).<d-cite key="jacot2020neural"></d-cite><d-cite key="arora2019finegrained"></d-cite><d-cite key="allen-zhu2020learning"></d-cite>
+
+The second regime, termed *feature learning*<d-cite key="yang2022feature"></d-cite>, represents a more complex dynamics in which networks substantially modify their internal representations during training. 
+This regime better captures the behavior of modern deep learning systems, where networks learn nontrivial features of a task. 
+The interplay between these regimes depends on factors like network width, learning rate, and initialization scale.
+Recent work has shown that the transition between lazy and feature learning regimes can be controlled through careful scaling of these parameters.
+
+Even seemingly simple architectures like deep linear networks can exhibit rich feature learning dynamics<d-cite key="saxe2014exact"></d-cite>, including distinct learning phases where different hierarchical features emerge at different timescales.
+This theoretical framework has proven valuable for analyzing phenomena like implicit regularization, optimization landscapes, and the role of overparameterization in deep learning.
 
 ### Statistical physics for neural network dynamics 
 
@@ -96,9 +105,6 @@ Highlight Solla and Goldt paper, and a lot form Lenka's lab, (Hugo Cui), Cengiz 
 Andrew, Lenka, Cenghiz, that meta-learning paper
 Features are fate?
 Check Blake's work
-
-## Notation
-
 
 
 ## Methods
@@ -442,6 +448,11 @@ TODO:
 **Optimization.**
 - natural gradient <d-cite key="yang1998complexity"></d-cite>
 
+**Reductions.**
+- <d-cite key="simsek2021geometry"></d-cite>
+- <d-cite key="martinelli2023expand"></d-cite>
+
+
 **Parameterized task difficulty**.
 - task difficulty <d-cite key="arnaboldi2024online"></d-cite>
 
@@ -474,5 +485,5 @@ Even under review at ICLR 2025!
 **Acknowledgements.** 
 We thank 
 [Stefano Sarao Mannelli](https://stefsmlab.github.io/) for historical perspectives,
-[Jin Hwa Lee](https://jinhl9.github.io/) for starter code for the analytical ODEs in NumPy,
+[Jin Hwa Lee](https://jinhl9.github.io/) for starter code for the analytical ODEs in Numpy,
 and [Nishil Patel](https://jinhl9.github.io/) for invaluable help in narrowing down details of the implementation.
