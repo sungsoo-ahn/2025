@@ -73,7 +73,7 @@ _styles: >
     font-size: 16px;
   }
 ---
-## Contrastive Learning Formulation:
+## Contrastive Learning Formulation
 <!-- Contrastive learning is a self-supervised learning approach that aims to learn representations by contrasting similar (positive) and dissimilar (negative) data pairs. The core idea is to map similar samples closer in the embedding space while pushing dissimilar ones apart. One of the commonly used loss function used for this is the InfoNCE loss which operates on a batch of anchor samples and their corresponding positive and negative pairs. Anchor samples are candidate samples in the dataset with respect to which both positive and negative samples are defined. InfoNCE loss is defined as follows: -->
 Contrastive learning is a self-supervised learning approach designed to learn representations by contrasting pairs of data: similar pairs (positive) and dissimilar pairs (negative). The main idea is to position similar samples closer together in the embedding space while pushing dissimilar samples further apart. A commonly used loss function in this context is the InfoNCE loss, which operates on a batch of anchor samples alongside their corresponding positive and negative pairs. Anchor samples serve as reference points in the dataset for defining both positive and negative samples. The InfoNCE loss is defined as follows:
 
@@ -89,7 +89,7 @@ Intuitively, **given an anchor, a positive pair is defined as either an augmente
 In this blog post, we will first establish a taxonomy of existing techniques for creating positive and negative pairs in contrastive learning (as shown in Figure 1), summarizing the key methods within each category. Next, we will provide a detailed explanation of some key techniques in each sub-category of the taxonomy. Finally, we will discuss the trade-offs associated with using different data curation methods, concluding with a discussion on open questions in the area.
 
 
-## Taxonomy and overview of methodologies to create positive and negative pairs for contrastive learning:
+## Taxonomy and overview of methodologies to create positive and negative pairs for contrastive learning
 
 {% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/contrastive_taxonomy.png" class="img-fluid" %}
 <div class="caption">
