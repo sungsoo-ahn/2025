@@ -148,6 +148,8 @@ Next, we dive into details of most commonly used techiques for crafting effectiv
 ### 1. Same instance augmentation techniques
 Data augmentation plays a crucial role in self-supervised learning by generating auxiliary versions of input data, which enhances the model’s robustness and ability to generalize. This process involves introducing various transformations to the original data, prompting the learning algorithm to identify consistent underlying patterns. By maintaining semantic integrity while altering visual appearance, augmentation instills a sense of consistency in the model’s representations. 
 
+Most existing surveys (<d-cite key="gui2024survey"></d-cite>, <d-cite key="jaiswal2020survey"></d-cite>, <d-cite key="giakoumoglou2024review"></d-cite>)  focus on comparing architectural choices—such as momentum encoders in MoCo, stop-gradient mechanisms in SimSiam, or redundancy reduction in Barlow Twins. This survey takes a complementary perspective by examining the role of data curation in self-supervised learning.
+
 <!-- TODO: Write something about how all these techniques use same instance positives, but use different model architectures to generate different embeddings. Write here about how other surveys focus on different model architectures for self-supervised learning, but this survey is concerened about how data has been curated for self-supervised learning. -->
 
 - *SimCLR* <d-cite key="chen2020simple"></d-cite> maximizes agreement between augmented views of the same data point using contrastive loss, relying on large batch sizes to sample enough negatives. 
