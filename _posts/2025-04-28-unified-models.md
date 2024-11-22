@@ -254,17 +254,6 @@ where $ε ~ \mathcal{N}(0, I)$ and $x_t$ refer to actual noise and noisy data at
 *  **Faster Inference Compared to Autoregressive Models**: Diffusion models often have faster inference times because they generate images or videos in parallel with only few steps, unlike autoregressive models that generate token-by-token.
 
 
-To further summarize and compare the pros and cons of Diffusion Models and Autoregressive Models, we present the table below:
-
-| **Model Type**          | **Pros**                                                                 | **Cons**                                                                 |
-|--------------------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------|
-| **Diffusion Models**     | - Excellent at modeling complex spatial distributions (image/video) due to iterative refinement. | - Computationally expensive during training and inference.             |
-|                          | - Leverages bi-directional (full) attention for holistic context understanding. | - Slower generation process due to multiple iterative steps.           |
-|                          | - Well-suited for tasks requiring high-quality generative capabilities.  | - More challenging to scale for sequential tasks.                      |
-| **Autoregressive Models**| - Efficient and fast at generation, producing outputs token by token.   | - Limited context awareness due to unidirectional (causal) attention.  |
-|                          | - Simpler training and inference pipeline.                              | - May struggle with capturing global relationships in the input data.  |
-|                          | - Natural fit for sequential and time-sensitive tasks (e.g., text generation). | - Often less flexible in handling complex multimodal relationships.     |
-
 
 
 
@@ -278,21 +267,21 @@ Unified multimodal models represent a pivotal advancement in artificial intellig
 Unified models are trained to understand relationships and interactions across multiple modalities (*e.g.,* text, image, audio). For example, given a pair $(x_{\text{image}}, x_{\text{text}})$, the model learns a joint representation $z$ such that:
 
 $$
-z = f(x_{\text{image}}, x_{\text{text}})
+z = f_{\text{Unified Model}}(x_{\text{image}}, x_{\text{text}})
 $$
 
 * **Multimodal Generation**: 
-These models synthesize cross-modal outputs. For instance, generating text $x_{\text{text}}$ from image $x_{\text{image}}$ can be formulated as:
+These models synthesize cross-modal outputs. For instance, generating text $x_{\text{video}}$ from text $x_{\text{text}}$ and image $x_{\text{image}}$ can be formulated as:
 
 $$
-x_{\text{text}} = g(x_{\text{image}})
+x_{\text{video}} = f_{\text{Unified Model}}(x_{\text{text}},x_{\text{image}})
 $$
 
-* **Cross-Modal Alignment**:
+* **Cross-Modal Alignment (Loss)**:
 A key challenge is aligning feature spaces of diverse modalities into a unified latent space. Formally, given $x_i$ and $y_j$ from different modalities, the goal is to minimize their alignment loss $\mathcal{L}_{\text{align}}$:
 
 $$
-\mathcal{L}_{\text{align}} = \| f(x_i) - f(x_j) \|_2^2
+\mathcal{L}_{\text{align}} = \| f_{\text{Unified Model}}(x_i) - f_{\text{Unified Model}}(x_j) \|_2^2
 $$
 
 * **Model Architectures**:
