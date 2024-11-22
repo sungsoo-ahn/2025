@@ -35,27 +35,13 @@ bibliography: 2025-04-28-rethinking-llm-simulation.bib
 toc:
     - name: Introduction
     - name: Limitations in Modeling Human
-    - name: Lacking Human Incentives
+    - name: Absence of Human Incentives
     - name: Bias in Training Data
     - name: Why Use LLM Simulations Despite Their Many Limitations?
-    - name: How Can We Align Them More Closely with Human Societies
+    - name: How Can We Align LLMs More Closely with Human Societies?
+    - name: LLM-based Simulations in Cryptocurrency Trading
     - name: Concusion
-
-  # - name: Equations
-  # - name: Images and Figures
-  #   subsections:
-  #   - name: Interactive Figures
-  # - name: Citations
-  # - name: Footnotes
-  # - name: Code Blocks
-  # - name: Diagrams
-  # - name: Tweets
-  # - name: Layouts
-  # - name: Other Typography?
-
-# Below is an example of injecting additional post-specific styles.
-# This is used in the 'Layouts' section of this post.
-# If you use this post as a template, delete this _styles block.
+  
 _styles: >
   .fake-img {
     background: #bbb;
@@ -76,7 +62,7 @@ _styles: >
 Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling.
 
 ## Introduction
-With the approximate human knowledge, large language models have revolutionized the way of simulations of social and psychological phenomena <d-cite key="Park2023GenerativeAgents"></d-cite> and <d-cite key="gao2023s"></d-cite>. By processing and generating human-like language, LLMs offer unprecedented opportunities to model complex interactions and behaviors that were previously challenging to simulate. This capability opens doors to exploring societal trends, market dynamics, and individual psychological states through a new lens <d-cite key="mu2023learning"></d-cite>.
+With the approximate human knowledge, large language models have revolutionized the way of simulations of social and psychological phenomena <d-cite key="Park2023GenerativeAgents"></d-cite> and <d-cite key="gao2023s"></d-cite>. By processing and generating human-like language, LLMs offer unprecedented opportunities to model complex interactions and behaviors that were previously challenging to simulate. This capability opens doors to exploring societal trends, market dynamics, and individual psychological states through a new lens.
 
 However, there lacks studies about to **<span style="color:blue">whether LLM simulation can truly reflect the real-world human behaviors</span>**
 . Firstly, some recent studies<d-cite key="wang2023not"></d-cite> and <d-cite key="wang2024new"></d-cite> show that the inner knowledge of LLMs show **strong cultural bias**, **decision preference** <d-cite key="huang2024far"></d-cite>, **prior psychological character**<d-cite key="pan2023llms"></d-cite>. Second, the current training datasets of LLMs **lack personal inner psychological states, thoughts and life experiences**. LLM may reflect the common cognition of all humans instead of individual persons. Third, unlike humans who make decisions and act based on motivations from the living, emotions and achievements <d-cite key="felin2024theory"></d-cite>, LLMs **lack intrinsic motivations, emotions, and consciousness**. They operate based on resultant patterns in training data, not from lived experiences. These fundamental differences motivate rethinking how we use LLMs for simulation purposes and to critically assess their ability to replicate the depth and complexity of human society.
@@ -156,17 +142,17 @@ Traditional simulations, especially those involving complex human behavior, requ
 LLMs have the unique ability to produce "out-of-the-box" results, generating insights that might not emerge in a structured, rule-based simulation <d-cite key="vertsel2024hybrid"></d-cite>. Since LLMs operate on patterns learned from vast datasets encompassing a wide array of human experiences, they can mimic human-like behaviors and interactions in ways that are sometimes surprising, offering novel perspectives or emergent social phenomena. For example, agents in Simulacra spontaneously initiated a mayoral election activity without any supervision <d-cite key="Park2023GenerativeAgents"></d-cite>. This characteristic allows researchers to explore complex social behaviors where unexpected behaviors may arise—for studying social dynamics, market trends, or collective human responses to specific events.
 
 ### Simulating Unconventional Scenarios
-LLM-based simulations can achieve scenarios that traditional methods struggle to replicate. For example, simulating human society under conditions of anarchy or alien societal structures <d-cite key="jin2024if"></d-cite> is challenging with rule-based simulations that rely on predefined behaviors. LLMs, however, can adapt flexibly to such open-ended scenarios, generating responses and interactions that evolve dynamically based on input prompts. This adaptability allows for the exploration of hypothetical societies, governance structures, or social conditions, expanding the boundaries of what simulations can achieve and enabling studies on societal organization and behavior in ways previously unachievable.
+LLM-based simulations can achieve scenarios that traditional methods struggle to replicate. For example, simulating human society under conditions of anarchy or alien societal structures <d-cite key="jin2024if"></d-cite> is challenging with rule-based simulations that rely on predefined behaviors. LLMs, however, can adapt flexibly to such open-ended scenarios, generating responses and interactions that evolve dynamically based on input prompts. This adaptability allows for the exploration of future societies, governance structures, or extreme social conditions, expanding the boundaries of what simulations can achieve and enabling studies on societal organization and behavior in ways previously unachievable.
 
 ### Reduced Ethical Concerns
 Traditional human-centered simulations can pose ethical challenges, often requiring participants to experience stress, discomfort, or other adverse conditions for experimental purposes. For example, psychological experiments like the Stanford Prison Experiment <d-cite key="zimbardo1971stanford"></d-cite> or animal-based studies raise ethical concerns due to the distress or harm they may cause participants. LLM simulations sidestep these ethical issues, allowing researchers to simulate behaviors and reactions without involving real participants. This ethical advantage enables studies in sensitive areas, such as social conflict or psychological stress, where live participant involvement might be deemed inappropriate or harmful.
 
-### Need of Multi-agent System
+### Need of LLM Multi-agent System
 There is growing research interest in LLM-based multi-agent systems <d-cite key="wu2023autogen, chen2023agentverse, hong2023metagpt"></d-cite>, driven by their ability to address complex tasks. For example, MetaGPT introduces a meta-programming framework that effectively simulates the software development process <d-cite key="hong2023metagpt"></d-cite>. Additionally, recent studies leverage LLMs’ cognitive capabilities to simulate intricate scenarios, such as large-scale social media simulations involving thousands of agents <d-cite key="guo2024large"></d-cite>. As the demand for simulating increasingly complex human societies grows, it is essential to focus on enhancing LLM simulations to better align with real-world human behaviors and societal dynamics.
 
 To sum up, while LLMs have notable limitations, their strengths in cost efficiency, scalability, and adaptability position them as transformative tools for advancing simulation research across diverse fields, including software development, sociology, economics, and psychology.
 
-## How can we align LLMs more closely with human societies?
+## How Can We Align LLMs More Closely with Human Societies?
 After highlighting LLM's necessasity in simulating, we discuss on **<span style="color:blue">how to align LLMs more closely with human societies.</span>** Key directions include enriching training data with nuanced psychological and experiential insights, improving the design of agent-based systems, creating realistic and meaningful simulation environments, and externally injecting societal knowledge.
 
 ### Enriching Training Data with Personal Psychological States and Life Experiences
@@ -176,7 +162,7 @@ One foundational approach is to incorporate data that reflects a broader spectru
 If we believe agent-based LLM simulations can simulate complex human societies and finish complex tasks, a crucial area of focus is the design of the agents themselves. Research can aim to develop reward functions that encourage agents to make decisions that mirror human behavior more accurately, and can developing the mechanism how to prevent the malacious actions propagrate, balancing short-term and long-term incentives similar to real human decision-making. Additionally, enhancing agent autonomy—such as allowing agents to learn from simulated life experiences, adapt to new environments, and develop unique 'personalities'—can improve their capacity to replicate diverse behaviors. This could involve adding emotion-like functions or “memories” that allow agents to respond adaptively based on prior interactions, similar to humans. 
 
 ### Careful Simulation Environment Design
-The design of the simulation environment significantly affects agent behavior and the outcomes of the simulation. By creating environments that reflect the social, economic, and psychological complexities of human societies, agents can be more likely to engage in behaviors that resonate with human decision-making processes. For example, simulations can introduce social roles, resource scarcity, and moral dilemmas that prompt agents to make trade-offs and prioritize long-term goals over short-term gains. Personalized LLMs and retrieval-augmented generation (RAG)-based simulations can be used to dynamically provide agents with relevant information about the simulated society <d-cite xu2024genai, helping them make decisions based on a blend of factual knowledge and social context.
+The design of the simulation environment significantly affects agent behavior and the outcomes of the simulation. By creating environments that reflect the social, economic, and psychological complexities of human societies, agents can be more likely to engage in behaviors that resonate with human decision-making processes. For example, simulations can introduce social roles, resource scarcity, and moral dilemmas that prompt agents to make trade-offs and prioritize long-term goals over short-term gains. Personalized LLMs and retrieval-augmented generation (RAG)-based simulations can be used to dynamically provide agents with relevant information about the simulated society <d-cite key="xu2024genai"></d-cite>, helping them make decisions based on a blend of factual knowledge and social context.
 
 ### External Injection of Societal Knowledge and Values
 Another promising direction is to externally inject curated societal knowledge and values into LLMs. This could be done through targeted fine-tuning or post-processing steps that embed specific ethical principles, cultural norms, and societal rules within the model’s decision-making framework. Such an approach would require LLMs to access structured knowledge bases and value systems that reflect human societal complexities, allowing them to make decisions aligned with social norms or ethical standards. For example, by integrating modules on ethics, cultural diversity, and societal roles, LLMs could better understand and reflect the diverse values that drive human societies.
@@ -184,62 +170,49 @@ Another promising direction is to externally inject curated societal knowledge a
 ### Developing Robust Evaluation Metrics
 To ensure that LLMs are aligned closely with human societies, developing evaluation metrics that assess the accuracy and depth of simulated human behavior is essential. Metrics could include factors like alignment with human moral reasoning, diversity of responses across agents, and the stability of simulated social systems over time. Robust benchmarks that measure how closely agents’ actions mirror real-world human behaviors would allow researchers to refine LLMs more effectively, continuously improving their realism and applicability in social simulations.
 
-<!-- ## Case Study: Current LLM Simulation Cases Deep Analysis
+## LLM-based Simulations in Cryptocurrency Trading
+In this section, we analyze a case study of cryptocurrency trading simulations to illustrate the potential and limitations of LLM-based simulations.
 
-### Case 1: Simulating a Cryptocurrency Market
+### Using LLMs to Simulate Human Buy/Sell Behaviors in a Cryptocurrency Market
+**CryptoTrade is an LLM-based trading agent designed to enhance cryptocurrency market trading by integrating both on-chain and off-chain data analysis.** It leverages the transparency and immutability of on-chain data, along with the timeliness and influence of off-chain signals, such as news, to offer a comprehensive view of the market. CryptoTrade also incorporates a reflective mechanism that refines its daily trading decisions by assessing the outcomes of previous trades. It simulates the buy and sell behaviors of human traders in the cryptocurrency market. An overview of this simulation is shown in the figure below <d-cite key="li2024cryptotrade"></d-cite>.
 
-### Case 2: 
+<figure style="text-align: center;">
+    <img src="{{ 'assets/img/2025-04-28-rethinking-llm-simulation/cryptotrade.png' | relative_url }}" width="400">
+    <figcaption style="font-size: 1em;">Figure 5: Overview of the CryptoTrade Simulation.</figcaption>
+</figure>
 
+And the result of this simulation on the Ethereum market compared with other trading baselines is shown in the figure below <d-cite key="li2024cryptotrade"></d-cite>.
 
-To illustrate both the potential and limitations of LLM simulations, let's examine a case study of simulating a cryptocurrency market. This example is particularly relevant as cryptocurrency markets involve complex interactions between human psychology, market dynamics, and technological factors.
+<figure style="text-align: center;">
+    <img src="{{ 'assets/img/2025-04-28-rethinking-llm-simulation/eth_results.png' | relative_url }}" width="400">
+    <figcaption style="font-size: 1em;">Figure 6: Comparison of CryptoTrade with other trading baselines.</figcaption>
+</figure>
 
-### Simulation Setup
-We designed a multi-agent system where LLM agents act as traders in a simulated cryptocurrency market. Each agent was given:
-- A unique trading strategy profile
-- Access to historical market data
-- The ability to analyze market sentiment from social media
-- A portfolio of virtual assets to trade
+To gain deeper insights into why CryptoTrade takes specific actions, we extract reasoning process from the simulation logs. These logs reveal how GPT-3.5 and GPT-4o respond to the same news event: Ethereum Shanghai Upgrade.
+
+<figure style="text-align: center;">
+    <img src="{{ 'assets/img/2025-04-28-rethinking-llm-simulation/reasoning.png' | relative_url }}">
+    <figcaption style="font-size: 1em;">Figure 7: Reasoning process of gpt-3.5 and gpt-4o.</figcaption>
+</figure>
 
 ### Key Observations
+We summarize the key observations of the CryptoTrade simulation results as follows:
 
-#### 1. Behavioral Patterns
-The simulation revealed interesting patterns in how LLM agents behave compared to human traders:
-
-- **Pattern Recognition**: LLM agents excelled at identifying technical patterns, achieving a **20% higher** success rate in pattern-based trading compared to average human traders.
-- **Emotional Detachment**: During simulated market crashes, LLM agents maintained consistent trading strategies while human traders typically show panic-selling behaviors. This led to **15% better** performance during stable markets but **20% worse** performance during extreme volatility.
-- **Social Sentiment Analysis**: Agents showed a tendency to overweight positive social media signals, leading to a **12% drawdown** when bullish social media sentiment didn't align with fundamental market conditions.
-
-#### 2. Limitations Exposed
-
-The simulation highlighted several key limitations of LLM-based agents:
-
-- **Lack of Market Psychology**: During simulated "black swan" events, agents failed to anticipate or react to panic-driven market movements, resulting in significant losses.
-- **Herd Behavior**: When multiple agents used similar LLM models, they tended to make identical decisions, potentially amplifying market movements rather than creating realistic market dynamics.
-- **Historical Bias**: Agents struggled with unprecedented scenarios not present in their training data, showing the limitation of purely data-driven decision making.
-
-#### 3. Emergent Phenomena
-
-Interestingly, the simulation produced some unexpected emergent behaviors:
-
-- **Market Cycles**: Without explicit programming, agents collectively created recognizable market cycles similar to real cryptocurrency markets.
-- **Price Discovery**: Agents developed sophisticated price discovery mechanisms through their interactions, leading to efficient market pricing in stable conditions.
-- **Strategy Evolution**: Over time, agents adapted their strategies based on market conditions, though in a more limited way compared to human traders.
+1. **Can't Outperform Buy and Hold**: In a bear market, CryptoTrade **lags behind the Buy and Hold strategy by approximately 2%**, highlighting a significant limitation. While LLMs are expected to outperform human traders, the results do not align with this expectation.
+2. **Inherent Bias**: During trading, CryptoTrade exhibited a tendency to prioritize factual information signals over sentiment-based information. While this approach can be advantageous in a bull market, it proves less effective in a bear market. For instance, in Ethereum trading, CryptoTrade outperformed the Buy and Hold strategy by 3%, likely due to its **<span style="color:blue">inherent factual bias</span>**. However, this bias is less suited for bear markets, where profitability often requires selling assets proactively at the first signs of a downturn in the social media.
+3. **Lack of Market Psychology**: During "black swan" events, CryptoTrade failed to anticipate or react to panic-driven market movements, resulting in significant losses.
+4. **Herd Behavior**: When multiple agents in the CryptoTrade used the same LLM backboned models, they tended to make identical decisions, potentially **amplifying market movements rather than creating realistic market dynamics**.
+5. **Historical Bias**: Agents struggled with unprecedented scenarios not present in their training data, showing the limitation of purely data-driven decision making.
 
 ### Lessons Learned
 
 This case study provides several insights about LLM simulations:
 
-1. **Hybrid Approaches Needed**: The most effective simulations might combine LLM agents with some form of human oversight or intervention, especially for handling extreme market conditions.
+1. **Hybrid Approaches Needed**: The most effective simulations might combine LLM agents with **some form of human oversight or intervention**, which can be injected as the format of RAG, especially for handling extreme market conditions.
 
-2. **Bias Mitigation**: Future simulations should incorporate mechanisms to balance different data sources and prevent overreliance on specific signals.
+2. **Bias Mitigation**: If we want LLM simulations to simulate more realistic human behaviors, we need to mitigate the bias in the training data and inject the societal knowledge and values into LLMs.
 
-3. **Scalability Advantage**: Despite limitations, the ability to run large-scale simulations with minimal resources (simulating thousands of traders simultaneously) offers unique research opportunities.
-
-4. **Evaluation Metrics**: The case highlighted the need for better metrics to evaluate how closely simulated market behavior matches real-world dynamics.
-
-This cryptocurrency market simulation demonstrates both the potential and current limitations of LLM-based simulations, while pointing toward future research directions for improving their effectiveness. -->
+3. **Evaluation Metrics**: Currently, the evaluation metric focuses solely on trading return-related metrics. However, what if different individuals prefer different trading styles or strategies? How can we assess the performance of LLM simulations in such scenarios?
 
 ## Conclusion
 LLM-based simulations represent a promising avenue due to their cost-efficiency, high flexibility, and ability to model complex societal dynamics in innovative, sometimes "out-of-the-box" ways. Despite limitations, such as the lack of human-like incentives, intrinsic motivations, and personalized psychological states, their novelty, scalability and ethical advantages over traditional methods make them a valuable tool. To better align LLM simulations with human societies, future research should focus on integrating LLMs with agent systems, enhancing LLM personalization, designing realistic environments, and embedding societal knowledge to create more authentic and impactful simulations.
-
-
