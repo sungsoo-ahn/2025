@@ -283,7 +283,7 @@ y=&f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2} & x_{3}\end{bmatrix} \right)\\
 \end{aligned}
 $$
 
-Computing the 2nd order term naively would require $O(N^2)$ multiplies for length-$N$ input. But because the coefficients implement a circular convolution operation,  fast fourier transforms would reduce compute complexity down to $N\log{N}$.
+Computing the 2nd order term naively would require $O(N^2)$ multiplies for length-$N$ input. But because the coefficients implement a circular convolution operation,  fast fourier transforms would reduce compute complexity down to $O(N\log{N})$.
 
 </div>
 </div>
@@ -335,7 +335,8 @@ The full parameterization is
 $$
 \begin{aligned}
 f&\left( \begin{bmatrix}x_{0} & x_{1} &x_{2}\end{bmatrix} \right) \\
-=&a + \sum_{i}\sum_{j\ne i} b_{ij} \frac{x_i}{x_j} + \sum_{i}\sum_{j\ne i} c_{ij} \frac{x_i^2}{x_j^2} + d_0 \frac{x_1 x_2}{x_0^2} + d_1 \frac{x_0 x_2}{x_1^2} + d_2 \frac{x_0 x_1}{x_2^2} + e_0 \frac{x_0^2}{x_1 x_2} + e_1 \frac{x_1^2}{x_0 x_2} + e_2 \frac{x_2^2}{x_0 x_1} 
+=&a + \sum_{i}\sum_{j\ne i} b_{ij} \frac{x_i}{x_j} + \sum_{i}\sum_{j\ne i} c_{ij} \frac{x_i^2}{x_j^2} + d_0 \frac{x_1 x_2}{x_0^2} + d_1 \frac{x_0 x_2}{x_1^2} + d_2 \frac{x_0 x_1}{x_2^2} \\
+&+ e_0 \frac{x_0^2}{x_1 x_2} + e_1 \frac{x_1^2}{x_0 x_2} + e_2 \frac{x_2^2}{x_0 x_1} 
 \end{aligned}
 $$
 
@@ -690,7 +691,7 @@ b_{1} & b_{1} & b_{0}
 \end{aligned}
 $$
 
-Rewriting in tensor contraction form using <p><a href="https://numpy.org/doc/stable/reference/generated/numpy.einsum.html">Numpy's einsum</a></p> notations
+Rewriting in tensor contraction form using Numpy's einsum notations
 
 $$
 \begin{aligned}
