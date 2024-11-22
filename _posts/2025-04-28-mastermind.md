@@ -75,8 +75,6 @@ _styles: >
 
 Large Language Models (LLMs) have exhibited impressive capabilities across numerous domains, yet they often struggle with complex reasoning and decision-making tasks. As playing games often requires a diversity of reasoning logic, we believe them good sandboxes to evaluate and boost the reasoning ability of LLMs. In this work, we first explore whether LLMs can master complex decision-making games through targeted post-training. To this end, we collect extensive offline datasets from two classic games, Doudizhu and Go, and develop a suite of techniques to effectively incorporate this data into LLM training, resulting in two novel agents: Mastermind-Dou and Mastermind-Go. Our experimental results demonstrate that these Mastermind LLMs achieve competitive performance in their respective games. Additionally, we explore whether integrating decision-making data can enhance the general reasoning abilities of LLMs. Our findings suggest that such post-training significantly improves certain aspects of reasoning, providing valuable insights for optimizing LLM pre-training data collection.
 
-{% include figure.html path="assets/img/2025-04-28-mastermind/dog.gif" class="img-fluid" height="600px" width="600px"%}
-
 ## Introduction
 
 Language serves as an important role in human communication and the reflection of intricate thought processes. In recent years, the advancement of large language models (LLMs) has made it possible for artificial intelligence to understand and master human language <d-cite key="brown2020language"></d-cite><d-cite key="chowdhery2023palm"></d-cite><d-cite key="touvron2023llama"></d-cite>, achieving human-level performances in various linguistic tasks <d-cite key="wang2019superglue"></d-cite><d-cite key="adiwardana2020towards"></d-cite>. Although modern LLMs can be applied to a variety of tasks in a zero-shot manner, their logical reasoning abilities remain less than satisfactory, due to the absence of a comprehensive understanding of tasks at a deep and holistic level <d-cite key="dziri2024faith"></d-cite>. 
@@ -283,9 +281,9 @@ Additionally, comparing the results with and without Chain-of-Thought (CoT) trai
 
 We further evaluated the trained agent by conducting match-ups with various open-source solutions, repeating each round 100 times. To ensure fair testing and eliminate the influence of teammate capabilities, our proposed agent was assigned the "landlord" role, while the two "farmer" roles were consistently filled by open-source agents. The results, as shown in the table above, indicate that the original model cannot even recognize which actions are legal. On the other hand, our proposed agent demonstrates strong performance. Against RLCard as the opponent, our agent achieved a 90% win rate, effectively inheriting the expertise-level performance. Similarly, when pitted against the expert model DouZero<d-cite key="zha2021douzero"></d-cite>, it achieved a 41% win rate, which is very close to DouZero's own expert-level win rate limit of 43%.
 
-Interestingly, analysis reveals that our agent is not merely imitating DouZero’s actions; its strategy is not always aligned with DouZero’s. In some situations, despite DouZero ultimately losing, our agent—using a different strategy—achieved victory. This suggests that the language model may indeed be learning certain high-level strategies rather than simply performing behavior cloning.
+Interestingly, analysis reveals that our agent is not merely imitating DouZero’s actions; its strategy is not always aligned with DouZero’s. In some situations, despite DouZero ultimately losing, our agent—using a different strategy—achieved victory. This suggests that the language model may indeed be learning certain high-level strategies rather than simply performing behavior cloning. Here is a game replay, demonstrating one game that DouZero fails but MasterMind wins using a different strategy.
 
-[TODO: mastermind 赢，但douzero没赢的replay]
+{% include figure.html path="assets/img/2025-04-28-mastermind/compare.gif" class="img-fluid" height="600px" width="600px"%}
 
 #### Go Tasks
 
