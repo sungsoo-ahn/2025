@@ -169,9 +169,11 @@ y=&f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2}\end{bmatrix} \right)\\
 + \ldots
 \end{aligned}
 $$
+
 For a total of 4 free parameters up to order 2, instead of 13 free parameters without the invariance constraint. More generally, for $N$ inputs, we still only need 4 parameters to express any permutation invariant function, whereas a non-invariant function needs $N^2+N+1$ parameters. In practice, parameterizing with symmetry often **reduces parameter count** exponentially. 
 
 We can further simplify by focusing on the free parameters
+
 $$
 \begin{aligned}
 y=&f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2}\end{bmatrix} \right)\\
@@ -179,6 +181,7 @@ y=&f\left( \begin{bmatrix}x_{0} & x_{1} & x_{2}\end{bmatrix} \right)\\
 = & a + b \sum_i x_i + (c_0-c_1) \sum_i x_i^2 + c_1 (\sum_{i}x_i )^2 + \ldots
 \end{aligned}
 $$
+
 An important effect of this simplification is **reduced compute**. It now requires $O(N)$ compute for $N$ inputs instead of $O(N^2)$ for order-2.  
 
 In math terms, the number of free parameters is the dimensionality of the null space of the symmetry equations. The free parameters can be numerically solved from the basis of this null space which is one of the many innovations in [1]. But note that as the basis is often not unique, numerical solutions can vary by a linear combination and therefore may not be compute-optimal, so further simplification is still needed.
@@ -201,6 +204,7 @@ Solution
 
 
 According to equivariant constraints, the coefficients of the Taylor series satisfy
+
 $$
 \begin{aligned}
 a = & a \\
@@ -223,7 +227,9 @@ a = & a \\
 & \ldots
 \end{aligned}
 $$
+
 Which means there are 6 free parameters up to order-2.
+
 $$
 \begin{aligned}
 b_0=b_1=&b_2=b_3 \\
@@ -233,6 +239,7 @@ c_{02}=c_{13}=&c_{20}=c_{31} \\
 c_{03}=c_{10}=&c_{21}=c_{32} \\
 \end{aligned}
 $$
+
 Considering Hessian transpose symmetry, we would additionally have $c_{01}=c_{03}$ and reduce number of free parameters to 5. For now, let us assume that multiply among $x_i$ does not commute.
 
 The parameterization with 6 parameters has an unrolled circular convolution on the order-2 term.
@@ -292,13 +299,7 @@ $$
 \end{aligned}
 $$
 
-This only holds when the coefficients match, that is for any $(i,j,k)$
-$$
-\begin{aligned}
-c_{ijk}=\alpha^{i+j+k} c_{ijk}
-\end{aligned}
-$$
-That is only terms with $i+j+k=0$ would have non-zero coefficients. For example, $\frac{xy}{z^2}$. Within terms up to order-2, that is $i,j,k\in \left\{ -2,-1,0,1,2 \right\}$, the degrees of freedom is $19$ out of $5^3=125$ as the following
+This only holds when the coefficients match, that is for any $(i,j,k)$, $$c_{ijk}=\alpha^{i+j+k} c_{ijk}$$. That means only terms with $i+j+k=0$ would have non-zero coefficients. For example, $\frac{xy}{z^2}$. Within terms up to order-2, that is $i,j,k\in \left\{ -2,-1,0,1,2 \right\}$, the degrees of freedom is $19$ out of $5^3=125$ as the following
 
 | (i,j,k) | DoF |
 |:-------:|:---:|
@@ -309,6 +310,7 @@ That is only terms with $i+j+k=0$ would have non-zero coefficients. For example,
 | 2,-1,-1 | 3   |
 
 The full parameterization is
+
 $$
 \begin{aligned}
 f&\left( \begin{bmatrix}x_{0} & x_{1} &x_{2}\end{bmatrix} \right) \\
@@ -317,11 +319,13 @@ f&\left( \begin{bmatrix}x_{0} & x_{1} &x_{2}\end{bmatrix} \right) \\
 $$
 
 Nevertheless, for scale invariance it is easier to reparameterize the input with
+
 $$
 z_0=\frac{x_0}{\sqrt{x_0^2+x_1^2+x_2^2}} \quad
 z_1=\frac{x_1}{\sqrt{x_0^2+x_1^2+x_2^2}} \quad
 z_2=\frac{x_2}{\sqrt{x_0^2+x_1^2+x_2^2}}
 $$
+
 and express
 
 $$
@@ -342,6 +346,7 @@ Solution
 </summary>
 
 According to the equivariant constraint, the coefficients of the Taylor series satisfy
+
 $$
 \begin{aligned}
 a = & a \\
@@ -363,7 +368,9 @@ a = & a \\
 \end{bmatrix} 
 \end{aligned}
 $$
+
 Solving the equations gives
+
 $$
 \begin{aligned}
 \begin{bmatrix}b_0 & b_1\end{bmatrix}=&\begin{bmatrix}b_2 & b_3\end{bmatrix} \\
@@ -388,6 +395,7 @@ $$
 \end{bmatrix} 
 \end{aligned}
 $$
+
 If we view the rows of inputs as vectors, the coefficients can be partitioned into blocks that process those vectors, and the row-permutation invariant constraint leads to parameter sharing at the block level. We can parameterize
 
 $$
@@ -430,7 +438,8 @@ f&\left( \begin{bmatrix}x_{0} & x_{1}\end{bmatrix}, \begin{bmatrix}x_{2} & x_{3}
 \begin{bmatrix}x_0+x_2 \\ x_1+x_3\end{bmatrix}
 \end{aligned}
 $$
-The size of order-$k$ coefficient blocks for processing length-$H$ latent vectors is $H^k$. This is already much better than the full coefficients $(NH)^k$ for a set of $N$ vectors but is still large. Now, the bread and butter of deep learning comes in, namely 1) stacking more layers, 2) low-rank factorization and 3) non-linearities which we'll discuss more in Section II.
+
+The size of order-$k$ coefficient blocks for processing length-$H$ latent vectors is $H^k$. This is already much better than the full coefficients $(NH)^k$ for a set of $N$ vectors but is still large. Now, the bread and butter of deep learning comes in, namely 1) stacking more layers, 2) low-rank factorization and 3) adding non-linearities which we'll discuss more in Section II.
 
 </details>
 
@@ -446,6 +455,7 @@ Solution
 </summary>
 
 According to the equivariant constraint, the coefficients of the Taylor series satisfy
+
 $$
 \begin{aligned}
 \begin{bmatrix} b_0 & b_1 & b_2 & b_3\end{bmatrix} = &
@@ -476,6 +486,7 @@ $$
 $$
 
 Solving the equations gives the following parameterization with 6 degrees of freedom
+
 $$
 \begin{aligned}
 y=&f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right)\\
@@ -495,6 +506,7 @@ y=&f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right
 $$
 
 Let us perform a bit of merging and simplification
+
 $$
 \begin{aligned}
 y=&f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right)\\
@@ -521,6 +533,7 @@ Solution
 </summary>
 
 According to the equivariant constraint, the coefficients of the Taylor series satisfy
+
 $$
 \begin{aligned}
 \begin{bmatrix} b_0 & b_1 & b_2 & b_3\end{bmatrix} = &
@@ -543,6 +556,7 @@ $$
 $$
 
 Solving the equations gives the following parameterization with 11 degrees of freedom
+
 $$
 \begin{aligned}
 y=&f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right)\\
@@ -560,7 +574,9 @@ y=&f\left( \begin{bmatrix}x_{00} & x_{01} \\ x_{10} & x_{11}\end{bmatrix} \right
 + \ldots
 \end{aligned}
 $$
+
 With Hessian transpose symmetry, we may further have $c_1=c_4$ and $c_2=c_7$ which reduces free parameters count down to 9, still 3 more than regular 2D permutation invariance. If you squint really hard (and maybe try Exercise D), there exists a tensor contraction form:
+
 $$
 \begin{aligned}
 f&\left( \{x_{ij}\} \right)\\
@@ -574,6 +590,7 @@ c_0' \sum_i x_{ii}^2
 + \ldots
 \end{aligned}
 $$
+
 What's different from regular 2D permutation invariance are terms involving diagonal and transpose. Also all tensor contractions here are at or below $O(N)$ compute for input size $\sqrt{N}\times \sqrt{N}$, which is exponentially less compute than $O(N^2)$ for the default Taylor series.
 
 </details>
@@ -593,6 +610,7 @@ Solution
 </summary>
 
 The Taylor series up to order 1 can be expressed as
+
 $$
 \begin{aligned}
 &\begin{bmatrix}y_{0} \\ y_{1} \\y_{2}\end{bmatrix}=F\left( \begin{bmatrix}x_{0} \\ x_{1} \\ x_{2}\end{bmatrix} \right) \\
@@ -608,7 +626,9 @@ b_{20} & b_{21} & b_{22}
 \ldots
 \end{aligned}
 $$
+
 The equivariant constraints are for any $P$
+
 $$
 \begin{bmatrix}
 b_{00} & b_{01} & b_{02} \\ 
@@ -632,6 +652,7 @@ b_{20} & b_{21} & b_{22}
  & & \\ 
 \end{bmatrix}
 $$
+
 Which is identical to the invariant constraints on order-2 terms. In general, the parameterization of an equivariant function up to order-k is very much the same as an invariant function up to order-(k+1). In the case of 1D permutation equivariance, the order-1 parameterization would be
 
 $$
@@ -649,6 +670,7 @@ b_{1} & b_{1} & b_{0}
 \ldots
 \end{aligned}
 $$
+
 Rewriting in tensor contraction form using [einsum](https://pytorch.org/docs/stable/generated/torch.einsum.html) notations
 
 $$
@@ -667,12 +689,12 @@ $$
 ### I.3 What we have learned so far
 
 In this section, we have learned that
-1) Symmetry constraints reduce the number of free parameters.
-2) A Taylor-series technique can be used to parameterize symmetric functions.
-3) Different symmetries can have different impacts on degrees of freedom.
-4) Certain parameterizations can reduce compute.
-5) Parameterization of equivariant functions are tied to parameterization of invariant functions
-6) Permutation invariant and equivariant functions can be parameterized solely using tensor contraction terms.
+1. Symmetry constraints reduce the number of free parameters.
+2. A Taylor-series technique can be used to parameterize symmetric functions.
+3. Different symmetries can have different impacts on degrees of freedom.
+4. Certain parameterizations can reduce compute.
+5. Parameterization of equivariant functions are tied to parameterization of invariant functions
+6. Permutation invariant and equivariant functions can be parameterized solely using tensor contraction terms.
 
 A Taylor series parameterization is sound in theory. In practice however, functions compound and high order interactions are common. Taylor series often provides too little relevant capacity and too much irrelevant capacity to be useful. Engineering is key in the journey to create universal learners of equivariant functions. In the next section, we'll focus on permutation symmetry and design a family of practical invariant and equivariant networks for various flavors of permutation symmetry.
 
@@ -716,20 +738,26 @@ Primer: Tensor contractions and the einsum notation
 </summary> 
 
 Intuitively, tensor contractions like
+
 $$
 Y_{ij}=\sum_k \sum_l X_{ik} X_{lk} X_{lj} 
 $$
+
 create a new tensor that has the same shape as the input while summing over unused dimensions. They achieve a permutation equivariant effect. And tensor contractions like
+
 $$
 y=\sum_i \sum_j \sum_k \sum_l X_{ik} X_{lk} X_{lj} 
 $$
+
 that sum over all dimensions achieve a permutation invariant effect. 
 
 As the math equations can get quite long, we will use the [einsum notation](https://numpy.org/doc/stable/reference/generated/numpy.einsum.html) which represents a tensor contraction using the indices involved. It is widely used across deep learning frameworks to denote tensor contractions. For example,
+
 ```python
 Y=einsum('Zik,Zlk,Zlj->Zij',X,X,X)
 y=einsum('Zik,Zlk,Zlj->Z',X,X,X)
 ```
+
 Here a batch dimension Z is added to make sure the right hand side is not empty.  
 
 </details>  
@@ -738,6 +766,7 @@ Here a batch dimension Z is added to make sure the right hand side is not empty.
 Let us use a 1D + latent `aH`-type equivariant constraint as an example to illustrate the design.
 
 The Taylor Series parameterization up to order 2 is
+
 ```python
 Y_abH=einsum('a->ba',a_H)
      +einsum('ab,ca->cb',b0_HH,X_aH)
@@ -808,7 +837,9 @@ The following is a quick lookup table of pooling operations for a few common equ
 |               | 3+    | No need  |
 
 
-*Did you know: `'ab,cb,cd->ad'` which is linear self-attention is an order-3 term for `ab`-type equivariance. Self-attention operation by itself is equivariant to not only token permutation but also latent permutation, although other linear layers in the transformer architecture do not retain the latent symmetry.*
+<blockquote>
+Did you know: `'ab,cb,cd->ad'` which is linear self-attention is an order-3 term for `ab`-type equivariance. Self-attention operation by itself is equivariant to not only token permutation but also latent rotation, although other linear layers in the transformer architecture do not retain the latent symmetry.
+</blockquote>
 
 
 ### II.3 Putting everything together: The Equivariant Einsum Network
