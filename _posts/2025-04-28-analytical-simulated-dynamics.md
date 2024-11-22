@@ -227,14 +227,14 @@ $$ \begin{align}
 with $\Delta_{s}^{u} = \sum_{m=1}^{M} g\left( \frac{W^{*}_{m}x_{s}^{u}}{\sqrt{N}} \right) + \sigma \xi^{u} - \sum_{k=1}^{K} g\left( \frac{W_{k}x_{s}^{u}}{\sqrt{N}} \right)$. 
 Hence, he gradient descent update equations for the student network is
 
-$$ W_{i}^{u+1} = W_{i}^{u} + \frac{\eta_{W} dt}{B}\sum_{s=1}^{B} \Delta_{s}^{u} \cdot g'\left( \frac{W_{i}x_{s}^{u}}{\sqrt{N}} \right) \cdot \frac{x_{s}^{u}}{\sqrt{N}}. $$
+$$ W_{i}^{u+1} = W_{i}^{u} + \frac{\eta_{W}}{B}\sum_{s=1}^{B} \Delta_{s}^{u} \cdot g'\left( \frac{W_{i}x_{s}^{u}}{\sqrt{N}} \right) \cdot \frac{x_{s}^{u}}{\sqrt{N}}. $$
 
-where we have introduced a scaling factor $dt=1/N$ that will be useful in the continuous limit. By taking the 
-limit $N \rightarrow \infty$, we make the step size in the right hand size vert small, effectively giving a large number of
-samples for the updates, converting the sum to an expectation over the data distribution. Unfortunately, this expectation
-does not have a closed form solution. However, we can write the expectation in terms of the order parameters, for which
-this expectation has a solution. The order parameters fully define the state of the system, while allowing for
-a closed form solution for the expectation. These order parameters are the overlap between student and teacher neruons $R$,
+From this expression, we could take the gradient flow limit, however, the expectation induced in the right hand side
+does not have a closed form solution. However, we can write the update equation in terms of the order parameters, for 
+which this expectation has a solution. The order parameters fully define the state of the system, and is commonly 
+understood in physics as a macroscopic variable that describe the time evolution of a complex system, while allowing 
+for further mathematical analysis. These order parameters are the overlap between student and teacher neurons 
+$R$,
 and the overlap of students neurons with itself $Q$, which are defined as
 
 $$ 
@@ -244,12 +244,25 @@ Q = \frac{W W^{T}}{N}.
 $$
 
 Instead of describing the learning using the gradient descent updates for the weights, we can describe it in terms of
-the order parameters. To do this, we simply multiply the gradient updates equation by $W^{*}_{n}/N$ to obtain $R$ updates
-and by $W_{j}/N$ to obtain $Q$ updates. Starting with the $R$ updates, we have
+the order parameters. To do this, we simply multiply the gradient updates equation by $(W^{*}_{n})^{T}/N$ to obtain $R$ 
+updates
+and by $W_{j}^{T}/N$ to obtain $Q$ updates. Starting with the $R$ updates, we have
 
-$$ \frac{W_{i}^{u+1}W_{n}^{*}}{N} = \frac{W_{i}^{u}W_{n}^{*}}{N} + \frac{\eta_{W} dt}{B}\sum_{s=1}^{B} \Delta_{s}^{u} \cdot g'\left( \frac{W_{i}x_{s}^{u}}{\sqrt{N}} \right) \cdot \frac{x_{s}^{u}}{\sqrt{N}}. $$
+$$ \begin{align}
+\frac{W_{i}^{u+1}(W_{n}^{*})^{T}}{N} & = \frac{W_{i}^{u}(W_{n}^{*})^{T}}{N} + \frac{\eta_{W}}{NB}\sum_{s=1}^{B} 
+\Delta_{s}^
+{u} \cdot g'\left( \frac{W_{i}x_{s}^{u}}{\sqrt{N}} \right) \cdot \frac{x_{s}^{u} (W_{n}^{*})^{T}}{\sqrt{N}}, \\
+R_{in}^{u+1} & = R_{in}^{u} + \frac{\eta_{W} dt}{B}\sum_{s=1}^{B} 
+\Delta_{s}^
+{u} \cdot g'\left( \frac{W_{i}x_{s}^{u}}{\sqrt{N}} \right) \cdot \frac{x_{s}^{u} (W_{n}^{*})^{T}}{\sqrt{N}}. 
+\end{align} $$
 
+From this equation, we defined $dt=1/N$, and by moving $R_{in}^{u}$ to the left hand side, dividing by $dt$, and
+taking the *thermodynamic limit* $N \rightarrow \infty$, we obtain the time derivative of $R_{in}$ as
 
+$$ 
+\frac{d R_{in}}{d t} = \left< \eta_{W} \Delta_{s}^{u} g'(\lambda_{i}^{u}) \rho_{n}^{u} \right>
+$$
 
 Fig1: Saad and Solla results.
 
