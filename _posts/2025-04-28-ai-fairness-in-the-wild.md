@@ -11,7 +11,7 @@ hidden: false
 # authors:
 #   - name: Anonymous
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-AI_Fairness_In_The_Wild.bib  
+bibliography: 2025-04-28-ai-fairness-in-the-wild.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -52,7 +52,7 @@ Recently, the field of AI fairness has exploded (see graph below), with many con
 
 <div class="row justify-content-center">
     <div class="col-md-8 align-self-center">
-{% include figure.html path="assets/img/2025-04-28-AI_Fairness_In_The_Wild/Fairness_Pubs.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-ai-fairness-in-the-wild/Fairness_Pubs.png" class="img-fluid" %}
 </div>
 <p class="text-sm-center" style="margin:0em 8em 1em; font-size:0.8em">Number of publications focusing on fairness in AI by year, From <a href="https://www.dimensions.ai/">dimensions.ai</a>.</p>
 </div>
@@ -73,7 +73,7 @@ This document might leave the reader with mixed feelings. While the emphasis on 
 
 [Fairness Definitions Explained](https://fairware.cs.umass.edu/papers/Verma.pdf)<d-cite key="def_exp"></d-cite> and [Algorithmic Fairness: Choices, Assumptions, and Definitions](https://www.annualreviews.org/doi/abs/10.1146/annurev-statistics-042720-125902)<d-cite key="alg_fair_choices"></d-cite> are surveys of the most popular quantifications used to measure fairness.  Before proceeding, one should consider a few points regarding these definitions.
 
-{% include figure.html path="assets/img/2025-04-28-AI_Fairness_In_The_Wild/AlgorithmicFairness.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-ai-fairness-in-the-wild/AlgorithmicFairness.png" class="img-fluid" %}
 <p class="text-sm-center" style="margin:0em 8em 1em; font-size:0.8em">From <a href="https://www.annualreviews.org/doi/abs/10.1146/annurev-statistics-042720-125902">Algorithmic Fairness: Choices, Assumptions, and Definitions</a>.</p>
 
 Given a group of people who share a protected characteristic $$g$$ and an independent variable $$X$$ (such as applicant credentials) *conditional statistical parity* is achieved when given the same values for $$X$$ candidates with and without the protected characteristic have the same chance to get positive outcomes. This is formalized as $$ p(D=1 \| X=x,G=g) = p(D=1 \| X=x,G=  - g) $$ . As this is a difficult criterion to satisfy, when there is access to ground truth (in the case of COMPAS, simply apply the algorithm to prisoners in other counties and use judge ruling as ground truth) we can instead focus on the predicted outcome $$Y$$ and real result. For instance we can examine the False Positive Balance between groups $$ p(D=0 \| Y=1,G=g)=p(D=0 \| Y=1,G=-g) $$ . Other metrics (such as the false negative rate) could similarly be explored.
@@ -87,7 +87,7 @@ Given the metrics defined above, a researcher can identify discriminatory algori
 
 <div class="row justify-content-center">
     <div class="col-md-8 align-self-center">
-	{% include figure.html path="assets/img/2025-04-28-AI_Fairness_In_The_Wild/jointOpt.png" class="img-fluid" %}
+	{% include figure.html path="assets/img/2025-04-28-ai-fairness-in-the-wild/jointOpt.png" class="img-fluid" %}
     </div>
 	<p class="text-sm-center" style="margin:0em 8em 1em; font-size:0.8em">From <a href="https://arxiv.org/pdf/2002.01621.pdf">Joint Optimization of AI Fairness and Utility: A
 	Human-Centered Approach</a>. The Statistical Parity Difference and Weighted Average Odds Difference (SPD and WAOD, two fairness metrics) are visualized for different algorithms, as well as utility 		
@@ -100,7 +100,7 @@ A different tool [AI Fairness 360](https://arxiv.org/pdf/1810.01943.pdf)<d-cite 
 - **Fair in-processing** techniques focus on learning a fair classifier given the original unchanged data. This can be done using multi-objective optimization with fairness as an objective, adversarial debiasing (training an adversary that tries to infer protected attributes from model prediction), or a prejudice remover (a discrimination aware regularizer).
 - **Fair post-processing** assumes you already have a trained biased model. These techniques try to fix the bias using frameworks such as reject option classification (favor/punish points in the model uncertainty boundary depending on the protected attribute) or equalized odds transformation (lear a linear projection of the classifier predicted probabilities to learn outputs that achieve fairness).
 
-{% include figure.html path="assets/img/2025-04-28-AI_Fairness_In_The_Wild/fairness360.png" style="width: 50%;" %}
+{% include figure.html path="assets/img/2025-04-28-ai-fairness-in-the-wild/fairness360.png" style="width: 50%;" %}
 <p class="text-sm-center" style="margin:0em 8em 1em; font-size:0.8em">From <a href="https://arxiv.org/pdf/1810.01943.pdf">AI Fairness 360</a>. Different frameworks to guarentee algorithmic farirness.</p>
 
 Overall, this tool - developed and suppoeted by IBM - implements over 15 bias mitigation algorithms, 5 fairness metrics, is implemented in both R and python, and even comes with a nicely designed graphical UI. But does this level of polish translate into adoption in real-world applications?
