@@ -135,7 +135,9 @@ CLLMs is jointly optimized with two losses, one guaranteeing the prediction of m
 
 **Consistency Loss.** For a prompt x with the Jacobi trajectory $$J$$ , directly push CLLM to output $$y^∗$$ with $$y$$ as the input by minimizing the following loss:
 
-{% include figure.html path="assets/img/2025-04-28-bridging-the-parallel-decoding-of-llms-with-the-diffusion-process/consistency_loss1.jpg" class="consistency_loss1" %}
+$$
+\mathcal{L}_{GC} = \mathbb{E}_{(x, \mathcal{I}) \sim \mathcal{D}, y \sim \mathcal{I}} \left[ \sum_{i=1}^{n} D \left( q_{\theta^-} (\cdot | y_{<i}^{*}, x) \| q_{\theta} (\cdot | y_{<i}, x) \right) \right]
+$$
 
 Alternatively, the adjacent states $$y(j), y(j+1)$$ in the Jacobi trajectory J are demanded to yield the same outputs:
 
