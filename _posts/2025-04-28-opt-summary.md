@@ -123,7 +123,7 @@ $$
 
 - *Complexity measure* $\mathcal{M}$, e.g., optimality gap $f(x)-f(x^\star)$ where $x^\star$ is the global minimum, function stationarity $\|\|\nabla f(x)\|\|$. 
 
-{% include figure.liquid path="assets/img/2024-04-28-opt-summary/complexity_analysis.jpg" class="img-fluid" %}
+{% include figure.html path="assets/img/2024-04-28-opt-summary/complexity_analysis.jpg" class="img-fluid" %}
 
 <div class="caption">
     Oracle Complexity Framework (adapted from Prof. Yangyang Xu's Slides<d-cite key="xu2019slides"></d-cite>)
@@ -156,7 +156,7 @@ $$
 	T_{\epsilon}(f,\mathtt{A}),
 $$
 
-{% include figure.liquid path="assets/img/2024-04-28-opt-summary/upper_lower.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2024-04-28-opt-summary/upper_lower.png" class="img-fluid" %}
 
 <div class="caption">
     Illustration of Upper and Lower Complexity Bounds
