@@ -10,14 +10,15 @@ hidden: false
 
 # TODO: Anonymize when submitting!
 authors:
-  - name: Rodrigo Carrasco-Davis
-    url: "https://scholar.google.cl/citations?user=PLBqVGoAAAAJ"
-    affiliations:
-      name: Gatsby Unit, UCL
-  - name: Erin Grant
-    url: "https://eringrant.github.io/"
-    affiliations:
-      name: "Gatsby Unit & SWC, UCL"
+  - name: Anonymous
+#  - name: Rodrigo Carrasco-Davis
+#    url: "https://scholar.google.cl/citations?user=PLBqVGoAAAAJ"
+#    affiliations:
+#      name: Gatsby Unit, UCL
+#  - name: Erin Grant
+#    url: "https://eringrant.github.io/"
+#    affiliations:
+#      name: "Gatsby Unit & SWC, UCL"
 
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-analytical-simulated-dynamics.bib
@@ -35,13 +36,12 @@ toc:
 - name: "Methods"
   subsections: 
     - name: The teacher-student setup
+- name: "Rederivations"
 - name: "Replications"
   subsections:
     - name: Theory-experiment overlap in the soft committee machine
-    - name: The specialization transition tracks feature learning
     - name: Large initial weights produce individual differences
     - name: Theory-experiment overlap in two-layer neural networks
-    - name: Limits of the analytical teacher-student setting
 - name: "Impact & extensions"
   subsections:
     - name: Applications of the teacher-student setting
@@ -199,36 +199,43 @@ and student are a soft-committee machine (an average of non-linear perceptrons),
 and Goldt et al. <d-cite key="goldt2020dynamics"></d-cite>,
 which extends these results to allow for non-linear neural networks with a hidden layer.
 
-## Replications
+## Rederivations
 
-### Theory-experiment overlap in the soft committee machine
 
-To solve the above differential equation, we need to assume a specific form for the teacher and student networks and 
+To solve the system of ordinary differential equations in (5), we need to assume a specific form for the teacher and student networks and 
 convert the dynamical equation that describes gradient descent to the corresponding order parameters equations. 
-In Saad and Solla's work, both the teacher and student networks were modeled as a soft-committee machine, which is an average of non-linear perceptrons. We define the teacher and student networks as follows 
-(with a slightly modified version):
+In Saad and Solla's work <d-cite key="saad1995online"></d-cite>, both the teacher and student networks were modeled as a soft-committee machine, which is an average of non-linear perceptrons. 
+We define the teacher and student networks as follows, using modified notation for clarity:
 
 $$ \begin{equation}
-y_{s}^{u} = \sum_{m=1}^{M} g\left( \frac{W^{*}_{m} x_{s}^{u}}{\sqrt{N}} \right) + \sigma \xi^{u} \hspace{
-0.3cm} \text{ and } \hspace
-{0.3cm} 
-\hat{y}_{s}^{u} = \sum_{k=1}^{K} g\left( \frac{W_{k} x_{s}^{u}}{\sqrt{N}} \right),
+y_{s}^{u} = \sum_{m=1}^{M} g\left( \frac{W^{*}_{m} x_{s}^{u}}{\sqrt{N}} \right) + \sigma \xi^{u}
 \end{equation} $$
 
-where $g( \cdot )$ is the error function (there are some closed form solution for $g( \cdot )$ as a ReLU non-linearity), 
-$k$ indexes the perceptrons (rows of $W \in \mathbb{R}^{1 \times N}$), and $M$ 
-and $K$ are the number of neurons in the teacher and student networks, respectively. From here on, neuron indexing will
+$$ \begin{equation}
+\hat{y}_{s}^{u} = \sum_{k=1}^{K} g\left( \frac{W_{k} x_{s}^{u}}{\sqrt{N}} \right)
+\end{equation} $$
+
+where $g( \cdot )$ is the error function,
+$$m$$ and $$k$$ index the perceptrons in the teacher and student 
+(rows of $$W^*, W \in \mathbb{R}^{1 \times N}$$), and $M$ 
+and $K$ are the number of neurons in the teacher and student networks, respectively. 
+Saad and Solla <d-cite key="saad1995online"></d-cite> present closed-form solutions 
+for $g( \cdot )$ as a Gauss error function non-linearity.
+From here on, neuron indexing will
 be $i, j, k$ for the student, and $m, n, p$ for the teacher. 
 
-To train the student, we minimize the mean squared error between the teacher and student outputs. 
-We then perform gradient descent to update the student's weights.
+To train the student, we minimize the mean squared error between the teacher and student outputs:
 
 $$ \begin{align} 
 \mathcal{L^{u}} = & \frac{1}{2B} \sum_{i=1}^{B} \left( y_{s}^{u} - \hat{y}_{s}^{u} \right)^{2} \\
  = & \frac{1}{2B} \sum_{s=1}^{B} \left[ \sum_{m=1}^
 {M} g\left( \frac{W^{*}_{m}x_{s}^{u}}{\sqrt{N}} \right) + \sigma \xi^{u} -\sum_{k=1}^{K} g\left( \frac{W_
 {k}x_{s}^{u}}{\sqrt{N}} 
-\right) \right]^{2} \\
+\right) \right]^{2} 
+\end{align} $$
+
+We then perform gradient descent to update the student's weights:
+$$ \begin{align} 
 \frac{\partial \mathcal{L}}{\partial W_{i}} = & \frac{1}{B}\sum_{s=1}^{B} \left[\sum_{m=1}^
 {M} g\left( \frac{W^{*}_{m}x_{s}^{u}}{\sqrt{N}} \right) + \sigma \xi ^{u} -\sum_{k=1}^{K} g\left( \frac{W
 _{k}x_{s}^{u}}{\sqrt{N}} 
@@ -236,18 +243,19 @@ _{k}x_{s}^{u}}{\sqrt{N}}
 = & - \frac{1}{B}\sum_{s=1}^{B} \Delta_{s}^{u}  \cdot  g'\left( \frac{W_{i}x_{s}^{u}}{\sqrt{N}} \right) \cdot \frac{x_{s}^{u}}{\sqrt{N}}
 \end{align} $$
 
-with $\Delta_{s}^{u} = \sum_{m=1}^{M} g\left( \frac{W^{*}_{m}x_{s}^{u}}{\sqrt{N}} \right) + \sigma \xi^{u} - 
-\sum_{k=1}^{K} g\left( \frac{W_{k}x_{s}^{u}}{\sqrt{N}} \right)$. 
-Hence, he gradient descent update equations for the student network is
+with $$\Delta_{s}^{u} = \sum_{m=1}^{M} g\left( \frac{W^{*}_{m}x_{s}^{u}}{\sqrt{N}} \right) + \sigma \xi^{u} - 
+\sum_{k=1}^{K} g\left( \frac{W_{k}x_{s}^{u}}{\sqrt{N}} \right)$$.
+Hence, the gradient descent update equations for the student network are
 
 $$ W_{i}^{u+1} = W_{i}^{u} + \frac{\eta_{W}}{B}\sum_{s=1}^{B} \Delta_{s}^{u}  \cdot  g'\left( \frac{W_{i}x_
 {s}^{u}}{\sqrt{N}} \right)  \cdot \frac{x_{s}^{u}}{\sqrt{N}}. $$
 
-From this expression, we could take the gradient flow limit, however, the expectation induced in the right hand side
-does not have a closed form solution. However, we can write the update equation in terms of the order parameters, for 
-which this expectation has a solution. The order parameters fully define the state of the system, and is commonly 
-understood in physics as a macroscopic variable that describe the time evolution of a complex system, while allowing 
-for further mathematical analysis. These order parameters are the overlap between student and teacher neurons 
+From this expression, we could take the gradient flow limit as in (5).
+However, the expectation induced in the right hand side
+does not have a closed form solution in this case. 
+Instead, we can write the update equation in terms of the order parameters, 
+which fully define the state of the system, and for which this expectation has a solution. 
+These order parameters are the overlap between student and teacher neurons 
 $R$, the overlap of students neurons with itself $Q$, and the overlap of teacher neurons with itself $T$ 
 (which do not change throughout training as the teacher is fixed) which are defined as
 
@@ -258,8 +266,8 @@ Q = \frac{W W^{T}}{N} \hspace{0.2cm} \text{and} \hspace{0.2cm} T = \frac{W^{*}(W
 \end{equation} $$
 
 Instead of describing the learning using the gradient descent updates for the weights, we can describe it in terms of
-the order parameters. To do this, we simply multiply the gradient updates equation by $(W^{*}_{n})^{T}/N$ to obtain $R$ 
-updates and by $(W_{j}^{u+1})^{T}/N$ to obtain $Q$ updates. Starting with the $R$ updates, we have
+the order parameters. To do this, we simply multiply the gradient updates equation by $$(W^{*}_{n})^{T}/N$$ to obtain $R$ 
+updates and by $$(W_{j}^{u+1})^{T}/N$$ to obtain $Q$ updates. Starting with the $R$ updates, we have
 
 $$ \begin{align}
 \frac{W_{i}^{u+1}(W_{n}^{*})^{T}}{N} & = \frac{W_{i}^{u}(W_{n}^{*})^{T}}{N} + \frac{\eta_{W}}{NB}\sum_{s=
@@ -272,7 +280,7 @@ R_{in}^{u+1} & = R_{in}^{u} + \frac{\eta_{W} dt}{B}\sum_{s=1}^{B}
 \end{align} $$
 
 From this equation, we defined $dt=1/N$, and by moving $R_{in}^{u}$ to the left hand side, dividing by $d
-t$, and taking the *thermodynamic limit* $N \rightarrow \infty$, we obtain the time derivative of $R_{in}$ as
+t$, and taking the *thermodynamic limit* $N \rightarrow \infty$ corresponding to large input dimension, we obtain the time derivative of $R_{in}$ as
 
 $$ \begin{equation}
 \frac{d R_{in}}{d t} = \eta_{W} \left< \Delta_{s}^{u} g'(\lambda_{i}^{u}) \rho_{n}^{u} \right>
@@ -286,8 +294,8 @@ $$ \begin{equation}
 {n}^{*})^{T}x_{s}^{u}}{\sqrt{N}}.
 \end{equation} $$
 
-The equation for $\frac{dR_{in}}{dt}$ is now in a convenient form, where the local fields are simply a gaussian 
-scalar as $x \sim \mathcal{N}(0, I)$, and the expectation because an integral over gaussian distribution 
+The equation for $\frac{dR_{in}}{dt}$ is now in a convenient form, where the local fields are simply a Gaussian 
+scalar as $x \sim \mathcal{N}(0, I)$, and the expectation because an integral over Gaussian distribution 
 with covariances defined by the order parameters. Before solving this expectation, let's derive the same equation for the 
 order paramaters $Q$ (slightly trickier). We go back to the gradient descent update equation for the weights, and 
 multiply by $(W_{j}^{u+1})^{T}/N$ and $(W_{j}^{u})^{T}/N$ giving
@@ -366,10 +374,10 @@ $$ \begin{align}
 \mathcal{E} = & \frac{1}{2} \sum_{i=1}^{K} \sum_{j=1}^{K} I_{2}(i, j) - \sum_{n=1}^{M} \sum_{i=1}^{K} I_{2}(i, n)+ \frac{1}{2} \sum_{m=1}^{M} \sum_{n=1}^{M} I_{2}(n, m) + \frac{\sigma^{2}}{2}
 \end{align}. $$
 
-The covariances between the local fields are defined by the order parameters. For instance, the covariance for $I_{2}
-(i, n)$ (student-teacher indexes) is $C_{12} = R_{i, n}$, $C_{11}=\text{diag}(Q)_{i}$ and $C_{22}=\text{diag}(T)_{n}
-$, or the covariance for $I_{2}(i, j)$ is $C_{12}=Q_{ij}$, $C_{11}=\text{diag}(Q)_{i}$ and $C_{22}=\text{diag}(Q)_{j}$.
-Hence, we can take advantage of broadcasting to compute all elements of $I_{2}$ matrix as a function of the
+The covariances between the local fields are defined by the order parameters. 
+For instance, the covariance for $$I_{2} (i, n)$$ (student-teacher indexes) is $$C_{12} = R_{i, n}$$, $$C_{11}=\text{diag}(Q)_{i}$$ and $$C_{22}=\text{diag}(T)_{n}$$, 
+or the covariance for $$I_{2}(i, j)$$ is $$C_{12}=Q_{ij}$$, $$C_{11}=\text{diag}(Q)_{i}$$ and $$C_{22}=\text{diag}(Q)_{j}$$.
+Hence, we can take advantage of broadcasting to compute all elements of $$I_{2}$$ matrix as a function of the
 corresponding order parameters matrices:
 ```python
 def get_I2(c12, c11, c22):
@@ -410,12 +418,13 @@ j, l) + \sigma^{2} J_{2}(i, j)
  
 The close form expression for every integral $I_{3}$, $I_{4}$ and $J_{2}$ can be found in <d-cite key="saad1995online"></d-cite>.
 
-### Two Layer Neural Network
+#### Neural networks with a hidden layer
 
 From the equations above, extending to a two-layer network can be done simply by adding another layer to both the 
-teacher and student networks. The second layer of the student network is treated as an additional order parameter, a
-s in <d-cite key="goldt2020dynamics"></d-cite>. The expectations and integrals remain the same as in 
-<d-cite key="saad1995online"></d-cite>, except that each update now involves the second layer of both the student and 
+teacher and student networks. The second layer of the student network is treated as an additional order parameter, 
+as in Goldt et al. <d-cite key="goldt2020dynamics"></d-cite>. 
+The expectations and integrals remain the same as in Saad & Solla <d-cite key="saad1995online"></d-cite>, 
+except that each update now involves the second layer of both the student and 
 teacher networks.
 
 Another way to understand the connection between both frameworks is by considering, for example, the soft committee 
@@ -423,11 +432,11 @@ machine as a two-layer network, where the second layer is fixed with ones in all
 reader should be well-equipped to follow the derivation in <d-cite key="goldt2020dynamics"></d-cite> as an extension 
 of the results presented here from <d-cite key="saad1995online"></d-cite>.
 
-## How to use the code
+## Replications
 
-The code is written in a Python package called nndyn, which can be found in the provided repository. 
-It is implemented in JAX to take advantage of broadcasting and jit compilation. The code has three main components: 
-tasks, networks, and ODEs.
+The code is written in a Python package called `nndyn`, which can be found in the provided repository. 
+It is implemented in `JAX` to take advantage of broadcasting and JIT-compilation. The code has three main components: 
+tasks, networks, and ordinary differential equations (ODEs).
 
 A task is defined by a teacher network, which is used to sample $(x, y)$ pairs for training the student network. A 
 common workflow in the teacher-student setup involves first simulating a student network trained numerically with 
@@ -472,7 +481,7 @@ for i in range(n_steps):
     loss = true_student.update(x, y)
     loss_list.append(np.array(loss))
 ```
-For the ODE calculation, an ode object can be created, where each order parameter are simply attributes of this object,
+For the ODE calculation, an `ode` object can be created, where each order parameter are simply attributes of this object,
 which can be moved forward in time using the update method:
 
 ```python
@@ -513,7 +522,10 @@ for i in range(n_steps):
         order_parameter_W2.append(np.array(ode.student_W2))
 ```
 
-### The specialization transition tracks feature learning
+We now present results comparing simulations of the low-dimensional ODEs derived by Saad & Solla <d-cite key="saad1995online"></d-cite> 
+with numerical simulations of training the full student network with standard minibatch stochastic gradient descent.
+
+### Theory-experiment overlap in the soft committee machine
 
 <div class="row mt-3">
     {% include figure.html path="assets/img/2025-04-28-analytical-simulated-dynamics/fixed_teacher_student_saad_solla.png" class="img-fluid" %}
@@ -523,7 +535,6 @@ for i in range(n_steps):
 machine student network with a fixed teacher network was compared against the analytical ODEs for the order parameters. 
 In this setup, N = 784, M = 4, and K varies. Notably, the generalization error is significantly reduced when 
 the student network has a size of K = 4 or larger.
-
 </div>
 
 ### Theory-experiment overlap in two-layer neural networks
@@ -552,20 +563,14 @@ Some drops can be seen in the alignment when the loss function is steepest.
 for different initial weights in the students network.
 </div>
 
-
-
-### Limits of the analytical teacher-student setting
-
-Check the bounds for learning rate and noise such that the ODEs follow the simulations.
-
 ## Impact & extensions
 
 The analytical techniques pioneered by Saad & Solla <d-cite key="saad1995online"></d-cite> and others have inspired two broad directions of research: extending the theoretical framework to handle more complex scenarios, and applying these tools to analyze specific phenomena in machine learning. 
-We detail these directions, and conclude with a brief discussion of what might be next for analytical approaches to neural network dynamics.
+We detail these directions, and conclude with a brief forward-looking perspective.
 
 ### Applications of the teacher-student setting
 
-Beyond charactierizing generalization error, the teacher-student framework has been applied to a wide range of problems, often to model interesting phenomena in machine learning. 
+Beyond characterizing generalization error, the teacher-student framework has been applied to a wide range of problems, often to model interesting phenomena in machine learning. 
 In optimization, applications extend to learning algorithms including 
 natural gradient descent <d-cite key="yang1998complexity"></d-cite>,
 feedback alignment <d-cite key="refinetti2022align"></d-cite>, 
@@ -583,7 +588,7 @@ Even current work under review at the ICLR 2025 conference <d-cite key="anonymou
 
 ### The analytical frontier
 
-The statistical physics approach to neural network dynamics has expanded significantly beyond the early results of Saaad & Solla <d-cite key="saad1995online"></d-cite> and others.
+The statistical physics approach to neural network dynamics has expanded significantly beyond the early results of Saad & Solla <d-cite key="saad1995online"></d-cite> and others.
 Early extensions to teacher-student explored different activation functions, with Freeman and Saad analyzing radial basis function networks <d-cite key="freeman1997online"></d-cite>
 Richert et al. studied the qualitative convergence for these dynamical systems <d-cite key="richert2022soft"></d-cite>.
 Deep networks were analyzed by Tian et al., who first provided empirical evidence for specialization in deep teacher-student networks <d-cite key="tian2019luck"></d-cite>, then developed theoretical characterization of these dynamics <d-cite key="tian2020student"></d-cite>. 
@@ -592,15 +597,15 @@ Recent work has tackled increasingly complex learning scenarios. Loureiro et al.
 Questions of learnability have been addressed by Troiani et al. <d-cite key="troiani2024fundamental"></d-cite>, who established theoretical limits on what neural networks can learn in various settings. 
 
 The Gaussian equivalence property <d-cite key="goldt2020modelling"></d-cite> <d-cite key="goldt2021gaussian"></d-cite> demonstrated that many results derived for Gaussian inputs extend to other data distributions, broadening the applicability of these analytical techniques.
-However, it is still challenging to capture the effect on learning dynamics of strongly non-Gaussian input distributions, and this frontier is attracting significant interest <d-cite key="ingrosso2023datadriven"></d-cite> <d-cite key="refinetti2023neural"></d-cite>.
+However, it is still challenging to capture the effect on learning dynamics of strongly non-Gaussian input distributions, and this frontier is attracting significant interest <d-cite key="ingrosso2022datadriven"></d-cite> <d-cite key="refinetti2023neural"></d-cite>.
 
 ### Conclusions
 
-The mathematical tools of statistical physics have proven an important component to the developement of neural networks, as noted by this year's Nobel Prize in Physics <d-cite key="zotero-4179"></d-cite>.
+The mathematical tools of statistical physics have proven an important component to the development of neural networks, as noted by this year's Nobel Prize in Physics <d-cite key="zotero-4179"></d-cite>.
 The teacher-student framework we explored here represents one successful application of physics-inspired analysis to the analysis of neural network dynamics.
 By reducing complex learning dynamics to tractable macroscopic variables, this approach provides exact solutions that characterize how neural networks learn and generalize.
 
-While the analytical teacher-studetn settings are simplified compared to modern deep learning systems, they nevertheless captures fundamental aspects of learning dynamics that persist in more complex architectures, including feature learning as characterized by the specialization transition.
+While the analytical teacher-student settings are simplified compared to modern deep learning systems, they nevertheless captures fundamental aspects of learning dynamics that persist in more complex architectures, including feature learning as characterized by the specialization transition.
 The extensions and applications surveyed here show how these theoretical tools continue to provide insights into problems ranging from optimization to continual learning.
 We hope that this blog post and the accompanying code repository make these results more accessible and extensible to the broader machine learning community.
 
@@ -616,10 +621,12 @@ This codebase is also easily adaptable to explore the learning dynamics of neura
 
 ---
 
-[TODO: Anonymize when submitting!]: # 
+[TODO: Anonymize when submitting!
 
 **Acknowledgements.** 
 We thank 
 [Stefano Sarao Mannelli](https://stefsmlab.github.io/) for historical perspectives,
 [Jin Hwa Lee](https://jinhl9.github.io/) for starter code for the analytical ODEs in Numpy,
 and [Nishil Patel](https://jinhl9.github.io/) for invaluable help in narrowing down details of the implementation.
+
+]: # 
