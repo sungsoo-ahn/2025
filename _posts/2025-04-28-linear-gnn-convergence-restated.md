@@ -329,7 +329,7 @@ $$
     \frac{\mathrm{d} }{\mathrm{d} t} \mathrm{vec}[\tilde{W}_{H}] 
     :&= \lim_{\alpha \to 0} \frac{\mathrm{vec}[\tilde{W}'_{(H)}] - \mathrm{vec}[\tilde{W}_{(H)}]}{\alpha} \\
     &= - \underbrace{[ (B_{(H)}\cdots B_{(1)})^\top (B_{(H)}\cdots B_{(1)}) \otimes I_{m_y}] \mathrm{vec} [\nabla_{\tilde{W}_H}L]}_{\textcolor{blue}{\text{part a'}}}
-    \\ & - \underbrace{\sum_{\ell=1}^H \left( J^\top_{(\ell,H)} J_{(\ell,H)} \right) \vec[\nabla_{\tilde{W}_H} L]}_{\textcolor{blue}{\text{part b'}}}. \\
+    \\ & - \underbrace{\sum_{\ell=1}^H \left( J^\top_{(\ell,H)} J_{(\ell,H)} \right) \mathrm{vec}[\nabla_{\tilde{W}_H} L]}_{\textcolor{blue}{\text{part b'}}}. \\
 \end{aligned}
 \end{equation*}
 $$
