@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: "Moravec's Paradox and Robot Learning"
-description: "A perspective on the current robot learning playbook including sim-to-real transfer, large scale demonstration data and vision language models"
+description: "A Perspective on the Current Robot Learning Playbook: Sim-to-Real Transfer, Large-Scale Demonstration Data, and Vision-Language Model"
 date: 2025-04-28
 future: true
 htmlwidgets: true
