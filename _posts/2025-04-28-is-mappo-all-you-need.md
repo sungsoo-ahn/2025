@@ -317,22 +317,24 @@ We then reproduced some of the experimental results from IPPO, MAPPO, and Noisy-
 
 We also cite the experimental results from these papers themselves below,
 
-<div class="center"> 
-{% include figure.html path="assets/img/2025-04-28-is-mappo-all-you-need/ippo.jpg" class="img-fluid width1" %}
-</div>
+
+| Map          | corridor | 6h_vs_8z | 3s5z_vs_3s6z | 3m  | 2m_vs_1z |
+|--------------|----------|----------|--------------|------|----------|
+| IPPO         | 80       | 60       | 90           | 100  | 100      |
+| MAPPO        | 0        | 8.95     | 80           | 99.875 | 100    |
 <div class="caption">
     (c) IPPO vs MAPPO results for SMAC (from the Figure 2 in <d-cite key="de2020independent"></d-cite>), the data in the table represents the win rate.
 </div>
 
 <div class="center"> 
-{% include figure.html path="assets/img/2025-04-28-is-mappo-all-you-need/mappo.jpg" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-is-mappo-all-you-need/mappo.png" class="img-fluid" %}
 </div>
 <div class="caption">
     (d) MAPPO-FP (i.e., FP) vs MAPPO (i.e., CL) results for SMAC (from the Figure 16 in <d-cite key="yu2022surprising"></d-cite>).
 </div>
 
 <div class="center"> 
-{% include figure.html path="assets/img/2025-04-28-is-mappo-all-you-need/noisy.jpg" class="img-fluid width2" %}
+{% include figure.html path="assets/img/2025-04-28-is-mappo-all-you-need/noisy.png" class="img-fluid width2" %}
 </div>
 <div class="caption">
     (e) Noisy-MAPPO (i.e., NV-MAPPO) vs MAPPO results for SMAC (from the Figure 4 in <d-cite key="hu2021policy"></d-cite>).
