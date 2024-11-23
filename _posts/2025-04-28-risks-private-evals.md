@@ -20,9 +20,9 @@ toc:
         - name: 1.2.2 Private Leaderboards
   - name: 2. Risks of Private Leaderboards
     subsections:
-    - name: 2.1 Financial Incentives and Conflicts
-    - name: 2.2 Annotator Bias
-  - name: 3. Simulation of Bias
+    - name: 2.1 Financial Incentives and Conflicts of Interest
+    - name: 2.2 Annotator Bias and Methodological Preferences
+  - name: 3. Simulation of Bias in Model Evaluations
     subsections:
     - name: 3.1 Experiment Overview
     - name: 3.2 Results and Analysis
