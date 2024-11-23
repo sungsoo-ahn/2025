@@ -103,7 +103,6 @@ Each variable has a specified domain and constraints to ensure valid questions a
 
 For their analysis, the authors select 100 questions from GSM8K and create such a template for each of them.
 Whilst the paper does not specify their selection method, we think that these questions were sampled randomly from GSM8K's test set.
-<!-- suppose -> assume , I think is more formal -  DRI: it's not an assumption, but a guess. -->
 By sampling values for the variables, 50 new questions are generated from each template. 
 This means that GSM-Symbolic and each of its 4 variants (GSM-M1, GSM-P1, GSM-P2, and GSM-NoOp) contain **50 datasets of 100 questions each**.
 
@@ -266,16 +265,10 @@ We visualise this in the next figure, showing the overlap between the 95% Wilson
 
 Note that our confidence intervals tend to be wider than the implied ranges in the figures in the paper, i.e. under the i.i.d. Bernoulli assumption, the expected variation is actually **larger** than what is observed.
 This discrepancy is likely to be explained by the unmodelled correlations between answers to questions coming from the same template---as initially suggested, a more reasonable assumption would be to model the probability of success on a template level, $p_{m,t}$, rather than assuming that questions arising from different templates are equally likely to be answered correctly. 
-<!-- the notebook that I added shows this is the case by using Beta-Bernoulli distribution instead of Bernoulli. We can discuss this on Friday, not for this paper-blog, but perhaps for the icml paper version -->
-<!-- "unmodelled correlations between questions" it reads to me like there is correlation between e.g. two questions from the 100 questions, but actually there is correlation between the same question template but between two samples from the 50 samples for that question template.
-I think is clearer if we say:
-This discrepancy is likely explained by a question "template" specific probability of success $p_{m,n}$. 
-DRI: Thanks, good point. I edited a bit, which I hope improved clarity
--->
 The analysis can be repeated once (if) the detailed question-level data becomes available.
 
 **Verdict:** The observed variability in GSM-Symbolic performance is not inherently surprising, and we provide empirical evidence that it is indeed expected.
-<!-- ili3p wrote: An idea I had here, how is the variability in the "adding two numbers" task? Are the results also within the 95% CI of assuming Binomial distribution?  TODO: @DRI CHECK-->
+<!-- @I wrote: An idea I had here, how is the variability in the "adding two numbers" task? Are the results also within the 95% CI of assuming Binomial distribution?  TODO: @D CHECK-->
 
 ## 4.2 Performance decline on GSM-Symbolic
 
@@ -342,7 +335,7 @@ For each example sampled from the corresponding ranges, we estimate the probabil
 
 <!-- I like these tables, but I prefer reporting standard error of the mean (SEM) instead of standard deviation because SEM decreases with the number of trials (the 512 examples here) as our estimate of the mean (the only thing we care about here) gets more accurate. So reporting the standard deviation is more aligned to when we are more interested in some distribution and not just the mean. This is personal preference and in literature both versions are used, actually I think standard deviation is more often, but I still prefer SEM.
 I think of each of the 512 examples as 512 measurements we make of the probability, so we want an estimate of the error of the measurements i.e. SEM and do not really care about the distribution of the errors of the measurements i.e. the standard deviation. 
-DRI: Very fair; I normally also report standard errors as these are much smaller (and reviewers like when things don't overlap); here the numbers are small any way, dividing by sqrt(512) means almost all will equal 0.000 (I've used 3 decimal places throughout).
+@D says: Very fair; I normally also report standard errors as these are much smaller (and reviewers like when things don't overlap); here the numbers are small any way, dividing by sqrt(512) means almost all will equal 0.000 (I've used 3 decimal places throughout).
 -->
 
 |   Llama   | $x+y$       | $(x+y)+z$       | $(x+y+z)+ans$       | All 3 operations |
@@ -365,21 +358,18 @@ Extrapolating from this, we suggest that if similar systematic discrepancies are
 
 **Note:** Using this analysis, we can conclude that the probability of successfully performing all arithmetic operations decreases exponentially as the number of arithmetic operations increases (more on this in Section 4.3).
 <!-- Why not add one line to the tables about what is expected given the original GSM8K values for x,y,z, ans.
-DRI: Yeah can do! DRI: TODO
+@D: Yeah can do! TODO
 -->
 
 **Verdict:** We provide some evidence for the existence of a distribution mismatch between GSM8K and GSM-Symbolic, which we believe should be further investigated.
 This mismatch could explain (some of) the performance discrepancies, and we offer some empirical support for this claim.
 Data contamination, as suggested by the authors, is also a plausible explanation, and is not mutually exclusive with distribution mismatch.
 
-<!-- I liked the token analysis you had at some point. It is another evidence why larger numbers are harder. Perhaps consider bringing that discussion back. 
-DRI: the issue is that I didn't find number of tokens to matter for predicting performance, at least not for the experiments and models I ran. Hence why I removed it..
---> 
 
 
 ### 4.2.2 Considering each model independently: Is the decline in performance statistically significant?
 
-For the purpose of this analysis, let's **assume** that GSM8K and GSM-Symbolic datasets come from the same distribution.
+<!-- For the purpose of this analysis, let's **assume** that GSM8K and GSM-Symbolic datasets come from the same distribution. -->
 
 For many models in Figure 2, the dashed line is in the right tail of the distribution. 
 Additionally, Figure 3 of the paper, reproduced below, reports substantial performance decrease for many other models. So is the performance decline statistically significant, or could it be attributed to normal variation?
@@ -522,7 +512,7 @@ We believe that this is precisely what we observe in Figure 6: the increase in v
 
 <!-- Why they are all bigger than 0.5? 
 I agree they have to be 0.5 so we can expect the variance to increase but what happens when they go below 0.5 like with Gemma2-9b-it, then they should again decrease the variance but this is not what we observe.
-DRI: yeah, I'm not sure what the best way to present this is; Althoug Gemma2-9b-it does fall under 50% accuracy for P2, 1-accuracy on p2 is stil lower than accuracy on P1 (which is above 60%), so we are still in the same pattern of "increasign variance". It would have been good if the authors included e.g. Gemma results (or any that have <0.5 success prob on GSM8K/GSM-Symbolic).  I think I'll  try to explain this in a footnote as I don't want to overcomplicate the exposision;
+@D: yeah, I'm not sure what the best way to present this is; Althoug Gemma2-9b-it does fall under 50% accuracy for P2, 1-accuracy on p2 is stil lower than accuracy on P1 (which is above 60%), so we are still in the same pattern of "increasign variance". It would have been good if the authors included e.g. Gemma results (or any that have <0.5 success prob on GSM8K/GSM-Symbolic).  I think I'll  try to explain this in a footnote as I don't want to overcomplicate the exposision;
 
 Also, one other alternative explanation may be again related to the Beta-Bernoulli modelling of the question success probability. Remember how the variance was a lot narrower than expected for the Bernoulli & Binomial model, well now with increasing difficulty the probability of success for each question template becomes more equal (there are fewer easy, trivial questions perhaps), i.e. Beta-Bernoulli -> Bernoulli, so the variance increases and goes closer to the expected ranges for a Binomial distribution. 
 Anyway, I cannot relate at all increasing variance with pattern-matching difficulties or "struggling reasoning capabilities" XD.
@@ -533,9 +523,9 @@ Importantly, as noted in Section 4.2.1, introducing more clauses necessarily inv
 This decline will occur even if the models perfectly execute the "reasoning" process of translating the math word problem into a sequence of arithmetic operations.
 To distinguish between these two effects, a more detailed and thorough analysis will be needed.
 
-We hypothesise that another reason for the decrease in performance could be the increasing length of the questions and the chain of thoughts required to solve them.<d-footnote>For example, the Phi-mini series of models has a default context length of 4K tokens<d-cite key="abdin2024phi"></d-cite>.</d-footnote>
-Whilst models can of course handle longer contexts by utilising various context length extension techniques, past research suggests that performance tends to degrade when we go beyond the training context length. 
-<!-- [CITE @MK can you add some citations? Can we say this is especially true for smaller models?]. -->
+<!-- We hypothesise that another reason for the decrease in performance could be the increasing length of the questions and the chain of thoughts required to solve them.<d-footnote>For example, the Phi-mini series of models has a default context length of 4K tokens<d-cite key="abdin2024phi"></d-cite>.</d-footnote>
+Whilst models can of course handle longer contexts by utilising various context length extension techniques, past research suggests that performance tends to degrade when we go beyond the training context length.  -->
+<!-- [CITE? @M can you add some citations? Can we say this is especially true for smaller models?]. -->
 
 
 **Verdict:** The emphasis on “non-negligible variance” and “increase in variance” throughout the paper appears to be an over-interpretation of expected statistical artifacts. 
@@ -588,16 +578,14 @@ Key findings from each subsection are summarised below:
 - [**Section 4.1**] We discussed the assumptions under which variability of performance on GSM-Symbolic is unexpected vs expected and quantifiable. We provided empirical evidence that variability is indeed expected.
 - [**Section 4.2**] We argued that distribution mismatch between the GSM8K and GSM-Symbolic datasets may explain some of the observed performance decline of models (in addition to contamination and "lack of reasoning"). 
 We also quantified the extent to which the performance degradation on GSM-Symbolic is actually statistically significant. Considering models individually, only 3 out of 25 models show a statistically significant performance decline on GSM-Symbolic (and 1 performs significantly better). Taken together, there is some evidence for a performance decline on GSM-Symbolic vs GSM8K.
-<!-- you mean weak evidence, right? :D 
-DRI lol, I wrote "statistically strong" as synonym for "statistically significant" (for which which there is some indeed). Maybe we say just "some evidence"? --> 
 - [**Section 4.3**] The observed increase in performance variance with rising question complexity is likely an over-interpretation of expected statistical artefacts. The decrease in success probability as complexity grows can be attributed to both increased reasoning difficulty and a higher likelihood of arithmetic errors.
 <!-- how about longer context windows make the task more difficult? So maybe the models are just forgetful, otherwise the reasoning is the same. This same happens with humans if they need to do all the calculations in their head. 
-DRI: Yeah good point! I'll add this as a possible explanation in the previous section too. Though worth saying that these are pretty short questions and I think they'll fit in the training context of all the models (but worth checking); issues tend to start arising when we start extrapolating beyond the training context length.
+@D says: Yeah good point! I'll add this as a possible explanation in the previous section too. Though worth saying that these are pretty short questions and I think they'll fit in the training context of all the models (but worth checking); issues tend to start arising when we start extrapolating beyond the training context length.
 -->
 - [**Section 4.4**] The performance decline on the GSM-NoOp dataset is highly statistically significant. We believe that investigating the NoOp results in more detail could provide genuine insights into the models' reasoning capabilities.
 <!-- the No-Op supports the context window problems again, especially if the No-Op results are worse then P2 or P1. To examine the context window idea, we can compare the question success based on the question length, but we need the actual questions for that. 
 Also, are some of the models known to be better at handling longer context windows? 
-DRI: The context for all these questions is quite small, so I dont think it's a primary driver for this big underperformance. I genuinely think the authors did a very poor job at running this experiemnt, can explain more when we meet on Fri.
+@D says: The context for all these questions is quite small, so I dont think it's a primary driver for this big underperformance. I genuinely think the authors did a very poor job at running this experiemnt, can explain more when we meet on Fri.
 -->
 
 **Final thoughts:** 
@@ -663,9 +651,9 @@ This setup can be represented by the following directed probabilistic graphical 
 -->
 
 where, for the purpose of this analysis, the bottom-most arrows denote deterministic dependencies. 
-<!-- [@MK can you elaborate on this---maybe say this is ok because of how we sample from the models?] -->
+<!-- [@M can you elaborate on this---maybe say this is ok because of how we sample from the models?] -->
 <!-- the way I understand this is, once the filler values are sampled and the questions produced, the models will always produce the same answer for a question, i.e. there is no variance due to the model it self (e.g. how there would have been if using dropout for example)
-DRI: Yes exactly, but this is because we are using what is called "greedy decoding" (which is generally the norm when you interact with these models)
+@D says: Yes exactly, but this is because we are using what is called "greedy decoding" (which is generally the norm when you interact with these models)
 -->
 
 Under this model, we have
@@ -685,7 +673,6 @@ Under the assumptions of this mathematical model, we can think of $$\hat{p}_m^{8
 In this blogpost, the main question we've tackled is: given these observed $$\hat{p}_m^{8K}$$ and $$\overline{\hat{p}_m^{Symb}}$$, what evidence is there to believe that $$p^{8K}_m \neq p^{Symb}_m$$ or that $$p^{8K}_m > p^{Symb}_m$$?
 
 <!-- I like the math setup section 
-DRI: @MPK - Well done and thanks for writing it down :)
 -->
 
 
@@ -791,14 +778,11 @@ Paragraph about p-values should go somehwere. Things to say:
 
 - p-values get misinterpreted; Some "Don'ts" : don't base your conclusions solely on whether an association or effect was found to be “statistically significant”; Don’t believe that an association or effect exists just because it was statistically significant. Don’t believe that an association or effect is absent just because it was not statistically significant. Don’t conclude anything about scientific or practical importance based on statistical significance (or lack thereof). -->
 <!-- perhaps also about effect sizes and sample sizes, but may be it will be too much textbook statistics; 
-DRI: yeah agree
  -->
 
 <!-- ## Should we include some notes on Bayesian analysis? -->
 
-<!-- we can discuss on Friday, but I think there is already enough content for the blog post, it will make the post too long and less focused.
-DRI: great, let's skip
--->
+
 
 ## Computational resources
 
