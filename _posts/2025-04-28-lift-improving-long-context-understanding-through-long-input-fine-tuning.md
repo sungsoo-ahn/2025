@@ -12,7 +12,7 @@ authors:
   - name: Anonymous
 
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-test-time-training-for-long-contexts.bib  
+bibliography: 2025-04-28-lift-improving-long-context-understanding-through-long-input-fine-tuning.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -58,7 +58,7 @@ Our novel framework, **Long Input Fine-Tuning (LIFT)**, is designed to enhance t
 
 3. **Significant improvement in long-context tasks.** Our evaluations across various benchmarks demonstrate that LIFT greatly benefits tasks such as summarization and complex scenarios like timeline reordering and reading comprehension. Moreover, incorporating supervised fine-tuning prior to applying LIFT further enhances the model's performance on downstream tasks.
 
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure1_method.svg" class="img-fluid" title="Figure 1" %}
+{% include figure.html path="assets/img/2025-04-28-lift-improving-long-context-understanding-through-long-input-fine-tuning/figure1_method.svg" class="img-fluid" title="Figure 1" %}
 <div class="caption">Figure 1. Overview of our method compared with existing methods like truncation, RAG, long context fine-tuning.</div>
 
 # 3. What is Long Input Fine-Tuning (LIFT) for Long Context?
@@ -119,7 +119,7 @@ $$
 
 There are no strict constraints on the method used to synthesize $$(\mathbf{q}_ {i},\mathbf{a}_ {i})_ {i=1}^{m}$$ based on $$\mathbf{x}$$, except that is should avoid computationally expensive operations on $$\mathbf{x}$$, such as inference over the entire $$\mathbf{x}$$. In our experiments, we extract several short segments from $$\mathbf{x}$$ and use a pretrained LLM to generate QA pairs based on the segments.
 
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure2_segmentation.svg" class="img-fluid" title="Figure 2" %}
+{% include figure.html path="assets/img/2025-04-28-lift-improving-long-context-understanding-through-long-input-fine-tuning/figure2_segmentation.svg" class="img-fluid" title="Figure 2" %}
 <div class="caption">Figure 2. Comparison between our segmentation method and the trivial segmentation method.</div>
 
 ## 3.3. Further improvement with pre-LIFT Supervised Fine-Tuning
@@ -160,12 +160,12 @@ Compared to GPT-3.5, LLaMA-3 benefits more from LIFT+ICL, showing notable improv
 
 Notably, all models perform particularly poorly on LongQA, with accuracy falling below 50%. This underscores that modeling long dependencies in extended contexts remains a significant challenge for existing models.
 
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table1_loogle.svg" class="img-fluid" title="Table 1" %}
+{% include figure.html path="assets/img/2025-04-28-lift-improving-long-context-understanding-through-long-input-fine-tuning/table1_loogle.svg" class="img-fluid" title="Table 1" %}
 <div class="caption">Table 1. Performance on LooGLE under different settings</div>
 
 For LongBench, as shown in Table 2, LLaMA-3 exhibits substantial improvement when integrating ICL and LIFT, reaffirming that LIFT is particularly beneficial for models with shorter context lengths. As expected, GPT-3.5, with longer context window and superior ICL capabilities, outperforms LLaMA-3 on all tasks except GovReport.
 
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table2_longbench.svg" class="img-fluid" title="Table 2" %}
+{% include figure.html path="assets/img/2025-04-28-lift-improving-long-context-understanding-through-long-input-fine-tuning/table2_longbench.svg" class="img-fluid" title="Table 2" %}
 <div class="caption">Table 2. Performance on LongBench under different settings</div>
 
 ### LIFT shows significant improvement on specific tasks
@@ -174,7 +174,7 @@ Table 3 presents detailed experimental results across four LongQA tasks from Loo
 
 However, LIFT does not yield any improvement in tasks such as Multiple Information Retrieval and even slightly degrades the performance in Computation for both models. This indicates that LIFT may not significantly impact all tasks and could introduce slight noise in some cases. At the same time, the performance variations are closely related to the specific capabilities required by each task and the inherent strengths of the model.
 
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table3_loogle_task.svg" class="img-fluid" title="Table 3" %}
+{% include figure.html path="assets/img/2025-04-28-lift-improving-long-context-understanding-through-long-input-fine-tuning/table3_loogle_task.svg" class="img-fluid" title="Table 3" %}
 <div class="caption">Table 3. Performance of each task in LongQA for LLaMA-3</div>
 
 In Table 2 on LongBench, LIFT+ICL consistently outperforms both ICL and LIFT_only on Narrativeqa and Qmsum for both models. Notable improvement is observed in Narrativeqa, where performance increases from 20.73 to 25.84. However, the results for Musique and GovReport exhibit different trends between the two models. LLaMA-3 shows a slight improvement on GovReport but experiences a significant drop on Musique, whereas GPT-3.5 demonstrates the opposite pattern.
@@ -194,7 +194,7 @@ Comparing the results of LIFT+ICL and LIFT+AT+ICL, as well as SFT+LIFT+ICL and S
 
 In contrast, we find SFT greatly improves the performance of both ICL and LIFT+ICL, which is reasonable since the tasks used in the SFT process are similar to those at test time. With SFT, LIFT+ICL is still better than ICL only, highlighting the effectiveness of our method.
 
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table4_at_sft.svg" class="img-fluid" title="Table 4" %}
+{% include figure.html path="assets/img/2025-04-28-lift-improving-long-context-understanding-through-long-input-fine-tuning/table4_at_sft.svg" class="img-fluid" title="Table 4" %}
 <div class="caption">Table 4. Coordinate score<d-cite key="dong2023bamboo"></d-cite> on specific task in Bamboo, LooGLE, and QuALITY using AT and SFT.</div>
 
 ## 4.2. Efficiency evaluations
@@ -203,7 +203,7 @@ Benefiting from our truncation strategy (Section 3.1), the computational complex
 
 We plot the GPU time against the input length along with the fitted curves in Figure 3.
 
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure3_efficiency.svg" class="img-fluid" title="Figure 3" %}
+{% include figure.html path="assets/img/2025-04-28-lift-improving-long-context-understanding-through-long-input-fine-tuning/figure3_efficiency.svg" class="img-fluid" title="Figure 3" %}
 <div class="caption">Figure 3. GPU time vs. input length for LIFT and ICL. The dashed lines represent the fitted curves, showing linear growth for LIFT and quadratic growth for ICL. The red cross indicates the input length at which ICL runs out of memory.</div>
 
 First, we observe that LIFT is significantly more **memory-efficient** than ICL. Notably, ICL runs out of memory when the input length exceeds 90k tokens on our A100 (80G) system. Upon closer inspection, we find that the cache of hidden states for previous tokens consumes most of the memory in ICL. In contrast, LIFT is capable of **handling arbitrarily long inputs**. Our truncation strategy ensures that LIFT only involves fine-tuning and inference on short text segments, eliminating the need for extensive caching.
@@ -234,8 +234,8 @@ We present the experimental results in the NIAH<d-cite key="niah"></d-cite> task
 
 The maximum context length of our test is 100K, which is within the 128K context window of LLaMA-3.1-8B-Instruct. As expected, the baseline achieves nearly perfect performance. However, LIFT slightly degrades the performance and the degradation seems irregular.
 
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure4_1_Needle-Long-Baseline.svg" class="img-fluid" title="Figure 4(1)" %}
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure4_2_Needle-Long-TTT.svg" class="img-fluid" title="Figure 4(2)" %}
+{% include figure.html path="assets/img/2025-04-28-lift-improving-long-context-understanding-through-long-input-fine-tuning/figure4_1_Needle-Long-Baseline.svg" class="img-fluid" title="Figure 4(1)" %}
+{% include figure.html path="assets/img/2025-04-28-lift-improving-long-context-understanding-through-long-input-fine-tuning/figure4_2_Needle-Long-TTT.svg" class="img-fluid" title="Figure 4(2)" %}
 <div class="caption">Figure 4. Performance on NIAH: ICL (top) vs. LIFT (bottom)</div>
 
 The reason for the degradation may be that LIFT introduces more noise to the model. While most parts of the context are irrelevant to the answer, LIFT asks the model to memorize all the context. The model is likely to be misled by the large amount of irrelevant information.
@@ -250,8 +250,8 @@ We make further studies on whether extracting relevant evidence can further enha
 
 Table 4 further expands the performance in Table 3 on specific tasks in LongQA in LooGLE. The combination of evidences, LIFT+ICL clearly outperforms the other configurations across all metrics, **highlighting the importance of extracting relevant knowledge from parameters and executing explicit step-by-step reasoning in more complex tasks like long dependency QA**. The incorporation of evidences helps the model ground its inferences resulting in a more refined and contextually accurate response generation.
 
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table5_loogle_evd.svg" class="img-fluid" title="Table 5" %}
+{% include figure.html path="assets/img/2025-04-28-lift-improving-long-context-understanding-through-long-input-fine-tuning/table5_loogle_evd.svg" class="img-fluid" title="Table 5" %}
 <div class="caption">Table 5. Performance with extracted evidence of LLaMA-3 in LongQA</div>
 
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table6_loogle_task_evd.svg" class="img-fluid" title="Table 6" %}
+{% include figure.html path="assets/img/2025-04-28-lift-improving-long-context-understanding-through-long-input-fine-tuning/table6_loogle_task_evd.svg" class="img-fluid" title="Table 6" %}
 <div class="caption">Table 6. Performance with extracted evidence of each task in LongQA for LLaMA-3</div>
