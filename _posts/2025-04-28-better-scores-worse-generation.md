@@ -122,7 +122,7 @@ Researchers have several options for integrating evaluation into their experimen
 4. Run formal listening tests at milestones
 5. Develop custom internal evaluation methods
 
-Each approach represents different trade-offs between speed, reliability, and resource requirements. Importantly, while individual labs might develop effective internal approaches, these evaluation investments often remain siloed rather than benefiting the broader community.
+Each approach represents different trade-offs between speed, reliability, and resource requirements.
 
 ## Probing the Perceptual Boundary
 
