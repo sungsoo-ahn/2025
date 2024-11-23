@@ -81,43 +81,25 @@ We use the term environment to refer to the general process that the agent inter
 
 A recent Deepmind position paper <d-cite key="hughes2024openendednessessentialartificialsuperhuman"></d-cite> classifies open-endedness as a learnable process that will surprise the learner ad infimum. However for a not very powerful learner lots of systems could be open-ended. 
 
-## Case about limits of current work
+## What exactly do we value in environment generation
 
-We have a bunch of realistic environments that are often hand crafted by humans or are found in the real world that we can verify are extremely useful to solve and can determine success for. The downside is that they have inherently sparse rewards making our learning algorithms struggle to solve them, needing to resort to clever reward shaping and autocurricula that we have yet to find general non-task specific solutions to. 
-
-We shouldn't be too surprised that that we can generate environments that work with 
-
-
-
-Dive into origins of 
-
-Dynamics, Agents, Life, Intelligence, Technology
-
-
+We have a bunch of realistic environments that are often hand crafted by humans or are found in the real world that we can verify are extremely useful to solve and can determine success for. The downside is that they have inherently sparse rewards making our learning algorithms struggle to solve them, needing to resort to clever reward shaping and autocurricula that we have yet to find general non-task specific solutions to. Current pipelines make “realistic” environments (more often than not sparse reward tasks) by hand and then reward shape to solve them. However since we can't solve them we need to look further. 
 
 We need environments for what they can model in the world, yet they are ony useful to the extent that our agents can solve them. 
 
-In this direction, perhaps it makes sense to more clearly differentiate between what sources really lead to 
+In this direction, perhaps it makes sense to more clearly differentiate between what sources really lead to new capabilities being learned in the agentic processes past the prior LLM knowledge. We shouldn't be too surprised that that we can generate the environments that use the knowledge already found in our prior data.
 
-There are several ways to frame what it means to go about solving this:
-1. Generating enviornments <d-cite key="bruce2024geniegenerativeinteractiveenvironments"></d-cite>
-2. Selecting for enviornments that help out agnts learn better
+How do we build past that? There are several ways to frame what it means to go about solving this:
+1. Generating enviornments 
+2. Selecting for enviornments that help out agnts learn better. 
 
-
-
-Wolfram - Snowflakes grow on their own form physics of temperature transfer in water and air molecules, and then their shape emergently leads to to snow being fluffy. 
-
-The dynamics of our world should make it possible to output 
+Famous work on the former, like GENIE<d-cite key="bruce2024geniegenerativeinteractiveenvironments"></d-cite>, often leverages internet data to replicate common modalities. But with low dimensional action spaces it is still unclear if they can generate environments that can evoke an endless stream of interesting behaviour. 
 
 It’s very exciting to see the work on leveraging large scale internet data for robotics, actual deployed robots and language  model chatbots giving us more and more samples of the dynamics of our world. Those approaches will keep cooking, but they will take time, traversing costly interaction with the real world, with the data flywheel unavoidable obstacle. Our simulators are unrealistic and in effort to train our models faster we trade off fidelity for speed. We’re craving tractable interactive environments that we can train policies to master and understand — but where are we planning on getting them?
 
-We want to  1) Use real-world data to bootstrap what kinds of environments we can create 2) Tractably simulate them 3) Be able to interpret results 
+We want to  1) Use real-world data to bootstrap what kinds of environments we can create 2) Tractably simulate them 3) Be able to interpret results .
 
-Current pipelines are to make “realistic” environments (more often than not sparse reward tasks) by hand and then reward shape to.
-
-You’d imagine that any random task/environment you’d design would the VAST majority of the time be either trivial/memorized or way too difficult/noninsighful. (Use randomly generated dynamics to explain? Use a language model to 
-
-There have been many exciting automatic environment generation pipelines, however they have 
+You’d imagine that any random task/environment you’d design would the VAST majority of the time be either trivial/memorized or way too difficult/noninsighful.
 
 We have so much hand crafted heuristics and ideas that we want to shape our learning processes for modeling the world with: it doesn’t violate the bitter lesson to incorporate those, they should just be incorporated as objectives not as bottlenecks on how they should be found. 
 
@@ -126,8 +108,6 @@ If we have a bunch of ideas on how the world evolves, instead of stressing about
 We have dynamics that if we just run we get evolution and all this kinds of stuff. How do we generate a set of dynamics that has all of that behavior?
 
 Open ended being learnable and novel is great and all but it suffers from a limitation that if the learner isn’t that smart then seemingly boring sources of novelty will let the learner improve forever on challenging tasks for itself, and if the learner is super smart, then any source of novelty that was forged together might quickly expose itself to be finite. 
-
-There is demonstrated evidence that most naive ways of generating environments or games leads to trivial dynamics. 
 
 There are still important work to do to figure out how to exactly use LLM priors in environment generation. LLMs for densifying rewards to solve existing tasks. OMNI, OMNI-EPIC for using LLMs to design new environments and select among them <d-cite key="faldor2024omniepicopenendednessmodelshuman"></d-cite>. 
 
@@ -141,8 +121,11 @@ It’s been some time since the startings of artificial intelligence research in
 
 Should Rich Sutton's bitter lesson confine us to not use our knowledge of the processes that shaped the world to become what it is today?
 
+
+
 ## Motivation to directly try neural dynamics
 
+Dynamics, Agents, Life, Intelligence, and Technology are all similar in how they are just different transition kernels with the world. Where they differ is implicitly in how hard it is to randomly find them, and perhaps how stable and effective they are in presence of the others.
 
 In some sense life evolved from some set of interaction principles (physics) on basic building blocks (atoms/protons neutrons electrons/quarks) to essentially have reproducing living things. These living things have become regular users of some large scale stable equilibria/processes over these building blocks that we term technologies (e.g. the bonding of atoms into ionic/covalent/metallic compounds, the conversion of water to ice, the concentration differences of ions driving biological processes over membranes, DNA replication, creating fire, humans as an organism, pulleys, levers, Archimedean contraptions, metallurgy, axes, catapults, gunpowder, buildings, steam engines, cars, planes, computers, AI, etc.). Note that it becomes to distinguish between technology, nature, and the lifeforms that interact with them under this categorization.
 
