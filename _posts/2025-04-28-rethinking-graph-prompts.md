@@ -73,7 +73,7 @@ _styles: >
 
 ## Introduction
 
-{% include figure.html path="assets/img/2025-04-28-Rethinking-Graph-Prompts/Figure2.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-Rethinking-Graph-Prompts/figure2.png" class="img-fluid" %}
 
 Graph Neural Networks (GNNs) have played a crucial role in advancing Graph Artificial General Intelligence (AGI) in the past decade, unlocking new possibilities in understanding and processing complex, interconnected data. As powerful tools for representation learning on graphs, GNNs have revolutionized a wide range of applications from social analysis to knowledge graph. However, despite their success, GNNs still face significant challenges that hinder their full potential towards Graph AGI:
 
@@ -90,7 +90,7 @@ By adopting graph prompts as a data manipulation framework, the graph learning c
 
 ## Origin of Graph Prompts
 
-{% include figure.html path="assets/img/2025-04-28-Rethinking-Graph-Prompts/Figure3.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-Rethinking-Graph-Prompts/figure3.png" class="img-fluid" %}
 
 <p align="center" style="color:gray;">
   <em>Figure 2: Comparison between `Pre-train & Fine-tune` and `Pre-train & Prompting` paradigms</em>
