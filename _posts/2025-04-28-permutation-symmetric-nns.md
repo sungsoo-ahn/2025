@@ -746,7 +746,7 @@ In the following table we analyze a few common problems by their type of permuta
 
 
 
-{% include figure.html path="assets/img/2025-04-28-permutation-symmetric-nns/ab.pn" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-permutation-symmetric-nns/ab.png" class="img-fluid" %}
 
 
 To aid discussions, we use a custom notation to describe the specific type of permutation symmetry, to capture both the input shape and the unique permutation axes. We have multiple dimensions and joint permutations whose symmetry notations are straight forward. 
