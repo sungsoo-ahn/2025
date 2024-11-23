@@ -457,7 +457,7 @@ error equation is also modified to include the second layer:
 $$ \begin{align}
 \mathcal{E} = \frac{1}{2}\sum_{i,k}v_{i}v_{k}I_{2}(i,k) + \frac{1}{2}\sum_{n,m}v_{n}^{*}v_{m}^{*}I_{2}(n,m) - \sum_{i,
 n}v_{i}v_{n}^{*}I_{2}(i,n)
-\end{align} $$.
+\end{align}. $$
 
 The derivation of these equation follow in the same way as the soft-committee machine, the only difference is the 
 inclusion of the second layer. Another way to understand the connection between both frameworks is by considering, for example, the soft committee 
