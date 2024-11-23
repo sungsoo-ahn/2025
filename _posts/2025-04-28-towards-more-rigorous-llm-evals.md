@@ -206,16 +206,16 @@ This variance is maximised when $p_m=1/2$ and goes to $0$ as $p_m$ approaches $0
 To understand what "expected" variation means under our assumption, we can construct confidence intervals (CIs) for the point estimates of $p_m$ on the GSM8K dataset. 
 We highlight that the paper does not report such point estimates, but we can calculate the maximum likelihood estimates of $p_m$ by dividing the number of correct answers by the total number of questions.
 The number of correct answers (out of 100 questions) on the GSM8K questions are reported in the second column of Table 1 in the Appendix of the paper. 
-We denote this estimate as $$p^{8K}_{m}$$ to indicate that it is computed from the GSM8K dataset.
+We denote this estimate as $$\hat{p}^{8K}_{m}$$ to indicate that it is computed from the GSM8K dataset.
 
 There are different ways to construct CI for the [Binomial proportion](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval). The next figure shows [Wilson score](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval) intervals, with more results included in the Appendix. 
-To put this variability into perspective, we also include the average of the 50 point estimates for the model performance on GSM-Symbolic, which we denote as $$p^{Symb}_{m}$$. <d-footnote>Similarly to $p^{8K}_{m}$, we obtain maximum likelihood estimates of $p^{Symb}_{m}$ from the average accuracy on GSM-Symbolic, reported in Table 1 of the paper.</d-footnote>
+To put this variability into perspective, we also include the average of the 50 point estimates for the model performance on GSM-Symbolic, which we denote as $$\overline{\hat{p}^{Symb}_{m}}$$. <d-footnote>Similarly to $\hat{p}^{8K}_{m}$, we obtain maximum likelihood estimates of $\overline{\hat{p}^{Symb}_{m}}}$ from the average accuracy on GSM-Symbolic, reported in Table 1 of the paper.</d-footnote>
 
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/wilson_0.95.png" 
   class="img-fluid" 
   title="95% Wilson score confidence intervals" 
-  caption="<b>95% Wilson score confidence intervals for the point estimates of $p^{8K}_{m}$ (red dots), along with the average (over 50 datasets) point estimate of $p^{Symb}_{m}$ (blue triangles).</b> The point estimates of $p^{8K}_{m}$ and $p^{Symb}_{m}$ are estimated from the data reported in Table 1 of the Appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
+  caption="<b>95% Wilson score confidence intervals for the point estimates of $\hat{p}^{8K}_{m}$ (red dots), along with the average (over 50 datasets) point estimate of $\overline{\hat{p}^{Symb}_{m}}$ (blue triangles).</b> The point estimates of $\hat{p}^{8K}_{m}$ and $\overline{\hat{p}^{Symb}_{m}}$ are estimated from the data reported in Table 1 of the Appendix of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>." 
 %}
 
 
@@ -230,10 +230,10 @@ Conversely, models with success probabilities closer to 0 or 1 (Gemma2b, GPT-4o,
   caption="<b>Figure 2 from Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>.</b> Note that the $x$-axis scales are different for different models."
 %}
 
-For the models shown in this figure, the GSM8K accuracy ($$p^{8K}_{m}$$, represented by the dashed line) varies from 74% for the weakest model, Llama3-8B-instruct, to 95% for the strongest model, GPT-4o. 
+For the models shown in this figure, the GSM8K accuracy ($$\hat{p}^{8K}_{m}$$, represented by the dashed line) varies from 74% for the weakest model, Llama3-8B-instruct, to 95% for the strongest model, GPT-4o. 
 The range of accuracies achieved on the 50 GSM-Symbolic datasets is relatively *wide* for Llama3-8B-instruct (approximately between 69% and 81%) and relatively *narrow* for GPT-4o (approximately between 91% and 98%).
 Importantly, for both models, **the variation in GSM-Symbolic performance falls well within the Wilson score CIs of GSM8K performance that we calculated earlier!** 
-We visualise this in the next figure, showing the overlap between the 95% Wilson score CIs for $$p^{8K}_{m}$$ and the accuracy ranges on GSM-Symbolic for the models that had results reported in the paper (note that this does not include all 25 models).
+We visualise this in the next figure, showing the overlap between the 95% Wilson score CIs for $$\hat{p}^{8K}_{m}$$ and the accuracy ranges on GSM-Symbolic for the models that had results reported in the paper (note that this does not include all 25 models).
 
 <!-- 
 
@@ -259,13 +259,13 @@ We visualise this in the next figure, showing the overlap between the 95% Wilson
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/ci_vs_reported.png" 
   class="img-fluid" 
-  caption="<b>95% Wilson score confidence intervals for the point estimates of GSM8K accuracy, $p^{8K}_{m}$ (red), and range of accuracies achieved on the 50 GSM-Symbolic datasets, $p^{Symb}_{m}$ (blue).</b> 
+  caption="<b>95% Wilson score confidence intervals for the point estimates of GSM8K accuracy, \hat{p}^{8K}_{m}$ (red), and range of accuracies achieved on the 50 GSM-Symbolic datasets, $\hat{p}^{Symb}_{m}$ (blue).</b> 
   The latter ranges are not explicitly reported; we approximate them from the histograms in Figure 1 of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper. 
   Since such histograms are not available for all models, we only show the subset of the models for which they are." 
 %}
 
 Note that our confidence intervals tend to be wider than the implied ranges in the figures in the paper, i.e. under the i.i.d. Bernoulli assumption, the expected variation is actually **larger** than what is observed.
-This discrepancy is likely to be explained by the unmodelled correlations between answers to questions coming from the same template---as initially suggested, a more reasonable assumption would be to model the probability of success on a template level, $p_{m,n}$, rather than assuming each questions arising from different templates are equally likely to be answered correctly. 
+This discrepancy is likely to be explained by the unmodelled correlations between answers to questions coming from the same template---as initially suggested, a more reasonable assumption would be to model the probability of success on a template level, $p_{m,n}$, rather than assuming that questions arising from different templates are equally likely to be answered correctly. 
 <!-- the notebook that I added shows this is the case by using Beta-Bernoulli distribution instead of Bernoulli. We can discuss this on Friday, not for this paper-blog, but perhaps for the icml paper version -->
 <!-- "unmodelled correlations between questions" it reads to me like there is correlation between e.g. two questions from the 100 questions, but actually there is correlation between the same question template but between two samples from the 50 samples for that question template.
 I think is clearer if we say:
