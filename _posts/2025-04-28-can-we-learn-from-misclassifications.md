@@ -71,7 +71,7 @@ Note: please use the table of contents as defined in the front matter rather tha
 | Resnet101      | 0.898816      | 0.777873      | 0.841248      | 0.451866      | 0.607102      | 0.587721      | 0.471974      |
 | Resnet152      | 0.918961      | 0.784820      | 0.834101      | 0.513276      | 0.560512      | 0.600739      | 0.498934      |
 
-<div class=".l-screen">
+<div class="center-content">
   <table>
     <thead>
       <tr>
