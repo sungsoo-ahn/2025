@@ -98,7 +98,7 @@ Despite its popularity, its design inherently suffers from several key risks:
 Companies specializing in data curation and evaluation have begun establishing their own private leaderboards. For instance, ScaleAI, which has positioned itself as a leader in AI evaluation, recently introduced the SEAL leaderboard <d-cite key="scale2024leaderboard"></d-cite> as a step towards standardizing privatized leaderboards to provide high-quality, unbiased evaluations by controlling the entire evaluation pipeline. By leveraging proprietary datasets and expert annotators, these companies strive to mitigate issues of data contamination and bias that plague open evaluation methods.
 
 
-{% include figure.html path="assets/img/2025-04-28-private-llm-eval/evaluation_pipeline.svg" class="img-fluid" caption="Structure of private evaluation pipeline showing the relationship between data curators, annotators, and model developers." %}
+{% include figure.html path="assets/img/2025-04-28-risks-private-evals/risks-private-evals.png" class="img-fluid" caption="Structure of private evaluation pipeline showing the relationship between data curators, annotators, and model developers." %}
 
 
 Key features include:
@@ -207,7 +207,7 @@ Crucially, we selected GPT-4o and Sonnet-3.5 because they rank at almost the sam
 **Preference Rates by Evaluator:**
 
 
-| Evaluator | Preferred Model Alpha | Preferred Model Beta |
+| Evaluator | Preferred Model A | Preferred Model B |
 |-----------|----------------------|---------------------|
 | Evaluator Alpha (GPT-4o) | <span style="background-color: #e6f3ff; color: black">407 (50.68%)</span> | <span style="background-color: #fff3e6; color: black">396 (49.32%)</span> |
 | Evaluator Beta (Claude) | <span style="background-color: #ffe6e6; color: black">314 (39.10%)</span> | <span style="background-color: #e6ffe6; color: black">489 (60.90%)</span> |
