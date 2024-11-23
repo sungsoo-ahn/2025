@@ -123,7 +123,7 @@ $$
 
 - *Complexity measure* $\mathcal{M}$, e.g., optimality gap $f(x)-f(x^\star)$ where $x^\star$ is the global minimum, function stationarity $\|\|\nabla f(x)\|\|$. 
 
-{% include figure.html path="assets/img/2024-04-28-opt-summary/complexity_analysis.jpg" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-opt-summary/complexity_analysis.jpg" class="img-fluid" %}
 
 <div class="caption">
     Oracle Complexity Framework (adapted from Prof. Yangyang Xu's Slides<d-cite key="xu2019slides"></d-cite>)
@@ -156,7 +156,7 @@ $$
 	T_{\epsilon}(f,\mathtt{A}),
 $$
 
-{% include figure.html path="assets/img/2024-04-28-opt-summary/upper_lower.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-opt-summary/upper_lower.png" class="img-fluid" %}
 
 <div class="caption">
     Illustration of Upper and Lower Complexity Bounds
@@ -370,7 +370,7 @@ Such a question has been partially addressed for stochastic optimization using i
 ### Beyond Classical Oracle Model
   Regarding the oracle complexity model, because it mainly focuses on hard instances in the function class which may be far from practical instances, possibly the derived complexities may be such conservative and vacuous that they may not match the practice well, as the figure below illustrated.
 
-  {% include figure.liquid path="assets/img/2024-04-28-opt-summary/practice_gap.png" class="img-fluid" %}
+  {% include figure.liquid path="assets/img/2025-04-28-opt-summary/practice_gap.png" class="img-fluid" %}
 
   <div class="caption">
       Gap Between General Worst-Case Complexity and Instance-Level Complexity Analysis (adapted from <d-cite key="zhang2022beyond"></d-cite>)
