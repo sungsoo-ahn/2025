@@ -740,13 +740,18 @@ In the following table we analyze a few common problems by their type of permuta
 
 | Problem       | Illustration  | Symmetry type  | Dependency |
 | ------------- |:-------------:|:--------------:|:---------- |
-| Predicting important weights to keep in a linear layer while pruning. Equivariant to input and output neuron permutations. | ![Weight matrices](assets/img/2025-04-28-permutation-symmetric-nns/ab.png) | `ab` |            |
-| Group classes by common misclassifications given confusion matrices. Equivariant to class permutations $a$ which simultaneously permutes both axes.  | ![Confusion matrices](assets/img/2025-04-28-permutation-symmetric-nns/aa.png) | `aa` |            |
-| Predicting who's winning given player's hands. Equivariant to player ID `a`. Invariant to permutation of suits `c`. Invariant to card reordering `b` for each player independently. No symmetry against card number `H`.  | ![Poker hands](assets/img/2025-04-28-permutation-symmetric-nns/aa.png) | `abcH` |  `a->b`  |
+| Predicting important weights to keep in a linear layer while pruning. Equivariant to neuron permutations along input `a` and output `b`. | ![Weight matrices](assets/img/2025-04-28-permutation-symmetric-nns/ab.png) | `ab` |            |
+| Group classes by common misclassifications given confusion matrices. Equivariant to class permutations `a` which simultaneously permutes both axes.  | ![Confusion matrices](assets/img/2025-04-28-permutation-symmetric-nns/aa.png) | `aa` |            |
+| Predicting who's winning given player's hands. Equivariant to player ID `a`. Invariant to permutation of suits `c`. Invariant to card reordering `b` for each player independently. No symmetry against card number `H`.  | ![Poker hands](assets/img/2025-04-28-permutation-symmetric-nns/abcH.png) | `abcH` |  `a->b`  |
+
+
+
+{% include figure.html path="assets/img/2025-04-28-permutation-symmetric-nns/ab.pn" class="img-fluid" %}
+
 
 To aid discussions, we use a custom notation to describe the specific type of permutation symmetry, to capture both the input shape and the unique permutation axes. We have multiple dimensions and joint permutations whose symmetry notations are straight forward. 
 There's also a dependency aspect, which captures a concept of "list of different lists". 
-A fully independent batch dimension Z and a non-symmetric latent dimension H may be added optionally.
+A fully independent batch dimension `Z` and a non-symmetric latent dimension `H` may be added optionally.
 
 
 ### II.2 Creating a permutation equivariant layer with einsum pooling
