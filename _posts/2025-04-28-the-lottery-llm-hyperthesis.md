@@ -151,7 +151,7 @@ The Chain-of-Thought (CoT) reasoning paradigm demonstrates that engaging in deta
 
 ## Lottery LLM Hypothesis
 
-Consider an original language model $f_\theta$ capable of processing input of length $n$, and an input problem $q$ with length $m < n$ and ground truth $\mu$. The performance of the model is evaluated using a performance measure $P(\cdot)$, expressed as $P(f_\theta(q), \mu)$. We hypothesize the existence of a smaller language model $g_\phi$ with parameters $\phi$ ($|\phi| < |\theta|$) and the same input length $n$, which can solve the problem $q$ with performance comparable to $f_\theta$, such that:
+Consider an original language model $f_\theta$ capable of processing input of length $n$, and an input problem $q$ with length $m < n$ and ground truth $\mu$. The performance of the model is evaluated using a performance measure $P(\cdot)$, expressed as $P(f_\theta(q), \mu)$. We hypothesize the existence of a smaller language model $g_\phi$ with parameters $\phi$ ($size(\phi) < size(\theta)$) and the same input length $n$, which can solve the problem $q$ with performance comparable to $f_\theta$, such that:
 
 $$P(f_\theta(q), \mu) \leq P( \mathcal{A}_{g_\phi, \mathcal{D}, \mathcal{R}, \mathcal{C}, \mathcal{M}}(q), \mu),$$
 
@@ -175,7 +175,7 @@ The reasoning algorithm $\mathcal{A}$ is described as Algorithm 1, employing a d
 
 
 
-**Recursive and Dynamic Scheduling.** Algorithm 1 can encompass tree-based reasoning methods such as Tree-of-Thought (ToT)<d-cite key="zhoulanguage, yao2024tree"></d-cite>, due to its recursive design that facilitates tree search and allows the branch-or-solve mechanism to be dynamically determined by LLMs. Additionally, Algorithm 1 is applicable to graph-based reasoning methods like Graph-of-Thought (GoT)<d-cite key="besta2024graph, luoreasoning, sunthink"></d-cite>, as the interaction between different LLMs and the external memory $\mathcal{M}$ can be conceptualized as a combination in GoT, where outputs from various nodes are integrated to construct the graph structure.
+**Recursive and Dynamic Scheduling.** Algorithm 1 can encompass tree-based reasoning methods such as Tree-of-Thought (ToT)<d-cite key="zhoulanguage, ToT"></d-cite>, due to its recursive design that facilitates tree search and allows the branch-or-solve mechanism to be dynamically determined by LLMs. Additionally, Algorithm 1 is applicable to graph-based reasoning methods like Graph-of-Thought (GoT)<d-cite key="GoT, luoreasoning, sunthink"></d-cite>, as the interaction between different LLMs and the external memory $\mathcal{M}$ can be conceptualized as a combination in GoT, where outputs from various nodes are integrated to construct the graph structure.
 
 <figure style="text-align: center;">
     <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/graph-structure.png' | relative_url }}" width="400">
@@ -191,7 +191,7 @@ The reasoning algorithm $\mathcal{A}$ is described as Algorithm 1, employing a d
 
 <figure style="text-align: center;">
     <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/Automata.png' | relative_url }}" width="50">
-    <figcaption style="font-size: 1em;">Figure 3: Simulating the Turing machine with LLMs and the external memory.</figcaption>
+    <figcaption style="font-size: 1em;">Figure 3: Simulating the Turing machine with LLMs and the external memory<d-cite key="Memory-Augmented-Turing"></d-cite>.</figcaption>
 </figure>
 
 
@@ -210,8 +210,6 @@ Most of previous model compression<d-cite key="Sun2023ASA_wanda, Frantar2023Spar
 </figure>
 
 As shown in the figures, preprocessing prompts significantly improves the LLM's performance on the NIAH test. Notably, even when the input length exceeds the model's context size (8K tokens for LLaMA3-8B-Instruct), there is no performance degradation, demonstrating that we can exploit the preprocessed prompts to improve the LLM's retrieval ability.
-
-
 
 
 **Ability 2: Identifying External Required Results.** To accurately find out which external resources to exploit, like searching knowledge or calling the external tools, the LLM $q_\phi$ needs to have the ability to understand and associate the problem $q$ and related sub-problems with the resources. Thus, $q_\phi$ needs to have some basic knowledge about the problem $q$ and the external resources. Also, it needs to have remarkable ability to bind questions with the provided resources. Once the external tools are used well, the performance of the small LLM can be improved significantly. The following table show the results of the arithmetic problems with different LLMs and methods. The PAL<d-cite key="pmlr-v202-gao23f"></d-cite> used the external arithemetic calculation functions to solve the arithmetic problems and significantly improve the performance of the small LLM.
@@ -239,22 +237,25 @@ Besides, with provided the external documents, the small LLM (Llama-3-Ins8B) sho
 
 **Ability 3: Planning and Scheduling.** To split the problem $q$ into multiple sub-problems and solve them one by one, the LLM $q_\phi$ needs to have the ability to plan and schedule the sub-problems. This is crucial for the lottery LLM to solve the complex problems. Thus, the LLM $q_\phi$ needs to have a good understanding of the problem $q$ and the sub-problems. However, the details of solving the sub-problems may not be requied for the LLM $q_\phi$. Because the external resources can be used to solve the sub-problems. And the efficient scheduling ability is also important for the lottery LLM for improving the reasoning efficiency.
 
-```
-A table here to show results of the reasoning with external logic solvers.
-```
+The following table shows the performance of LLMs with the naive inference or with scheduling the problem into multiple sub-problems and using external logic solvers Logic-LM<d-cite key="pan-etal-2023-logic"></d-cite>. We highlight the results (naive inference/with Logic-LM) of the GPT-3.5 which is weaker than GPT-4 but shows the better the similar performence than GPT-4 with the naive inference.
 
-**Ability 4: Accurately Approximating Basic Operations.** Like illustrated in the section of the computational expressivity of LLMs, to implement the (approximated) Turing completeness, the LLM $q_\phi$ needs to accurately approximate the basic operations like the MOV, COPY, JUMP, and WRITE and READ the external memory<d-cite key="Autogressive-Turing, Memory-Augmented-Turing"></d-cite>. While these operations may not be directly used in the problem solving, they are crucial for the lottery LLM to serve as a possible meta agent<d-cite key="hong2024metagpt"></d-cite>.
+| Dataset            | ChatGPT (gpt-3.5-turbo) | GPT-3.5 (text-davinci-003) | GPT-4 (gpt-4) |
+|--------------------|-------------------------|----------------------------|---------------|
+| PrOntoQA           | 47.40 / 61.00           | 83.00 / **85.00**          | 77.40 / 83.20 |
+| ProofWriter        | 35.50 / 58.33           | 48.33 / **71.45**          | 52.67 / 79.66 |
+| FOLIO              | 45.09 / **62.74**           | 57.84 / 61.27          | 69.11 / 78.92 |
+| LogicalDeduction   | 40.00 / **65.67**           | 48.33 / 62.00              | 71.33 / 87.63 |
+| AR-LSAT            | 20.34 / 26.41           | 22.51 / **25.54**              | 33.33 / 43.04 |
 
 
-**Ability 5: Long-context Reasoning.** In the single-step reasoning, the longer the context length, the more information the LLM $q_\phi$ can receive and use to address the problems. In the multi-step reasoning, the prompt can be seen as a kind of working memory of the meta agent, or say the planner (controller). Each returned results of the solved sub-problems should be injected into the prompt for the later steps. With the increased problem complexity, the depth of the tree of sub-problems also increases. Thus, the LLM $q_\phi$ needs to have a long-context reasoning ability to support the deep tree reasoning<d-cite key="merrillexpressive, Reveal-CoT"></d-cite>.
 
+**Ability 4: Precise Approximation of Fundamental Operations.** As discussed in the section on the computational expressivity of LLMs, achieving (approximate) Turing completeness necessitates that the LLM $q_\phi$ precisely approximates fundamental operations such as MOV, COPY, JUMP, and WRITE and READ from external memory<d-cite key="Autogressive-Turing, Memory-Augmented-Turing"></d-cite>. Although these operations may not be directly employed in problem-solving, they are essential for the lottery LLM to function as a potential meta-agent<d-cite key="hong2024metagpt"></d-cite>.
+
+**Ability 5: Long-Context Reasoning.** In single-step reasoning, an extended context length allows the LLM $q_\phi$ to access and utilize more information for problem-solving. In multi-step reasoning, the prompt serves as a form of working memory for the meta-agent, or planner (controller). Each result from solved sub-problems should be incorporated into the prompt for subsequent steps. As problem complexity increases, so does the depth of the sub-problem tree. Therefore, the LLM $q_\phi$ must possess the ability for extended contextual reasoning to support deep tree reasoning<d-cite key="merrillexpressive, Reveal-CoT"></d-cite>.
 
 ## Conclusion
 
-The main aim of this blog is to shed light on the possible lottery LLM and summarize the crucial abilities that the lottery LLM should have but missed in the current methods of compressing LLMs and KV cache. The discussion about the redundant knowledge in the LLMs also sheds light on the trade-off between the knowledge and the reasoning ability of LLMs. Once we have the lottery LLM, with the external tools and knowledge base and a strong enough algorithm $\mathcal{A}$, there is the possibility that the lottery LLM can serve as a meta agent to work like humans. Its external memory may work as the human's long-term memory, the prompt can work as the short-term memory, while the LLM inference process $g_\phi$ works as the basic thinking process. The external tools and knowledge base can be viewed as commonly used supplementary tools in our daily life. The deployment of the lottery LLM can help to save the energy and resources for building the large-scale LLM-driven applications. The future works of LLM compression, KV cache compression and other efficent LLM methods should consider both the efficiency and the crucial abilities of the LLM.
-
-
-
+This blog aims to elucidate the potential of the lottery LLM and to summarize the essential capabilities that the lottery LLM should possess, which are currently lacking in existing methods of LLM and KV cache compression. The discussion on redundant knowledge within LLMs also highlights the trade-off between knowledge storage and reasoning capabilities. With the development of the lottery LLM, alongside external tools, knowledge bases, and a robust algorithm $\mathcal{A}$, there is potential for the lottery LLM to function as a meta-agent akin to human cognition. Its external memory could serve as long-term memory, the prompt as short-term memory, and the LLM inference process $g_\phi$ as the fundamental cognitive process. External tools and knowledge bases can be considered as supplementary tools commonly used in daily life. Deploying the lottery LLM could significantly reduce energy and resource consumption in large-scale LLM-driven applications. Future research on LLM compression, KV cache compression, and other efficient LLM methodologies should address both efficiency and the essential capabilities of LLMs.
 
 
 
