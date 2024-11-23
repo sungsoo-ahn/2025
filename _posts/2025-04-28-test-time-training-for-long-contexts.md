@@ -138,74 +138,77 @@ $$
 
 ## 4.1. Results on popular long context benchmarks
 To evaluate our method, we choose two models for evaluation:
-- close-sourced model *GPT3.5-turbo*<d-cite key="chen2023robust"></d-cite> with longer context window **16k**
-- open-sourced model *LLaMA3-8B-Instruct*<d-cite key="llama3modelcard"></d-cite> with **8k** context window
+- open-sourced model *LLaMA-3-8B-Instruct*<d-cite key="LLaMA3modelcard"></d-cite> with **8k** context window
+- close-sourced model *GPT3.5-turbo*<d-cite key="chen2023robust"></d-cite> with a longer context window **16k**
+
 
 We compare the following methods:
-- ICL with truncation (noted as *ICL*)
-- LIFT without ICL (noted as *LIFT_only*)
-- LIFT with ICL (noted as *LIFT+ICL*)
+- ICL with truncation (noted as *ICL*), where we truncate the input by only keeping its beginning and end tokens to maximally fill the context window, and use the original LLM.
+- LIFT without ICL (noted as *LIFT_only*), where we use the LIFT LLM without filling any input into the context window.
+- LIFT with ICL (noted as *LIFT+ICL*), where we use the LIFT LLM and additionally fill the beginning and end tokens of the input tokens into the context window.
+
+By default, LIFT does not use auxiliary tasks (AT) and SFT and only fine-tunes the model on the input text.
 
 
-We evaluate our method on four popular long-context benchmarks *LooGLE* <d-cite key="li2023loogle"></d-cite>, *LongBench* <d-cite key="bai2023longbench"></d-cite>, *Bamboo* <d-cite key="dong2023bamboo"></d-cite> and *QuALITY* <d-cite key="pang2021quality"></d-cite>. They are mainly used for comprehensive and overall evaluation, covering a wide variety of application scenarios. Specifically, we focus on QA tasks in LooGLE and representative tasks in LongBench, with as longer average length as possible. The evaluation metrics are task-specific and consistent with the respective original benchmarks. 
+We evaluate our methods on four popular long-context benchmarks *LooGLE* <d-cite key="li2023loogle"></d-cite>, *LongBench* <d-cite key="bai2023longbench"></d-cite>, *Bamboo* <d-cite key="dong2023bamboo"></d-cite> and *QuALITY* <d-cite key="pang2021quality"></d-cite>. They provide a relatively comprehensive evaluation, covering a wide variety of application scenarios. The evaluation metrics are task-specific and consistent with the respective original benchmarks. 
 
 ### LIFT generally strengthens long context understanding when combined with ICL
 
-For LooGLE, as shown in Table 1, LIFT+ICL consistently achieves the highest scores across both LongQA and shortQA tasks for both models. LIFT is particularly **effective in the ShortQA task**, which doesn't rely on long dependencies. However, LIFT_only performs the worst among all the settings. We observe that LIFT_only struggles to retrieve the original input. While overfitting the model on the input enables the model to precisely memorize the input, it destroys the original capabilities of the model, resulting in even worse performance.
+For LooGLE, as shown in Table 1, **LIFT+ICL consistently achieves the highest scores** across both LongQA and shortQA tasks for both models, and is particularly effective in the ShortQA task, which doesn't rely on long dependencies. Interestingly, **LIFT_only performs the worst** among all the settings. We observe that LIFT_only struggles to retrieve the original input. While overfitting the model on the input enables the model to precisely memorize the input, it may degrade the original capabilities of the model such as retrieving certain in-parameter knowledge, resulting in even worse performance. In this sense, LIFT and ICL might provide a reference point to each other to help them locate the relevant knowledge better, which combines the strengths of both in-parameter knowledge (full) and in-context knowledge (partial) and results in the best performance.
 
-LLaMa-3 benefits more with the combination of ICL and LIFT (LIFT+ICL) than GPT-3.5, showing notable improvements in GPT4_score: from 30.88 (ICL) to 33.42 in LongQA, and from 44.23 to 50.44 in ShortQA. These results highlight that **LIFT significantly improves the performance of ICL, particularly for models with shorter context windows**.
+Compared to GPT-3.5, LLaMA-3 benefits more from LIFT+ICL, showing notable improvement in GPT4_score: from 30.88 (ICL) to 33.42 in LongQA, and from 44.23 to 50.44 in ShortQA. These results highlight that **LIFT significantly improves the performance of ICL only, particularly for models with shorter context windows**.
 
-Notably, both models perform particularly poorly on LongQA, with accuracy falling below 50%. This underscores that modeling long dependencies in extended contexts remains a significant challenge for existing models.
+Notably, all models perform particularly poorly on LongQA, with accuracy falling below 50%. This underscores that modeling long dependencies in extended contexts remains a significant challenge for existing models.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table1_loogle.svg" class="img-fluid" title="Table 1" %}
 <div class="caption">Table 1. Performance on LooGLE under different settings</div>
 
-For LongBench, as shown in Table 2, LLaMa-3 exhibits substantial improvements when integrating ICL and LIFT, reaffirming that LIFT is particularly beneficial for models with shorter context lengths. As expected, GPT-3.5, with longer context window and superior ICL capabilities, outperforms LLaMa-3 on all tasks except GovReport.
+For LongBench, as shown in Table 2, LLaMA-3 exhibits substantial improvement when integrating ICL and LIFT, reaffirming that LIFT is particularly beneficial for models with shorter context lengths. As expected, GPT-3.5, with longer context window and superior ICL capabilities, outperforms LLaMA-3 on all tasks except GovReport.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table2_longbench.svg" class="img-fluid" title="Table 2" %}
-<div class="caption">Table 2. Performance of each task in LongQA for Llama3</div>
+<div class="caption">Table 2. Performance of each task in LongQA for LLaMA-3</div>
 
 ### LIFT shows significant improvement on specific tasks
 
-Table 3 presents detailed experimental results across four LongQA tasks from LooGLE. LLaMa-3 benefits more from LIFT+ICL, with notable improvements in specific tasks, particularly in **Comprehension & Reasoning** (40.88 → 44.83) and **Timeline Reorder** (22.33 → 26.51). These results demonstrate that LIFT enhances ICL by providing a more comprehensive overview of the entire lengthy input by fine-tuning the long context directly into the parameters.
+Table 3 presents detailed experimental results across four LongQA tasks from LooGLE. LLaMA-3 benefits more from LIFT+ICL, with notable improvement in specific tasks, particularly in **Comprehension & Reasoning** (40.88 → 44.83) and **Timeline Reorder** (22.33 → 26.51). These results demonstrate that LIFT enhances ICL by providing a more comprehensive overview of the entire lengthy input by fine-tuning the long input directly into the parameters.
 
-However, LIFT does not yield any improvement in tasks such as Multiple Information Retrieval and even slightly degrades the performances in Computation for both models. This indicates that LIFT may not significantly impact all tasks and could introduce slight noise in some cases. At the same time, the performances variations are closely related to the specific capabilities required by each task and the inherent strengths of the model.
+However, LIFT does not yield any improvement in tasks such as Multiple Information Retrieval and even slightly degrades the performance in Computation for both models. This indicates that LIFT may not significantly impact all tasks and could introduce slight noise in some cases. At the same time, the performance variations are closely related to the specific capabilities required by each task and the inherent strengths of the model.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table3_loogle_task.svg" class="img-fluid" title="Table 3" %}
 <div class="caption">Table 3. Performance on LongBench under different settings</div>
 
-In Table 2 on LongBench, LIFT+ICL consistently outperforms both ICL and LIFT_only on Narrativeqa and Qmsum for both models. Notable improvements are observed in Narrativeqa, where performance increases from 20.73 to 25.84. However, the results for Musique and GovReport exhibit different trends between the two models. LLaMa-3 shows a slight improvement on GovReport but experiences a significant drop on Musique, whereas GPT-3.5 demonstrates the opposite pattern.
+In Table 2 on LongBench, LIFT+ICL consistently outperforms both ICL and LIFT_only on Narrativeqa and Qmsum for both models. Notable improvement is observed in Narrativeqa, where performance increases from 20.73 to 25.84. However, the results for Musique and GovReport exhibit different trends between the two models. LLaMA-3 shows a slight improvement on GovReport but experiences a significant drop on Musique, whereas GPT-3.5 demonstrates the opposite pattern.
 
-Interestingly, PassageRetrievalEN exhibits a significant drop when combining LIFT with ICL, suggesting that the LIFT is applicable and effective to specific tasks. This encourages us to fine-tune the model at task level.
+Interestingly, PassageRetrievalEN exhibits a significant drop when combining LIFT with ICL, suggesting that the LIFT is not effective to specific tasks. This motivates us to fine-tune the model at task level.
 
 ## LIFT can be further enhanced with pre-LIFT supervised fine-tuning
 
-Encouraged by the significant improvement observed in the timeline-reorder task from LooGLE, we aim to further enhance the performance of LIFT on similar tasks like sorting and reordering, by incorporating auxiliary tasks (AT) (Section 3.2) and pre-LIFT SFT (Section 3.3), where we generate synthetic QAs simliar to the target task and fine-tunes the model on both the input long text and the QAs. The results are illustrated in Table 4.
+Encouraged by the significant improvement observed in the timeline-reorder task from LooGLE, we aim to further enhance the performance of LIFT on similar tasks like sorting and reordering, by incorporating auxiliary tasks (AT) (Section 3.2) and pre-LIFT SFT (Section 3.3). For AT, we generate synthetic QAs according to the input text simliar to the target task and fine-tunes the model on both the input text and the QAs. For SFT, we generate synthetic QAs on independent corpus and fine-tune the model on the corpus and QAs before applying LIFT on specific inputs. 
 
-There are six models compared:
-- ICL and LIFT+ICL are the same as before; 
+The results are illustrated in Table 4. There are six models compared:
+- ICL and LIFT+ICL are the same as before;
 - LIFT+AT+ICL means fine-tuning on both input text and synthetic QAs during the LIFT phase;
 - SFT+ICL, SFT+LIFT+ICL and SFT+LIFT+AT+ICL mean using the SFT model rather than the original LLM for the previous three baselines.
 
-Comparing the results of LIFT+ICL w/ and w/o AT, as well as SFT+LIFT+ICL w/ and w/o AT, we observe that AT bring negligible improvement or even slightly degrades performance. A possible explanation is that the number of synthesized samples in our evaluation is insuffcient, potentially causing the model to overfit to these tasks. However, it's impractical to synthesise a huge number of training samples at test time due to unacceptable computational cost. Striking a balance between efficiency and effectiveness when using AT at test time remains a significant challenge and requires further exploration.
+Comparing the results of LIFT+ICL and LIFT+AT+ICL, as well as SFT+LIFT+ICL and SFT+LIFT+AT+ICL, we observe that AT brings negligible improvement or even slightly degrades performance for the LIFT phase. A possible explanation is that the number of synthesized samples in our evaluation is insuffcient, potentially causing the model to **overfit these specific examples instead of enhancing the general ability**. However, it's impractical to synthesise a huge number of training samples at test time due to unacceptable computational cost. Striking a balance between efficiency and effectiveness when using AT at test time remains a significant challenge and requires further exploration.
 
-In contrast, we find LIFT w/o AT consistently improves performance. While SFT greatly improves the performance (which is reasonable since the tasks used in the SFT process are similar to those at test time), LIFT can further boost performance (comparing LIFT+ICL to ICL, as well as SFT+LIFT+ICL to SFT+ICL), highlighting the effectiveness of our method.
+In contrast, we find SFT greatly improves the performance of both ICL and LIFT+ICL, which is reasonable since the tasks used in the SFT process are similar to those at test time. With SFT, LIFT+ICL is still better than ICL only, highlighting the effectiveness of our method.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table4_at_sft.svg" class="img-fluid" title="Table 4" %}
 <div class="caption">Table 4. Coordinate score on specific task in Bamboo, LooGLE, and QuALITY using AT and SFT.</div>
 
 ## 4.2. Efficiency evaluations
 
-Benefiting from our truncation strategy (Section 3.1), the computational complexity of our method scales linearly with the input context length. To further evaluate the efficiency of our approach compared to ICL, we measure the time cost of a single Needle-In-A-Haystack (NIAH) task under both methods. In this experiment, the input lengths are controlable and the primary computational cost stems from processing the input context rather than iterative generation.
+Benefiting from our truncation strategy (Section 3.1), the computational complexity of our method scales linearly with the input context length (due to fine-tuning). To further evaluate the efficiency of our approach compared to ICL, we measure the time cost of a single Needle-In-A-Haystack (NIAH) task under both methods. In this experiment, the input lengths are controllable and the primary computational cost stems from processing the input context rather than iterative generation.
 
-We plot the GPU time against the input length along with the fitted curve in Figure 3.
+We plot the GPU time against the input length along with the fitted curves in Figure 3.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure3_efficiency.svg" class="img-fluid" title="Figure 3" %}
 <div class="caption">Figure 3. GPU time vs. input length for LIFT and ICL. The dashed lines represent the fitted curves, showing linear growth for LIFT and quadratic growth for ICL. The red cross indicates the input length at which ICL runs out of memory.</div>
 
-First, we observe that LIFT is significantly more **memory-efficient** than ICL. Notably, ICL runs out of memory when the input length exceeds 90k tokens. Upon closer inspection, we find that the cache of hidden states for previous tokens consumes most of the memory in ICL. In contrast, LIFT is capable of **handling arbitrarily long inputs**. Our truncation strategy ensures that LIFT only involves fine-tuning and inference on short text segments, eliminating the need for extensive caching.
+First, we observe that LIFT is significantly more **memory-efficient** than ICL. Notably, ICL runs out of memory when the input length exceeds 90k tokens on our A100 (80G) system. Upon closer inspection, we find that the cache of hidden states for previous tokens consumes most of the memory in ICL. In contrast, LIFT is capable of **handling arbitrarily long inputs**. Our truncation strategy ensures that LIFT only involves fine-tuning and inference on short text segments, eliminating the need for extensive caching.
 
-Empirically, we find that the time cost of ICL grows quadratically with input length, while our method scales linearly. However, we also observe that the constant factor in the computational complexity of LIFT is non-negligible. As a result, our method only surpasses ICL in time efficiency when the input length exceeds a certain threshold above 200k tokens. The primary cost of our method arises from the multi-epoch fine-tuning. We propose that by designing tasks that are more aligned with the strengths of LIFT, the efficiency of the LIFT framework can be significantly improved.
+Empirically, we find that the time cost of ICL grows quadratically with input length, while our method scales linearly. However, we also observe that the constant factor introduced by fine-tuning in the computational complexity of LIFT is non-negligible. As a result, our method only surpasses ICL in time efficiency when the input length exceeds a certain threshold above 200k tokens. The primary cost of our method arises from the multi-epoch fine-tuning. We hypothesize that by using better parallel fine-tuning techniques and designing tasks that are more aligned with the strengths of LIFT, the efficiency of the LIFT framework can be significantly improved.
 
 # 5. Limitations and future works
 
@@ -225,9 +228,9 @@ Empirically, we find that the time cost of ICL grows quadratically with input le
 
 ## A. Results on Needle-in-a-Haystack (NIAH)
 
-We present the experimental results in the NIAH<d-cite key="niah"></d-cite> task in Figure 4, as further analysis of the pros and cons of LIFT and directions for future works. The task requires accurate retrieval from the contexts. We adopt a strong long-context model, Llama-3.1-8B-Instruct, as the baseline and apply the LIFT framework to the model.
+We present the experimental results in the NIAH<d-cite key="niah"></d-cite> task in Figure 4, as further analysis of the pros and cons of LIFT and directions for future works. The task requires accurate retrieval from the contexts. We adopt a strong long-context model, LLaMA-3.1-8B-Instruct, as the baseline and apply the LIFT framework to the model.
 
-The maximum context length of our test is 100K, which is within the 128K context window of Llama-3.1-8B-Instruct. As expected, the baseline achieves nearly perfect performance. However, LIFT slightly degrades the performance and the degradation seems irregular.
+The maximum context length of our test is 100K, which is within the 128K context window of LLaMA-3.1-8B-Instruct. As expected, the baseline achieves nearly perfect performance. However, LIFT slightly degrades the performance and the degradation seems irregular.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure4_1_Needle-Long-Baseline.svg" class="img-fluid" title="Figure 4(1)" %}
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure4_2_Needle-Long-TTT.svg" class="img-fluid" title="Figure 4(2)" %}
@@ -246,7 +249,7 @@ We make further studies on whether extracting relevant evidence can further enha
 Table 4 further expands the performance in Table 3 on specific tasks in LongQA in LooGLE. The combination of evidences, LIFT+ICL clearly outperforms the other configurations across all metrics, **highlighting the importance of extracting relevant knowledge from parameters and executing explicit step-by-step reasoning in more complex tasks like long dependency QA**. The incorporation of evidences helps the model ground its inferences resulting in a more refined and contextually accurate response generation.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table5_loogle_evd.svg" class="img-fluid" title="Table 5" %}
-<div class="caption">Table 5. Performance with extracted evidence of Llama3 in LongQA</div>
+<div class="caption">Table 5. Performance with extracted evidence of LLaMA-3 in LongQA</div>
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table6_loogle_task_evd.svg" class="img-fluid" title="Table 6" %}
-<div class="caption">Table 6. Performance with extracted evidence of each task in LongQA for Llama3</div>
+<div class="caption">Table 6. Performance with extracted evidence of each task in LongQA for LLaMA-3</div>
