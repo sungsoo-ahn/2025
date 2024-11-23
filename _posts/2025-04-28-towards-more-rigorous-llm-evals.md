@@ -189,15 +189,15 @@ Even if a model applies consistent reasoning, it may still make arithmetic error
 
 **How much variation is expected?**  
 By now, it should be clear that the answer to this question depends on the assumptions we make about the data.
-One reasonable assumption we could make is that each model $$m=1, \dots, 25$$, answers each question $$n=1,\dots,100$$ correctly with some probability $p_{m,n}$.
-Unfortunately, since the paper does not provide question-level performance data, for the purposes of this analysis, we must further assume that this probability is constant across questions, that is $p_{m,n}=p_m$ for all $n$. 
+One reasonable assumption we could make is that each model $$m=1, \dots, 25$$, answers a question from template $$t=1,\dots,100$$ correctly with some probability $$p_{m,t}$$ (where the randomness is induced by the sampling of different filler values; see the Appendix for a precise mathematical treatment of our assumptions).
+Unfortunately, since the paper does not provide performance data for individual question templates, we will focus our analysis instead on the quantity $$p_m$$, obtained by marginalising $$p_{m,t}$$ across templates.  
 
-Thus, an LM answering questions is modelled as an independent and identically distributed Bernoulli trial with a model-specific success probability $p_m$.
-Under this assumption, the total number of correct answers on a dataset of size $N=100$ is
+Thus, an LM answering questions is modelled as an independent and identically distributed Bernoulli trial with a model-specific success probability $$p_m$$.
+Under this assumption, the total number of correct answers on a dataset of size $$N=100$$ is
 
 $$\text{Binomial}(N, p_m).$$
 
-The variance of this distribution is **fully determined by the success probability $p_m$** and equals 
+The variance of this distribution is **fully determined by the success probability $$p_m$$** and equals 
 
 $$N \cdot p_m \cdot (1-p_m).$$
 
@@ -265,7 +265,7 @@ We visualise this in the next figure, showing the overlap between the 95% Wilson
 %}
 
 Note that our confidence intervals tend to be wider than the implied ranges in the figures in the paper, i.e. under the i.i.d. Bernoulli assumption, the expected variation is actually **larger** than what is observed.
-This discrepancy is likely to be explained by the unmodelled correlations between answers to questions coming from the same template---as initially suggested, a more reasonable assumption would be to model the probability of success on a template level, $p_{m,n}$, rather than assuming that questions arising from different templates are equally likely to be answered correctly. 
+This discrepancy is likely to be explained by the unmodelled correlations between answers to questions coming from the same template---as initially suggested, a more reasonable assumption would be to model the probability of success on a template level, $p_{m,t}$, rather than assuming that questions arising from different templates are equally likely to be answered correctly. 
 <!-- the notebook that I added shows this is the case by using Beta-Bernoulli distribution instead of Bernoulli. We can discuss this on Friday, not for this paper-blog, but perhaps for the icml paper version -->
 <!-- "unmodelled correlations between questions" it reads to me like there is correlation between e.g. two questions from the 100 questions, but actually there is correlation between the same question template but between two samples from the 50 samples for that question template.
 I think is clearer if we say:
