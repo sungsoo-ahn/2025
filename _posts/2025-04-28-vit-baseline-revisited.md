@@ -536,13 +536,20 @@ compared to the [JAX implementation](https://github.com/mlcommons/algorithmic-ef
 
 In the narrow sense, we have
 shown that the discrepancies in RandAugment and Inception crop implementations impact model performance.
-Some CV people are aware of the RandAugment issues, but to our best knowledge the Inception crop
-discrepancies are not documented anywhere. Given its deep root in training deep image models, it has
-potentially broad implications. Tracking down the commit histories, we find that the schism between
+Some CV people are aware of the RandAugment issues, but again it requires tremendous attention to detail
+to keep implementations consistent across ecosystems. As an example: the `imagenet_vit` workload of AlgoPerf <d-cite key="Dahl2023AlgoPerf"></d-cite>
+makes sure that the RandAugment implementations have the same transform lineup and use the same neutral gray
+fill value. However, the Contrast transform bug of the JAX implementation [remains unfixed](https://github.com/mlcommons/algorithmic-efficiency/blob/86d2a0d23c9a3192f878406edc72547fcf0568ec/algorithmic_efficiency/workloads/imagenet_resnet/imagenet_jax/randaugment.py#L139). The PyTorch counterpart [simply calls](https://github.com/mlcommons/algorithmic-efficiency/blob/86d2a0d23c9a3192f878406edc72547fcf0568ec/algorithmic_efficiency/workloads/imagenet_resnet/imagenet_pytorch/randaugment.py#L108)
+torchvision's [`F.adjust_contrast()`](https://pytorch.org/vision/main/generated/torchvision.transforms.functional.adjust_contrast.html) for the correct transform,
+so the RandAugment ends up not exactly the same.
+
+In our opinion though, the Inception crop discrepancy is probably the most severe issue.
+Given its deep root in training deep image models, it has potentially broad implications and remains
+undocumented to our best knowledge. Tracking down the commit histories, we find that the schism between
 the implementations goes back 8 years, almost as old as the paper <d-cite key="szegedy2015going"></d-cite> itself:
 
 * [`sample_distorted_bounding_box()` has remained unchanged](https://github.com/tensorflow/tensorflow/commit/f3a77378b4c056e76691c5eba350a022c11e00d4).
-* Hardcoded 10 sampling attempts and uniform crop area sampling ([1 and 3 listed here](#inception-crop)) [have been the same for `RandomSizedCrop()`](https://github.com/pytorch/vision/commit/d9b8d003d282904461d30e60b9e13ed2f74f3bc6).
+* Hardcoded 10 sampling attempts and uniform crop area sampling [have been the same for `RandomSizedCrop()`](https://github.com/pytorch/vision/commit/d9b8d003d282904461d30e60b9e13ed2f74f3bc6).
 
 Below are some of the papers that we know are affected, the context in which the TF implementation
 of Inception crop is mentioned, and its current Google Scholar citation counts:
@@ -557,6 +564,7 @@ of Inception crop is mentioned, and its current Google Scholar citation counts:
 | Getting ViT in Shape: Scaling Laws for Compute-Optimal Model Design <d-cite key="alabdulmohsin2024getting"></d-cite> | 'We use the big_vision codebase [10, 9] for conducting experiments in this project' and `inception_crop` can be found in the hyper-parameters settings in the appendix. | 26 |
 | FlexiViT: One Model for All Patch Sizes <d-cite key="beyer2023flexivit"></d-cite> | `inception_crop` can be found in config.json downloaded from the link in the [flexivit project README](https://github.com/google-research/big_vision/tree/46b2456f54b9d4f829d1925b78943372b376153d/big_vision/configs/proj/flexivit) in Big Vision. | 82 |
 | Patch n' Pack: NaViT, a Vision Transformer for any Aspect Ratio and Resolution <d-cite key="dehghani2024patch"></d-cite> | 'NaViT is implemented in JAX [21] using the FLAX library [22] and built within Scenic [23].' (...) 'Second, we apply inception-style cropping [35] with a fixed minimum area of 50%'. While the source code of NaViT isn't available, [Scenic relies on `tf.image.sample_distorted_bounding_box()` for Inception crop](https://github.com/search?q=repo%3Agoogle-research%2Fscenic%20sample_distorted_bounding_box&type=code) and [this call](https://github.com/google-research/scenic/blob/0340172a1ffa97a2cdb02adde7ea6d0ea66e539c/scenic/dataset_lib/dataset_utils.py#L735) might be what it uses. | 51 |
+| Benchmarking Neural Network Training Algorithms <d-cite key="Dahl2023AlgoPerf"></d-cite> | JAX implementation of the ImageNet workloads [relies on `tf.image.stateless_sample_distorted_bounding_box()`](https://github.com/mlcommons/algorithmic-efficiency/blob/86d2a0d23c9a3192f878406edc72547fcf0568ec/algorithmic_efficiency/workloads/imagenet_resnet/imagenet_jax/input_pipeline.py#L60) while the PyTorch counterpart [invokes torchvision's `transforms.RandomResizedCrop()`](https://github.com/mlcommons/algorithmic-efficiency/blob/86d2a0d23c9a3192f878406edc72547fcf0568ec/algorithmic_efficiency/workloads/imagenet_resnet/imagenet_pytorch/workload.py#L99). | 18 |
 
 It is out of scope to retrain these models with the correct Inception crop, but we can compare the
 90ep Head: MLP → linear models we trained with either the correct uniform area sampling:
