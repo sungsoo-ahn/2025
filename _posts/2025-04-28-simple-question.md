@@ -105,6 +105,152 @@ We also ask test to find lines, instead of "above", "below" and "above and below
 
 The total cost of this experiment is ~8 US dollars.
 
+The code are below:
+
+```python
+import openai
+import pandas as pd
+from datetime import datetime
+from dotenv import load_dotenv
+import os
+import time
+import random
+
+# Load environment variables from .env file
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# Load context text from a file and split it into smaller chunks
+def load_and_split_context(file_path="hamlet.txt", max_chunk_size=6000):
+    with open(file_path, "r") as file:
+        context_text = file.read()
+
+    # Split the context text into smaller chunks based on max_chunk_size
+    context_parts = []
+    start = 0
+    while start < len(context_text):
+        end = min(start + max_chunk_size, len(context_text))
+        context_parts.append(context_text[start:end])
+        start = end
+    return context_parts
+
+# Define questions for each line
+def findLineQuestion(line):
+    return f'Can you find this line in the context? Answer yes or no: {line}'
+
+def countQuestionPre1(line):
+    return f'Find the one line above {line}'
+
+def countQuestionNext1(line):
+    return f'Find the one line below {line}'
+
+def countQuestionPreAndNext1(line):
+    return f'Find the one line above and one line below {line}'
+
+def countQuestionPre5(line):
+    return f'Find the five lines above {line}'
+
+def countQuestionNext5(line):
+    return f'Find the five lines below {line}'
+
+def countQuestionPreAndNext5(line):
+    return f'Find the five lines above and five lines below {line}'
+
+def countQuestionPre20(line):
+    return f'Find the twenty lines above {line}'
+
+def countQuestionNext20(line):
+    return f'Find the twenty lines below {line}'
+
+def countQuestionPreAndNext20(line):
+    return f'Find the twenty lines above and twenty lines below {line}'
+
+# List of question functions
+countQuestions = [
+    countQuestionPre1, countQuestionNext1, countQuestionPreAndNext1,
+    countQuestionPre5, countQuestionNext5, countQuestionPreAndNext5,
+    countQuestionPre20, countQuestionNext20, countQuestionPreAndNext20
+]
+
+
+# Function to ask GPT a question and handle rate limits and connection errors
+def ask_gpt_question(question, context_part, max_retries=5):
+    retries = 0
+    while retries < max_retries:
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-4",
+                messages=[
+                    {"role": "system", "content": context_part},
+                    {"role": "user", "content": question}
+                ],
+                max_tokens=2000
+            )
+            return response.choices[0].message['content']
+        except openai.error.RateLimitError:
+            wait_time = 10
+            print(f"Rate limit reached. Waiting for {wait_time} seconds before retrying...")
+            time.sleep(wait_time)
+        except openai.error.APIConnectionError as e:
+            # Wait with exponential backoff and some jitter
+            wait_time = 2 ** retries + random.uniform(0, 1)
+            print(f"Connection error: {e}. Retrying in {wait_time:.2f} seconds...")
+            time.sleep(wait_time)
+            retries += 1
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+            break
+    print(f"Failed to get a response after {max_retries} retries.")
+    return None  # Return None if it fails all retries
+
+
+# Main function
+def main():
+    # Load and split the context
+    context_parts = load_and_split_context()
+    lines = [
+        'To be, or not to be, that is the Question',
+        'What shall I do?',
+        'Tis very strange',
+        ]
+    all_results = []
+
+    # Iterate over each context chunk
+    for chunk_id, part in enumerate(context_parts):
+        # Save each context chunk as a separate text file
+        with open(f'context_chunk_{chunk_id}.txt', 'w') as f:
+            f.write(part)
+
+        # Iterate over each line and ask questions
+        for line in lines:
+            # Ask if the line exists in the context
+            line_question = findLineQuestion(line)
+            line_exists = ask_gpt_question(line_question, part).strip().lower()
+
+            # If line exists, ask count questions one by one without reloading the context part
+            if line_exists == 'yes':
+                for func in countQuestions:
+                    question = func(line)
+                    answer = ask_gpt_question(question, part)
+
+                    # Append results to the list for DataFrame
+                    all_results.append({
+                        "chunk_id": chunk_id,
+                        "line": line,
+                        "question": question,
+                        "answer": answer
+                    })
+
+    # Create a DataFrame and save to CSV
+    df = pd.DataFrame(all_results)
+    df.to_csv("output.csv", index=False)
+    print("Results saved to output.csv")
+
+# Run the main function
+if __name__ == "__main__":
+    main()
+
+```
 
 # Results
 
