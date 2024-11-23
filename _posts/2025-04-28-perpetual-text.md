@@ -53,7 +53,7 @@ _styles: >
   }
 ---
 
-<!-- Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling. -->
+Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling.
 
 # Introduction
 
@@ -159,7 +159,7 @@ From our Motivating Experiments, we observed decreasing entropy and increasing E
 The first method involves suppressing the EOS token during the token generation process to prevent th emodel from ending the sequence prematurely.
 
 **Implementation Details:**
-- Sampling Without Replacement: At each generation step, the model uses a sampling without replacement strategy to [select two candidate tokens]((https://github.com/Perpetual-text/icrl25-blog-code/blob/main/sampling.py#L60)) from the probability distribution.
+- Sampling Without Replacement: At each generation step, the model uses a sampling without replacement strategy to [select two candidate tokens](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/sampling.py#L60) from the probability distribution.
 - EOS Token Exclusion: If one of the sampled tokens is the EOS token, it is discarded in favor of the other token. This ensures that the EOS token is not selected during generation.
 - Continuation of Generation: The model continues to generate tokens without the possibility of selecting the EOS token.
 
@@ -236,6 +236,5 @@ The fourth method enhances the previous approach by incorporating a dynamic temp
 The exploration of these four methods highlights the challenges and potential solutions in managing the EOS token's influence on sequence generation in autoregressive language models. Suppressing the EOS token or altering the sampling strategy can mitigate premature termination, thereby increasing the model's ability to generate up to 1,000 more tokens. However, these approaches may introduce issues with coherence. Regenerating tokens prior to the EOS token, particularly with dynamic temperature adjustment, shows promise in producing longer and more coherent sequences by balancing diversity and focus in the model's predictions.
 
 These findings suggest that adaptive manipulation of the token generation process and sampling strategies can enhance the model's capacity to generate significantly longer texts—up to 1,000 additional tokens—while maintaining quality. Further research into optimizing these methods and exploring additional strategies could lead to significant improvements in language model performance.
-
 
 
