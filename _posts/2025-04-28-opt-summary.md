@@ -7,7 +7,7 @@ future: true
 htmlwidgets: true
 hidden: false
 
-Anonymize when submitting
+# Anonymize when submitting
 authors:
   - name: Anonymous
 
@@ -370,7 +370,7 @@ Such a question has been partially addressed for stochastic optimization using i
 ### Beyond Classical Oracle Model
   Regarding the oracle complexity model, because it mainly focuses on hard instances in the function class which may be far from practical instances, possibly the derived complexities may be such conservative and vacuous that they may not match the practice well, as the figure below illustrated.
 
-  {% include figure.liquid path="assets/img/2025-04-28-opt-summary/practice_gap.png" class="img-fluid" %}
+  {% include figure.html path="assets/img/2025-04-28-opt-summary/practice_gap.png" class="img-fluid" %}
 
   <div class="caption">
       Gap Between General Worst-Case Complexity and Instance-Level Complexity Analysis (adapted from <d-cite key="zhang2022beyond"></d-cite>)
