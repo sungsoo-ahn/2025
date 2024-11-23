@@ -14,7 +14,7 @@ authors:
       name: Anonymous
 
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-distill-example.bib  
+bibliography: 2025-04-28-foundation-adapter.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -50,14 +50,14 @@ _styles: >
 
 ## Introduction
 
-Adapter-based fine-tuning methods have revolutionized the customization of large language models (LLMs) by inserting small, trainable adapters inside block layers of frozen pre-trained LLMs <d-cite key="pmlr-v97-houlsby19a"></d-cite><d-cite key="hu2022lora"></d-cite><d-cite key="hu-etal-2023-llm"></d-cite>. These methods reduce computational and memory costs compared to full fine-tuning by training fewer than 1% of the original parameters while maintaining similar performance. The modular nature of adapters also enables efficient multi-task learning and task composition, allowing organizations to maintain a single base model while deploying multiple specialized adaptations for different downstream tasks or domains. 
+Adapter-based fine-tuning methods have revolutionized the customization of large language models (LLMs) by inserting small, trainable adapters inside block layers of frozen pre-trained LLMs <d-cite key="pmlr-v97-houlsby19a,hu2022lora,hu-etal-2023-llm"></d-cite>. These methods reduce computational and memory costs compared to full fine-tuning by training fewer than 1% of the original parameters while maintaining similar performance. The modular nature of adapters also enables efficient multi-task learning and task composition, allowing organizations to maintain a single base model while deploying multiple specialized adaptations for different downstream tasks or domains. 
 
 The issue here is that random initialization of adapter weights in fine-tuning leads to training instability and inconsistent performance across different runs <d-cite key="dodge2020finetuningpretrainedlanguagemodels"></d-cite>, making it challenging to efficiently and reliably adapt models for downstream tasks <d-cite key="chen-etal-2022-revisiting"></d-cite>. To address this issue, this blog post introduces an approach combining continual pre-training and knowledge distillation for pre-training adapters, which serve as a foundation for weight initialization in adapter-based fine-tuning. This replaces the traditional random initialization, potentially improving the efficiency and effectiveness of the fine-tuning process.
 
 
 ## Pre-training of Foundation Adapters
 
-Given a "frozen" pre-trained LLM $$S$$ with trainable adapters $$A$$ attached to each of its block layers, our research question is: *How can we pre-train the adapters $$A$$*? We may follow a previous approach <d-cite key="gunter2024appleintelligencefoundationlanguage"></d-cite> to perform continual pre-training with $$S$$ to learn $$A$$. However, we further extend the previous approach with classical knowledge distillation <d-cite key="wu2024rethinkingkullbackleiblerdivergenceknowledge"></d-cite><d-cite key="muralidharan2024compactlanguagemodelspruning"></d-cite>. In particular, we introduce a joint training method to pre-train the adapters. The method comprises two key modules: knowledge distillation and continual pre-training, as illustrated in Figure 1.
+Given a "frozen" pre-trained LLM $$S$$ with trainable adapters $$A$$ attached to each of its block layers, our research question is: *How can we pre-train the adapters $$A$$*? We may follow a previous approach <d-cite key="gunter2024appleintelligencefoundationlanguage"></d-cite> to perform continual pre-training with $$S$$ to learn $$A$$. However, we further extend the previous approach with classical knowledge distillation <d-cite key="wu2024rethinkingkullbackleiblerdivergenceknowledge,muralidharan2024compactlanguagemodelspruning"></d-cite>. In particular, we introduce a joint training method to pre-train the adapters. The method comprises two key modules: knowledge distillation and continual pre-training, as illustrated in Figure 1.
 
 - Knowledge distillation (KD): A larger, frozen pre-trained LLM is employed as the teacher model to facilitate knowledge distillation, transferring its knowledge to a smaller student model that consists of the frozen $$S$$ augmented with trainable adapters $$A$$. Specifically, the Kullback-Leibler divergence is used to measure the difference between the LM head logits of the teacher and student models, resulting in a corresponding knowledge distillation loss $$\mathcal{L}_{\text{KD}}$$ during training, which guides the student to mimic the teacher’s output distributions.
 
