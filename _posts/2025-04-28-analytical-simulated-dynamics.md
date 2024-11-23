@@ -29,16 +29,12 @@ bibliography: 2025-04-28-analytical-simulated-dynamics.bib
 toc:
 - name: "Background"
   subsections:
-    - name: Theoretical analyses of neural network dynamics 
-    - name: Statistical physics for neural network dynamics 
-      subsections:
-        - name: A long history 
-        - name: "Our focus: Narrow neural networks"
-          subsections:
-            - name: "The classical analysis"
-            - name: "Modern extensions of the analysis"
+    - name: Empirical studies of learning dynamics 
+    - name: Theoretical analyses of learning dynamics 
+    - name: Statistical physics for learning dynamics 
 - name: "Methods"
   subsections: 
+    - name: The teacher-student setup
     - name: Simulating the ordinary differential equations
     - name: Simulating neural network training
 - name: "Replications"
@@ -56,104 +52,104 @@ toc:
 
 ## Background
 
-The dynamics of learning in artificial neural networks capture how the parameters of a network change over time during training as a function of the data, architecture, and algorithm. 
-These dynamics describe how the parameters, and thus the internal representations and external behaviors of the network, evolve during training.
-In neural networks with at least one hidden layer, these dynamics are *nonlinear* even when the activation function is linear, making them challenging to characterize.
+The dynamics of learning in artificial neural networks capture how the parameters of a network change over time during training as a function of the data, architecture, and training algorithm. 
+The internal representations and external behaviors of the network evolve during training as a consequence of these dynamics.
+In neural networks with at least one hidden layer, these dynamics are *nonlinear* even when the activation function is linear <d-cite key="saxe2014exact"></d-cite>, making them challenging to characterize even qualitatively.
+Nevertheless, understanding learning dynamics is central to machine learning research, as they determine how networks acquire useful features that generalize to unseen data through the data-driven optimization process of gradient descent on the training objective.
 
-[### Empirical studies of neural network dynamics]: # 
+### Empirical studies of learning dynamics
 
-### Theoretical analyses of neural network dynamics 
+Empirical work uses simulations of training dynamics to visualize and characterize the geometry of neural network loss landscapes and the trajectories networks take during optimization. 
+Early work by Choromanska et al. <d-cite key="choromanska2015loss"></d-cite> and Goodfellow et al. <d-cite key="goodfellow2015qualitatively"></d-cite> challenged the notion that local minima were a significant obstacle to optimization, finding that most local minima have similar loss values.
+Garipov et al. <d-cite key="garipov2018loss"></d-cite> further showed that different solutions are often connected by simple paths in parameter space.
+Visualization techniques developed by Li et al. <d-cite key="li2018visualizing"></d-cite> and Sagun et al. <d-cite key="sagun2018empirical"></d-cite> revealed the structure of these landscapes, showing how network width and depth affect the loss geometry. Fort et al. examined how networks traverse these landscapes <d-cite key="fort2019goldilocks"></d-cite> and characterizing the role of network width in determining training trajectories <d-cite key="fort2020deep"></d-cite>.
+More recent work by Entezari et al. <d-cite key="entezari2022rolea"></d-cite> has worked connected these empirical observations to theoretical frameworks for understanding optimization dynamics.
 
-Theoretical approaches to understanding neural network learning dynamics have revealed two distinct training regimes.
-The first regime, known as *lazy training*,<d-cite key="chizat2019lazy"></d-cite> occurs when network parameters stay close to their initialization throughout training, which can be induced by initializing with small weights.
-In this regime, the network behaves similarly to a kernel method, with dynamics characterized by the *neural tangent kernel* (NTK).<d-cite key="jacot2020neural"></d-cite><d-cite key="arora2019finegrained"></d-cite><d-cite key="allen-zhu2020learning"></d-cite>
 
-The second regime, termed *feature learning*<d-cite key="yang2022feature"></d-cite>, represents a more complex dynamics in which networks substantially modify their internal representations during training. 
-This regime better captures the behavior of modern deep learning systems, where networks learn nontrivial features of a task. 
-The interplay between these regimes depends on factors like network width, learning rate, and initialization scale.
-Recent work has shown that the transition between lazy and feature learning regimes can be controlled through careful scaling of these parameters.
+### Theoretical analyses of learning dynamics 
 
-Even seemingly simple architectures like deep linear networks can exhibit rich feature learning dynamics<d-cite key="saxe2014exact"></d-cite>, including distinct learning phases where different hierarchical features emerge at different timescales.
-This theoretical framework has proven valuable for analyzing phenomena like implicit regularization, optimization landscapes, and the role of overparameterization in deep learning.
+Theoretical approaches to understanding neural network learning dynamics use mathematical tools to describe how network parameters evolve during training.
+These analyses have revealed two distinct training regimes.
+The first regime, known as *lazy training* <d-cite key="chizat2019lazy"></d-cite>, occurs when network parameters stay close to their initialization throughout training.
+In this regime, the network behaves similarly to a kernel method, with dynamics characterized by the *neural tangent kernel* <d-cite key="jacot2020neural"></d-cite><d-cite key="arora2019finegrained"></d-cite><d-cite key="allen-zhu2020learning"></d-cite>.
 
-### Statistical physics for neural network dynamics 
+The second regime, termed *feature learning* <d-cite key="yang2022feature"></d-cite>, represents a more complex dynamics in which networks substantially modify their internal representations during training as a function of the task.
+Even seemingly simple architectures like deep linear networks can exhibit rich feature learning dynamics <d-cite key="saxe2014exact"></d-cite>, including distinct learning phases where different hierarchical features emerge rapidly followed by plateaus of little progress.
+The transition between the rich and lazy regimes depends on the interplay between factors such as the network width, learning rate, and initialization scale <d-cite key="yang2023spectral"></d-cite>, and the dynamics can transition between these regimes during training <d-cite key="kunin2024get"></d-cite>, resulting in drastic changes in generalization behavior <d-cite key="kumar2023grokking"></d-cite>.
 
-Statistical physics offers powerful tools for characterizing macroscopic behavior emerging from collections of microscopic particles, an approach with deep roots in physics. 
-Early pioneering work by Gardner applied these techniques to neural networks by viewing neurons as microscopic particles in a complex system <d-cite key="gardner1989three"></d-cite>.
+### Statistical physics for learning dynamics 
 
-The primary goal of statistical physics approaches is to analytically characterize the time-varying generalization error through reduction to macroscopic variables to be defined.
-These analyses can be performed under various neural network parameter regimes, often considering asymptotic limits (such as infinite width or input dimension) where the system concentrates—exhibiting fewer fluctuations in a precise sense—leading to simpler dynamical descriptions; see Cui (2024)<d-cite key="cui2024highdimensional"></d-cite> for a review of these regimes.
+Statistical physics offers tools for characterizing macroscopic behavior emerging from collections of microscopic particles <d-cite key="helias2019statistical"></d-cite> <d-cite key="urbani2024statistical"></d-cite>.
+Early pioneering work by Gardner applied these techniques to neural networks by viewing neurons as the microscopic particles in a complex system <d-cite key="gardner1989three"></d-cite>.
+The primary goal of many statistical physics approaches to learning dynamics is to derive an exact equation for time-varying generalization error through reduction to macroscopic variables to be defined.
+These analyses can be performed under various neural network parameter regimes, often considering asymptotic limits (such as infinite width or infinite input dimension) where the system concentrates—exhibiting fewer fluctuations in a precise sense—leading to simpler dynamical descriptions; see Cui <d-cite key="cui2024highdimensional"></d-cite> for a review of these regimes.
 
-#### Our focus: Narrow neural networks in the teacher-student setting
+#### Our focus: The teacher-student setting
 
-The teacher-student framework, introduced by Gardner <d-cite key="gardner1989three"></d-cite>, provides a controlled setting for studying neural network learning with statistical physics techniques.
-In this paradigm, a student network learns to mimic a fixed teacher network that generates the training data.
-Classical analytical results were achieved by Saad and Solla <d-cite key="saad1995online"></d-cite> and Riegler and Biehl <d-cite key="riegler1995online"></d-cite> in the 1990s, who derived exact equations for the generalization dynamics this teacher-student setup with a particular scaling.
-
-These analytical results provide exact, time-resolved predictions of learning dynamics, captures nonlinear feature learning phenomena, and allows precise study of generalization behavior.
+The teacher-student framework, introduced by Gardner <d-cite key="gardner1989three"></d-cite>, provides perhaps the simplest setting for studying neural network learning with statistical physics techniques.
+In this paradigm, a student network learns to mimic a fixed teacher network that generates labels for training data drawn from a given input  distrubution.
+Classical analytical results were achieved by Saad & Solla <d-cite key="saad1995online"></d-cite> and Riegler and Biehl <d-cite key="riegler1995online"></d-cite> in the 1990s, who derived exact equations for the generalization dynamics this teacher-student setup with a particular scaling.
 These analyses requires specific assumptions about the data distribution—in particular, that it is Gaussian—and the results require the input dimension to be large to enable solvability.
-Despite these constraints, this framework allow granular study of various learning regimes, including feature learning.
+Despite these constraints, this framework allow granular study of various learning regimes, including overparamerization and a feature-learning phenomena termed *specialization*.
 
-Much recent work builds on these classical analyses to expand the frontier of solvable training regimes, exploring parameter settings beyond those considered by Saad and Solla and Riegler and Biehl. <d-cite key="goldt2020dynamics"></d-cite>
+Much recent work builds on these classical analyses to expand the frontier of solvable training regimes, exploring parameter settings beyond those considered by Saad & Solla and Riegler & Biehl <d-cite key="goldt2020dynamics"></d-cite>.
 These techniques have also found applications beyond generalization error dynamics, which we detail in the final section of this blog post. 
-Next, we focus on the foundational results from Saad and Solla that form the basis of these analyses.
+Next, we provide a pedagocial introduction to the foundational results from Saad & Solla <d-cite key="saad1995online"></d-cite>.
 
 ## Methods
 
-In this section, we describe the teacher-student neural network setup. Next, we present the mathematical 
-framework 
-to characterize the gradient descent learning dynamics of the student network in terms of its order param
-eters. To 
-complement the simulations  and theoretical framework, we include code snippets for computing each compon
-ent.
-
-Each element of the teacher-student setup is implemented  as an object, with the underlying computations 
-efficiently 
-coded in JAX for clarity and speed. The code adheres closely to the notation used in the equations,  leve
-raging 
-broadcasting to accelerate computations and enabling JIT compilation for further optimization
+In this section, we detail the teacher-student setup of Saad & Solla <d-cite key="saad1995online"></d-cite>.
+We present a pedagogical tour of their mathematical framework to characterize the gradient descent learning dynamics of the student network in terms of its order parameters, noting some inconsistencies in the original derivations <d-cite key="saad1995online"></d-cite> and in follow-up extensions <d-cite key="goldt2020dynamics"></d-cite>.
+To complement the derivations, we include code snippets for computing the macroscopic variables describing the learning dynamics efficiently in JAX <d-cite key="jax2018github"></d-cite>, which we use to test the theory-experiment overlap of the generalization error dynamics targeted by Saad & Solla <d-cite key="saad1995online"></d-cite>.
 
 ### The teacher-student setup
 
-In the teacher-student setting, the data generation process used to train the student network is 
-described by a teacher network. We focus on the online learning setting, where new samples are drawn from the data generation process. In this setting, as new samples are drawn, the batch size has no effect on the dynamics, 
-except to reduce the noise in the gradient estimate. We sample multiple $(x_{s}, y_{s})^{u}$ pairs to fill a batch 
-$s = 1, \ldots, B$ and update the student network using gradient descent iterations, indexed by $u$.
+In the teacher-student setting of Saad & Solla <d-cite key="saad1995online"></d-cite>, the data generation process used to train the student network is described by a distrubution over inputs $x$ and a teacher providing target outputs $y$.
 
-A teacher can be defined in a general way by 
+Saad & Solla focus on the online learning (also termed *stochastic* gradient descent) setting, where new samples are drawn from the data generation process uniformly at random.
+In this setting, a batch size greater than one has no substantial effect on the dynamics except to reduce the noise in the gradient estimate. 
+As such, in simulations we use minibatch stochastic gradient descent and sample multiple $(x_{s}, y_{s})^{u}$ pairs to fill a batch 
+$s = 1, \ldots, B$.
+We consider updates of the student network using gradient descent iterations indexed by $u$.
+
+The teacher, including that of Saad & Solla <d-cite key="saad1995online"></d-cite>, is generally defined as
 
 $$\begin{equation} 
-y_{s}^{u} = f^{*}(x_{s}^{u}, W^{*}) + \sigma \xi^{u}, 
+y_{s}^{u} = f^{*}(x_{s}^{u}, W^{*}) + \sigma \xi^{u}~, 
 \end{equation} $$ 
 
-where $f^{*}( \cdot , W^{*})$ is the mapping defined by the teacher network with parameters $W^{*}$, $\xi^{
-u} \sim \mathcal{N}(0, 1)$, and 
-$\sigma$ scales the output noise. The student network is generally defined as 
+where $$f^{*}( \cdot , W^{*})$$ is the mapping defining the teacher with parameters $$W^{*}$$, $$\xi^{u} \sim \mathcal{N}(0, 1)$$, and 
+$$\sigma$$ scales the output noise. 
+
+The student network is generally defined as 
 
 $$ \begin{equation}
 \hat{y}_{s}^{u} = f(x_{s}^{u}, W), 
 \end{equation} $$ 
 
-where $f( \cdot , W)$ is the mapping generated by the student, and $W$ are the parameters of the student network. 
-In general, $f$ and $f^{*}$ are the same (e.g., a neural network), where the parameters are the weights of the network.
+where $$f( \cdot , W)$$ is the mapping defining the student, and $$W$$ are the parameters of the student. 
+In teacher-student, $$f$$ and $$f^{*}$$ share the same parameterizaton to enable finegrained comparison between the learning of the student and the teacher definited the task.
+Commonly, they are both neural networks and the parameters $$W$$ and $$W^{*}$$ are the weights of the networks.
+In Saad & Solla <d-cite key="saad1995online"></d-cite>, both the teacher and student networks were modeled as a soft-committee machine, which is an average of non-linear perceptrons.
 
-To train the student network, we use gradient descent to minimize the mean squared error function at iteration $u$:
+To train the student network, Saad & Solla <d-cite key="saad1995online"></d-cite> 
+consider gradient descent to improve on the mean squared error between teacher and student outputs at iteration $u$:
 
 $$ \begin{equation}
-\mathcal{L}^{u} = \frac{1}{2B} \sum_{s=1}^{B} \left( \hat{y}_{s}^{u} - y_{s}^{u} \right)^{2}, 
+\mathcal{L}^{u} = \frac{1}{2B} \sum_{s=1}^{B} \left( \hat{y}_{s}^{u} - y_{s}^{u} \right)^{2}~, 
 \end{equation} $$
 
 where samples to fill a batch consist of $(x_{s}, y_{s})^{u}$ pairs with $i = 1, \ldots, B$, 
 $x \sim \mathcal{N}(0, I)$ of dimension $N$, and the target $y_{s}^{u}$ is generated by feeding $x_{s}^{u}$ to the 
 teacher network. 
-We then update the student network's weights to minimize the loss function $\mathcal{L}^{u}$, effectively learning 
-the same mapping as the teacher. The weights of the student network are updated using gradient descent as follows:
+The weights of the student network are updated using gradient descent as
 
 $$ \begin{equation}
-W^{u+1} = W^{u} - \eta_{W} \frac{\partial \mathcal{L}^{u}}{\partial W}, 
+W^{u+1} = W^{u} - \eta_{W} \frac{\partial \mathcal{L}^{u}}{\partial W}~, 
 \end{equation} $$
 
-where $\eta_{W}$ is the learning rate. 
+where $\eta_{W}$ is the learning rate for parameters $$W$$
+This procedure can be shown to converge to near-zero training error in the limit of infinite data and small learning rates if the student is overparameterized with respect to the teacher <d-cite key="saad1995online"></d-cite>.
 
 **How is the teacher-student setting useful here?** One way to analyze learning 
 dynamics in neural networks is to pose the learning network as a dynamical system, where the gradient descent updates 
