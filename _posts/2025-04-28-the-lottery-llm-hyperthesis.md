@@ -184,9 +184,11 @@ The reasoning algorithm $\mathcal{A}$ is described as Algorithm 1, employing a d
 
 
 
-**External Knowledge and Tools.** At each problem-solving step, Algorithm 1 initially determines whether to directly address the problem using the external knowledge base $\mathcal{D}$ or external tools $\mathcal{C}$. If affirmative, Algorithm 1 employs $g_\phi$ to analyze the problem $q$ and identify the requisite knowledge or tools for resolution. Subsequently, based on the generated requests, the retriever $\mathcal{R}$ searches for external knowledge $d \in \mathcal{D}$ or tool $c \in \mathcal{C}$ to furnish the necessary results. These supplementary results are then integrated with the problem $q$ for resolution by the model $g_\phi$. This design facilitates the utilization of Retrieval Augmented Generation (RAG) and external tools, such as arithmetic calculation functions, Internet search engines, and logic solvers, to address the problem $q$.
 
-**External Memory.** The external memory $\mathcal{M}$ serves to store intermediate results during the reasoning process. When addressing different sub-problems, intermediate results can be stored in the external memory for reuse in subsequent steps. By interacting with the external memory, Algorithm 1 can replicate reasoning methods with working memory<d-cite key="wang2024symbolic"></d-cite>. The form of the `Divide_and_Conquer` function in Algorithm 1 is not restricted. Through meticulous design and programming, the recursive mechanism can implement basic operations such as MOV, COPY, JUMP, and WRITE and READ from the external memory, thereby simulating a Turing machine<d-cite key="Memory-Augmented-Turing"></d-cite>, as illustrated in Figure 3.
+**External Knowledge and Tools.** During each phase of problem-solving, Algorithm 1 initially assesses whether the problem can be directly addressed using the external knowledge base $\mathcal{D}$ or external tools $\mathcal{C}$. If so, Algorithm 1 utilizes $g_\phi$ to evaluate the problem $q$ and ascertain the necessary knowledge or tools required for its resolution. Subsequently, based on the generated requests, the retriever $\mathcal{R}$ searches for external knowledge $d \in \mathcal{D}$ or tool $c \in \mathcal{C}$ to provide the requisite results. These supplementary results are then integrated with the problem $q$ for resolution by the model $g_\phi$. This framework facilitates the application of Retrieval Augmented Generation (RAG) and external tools, such as arithmetic calculation functions, Internet search engines, and logic solvers, to effectively address the problem $q$.
+
+**External Memory.** The external memory $\mathcal{M}$ functions as a repository for storing intermediate results throughout the reasoning process. When tackling various sub-problems, intermediate results can be stored in the external memory for reuse in subsequent steps. By interacting with the external memory, Algorithm 1 can emulate reasoning methods that utilize working memory<d-cite key="wang2024symbolic"></d-cite>. The structure of the `Divide_and_Conquer` function in Algorithm 1 is not constrained. Through careful design and programming, the recursive mechanism can execute fundamental operations such as MOV, COPY, JUMP, and WRITE and READ from the external memory, thereby simulating a Turing machine<d-cite key="Memory-Augmented-Turing"></d-cite>, as depicted in Figure 3.
+
 
 
 <figure style="text-align: center;">
@@ -209,10 +211,11 @@ Most of previous model compression<d-cite key="Sun2023ASA_wanda, Frantar2023Spar
     <figcaption style="font-size: 1em;">Figure 5: NIAH results of LLaMA3-8B-Instruct with preprocessing prompts.</figcaption>
 </figure>
 
-As shown in the figures, preprocessing prompts significantly improves the LLM's performance on the NIAH test. Notably, even when the input length exceeds the model's context size (8K tokens for LLaMA3-8B-Instruct), there is no performance degradation, demonstrating that we can exploit the preprocessed prompts to improve the LLM's retrieval ability.
 
+The figures illustrate that preprocessing prompts markedly enhances the performance of LLMs on the NIAH test. Importantly, even when the input length surpasses the model's context size (8K tokens for LLaMA3-8B-Instruct), there is no observed degradation in performance. This indicates the potential of utilizing preprocessed prompts to augment the retrieval capabilities of LLMs.
 
-**Ability 2: Identifying External Required Results.** To accurately find out which external resources to exploit, like searching knowledge or calling the external tools, the LLM $q_\phi$ needs to have the ability to understand and associate the problem $q$ and related sub-problems with the resources. Thus, $q_\phi$ needs to have some basic knowledge about the problem $q$ and the external resources. Also, it needs to have remarkable ability to bind questions with the provided resources. Once the external tools are used well, the performance of the small LLM can be improved significantly. The following table show the results of the arithmetic problems with different LLMs and methods. The PAL<d-cite key="pmlr-v202-gao23f"></d-cite> used the external arithemetic calculation functions to solve the arithmetic problems and significantly improve the performance of the small LLM.
+**Ability 2: Identification of Required External Resources.** To effectively determine which external resources to utilize, such as knowledge databases or external tools, the LLM $q_\phi$ must possess the capability to comprehend and correlate the problem $q$ and its associated sub-problems with the relevant resources. Consequently, $q_\phi$ should have foundational knowledge of the problem $q$ and the external resources. Additionally, it must exhibit a strong ability to associate queries with the available resources. When external tools are adeptly employed, the performance of smaller LLMs can be significantly enhanced. The subsequent table presents the results of arithmetic problem-solving using various LLMs and methodologies. The PAL<d-cite key="pmlr-v202-gao23f"></d-cite> approach, which employs external arithmetic calculation functions, demonstrates a substantial improvement in the performance of smaller LLMs.
+
 
 
 |        | GSM8K | SVAMP | ASDIV |  ADDSUB | MULTIARITH |
@@ -223,9 +226,10 @@ As shown in the figures, preprocessing prompts significantly improves the LLM's 
 | CoT Codex    | 65.6  | 74.8  | 76.9  |  86.0   | 95.9       |
 | CoT PaLM-540B | 56.9  | 79.0  | 73.9  |  91.9   | 94.7       |
 | CoT Minerva 540B | 58.8  | -     | -     | -      | -          |
-| PAL            | **72.0**  | **79.4**  | **79.6**  | **92.5**   | **99.2**       |
+| PAL<d-cite key="pmlr-v202-gao23f"></d-cite>            | **72.0**  | **79.4**  | **79.6**  | **92.5**   | **99.2**       |
 
-Besides, with provided the external documents, the small LLM (Llama-3-Ins8B) show the superb performance in many QA tasks<d-cite key="mallen2023not, kwiatkowski2019natural, stelmakh2022asqa"></d-cite> than the large LLMs (Llama-3-Ins70B and ChatGPT-4oMINI).
+Besides, with provided the external documents, following results<d-cite key="asai2024selfrag"></d-cite> show that the small LLM (Llama-3-Ins8B) show the superb performance in many QA tasks<d-cite key="mallen2023not, kwiatkowski2019natural, stelmakh2022asqa"></d-cite> than the large LLMs (Llama-3-Ins70B and ChatGPT-4oMINI).
+
 
 | Method | LLM | PopQA (acc) | NQ (acc) | ASQA (str-em) | ASQA (hit) | 
 |--------|-----|-------------|----------|---------------|-------------|
@@ -235,16 +239,19 @@ Besides, with provided the external documents, the small LLM (Llama-3-Ins8B) sho
 | With RAG | Llama-3-Ins8B | **59.8** | **54.0** | **38.8** | **14.0** |
 
 
-**Ability 3: Planning and Scheduling.** To split the problem $q$ into multiple sub-problems and solve them one by one, the LLM $q_\phi$ needs to have the ability to plan and schedule the sub-problems. This is crucial for the lottery LLM to solve the complex problems. Thus, the LLM $q_\phi$ needs to have a good understanding of the problem $q$ and the sub-problems. However, the details of solving the sub-problems may not be requied for the LLM $q_\phi$. Because the external resources can be used to solve the sub-problems. And the efficient scheduling ability is also important for the lottery LLM for improving the reasoning efficiency.
 
-The following table shows the performance of LLMs with the naive inference or with scheduling the problem into multiple sub-problems and using external logic solvers Logic-LM<d-cite key="pan-etal-2023-logic"></d-cite>. We highlight the results (naive inference/with Logic-LM) of the GPT-3.5 which is weaker than GPT-4 but shows the better the similar performence than GPT-4 with the naive inference.
+**Ability 3: Planning and Scheduling.** To effectively decompose the problem $q$ into multiple sub-problems and address them sequentially, the LLM $q_\phi$ must possess robust planning and scheduling capabilities. This competency is essential for the lottery LLM to tackle complex problems efficiently. Consequently, the LLM $q_\phi$ should have a comprehensive understanding of both the primary problem $q$ and its constituent sub-problems. However, the intricate details of solving these sub-problems may not be necessary for the LLM $q_\phi$, as external resources can be leveraged to resolve them. Moreover, proficient scheduling is crucial for the lottery LLM to enhance reasoning efficiency.
+
+The table below illustrates the performance of LLMs using simple inference compared to those employing a strategy of decomposing the problem into sub-problems and utilizing external logic solvers, such as Logic-LM<d-cite key="pan-etal-2023-logic"></d-cite>. The used five datasets are commonly used in the logical reasoning tasks. Notably, we emphasize the results<d-cite key="pan-etal-2023-logic"></d-cite> (simple inference/with Logic-LM) of GPT-3.5, which, despite being less advanced than GPT-4, demonstrates comparable performance to GPT-4 (GPT-3.5 with Logic-LM compared with GPT-4 with simple inference). Thus, with advanced reasoning algorithms, the weaker LLMs can outperform the stronger LLMs in advanced tasks.
+
+
 
 | Dataset            | ChatGPT (gpt-3.5-turbo) | GPT-3.5 (text-davinci-003) | GPT-4 (gpt-4) |
 |--------------------|-------------------------|----------------------------|---------------|
-| PrOntoQA           | 47.40 / 61.00           | 83.00 / **85.00**          | 77.40 / 83.20 |
-| ProofWriter        | 35.50 / 58.33           | 48.33 / **71.45**          | 52.67 / 79.66 |
-| FOLIO              | 45.09 / **62.74**           | 57.84 / 61.27          | 69.11 / 78.92 |
-| LogicalDeduction   | 40.00 / **65.67**           | 48.33 / 62.00              | 71.33 / 87.63 |
+| PrOntoQA           | 47.40 / 61.00           | 51.80 / **85.00**          | 77.40 / 83.20 |
+| ProofWriter        | 35.50 / 58.33           | 36.16 / **71.45**          | 52.67 / 79.66 |
+| FOLIO              | 45.09 / **62.74**           | 54.60 / 61.27          | 69.11 / 78.92 |
+| LogicalDeduction   | 40.00 / **65.67**           | 41.33 / 62.00              | 71.33 / 87.63 |
 | AR-LSAT            | 20.34 / 26.41           | 22.51 / **25.54**              | 33.33 / 43.04 |
 
 
