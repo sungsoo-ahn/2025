@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: "A Curious Case of the Missing Measure: Better Scores and Worse Generation"
-description: "Our field has a secret: nobody fully trusts audio evaluation measures. As models improve, audio evaluation measures struggle to find audio generation flaws with high precision. These measures often contradict each other when comparing models, suggesting we're missing something important: an single automatic evaluation measure that can detect if a pair of audio is perceptibly different. The problem is exacerbated in the regime of comparing recent neural audio models that can generate audio nearing perceptual fidelity. The impact is slower research cycles, costly human evaluation, and difficulty predicting failure modes. We discuss how such a measure might be precisely defined, and explore whether strategic data collection combining traditional psychoacoustic measures with learned perceptual features could provide a path forward. While we focus on universal audio generation, the increasing gap between model capability and evaluation reliability raises important questions for generative modeling."
+description: "Our field has a secret: nobody fully trusts audio evaluation measures. As neural audio generation nears perceptual fidelity, these measures fail to detect subtle differences that human listeners readily identify, often contradicting each other when comparing state-of-the-art models. The gap between human perception and automatic measures means we have increasingly sophisticated models while losing our ability to understand their flaws."
 
 date: 2025-04-28
 future: true
