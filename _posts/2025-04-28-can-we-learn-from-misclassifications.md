@@ -71,77 +71,75 @@ Note: please use the table of contents as defined in the front matter rather tha
 | Resnet101      | 0.898816      | 0.777873      | 0.841248      | 0.451866      | 0.607102      | 0.587721      | 0.471974      |
 | Resnet152      | 0.918961      | 0.784820      | 0.834101      | 0.513276      | 0.560512      | 0.600739      | 0.498934      |
 
-<div class="l-screen">
+<div class=".l-screen">
   <table>
     <thead>
       <tr>
-        <th>model\Matrices</th>
-        <th>Column 1</th>
-        <th>Column 2</th>
-        <th>Column 3</th>
-        <th>Column 4</th>
-        <th>Column 5</th>
-        <th>Column 6</th>
+        <th>Model\Matrices</th>
+        <th>'Cos_Sim_G'</th>
+        <th>'Cos_Sim_R'</th>
+        <th>'Cos_Sim_act'</th>
+        <th>'Grad_Cam_CC'</th>
+        <th>'Grad_Cam_KLD'</th>
+        <th>'Grad_Cam_SSIM'</th>
+        <th>'Grad_Cam_AUC'</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>Row 1</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
+        <td>Resnet18</td>
+        <td>0.832475</td>
+        <td>0.750405</td>
+        <td>0.809194</td>
+        <td>0.514107</td>
+        <td>0.546371</td>
+        <td>0.640893</td>
+        <td>0.473252</td>
       </tr>
       <tr>
-        <td>Row 2</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
+        <td>Resnet34</td>
+        <td>0.891979</td>
+        <td>0.760314</td>
+        <td>0.821133</td>
+        <td>0.547336</td>
+        <td>0.303619</td>
+        <td>0.717424</td>
+        <td>0.482986</td>
       </tr>
       <tr>
-        <td>Row 3</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
+        <td>Resnet50</td>
+        <td>0.970702</td>
+        <td>0.781508</td>
+        <td>0.842356</td>
+        <td>0.387207</td>
+        <td>0.845985</td>
+        <td>0.534813</td>
+        <td>0.441505</td>
       </tr>
       <tr>
-        <td>Row 4</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
+        <td>Resnet101</td>
+        <td>0.898816</td>
+        <td>0.777873</td>
+        <td>0.841248</td>
+        <td>0.451866</td>
+        <td>0.607102</td>
+        <td>0.587721</td>
+        <td>0.471974</td>
       </tr>
       <tr>
-        <td>Row 5</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-      </tr>
-      <tr>
-        <td>Row 6</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
-        <td>Value</td>
+        <td>Resnet152</td>
+        <td>0.918961</td>
+        <td>0.784820</td>
+        <td>0.834101</td>
+        <td>0.513276</td>
+        <td>0.560512</td>
+        <td>0.600739</td>
+        <td>0.498934</td>
       </tr>
     </tbody>
   </table>
 </div>
+
 
 Where the columns of the table represent: 
 
