@@ -127,7 +127,7 @@ Despite the above advantages, these private evaluation leaderboards by data cura
 ### 2-1 Financial Incentives and Conflicts of Interest
 
 
-As private evaluators like ScaleAI gain prominence, the financial dynamics between them and model developers become a critical concern <d-cite key="forbes2024openai"></d-cite>. Companies may invest heavily in these evaluations to secure favorable rankings, creating a potential conflict of interest. For instance, if a data curation company provides both SFT/preference data and evaluation services to a client, there is an inherent incentive to design evaluation datasets that highlight the strengths of the client's models. This could lead to biased evaluations where certain models consistently outperform competitors, not necessarily due to superior capabilities but because the evaluation criteria are tailored to favor them. In the following screenshot from Scale AI, we can see that LLM training companies like OpenAI and Cohere are customers of ScaleAI. At the same time, ScaleAI evaluates the performance of these models based on its leaderboard.
+As private evaluators like ScaleAI gain prominence, the financial dynamics between them and model developers become a critical concern <d-cite key="forbes2024openai"></d-cite>. Companies may invest heavily in these evaluations to secure favorable rankings, creating a potential conflict of interest. For instance, if a data curation company provides both finetuning data and evaluation services to a client, there is an inherent incentive to design evaluation datasets that highlight the strengths of the client's models. This could lead to biased evaluations where certain models consistently outperform competitors, not necessarily due to superior capabilities but because the evaluation criteria are tailored to favor them. In the following screenshot from Scale AI, we can see that LLM training companies like OpenAI and Cohere are customers of ScaleAI. At the same time, ScaleAI evaluates the performance of these models based on its leaderboard.
 
 
 {% include figure.html path="assets/img/2025-04-28-risks-private-evals/scale_customers.png" class="img-fluid" %}
@@ -144,7 +144,7 @@ This scenario raises important questions about transparency and fairness. Should
 Private evaluators often employ expert annotators to assess model outputs, aiming to ensure high-quality and reliable evaluations. However, these annotators bring their own subjective preferences and biases, which can influence the evaluation outcomes. If the annotators favor certain styles of responses or have been involved in creating training data for specific models, their assessments might inadvertently favor those models. This bias can create an uneven playing field, where models that align with the annotators' preferences perform better in evaluations, regardless of their general applicability or performance across a broader user base. Even when the annotators act in good faith, biases because of the dual roles of such evaluators can occur in various ways:
 
 
-1. **Overlap in Evaluation and Training Prompts**: Scale AI may have a broad set of “tasks” or questions in their evaluations that are similar or identical to those used in a model's training data. As an example, platforms like LMSys's Chatbot Arena allow users to input prompts and rank model responses. If a model developer has access to these prompts, they can fine-tune their models to perform exceptionally well on them. It has already been seen how recent efforts in LLM pre-training (like Gemma models) have started fine-tuning on LMSys chats to boost the model’s ELO score on the Chatbot Arena. Note that while LMSys is primarily an evaluator and *not* a data curator, this annecdote serves as evidence of how side-information about data curation can be beneficial in gaming evaluations.<br> **Impact:** Models appear to perform better not because they have superior general capabilities, but because they have been specifically trained on the evaluation data. This creates an artificial performance boost and does not reflect the model's real-world effectiveness.
+1. **Overlap in Evaluation and Training Prompts**: Scale AI may have a broad set of “tasks” or questions in their evaluations that are similar or identical to those used in a model's training data. As an example, platforms like LMSys's Chatbot Arena allow users to input prompts and rank model responses. If a model developer has access to these prompts, they can fine-tune their models to perform exceptionally well on them. It has already been seen how recent efforts in LLM pre-training (like Gemma models) have started fine-tuning on LMSys chats to boost the model’s ELO score on the Chatbot Arena. Note that while LMSys is primarily an evaluator and *not* a data curator, this anecdote serves as evidence of how side-information about data curation can be beneficial in gaming evaluations.<br> **Impact:** Models appear to perform better not because they have superior general capabilities, but because they have been specifically trained on the evaluation data. This creates an artificial performance boost and does not reflect the model's real-world effectiveness.
 
 
 
@@ -157,12 +157,10 @@ Private evaluators often employ expert annotators to assess model outputs, aimin
 ---
 ## 3. Simulation of Bias in Model Evaluations
 
+Let us now simulate and quantify the impact of the bias induced due to overlap in human annotators between training and evaluation. To empirically demonstrate how evaluator biases can influence private evaluations, we conducted an experiment simulating two private evaluation companies, Company Alpha and Company Beta. Each company develops its own set of evaluation leaderboards but has the dual responsibility of also providing instruction fine-tuning data to their own clients (LLM trainers). This setup mirrors real-world scenarios where Company Alpha and Beta might represent ScaleAI and one of their competitors.
 
-To empirically demonstrate how evaluator biases can influence private evaluations, we conducted an experiment simulating two private evaluation companies, Company Alpha and Company Beta. Each company develops its own set of evaluation leaderboards but has the dual responsibility of also providing instruction fine-tuning data to their own clients (LLM trainers). This setup mirrors real-world scenarios where Company Alpha and Beta might represent ScaleAI and one of their competitors.
 
-
-For this set of experiments, we consider the most benign case in which both companies A and B **act in good faith**. They take precautions to ensure there is no overlap in the evaluation leaderboard, no overlap in the question templates, and tasks. We study the “mildest” form of bias, where given two outputs, Company Alpha and Beta’s annotators, only provide an output. Let us concretely understand what the experiment setup looks like.
-
+In this set of experiments, we focus on the most benign scenario where both Companies A and B **act in good faith**. They ensure that their curated data, accessible to customers, does not include privileged information related to the evaluation leaderboard, such as specific question templates, tasks, or answer styles. We examine the “mildest” form of bias: when annotators from Company Alpha and Company Beta are asked to evaluate and provide a single output for a given input. Let’s now describe the experimental setup in detail.
 
 
 ---
@@ -268,7 +266,7 @@ Let us finally dive into the metric that has captivated the LLM world, ELO ranki
 | Evaluator Beta (Claude) | <span style="background-color: #ffe6e6; color: black">959</span> | <span style="background-color: #e6ffe6; color: black">1040</span> |
 
 
-An ELO difference of 44 on the LMSys leaderboard is a significant amount of bragging rights, as can be seen by these tweets at a 5-20 ELO difference.
+An ELO difference of 44 on the LMSys leaderboard allows for a significant amount of bragging rights, as can be seen by these tweets at a 5-20 ELO difference.
 
 
 
@@ -287,7 +285,7 @@ An ELO difference of 44 on the LMSys leaderboard is a significant amount of brag
 
 
 
-These ELO differences further highlight the significance of the bias each evaluator has toward the model fine-tuned on its own preferences.
+These ELO differences further highlight the significance of the bias each evaluator has towards the model fine-tuned on its own preferences.
 
 
 
