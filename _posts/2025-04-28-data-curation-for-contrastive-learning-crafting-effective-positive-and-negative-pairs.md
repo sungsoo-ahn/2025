@@ -508,10 +508,7 @@ AudioCLIP <d-cite key="guzhov2022audioclip"></d-cite> is an extension of the CLI
 
 *Audio-Visual Instance Discrimination (AVID)<d-cite key="morgado2021audio"></d-cite>* is a self-supervised learning approach designed to learn representations from both audio and visual data by leveraging their natural correspondence. Unlike traditional methods that focus on within-modal discrimination, AVID emphasizes cross-modal discrimination, aiming to align audio and visual features effectively. AVID employs a contrastive learning framework where the model learns to associate corresponding audio and visual pairs (positive pairs) while distinguishing them from non-corresponding pairs (negative pairs). This approach enhances the model's ability to capture the inherent relationships between audio and visual modalities.
 
-### Crafting Effective Negative Pairs
-
-<!-- TODO: Write summary of each technique before explaining papers -->
-<!-- TODO: Explain how these techniques select positive pairs -->
+## Crafting Effective Negative Pairs
 
 ### Hard negative selection 
 
