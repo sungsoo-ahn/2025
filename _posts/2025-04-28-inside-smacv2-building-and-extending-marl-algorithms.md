@@ -2,7 +2,8 @@
 layout: distill
 title: "Inside SMACv2: Building and Extending MARL Algorithms"
 description: 
-  The StarCraft Multi Agent Challenge v2 (SMACv2) environment provides a robust platform for testing and developing Multi-Agent Reinforcement Learning (MARL) algorithms, but navigating its codebase can be challenging. This blog post serves as a comprehensive guide to understanding the structure of the MARL algorithms within the SMACv2 framework. By breaking down the key components—such as agent networks, mixer networks, and transformation networks—we clarify how these algorithms are implemented and highlight the critical locations in the codebase for editing or extending functionality. We also provide a step-by-step walkthrough for adding new algorithms to the framework, lowering the barrier to entry for researchers and developers. Whether you're seeking to adapt existing algorithms or contribute novel approaches, this guide provides the necessary knowledge to navigate and enhance the SMACv2 ecosystem.
+  The StarCraft Multi Agent Challenge v2 (SMACv2) environment provides a robust platform for testing and developing Multi-Agent Reinforcement Learning (MARL) algorithms, but navigating its codebase can be challenging. This blog post serves as a comprehensive guide to understanding the structure of the MARL algorithms within the SMACv2 framework. 
+  By breaking down the key components—such as agent networks, mixer networks, and transformation networks—we clarify how these algorithms are implemented and highlight the critical locations in the codebase for editing or extending functionality. We also provide a step-by-step walkthrough for adding new algorithms to the framework, lowering the barrier to entry for researchers and developers. Whether you're seeking to adapt existing algorithms or contribute novel approaches, this guide provides the necessary knowledge to navigate and enhance the SMACv2 ecosystem.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -43,7 +44,7 @@ toc:
     - name: Transformation Network
     - name: Mixing Network
   - name : How to Add a New Algorithm
-  - name : Some Additional Information
+  - name : Common Pitfalls
   - name : Future Work
   - name : Conclusion
   # - name: Training loop
@@ -303,7 +304,7 @@ lamdba return -->
 
 
 
-## How to add a new algorithm
+## How to Add a New Algorithm
 
 In order to add a new algorithm, the following steps need to be followed. Note: Depending on the specific algorithm, there might be more steps.
 
@@ -317,7 +318,7 @@ In order to add a new algorithm, the following steps need to be followed. Note: 
 
 
 
-## Some additional information
+## Common Pitfalls
 
 1. The SMACv2 environment is procedurally generated, therefore setting the seed is tricky [github issue](https://github.com/oxwhirl/smacv2/issues/34).
 2. We never really use the joint trajectory $$\mathbf{\tau}$$. It is assumed that adding the information of the state to $$\tau_i$$ gives us a good representation of $$\mathbf{\tau}$$.
