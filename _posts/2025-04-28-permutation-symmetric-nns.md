@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Permutation Symmetric Neural Nets from the Ground Up
-description: Dealing with lists, matrices or symbols? When your problem has obvious permutation symmetries, carefully designed permutation symmetric neural networks can enable highly efficient learning, sometimes solving the task from just a few examples. In this post, we'll walk through a first principle derivation of permutation symmetric network parameterization using Taylor series, a practical network design using Einsum pooling for various types of permutation symmetry, and from scratch implementations on several problems, including matrix operation, knowledge graph reasoning and a few ARC-AGI challenge problems with permutation symmetry.
+description: Dealing with lists, matrices or symbols? When your problem has obvious permutation symmetries, carefully designed permutation symmetric neural networks can enable highly efficient learning, sometimes solving the task from just a few examples. In this post, we'll walk through a simple first principle derivation of permutation symmetric network parameterization using Taylor series, a practical network design using Einsum pooling for various types of permutation symmetry, and from scratch implementations on several problems, including matrix operation, knowledge graph reasoning and a few ARC-AGI challenge problems with permutation symmetry.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -726,9 +726,10 @@ In this section, we have learned that
 1. Symmetry constraints reduce the number of free parameters.
 2. A Taylor-series technique can be used to parameterize symmetric functions.
 3. Different symmetries can have different impacts on degrees of freedom.
-4. Certain parameterizations can reduce compute.
+4. Certain parameterizations can reduce compute exponentially.
 5. Parameterization of equivariant functions are tied to parameterization of invariant functions
 6. Permutation invariant and equivariant functions can be parameterized solely using tensor contraction terms.
+
 
 A Taylor series parameterization is sound in theory. In practice however, functions compound and high order interactions are common. Taylor series often provides too little relevant capacity and too much irrelevant capacity to be useful. Engineering is key in the journey to create universal learners of symmetric functions. In the next section, we'll focus on permutation symmetry and design a family of practical invariant and equivariant networks for various flavors of permutation symmetry.
 
@@ -894,6 +895,8 @@ With an equivariant layer, we can stack them to create a practical high capacity
 3. Residual connections for better optimization dynamics.
 4. Average pooling to create invariant dimensions if the symmetry involves invariance. 
 
+The result is an equivariant backbone as follows.
+
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-permutation-symmetric-nns/arch.png" class="img-fluid rounded z-depth-1" %}
@@ -902,6 +905,8 @@ With an equivariant layer, we can stack them to create a practical high capacity
 <div class="caption">
     Stacking multiple equivariant layers to create a practical high capacity network.
 </div>
+
+As
 
 Another consideration in practice is [einsum path optimization](https://numpy.org/doc/stable/reference/generated/numpy.einsum_path.html). For example, the einsum string `ab,dc,ae,ac,db->de` by default is programmed to be computed pairwise from left to right. By the third term, a large factor `abcde` would be created and stress the memory. Instead, if we compute pairwise via path `ab,db->ad`, `ac,dc->ad`, `ad,ad->ad` and `ad,ae->de`, the largest intermediate factor would only be 2-dimensional and the computation can also be done much faster. For modeling complex higher-order interations under certain types of symmetries, large einsums may be unavoidable, and computing them might be an interesting compute challenge.
 
@@ -923,7 +928,7 @@ class einpool_a(nn.Module):
         H=KH//self.fan_in
         x=x.split(H,dim=-1)
         y0=x[0]
-        y1=x[1].sum(-2,keepdim=True).repeat(1,N,1)
+        y1=x[1].mean(-2,keepdim=True).repeat(1,N,1)
         y2=x[2]*x[3]
         y=torch.cat((y0,y1,y2),dim=-1)
         y=y.view(*x_.shape[:-1],-1) #Recover original tensor shape
@@ -938,16 +943,20 @@ class einpool_aa(nn.Module):
         x=x_.view(-1,*x_.shape[-3:]) # Apply pooling only to the last 3 dims, supposedly `aaH`
         N,M,KH=x.shape[-3:]
         H=KH//self.fan_in
+        xn=x.view(-1,N*M,KH)
+        xn=F.normalize(xn-xn.mean(-2,keepdim=True),dim=-2,p=2,eps=1e-1).view(*x.shape)
         x=x.split(H,dim=-1)
+        xn=xn.split(H,dim=-1)
         y0=x[0]
         y1=x[1].diagonal(dim1=-2,dim2=-3).diag_embed(dim1=-2,dim2=-3)
         y2=x[2].transpose(-2,-3)
-        y3=x[3].sum(-2,keepdim=True).repeat(1,1,M,1)
+        y3=x[3].mean(-2,keepdim=True).repeat(1,1,M,1)
         y4=x[4]*x[5]
-        y5=torch.einsum('ZabH,ZbcH->ZacH',x[6],x[7])
+        y5=torch.einsum('ZabH,ZbcH->ZacH',xn[6],x[7])
         y=torch.cat((y0,y1,y2,y3,y4,y5),dim=-1)
         y=y.view(*x_.shape[:-1],-1) #Recover original tensor shape
         return y
+
 
 #Implements order-3 abH-type pooling
 class einpool_ab(nn.Module):
@@ -956,17 +965,22 @@ class einpool_ab(nn.Module):
     ndims=2
     def forward(self,x_):
         x=x_.view(-1,*x_.shape[-3:]) # Apply pooling only to the last 3 dims, supposedly `abH`
-        N,M,KH=x.shape[-3:]
+        N,M,KH=x.shape[-3:] 
         H=KH//self.fan_in
+        xn=x.view(-1,N*M,KH)
+        xn=F.normalize(xn-xn.mean(-2,keepdim=True),dim=-2,p=2,eps=1e-12).view(*x.shape)
+        #xn=F.softmax(x.view(-1,N*M,KH),dim=-2).view(*x.shape)
         x=x.split(H,dim=-1)
+        xn=xn.split(H,dim=-1)
         y0=x[0]
-        y1=x[1].sum(-2,keepdim=True).repeat(1,1,M,1)
-        y2=x[2].sum(-3,keepdim=True).repeat(1,N,1,1)
-        y3=x[3]*x[4]
-        y4=torch.einsum('ZacH,ZbcH,ZadH->ZbdH',x[5],x[6],x[7])
-        y=torch.cat((y0,y1,y2,y3,y4),dim=-1)
+        y1=x[1].mean(-2,keepdim=True).repeat(1,1,M,1)
+        y2=x[2].mean(-3,keepdim=True).repeat(1,N,1,1)
+        y3=xn[3]*x[4]
+        y4=torch.einsum('ZacH,ZbcH,ZadH->ZbdH',xn[5],xn[6],x[7])
+        y=torch.cat((y0,y1,y2,y3,y4),dim=-1) #
         y=y.view(*x_.shape[:-1],-1) #Recover original tensor shape
         return y
+
 
 #Equivariant EinNet layer
 class einnet_layer(nn.Module):
