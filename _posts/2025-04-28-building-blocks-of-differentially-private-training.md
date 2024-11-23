@@ -87,7 +87,7 @@ In principle, DP is about plausible deniability. The key insight is this: an obs
 - Know all other training data
 - Have unlimited computational power
 
-This protection should also holds true regardless of what other information the observer might have. That's a nice list of requirement, let's try to be more concrete and introduce the definition.   
+This protection should also hold true regardless of what other information the observer might have. That's a nice list of requirement, let's try to be more concrete and introduce the definition.   
 
 > **Definition** A randomized algorithm $$M$$ is said to satisfy $$(\varepsilon, \delta)$$-differential privacy if for:
 > - Any two neighbouring datasets $$D$$ and $$D'$$ that differ by just one record
@@ -111,7 +111,7 @@ For a small $$\varepsilon$$, an observer looking at the output of $M$ is not abl
 >\end{equation} $$
 > where $$p_{D}$$ and $$p_{D'}$$ are the distributions of $$M(D)$$ and $$M(D')$$ respectively. The probability is taken over $$O\sim p_D$$.
 
-This result shows that an $$(\varepsilon, \delta)$$-DP guarantee can be interpreted as high-probability bound on the ratio between the log probabilities of the outputs corresponding to two neighbouring datasets. This ratio is actually called the privacy loss and plays a critical role in the analysis of DP mechanisms. 
+This result shows that an $$(\varepsilon, \delta)$$-DP guarantee can be interpreted as a high probability bound on the ratio between the log probabilities of the outputs corresponding to two neighbouring datasets. This ratio is actually called the privacy loss and plays a critical role in the analysis of DP mechanisms. 
 
 > **Definition**  For a mechanism $$M$$ and neighbouring datasets $$D,D'$$, the privacy loss random variable is defined as:
 > $$L(M,D,D') = \ln\left( \frac{ p_{D}(O)}{p_{D'}(O)}\right)$$
@@ -189,7 +189,7 @@ $$\sigma \geq \Delta \cdot \min \left\{
 \end{array} 
 \right\}.$$
 
-Taking this one step further, <d-cite key=balle2018analytic></d-cite> proposed to use numerical solver to get even tighter bounds on $$\sigma$$, naming this approach the Analytical Gaussian Mechanism. To illustrate the differences of these approaches, we plot the values of $$\sigma$$ computed using them on our mean salary example.
+Taking this one step further, <d-cite key=balle2018analytic></d-cite> proposed to use a numerical solver to get even tighter bounds on $$\sigma$$, naming this approach the Analytical Gaussian Mechanism. To illustrate the differences of these approaches, we plot the values of $$\sigma$$ computed using them on our mean salary example.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -204,7 +204,7 @@ Taking another look at our example of computing the mean salary, we find out tha
 >1. We really care about tighter bounds as: **tighter bounds** ->  **less noise** -> **more useful results with same privacy**
 >2. In cases where it is possible to leverage numerical solvers to get tighter bounds, we are happy to do so. 
 
-The above two points are very important in both DP practice and research. While closed form bounds and asymptotic are useful in gaining intuition or proving the (non)optimality of some methods, most state of the art DP implementations are attained using numerical solvers and numerous tricks to calibrate as tightly as possible the noise magnitude and compute the privacy guarantee.
+The above two points are very important in both DP practice and research. While closed form bounds and asymptotics are useful in gaining intuition or proving the (non)optimality of some methods, most state of the art DP implementations are attained using numerical solvers and numerous tricks to calibrate as tightly as possible the noise magnitude and compute the privacy guarantee.
 
 ## From Gaussian Mechanism to DP-SGD
 
@@ -269,7 +269,7 @@ Finally, going back to our goal of calculating $$(\varepsilon_{\text{tot}}, \del
 
 After introducing the advanced composition theorem, we technically have all the ingredients for a first trial to train a small two layer neural network on a simple dataset. For our model we will use a simple two-layer neural network with RelU activation and $$128$$ hidden units. For the data, we will use $$5000$$ randomly sampled images from MNIST. To train our model with DP, we first need to set the hyperparameters $$C$$ (clipping norm) and $$T$$ (number of iteration). Then, after picking the privacy guarantee we want by setting $$\varepsilon$$ and $$\delta$$, we can use the Gaussian mechanism along with advanced composition result to calculate the magnitude of Gaussian noise required at each iteration. 
 
-In fact, we may make use of a handy result from <d-cite key=kairouz2015composition></d-cite>, which state that to get $(\varepsilon,\delta)$ it is sufficient to have each inner Gaussian mechanism satisfy $(\varepsilon_0, \delta_0)$ with $\varepsilon_0 = \frac{\varepsilon}{2\sqrt{T\log(e + \varepsilon/\delta)}}$ and $\delta_0 = \frac{\delta}{2T}$. We can then use $\varepsilon_0$ and $\delta_0$ to calculate the amount of noise we need to have. However, we are left with two hyperparameters to tune $C$ and $T$. For the gradient clipping $C$, one common heuristic to tune it is to run the training without any DP, measure the distribution of the gradient norms, and pick $C$ so that we are doing some clipping but not a lot of clipping<d-footnote>This is a bit vague. It is hard to be very specific about hyperparameters tuning intuitions. On a side note, in the wider machine learning community, gradient clipping is being used to stabilize training. The critical difference is that we are computing the average of clipped gradients, while the (wider used) gradient clipping is often a clipping of the average gradients.</d-footnote>. $T$ can also be tricky to tune. For a larger $T$, we are able to train longer but we need to use smaller $\varepsilon_0$ and $\delta_0$ forcing us to add more noise at each iteration.
+In fact, we may make use of a handy result from <d-cite key=kairouz2015composition></d-cite>, which states that to get $(\varepsilon,\delta)$ it is sufficient to have each inner Gaussian mechanism satisfy $(\varepsilon_0, \delta_0)$ with $\varepsilon_0 = \frac{\varepsilon}{2\sqrt{T\log(e + \varepsilon/\delta)}}$ and $\delta_0 = \frac{\delta}{2T}$. We can then use $\varepsilon_0$ and $\delta_0$ to calculate the amount of noise we need to have. However, we are left with two hyperparameters to tune $C$ and $T$. For the gradient clipping $C$, one common heuristic to tune it is to run the training without any DP, measure the distribution of the gradient norms, and pick $C$ so that we are doing some clipping but not a lot of clipping<d-footnote>This is a bit vague. It is hard to be very specific about hyperparameters tuning intuitions. On a side note, in the wider machine learning community, gradient clipping is being used to stabilize training. The critical difference is that we are computing the average of clipped gradients, while the (wider used) gradient clipping is often a clipping of the average gradients.</d-footnote>. $T$ can also be tricky to tune. For a larger $T$, we are able to train longer but we need to use smaller $\varepsilon_0$ and $\delta_0$ forcing us to add more noise at each iteration.
 
 To get some intuition of the tuning of $C$ and $T$, let's try a training run without any DP to see the gradients norms and the loss curves. We run gradient descent with learning $0.01$ for $5000$ iterations. For the gradients norm, the $95\%$ quantile is around $32$ and very low number of gradient go above $40$. For the sake of round numbers, let's take $C=30$ <d-footnote>One may want to do better hyperparameter tunning in practice but this blog is for illustrations only</d-footnote>
 
@@ -337,7 +337,7 @@ This means that each moment bound on the privacy loss random variable captures a
 
 **Theorem (RDP Composition)**<d-cite key=mironov2017renyi></d-cite>: If $$M_1$$ is $$(\alpha,\varepsilon_1)$$-RDP and $$M_2$$ is $$(\alpha,\varepsilon_2)$$-RDP, then their adaptive composition is $$(\alpha,\varepsilon_1+\varepsilon_2)$$-RDP.
 
-Thus to compose a series of RDP mechanism, we can simple add there epsilons. The Gaussian mechanism has another remarkable property - it simultaneously satisfies RDP at all orders $$\alpha > 1$$ with:
+Thus to compose a series of RDP mechanism, we can simply add their epsilons. The Gaussian mechanism has another remarkable property - it simultaneously satisfies RDP at all orders $$\alpha > 1$$ with:
 
 $$\varepsilon(\alpha) = \frac{\alpha}{2\sigma^2}.$$
 
@@ -353,7 +353,7 @@ Given that the Gaussian mechanism satisfies RDP for an infinite list of alphas a
 
 #### A second try at DP training: 
 
-Armed with RDP and it's cleaner composition result, let's retry the experiments of the last subsection. 
+Armed with RDP and its cleaner composition result, let's retry the experiments of the last subsection. 
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -363,7 +363,7 @@ Armed with RDP and it's cleaner composition result, let's retry the experiments 
 
 This is more encouraging. We need a way smaller noise for the same exact privacy guarantees. Let's be brave and try training for $$T=200$$ steps this time. 
 
-<div class="row mt-3">f
+<div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-building-blocks-of-differentially-private-training/rdp_comp_training.png" class="img-fluid rounded z-depth-1" %}
     </div>
@@ -453,7 +453,7 @@ Then we can write all iterations of gradient descent in a the more compact form
 
 $$\Theta = \Theta_0 - \eta AG,$$
 
-such that $$\Theta_0$$ is the matrix with all rows set to $$\theta_0$$ and $$i$$-th row of $$\Theta$$ is $$\theta_i$$. Here, $$A$$ encodes how past gradients influence current parameters. Each row of $$A$$ represents which gradients have been accumulated up to that step.
+such that $$\Theta_0$$ is the matrix with all rows set to $$\theta_0$$ and the $$i$$-th row of $$\Theta$$ is $$\theta_i$$. Here, $$A$$ encodes how past gradients influence current parameters. Each row of $$A$$ represents which gradients have been accumulated up to that step.
 
 ### DP-SGD in Matrix Form
 
@@ -475,7 +475,7 @@ Since $$z_1$$ and $$z_2$$ are independent, the total noise variance is $$2\eta^2
 Now consider an alternative scheme where  $$z_1 = -z_2$$, then 
 $$\theta_2 = \theta_0 - \eta(h_1 + h_1) $$
 
-The noise cancels out. However, releaseing $$\theta_2$$ clearly offers no privacy guarantees at all.  While this specific scheme isn't DP, it illustrates how correlating noise across steps that process the same data could reduce total variance. Then, the question becomes how to do so in a DP way.
+The noise cancels out. However, releasing $$\theta_2$$ clearly offers no privacy guarantees at all.  While this specific scheme isn't DP, it illustrates how correlating noise across steps that process the same data could reduce total variance. Then, the question becomes how to do so in a DP way.
 
 ### The Matrix Factorization Framework
 
@@ -487,7 +487,7 @@ with a noise matrix $$Z$$. The key insight is that we can factorize $$A = BC$$. 
 
 $$\widehat{AH} = B(CH+Z).$$
 
-Here, we shift the placement of the DP mechanism to make it on the computation of $$CH$$. Since, $$A$$ is independent of the data, $$B$$ is also independent of the data. So if $$CH$$ is computed in a DP way so will $$BCH=AH$$. Then, if $$C$$ is invertible, we can equivalently rewrite this as 
+Here, we shift the placement of the DP mechanism to make it on the computation of $$CH$$. Since $$A$$ is independent of the data, $$B$$ is also independent of the data. So if $$CH$$ is computed in a DP way so will $$BCH=AH$$. Then, if $$C$$ is invertible, we can equivalently rewrite this as 
 
 $$\widehat{AH} = A(H+C^{-1}Z).$$
 
