@@ -100,6 +100,10 @@ In this section, we detail the teacher-student setup of Saad & Solla <d-cite key
 We present a pedagogical tour of their mathematical framework to characterize the gradient descent learning dynamics of the student network in terms of its order parameters, noting some inconsistencies in the original derivations <d-cite key="saad1995online"></d-cite> and in follow-up extensions <d-cite key="goldt2020dynamics"></d-cite>.
 To complement the derivations, we include code snippets for computing the macroscopic variables describing the learning dynamics efficiently in JAX <d-cite key="jax2018github"></d-cite>, which we use to test the theory-experiment overlap of the generalization error dynamics targeted by Saad & Solla <d-cite key="saad1995online"></d-cite>.
 
+The code to reproduce all plots in this blog post can be found here at
+[https://anonymous.4open.science/r/teacher-student-BB2ftbMaCJfRG3JXbE9PhYoiqCzwVims](https://anonymous.4open.science/r/teacher-student-BB2ftbMaCJfRG3JXbE9PhYoiqCzwVims).
+This codebase is also easily adaptable to explore the learning dynamics of neural networks in the teacher-student setting beyond the scope of this blog post.
+
 ### The teacher-student setup
 
 In the teacher-student setting of Saad & Solla <d-cite key="saad1995online"></d-cite>, the data generation process used to train the student network is described by a distrubution over inputs $x$ and a teacher providing target outputs $y$.
@@ -107,6 +111,7 @@ Saad & Solla <d-cite key="saad1995online"></d-cite> focus on the online learning
 In this setting, a batch size greater than one has no substantial effect on the dynamics except to reduce the noise in the gradient estimate. 
 As such, in simulations we use minibatch stochastic gradient descent and sample multiple $(x_{s}, y_{s})^{u}$ pairs to fill a batch 
 $s = 1, \ldots, B$.
+
 We consider updates of the student network using gradient descent iterations indexed by $u$.
 
 The teacher, including that of Saad & Solla <d-cite key="saad1995online"></d-cite>, is generally defined as
@@ -408,18 +413,21 @@ j, l) + \sigma^{2} J_{2}(i, j)
 ### Large initial weights produce individual differences
 
 <div class="row mt-3">
-    {% include figure.html path="assets/img/2025-04-28-analytical-simulated-dynamics/fixed_teacher_student_base_goldt.png" class="img-fluid" %}
+    {% include figure.html path="assets/img/2025-04-28-analytical-simulated-dynamics/varying_weights.png" class="img-fluid" %}
 </div>
 <div class="caption">
-    Figure 2: Goldt et al. <d-cite key="goldt2020dynamics"></d-cite> results.
-    Large weights, varying simulations and average out to show correspondence with ODEs. Show for M=4 and K=2, 4 and 6 (Sebastian Goldt's)
+    Figure 2: Saad and Solla <d-cite key="saad1995online"></d-cite> results for various seeds.
 </div>
 
 ### Theory-experiment overlap in two-layer neural networks
 
-Fig4: (decide later, perhaps small weights).
-Goldt setting?
-- <d-cite key="goldt2020dynamics"></d-cite>
+<div class="row mt-3">
+    {% include figure.html path="assets/img/2025-04-28-analytical-simulated-dynamics/fixed_teacher_student_base_goldt.png" class="img-fluid" %}
+</div>
+<div class="caption">
+    Figure 3: Goldt et al. <d-cite key="goldt2020dynamics"></d-cite> results.
+    Large weights, varying simulations and average out to show correspondence with ODEs. Show for M=4 and K=2, 4 and 6 (Sebastian Goldt's)
+</div>
 
 ### Limits of the analytical teacher-student setting
 
