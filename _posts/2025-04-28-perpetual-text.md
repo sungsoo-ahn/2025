@@ -8,8 +8,8 @@ htmlwidgets: true
 hidden: false
 
 # Anonymize when submitting
-# authors:
-#   - name: Anonymous
+authors:
+  - name: Anonymous
 
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-perpetual-text.bib  
