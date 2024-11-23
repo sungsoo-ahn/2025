@@ -72,6 +72,98 @@ _styles: >
     text-align: center;
     font-size: 16px;
   }
+  .box-note, .box-warning, .box-error, .box-important {
+    padding: 15px 15px 15px 10px;
+    margin: 20px 20px 20px 5px;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 5px 3px 3px 5px;
+  }
+  d-article .box-note {
+    background-color: #eee;
+    border-left-color: #2980b9;
+  }
+  d-article .box-warning {
+    background-color: #fdf5d4;
+    border-left-color: #f1c40f;
+  }
+  d-article .box-error {
+    background-color: #f4dddb;
+    border-left-color: #c0392b;
+  }
+  d-article .box-important {
+    background-color: #d4f4dd;
+    border-left-color: #2bc039;
+  }
+  html[data-theme='dark'] d-article .box-note {
+    background-color: #333333;
+    border-left-color: #2980b9;
+  }
+  html[data-theme='dark'] d-article .box-warning {
+    background-color: #3f3f00;
+    border-left-color: #f1c40f;
+  }
+  html[data-theme='dark'] d-article .box-error {
+    background-color: #300000;
+    border-left-color: #c0392b;
+  }
+  html[data-theme='dark'] d-article .box-important {
+    background-color: #003300;
+    border-left-color: #2bc039;
+  }
+  html[data-theme='dark'] d-article blockquote {
+    color: var(--global-text-color) !important;
+  }
+  html[data-theme='dark'] d-article summary {
+    color: var(--global-text-color) !important;
+  }
+  d-article aside * {
+    color: var(--global-text-color) !important;
+  }
+  d-article p {
+    text-align: justify;
+    text-justify: inter-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+  d-article aside {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+    font-size: 90%;
+  }
+  d-article aside p:first-child {
+      margin-top: 0;
+  }
+  d-article details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+  }
+  d-article summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+    display: list-item;
+  }
+  d-article details[open] {
+    padding: .5em;
+  }
+  d-article details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+  }
+categories:
+- Data Processing Inequality
+- Information Theory
+- Data Processing Inequality
+- Information Theory
+- Function-Space Variational Inference
+- Parameter Equivalence Classes
+- Entropy Regularization
+- Label Entropy Regularization
 ---
 ## Contrastive Learning Formulation
 <!-- Contrastive learning is a self-supervised learning approach that aims to learn representations by contrasting similar (positive) and dissimilar (negative) data pairs. The core idea is to map similar samples closer in the embedding space while pushing dissimilar ones apart. One of the commonly used loss function used for this is the InfoNCE loss which operates on a batch of anchor samples and their corresponding positive and negative pairs. Anchor samples are candidate samples in the dataset with respect to which both positive and negative samples are defined. InfoNCE loss is defined as follows: -->
@@ -84,7 +176,11 @@ $$
 $$ z_i$$ is the representation of the anchor sample and $$ z_i^+$$ ​is the representation of the positive sample generated through augmenting the same instance or using a criteria to select another instance in the same dataset.  $$z_j$$ represents the representations of all samples in the batch (including negatives). $$\mathcal{sim}\left(\mathcal{.},\mathcal{.}\right)$$ denotes the similarity function (commonly cosine similarity). $$\tau$$ is the temperature scaling parameter and  $$N$$ is the number of samples in the batch.
 
 <!-- **Given an anchor, a positive pair is either augmented version of the same sample or a distinct instance chosen from the dataset using some criteria. The negatives are other samples in the batch or a memory bank. The loss minimizes the distance between anchor-positive pairs while maximizing the distance between anchor-negative pairs**. This approach enables models to learn robust and meaningful representations without labeled data, making it powerful for downstream tasks like image classification, retrieval, and multimodal alignment. Effective contrastive learning depends on constructing diverse and informative positive and negative pairs, often leveraging techniques like data augmentation, hard negative mining, and synthetic pair generation. -->
-Intuitively, **given an anchor, a positive pair is defined as either an augmented version of the same sample or a distinct instance selected from the dataset according to specific criteria. Negative pairs consist of other samples in the batch or from a memory bank. The loss function aims to minimize the distance between anchor-positive pairs while maximizing the distance between anchor-negative pairs.** This approach allows models to learn robust and meaningful representations without the need for labeled data, and has been shown to be highly effective for downstream tasks such as image classification, retrieval, and multimodal alignment. Effective contrastive learning relies on constructing diverse and informative positive and negative pairs, often utilizing techniques such as data augmentation, hard negative mining, and synthetic pair generation. 
+<aside class="l-body box-important" markdown="1">
+Intuitively, given an anchor, a positive pair is defined as either an augmented version of the same sample or a distinct instance selected from the dataset according to specific criteria. Negative pairs consist of other samples in the batch or from a memory bank. The loss function aims to minimize the distance between anchor-positive pairs while maximizing the distance between anchor-negative pairs.
+</aside>
+
+This approach allows models to learn robust and meaningful representations without the need for labeled data, and has been shown to be highly effective for downstream tasks such as image classification, retrieval, and multimodal alignment. Effective contrastive learning relies on constructing diverse and informative positive and negative pairs, often utilizing techniques such as data augmentation, hard negative mining, and synthetic pair generation. 
 
 In this blog post, we will first establish a taxonomy of existing techniques for creating positive and negative pairs in contrastive learning (as shown in Figure 1), summarizing the key methods within each category. Next, we will provide a detailed explanation of some key techniques in each sub-category of the taxonomy. Finally, we will discuss the trade-offs associated with using different data curation methods, concluding with a discussion on open questions in the area.
 
@@ -109,13 +205,21 @@ This section discusses techniques for creating positive pairs in contrastive lea
 
 #### Same-instance positives
 
-**Same-instance positives** are generated by applying various data augmentations, such as random cropping and color alterations, to a single instance. These augmented views are considered positive pairs, and the model learns to align their representations in the embedding space. However, this approach has limitations; random augmentations cannot account for diverse variations, such as different viewpoints, object deformations, or semantically similar instances within the same class. Consequently, the model's generalization ability heavily relies on the augmentation pipeline, which may not sufficiently capture all intrinsic variances. This approach is utilized in methods like SimCLR <d-cite key="chen2020simple"></d-cite> and MoCo <d-cite key="he2020momentum"></d-cite> to list a few methods.
+**Same-instance positives** are generated by applying various data augmentations, such as random cropping and color alterations, to a single instance. These augmented views are considered positive pairs, and the model learns to align their representations in the embedding space. 
+<aside class="l-body box-important" markdown="1">
+However, this approach has limitations; random augmentations cannot account for diverse variations, such as different viewpoints, object deformations, or semantically similar instances within the same class. Consequently, the model's generalization ability heavily relies on the augmentation pipeline, which may not sufficiently capture all intrinsic variances.
+</aside>
+This approach is utilized in methods like SimCLR <d-cite key="chen2020simple"></d-cite> and MoCo <d-cite key="he2020momentum"></d-cite> to list a few methods.
 
 <!-- - **Augmentation:** This entails applying different augmentations (e.g. random cropping, color distortion, gaussian blur) to the same data point to create positive pairs. This approach is utilized in methods like SimCLR <d-cite key="chen2020simple"></d-cite> and MoCo <d-cite key="he2020momentum"></d-cite> to list a few methods. -->
 
 #### Multi-instance positives
 
-To address the limitations of using same-instance positive pairs, **multi-instance positives** offer a more diverse set of positive pairs by using different instances from the dataset. These pairs are generated using predefined, often task-specific criteria. Examples include identifying semantically similar instances in the embedding space, utilizing supervised labels from an oracle, incorporating online or offline human feedback, associating data across modalities (such as image-text pairs), creating synthetic positive pairs through generative models like GANs or diffusion models, and selecting pairs based on spatial or temporal similarities, such as images captured in the same location or at the same time. By providing diverse and meaningful positive pairs, multi-instance approaches have been shown to enable models to learn richer, more generalizable representations that are beneficial for a broader range of downstream tasks. Multi-instance positive pair selection techniques lie in the following categories: 
+To address the limitations of using same-instance positive pairs, **multi-instance positives** offer a more diverse set of positive pairs by using different instances from the dataset. These pairs are generated using predefined, often task-specific criteria.
+<aside class="l-body box-important" markdown="1">
+Examples include identifying semantically similar instances in the embedding space, utilizing supervised labels from an oracle, incorporating online or offline human feedback, associating data across modalities (such as image-text pairs), creating synthetic positive pairs through generative models like GANs or diffusion models, and selecting pairs based on spatial or temporal similarities, such as images captured in the same location or at the same time.
+</aside>
+By providing diverse and meaningful positive pairs, multi-instance approaches have been shown to enable models to learn richer, more generalizable representations that are beneficial for a broader range of downstream tasks. Multi-instance positive pair selection techniques lie in the following categories: 
 
 - **Embedding-Based Similarity:** This technique identifies semantically similar samples in the embedding space to form positive pairs. For example, Nearest-Neighbour Contrastive Learning of visual Representations (NNCLR) <d-cite key="dwibedi2021little"></d-cite> retrieves the nearest neighbor of a sample as its positive pair. Similarly, MSF <d-cite key="koohpayegani2021mean"></d-cite>  propose to use the first and k nearest neighbors as the multiple instances positives. All4One <d-cite key="estepa2023all4one"></d-cite> improves MSF by incorporating a centroid contrastive objective to learn contextual information from multiple neighbors using transformer network.
 
@@ -130,7 +234,11 @@ To address the limitations of using same-instance positive pairs, **multi-instan
 ### Negative pair creation taxonomy
 <!-- Aside from generating diverse positive pairs, it is equally important to carefully select and curate the negative pairs. The common approach of **defining negative pairs as any other instance in the dataset ignoring their semantic content might not be sufficient to learn robust representation**. It can result in false negatives if the other instance is semantically similar to the anchor sample in embedding space or belongs to the same class as the anchor. Hence, selecting multiple instances as negatives might enable the model to learn better representation. As such, there is no clear notion of “informativeness” incorporated in the negative selection process. **A selection mechanism should ideally capture negatives which satisfy properties such as: anchor semantic similarity and representativeness.** -->
 
-In addition to generating a variety of positive pairs, it is also crucial to carefully select and curate negative pairs. The conventional approach of **defining negative pairs as any other instance in the dataset, without considering their semantic content, may not be sufficient for learning robust representations**. This can lead to false negatives if the other instance is semantically similar to the anchor sample in the embedding space or belongs to the same class as the anchor. Therefore, selecting multiple instances as negatives can help the model learn more effective representations. However, the current negative selection process lacks a clear notion of “informativeness.” **Ideally, a selection mechanism should capture negatives that meet specific criteria, such as semantic similarity to the anchor and overall representativeness**. In current literature, negative pair creation fall under the following categories: 
+In addition to generating a variety of positive pairs, it is also crucial to carefully select and curate negative pairs. The conventional approach of **defining negative pairs as any other instance in the dataset, without considering their semantic content, may not be sufficient for learning robust representations**. This can lead to false negatives if the other instance is semantically similar to the anchor sample in the embedding space or belongs to the same class as the anchor. Therefore, selecting multiple instances as negatives can help the model learn more effective representations. However, the current negative selection process lacks a clear notion of “informativeness.” 
+<aside class="l-body box-important" markdown="1">
+Ideally, a negative pair selection mechanism should capture negatives that meet specific criteria, such as semantic similarity to the anchor and overall representativeness.
+</aside>
+In current literature, negative pair creation fall under the following categories: 
 
 <!-- TODO: explain intuition first before explaining techniques for negative pair creation -->
 - **Hard Negative Selection:** Hard negatives are defined as samples that are challenging for the model to distinguish. <d-cite key="Hardnegativemixing"></d-cite> extends the MoCo v2 <d-cite key="chen2020improved"></d-cite> framework  by adding two sets of hard and harder negatives into the queue. The first set is a convex linear combination of pairs of its hardest existing negatives whereas the second set is created by mixing the negatives with the query. <d-cite key="unremix"></d-cite>, introduce UnReMix, a method designed to enhance contrastive learning by selecting hard negative samples based on three key factors: anchor similarity, model uncertainty and representativeness ensuring that negative samples are similar to the anchor point, making them challenging for the model to distinguish.
@@ -146,7 +254,11 @@ Next, we dive into details of most commonly used techiques for crafting effectiv
 ## Crafting Effective Positive Pairs
 
 ### 1. Same instance augmentation techniques
-Data augmentation plays a crucial role in self-supervised learning by generating auxiliary versions of input data, which enhances the model’s robustness and ability to generalize. This process involves introducing various transformations to the original data, prompting the learning algorithm to identify consistent underlying patterns. By maintaining semantic integrity while altering visual appearance, augmentation instills a sense of consistency in the model’s representations. 
+Data augmentation plays a crucial role in self-supervised learning by generating auxiliary versions of input data, which enhances the model’s robustness and ability to generalize. 
+<aside class="l-body box-important" markdown="1">
+This process involves introducing various transformations to the original data, prompting the learning algorithm to identify consistent underlying patterns. By maintaining semantic integrity while altering visual appearance, augmentation instills a sense of consistency in the model’s representations.
+</aside>
+ 
 
 Most existing surveys (<d-cite key="gui2024survey"></d-cite>, <d-cite key="jaiswal2020survey"></d-cite>, <d-cite key="giakoumoglou2024review"></d-cite>)  focus on comparing architectural choices—such as momentum encoders in MoCo, stop-gradient mechanisms in SimSiam, or redundancy reduction in Barlow Twins. This survey takes a complementary perspective by examining the role of data curation in self-supervised learning.
 
@@ -173,7 +285,12 @@ Most existing surveys (<d-cite key="gui2024survey"></d-cite>, <d-cite key="jaisw
 - *SEED* <d-cite key="fang2021seed"></d-cite> simplifies training by using teacher-student distillation with pseudo-labels, reducing computational complexity while maintaining strong performance.
 
 ### 2. Embedding-based techniques
-Nearest-Neighbour Contrastive Learning of visual Representations (NNLCR)  <d-cite key="dwibedi2021little"></d-cite> goes beyond single instance positives, i.e. the instance discrimination task so the model can learn better features that are **invariant to different viewpoints, deformations, and even intra-class variations.** The model is encouraged to generalize to new data-points that may not be covered by the data augmentation scheme at hand. In other words, *nearest neighbors of a sample in the embedding space act as small semantic perturbations that are not imaginary*, i.e. they are representative of actual semantic samples in the dataset. Building upon the SimCLR objective, NNCLR is defined as loss as below:
+Nearest-Neighbour Contrastive Learning of visual Representations (NNLCR)  <d-cite key="dwibedi2021little"></d-cite> goes beyond single instance positives, i.e. the instance discrimination task so the model can learn better features that are invariant to different viewpoints, deformations, and even intra-class variations.
+The model is encouraged to generalize to new data-points that may not be covered by the data augmentation scheme.
+<aside class="l-body box-important" markdown="1">
+Nearest neighbors of a sample in the embedding space act as small semantic perturbations that are not imaginary, i.e. they are representative of actual semantic samples in the dataset. 
+</aside>
+Building upon the SimCLR objective, NNCLR is defined as loss as below:
 
 $$
 \mathcal{L}_{\text{NNCLR}} = - \frac{1}{N} \sum_{i=1}^{N} \log \frac{\exp\left(\text{sim}\left(\text{NN}\left(\mathbf{z}_i, \mathcal{Q}\right),  \mathbf{z}_i^+\right) / \tau\right)}{\sum_{j=1}^{N} \exp\left(\text{sim}\left(\text{NN}\left(\mathbf{z}_i, \mathcal{Q}\right), \mathbf{z}_j \right)/ \tau\right)}
@@ -319,7 +436,7 @@ The human-supervised loss then minimizes the distance between the new centroid o
 Similarly, Oracle-guided Contrastive Clustering (OCC) <d-cite key="wang2022oracle"></d-cite> is a deep clustering framework designed to incorporate personalized clustering preferences by interactively querying oracles—entities with specific clustering criteria. Traditional deep clustering methods often aim solely to maximize clustering performance, potentially overlooking the unique demands of specific tasks. In contrast, OCC addresses this by engaging with oracles to obtain pairwise "same-cluster" queries, thereby guiding the clustering process according to the desired orientation.
 
 ### 5. Attribute-based pairing techniques
-Attribute-based pairing entails selecting positive pairs based task-specific criteria. For instance, Geography-aware self supervised learning <d-cite key="ayush2021geography"></d-cite> **use temporal positive pairs from spatially aligned images over time** as shown in Figure 11.
+Attribute-based pairing entails selecting positive pairs based on task-specific criteria. For instance, Geography-aware self supervised learning <d-cite key="ayush2021geography"></d-cite> **use temporal positive pairs from spatially aligned images over time** as shown in Figure 11.
 
 
 {% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/Geography_aware_framework.png" class="img-fluid" %}
@@ -360,7 +477,11 @@ By focusing on these positive pairs during training, the authors demonstrate tha
 ### 6. Cross-modal positive pairing techniques
 
 <!-- TODO: Write an intro to cross modal pairing before explaining techniques -->
-The goal of cross-modal pairing is to map data from different modalities into a shared feature space where semantically related instances from each modality are aligned. Due to data heterogeneity and variations in data quality, resolution, and noise across modalities, robust alignment techniques are essential.
+<aside class="l-body box-important" markdown="1">
+The goal of cross-modal pairing is to map data from different modalities into a shared feature space where semantically related instances from each modality are aligned. Due to data heterogeneity and variations in data quality, resolution, and noise across modalities, robust alignment techniques are essential. 
+</aside>
+
+There have been different modalities that have been used to generate contrastive pairs. Below, we outline a few combinations.
 
 #### a. Image-Text Pairing
 
@@ -406,11 +527,11 @@ Figure 13: Illustrations of a. anchor sample, b. positive sample, c. normal nega
 </div>
 Positive pair selection in this method is generated through augmentation of the same instance.
 
-Another method named Uncertainty and Representativeness Mixing (UnReMix) for contrastive training <d-cite key="unremix"></d-cite>, introduces a method designed to enhance contrastive learning by selecting hard negative samples based on three key factors: **anchor similarity, model uncertainty and representativeness** ensuring that negative samples are similar to the anchor point, making them challenging for the model to distinguish. UnReMix utilizes uncertainty to penalize false hard negatives and pairwise distance among negatives to select representative examples as shown in Figure 13.
+Another method named Uncertainty and Representativeness Mixing (UnReMix) for contrastive training <d-cite key="unremix"></d-cite>, introduces a method designed to enhance contrastive learning by selecting hard negative samples based on three key factors: **anchor similarity, model uncertainty and representativeness** ensuring that negative samples are similar to the anchor point, making them challenging for the model to distinguish. UnReMix utilizes uncertainty to penalize false hard negatives and pairwise distance among negatives to select representative examples as shown in Figure 14.
 
 {% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/Unremix.png" class="img-fluid" %}
 <div class="caption">
-Figure 13: Overview of the proposed hard negative sampling technique, UnReMix. Given an anchor
+Figure 14: Overview of the proposed hard negative sampling technique, UnReMix. Given an anchor
 and a set of negative samples, UnReMix computes an importance score for each negative sample, by linearly interpolating between gradient-based uncertainty, anchor similarity and representativeness indicators, capturing desirable negative sample properties, i.e., samples that are truly negative (P1), in close vicinity to the anchor (P2) and representative of the sample population (P3) (from <d-cite key="unremix"></d-cite>)
 </div>.
 
@@ -430,22 +551,24 @@ and (3) a density-based component that assigns more weight to negatives examples
 distant on average from other negative examples in the batch, and satisfies P3.
 
 ### 2. Removal of False Negatives
-**A false negative may not be as similar to the anchor as it is to other augmentations of the same image, as each augmentation only holds a specific view of the object.   Contrasting false negatives induces two critical issues in representation learning: discarding semantic information and slow convergence.**
+<aside class="l-body box-important" markdown="1">
+A false negative may not be as similar to the anchor as it is to other augmentations of the same image, as each augmentation only holds a specific view of the object. Contrasting false negatives induces two critical issues in representation learning: discarding semantic information and slow convergence.
+</aside>
 
-Boosting Contrastive Self-Supervised Learning with False Negative Cancellation <d-cite key="huynh2022boosting"></d-cite> introduces methods to identify these false negatives and propose two strategies to mitigate their impact: elimination and attraction. False negatives are samples from different images with the same semantic content, therefore they should hold certain similarity (e.g., dog features).  As shown in Figure 14, <d-cite key="huynh2022boosting"></d-cite> proposes novel approaches to identify false negatives, as well as two strategies to mitigate their effect, i.e. false negative elimination and attraction. **False Negative Elimination identifies potential false negatives and excludes them from the negative sample set**, preventing the model from learning misleading distinctions. In **False Negative Attraction**, instead of excluding false negatives, **this strategy reclassifies them as positives, encouraging the model to learn representations that acknowledge their semantic similarity.**
+Boosting Contrastive Self-Supervised Learning with False Negative Cancellation <d-cite key="huynh2022boosting"></d-cite> introduces methods to identify these false negatives and propose two strategies to mitigate their impact: elimination and attraction. False negatives are samples from different images with the same semantic content, therefore they should hold certain similarity (e.g., dog features).  As shown in Figure 15, <d-cite key="huynh2022boosting"></d-cite> proposes novel approaches to identify false negatives, as well as two strategies to mitigate their effect, i.e. false negative elimination and attraction. **False Negative Elimination identifies potential false negatives and excludes them from the negative sample set**, preventing the model from learning misleading distinctions. In **False Negative Attraction**, instead of excluding false negatives, **this strategy reclassifies them as positives, encouraging the model to learn representations that acknowledge their semantic similarity.**
 {% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/boosting_fn.png" class="img-fluid" %}
 <div class="caption">
-Figure 14: False negatives in contrastive learning. Without knowledge of labels, automatically selected negative pairs could actually belong to the same semantic category, creating false negatives (from <d-cite key="huynh2022boosting"></d-cite>)
+Figure 15: False negatives in contrastive learning. Without knowledge of labels, automatically selected negative pairs could actually belong to the same semantic category, creating false negatives (from <d-cite key="huynh2022boosting"></d-cite>)
 </div>
 False negatives hinder the convergence of contrastive learning-based objectives due to the appearance
-of contradicting objectives. For instance, in Figure 14, the dog’s head on the left is attracted to its fur (positive pair), but repelled from similar fur of another dog image on the right (negative pair), creating contradicting objectives.
+of contradicting objectives. For instance, in Figure 15, the dog’s head on the left is attracted to its fur (positive pair), but repelled from similar fur of another dog image on the right (negative pair), creating contradicting objectives.
 
 {% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/boosting_fn_2.png" class="img-fluid" %}
 <div class="caption">
-Figure 15: Overview of the proposed framework. Left: Original definition of the anchor, positive, and negative samples in contrastive learning. Middle: Identification of false negatives (blue). Right: false negative cancellation strategies, i.e. elimination and attraction (from <d-cite key="huynh2022boosting"></d-cite>)
+Figure 16: Overview of the proposed framework. Left: Original definition of the anchor, positive, and negative samples in contrastive learning. Middle: Identification of false negatives (blue). Right: false negative cancellation strategies, i.e. elimination and attraction (from <d-cite key="huynh2022boosting"></d-cite>)
 </div>
 
-Figure 15 shows the overview of the method.
+Figure 16 shows the overview of the method.
 
 - *False Negative Cancellation:* Negative pairs are samples from different images that may or may not possess similar semantic content or visual
 features. Consequently, it is possible that some samples k have the same semantic content as the anchor i, and are thus false negatives. As discussed earlier, false negatives give rise to two critical problems in contrastive learning: they discard semantic information and slow convergence
@@ -460,7 +583,7 @@ Synthetic negatives can be created using various techniques, including generativ
 Synthetic Hard Negative Samples for Contrastive Learning <d-cite key="dong2024synthetic"></d-cite> proposes a method to enhance contrastive learning by generating synthetic hard negative samples as shown in Figure 16. This approach **involves mixing existing negative samples in the feature space to create more challenging negatives, encouraging the model to learn more discriminative representations. To address the issue of false negatives—samples incorrectly labeled as negative but semantically similar to the anchor, this paper incorporates a debiasing mechanism, ensuring the model focuses on truly dissimilar negative samples.**
  {% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/synthetic.png" class="img-fluid" %}
 <div class="caption">
-Figure 16: The architecture of SSCL. Given a batch of N images, this method first applies data augmentation and then encode and projection head to obtain two batch feature vectors (2N). For one image, it generates new harder negative samples by synthesizing negative samples from the 2N-2 remaining images. The red dashed arrow indicates the projection of the feature vector.We then combine the original samples with the newly synthesized ones to compute the contrastive loss (from <d-cite key="dong2024synthetic"></d-cite>).
+Figure 17: The architecture of SSCL. Given a batch of N images, this method first applies data augmentation and then encode and projection head to obtain two batch feature vectors (2N). For one image, it generates new harder negative samples by synthesizing negative samples from the 2N-2 remaining images. The red dashed arrow indicates the projection of the feature vector.We then combine the original samples with the newly synthesized ones to compute the contrastive loss (from <d-cite key="dong2024synthetic"></d-cite>).
 </div>
 The process involves the following steps:
 
@@ -523,7 +646,11 @@ Even though significant work has been done in data curation for contrastive lear
 
 ### Balancing Diversity vs Relevance in pairs
 
-Balancing diversity and semantic alignment in positive pair creation is a critical challenge in contrastive learning. Both factors are essential: **diversity ensures robustness and generalization, while semantic alignment guarantees meaningful and task-relevant representations.** Striking the right balance between these two can significantly impact the performance of the learned embeddings for a given task. **Diversity improves generalization across unseen domains or test data.** It also  encourages the model to focus on core semantic features rather than superficial patterns. However, **excessive diversity can dilute semantic similarity,** making it harder for the model to learn meaningful representations.
+Balancing diversity and semantic alignment in positive pair creation is a critical challenge in contrastive learning. 
+<aside class="l-body box-important" markdown="1">
+Both factors are essential: diversity ensures robustness and generalization, while semantic alignment guarantees meaningful and task-relevant representations.
+</aside>
+Striking the right balance between these two can significantly impact the performance of the learned embeddings for a given task. **Diversity improves generalization across unseen domains or test data.** It also  encourages the model to focus on core semantic features rather than superficial patterns. However, **excessive diversity can dilute semantic similarity,** making it harder for the model to learn meaningful representations.
 Diverse positive pairs may include instances that, while related, are semantically weakly aligned, leading to noisy embeddings. For instance, in wildlife monitoring, temporally diverse images of the same species might include drastic environmental or seasonal differences, reducing alignment. Conversely, tightly aligned pairs might miss important variations like behavioral changes. For tasks requiring generalization (e.g., unsupervised representation learning), diversity might take precedence. For tasks requiring fine-grained distinctions (e.g., medical imaging), semantic alignment is more critical. Some ways to address this might involve adjusting the balance dynamically during training. Early training phases might prioritize semantic alignment to establish core features. Later phases might introduce diversity to improve robustness. We can define  positives based on similarity scores rather than binary criteria. This allows pairs with partial semantic alignment to contribute proportionally. By carefully navigating this trade-off, models can achieve both robust generalization and meaningful class-specific representations. 
 
 ### Dealing with emerging modalities in contrastive learning
