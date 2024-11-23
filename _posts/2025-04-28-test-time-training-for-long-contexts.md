@@ -144,16 +144,16 @@ To evaluate our method, we choose two models for evaluation:
 We compare the following methods:
 - ICL with truncation (noted as *ICL*)
 - LIFT without ICL (noted as *LIFT_only*)
-- LIFT with ICL (noted as *ICL+LIFT*)
+- LIFT with ICL (noted as *LIFT+ICL*)
 
 
 We evaluate our method on four popular long-context benchmarks *LooGLE* <d-cite key="li2023loogle"></d-cite>, *LongBench* <d-cite key="bai2023longbench"></d-cite>, *Bamboo* <d-cite key="dong2023bamboo"></d-cite> and *QuALITY* <d-cite key="pang2021quality"></d-cite>. They are mainly used for comprehensive and overall evaluation, covering a wide variety of application scenarios. Specifically, we focus on QA tasks in LooGLE and representative tasks in LongBench, with as longer average length as possible. The evaluation metrics are task-specific and consistent with the respective original benchmarks. 
 
 ### LIFT generally strengthens long context understanding when combined with ICL
 
-For LooGLE, as shown in Table 1, ICL+LIFT consistently achieves the highest scores across both LongQA and shortQA tasks for both models. LIFT is particularly **effective in the ShortQA task**, which doesn't rely on long dependencies. However, LIFT_only performs the worst among all the settings. We observe that LIFT_only struggles to retrieve the original input. While overfitting the model on the input enables the model to precisely memorize the input, it destroys the original capabilities of the model, resulting in even worse performance.
+For LooGLE, as shown in Table 1, LIFT+ICL consistently achieves the highest scores across both LongQA and shortQA tasks for both models. LIFT is particularly **effective in the ShortQA task**, which doesn't rely on long dependencies. However, LIFT_only performs the worst among all the settings. We observe that LIFT_only struggles to retrieve the original input. While overfitting the model on the input enables the model to precisely memorize the input, it destroys the original capabilities of the model, resulting in even worse performance.
 
-LLaMa-3 benefits more with the combination of ICL and LIFT (ICL+LIFT) than GPT-3.5, showing notable improvements in GPT4_score: from 30.88 (ICL) to 33.42 in LongQA, and from 44.23 to 50.44 in ShortQA. These results highlight that **LIFT significantly improves the performance of ICL, particularly for models with shorter context windows**.
+LLaMa-3 benefits more with the combination of ICL and LIFT (LIFT+ICL) than GPT-3.5, showing notable improvements in GPT4_score: from 30.88 (ICL) to 33.42 in LongQA, and from 44.23 to 50.44 in ShortQA. These results highlight that **LIFT significantly improves the performance of ICL, particularly for models with shorter context windows**.
 
 Notably, both models perform particularly poorly on LongQA, with accuracy falling below 50%. This underscores that modeling long dependencies in extended contexts remains a significant challenge for existing models.
 
@@ -167,14 +167,14 @@ For LongBench, as shown in Table 2, LLaMa-3 exhibits substantial improvements wh
 
 ### LIFT shows significant improvement on specific tasks
 
-Table 3 presents detailed experimental results across four LongQA tasks from LooGLE. LLaMa-3 benefits more from ICL+LIFT, with notable improvements in specific tasks, particularly in **Comprehension & Reasoning** (40.88 → 44.83) and **Timeline Reorder** (22.33 → 26.51). These results demonstrate that LIFT enhances ICL by providing a more comprehensive overview of the entire lengthy input by fine-tuning the long context directly into the parameters.
+Table 3 presents detailed experimental results across four LongQA tasks from LooGLE. LLaMa-3 benefits more from LIFT+ICL, with notable improvements in specific tasks, particularly in **Comprehension & Reasoning** (40.88 → 44.83) and **Timeline Reorder** (22.33 → 26.51). These results demonstrate that LIFT enhances ICL by providing a more comprehensive overview of the entire lengthy input by fine-tuning the long context directly into the parameters.
 
 However, LIFT does not yield any improvement in tasks such as Multiple Information Retrieval and even slightly degrades the performances in Computation for both models. This indicates that LIFT may not significantly impact all tasks and could introduce slight noise in some cases. At the same time, the performances variations are closely related to the specific capabilities required by each task and the inherent strengths of the model.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table3_loogle_task.svg" class="img-fluid" title="Table 3" %}
 <div class="caption">Table 3. Performance on LongBench under different settings</div>
 
-In Table 2 on LongBench, ICL+LIFT consistently outperforms both ICL and LIFT_only on Narrativeqa and Qmsum for both models. Notable improvements are observed in Narrativeqa, where performance increases from 20.73 to 25.84. However, the results for Musique and GovReport exhibit different trends between the two models. LLaMa-3 shows a slight improvement on GovReport but experiences a significant drop on Musique, whereas GPT-3.5 demonstrates the opposite pattern.
+In Table 2 on LongBench, LIFT+ICL consistently outperforms both ICL and LIFT_only on Narrativeqa and Qmsum for both models. Notable improvements are observed in Narrativeqa, where performance increases from 20.73 to 25.84. However, the results for Musique and GovReport exhibit different trends between the two models. LLaMa-3 shows a slight improvement on GovReport but experiences a significant drop on Musique, whereas GPT-3.5 demonstrates the opposite pattern.
 
 Interestingly, PassageRetrievalEN exhibits a significant drop when combining LIFT with ICL, suggesting that the LIFT is applicable and effective to specific tasks. This encourages us to fine-tune the model at task level.
 
@@ -182,9 +182,9 @@ Interestingly, PassageRetrievalEN exhibits a significant drop when combining LIF
 
 Encouraged by the significant improvement observed in the timeline-reorder task from LooGLE, we aim to further enhance the performance of LIFT on similar tasks like sorting and reordering, by incorporating auxiliary tasks (AT) (Section 3.2) and pre-LIFT SFT (Section 3.3). The results are illustrated in Table 4.
 
-Comparing the results of ICL+LIFT w/ and w/o AT, as well as ICL+SFT+LIFT w/ and w/o AT, we observe that AT bring negligible improvement or even slightly degrades performance. A possible explanation is that the number of synthesized samples in our evaluation is insuffcient, potentially causing the model to overfit to these tasks. However, it's impractical to synthesise a huge number of training samples at test time due to unacceptable computational cost. Striking a balance between efficiency and effectiveness when using AT at test time remains a significant challenge and requires further exploration.
+Comparing the results of LIFT+ICL w/ and w/o AT, as well as LIFT+ICL+SFT w/ and w/o AT, we observe that AT bring negligible improvement or even slightly degrades performance. A possible explanation is that the number of synthesized samples in our evaluation is insuffcient, potentially causing the model to overfit to these tasks. However, it's impractical to synthesise a huge number of training samples at test time due to unacceptable computational cost. Striking a balance between efficiency and effectiveness when using AT at test time remains a significant challenge and requires further exploration.
 
-In contrast, we find LIFT w/o AT consistently improves performance. While SFT greatly improves the performance (which is reasonable since the tasks used in the SFT process are similar to those at test time), LIFT can further boost performance (comparing ICL+LIFT to ICL, as well as ICL+SFT+LIFT to ICL+SFT), highlighting the effectiveness of our method.
+In contrast, we find LIFT w/o AT consistently improves performance. While SFT greatly improves the performance (which is reasonable since the tasks used in the SFT process are similar to those at test time), LIFT can further boost performance (comparing LIFT+ICL to ICL, as well as LIFT+ICL+SFT to ICL+SFT), highlighting the effectiveness of our method.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table4_at_sft.svg" class="img-fluid" title="Table 4" %}
 <div class="caption">Table 4. Coordinate score on specific task in Bamboo, LooGLE, and QuALITY using AT and SFT.</div>
@@ -238,7 +238,7 @@ For a task in LooGLE, the relevant evidences are provided as a sequence of multi
 
 We make further studies on whether extracting relevant evidence can further enhance the long context understanding after LIFT. In Table 5, it highlights the effectiveness of integrating evidences and combining it with LIFT in greatly improving the model's performance, which leaves space for futher enhancement on the strategy of LIFT. While LIFT alone provides modest improvements, the most substantial gains are observed when evidences are integrated into the ICL process, either with or without LIFT.
 
-Table 4 further expands the performance in Table 3 on specific tasks in LongQA in LooGLE. The combination of evidences, ICL+LIFT clearly outperforms the other configurations across all metrics, **highlighting the importance of extracting relevant knowledge from parameters and executing explicit step-by-step reasoning in more complex tasks like long dependency QA**. The incorporation of evidences helps the model ground its inferences resulting in a more refined and contextually accurate response generation.
+Table 4 further expands the performance in Table 3 on specific tasks in LongQA in LooGLE. The combination of evidences, LIFT+ICL clearly outperforms the other configurations across all metrics, **highlighting the importance of extracting relevant knowledge from parameters and executing explicit step-by-step reasoning in more complex tasks like long dependency QA**. The incorporation of evidences helps the model ground its inferences resulting in a more refined and contextually accurate response generation.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table5_loogle_evd.svg" class="img-fluid" title="Table 5" %}
 <div class="caption">Table 5. Performance with extracted evidence of Llama3 in LongQA</div>
