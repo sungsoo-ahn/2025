@@ -58,7 +58,7 @@ Our novel framework, **Long Input Fine-Tuning (LIFT)**, is designed to enhance t
 
 3. **Significant improvement in long-context tasks.** Our evaluations across various benchmarks demonstrate that LIFT greatly benefits tasks such as summarization and complex scenarios like timeline reordering and reading comprehension. Moreover, incorporating supervised fine-tuning prior to applying LIFT further enhances the model's performance on downstream tasks.
 
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure1_method.pdf" class="img-fluid" title="Figure 1" %}
+{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure1_method.svg" class="img-fluid" title="Figure 1" %}
 <div class="caption">Figure 1. Overview of our method compared with existing methods like truncation, RAG, long context fine-tuning.</div>
 
 # 3. What is Long Input Fine-Tuning (LIFT) for Long Context?
