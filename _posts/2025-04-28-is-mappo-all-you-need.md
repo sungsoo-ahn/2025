@@ -322,6 +322,7 @@ We also cite the experimental results from these papers themselves below,
 |--------------|----------|----------|--------------|------|----------|
 | IPPO         | 80       | 60       | 90           | 100  | 100      |
 | MAPPO        | 0        | 8.95     | 80           | 99.875 | 100    |
+
 <div class="caption">
     (c) IPPO vs MAPPO results for SMAC (from the Figure 2 in <d-cite key="de2020independent"></d-cite>), the data in the table represents the win rate.
 </div>
