@@ -29,7 +29,7 @@ authors:
 #       name: IAS, Princeton
 
 # must be the exact same name as your blogpost
-bibliography: 2025-05-07-submission.bib  
+bibliography: 2025-05-07-soft_value_guidance.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
