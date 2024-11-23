@@ -9,21 +9,21 @@ hidden: false
 
 # Anonymize when submitting
 # authors:
-#   - name: Anonymous
+   - name: Anonymous
 
-authors:
-  - name: Albert Einstein
-    url: "https://en.wikipedia.org/wiki/Albert_Einstein"
-    affiliations:
-      name: IAS, Princeton
-  - name: Boris Podolsky
-    url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
-    affiliations:
-      name: IAS, Princeton
-  - name: Nathan Rosen
-    url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
-    affiliations:
-      name: IAS, Princeton
+# authors:
+#   - name: Albert Einstein
+#     url: "https://en.wikipedia.org/wiki/Albert_Einstein"
+#     affiliations:
+#       name: IAS, Princeton
+#   - name: Boris Podolsky
+#     url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
+#     affiliations:
+#       name: IAS, Princeton
+#   - name: Nathan Rosen
+#     url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
+#     affiliations:
+#       name: IAS, Princeton
 
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-can-we-learn-from-misclassifications.bib  
@@ -71,6 +71,16 @@ Note: please use the table of contents as defined in the front matter rather tha
 | Resnet101      | 0.898816      | 0.777873      | 0.841248      | 0.451866      | 0.607102      | 0.587721      | 0.471974      |
 | Resnet152      | 0.918961      | 0.784820      | 0.834101      | 0.513276      | 0.560512      | 0.600739      | 0.498934      |
 
+### Clustering using Kmeans
+|                    | Resnet18                      | Resnet34                      | Resnet50                      | Resnet101                     | Resnet152                     |
+| ----------------   |:-----------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|
+| Clustring by\Metric| ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette |
+| Gradient Weights   | 0.95 | 0.98 | 0.79            | 0.63 | 0.85 | 0.62            | 1.00 | 1.00 | 0.89            | 0.95 | 0.98 | 0.83            | 0.77 | 0.91 | 0.81 |
+| Final Predictions  | 0.30 | 0.64 | 0.42            | 0.50 | 0.78 | 0.42            | 0.41 | 0.69 | 0.33            | 0.34 | 0.66 | 0.39            | 0.53 | 0.77 | 0.43 |
+| Feature Maps       | 0.41 | 0.72 | 0.42            | 0.57 | 0.80 | 0.51            | 0.41 | 0.73 | 0.49            | 0.23 | 0.57 | 0.41            | 0.39 | 0.69 | 0.35 |
+
+
+### Clustering using GMM
 
 
 Where the columns of the table represent: 
