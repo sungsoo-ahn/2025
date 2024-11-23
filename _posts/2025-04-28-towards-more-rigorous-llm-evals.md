@@ -51,6 +51,8 @@ To illustrate this in practice, we outline three key elements of rigorous empiri
 
 # 2. Elements of Rigorous Empirical Evaluation
 
+We believe that the following three elements are key to rigorous empirical evaluation, especially when dealing with relatively small evaluation datasets (e.g., at the order of 100-1000 samples):
+
 1. Clear articulation of assumptions and consideration of alternative explanations.
 2. Quantification of uncertainty in results through appropriate statistical measures.
 3. Careful consideration of train-test overlap, with reasonable attempts to evaluate on "out-of-sample" datasets when possible.
@@ -476,7 +478,7 @@ The results of the hypothesis tests are given in the following table:
 For the **largest** subset of models, both tests show statistically significant differences (at the $5\%$ significance level but not at the $1\%$ level), indicating that GSM8K outperforms GSM-Symbolic in the one-sided test. 
 When looking at the **smallest** subset of models, the evidence for significant differences is somewhat weaker.
 
-It is important to note that rejecting the null hypothesis, gives us strong evidence that the models perform worse on GSM-Symbolic, but does not imply that the models lack reasoning abilities. 
+It is important to note that rejecting the null hypothesis gives us strong evidence that the models perform worse on GSM-Symbolic, but does not imply that the models lack reasoning abilities. 
 As mentioned in Section 4.2.1, the observed performance differences could also be due to distributional differences (for which there is substantial evidence), data contamination, or a combination of both.
 
 **Verdict:** When analysing the results of models individually, there is little evidence of performance differences: out of 25 models, only 3 perform significantly worse on GSM-Symbolic compared to GSM8K, and 1 performs better.
