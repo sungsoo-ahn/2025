@@ -65,7 +65,7 @@ This is why this methodology is called **gradient dynamics**.
 {% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig2-V2.png" class="img-fluid" %}
 
 
-By connecting the dots, now the *continuous* change in loss can be described by an Ordinary Differential Equation (ODE). With some gradient calculations and simplifications, the result comes down to this beautiful expression:
+By connecting the dots, now the *continuous* change in loss can be described by an Ordinary Differential Equation (ODE). With some gradient calculus and simplifications, the result comes down to this beautiful expression:
 
 
 {% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig3-V3.png" width="100" %}
@@ -236,7 +236,7 @@ It is easy to get $\nabla_{\tilde{W}_H}L = 2(\hat{Y}-Y)\tilde{G}_H^{\top}$.
 Now, let's proceed by deriving gradients for all the learnable weight matrices. 
 The backpropagation process is illustrated in the image below.
 
-{% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig5-V3.png" width="100" %}
+{% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig5-V3.png" width="100" caption=caption='<b>Forward and backward pass for understanding gradients calculus</b>. The style of illustration refers to <a href="http://colah.github.io/posts/2015-08-Backprop/"> Colah's blog</a> for inspiration.'%}
 
 Let's write out the explict expressions of gradients:
 
@@ -504,7 +504,7 @@ $$
 
 where our notation $$\mathbf{P}$$ matches $$\mathbf{P}_{\tilde{G}_H^\top \otimes I_{m_y}}$$ here for neatness.
 
-By simply calculation, one can verify that the inequality only holds when
+By simple calculation, one can verify that the inequality only holds when
 
 $$
 \begin{equation*}
