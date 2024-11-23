@@ -956,43 +956,39 @@ class einpool_ab(nn.Module):
         y=y.view(*x_.shape[:-1],-1) #Recover original tensor shape
         return y
 
-#2-layer mlp with GELU
-def mlp2(ninput,nh,noutput):
-    return nn.Sequential(nn.Linear(ninput,nh),nn.GELU(),nn.Linear(nh,noutput))
+#Equivariant EinNet layer
+class einnet_layer(nn.Module):
+    def __init__(self,ninput,nh0,noutput,pool):
+        super().__init__()
+        self.fan_in=nn.Linear(ninput,nh0*pool.fan_in)
+        self.fan_out=nn.Linear(nh0*pool.fan_out,noutput)
+        self.pool=pool
+    
+    def forward(self,x):
+        h=self.fan_in(x)
+        h=self.pool(h)
+        return self.fan_out(h)
 
 #Equivariant EinNet backbone
 class einnet(nn.Module):
-    #Instantiate the network
-    #    ninput/noutput -- number of input/output dimensions
-    #    nh0 -- pooling dimensions, like head_dim in transformers
-    #    nh -- latent dimensions 
-    #    nstacks -- number of einsum pooling stacks
-    #    pool -- einsum pooling operation. Needs to provide fan_in, 
-    #            fan_out factors, and ndims
     def __init__(self,ninput,nh0,nh,noutput,nstacks,pool):
         super().__init__()
         self.t=nn.ModuleList()
-        self.t.append(mlp2(ninput,nh,nh0*pool.fan_in))
+        self.t.append(einnet_layer(ninput,nh0,nh,pool))
         for i in range(nstacks-1):
-            self.t.append(mlp2(nh0*pool.fan_out,nh,nh0*pool.fan_in))
+            self.t.append(einnet_layer(nh,nh0,nh,pool))
         
-        self.t.append(mlp2(nh0*pool.fan_out,nh,noutput))
+        self.t.append(einnet_layer(nh,nh0,noutput,pool))
         self.pool=pool
     
     # Forward call
     #    x: tensor shape matches equivariance type, e.g. *abH
     def forward(self,x):
         h=self.t[0](x)
-        for i in range(1,len(self.t)):
-            hi=F.softmax(h.view(*h.shape[:-self.pool.ndims-1],-1,h.shape[-1]),dim=-2).view(*h.shape)
-            hi=self.t[i](self.pool(hi))
-            #Residual connection
-            if i<len(self.t)-1:
-                h=h+hi
-            else:
-                h=hi
+        for i in range(1,len(self.t)-1):
+            h=h+self.t[i](F.gelu(h))
         
-        return h
+        return self.t[-1](F.gelu(h))
 
 #Example usage
 #    net=einnet(1,16,64,1,2,einpool_ab())
@@ -1200,7 +1196,7 @@ def loss_ce(pred,Y):
     loss_head=F.cross_entropy(s,ind[:,0])
     return loss_head,loss_tail
 
-net=einnet.einnet(R,64,128,R*2,6,einnet.einpool_aa()).cuda()
+net=einnet(R,64,128,R*2,6,einpool_aa()).cuda()
 opt=optim.Adam(net.parameters(),lr=1e-3)
 t0=time.time()
 for epoch in range(100):
@@ -1249,7 +1245,7 @@ At 94% MRR, the equivariant network has a strong showing here and does much bett
 
 The Abstraction Reasoning Corpus for Artificial General Intelligence (ARC-AGI) is a collection of complex puzzles for which even advanced Large Language Models (LLMs) struggle to solve. The task is to construct an output "grid" or colors given an input "grid", following several demonstrations of input-output pairs. 
 
-While the ARC-AGI benchmark tests a wide range of intelligence capabilities, there are a few interesting ones with permutation symmetry that can seemingly be solved by a permutation symmetric NN trained only on the ~3 given demonstrations. Here are 4 of them.
+While the ARC-AGI benchmark tests a wide range of intelligence capabilities, there are a few interesting ones with permutation symmetry that can seemingly be solved by a permutation symmetric NN trained only on the ~3 given demonstrations. Here are 3 of them.
 
 
 <div class="row mt-3">
@@ -1261,6 +1257,105 @@ While the ARC-AGI benchmark tests a wide range of intelligence capabilities, the
     Four ARC-AGI tasks that can be solved by permutation symmetric neural network, training solely on the ~3 provided demonstrations.
 </div>
 
+Using problem `a406ac07` as an example, we first need to implement an `aab`-type pooling operation. Here we show an implementation for einsum pooling up to order-2.
+
+```python
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class einpool_aab(nn.Module):
+    fan_in=10
+    fan_out=8
+    def forward(self,x):
+        N,M,T,KH=x.shape
+        H=KH//self.fan_in
+        xn=x.view(-1,N*M*T,KH)
+        xn=F.normalize(xn-xn.mean(-2,keepdim=True),dim=-2,p=2,eps=1e-6).view(*x.shape)
+        x=x.split(H,dim=-1)
+        xn=xn.split(H,dim=-1)
+        y0=x[0]
+        y1=x[1].mean(-2,keepdim=True).repeat(1,1,T,1)
+        y2=x[2].mean(-3,keepdim=True).repeat(1,M,1,1)
+        y3=x[3].mean(-4,keepdim=True).repeat(N,1,1,1)
+        y4=x[4].diagonal(dim1=-3,dim2=-4).diag_embed(dim1=-3,dim2=-4)
+        y5=x[5].transpose(-3,-4)
+        y6=xn[6]*x[7]
+        y7=torch.einsum('abdH,bcdH->acdH',xn[8],x[9])
+        y=[y0,y1,y2,y3,y4,y5,y6,y7]
+        y=torch.cat(y,dim=-1)
+        return y
+
+```
+
+The following implementation use a 3-stack `aab`-type EinNet to solve the `a406ac07` task, using only provided training instances.
+
+```python
+
+import torch
+import torch.nn.functional as F
+
+#evaluation/a406ac07.json
+data_train=[{"input": [[0, 0, 0, 0, 0, 0, 0, 0, 0, 9], [0, 0, 0, 0, 0, 0, 0, 0, 0, 9], [0, 0, 0, 0, 0, 0, 0, 0, 0, 8], [0, 0, 0, 0, 0, 0, 0, 0, 0, 8], [0, 0, 0, 0, 0, 0, 0, 0, 0, 7], [0, 0, 0, 0, 0, 0, 0, 0, 0, 7], [0, 0, 0, 0, 0, 0, 0, 0, 0, 6], [0, 0, 0, 0, 0, 0, 0, 0, 0, 6], [0, 0, 0, 0, 0, 0, 0, 0, 0, 5], [9, 9, 8, 8, 7, 7, 6, 6, 5, 5]], "output": [[9, 9, 0, 0, 0, 0, 0, 0, 0, 9], [9, 9, 0, 0, 0, 0, 0, 0, 0, 9], [0, 0, 8, 8, 0, 0, 0, 0, 0, 8], [0, 0, 8, 8, 0, 0, 0, 0, 0, 8], [0, 0, 0, 0, 7, 7, 0, 0, 0, 7], [0, 0, 0, 0, 7, 7, 0, 0, 0, 7], [0, 0, 0, 0, 0, 0, 6, 6, 0, 6], [0, 0, 0, 0, 0, 0, 6, 6, 0, 6], [0, 0, 0, 0, 0, 0, 0, 0, 5, 5], [9, 9, 8, 8, 7, 7, 6, 6, 5, 5]]}, {"input": [[0, 0, 0, 0, 0, 0, 0, 0, 0, 5], [0, 0, 0, 0, 0, 0, 0, 0, 0, 6], [0, 0, 0, 0, 0, 0, 0, 0, 0, 6], [0, 0, 0, 0, 0, 0, 0, 0, 0, 7], [0, 0, 0, 0, 0, 0, 0, 0, 0, 7], [0, 0, 0, 0, 0, 0, 0, 0, 0, 7], [0, 0, 0, 0, 0, 0, 0, 0, 0, 8], [0, 0, 0, 0, 0, 0, 0, 0, 0, 9], [0, 0, 0, 0, 0, 0, 0, 0, 0, 9], [5, 6, 6, 7, 7, 7, 8, 9, 9, 9]], "output": [[5, 0, 0, 0, 0, 0, 0, 0, 0, 5], [0, 6, 6, 0, 0, 0, 0, 0, 0, 6], [0, 6, 6, 0, 0, 0, 0, 0, 0, 6], [0, 0, 0, 7, 7, 7, 0, 0, 0, 7], [0, 0, 0, 7, 7, 7, 0, 0, 0, 7], [0, 0, 0, 7, 7, 7, 0, 0, 0, 7], [0, 0, 0, 0, 0, 0, 8, 0, 0, 8], [0, 0, 0, 0, 0, 0, 0, 9, 9, 9], [0, 0, 0, 0, 0, 0, 0, 9, 9, 9], [5, 6, 6, 7, 7, 7, 8, 9, 9, 9]]}, {"input": [[0, 0, 0, 0, 0, 0, 0, 0, 0, 8], [0, 0, 0, 0, 0, 0, 0, 0, 0, 8], [0, 0, 0, 0, 0, 0, 0, 0, 0, 8], [0, 0, 0, 0, 0, 0, 0, 0, 0, 4], [0, 0, 0, 0, 0, 0, 0, 0, 0, 4], [0, 0, 0, 0, 0, 0, 0, 0, 0, 5], [0, 0, 0, 0, 0, 0, 0, 0, 0, 5], [0, 0, 0, 0, 0, 0, 0, 0, 0, 3], [0, 0, 0, 0, 0, 0, 0, 0, 0, 3], [8, 8, 4, 4, 4, 5, 5, 3, 3, 3]], "output": [[8, 8, 0, 0, 0, 0, 0, 0, 0, 8], [8, 8, 0, 0, 0, 0, 0, 0, 0, 8], [8, 8, 0, 0, 0, 0, 0, 0, 0, 8], [0, 0, 4, 4, 4, 0, 0, 0, 0, 4], [0, 0, 4, 4, 4, 0, 0, 0, 0, 4], [0, 0, 0, 0, 0, 5, 5, 0, 0, 5], [0, 0, 0, 0, 0, 5, 5, 0, 0, 5], [0, 0, 0, 0, 0, 0, 0, 3, 3, 3], [0, 0, 0, 0, 0, 0, 0, 3, 3, 3], [8, 8, 4, 4, 4, 5, 5, 3, 3, 3]]}]
+data_test=[{"input": [[0, 0, 0, 0, 0, 0, 0, 0, 0, 3], [0, 0, 0, 0, 0, 0, 0, 0, 0, 3], [0, 0, 0, 0, 0, 0, 0, 0, 0, 3], [0, 0, 0, 0, 0, 0, 0, 0, 0, 4], [0, 0, 0, 0, 0, 0, 0, 0, 0, 4], [0, 0, 0, 0, 0, 0, 0, 0, 0, 6], [0, 0, 0, 0, 0, 0, 0, 0, 0, 6], [0, 0, 0, 0, 0, 0, 0, 0, 0, 9], [0, 0, 0, 0, 0, 0, 0, 0, 0, 7], [3, 3, 4, 6, 6, 6, 9, 9, 7, 7]], "output": [[3, 3, 0, 0, 0, 0, 0, 0, 0, 3], [3, 3, 0, 0, 0, 0, 0, 0, 0, 3], [3, 3, 0, 0, 0, 0, 0, 0, 0, 3], [0, 0, 4, 0, 0, 0, 0, 0, 0, 4], [0, 0, 4, 0, 0, 0, 0, 0, 0, 4], [0, 0, 0, 6, 6, 6, 0, 0, 0, 6], [0, 0, 0, 6, 6, 6, 0, 0, 0, 6], [0, 0, 0, 0, 0, 0, 9, 9, 0, 9], [0, 0, 0, 0, 0, 0, 0, 0, 7, 7], [3, 3, 4, 6, 6, 6, 9, 9, 7, 7]]}]
+
+#Describe KG into grid
+def make_example(input,output):
+    x=torch.LongTensor(input)
+    y=torch.LongTensor(output)
+    x=F.one_hot(x,num_classes=10).float()
+    H,W,_=x.shape
+    i=torch.arange(10).eq(0).float().view(1,1,-1).repeat(H,W,1) #special indicator for 0
+    x=torch.stack((x,i),dim=-1).float()
+    return x,y
+
+X_train=[]
+Y_train=[]
+for i,ex in enumerate(data_train):
+    x,y=make_example(ex['input'],ex['output'])
+    X_train.append(x.cuda())
+    Y_train.append(y.cuda())
+
+X_test=[]
+Y_test=[]
+for i,ex in enumerate(data_test):
+    x,y=make_example(ex['input'],ex['output'])
+    X_test.append(x.cuda())
+    Y_test.append(y.cuda())
+
+net=einnet(ninput=2,nh0=16,nh=16,noutput=1,nstacks=2,pool=einpool_aab()).cuda()
+
+def forward(X,Y):
+    s=net(X).squeeze(-1)
+    loss=F.cross_entropy(s.view(-1,s.shape[-1]),Y.view(-1))
+    _,pred=s.max(dim=-1)
+    acc=pred.eq(Y).float().mean()
+    return loss,pred,acc
+
+opt=torch.optim.AdamW(net.parameters(),lr=1e-3,weight_decay=0)
+
+loss=[]
+for i in range(2000):
+    net.zero_grad()
+    for j in range(len(X_train)):
+        loss_j,_,_=forward(X_train[j],Y_train[j])
+        loss_j.backward()
+        loss.append(float(loss_j.data))
+    
+    opt.step()
+    loss_i=sum(loss)/len(loss)
+    print('iter %d, loss %f   '%(i,loss_i),end='\r')
+    
+    if i%100==0:
+        with torch.no_grad():
+            for j in range(len(X_test)):
+                loss_eval,pred,acc=forward(X_test[j],Y_test[j])
+                print('iter %d, loss %f, loss_eval %f, acc %f,   '%(i,loss_i,loss_eval,acc))
+                print(pred.view(-1).tolist())
+            
+            loss=[]
+
+```
 
 
 
