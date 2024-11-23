@@ -296,7 +296,7 @@ $$
 \def\p{p(x | t)}
 \def\u{u(x, t)}
 \def\utheta{u_{\theta}(x, t)}
-\def\uthetacfm{u_{\theta}^{\CFM}(x, t)}
+\def\uthetacfm{u_{\theta}^{\mathrm{CFM}}(x, t)}
 \def\pcond{p(x | t, z)}
 \def\ucond{u^{\mathrm{cond}}(x, t, z)}
 \def\ucondzi{u^{\mathrm{cond}}(x, t, z^{(i)})}
@@ -318,7 +318,6 @@ $$
 $$
 </div>
 
-$$\cL$$, $$\cN$$, $$\cLL$$
 The first part of this blog post is an introduction to generative modelling, normalizing flows and continuous normalizing flows.
 The reader already familiar with these topics, or that wants to cover them later, can directly jump to the <a href="#conditional-flow-matching">second part</a>, devoted to **conditional flow matching**.
 
