@@ -35,8 +35,6 @@ toc:
 - name: "Methods"
   subsections: 
     - name: The teacher-student setup
-    - name: Simulating the ordinary differential equations
-    - name: Simulating neural network training
 - name: "Replications"
   subsections:
     - name: Theory-experiment overlap in the soft committee machine
@@ -105,8 +103,7 @@ To complement the derivations, we include code snippets for computing the macros
 ### The teacher-student setup
 
 In the teacher-student setting of Saad & Solla <d-cite key="saad1995online"></d-cite>, the data generation process used to train the student network is described by a distrubution over inputs $x$ and a teacher providing target outputs $y$.
-
-Saad & Solla focus on the online learning (also termed *stochastic* gradient descent) setting, where new samples are drawn from the data generation process uniformly at random.
+Saad & Solla <d-cite key="saad1995online"></d-cite> focus on the online learning (also termed *stochastic* gradient descent) setting, where new samples are drawn from the data generation process uniformly at random.
 In this setting, a batch size greater than one has no substantial effect on the dynamics except to reduce the noise in the gradient estimate. 
 As such, in simulations we use minibatch stochastic gradient descent and sample multiple $(x_{s}, y_{s})^{u}$ pairs to fill a batch 
 $s = 1, \ldots, B$.
@@ -151,37 +148,45 @@ W^{u+1} = W^{u} - \eta_{W} \frac{\partial \mathcal{L}^{u}}{\partial W}~,
 where $\eta_{W}$ is the learning rate for parameters $$W$$
 This procedure can be shown to converge to near-zero training error in the limit of infinite data and small learning rates if the student is overparameterized with respect to the teacher <d-cite key="saad1995online"></d-cite>.
 
-**How is the teacher-student setting useful here?** One way to analyze learning 
-dynamics in neural networks is to pose the learning network as a dynamical system, where the gradient descent updates 
+**How is the teacher-student setting useful here?** 
+One way to analyze learning 
+dynamics in neural networks treat the optimization process as a dynamical system where the gradient descent updates 
 effectively evolve through continuous time as the parameters of a dynamical system. This transformation is 
-commonly known as the *gradient flow limit*, where the discrete gradient descent updates become continuous when 
+commonly known as the *gradient flow limit* <d-cite key="bach2020effortless"></d-cite>,
+where the discrete gradient descent updates become continuous when 
 the learning rate is small, giving
 
 $$ \begin{equation}
-\frac{dW}{dt} = - \left\langle \frac{\partial \mathcal{L}^{u}}{\partial W} \right\rangle_{x,y}, 
+\frac{\mathrm{d}W}{\mathrm{d}t} = - \left\langle \frac{\partial \mathcal{L}^{u}}{\partial W} \right\rangle_{x,y}
 \end{equation} $$
 
-and a generalization error at each step as
+where $$\left\langle \cdot \right\rangle_{x,y}$$ is physics notation for the expectation taken over the distribution of the data.
+In the gradient flow limit, the generalization error at each step can be written as
 
 $$ \begin{equation}
-\mathcal{E}(W) = \frac{1}{2} \left\langle \left( \hat{y} - y \right)^{2} \right\rangle_{x,y}, 
+\mathcal{E}(W^u) = \frac{1}{2} \left\langle \left( \hat{y}^u - y \right)^{2} \right\rangle_{x,y}~.
 \end{equation} $$
 
-where the expectation is taken over the data distribution. One way to think about this limit is by considering that 
-as the learning rate gets smaller, the amount of data observed by the network increases, becoming virtually infinite 
-when the learning rate is zero. This converts the average over data in the loss function to an expectation over the 
-data. 
+One way to think about the limit defined by (5) is by considering that 
+as the learning rate gets smaller, the amount of data observed by the network at a fixed timescale increases, becoming virtually infinite 
+when the learning rate is zero. 
+This converts the finite average over data in the loss function in (3) to an expectation over the data as in (6).
 
-It is possible to solve the above equation for linear networks (CITE ANDREWS, CLEM'S, AND LUKAS' WORK, 
-\url{https://arxiv.org/abs/2405.17580}, \url{https://pubmed.ncbi.nlm.nih.gov/38288081/}). For 
-non-linear networks, however, other techniques must be used, such as mean-field theory approaches (CITE THIS). 
-In particular, using a teacher-student setup allows for the derivation of a closed-form expectation of the 
-learning dynamics, even for non-linear transfer functions. To achieve this, the above differential equation can be 
-written in terms of the **order parameters**, which fully define the state of the system at each time step. 
+It is possible to solve the system of ordinary differential equations in (5)
+ for several classes of deep linear networks <d-cite key="saxe2014exact"></d-cite> <d-cite key="jacot2018neural"></d-cite> <d-cite key="braun2022exact"></d-cite> <d-cite key="shi2022learning"></d-cite> <d-cite key="tu2024mixed"></d-cite> at finite width.
+Happily, using a teacher-student setup allows for the derivation of a closed-form expression of the learning dynamics, even for *nonlinear* networks with a hidden layer.
+To achieve this, the above differential equation can be 
+written in terms of specific **order parameters**, which sufficiently describe the state of the learning dynamics at each time step. 
+Order parameters are commonly understood in physics as macroscopic variables that describe the time evolution of a complex system in a way that is convenient for further mathematical analysis.
 
-In the next sections, we will derive these equations for two specific cases: (SAAD AND SOLLA 1995), where the teacher 
-and student are a soft-committee machine, and (GOLDT 2020), which extends these results to allow for non-linear 
-two-layer neural networks.
+In the next sections, 
+we will rederive the dynamical equations for two paradigmatic cases of the teacher-student setting,
+the classical case of Saad and Solla <d-cite key="saad1995online"></d-cite> where the teacher
+and student are a soft-committee machine (an average of non-linear perceptrons), 
+and Goldt et al. <d-cite key="goldt2020dynamics"></d-cite>,
+which extends these results to allow for non-linear neural networks with a hidden layer.
+
+## Replications
 
 ### Theory-experiment overlap in the soft committee machine
 
