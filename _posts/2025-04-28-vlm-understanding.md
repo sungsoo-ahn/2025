@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Scientific Understanding of Vision-Language Models
-description: Vision-Language Models (VLMs) have emerged as a significant advancement in AI, demonstrating remarkable capabilities in integrating visual and textual information processing. While the field has seen rapid progress through engineering innovations, this advancement has primarily relied on empirical approaches rather than deep scientific understanding. Compared to Language Models (LMs) where interpretability research is extensive, the scientific understanding of VLMs remains limited. In this survey blog, we examine VLM research from both macro (model behavior analysis) and micro (mechanistic interpretability) perspectives, aiming to bridge the gap between empirical success and theoretical understanding. Through this comprehensive analysis, we not only summarize current approaches but also identify promising directions for developing a more principled understanding of VLMs.
+description: Vision language models (VLMs), such as GPT-4o, have rapidly evolved, demonstrating impressive capabilities across diverse tasks. However, much of the progress in this field has been driven by engineering efforts, with a limited understanding of how these models work. The lack of scientific insight poses challenges for further enhancing their robustness, generalization, and interpretability. In this work, we systematically review two streams of works that make VLM research more "sciencey." At the macro level, we explore studies focusing on behavioral analysis, which examines the performance of VLMs across diverse designs, such as architectural choices or training strategies. At the micro level, we delve into mechanistic interpretability, which focuses on understanding how VLMs' internal features and neurons represent and process information using tools like linear probing or activation patching. Finally, we discuss how these two streams can be integrated to foster a more principled approach to understanding and advancing VLMs.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -318,9 +318,9 @@ Recent advances in the field have demonstrated that VLMs like CLIP can be levera
 
 ### Probing
 
-<img src="{{ 'assets/img/2025-04-28-vlm-understanding/probing.png' | relative_url }}" alt="transformer" width="80%" class="l-body rounded z-depth-1 center">
+<object data="{{ 'assets/img/2025-04-28-vlm-understanding/probing.svg' | relative_url }}" type="image/svg+xml" width="80%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
-Probing.
+Probing
 </div>
 
 Probing <d-cite key="alain2016understanding"></d-cite><d-cite key="hewitt-manning-2019-structural"></d-cite> serves as a powerful diagnostic tool - essentially a microscope for peering into the internal workings of neural networks, helping us understand what information these models actually capture in their representations. At its core, the technique involves training simple supervised classifiers (probes) to predict specific linguistic or semantic properties from a model's internal representations. 
@@ -353,10 +353,9 @@ Key Takeaways:
 </aside>
 
 ### Activation Patching
-
-<img src="{{ 'assets/img/2025-04-28-vlm-understanding/activation_patching.png' | relative_url }}" alt="transformer" width="80%" class="l-body rounded z-depth-1 center">
+<object data="{{ 'assets/img/2025-04-28-vlm-understanding/activation.svg' | relative_url }}" type="image/svg+xml" width="100%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
-Activation patching.
+Activation Patching
 </div>
 
 Activation patching is a powerful interpretability technique for neural networks. It enables researchers to systematically analyze how different components of a model contribute to its behavior by modifying specific internal activations while keeping others constant. This approach, grounded in the principle of control variates, provides causal insights by attributing changes in outputs to specific components. Its utility lies in identifying the roles of individual layers, attention mechanisms, and activation pathways in producing the model's predictions, which is especially valuable for understanding the inner workings of complex vision-language models (VLMs) and transformers.
@@ -420,9 +419,9 @@ Key Takeaways:
 
 ### Logit Lens
 
-<img src="{{ 'assets/img/2025-04-28-vlm-understanding/logit_lens.png' | relative_url }}" alt="transformer" width="80%" class="l-body rounded z-depth-1 center">
+<object data="{{ 'assets/img/2025-04-28-vlm-understanding/logit_lens.svg' | relative_url }}" type="image/svg+xml" width="80%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
-Logit lens
+Logit Lens
 </div>
 
 The logit lens <d-cite key="alignmentforumorg2024interpreting"></d-cite> serves as a powerful analytical tool for understanding how neural networks progressively refine their predictions across different layers. By examining intermediate activations, this technique reveals the evolution of model predictions throughout the computational process, offering insights into how multimodal models integrate and process information. 
@@ -454,9 +453,9 @@ Key Takeaways:
 
 ### Sparse Autoencoders
 
-<img src="{{ 'assets/img/2025-04-28-vlm-understanding/sae.png' | relative_url }}" alt="transformer" width="80%" class="l-body rounded z-depth-1 center">
+<object data="{{ 'assets/img/2025-04-28-vlm-understanding/sae.svg' | relative_url }}" type="image/svg+xml" width="80%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
-Sparse autoencoders.
+Sparse Autoencoders
 </div>
 
 A significant challenge in understanding neural networks is the superposition phenomenon, where individual neurons or layers simultaneously encode multiple features, making their internal representations difficult to interpret. Traditional methods that attempt to assign concepts to individual neurons often fail because these neurons are frequently polysemantic - encoding multiple meanings simultaneously <d-cite key="elhage2022toy"></d-cite>. In late 2023, Sparse Autoencoders (SAEs) emerged as an effective solution to this problem <d-cite key="bricken2023monosemanticity"></d-cite><d-cite key="DBLP:conf/iclr/HubenCRES24"></d-cite>, offering a novel approach to extract mono-semantic concepts from neural networks.
@@ -499,6 +498,10 @@ A notable advancement came from Gandelsman et al. <d-cite key="gandelsman2023int
 Building on this work, Balasubramanian et al. <d-cite key="balasubramanian2024decomposing"></d-cite> extended TEXTSPAN beyond contrastively-trained language-vision models. Their automated representation decomposition method leverages the computational graph generated during the forward pass, decomposing internal contributions of vanilla vision models into their final representation and mapping these contributions to CLIP space for text-based interpretation.
 
 #### Data Distribution-Based Methods
+<object data="{{ 'assets/img/2025-04-28-vlm-understanding/automated.svg' | relative_url }}" type="image/svg+xml" width="80%" class="l-body rounded z-depth-1 center"></object>
+<div class="l-gutter caption" markdown="1">
+automated.
+</div>
 
 Another effective approach to understanding neural networks' internal mechanisms involves analyzing neuron activation patterns across different input types. This method examines how neurons respond to various categories of data, revealing specialized neurons and their roles in information processing. This approach can be broadly categorized into supervised and unsupervised methods.
 
