@@ -246,7 +246,6 @@ $$
 
 
 The results highlight a clear bias aligned with each evaluator's preferences. While both models exhibit self-bias, the difference in magnitude suggests potential variations in their evaluation mechanisms or inherent tendencies to favor their own outputs. These findings are additionally concurred by the findings of Panickssery et al. <d-cite key="panickssery2024evaluating"></d-cite>, who observed that LLM evaluators recognize and favor their own generations.
-.
 
 
 
