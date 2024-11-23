@@ -293,7 +293,7 @@ Nearest neighbors of a sample in the embedding space act as small semantic pertu
 Building upon the SimCLR objective, NNCLR is defined as loss as below:
 
 $$
-\mathcal{L}_{\text{NNCLR}} = - \frac{1}{N} \sum_{i=1}^{N} \log \frac{\exp\left(\text{sim}\left(\text{NN}\left(\mathbf{z}_i, \mathcal{Q}\right),  \mathbf{z}_i^+\right) / \tau\right)}{\sum_{j=1}^{N} \exp\left(\text{sim}\left(\text{NN}\left(\mathbf{z}_i, \mathcal{Q}\right), \mathbf{z}_j \right)/ \tau\right)}
+\mathcal{L}_{\text{NNCLR}} = - \frac{1}{N} \sum_{i=1}^{N} \log \frac{\exp\left(\text{sim}\left(\text{NN}\left(\mathbf{z}_i, \mathcal{Q}\right),  \mathbf{z}_i^+\right) / \tau\right)}{\exp\left(\text{sim}\left(\text{NN}\left(\mathbf{z}_i, \mathcal{Q}\right),  \mathbf{z}_i^+\right) / \tau\right) + \sum_{j=1}^{N} \exp\left(\text{sim}\left(\text{NN}\left(\mathbf{z}_i, \mathcal{Q}\right), \mathbf{z}_j \right)/ \tau\right)}
 $$
 
 where $$NN(z, \mathcal{Q})$$ is the nearest neighbor operator as defined below:
