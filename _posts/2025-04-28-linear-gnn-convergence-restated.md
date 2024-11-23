@@ -31,7 +31,7 @@ toc:
     - name: Step 1. Gradients and Optimization Steps.
     - name: Step 2. The Dynamics.
     - name: Step 3. Solving the ODE.
-  - name: A Minor Mistake 
+  - name: A Minor Mistake in the Original Paper
   - name: Critical Thinking 
     subsections:
     - name: The Overlooked Gap. 
@@ -483,7 +483,7 @@ This finishes the proof.
 
 
  
-## A Minor Mistake In the Original Paper
+## A Minor Mistake in the Original Paper
 
 <!-- In our careful review of the proof, we identified a minor mistake in a key step involving the "almost static term". This discovery initially made us question the entire derivation. However, upon closer inspection, we found that while there was indeed a small error, the overall derivation remained valid and elegant.
 
