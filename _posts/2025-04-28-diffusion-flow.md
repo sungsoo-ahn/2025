@@ -334,7 +334,9 @@ The fraction of the DDIM step to undo by renoising is a hyperparameter which we 
 </div>
 
 Here we ran different samplers for 100 sampling steps using a cosine noise schedule
-and $${\bf v}$$-prediction <d-cite key="salimansprogressive"></d-cite>. Ignoring nonlinear interactions, the final sample produced by the sampler can be written as a weighted sum of predictions $$\hat{\bf v}_t$$ made during sampling and Gaussian noise $${\bf e}$$: $${\bf z}_0 = \sum_t h_t \hat{\bf v}_t +  \sum_t g_t {\bf e} $$. The weights $$h_t$$ of these predictions are shown on the y-axis for different diffusion times $$t$$ shown on the x-axis. DDIM results in an equal weighting of $${\bf v}$$-predictions for this setting, as shown <d-cite key="salimansprogressive"></d-cite>,
+
+and $${\bf v}$$-prediction <d-cite key="salimansprogressive"></d-cite>. Ignoring nonlinear interactions, the final sample produced by the sampler can be written as a weighted sum of predictions $$\hat{\bf v}_t$$ made during sampling and Gaussian noise $${\bf e}$$: $${\bf z}_0 = \sum_t h_t \hat{\bf v}_t +  c {\bf e} $$. The weights $$h_t$$ of these predictions are shown on the y-axis for different diffusion times $$t$$ shown on the x-axis. DDIM results in an equal weighting of $${\bf v}$$-predictions for this setting, as shown <d-cite key="salimansprogressive"></d-cite>,
+
 whereas DDPM puts more emphasis on predictions made towards the end of sampling. Also see <d-cite key="lu2022dpm"></d-cite> for analytic expressions of these weights in the $${\bf x}$$ and $${\boldsymbol \epsilon}$$ parameterizations.
 
 
