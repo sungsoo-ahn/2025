@@ -21,6 +21,7 @@ bibliography: 2025-04-28-permutation-symmetric-nns.bib
 toc:
   - name: I. In Theory - Paramterizing Symmetric Functions in Taylor Series
   - name: II. Engineering a Network with Permutation Symmetry
+  - name: III. Use Cases
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
@@ -1005,5 +1006,271 @@ class einnet(nn.Module):
 #Example usage
 #    net=einnet(1,16,64,1,2,einpool_ab())
 ```
+
+
+
+
+## III Use cases
+
+Now that we have designed a network, let's use a variety of toy problems to test its capability. 
+
+### III.1 Matrix pseudo inverse
+
+A good sanity check of a permutation equivariant network is whether it can learn matrix inverse. The Moore-Penrose inverse is defined as
+```math
+A^{+}=(A^TA)^{-1}A^T
+```
+For any permutation matrix $P$ the Moore-Penrose inverse satisfies
+```math
+(PA)^+=A^+ P^T \\
+(AP)^+=P^T A^+
+```
+So $F(A)=(A^+)^T$ is row-column permutation equivariant. In fact, it is further equivariant to arbitrary rotation.
+
+
+
+In this exercise, we will train an `abH`-type equivariant EinNet to perform Moore-Penrose inverse on $8\times 16$ matrices from 1000 training examples to test its capability.
+
+
+The python implementation is as the follows. We use a 12-stack EinNet backbone with 128 hidden dims and 32 head dims, and minimize L2 loss against ground truth using AdamW with lr=1e-3.
+
+```python
+import torch
+import torch.optim as optim
+ntrain,ntest,H,W=1000,100,8,16
+
+torch.manual_seed(0)
+x_train=torch.Tensor(ntrain,H,W).normal_().cuda()
+y_train=torch.linalg.pinv(x_train).transpose(-1,-2)
+x_test=torch.Tensor(ntest,H,W).normal_().cuda()
+y_test=torch.linalg.pinv(x_test).transpose(-1,-2)
+
+net=einnet(ninput=1,nh0=32,nh=128,noutput=1,nstacks=6,pool=einpool_ab()).cuda()
+
+opt=optim.AdamW(net.parameters(),lr=1e-3,weight_decay=1e-3)
+
+for i in range(10000):
+    opt.zero_grad()
+    pred=net(x_train.unsqueeze(-1)).squeeze(-1)
+    loss=((y_train-pred)**2).mean()
+    loss.backward()
+    opt.step()
+    
+    if i%100==0:
+        with torch.no_grad():
+            pred=net(x_train.unsqueeze(-1)).squeeze(-1)
+            err_train=(torch.bmm(pred,x_train.transpose(-1,-2))-torch.eye(H).cuda())
+            err_train=err_train.abs().mean()
+            
+            pred=net(x_test.unsqueeze(-1)).squeeze(-1)
+            err_test=(torch.bmm(pred,x_test.transpose(-1,-2))-torch.eye(H).cuda())
+            err_test=err_test.abs().mean()
+        
+        print('Iter %d, mae_train %.4f, mae_test %.4f'%(i,err_train,err_test))
+```
+
+Let us plot the element-wise mean absolute error between $A^+A$ and $I$ over the course of learning. 
+
+
+
+With only 640k parameters (roughly the size of a $800\times800$ linear layer) and 1000 training points, we get to 0.0015 MAE which is 2 orders of magnitudes below random 0.1250 MAE. 
+
+
+### III.2 Knowledge graph reasoning
+
+Knowledge graphs are structured representations of real-world entities and their relations, organized in the form of graphs. They consist of nodes representing entities (such as people, places, and objects) and edges that denote the relationships between these entities. 
+
+Permutation symmetry can play an important role in knowledge graph reasoning. An edge (entity1, relation, entity2) indicates a relationship between entity1 and entity2. For example, (A, father_of, B), or (C, sister_of, A). Knowledge extracted from text is often incomplete. In the case of missing edges, knowledge graph completion or link prediction is the task of inferring missing edges in the knowledge graph, such as (C, aunt_of, B). That is because the underlying logic rule "if (A, father_of, B) and (C, sister_of, A), then (C, aunt_of, B)" generally stands for any A, B and C. That is why knowledge graph reasoning is expected to be equivariant to arbitrary permutation of the entities.
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-permutation-symmetric-nns/KG.png" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    Knowledge graph completion requires logic reasoning. Permutation symmetry plays an important role, because the logic rule used for reasoning is independent of entity permutations.
+</div>
+
+
+
+Let us represent a knowledge graph as a sparse tensor $X_{ijr}$, where $X(i,j,r)=1$ if there is an edge between entity i and entity j with relation r, and $X(i,j,r)=0$ otherwise. We want to learn an `aaH`-type permutation equivariant network equivariant to entity permutation
+
+$$Y^{\text{head}}_{ijr},Z^{\text{tail}}_{ijr}=F(X_{ijr})$$
+
+Here we output two sets of logits for "head" and "tail" prediction -- predicting entity1 given (*, relation, entity2) and predicting entity2 given (entity1, relation, *) respectively. Standard loss function is
+
+```python
+loss_ijr=cross_entropy(Y[:,j,r],i)+cross_entropy(Z[i,:,r],j)
+```
+to be enumerated across all heldout edges (i,r,j).
+
+Here we have a python implementation for knowledge graph completion on the Alyawarra Kinship dataset. The Alyawarra Kinship dataset records the kinship terms among 102 Alyawarra-speaking Aboriginal people of central Austraila. It can be thought of as a real world instance of the "sister of father is aunt" example. It is one of the classical datasets for evaluating knowledge graph reasoning.
+The dataset (`train.txt`, `valid.txt` and `test.txt`) are available from the [ConvE Github repository](https://github.com/TimDettmers/ConvE/blob/master/kinship.tar.gz).
+
+```python
+import time
+import torch
+import torch.optim as optim
+import torch.nn.functional as F
+#Read *.txt file for tuples
+def read_data(fname):
+    data=[]
+    with open(fname,'r') as f:
+        for line in f:
+            data.append(line.rstrip('\n').split('\t'))
+    return data
+
+#Compute metrics. pred, ref and exclude are [R,N,N] tensors
+#pred=predictions, ref=gt, exclude=all non-gt tuples 
+def perf(pred,ref,exclude):
+    R,N,_=ref.shape
+    ref=ref.nonzero().tolist()
+    exclude=exclude.nonzero().tolist()
+    ref=[tuple(x) for x in ref]
+    exclude=[tuple(x) for x in exclude]
+    ref_lookup={k:1 for k in ref+exclude}
+    #head
+    rank_head=[]
+    pred_head=pred[:R]
+    for t in ref:
+        options=torch.LongTensor([i for i in range(N) if i==t[1] or not (t[0],i,t[2]) in ref_lookup])
+        sgt=pred_head[t[0],t[1],t[2]]
+        sopt=pred_head[t[0],options,t[2]]
+        rank=sopt.ge(sgt).long().sum()
+        rank_head.append(rank)
+    
+    #tail
+    rank_tail=[]
+    pred_tail=pred[R:]
+    for t in ref:
+        options=torch.LongTensor([i for i in range(N) if i==t[2] or not (t[0],t[1],i) in ref_lookup])
+        sgt=pred_tail[t[0],t[1],t[2]]
+        sopt=pred_tail[t[0],t[1],options]
+        rank=sopt.ge(sgt).long().sum()
+        rank_tail.append(rank)
+    
+    rank_head=torch.LongTensor(rank_head)
+    rank_tail=torch.LongTensor(rank_tail)
+    mrr_head=(1/rank_head.float()).mean()
+    mrr_tail=(1/rank_tail.float()).mean()
+    
+    top1=(rank_head.eq(1).float().mean()+rank_tail.eq(1).float().mean())/2
+    top3=(rank_head.le(3).float().mean()+rank_tail.le(3).float().mean())/2
+    top10=(rank_head.le(10).float().mean()+rank_tail.le(10).float().mean())/2
+    mrr=(mrr_head+mrr_tail)/2
+    return float(top1),float(top3),float(top10),float(mrr)
+
+def to_matrix(links,N,R):
+    X=torch.sparse_coo_tensor(links.t(),[1.0 for i in range(len(links))],[N,N,R])
+    return X.coalesce().to_dense().cuda()
+
+train=read_data('train.txt')
+val=read_data('valid.txt')
+test=read_data('test.txt')
+
+entities=sorted(list(set([x[0] for x in train+val+test]+[x[2] for x in train+val+test])))
+relations=sorted(list(set([x[1] for x in train+val+test])))
+N=len(entities)
+R=len(relations)
+
+x_train=torch.Tensor([[entities.index(x[0]),entities.index(x[2]),relations.index(x[1])] for x in train])
+x_val=torch.Tensor([[entities.index(x[0]),entities.index(x[2]),relations.index(x[1])] for x in val])
+x_test=torch.Tensor([[entities.index(x[0]),entities.index(x[2]),relations.index(x[1])] for x in test])
+X_train=to_matrix(x_train,N,R)
+X_val=to_matrix(x_val,N,R)
+X_test=to_matrix(x_test,N,R)
+
+def split(X,p=0.9):
+    mask=torch.rand_like(X).lt(p).float()
+    return X*mask,X*(1-mask)
+
+def loss_ce(pred,Y):
+    R=Y.shape[-1]
+    pred_head=pred[:,:,:R]
+    pred_tail=pred[:,:,R:]
+    ind=Y.nonzero()
+    s=pred_tail[ind[:,0],:,ind[:,2]]
+    loss_tail=F.cross_entropy(s,ind[:,1])
+    s=pred_head[:,ind[:,1],ind[:,2]].contiguous().t()
+    loss_head=F.cross_entropy(s,ind[:,0])
+    return loss_head,loss_tail
+
+net=einnet.einnet(R,64,128,R*2,6,einnet.einpool_aa()).cuda()
+opt=optim.Adam(net.parameters(),lr=1e-3)
+t0=time.time()
+for epoch in range(100):
+    opt.zero_grad()
+    net.train()
+    for i in range(100): 
+        X,Y=split(X_train)
+        pred=net(X)
+        loss_head,loss_tail=loss_ce(pred,Y)
+        loss=loss_head+loss_tail
+        loss.backward()
+        print('%d, loss %.4f, time %.2f    '%(epoch,loss,time.time()-t0),end='\r')
+        if (i+1)%16==0:
+            opt.step()
+            opt.zero_grad()
+    
+    net.eval()
+    #Calculate performance on val split
+    with torch.no_grad():
+        pred=net(X_train)
+    
+    top1,top3,top10,mrr=perf(pred.permute(2,0,1),X_val.permute(2,0,1),(X_train+X_test).permute(2,0,1))
+    print('epoch %d val top1 %.4f top3 %.4f top10 %.4f mrr %.4f'%(epoch,top1,top3,top10,mrr))
+    #Calculate performance on test split
+    #Use both train and val edges to make prediction on test
+    with torch.no_grad():
+        pred=net(X_train+X_val)
+    
+    top1,top3,top10,mrr=perf(pred.permute(2,0,1),X_test.permute(2,0,1),(X_train+X_val).permute(2,0,1))
+    print('epoch %d test top1 %.4f top3 %.4f top10 %.4f mrr %.4f'%(epoch,top1,top3,top10,mrr))
+```
+
+
+Standard evaluation metric for knowledge graph completion is top-1, top-5, top-10 and mean reciprocal rank (MRR) for head- and tail-prediction tasks, after filtering of known edges. 
+
+| Model | MRR  | Hits@10 | Hits@3 | Hits@1|
+| ----- |:----:|:-------:|:------:|:-----:|
+| ConvE | 0.83 |  0.98   | 0.91   | 0.73  |
+| EinNet `aaH` | 0.94 |  1.00   | 0.99   | 0.90  |
+
+At 94% MRR, the equivariant network has a strong showing here and does much better than the classic embedding-based ConvE model and even more recent models. Maybe its closer to actually doing some logic reasoning? The limitation here is that memory cost is quadratic to number of entities and 1000 entities seems to be the current limit, where as embedding-based methods can scale to millions of entities. Further research on design is needed.
+
+
+### III.3 Permutation symmetry in ARC-AGI problems
+
+
+The Abstraction Reasoning Corpus for Artificial General Intelligence (ARC-AGI) is a collection of complex puzzles for which even advanced Large Language Models (LLMs) struggle to solve. The task is to construct an output "grid" or colors given an input "grid", following several demonstrations of input-output pairs. 
+
+While the ARC-AGI benchmark tests a wide range of intelligence capabilities, there are a few interesting ones with permutation symmetry that can seemingly be solved by a permutation symmetric NN trained only on the ~3 given demonstrations. Here are 4 of them.
+
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-permutation-symmetric-nns/ARC-AGI.png" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    Four ARC-AGI tasks that can be solved by permutation symmetric neural network, training solely on the ~3 provided demonstrations.
+</div>
+
+
+
+
+Arguably, hardcoding symmetry constraints specific to a ARC-AGI task can be considered cheating as much as writing a python program to solve the task. But maybe one day just like program synthesis, the LLMs may be able to generate neural network architectures that solve those tasks, so who knows?
+
+
+
+
+
+## Final words
+
+There have you, we've designed and verified various kinds of permutation symmetric network from the basic principles. Building permutation symmetry into neural network architecture helps make learning highly efficient, sometimes solving tasks from as few as 3 examples. 
+
+The same bottom-up approach is applicable to many other types of symmetries, such as translation, scale, rotation. In fact, designing equivariant and invariant networks has been a hot topic. In addition to the EMLP architecture, many network designs for specific types of permutation symmetry have also been proposed previously, such as 
+
+In fact, the matrix pseudo inverse and knowledge graph completion use cases in our post are in part inspired by the [] work and a comment in its reviews. We'd like to encourage curious readers to read those papers as well.
 
 
