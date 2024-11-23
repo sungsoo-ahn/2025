@@ -187,8 +187,7 @@ For convenience, we summarize some of the notations commonly used in tables belo
 - Optimality gap: the function value gap $f(x) - f^\star$.
 - Stationarity: the function gradient norm $\|\| \nabla f(x) \|\|$.
 - Near-stationarity: the gradient norm $\|\| \nabla f_\lambda(x) \|\|$, where $f_\lambda$ is the Moreau envelope of the original function $f$.
-- Duality Gap (for minimax optimization): the primal-dual gap of a given point $(x', y')$, defined as $G_f(x', y')\triangleq \max_y f(x',y)- \min_x f(x,y')$.
-
+- Duality Gap (for minimax optimization): the primal-dual gap of a given point $(x',y')$, defined as $G_f(x',y')\triangleq\max_y f(x',y)-\min_x f(x,y')$.
 - Primal Stationarity (for minimax optimization): the primal function gradient norm $\|\| \nabla \Phi(x) \|\|$, where $\Phi(x)\triangleq\max_{y\in\mathcal{Y}}f(x,y)$ is the primal function. It is different from the function stationarity in terms of the original objective function $f$.
 
 ---
