@@ -143,7 +143,7 @@ This implies that *almost* all regions of the parameter space are "stable" in te
 
 
 
-### Why This Matters
+#### Why This Matters
 
 The key consequences and takeaways of this result are:
 
