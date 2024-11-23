@@ -43,12 +43,7 @@ In this blog, we explore the distinctions between Direct Preference Optimization
 - DPO is a variant of the REINFORCE algorithm <d-cite key="sewak2019policy"></d-cite>, while PPO is a variant of the Actor-Critic algorithm <d-cite key="konda1999actor"></d-cite>.
 - DPO is an off-policy method <d-cite key="degris2012off"></d-cite>, learning from an offline dataset, while PPO is an on-policy algorithm <d-cite key="deisenroth2013survey"></d-cite>, relying on data from the current policy.
 
-DPO's lack of GAE, a critic model, and its reliance on off-policy sampling cause high-variance reward estimates, leading to **sample inefficiency**.  We detail these differences and present experiments demonstrating DPO's limitations:
-
-- State distribution shift due to limited samples and off-policy data.
-- Difficulty distinguishing responses with significant token overlap.
-- Potential decrease in likelihoods of both positive and negative samples.
-
+In summary, the lack of GAE estimation, the absence of a critic model, and the use of off-policy sampling in DPO result in high variance but unbiased token-wise reward estimates. This leads to a significant drawback for DPO: **sample inefficiency**. In the following sections, we outline the detailed differences between DPO and PPO and use a series of experiments to uncover a limitation of the DPO algorithm: DPO struggles to distinguish response pairs with substantial token overlap while still attempting to maximize the difference between them, which may result in reduced likelihoods for both positive and negative samples.
 
 ## Contrasting DPO and PPO from an RL Perspective
 
@@ -244,7 +239,7 @@ As shown in the Figure 1, we find that when trained with a math preference datas
 
 {% include figure.html path="assets/img/2025-04-28-dpo-practice/math-qwen2-1.5b-all.png" class="img-fluid" %}
 <div class="caption">
-    Figure 1: both of the logits of the chosen response and the logits of the rejected response dropping. (Notes: the rewards is the sum of the logits.)
+    Figure 1: The training monitor of DPO process, where the chosen reward is the output logit of the chosen responses and the rejected reward is the output logit of the rejected responses.
 </div>
 
 This problem is more pronounced when training with only one preference pair with a small edit distance (See Figure 2):
@@ -252,8 +247,8 @@ This problem is more pronounced when training with only one preference pair with
 ```json
 {
   "prompt": "A rectangular prism has a length of 20 cm, a width of 5 cm, and a height of 6 cm. What is its volume?",
-  "chosen": "1. It is known that the length of the rectangular prism is 20 cm, the width is 5 cm, and the height is 6 cm.\n2. According to the volume formula of a rectangular prism: volume = length × width × height\n3. Substituting the specific values into the formula: volume = 20 × 5 × 6 = 600 (cubic centimeters)\n4. Therefore, the volume of this rectangular prism is 600 cubic centimeters.",
-  "rejected": "1. It is known that the length of the rectangular prism is 20 cm, the width is 5 cm, and the height is 6 cm.\n2. According to the volume formula of a rectangular prism: volume = length × width × height\n3. Substituting the specific values into the formula: volume = 20 × 5 × 6 = 500 (cubic centimeters)\n4. Therefore, the volume of this rectangular prism is 500 cubic centimeters.",
+  "chosen response": "1. It is known that the length of the rectangular prism is 20 cm, the width is 5 cm, and the height is 6 cm.\n2. According to the volume formula of a rectangular prism: volume = length × width × height\n3. Substituting the specific values into the formula: volume = 20 × 5 × 6 = 600 (cubic centimeters)\n4. Therefore, the volume of this rectangular prism is 600 cubic centimeters.",
+  "rejected response": "1. It is known that the length of the rectangular prism is 20 cm, the width is 5 cm, and the height is 6 cm.\n2. According to the volume formula of a rectangular prism: volume = length × width × height\n3. Substituting the specific values into the formula: volume = 20 × 5 × 6 = 500 (cubic centimeters)\n4. Therefore, the volume of this rectangular prism is 500 cubic centimeters.",
   "target": "600",
   "edit_dis": 3
 }
@@ -261,13 +256,40 @@ This problem is more pronounced when training with only one preference pair with
 
 {% include figure.html path="assets/img/2025-04-28-dpo-practice/math-qwen2-1.5-top1-pair.png" class="img-fluid" %}
 <div class="caption">
-    Figure 2: both of the logits of the chosen response and the logits of the rejected response dropping with small edit distance. (Notes: the reward is the sum of the logits.)
+    Figure 2: The training monitor of DPO process, where the chosen reward is the output logit of the chosen responses and the rejected reward is the output logit of the rejected responses.
 </div>
 
-This might be due to:
+It may result from the following reasons:
 
-- **State Distribution Shift:** With limited off-policy samples, the LLM learns specific tokens in positive responses while neglecting others, leading to generation of responses with easily generated tokens instead of the full positive response.
-- **Bradley-Terry Limitations:** DPO maximizes the difference between positive and negative samples but doesn't guarantee an increase in the likelihood of positive samples.  With substantial token overlap, DPO struggles to distinguish important tokens, potentially decreasing the likelihood of both samples.
-- **Overfitting:** The BT model can overfit simpler pairwise samples and neglect more challenging ones with limited data, leading to model collapse and reduced probability of generating other chosen responses.
+- With insufficient samples in an offline dataset, DPO is trained predominantly on samples it rarely generates (off-policy samples), leading to a state distribution shift problem. Specifically, when trained with off-policy samples, LLM learns only specific tokens in the positive responses while neglecting others. These tokens are typically those easily generated by the original policy. This results in the policy easily generating responses with these tokens instead of the positive response. For example, an LLM might easily generate sequences like ABD and ACE. If the positive response is ABE and the negative response is ADE, after DPO training, the LLM learns the AB pattern but neglects the E token, which is rarely generated in the context of AB. Consequently, it easily generates ABD instead of ABE. Worse, the model easily learns to reject the response ADE, which might generalized to the pattern A~E, thereby reducing the probability of generating ABE.
+- As a Bradley-Terry model, DPO maximizes the differences between positive and negative samples. However, it does not guarantee an increase in the likelihoods of positive samples. For instance, if the initial likelihood of a positive sample is $0.7$ and that of a negative sample is $0.3$, the difference between their log probabilities is $\log⁡ 0.7− \log ⁡0.3$, which equals $0.368$. If the likelihood of the positive sample changes to $10^{−1}$ and that of the negative sample changes to $10^{−7}$, the difference between their log probabilities becomes $6$. Despite the decrease in the positive sample's likelihood, this change still maximizes the difference between the positive and negative samples. When there is substantial token overlap between the positive and negative samples, DPO struggles to distinguish the significant tokens in the responses, often simultaneously increasing or decreasing the likelihoods of both sample types. To minimize the DPO loss, the model tends to decrease the likelihoods of both positive and negative samples.
+- Furthermore, BT model tends to overfit simpler pairwise samples and neglect more challenging ones with limited samples. ****The overfitting of simpler pairwise samples can lead to model collapse, reducing the probability of generating other chosen responses.
 
-The interplay between state distribution shift and the limitations of the Bradley-Terry model can result in reduced likelihoods for both positive and negative samples <d-cite key="rafailov2024from"></d-cite><d-cite key="pal2024smaug"></d-cite>.
+For exploring what is the main cause of this problem, we observe the output of DPO policy in each training epoch for one preference pair:
+
+```json
+{
+    "STEP 1": {
+        "answer": "To calculate the volume of this rectangular prism, we can use the formula:\n\n\\[ \\text{Volume} = \\text{Length} \\times \\text{Width} \\times \\text{Height} \\]\n\nSubstitute the given dimensions into the formula:\n\n\\[ \\text{Volume} = 20\\, \\text{cm} \\times 5\\, \\text{cm} \\times 6\\, \\text{cm} \\]\n\nPerform the multiplication:\n\n\\[ \\text{Volume} = 100\\, \\text{cm}^3 \\times 6\\, \\text{cm} = 600\\, \\text{cm}^3 \\]\n\nTherefore, the volume of this rectangular prism is \\(600\\, \\text{cm}^3\\)."
+    },
+    "STEP 2": {
+        "answer": "To calculate the volume of a rectangular prism, we can use the formula:\n\n\\[ \\text{Volume} = \\text{Length} \\times \\text{Width} \\times \\text{Height} \\]\n\nThe given data are:\n- Length (L) = 20 cm\n- Width (W) = 5 cm\n- Height (H) = 6 cm\n\nSubstitute these values into the formula, we get:\n\n\\[ \\text{Volume} = 20 \\text{cm} \\times 5 \\text{cm} \\times 6 \\text{cm} = 600 \\text{cm}^3 \\]\n\nSo, the volume of this rectangular prism is 600 cubic centimeters."
+    },
+    "STEP 3": {
+        "assistant": "To calculate the volume of this rectangular prism, we use the formula:\n\n\\[ \\text{Volume} = \\text{Length} \\times \\text{Width} \\times \\text{Height} \\]\n\nSubstitute the given values into the formula,\n\n\\[ \\text{Volume} = 20\\, \\text{cm} \\times 5\\, \\text{cm} \\times 6\\, \\text{cm} \\]\n\n\\[ \\text{Volume} = 100\\, \\text{cm}^3 \\]\n\nSo, the volume of this rectangular prism is \\(100\\) cubic centimeters."
+    },
+    ...
+    "STEP 3100": {
+        "answer": "The volume \(V\) is given by the product of length, width, and height. Thus, the formula for calculating volume is:\n\n\\[V = \\text{Length} \\times \\text{Width} \\times \\text{Height}\\]\n\nSubstitute the given dimensions into the formula,\n\n\\[V = 20\\, \\text{cm} \\times 5\\, \\text{cm} \\times 6\\, \\text{cm}\\]\n\n\\[V = 600\\, \\text{cm}^3\\]\n\nTherefore, the volume of this rectangular prism is 600 cubic centimeters."
+    }
+}
+```
+
+We have the follow findings:
+
+- The outputs at all steps are dissimilar to both the positive (chosen) and negative (rejected) responses. This suggests that the model does not learn any patterns from either the positive or the negative responses in the preference dataset. Consequently, the DPO algorithm does not suffer from the state distribution shift problem.
+- Although the model does not produce the positive response (chosen response) from the preference dataset, the outputs at all steps remain readable. This indicates that the model does not experience collapse. Therefore, the DPO algorithm does not suffer from the model collapse problem.
+
+Finally, we speculate that
+
+>💡When there is substantial token overlap between the positive and negative samples, DPO struggles to distinguish the significant tokens in the responses, often simultaneously increasing or decreasing the likelihoods of both sample types. To minimize the DPO loss, the model tends to decrease the likelihoods of both positive and negative samples.
