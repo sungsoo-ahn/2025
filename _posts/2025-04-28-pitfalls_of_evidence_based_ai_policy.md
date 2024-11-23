@@ -1,7 +1,8 @@
 ---
 layout: distill
 title: Pitfalls of Evidence-Based AI Policy
-description: Nations across the world are working to govern AI. However, from a technical perspective, the best way to do this is not yet clear. Meanwhile, recent debates over AI regulation have led to calls for “evidence-based AI policy” which emphasize holding regulatory action to a high evidentiary standard. Evidence is of irreplaceable value to policymaking. However, holding regulatory action to too high an evidentiary standard can lead to systematic neglect of certain risks. In historical policy debates (e.g., over tobacco ca. 1965 and fossil fuels ca. 1990) “evidence-based policy” rhetoric is also a well-precedented strategy to downplay the urgency of action, delay regulation, and protect industry interests. Here, we argue that if the goal is evidence-based AI policy, the first regulatory objective must be to actively facilitate the process of identifying, studying, and deliberating about AI risks. We discuss a set of 16 regulatory goals to facilitate this and show that the EU, UK, USA, Brazil, Canada, and China all have substantial opportunities to adopt further evidence-seeking policies.
+description: Evidence is of irreplaceable value to policymaking. But holding regulation to too high an evidentiary standard can lead to systmatic neglect of certain risks. We need to be critical of the systematic biases shaping the evidence that the AI community produces and actively facilitate the process of identifying, studying, and deliberating about AI risks.
+
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -83,6 +84,17 @@ _styles: >
 > At this very moment, I say we sit tight and assess.
 > 
 > — [President Janie Orlean](https://villains.fandom.com/wiki/Janie_Orlean), [Don’t Look Up](https://www.imdb.com/title/tt11286314/)
+
+## Abstract
+
+Nations across the world are working to govern AI. 
+However, from a technical perspective, the best way to do this is not yet clear. 
+Meanwhile, recent debates over AI regulation have led to calls for “evidence-based AI policy” which emphasize holding regulatory action to a high evidentiary standard. 
+Evidence is of irreplaceable value to policymaking. 
+However, holding regulatory action to too high an evidentiary standard can lead to systematic neglect of certain risks. 
+In historical policy debates (e.g., over tobacco ca. 1965 and fossil fuels ca. 1990) “evidence-based policy” rhetoric is also a well-precedented strategy to downplay the urgency of action, delay regulation, and protect industry interests. 
+Here, we argue that if the goal is evidence-based AI policy, the first regulatory objective must be to actively facilitate the process of identifying, studying, and deliberating about AI risks. 
+We discuss a set of 16 regulatory goals to facilitate this and show that the EU, UK, USA, Brazil, Canada, and China all have substantial opportunities to adopt further evidence-seeking policies.
 
 ## How Do We Regulate Emerging Tech?
 
