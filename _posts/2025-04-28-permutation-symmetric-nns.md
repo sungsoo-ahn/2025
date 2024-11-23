@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Permutation Symmetric Neural Nets from the Ground Up
-description: Dealing with lists, matrices or symbols? When your problem has obvious permutation symmetries, carefully designed permutation symmetric neural networks can enable highly efficient learning, sometimes solving the task from just a few examples. In this post, we'll walk through a first principle derivation of permutation symmetric network parameterization using Taylor series, a practical network design using einsum pooling for various types of permutation symmetry, and from scratch implementations on several problems, including a Sudoku solver, a few ARC-AGI challenge problems with permutation symmetry and knowledge graph reasoning.
+description: Dealing with lists, matrices or symbols? When your problem has obvious permutation symmetries, carefully designed permutation symmetric neural networks can enable highly efficient learning, sometimes solving the task from just a few examples. In this post, we'll walk through a first principle derivation of permutation symmetric network parameterization using Taylor series, a practical network design using Einsum pooling for various types of permutation symmetry, and from scratch implementations on several problems, including matrix operation, knowledge graph reasoning and a few ARC-AGI challenge problems with permutation symmetry.
 date: 2025-04-28
 future: true
 htmlwidgets: true
