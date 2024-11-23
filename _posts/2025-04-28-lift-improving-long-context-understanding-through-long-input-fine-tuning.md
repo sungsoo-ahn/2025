@@ -150,7 +150,7 @@ We compare the following methods:
 By default, LIFT does not use auxiliary tasks (AT) and SFT and only fine-tunes the model on the input text.
 
 
-We evaluate our methods on four popular long-context benchmarks *LooGLE* <d-cite key="li2023loogle"></d-cite>, *LongBench* <d-cite key="bai2023longbench"></d-cite>, *Bamboo* <d-cite key="dong2023bamboo"></d-cite> and *QuALITY* <d-cite key="pang2021quality"></d-cite>. They provide a relatively comprehensive evaluation, covering a wide variety of application scenarios. The evaluation metrics are task-specific and consistent with the respective original benchmarks. Among these, the GPT-4 score evaluates the correctness of responses of LLMs given corresponding questions and answers, which is proven to be highly aligned with human evaluations.
+We evaluate our methods on four popular long-context benchmarks *LooGLE* <d-cite key="li2023loogle"></d-cite>, *LongBench* <d-cite key="bai2023longbench"></d-cite>, *Bamboo* <d-cite key="dong2023bamboo"></d-cite> and *QuALITY* <d-cite key="pang2021quality"></d-cite>. They provide a relatively comprehensive evaluation, covering a wide variety of application scenarios. The evaluation metrics are task-specific and consistent with the respective original benchmarks. Among these, the GPT-4 score evaluates the correctness of responses of LLMs given corresponding questions and answers with GPT-4<d-cite key="openai2024gpt4technicalreport"></d-cite>, which is proven to be highly aligned with human evaluations.
 
 ### LIFT generally strengthens long context understanding when combined with ICL
 
