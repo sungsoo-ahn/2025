@@ -322,7 +322,13 @@ In order to add a new algorithm, the following steps need to be followed. Note: 
 
 1. The SMACv2 environment is procedurally generated, therefore setting the seed is tricky [github issue](https://github.com/oxwhirl/smacv2/issues/34).
 2. We never really use the joint trajectory $$\mathbf{\tau}$$. It is assumed that adding the information of the state to $$\tau_i$$ gives us a good representation of $$\mathbf{\tau}$$.
-3. `batch_size` and `batch_size_run` refer to two different concepts, though their names are used interchangeably in the codebase. `batch_size` represents the training batch size used to sample episodes from the buffer, while `batch_size_run` denotes the number of parallel environments configured for algorithm execution.  
+3. `batch_size` and `batch_size_run` in the config files refer to two different concepts. `batch_size` represents the training batch size used to sample episodes from the replay buffer, while `batch_size_run` denotes the number of parallel environments configured for algorithm execution. However, they are sometimes used interchangeably in the codebase, e.g., in src -> runners -> parallel_runner.py
+```
+self.batch_size = self.args.batch_size_run
+```
+
+
+
 4. All the values in the replay buffer are first initialized with zeros for the corresponding `batch_size_run` (i.e., number of parallel training environments) and timesteps. The values are updated as the episode progresses timestep-by-timestep. 
 <!-- Since not all parallel training environments end at the same timestep, there is an array called `filled` in the replay buffer. When an episode ends, the values in the `filled` array are set to 1. These values are used to indicate valid values in the remaining arrays of the replay buffer.  -->
  <!-- The corresponding `filled` key in the buffer is updated to 1 when the episode ends. This indicates valid values in the replay buffer because not all parallel training environments end at the same timestep.  -->
