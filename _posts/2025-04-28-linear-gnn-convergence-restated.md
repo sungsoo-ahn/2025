@@ -557,9 +557,7 @@ The limitation of this approach was pointed out by an anonymous reviewer of the 
 
 Even so, the method that study the discrete optimization process from a continuous viewpoint is widely adopted <d-cite key="Saxe2013"></d-cite><d-cite key="Huang2020"></d-cite><d-cite key="Ji2020"></d-cite><d-cite key="Kawaguchi2021"></d-cite><d-cite key="Arora2018"></d-cite><d-cite key="Arora2019"></d-cite>.
 
-What's more, 
-
-We notice that similar approaches, which treat inherently discrete entities as continuous by using an ODE or PDE to model the process, are also widely adopted in many other scientific areas. For example, when establishing mathematical models of **epidemic diseases**, researchers treat the disease spreading process among people as a continuous flow, which has led to many valuable insights. We refer the readers to the SI and SIS models introduced [HERE](http://www.networksciencebook.com/chapter/10#epidemic) on Albert-László Barabási's website.
+What's more, we notice that similar approaches, which treat inherently discrete entities as continuous by using an ODE or PDE to model the process, are also widely adopted in many other scientific areas. For example, when establishing mathematical models of **epidemic diseases**, researchers treat the disease spreading process among people as a continuous flow, which has led to many valuable insights. We refer the readers to the SI and SIS models introduced [HERE](http://www.networksciencebook.com/chapter/10#epidemic) on Albert-László Barabási's website.
 
 So, while this approach has its own unique value, we should carefully consider if the approximation error is tolerable before using it for analysis and modeling.
 
