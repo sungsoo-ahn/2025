@@ -119,10 +119,10 @@ Original work on iDEM was evaluated on a series of four increasingly complex ben
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/E_d_DW.png" class="img-fluid" %}
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/e_d_dw.png" class="img-fluid" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/E_d_LJ.png" class="img-fluid" %}
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/e_d_lj.png" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
@@ -172,7 +172,7 @@ For higher-dimensional systems, where the W2 metric becomes less intuitive to in
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/W2_lineplots-1.png" class="img-fluid" %}
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/w2_lineplots-1.png" class="img-fluid" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/W2_lineplots_time-1.png" class="img-fluid" %}
@@ -203,15 +203,15 @@ The table above contains the mean and std deviation of the W2 metrics vs the tes
         {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/true_gmm_samples.png" class="img-fluid" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/IDEM_gmm_samples.png" class="img-fluid" %}
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/idem_gmm_samples.png" class="img-fluid" %}
     </div>
 </div>
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/MCMC_gmm_samples.png" class="img-fluid" %}
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/mcmc_gmm_samples.png" class="img-fluid" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/IEFM_gmm_samples.png" class="img-fluid" %}
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/iefm_gmm_samples.png" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
@@ -311,7 +311,7 @@ The quantitative results (Table 2) and distribution plots (Figure 9, 10) provide
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/dw4_Interatomic_distance_distribution.png" class="img-fluid" %}
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/dw4_interatomic_distance_distribution.png" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
@@ -320,7 +320,7 @@ The quantitative results (Table 2) and distribution plots (Figure 9, 10) provide
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/dw4_Energy_distribution.png" class="img-fluid" %}
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/dw4_energy_distribution.png" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
