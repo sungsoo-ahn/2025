@@ -1,7 +1,9 @@
 ---
 layout: distill
 title: The Lottery LLM Hyperthesis
-description: In this blog, we present a brief review of some of the recent progresses of LLM related to multi-step reasoning, computational expressivity, external tools, retrieval augmented generation and model compression. We propose a lottery LLM hypothesis that indicates for a given LLM and a task, there exists a small lottery LLM capable of producing the same performance with the original LLM with the assistances of multi-step reasoning and external tools. Introducing a lottery LLM helps to reduce the computational and storage costs. We derive and summarize the crucial abilities that the lottery LLM must possess, hoping to shed some light on the possibility of AGI, which does not need to be a very large LLM as long as the LLM owns some crucial abilities and with the help of external tools and advanced algorithm design.
+description: Motivated by reducing the computational and storage costs of LLMs, model compression and KV cache compression have attracted much attentions of researchers. However, current methods only focus on guaranteeing the performance of compressed LLMs with the similar perplexity on some common sense knowledge QA tasks and the basic arithmetic reasoning tasks. In this blog, we present a brief review of some of the recent progresses of LLM related to retrieval augmented generation, multi-step reasoning, external tools and computational expressivity which significantly improve the performance of LLMs. Then, we propose a lottery LLM hypothesis suggesting that for a given LLM and task, there exists a smaller lottery LLM capable of producing the same performance with the original LLM with the assistances of multi-step reasoning and external tools. Based on the review of current progresses of LLMs, we discuss and summarize the essential capabilities that the lottery LLM and KV cache compression must possess.
+
+
 
 date: 2025-04-28
 future: true
@@ -53,88 +55,56 @@ _styles: >
 ---
 
 <!-- <d-cite key="aaa"></d-cite> -->
-Motivated by reducing the computational and storage costs of LLMs, model compression and KV cache compression have attracted much attentions of researchers. However, previous methods only focus on guaranteeing the performance of compressed LLMs with the similar perplexity on some common sense knowledge QA tasks and the basic arithmetic reasoning tasks. In this blog, we present a brief review of some of the recent progresses of LLM related to retrieval augmented generation, multi-step reasoning, external tools and computational expressivity which significantly improve the performance of LLMs. Then, we propose a lottery LLM hypothesis suggesting that for a given LLM and task, there exists a smaller lottery LLM capable of producing the same performance with the original LLM with the assistances of multi-step reasoning and external tools. We derive and summarize the essential capabilities that the lottery LLM must possess.
+Motivated by reducing the computational and storage costs of LLMs, model compression and KV cache compression have attracted much attentions of researchers. However, current methods only focus on guaranteeing the performance of compressed LLMs with the similar perplexity on some common sense knowledge QA tasks and the basic arithmetic reasoning tasks. In this blog, we present a brief review of some of the recent progresses of LLM related to retrieval augmented generation, multi-step reasoning, external tools and computational expressivity which significantly improve the performance of LLMs. Then, we propose a lottery LLM hypothesis suggesting that for a given LLM and task, there exists a smaller lottery LLM capable of producing the same performance with the original LLM with the assistances of multi-step reasoning and external tools. Based on the review of current progresses of LLMs, we discuss and summarize the essential capabilities that the lottery LLM and KV cache compression must possess.
+
+
+## Current Efforts on Compressing LLMs and KV Cache
+LLMs have demonstrated remarkable proficiency in natural language processing, enabling sophisticated interactions and understanding of human language<d-cite key="openai2023gpt4"></d-cite>.
+To learn the tremendous knowledge in the training datsests, the current advanced LLMs like GPT4 <d-cite key="openai2023gpt4"></d-cite> and Llama3 <d-cite key="touvron2023llama"></d-cite> have enoumous parameters like $7 \sim 750$ billion. Training such an LLM requires extensive computational resources, often measured in enormous GPU days using advanced NVIDIA GPUs<d-cite key="touvron2023llama"></d-cite>. This results in substantial electricity consumption, impacting both economic and energy costs<d-cite key="samsi2023words"></d-cite><d-cite key="tangDVFS"></d-cite>, and raising concerns regarding sustainable computing<d-cite key="wilkins2024hybrid"></d-cite>. Furthermore, providing inference services for LLMs necessitates numerous GPUs and incurs additional energy costs<d-cite key="samsi2023words"></d-cite><d-cite key="tangDVFS"></d-cite>, making it a significant challenge for widespread deployment<d-cite key="10.1145/3620666.3651329"></d-cite>.
+
+**Compression methods.** To this end, both academic researchers and industrial engineers are trying to compress model pararameters and reduce the model into a smaller one while keeping its performance not change. The typical compression algorithm includes the pruning<d-cite key="Sun2023ASA_wanda"></d-cite><d-cite key="Frantar2023SparseGPTML"></d-cite> and quantization<d-cite key="Yao2022ZeroQuantEA"></d-cite><d-cite key="Dettmers2022TheCF"></d-cite> of LLM parameters, and KV cache compression<d-cite key="zhang2024h2o"></d-cite><d-cite key="xiao2024efficient"></d-cite>. However, most of the current methods that compress LLMs and KV cache only show guaranteed performance of the perplexity on some basic language tasks like Wikitext2<d-cite key="merity2016pointer"></d-cite> and PTB<d-cite key="marcus1993building"></d-cite>, common sense knowledge QA tasks<d-cite key="hendrycks2021measuring"></d-cite><d-cite key="talmor-etal-2019-commonsenseqa"></d-cite> and the basic arithmetic reasoning tasks<d-cite key="cobbe2021training"></d-cite> in small-scale evaluation but not in the real-world industrial scenarios.
 
 
 
 
- in this blog, we present a brief review of some of the recent progresses of LLM related to multi-step reasoning, computational expressivity, external tools, retrieval augmented generation and model compression. Then, we propose a lottery LLM hypothesis suggesting that for a given LLM and task, there exists a smaller lottery LLM capable of producing the same performance with the original LLM with the assistances of multi-step reasoning and external tools. We derive and summarize the essential capabilities that the lottery LLM must possess,
+**Missed aspects.** Some recent studies show that the LLMs may lose their advanced crutial abilities under the compressions like the long-context retrieval, long-context generation and long-document reasoning and so on<d-cite key="jaiswal2024compressing"></d-cite>. Also, the long-context understanding ability of LLMs is significantly reduced under the KV cache compression<d-cite key="yuan-etal-2024-kv"></d-cite>.
 
-Introducing a lottery LLM helps to reduce the computational and storage costs. 
+In the subsequent sections, we review some progresses of retrival augmented generation, external tool use, and multi-step reasoning, which significantly improve the performance of LLMs. Then, we propose a lottery LLM hypothesis suggesting that for a given LLM and task, there exists a smaller lottery LLM capable of producing the same performance with the original LLM with the assistances of multi-step reasoning and external tools. We discuss and summarize the essential capabilities that the lottery LLM and KV cache compression must possess to support the multi-step reasoning and external tools.
 
-
-We derive and summarize the crucial abilities that the lottery LLM must possess, 
-
-
-
-## Huge Computation and Storage Costs of LLMs
-LLMs have shown their remarkable ability in natural language conversations,  xxxxxxxxxxxxxxx <d-cite key="aaa"></d-cite>.
-To learn the tremendous knowledge in the training datsests, the current advanced LLMs like xxxxx <d-cite key="aaa"></d-cite>have enoumous parameters like $7 \sim 750$ billion. Training such a LLM consumes xxx GPU days with the advanced NVIDIA GPUs<d-cite key="aaa"></d-cite>. This results in the huge electricity consumption, not only occupies the economic costs but also the energy costs<d-cite key="aaa"></d-cite>, raising concerns of the green computing<d-cite key="aaa"></d-cite>. Moreover, providing inference services of LLMs also requires many GPUs and consumes more energy cosits.
-
-To this end, both academic researchers and industrial engineers are trying to compress model pararameters and reduce the model into a smaller one while keeping its performance not change. The typical compression algorithm includes the pruning<d-cite key="aaa"></d-cite> and quantization<d-cite key="aaa"></d-cite>. However, most of the current LLM compression methods only show guaranteed performance with small dataset or the traditional datasets in papers but not in the real-world industrial scenarios. Some recent studies show that the low-precision representations of LLMs will significantly reduce the LLM performance<d-cite key="aaa"></d-cite>, or reduce some crucial abilities of LLMs<d-cite key="aaa"></d-cite>.
-
-Instead of compression a pretrained model, researchers resort to train a small LLM from scratch<d-cite key="aaa"></d-cite>. However, there is still no such a real-world deployed small LLM that has the same performance of LLMs.
-
-Besides the model parameters, some academic works focus on compressing the intermediate features including the KV cache<d-cite key="aaa"></d-cite> and activations from FFNs<d-cite key="aaa"></d-cite> to reduce the computing and storage costs during inference. However, some recent studies show that the LLMs may lose their key abilities under these compressions like xxxxxxxxxxx <d-cite key="aaa"></d-cite>.
-
-
-
-
-## Significant Computational and Storage Costs of LLMs
-LLMs have demonstrated remarkable proficiency in natural language processing, enabling sophisticated interactions and understanding of human language. However, to assimilate the vast knowledge contained within training datasets, contemporary advanced LLMs, such as GPT-3 and its successors, comprise an enormous number of parameters, ranging from $7$ to $750$ billion. Training such an LLM requires extensive computational resources, often measured in thousands of GPU days using advanced NVIDIA GPUs. This results in substantial electricity consumption, impacting both economic and energy costs, and raising concerns regarding sustainable computing. Furthermore, providing inference services for LLMs necessitates numerous GPUs and incurs additional energy costs, making it a significant challenge for widespread deployment.
-
-Consequently, both academic researchers and industry engineers are endeavoring to compress model parameters and reduce the model size while maintaining performance. Typical compression algorithms include pruning, which removes redundant parameters, and quantization, which reduces the precision of the model's weights. However, most current LLM compression methods demonstrate assured performance only with small datasets or traditional datasets in academic papers, but not in real-world industrial scenarios. Recent studies indicate that low-precision representations of LLMs can significantly degrade performance, particularly in tasks requiring nuanced understanding or complex reasoning, or diminish some crucial capabilities of LLMs, such as their ability to generalize across diverse contexts.
-
-Instead of compressing a pretrained model, researchers are exploring the training of a small LLM from scratch. This approach aims to inherently design models that are efficient and effective without the need for extensive post-training modifications. However, there is still no real-world deployed small LLM that matches the performance of larger LLMs, highlighting the ongoing challenges in this area of research.
-
-In addition to model parameters, some academic works focus on compressing intermediate features, including the key-value (KV) cache and activations from feedforward networks (FFNs), to reduce computational and storage costs during inference. However, recent studies suggest that LLMs may lose key capabilities under these compressions, such as their ability to maintain context over long conversations or perform complex multi-step reasoning, which are critical for many applications.
-
-
-
-```
-Some tables and figures here to show the performance limitation of compressed LLMs.
-```
-
-Nevertheless, next, with reviewing some progresses of retrival augmented generation, external tool use, and multi-step reasoning, we show the possiblity of allowing small LLMs to own the same performance of their original LLMs.
 
 ## Knowledge Retrival: Tackling Redundant and Unreal Knowledge of LLMs
+**Redundant Knowledge.** In contemporary applications, many individuals utilize LLMs as encyclopedic resources or to verify news and academic research, akin to an Internet search engine. Recent studies indicate that LLMs exhibit varying performance in knowledge retrieval, contingent upon the popularity of the information<d-cite PopQA="PopQA"></d-cite>. Specifically, a small subset of real-world question-answer (QA) pairs constitutes the majority of interactions, while a limited number of QAs receive frequent attention, demonstrating a long-tail distribution in their popularity<d-cite key="PopQA"></d-cite>. LLMs tend to perform better on high-popularity QAs compared to those with lower popularity.
 
-**Redundant Knowledge.** Nowadays, many people even use LLMs to search knowledge like a 百科全书, or check some news or academic research papers like a Internet search engine. Some recent studies show that LLMs have divergence performance on different knowledge retrivals based on the popularity of these knowledge <d-cite key="aaa"></d-cite>. Specifically, many real-world quesion-answer (QA) pairs occupy the small portion of the all QAs, while a small part of QAs are frequently focused by people, showing a long-tail distribution of their popularity<d-cite key="aaa"></d-cite>. LLMs show the higher performance on the high-popularity QAs while low performance on low-popularity QAs. 
-**Hallucinated Knowledge.** However, LLMs ofter response the imaginary outputs sampled by its probabilistic language modeling, instead of the factual knowledge that exist in the real world<d-cite key="aaa"></d-cite>. This phenomenon called hallucination has raised significant attentions of researchers<d-cite key="aaa"></d-cite>. There are debates on whether we can completely eliminate it<d-cite key="aaa"></d-cite>, or the hallucination will always exist and cannot be addressed<d-cite key="aaa"></d-cite>. Some studies show that the hallucination itself 必然存在 because it is 大模型推理泛化能力的共生物.
+**Hallucinated Knowledge.** Conversely, LLMs often generate outputs based on probabilistic language modeling rather than factual knowledge, a phenomenon known as hallucination<d-cite key="huang2023survey"></d-cite>. This issue has garnered significant attention from researchers<d-cite key="huang2023survey"></d-cite>. There is ongoing debate regarding the feasibility of completely eliminating hallucinations<d-cite key="farquhar2024detecting"></d-cite>. Some studies suggest that hallucinations are inevitable, as they are a byproduct of the model's reasoning and generalization abilities<d-cite key="banerjee2024llms"></d-cite><d-cite key="xu2024hallucination"></d-cite>.
 
 
-**Retrival Augmented Generation (RAG).** As LLMs have the strong in-context learning ability, they can rely on prompts to response questions instead of only their inner knowledge that are stored in the model parameters. Thus, the external knowledge such as articles, webpages, books and other documents can be inserted into the prompts to allow LLMs to retrive extra factual knowledge<d-cite key="yao2022react"></d-cite> that does not exist in model parameters or avoid hallucination<d-cite key="yao2022react"></d-cite>. Intuitively, the usage of RAG inspires the following research questions:
+
+**Retrieval Augmented Generation (RAG).** LLMs possess strong in-context learning capabilities, allowing them to respond to queries using prompts rather than solely relying on their internal knowledge stored within model parameters. Consequently, external knowledge sources such as articles, webpages, books, and other documents can be incorporated into prompts to enable LLMs to retrieve additional factual information<d-cite key="yao2022react"></d-cite>, thereby mitigating hallucinations<d-cite key="yao2022react"></d-cite>. This approach raises pertinent research questions:
 <blockquote>
-Do we need to store all knowledge into LLM parameters if we can use RAG to accurately retrive the factual knowledge from the external knowledge base? If no, which knowledge are needed and which not?
+Is it necessary to store all knowledge within LLM parameters if RAG can accurately retrieve factual information from external knowledge bases? If not, which knowledge should be stored and which should not?
 </blockquote>
 
-Considering two extreme cases:
-- Storing all knowledge in **model parameters**. If we store all knowledge in the model parameters, the LLMs serve as an oracle machine<d-cite key="aaa"></d-cite> and there is no need to use the RAG. However, it is almost impossible to train such an LLM and the model size will be too large to be deployed.
-- Storing all knowledge in **external knowledge base**. If we store all knowledge in the external knowledge base, maybe we can compress the LLM parameters to a very small size and retrive any factual knowledge during inference.
+Considering two extreme scenarios:
+- Storing all knowledge in **model parameters**: If all knowledge is stored within model parameters, LLMs function as oracle machines, obviating the need for RAG. However, training such an LLM is nearly impossible because not all knowledge can be collected and nerver outdated<d-cite key="xu2024hallucination"></d-cite> <d-cite key="banerjee2024llms"></d-cite>. And it is inefficient to deploy such a huge model.
+- Storing all knowledge in **external knowledge bases**: If all knowledge is stored externally, LLM parameters could potentially be reduced significantly, allowing for the retrieval of factual information during inference.
 
-However, LLMs require some basic common knowledge to implement current amazing abilities like reasoning, accurate retrival and so on. We will discuss this problem in the subsequent sections. Thus, compressing all knowledge into the external knowledge base is infeasible. Studying how the learned knowledge and which knowledge to trigger the grokking phenomenon of LLMs is still an open problem<d-cite key="aaa"></d-cite>.
-
-**Trade-off between model size and knowledge base.** Some studies show that the adaptive knowledge retrival is a promising direction to improve the performance of LLMs and may help to find the good trade-off between the knowledge base and model size<d-cite key="aaa"></d-cite>. The adaptive RAG<d-cite key="aaa"></d-cite> shows that the popular knowledge can be stored in the model parameters while the less popular knowledge can be stored in the external knowledge base. 
-
-
-The core idea of adaptive RAG seems to be related to a classic efficient data structure, the **huffman coding**<d-cite key="aaa"></d-cite>. Specifically, we can view the cost of the knowledge retrival as the prompt length (because the retrived knowledge will be inserted into the prompts). Then, storing knowledge in the model parameters will have a shorter prompt length because LLMs can directly response to questions without need to retrive knowledge from the external knowledge base. And storing the knowledge in the external knowledge base will have a longer prompt length, in other words, the cost of more retrival operations and the longer context length which causes higher computation and storage costs during inference<d-cite key="aaa"></d-cite>. Therefore, the popularity of the knowledge can be seen as the appearance probability as in the Huffman coding. Storing the popular knowledge in the model parameters is more efficient.
-
-
-**Finetuning v.s. retrival.** Another parallel related question is that whether we should use the finetuning to improve the performance of LLMs in some specifical application domains like legal, finance, medical and so on<d-cite key="aaa"></d-cite>. Because the finetuning may lead to the forgetting problem and the extra training overheads, there is debate on whether we should use the finetuning to improve the performance of LLMs or we can rely on the RAG to achieve the same goal<d-cite key="aaa"></d-cite>. Some recent studies show that the RAG can significantly improve the performance of LLMs on the specific domains<d-cite key="aaa"></d-cite>, achieving similar performance of finetuned LLMs.
+Nevertheless, LLMs require foundational common knowledge to perform tasks such as reasoning and accurate retrieval. This issue will be further explored in subsequent sections. Thus, compressing all knowledge into external knowledge bases is not feasible. Investigating the nature of learned knowledge and identifying which knowledge triggers the grokking phenomenon in LLMs remains an open research question<d-cite key="Grokking"></d-cite>.
 
 
 
 
-**Beyond the RAG.** The document-based knowledge retrival mainly help LLMs to retrive the knowledge of triplets consisting of entity, relation and object like the konwledge graph<d-cite key="aaa"></d-cite>. However, the ability and superb performance of LLMs does not only include retriving the triplet knowledge. LLMs also show amazing abilities like solving the arithmetic problems, playing chess, coding and so on, which are not simple triplet knowledge retrival<d-cite key="aaa"></d-cite>. How to guarantee the reasoning performance of small LLMs is important and cannot be easily addressed bythe document-based knowledge retrival.
+**Trade-off between model size and knowledge base.** Some studies show that the adaptive knowledge retrival is a promising direction to improve the performance of LLMs and may help to find the good trade-off between the knowledge base and model size<d-cite key="jeong2024adaptive"></d-cite>. The adaptive RAG <d-cite key="soudani2024fine"></d-cite><d-cite key="jeong2024adaptive"></d-cite> shows that the popular knowledge can be stored in the model parameters while the less popular knowledge can be stored in the external knowledge base. 
 
 
-<!-- 
+The core idea of adaptive RAG seems to be related to a classic efficient data structure, the **huffman coding**<d-cite key="moffat2019huffman"></d-cite>. Specifically, we can view the cost of the knowledge retrival as the prompt length (because the retrived knowledge will be inserted into the prompts). Then, storing knowledge in the model parameters will have a shorter prompt length because LLMs can directly response to questions without need to retrive knowledge from the external knowledge base. And storing the knowledge in the external knowledge base will have a longer prompt length, in other words, the cost of more retrival operations and the longer context length which causes higher computation and storage costs during inference<d-cite key="xiao2024efficient"></d-cite>. Therefore, the popularity of the knowledge can be seen as the appearance probability as in the Huffman coding. Storing the popular knowledge in the model parameters is more efficient.
 
-Presumably this means that the current LLM probably remembers a lot of knowledge that doesn't need to be remembered, such as what unimportant news happened on a certain day in the training data, and such knowledge can be assisted by the RAG. So there are a lot of redundant parameters that can be thrown out of the big LLM, and we can make the model much smaller by using a small model with the help of external knowledge base/external tool calls.
 
-Then, for the single-step reasoning capability of the big model, the small model may be able to equate it with multi-step reasoning once it has some core capabilities (reference1: the small model is equivalent to a Turing machine with the aid of external memories, reference2: through GoT/agents collaboration/neural symbolic).
+**Finetuning v.s. retrival.** Another parallel related question is that whether we should use the finetuning to improve the performance of LLMs in some specifical application domains like legal, finance, medical and so on<d-cite key="hendrycks2021measuring"></d-cite><d-cite key="talmor-etal-2019-commonsenseqa"></d-cite>. Because the finetuning may lead to the forgetting problem and the extra training overheads, there is debate on whether we should use the finetuning to improve the performance of LLMs or we can rely on the RAG to achieve the same goal<d-cite key="jeong2024adaptive"></d-cite>. Some recent studies show that the RAG can significantly improve the performance of LLMs on the specific domains like legal <d-cite key="pipitone2024legalbench"></d-cite>, medical <d-cite key="jeong2024improving"></d-cite> and finance <d-cite key="li-etal-2024-alphafin"></d-cite>.
 
-We then summarize our conjectures in the paper by guessing what key capabilities the mini-model should have in order to achieve this effect. For example, it would need a good ability to retrival relevant information from context, some ability to copy, rewrite operations (necessary for Turing completeness), and some common sense knowledge (e.g., the ability to recognize which function calls are provided to add, subtract, multiply, or divide two numbers). -->
+
+**Beyond the RAG.** The document-based knowledge retrival mainly help LLMs to retrive the knowledge of triplets consisting of entity, relation and object<d-cite key="chen-etal-2024-retrieval"></d-cite>. However, the ability and superb performance of LLMs does not only include retriving the triplet knowledge. LLMs also show amazing abilities like solving the arithmetic problems, playing chess, coding and so on, which are not simple triplet knowledge retrival<d-cite key="chen-etal-2024-retrieval"></d-cite>. How to guarantee the reasoning performance of small LLMs is important and cannot be easily addressed bythe document-based knowledge retrival.
+
+
 
 ## External Tools
 The advanced LLMs show their remarkable abilities in function calling, which is the ability to call external tools to solve some specific tasks. The external tools can be the Internet search engine<d-cite key="ToolLLM"></d-cite>, the arithmetic calculation functions<d-cite key="NEURIPS2023_d842425e"></d-cite>, system operations<d-cite key="LLM-as-OS"></d-cite><d-cite key="AIOS"></d-cite>, game interfaces and so on, which are formulated into programming function calls<d-cite key="Granite-Function"></d-cite> and passed to LLMs using prompts. According to the function descriptions, LLMs decide to call which function to solve the given problems<d-cite key="Granite-Function"></d-cite>.
@@ -151,7 +121,7 @@ The advanced LLMs show their remarkable abilities in function calling, which is 
     The ability of function calling in <d-cite key="NEURIPS2023_d842425e"></d-cite>. The smaller models like GPT-2 finetuned with function calling datsets show much better performance with the large models (GPT-3) that are not specifically tuned with function calling datsets.
 </div>
 
-**Arithmetic function callings.** To solve the arithmetic problems, LLMs are trained on the arithmetic datasets<d-cite key="aaa"></d-cite>. However, some simple errors ofter happen during the arithmetic reasoning process like that LLMs may think the 9.11 is larger than 9.9 <d-cite key="aaa"></d-cite>. To this end, some works propose to allow LLMs to generate programs including the arithmetic operations and exploit the external Python interpreter to solve the arithmetic problems<d-cite key="pmlr-v202-gao23f"></d-cite>. Besides, some works propose to exploit the arithmetic function calling to solve the arithmetic problems<d-cite key="he23solving"></d-cite>. The experimental results show that the arithmetic function calling can significantly improve the performance of LLMs on the arithmetic problems<d-cite key="pmlr-v202-gao23f"></d-cite><d-cite key="NEURIPS2023_e3936777"></d-cite>.
+**Arithmetic function callings.** To solve the arithmetic problems, LLMs are trained on the arithmetic datasets<d-cite key="cobbe2021training"></d-cite>. However, some simple errors ofter happen during the arithmetic reasoning process like that LLMs may think the 9.11 is larger than 9.9 <d-cite key="aaa"></d-cite>. To this end, some works propose to allow LLMs to generate programs including the arithmetic operations and exploit the external Python interpreter to solve the arithmetic problems<d-cite key="pmlr-v202-gao23f"></d-cite>. Besides, some works propose to exploit the arithmetic function calling to solve the arithmetic problems<d-cite key="he23solving"></d-cite>. The experimental results show that the arithmetic function calling can significantly improve the performance of LLMs on the arithmetic problems<d-cite key="pmlr-v202-gao23f"></d-cite><d-cite key="NEURIPS2023_e3936777"></d-cite>.
 
 **Internet search engine.** To augment LLM knowledge with the online and dynamic updated external knowledge, the Internet search engine is exploited as the external tool<d-cite key="yao2022react"></d-cite><d-cite key="FreshLLMs"></d-cite>. The experimental results show that interacting with the Internet search engine like a simple Wikipedia API can significantly improve the performance of LLMs on the knowledge retrival tasks<d-cite key="yao2022react"></d-cite>.
 
@@ -161,13 +131,6 @@ The advanced LLMs show their remarkable abilities in function calling, which is 
 
 
 **LLM Operation System (OS).** By viewing the LLM calls as the system call like the traditional operational system, some recent studies propose to build a new *LLM-as-OS* framework<d-cite key="LLM-as-OS"></d-cite>, which allows LLMs to call the external tools like the apps in the OS. And the recent studies proposes to build the AIOS framework<d-cite key="AIOS"></d-cite> to decouple the LLM calls and system calls, and implementing different managers to help improve the AIOS efficiency. The optimized agent framework from the OS perspective significantly improve both the efficiency and the performance of LLM calls.
-
-
-<d-cite key="AIOS"></d-cite>
-<d-cite key="yao2022react"></d-cite>
-
-<d-cite key="LLM-as-OS"></d-cite>
-
 
 
 
@@ -236,16 +199,9 @@ A figure here about the tree and graph structure.
 A figure here about the external memory.
 ```
 
-
-
-<!--  each reasoning step $\mathcal{A}_i$ is a reasoning algorithm that may consists of one or multiple times of calling $g_\phi$ with different inputs. -->
-<!-- Here the external tools can be the Internet search engine, the arithmetic calculation functions, system operations and so on. -->
-
 <d-cite key="aaa"></d-cite>
 
-<!-- Based on the procedures of the Algorithm 1 and the previous design,  -->
-
-Most of previous model compression<d-cite key="aaa"></d-cite> and KV cache compression methods<d-cite key="aaa"></d-cite> only focus on the guaranteeing the model performance on the perplexity metric<d-cite key="aaa"></d-cite> or some downstream tasks like the common sense knowledge<d-cite key="aaa"></d-cite> and the basic arithmetic problems<d-cite key="aaa"></d-cite>. From the above analysis and the procedures of the Algorithm 1, we can see that there are some other crucial abilities that the lottery LLM and other compression methods must take for considering. We summarize the crucial abilities that the lottery LLM should have as follows.
+Most of previous model compression<d-cite key="Sun2023ASA_wanda"></d-cite><d-cite key="Frantar2023SparseGPTML"></d-cite> <d-cite key="Yao2022ZeroQuantEA"></d-cite><d-cite key="Dettmers2022TheCF"></d-cite> and KV cache compression methods<d-cite key="zhang2024h2o"></d-cite><d-cite key="xiao2024efficient"></d-cite>only focus on the guaranteeing the model performance on the perplexity metric<d-cite key="merity2016pointer"></d-cite> or some downstream tasks like the common sense knowledge<d-cite key="hendrycks2021measuring"></d-cite><d-cite key="talmor-etal-2019-commonsenseqa"></d-cite> and the basic arithmetic problems<d-cite key="cobbe2021training"></d-cite>. From the above analysis and the procedures of the Algorithm 1, we can see that there are some other crucial abilities that the lottery LLM and other compression methods must take for considering. We summarize the crucial abilities that the lottery LLM should have as follows.
 
 **Ability 1: Retrieval from prompts.** Obviously, the useful information in the prompts that related to address the problem $q$ is crucial for the lottery LLM. After collecting the required external results into the prompt, the LLM $q_\phi$ needs to be able to retrieve the required information from the prompt and avoid the interuption of some irrelevant information. This is related to the retrieval ability of the LLM and its measurement test is like the well-known needle-in-the-haystack test<d-cite key="aaa"></d-cite>. We show that there is a simple and interesting method to endow the LLM with advanced retrieval ability with preprocessing prompts.
 
@@ -286,22 +242,11 @@ A table here to show results of the RAG.
 **Ability 5: Long-context Reasoning.** In the single-step reasoning, the longer the context length, the more information the LLM $q_\phi$ can receive and use to address the problems. In the multi-step reasoning, the prompt can be seen as a kind of working memory of the meta agent, or say the planner (controller). Each returned results of the solved sub-problems should be injected into the prompt for the later steps. With the increased problem complexity, the depth of the tree of sub-problems also increases. Thus, the LLM $q_\phi$ needs to have a long-context reasoning ability to support the deep tree reasoning<d-cite key="merrillexpressive"></d-cite><d-cite key="Reveal-CoT"></d-cite>.
 
 
-
-
-<d-cite key="he23solving"></d-cite>
-<d-cite key="NEURIPS2023_d842425e"></d-cite>
-<d-cite key="pmlr-v202-gao23f"></d-cite>
-
-
-
-
-
-
 ## Discussion and Broader Impact
 
-The main aim of this blog is to shed light on the possible lottery LLM and summarize the crucial abilities that the lottery LLM should have but missed in the current methods of compressing LLMs and KV cache. The discussion about the redundant knowledge in the LLMs also sheds light on the trade-off between the knowledge and the reasoning ability of LLMs. Once we have the lottery LLM, with the external tools and knowledge base and a strong enough algorithm $\mathcal{A}$, there is the possibility that the lottery LLM can serve as a meta agent to work as the AGI like humans. Its external memory may work as the human's long-term memory, the prompt can work as the short-term memory, while the LLM inference process $g_\phi$ works as the basic thinking process. The external tools and knowledge base can be viewed as commonly used supplementary tools in our daily life.
+The main aim of this blog is to shed light on the possible lottery LLM and summarize the crucial abilities that the lottery LLM should have but missed in the current methods of compressing LLMs and KV cache. The discussion about the redundant knowledge in the LLMs also sheds light on the trade-off between the knowledge and the reasoning ability of LLMs. Once we have the lottery LLM, with the external tools and knowledge base and a strong enough algorithm $\mathcal{A}$, there is the possibility that the lottery LLM can serve as a meta agent to work like humans. Its external memory may work as the human's long-term memory, the prompt can work as the short-term memory, while the LLM inference process $g_\phi$ works as the basic thinking process. The external tools and knowledge base can be viewed as commonly used supplementary tools in our daily life. The deployment of the lottery LLM can help to save the energy and resources for building the large-scale LLM-driven applications.
 
-
+The future works about LLM compression, KV cache compression and other efficent LLM methods should consider both the efficiency and the crucial abilities of the LLM.
 
 
 

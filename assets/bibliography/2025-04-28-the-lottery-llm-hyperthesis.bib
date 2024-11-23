@@ -390,6 +390,412 @@ series = {PLDI 2021}
 }
 
 
+@inproceedings{jaiswal2024compressing,
+title={Compressing {LLM}s: The Truth is Rarely Pure and Never Simple},
+author={AJAY KUMAR JAISWAL and Zhe Gan and Xianzhi Du and Bowen Zhang and Zhangyang Wang and Yinfei Yang},
+booktitle={The Twelfth International Conference on Learning Representations},
+year={2024},
+url={https://openreview.net/forum?id=B9klVS7Ddk}
+}
+
+
+@inproceedings{tangDVFS,
+	author       = {Tang, Zhenheng and Wang, Yuxin and Wang, Qiang and Chu, Xiaowen},
+	title        = {The Impact of GPU DVFS on the Energy and Performance of Deep Learning: An Empirical Study},
+	year         = {2019},
+	isbn         = {9781450366717},
+	publisher    = {Association for Computing Machinery},
+	address      = {New York, NY, USA},
+	doi          = {10.1145/3307772.3328315},
+	booktitle    = {Proceedings of the Tenth ACM International Conference on Future Energy Systems},
+	pages        = {315–325},
+	numpages     = {11},
+	location     = {Phoenix, AZ, USA},
+	series       = {e-Energy '19}
+}
+
+
+
+@inproceedings{samsi2023words,
+  title={From words to watts: Benchmarking the energy costs of large language model inference},
+  author={Samsi, Siddharth and Zhao, Dan and McDonald, Joseph and Li, Baolin and Michaleas, Adam and Jones, Michael and Bergeron, William and Kepner, Jeremy and Tiwari, Devesh and Gadepally, Vijay},
+  booktitle={2023 IEEE High Performance Extreme Computing Conference (HPEC)},
+  pages={1--9},
+  year={2023},
+  organization={IEEE}
+}
+
+
+@inproceedings{10.1145/3620666.3651329,
+author = {Patel, Pratyush and Choukse, Esha and Zhang, Chaojie and Goiri, \'{I}\~{n}igo and Warrier, Brijesh and Mahalingam, Nithish and Bianchini, Ricardo},
+title = {Characterizing Power Management Opportunities for LLMs in the Cloud},
+year = {2024},
+isbn = {9798400703867},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3620666.3651329},
+doi = {10.1145/3620666.3651329},
+abstract = {Recent innovation in large language models (LLMs), and their myriad use cases have rapidly driven up the compute demand for datacenter GPUs. Several cloud providers and other enterprises plan to substantially grow their datacenter capacity to support these new workloads. A key bottleneck resource in datacenters is power, which LLMs are quickly saturating due to their rapidly increasing model sizes.We extensively characterize the power consumption patterns of a variety of LLMs and their configurations. We identify the differences between the training and inference power consumption patterns. Based on our analysis, we claim that the average and peak power utilization in LLM inference clusters should not be very high. Our deductions align with data from production LLM clusters, revealing that inference workloads offer substantial headroom for power oversubscription. However, the stringent set of telemetry and controls that GPUs offer in a virtualized environment make it challenging to build a reliable and robust power management framework.We leverage the insights from our characterization to identify opportunities for better power management. As a detailed use case, we propose a new framework called POLCA, which enables power oversubscription in LLM inference clouds. POLCA is robust, reliable, and readily deployable. Using open-source models to replicate the power patterns observed in production, we simulate POLCA and demonstrate that we can deploy 30\% more servers in existing clusters with minimal performance loss.},
+booktitle = {Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 3},
+pages = {207–222},
+numpages = {16},
+keywords = {large language models, power usage, cloud, datacenters, GPUs, power oversubscription, profiling},
+location = {La Jolla, CA, USA},
+series = {ASPLOS '24}
+}
+
+
+
+@misc{openai2023gpt4,
+	title        = {GPT-4 Technical Report},
+	author       = {OpenAI},
+	year         = 2023,
+	eprint       = {2303.08774},
+	archiveprefix = {arXiv},
+	primaryclass = {cs.CL}
+}
+@article{touvron2023llama,
+	title        = {Llama: Open and efficient foundation language models},
+	author       = {Touvron, Hugo and Lavril, Thibaut and Izacard, Gautier and Martinet, Xavier and Lachaux, Marie-Anne and Lacroix, Timoth{\'e}e and Rozi{\`e}re, Baptiste and Goyal, Naman and Hambro, Eric and Azhar, Faisal and others},
+	year         = 2023,
+	journal      = {arXiv preprint},
+	url          = {https://arxiv.org/abs/2302.13971}
+}
+
+
+
+@inproceedings{Sun2023ASA_wanda,
+	title        = {A Simple and Effective Pruning Approach for Large Language Models},
+	author       = {Mingjie Sun and Zhuang Liu and Anna Bair and J. Zico Kolter},
+	year         = 2024,
+	booktitle    = {International Conference on Learning Representations}
+}
+
+@article{Frantar2023SparseGPTML,
+	title        = {SparseGPT: Massive Language Models Can Be Accurately Pruned in One-Shot},
+	author       = {Elias Frantar and Dan Alistarh},
+	year         = 2023,
+	journal      = {ArXiv},
+	volume       = {abs/2301.00774}
+}
+
+@article{Yao2022ZeroQuantEA,
+	title        = {ZeroQuant: Efficient and Affordable Post-Training Quantization for Large-Scale Transformers},
+	author       = {Zhewei Yao and Reza Yazdani Aminabadi and Minjia Zhang and Xiaoxia Wu and Conglong Li and Yuxiong He},
+	year         = 2022,
+	journal      = {ArXiv},
+	volume       = {abs/2206.01861}
+}
+
+@inproceedings{Dettmers2022TheCF,
+	title        = {The case for 4-bit precision: k-bit Inference Scaling Laws},
+	author       = {Tim Dettmers and Luke Zettlemoyer},
+	year         = 2022,
+	booktitle    = {International Conference on Machine Learning}
+}
+
+@inproceedings{xiao2024efficient,
+  author    = {Guangxuan Xiao and Yuandong Tian and Beidi Chen and Song Han and Mike Lewis},
+  booktitle = {The Twelfth International Conference on Learning Representations},
+  title     = {Efficient Streaming Language Models with Attention Sinks},
+  url       = {https://openreview.net/forum?id=NG7sS51zVF},
+  year      = {2024}
+}
+
+
+@inproceedings{zhang2024h2o,
+  author    = {Zhenyu Zhang and
+               Ying Sheng and
+               Tianyi Zhou and
+               Tianlong Chen and
+               Lianmin Zheng and
+               Ruisi Cai and
+               Zhao Song and
+               Yuandong Tian and
+               Christopher R{\'{e}} and
+               Clark W. Barrett and
+               Zhangyang Wang and
+               Beidi Chen},
+  bibsource = {dblp computer science bibliography, https://dblp.org},
+  biburl    = {https://dblp.org/rec/conf/nips/Zhang00CZC0TRBW23.bib},
+  booktitle = {Advances in Neural Information Processing Systems 36: Annual Conference
+               on Neural Information Processing Systems 2023, NeurIPS 2023, New Orleans,
+               LA, USA, December 10 - 16, 2023},
+  editor    = {Alice Oh and
+               Tristan Naumann and
+               Amir Globerson and
+               Kate Saenko and
+               Moritz Hardt and
+               Sergey Levine},
+  timestamp = {Fri, 15 Mar 2024 00:00:00 +0100},
+  title     = {{H2O:} Heavy-Hitter Oracle for Efficient Generative Inference of Large
+               Language Models},
+  url       = {http://papers.nips.cc/paper\_files/paper/2023/hash/6ceefa7b15572587b78ecfcebb2827f8-Abstract-Conference.html},
+  year      = {2023}
+}
+
+@article{kumar2024scaling,
+  title={Scaling Laws for Precision},
+  author={Kumar, Tanishq and Ankner, Zachary and Spector, Benjamin F and Bordelon, Blake and Muennighoff, Niklas and Paul, Mansheej and Pehlevan, Cengiz and R{\'e}, Christopher and Raghunathan, Aditi},
+  journal={arXiv preprint arXiv:2411.04330},
+  year={2024}
+}
+
+@inproceedings{yuan-etal-2024-kv,
+    title = "{KV} Cache Compression, But What Must We Give in Return? A Comprehensive Benchmark of Long Context Capable Approaches",
+    author = "Yuan, Jiayi  and
+      Liu, Hongyi  and
+      Zhong, Shaochen  and
+      Chuang, Yu-Neng  and
+      Li, Songchen  and
+      Wang, Guanchu  and
+      Le, Duy  and
+      Jin, Hongye  and
+      Chaudhary, Vipin  and
+      Xu, Zhaozhuo  and
+      Liu, Zirui  and
+      Hu, Xia",
+    editor = "Al-Onaizan, Yaser  and
+      Bansal, Mohit  and
+      Chen, Yun-Nung",
+    booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2024",
+    month = nov,
+    year = "2024",
+    address = "Miami, Florida, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.findings-emnlp.266",
+    pages = "4623--4648",
+    abstract = "Long context capability is a crucial competency for large language models (LLMs) as it mitigates the human struggle to digest long-form texts. This capability enables complex task-solving scenarios such as book summarization, code assistance, and many more tasks that are traditionally manpower-intensive. However, transformer-based LLMs face significant challenges with long context input due to the growing size of the KV cache and the intrinsic complexity of attending to extended inputs; where multiple schools of efficiency-driven approaches {---} such as KV cache quantization, token dropping, prompt compression, linear-time sequence models, and hybrid architectures {---} have been proposed to produce efficient yet long context-capable models. Despite these advancements, no existing work has comprehensively benchmarked these methods in a reasonably aligned environment. In this work, we fill this gap by providing a taxonomy of current methods and evaluating 10+ state-of-the-art approaches across seven categories of long context tasks. Our work reveals numerous previously unknown phenomena and offers insights {---} as well as a friendly workbench {---} for the future development of long context-capable LLMs. The source code is available at https://github.com/henryzhongsc/longctx{\_}bench.",
+}
+
+@article{banerjee2024llms,
+  title={Llms will always hallucinate, and we need to live with this},
+  author={Banerjee, Sourav and Agarwal, Ayushi and Singla, Saloni},
+  journal={arXiv preprint arXiv:2409.05746},
+  year={2024}
+}
+
+@inproceedings{li-etal-2024-dawn,
+    title = "The Dawn After the Dark: An Empirical Study on Factuality Hallucination in Large Language Models",
+    author = "Li, Junyi  and
+      Chen, Jie  and
+      Ren, Ruiyang  and
+      Cheng, Xiaoxue  and
+      Zhao, Xin  and
+      Nie, Jian-Yun  and
+      Wen, Ji-Rong",
+    editor = "Ku, Lun-Wei  and
+      Martins, Andre  and
+      Srikumar, Vivek",
+    booktitle = "Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = aug,
+    year = "2024",
+    address = "Bangkok, Thailand",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.acl-long.586",
+    doi = "10.18653/v1/2024.acl-long.586",
+    pages = "10879--10899",
+    abstract = "In the era of large language models (LLMs), hallucination (the tendency to generate factually incorrect content) poses great challenges to trustworthy and reliable deployment of LLMs in real-world applications. To tackle the hallucination, three key questions should be well studied: how to detect hallucinations (detection), why do LLMs hallucinate (source), and what can be done to mitigate them (mitigation). To address these challenges, this work presents a systematic empirical study on LLM hallucinations, focused on the three aspects of hallucination detection, source and mitigation. Specially, we construct a new hallucination benchmark HaluEval 2.0, and design a simple yet effective detection method for LLM hallucinations. Furthermore, we zoom into the different training or utilization stages of LLMs and extensively analyze the potential factors that lead to the LLM hallucinations. Finally, we implement and examine a series of widely used techniques to mitigate the hallucinations in LLMs. Our work has led to several important findings to understand the hallucination origin and mitigate the hallucinations in LLMs.",
+}
+
+@article{xu2024hallucination,
+  title={Hallucination is inevitable: An innate limitation of large language models},
+  author={Xu, Ziwei and Jain, Sanjay and Kankanhalli, Mohan},
+  journal={arXiv preprint arXiv:2401.11817},
+  year={2024}
+}
+
+@article{huang2023survey,
+  title={A survey on hallucination in large language models: Principles, taxonomy, challenges, and open questions},
+  author={Huang, Lei and Yu, Weijiang and Ma, Weitao and Zhong, Weihong and Feng, Zhangyin and Wang, Haotian and Chen, Qianglong and Peng, Weihua and Feng, Xiaocheng and Qin, Bing and others},
+  journal={ACM Transactions on Information Systems},
+  year={2023},
+  publisher={ACM New York, NY}
+}
+
+
+@article{farquhar2024detecting,
+  title={Detecting hallucinations in large language models using semantic entropy},
+  author={Farquhar, Sebastian and Kossen, Jannik and Kuhn, Lorenz and Gal, Yarin},
+  journal={Nature},
+  volume={630},
+  number={8017},
+  pages={625--630},
+  year={2024}
+}
+
+
+@inproceedings{jeong2024adaptive,
+  title={Adaptive-RAG: Learning to Adapt Retrieval-Augmented Large Language Models through Question Complexity},
+  author={Jeong, Soyeong and Baek, Jinheon and Cho, Sukmin and Hwang, Sung Ju and Park, Jong C},
+  booktitle={Proceedings of the 2024 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
+  pages={7029--7043},
+  year={2024}
+}
+
+@article{soudani2024fine,
+  title={Fine Tuning vs. Retrieval Augmented Generation for Less Popular Knowledge},
+  author={Soudani, Heydar and Kanoulas, Evangelos and Hasibi, Faegheh},
+  journal={arXiv preprint arXiv:2403.01432},
+  year={2024}
+}
+
+@article{moffat2019huffman,
+author = {Moffat, Alistair},
+title = {Huffman Coding},
+year = {2019},
+issue_date = {July 2020},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {52},
+number = {4},
+issn = {0360-0300},
+url = {https://doi.org/10.1145/3342555},
+doi = {10.1145/3342555},
+abstract = {Huffman’s algorithm for computing minimum-redundancy prefix-free codes has almost legendary status in the computing disciplines. Its elegant blend of simplicity and applicability has made it a favorite example in algorithms courses, and as a result it is perhaps one of the most commonly implemented algorithmic techniques. This article presents a tutorial on Huffman coding and surveys some of the developments that have flowed as a consequence of Huffman’s original discovery, including details of code calculation and of encoding and decoding operations. We also survey related mechanisms, covering both arithmetic coding and the recently developed asymmetric numeral systems approach and briefly discuss other Huffman-coding variants, including length-limited codes.},
+journal = {ACM Comput. Surv.},
+month = aug,
+articleno = {85},
+numpages = {35},
+keywords = {Huffman code, data compression, minimum-redundancy code}
+}
+
+@inproceedings{hendrycks2021measuring,
+title={Measuring Massive Multitask Language Understanding},
+author={Dan Hendrycks and Collin Burns and Steven Basart and Andy Zou and Mantas Mazeika and Dawn Song and Jacob Steinhardt},
+booktitle={International Conference on Learning Representations},
+year={2021},
+url={https://openreview.net/forum?id=d7KBjmI3GmQ}
+}
+
+@article{cobbe2021training,
+  title={Training verifiers to solve math word problems},
+  author={Cobbe, Karl and Kosaraju, Vineet and Bavarian, Mohammad and Chen, Mark and Jun, Heewoo and Kaiser, Lukasz and Plappert, Matthias and Tworek, Jerry and Hilton, Jacob and Nakano, Reiichiro and others},
+  journal={arXiv preprint arXiv:2110.14168},
+  year={2021}
+}
+
+@inproceedings{wilkins2024hybrid,
+  title={Hybrid Heterogeneous Clusters Can Lower the Energy Consumption of LLM Inference Workloads},
+  author={Wilkins, Grant and Keshav, Srinivasan and Mortier, Richard},
+  booktitle={Proceedings of the 15th ACM International Conference on Future and Sustainable Energy Systems},
+  pages={506--513},
+  year={2024}
+}
+
+@article{pipitone2024legalbench,
+  title={LegalBench-RAG: A Benchmark for Retrieval-Augmented Generation in the Legal Domain},
+  author={Pipitone, Nicholas and Alami, Ghita Houir},
+  journal={arXiv preprint arXiv:2408.10343},
+  year={2024}
+}
+
+@article{jeong2024improving,
+  title={Improving medical reasoning through retrieval and self-reflection with retrieval-augmented large language models},
+  author={Jeong, Minbyul and Sohn, Jiwoong and Sung, Mujeen and Kang, Jaewoo},
+  journal={Bioinformatics},
+  volume={40},
+  number={Supplement\_1},
+  pages={i119--i129},
+  year={2024},
+  publisher={Oxford University Press}
+}
+
+@inproceedings{chen-etal-2024-retrieval,
+    title = "Retrieval-Augmented Knowledge Integration into Language Models: A Survey",
+    author = {Chen, Yuxuan  and
+      R{\"o}der, Daniel  and
+      Erker, Justus-Jonas  and
+      Hennig, Leonhard  and
+      Thomas, Philippe  and
+      M{\"o}ller, Sebastian  and
+      Roller, Roland},
+    editor = "Li, Sha  and
+      Li, Manling  and
+      Zhang, Michael JQ  and
+      Choi, Eunsol  and
+      Geva, Mor  and
+      Hase, Peter  and
+      Ji, Heng",
+    booktitle = "Proceedings of the 1st Workshop on Towards Knowledgeable Language Models (KnowLLM 2024)",
+    month = aug,
+    year = "2024",
+    address = "Bangkok, Thailand",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.knowllm-1.5",
+    doi = "10.18653/v1/2024.knowllm-1.5",
+    pages = "45--63",
+ 
+
+@inproceedings{li-etal-2024-alphafin,
+    title = "{A}lpha{F}in: Benchmarking Financial Analysis with Retrieval-Augmented Stock-Chain Framework",
+    author = "Li, Xiang  and
+      Li, Zhenyu  and
+      Shi, Chen  and
+      Xu, Yong  and
+      Du, Qing  and
+      Tan, Mingkui  and
+      Huang, Jun",
+    editor = "Calzolari, Nicoletta  and
+      Kan, Min-Yen  and
+      Hoste, Veronique  and
+      Lenci, Alessandro  and
+      Sakti, Sakriani  and
+      Xue, Nianwen",
+    booktitle = "Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024)",
+    month = may,
+    year = "2024",
+    publisher = "ELRA and ICCL",
+    pages = "773--783",
+}
+
+
+
+@inproceedings{2019-commonsenseqa,
+    title = "{C}ommonsense{QA}: A Question Answering Challenge Targeting Commonsense Knowledge",
+    author = "Talmor, Alon  and
+      Herzig, Jonathan  and
+      Lourie, Nicholas  and
+      Berant, Jonathan",
+    editor = "Burstein, Jill  and
+      Doran, Christy  and
+      Solorio, Thamar",
+    booktitle = "Proceedings of the 2019 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers)",
+    month = jun,
+    year = "2019",
+    address = "Minneapolis, Minnesota",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/N19-1421",
+    doi = "10.18653/v1/N19-1421",
+    pages = "4149--4158",
+}
+
+
+@article{merity2016pointer,
+	title        = {Pointer Sentinel Mixture Models},
+	author       = {Merity, Stephen and Xiong, Caiming and Bradbury, James and Socher, Richard},
+	year         = 2016,
+	booktitle    = {ICLR},
+	url          = {https://openreview.net/forum?id=Byj72udxe}
+}
+
+
+@article{raffel2020exploring,
+	title        = {Exploring the limits of transfer learning with a unified text-to-text transformer},
+	author       = {Raffel, Colin and Shazeer, Noam and Roberts, Adam and Lee, Katherine and Narang, Sharan and Matena, Michael and Zhou, Yanqi and Li, Wei and Liu, Peter J},
+	year         = 2020,
+	journal      = {JMLR},
+	publisher    = {JMLRORG},
+	url          = {https://dl.acm.org/doi/abs/10.5555/3455716.3455856}
+}
+
+@article{marcus1993building,
+	title        = {Building a Large Annotated Corpus of English: The Penn Treebank},
+	author       = {Marcus, Mitch and Santorini, Beatrice and Marcinkiewicz, Mary Ann},
+	year         = 1993,
+	journal      = {Computational Linguistics},
+	url          = {https://aclanthology.org/J93-2004.pdf}
+}
 Granite-Function:
 Granite-Function Calling Model: Introducing Function Calling Abilities via Multi-task Learning of Granular Tasks
 
