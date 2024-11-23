@@ -166,7 +166,7 @@ Notably, all models perform particularly poorly on LongQA, with accuracy falling
 For LongBench, as shown in Table 2, LLaMA-3 exhibits substantial improvement when integrating ICL and LIFT, reaffirming that LIFT is particularly beneficial for models with shorter context lengths. As expected, GPT-3.5, with longer context window and superior ICL capabilities, outperforms LLaMA-3 on all tasks except GovReport.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table2_longbench.svg" class="img-fluid" title="Table 2" %}
-<div class="caption">Table 2. Performance of each task in LongQA for LLaMA-3</div>
+<div class="caption">Table 2. Performance on LongBench under different settings</div>
 
 ### LIFT shows significant improvement on specific tasks
 
@@ -175,7 +175,7 @@ Table 3 presents detailed experimental results across four LongQA tasks from Loo
 However, LIFT does not yield any improvement in tasks such as Multiple Information Retrieval and even slightly degrades the performance in Computation for both models. This indicates that LIFT may not significantly impact all tasks and could introduce slight noise in some cases. At the same time, the performance variations are closely related to the specific capabilities required by each task and the inherent strengths of the model.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table3_loogle_task.svg" class="img-fluid" title="Table 3" %}
-<div class="caption">Table 3. Performance on LongBench under different settings</div>
+<div class="caption">Table 3. Performance of each task in LongQA for LLaMA-3</div>
 
 In Table 2 on LongBench, LIFT+ICL consistently outperforms both ICL and LIFT_only on Narrativeqa and Qmsum for both models. Notable improvement is observed in Narrativeqa, where performance increases from 20.73 to 25.84. However, the results for Musique and GovReport exhibit different trends between the two models. LLaMA-3 shows a slight improvement on GovReport but experiences a significant drop on Musique, whereas GPT-3.5 demonstrates the opposite pattern.
 
@@ -195,7 +195,7 @@ Comparing the results of LIFT+ICL and LIFT+AT+ICL, as well as SFT+LIFT+ICL and S
 In contrast, we find SFT greatly improves the performance of both ICL and LIFT+ICL, which is reasonable since the tasks used in the SFT process are similar to those at test time. With SFT, LIFT+ICL is still better than ICL only, highlighting the effectiveness of our method.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table4_at_sft.svg" class="img-fluid" title="Table 4" %}
-<div class="caption">Table 4. Coordinate score on specific task in Bamboo, LooGLE, and QuALITY using AT and SFT.</div>
+<div class="caption">Table 4. Coordinate score<d-cite key="dong2023bamboo"></d-cite> on specific task in Bamboo, LooGLE, and QuALITY using AT and SFT.</div>
 
 ## 4.2. Efficiency evaluations
 
