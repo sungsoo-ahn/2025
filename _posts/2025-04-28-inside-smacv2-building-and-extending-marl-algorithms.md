@@ -95,7 +95,7 @@ Note: If there are any errors in this explanation or if you think this blog woul
 
 <!-- some of the information in this blog may not be valid. -->
 
-## Main Components of Any Algorithm:
+## Main Components of Any Algorithm
 1. Agent network
 - These are found in src -> modules -> agents.
 - First refer to src -> modules -> agents -> \__init__.py. Here, all the different types of agent networks are registered.
@@ -110,7 +110,7 @@ Note: If there are any errors in this explanation or if you think this blog woul
 5. Shapes of Some Key Elements:  
 - state = (B, T, state_dim)  
 - obs = (B, T, A, obs_dim)  
-- actions = (B, T, A, 1) #chosen actions  
+- actions = (B, T, A, 1) # chosen actions  
 - avail_actions = (B, T, A, n_actions)  
 - probs = (B, T, A, 1) # probabilities of the chosen action  
 - reward = (B, T, 1)  
