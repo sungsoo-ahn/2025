@@ -104,7 +104,7 @@ To complement the derivations, we include code snippets for computing the macros
 #### Code availability
 
 The code to reproduce all plots in this blog post can be found here at
-[https://anonymous.4open.science/r/teacher-student-BB2ftbMaCJfRG3JXbE9PhYoiqCzwVims](https://anonymous.4open.science/r/teacher-student-BB2ftbMaCJfRG3JXbE9PhYoiqCzwVims).
+[https://anonymous.4open.science/r/nndyn-E763](https://anonymous.4open.science/r/nndyn-E763).
 This codebase is also easily adaptable to explore the learning dynamics of neural networks in the teacher-student setting beyond the scope of this blog post.
 
 ### The teacher-student setup
@@ -616,7 +616,7 @@ We hope that this blog post and the accompanying code repository make these resu
 
 #### Code availability
 
-The code to reproduce all plots in this blog post can be found here at
-[https://anonymous.4open.science/r/teacher-student-BB2ftbMaCJfRG3JXbE9PhYoiqCzwVims](https://anonymous.4open.science/r/teacher-student-BB2ftbMaCJfRG3JXbE9PhYoiqCzwVims).
+The code to reproduce all plots in this blog post can be found at
+[https://anonymous.4open.science/r/nndyn-E763](https://anonymous.4open.science/r/nndyn-E763).
 This codebase is also easily adaptable to explore the learning dynamics of neural networks in the teacher-student setting beyond the scope of this blog post.
 
