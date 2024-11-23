@@ -396,28 +396,24 @@ j, l) + \sigma^{2} J_{2}(i, j)
 \end{align} $$
  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Fig1: Saad and Solla results.
-
 ### The specialization transition tracks feature learning
 
-Fig2: Widget (Saad and Solla from Fig 1) Visualizing order parameters. According to the phase transition in the loss there is a corresponding change in the order parameters, show this by adding a slide that encodes time.
+<div class="row mt-3">
+    {% include figure.html path="assets/img/2025-04-28-analytical-simulated-dynamics/fixed_teacher_student_saad_solla.png" class="img-fluid" %}
+</div>
+<div class="caption">
+    Figure 1: Saad and Solla <d-cite key="saad1995online"></d-cite> results.
+</div>
 
 ### Large initial weights produce individual differences
 
-Fig3: Large weights, varying simulations and average out to show correspondence with ODEs. Show for M=4 and K=2, 4 and 6 (Sebastian Goldt's)
+<div class="row mt-3">
+    {% include figure.html path="assets/img/2025-04-28-analytical-simulated-dynamics/fixed_teacher_student_base_goldt.png" class="img-fluid" %}
+</div>
+<div class="caption">
+    Figure 2: Goldt et al. <d-cite key="goldt2020dynamics"></d-cite> results.
+    Large weights, varying simulations and average out to show correspondence with ODEs. Show for M=4 and K=2, 4 and 6 (Sebastian Goldt's)
+</div>
 
 ### Theory-experiment overlap in two-layer neural networks
 
