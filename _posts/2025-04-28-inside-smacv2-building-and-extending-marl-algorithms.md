@@ -47,14 +47,6 @@ toc:
   - name : Common Pitfalls
   - name : Future Work
   - name : Conclusion
-  # - name: Training loop
-  # - name: Citations
-  # - name: Footnotes
-  # - name: Code Blocks
-  # - name: Diagrams
-  # - name: Tweets
-  # - name: Layouts
-  # - name: Other Typography?
 
 
 # Below is an example of injecting additional post-specific styles.
@@ -83,17 +75,9 @@ The StarCraft Multi Agent Challenge v2 (SMACv2) environment is a commonly used t
 
 The [pymarl2 repository](https://github.com/benellis3/pymarl2) has a variety of value factorisation algorithms that are implemented efficiently. However, like many respositories, the repository is quite complex to understand and edit. Moreover, there are some implementation details that do not match the theory in the respective papers of said algorithms. Our aim with this blog is to reduce the entry barrier to implementing custom algorithms to complex environments like SMACv2 and foster better algorithms than the ones in the existing literature. 
 
-<!-- It took us a while to understand how the [pymarl2 repo](https://github.com/benellis3/pymarl2) works and how to make any changes to the algorithms. We thought we’d write this blog to help y’all understand it better and perhaps save you some time. -->
-
-<!-- MARL is complex enough as it is. Firstly, the algorithms are complex to understand and then matching the algorithm to existing codebase is a big challenge of its own! Don’t we wish that everyone would write better README files in their repositories! We’re writing this blog to reduce the entry barrier to implementing your algorithm to complex environments like smacv2! The repository explained in this blog is the repository that has implemented some MARL algorithms to the smacv2 environment. -->
-
 In this blog, we explain where specific parts of an algorithm are located to facilitate the easy editing/omiting of those parts for new algorithms. We also match the theory to the code where we can while also trying to explain where the theory and implementation don't match.
 
-<!-- so that you can edit/omit those parts for your new algorithm. -->
-
 Note: If there are any errors in this explanation or if you think this blog would benefit from adding more details, please feel free to reach out to us! Moreover, as the repo is updated, we will try to keep this blog updated as well (but there may be a delay).
-
-<!-- some of the information in this blog may not be valid. -->
 
 ## Main Components of Any Algorithm
 1. Agent network
@@ -119,12 +103,7 @@ Note: If there are any errors in this explanation or if you think this blog woul
 
 where, B = batch size, T = total number of timesteps in an episode, A = number of agents, state_dim = length of the state vector (found in [SMACv2 repository](https://github.com/oxwhirl/smacv2/tree/main)), obs_dim = length of the observation vector (found in [SMACv2 repository](https://github.com/oxwhirl/smacv2/tree/main)), n_actions = total number of actions that an agents can take.  
 
-
-<!-- 5. <span style="color: red;">The training loop</span>
-- parallel_runner.py -->
-
 In the remainder of the blog, we go deeper into one algorithm. Majority of the algorithms follow a similar structure. Therefore, if the basic flow of one algorithm is clear, the others will follow.
-
 
 ## QPLEX Algorithm
 
@@ -145,11 +124,7 @@ return q.view(b, a, -1), h.view(b, a, -1)
 ```
 
 - q : The q is $Q_i(\tau_i, a_i)$ in the diagram above. 
-<!-- <span style="color: red;">Maybe mention its shape.</span> -->
-
 - h : The h represents $$h_i^t$$, i.e., the next hidden state of the GRU in the diagram above.
-
-
 
 
 ### 2. Transformation Network
@@ -250,12 +225,6 @@ This resembles the rightmost term in equation 11 in the QPLEX paper<d-cite key="
 
 **(c) Summing over the $$V_i$$ Values**
 
-<!-- ```
-y = self.calc(agent_qs, states, actions=actions, max_q_i=max_q_i, is_v=is_v)
-```
-
-For this case, the parameter `is_v` is set to True. Therefore y returns $$V_{tot}$$. As mentioned in the previous point,  -->
-
 In the `calc_v` function of dmaq_general.py, 
 ```
 v_tot = th.sum(agent_qs, dim=-1)
@@ -274,35 +243,6 @@ chosen_action_qvals = ans_chosen + ans_adv
 Here chosen_action_qvals represents the $$Q_{tot}$$, ans_chosen represents the $$V_{tot}$$ (but as mentioned in the previous point, mathematically it is $$\sum_{i=1}^n Q_i(\mathbf{\tau}, a_i)$$ )and ans_adv represents $$A_{tot}$$ (but as mentioned in the previous point, mathematically it is $$\sum_{i=1}^n (\lambda_i (\mathbf{\tau},\mathbf{a}) - 1) A_i(\mathbf{\tau}, a_i)$$).
 
 
-<!-- ### 4. The Training Loop
-
-Found in src -> learners -> dmaq_qatten_learner.py
-
-
-
-
-<span style="color: red;">Talk about basic_controller.</span>
-
-
-<span style="color: red;">Replay buffer.</span>
-1. Initialised as zeros
-2. Masking
-3. Shape
-
-
-
-
-
-
-action selection is done using EpsilonGreedyActionSelector found in src -> components -> action_selectors.py
-
-lamdba return -->
-
-
-
-
-
-
 
 ## How to Add a New Algorithm
 
@@ -313,26 +253,20 @@ In order to add a new algorithm, the following steps need to be followed. Note: 
 3. Agent - If the new algorithm needs a different agent network, create a new agent network in src -> modules -> agents. 
 4. Mixer - If the new algorithm needs a different mixer, create a new mixer in src -> modules -> mixers. In the case of QPLEX, the mixer encapsulates both the transformation network and the mixing network.
 5. Algorithm - If the new algorithm needs a different learner file, create a new learner in src -> learners.
-6. Action selecting scheme - If the existing action selecting schemes (e.g., epislon-greedy) are not sufficient, create a new action selecting scheme in src -> components -> action_selectors.py. 
+6. Action selecting scheme - If the existing action selecting schemes (e.g., epsilon-greedy) are not sufficient, create a new action selecting scheme in src -> components -> action_selectors.py. 
 7. Registering all new components - Remember to register all the new components created (e.g., agent, mixer, controller, etc.). This is an important part to making the algorithm work and also a common place to make an error if you forget to register. 
 
 
 
 ## Common Pitfalls
 
-1. The SMACv2 environment is procedurally generated, therefore setting the seed is tricky [github issue](https://github.com/oxwhirl/smacv2/issues/34).
+1. The SMACv2 environment is procedurally generated, therefore setting the seed is tricky ([github issue](https://github.com/oxwhirl/smacv2/issues/34)).
 2. We never really use the joint trajectory $$\mathbf{\tau}$$. It is assumed that adding the information of the state to $$\tau_i$$ gives us a good representation of $$\mathbf{\tau}$$.
 3. `batch_size` and `batch_size_run` in the config files refer to two different concepts. `batch_size` represents the training batch size used to sample episodes from the replay buffer, while `batch_size_run` denotes the number of parallel environments configured for algorithm execution. However, they are sometimes used interchangeably in the codebase, e.g., in src -> runners -> parallel_runner.py
 ```
 self.batch_size = self.args.batch_size_run
 ```
-
-
-
 4. All the values in the replay buffer are first initialized with zeros for the corresponding `batch_size_run` (i.e., number of parallel training environments) and timesteps. The values are updated as the episode progresses timestep-by-timestep. 
-<!-- Since not all parallel training environments end at the same timestep, there is an array called `filled` in the replay buffer. When an episode ends, the values in the `filled` array are set to 1. These values are used to indicate valid values in the remaining arrays of the replay buffer.  -->
- <!-- The corresponding `filled` key in the buffer is updated to 1 when the episode ends. This indicates valid values in the replay buffer because not all parallel training environments end at the same timestep.  -->
-<!-- This `filled` key is later used as a mask while calculating the error so that only the td_error corresponding to the filled values is used for updating the network weights. -->
 
 
 ## Future Work 
@@ -344,7 +278,3 @@ If the community finds this blog useful, we would like to add explanations of ot
 
 In this blog, we explain the overall structure of the [pymarl2 repository](https://github.com/benellis3/pymarl2) that contains value factorisation algorithms implemented on the benchmark environment [SMACv2](https://github.com/oxwhirl/smacv2/tree/main). We explain the implementation of one of these algorithms (QPLEX) in detail while highlighting the key similarities and differences between the theory and the implementation. We further give detailed instructions on how to add a new algorithm to the repository. 
 Recognizing that some terms in the repository may cause confusion, this blog aims to clarify common misunderstandings. While not exhaustive, it addresses several key components that are important for avoiding mistakes in code implementation and ensuring accurate results. For those looking to apply their algorithms in a complex multi-agent environment like SMACv2, this blog serves as a practical starting point.
-
-
-<!-- There are certain terms in the respository that can be confusing that can lead to incorrect code implementation. This blog tries to clarify those misunderstandings. 
-While this blog is not all encompassing and there are more components that need clarity, we have tried to cover some key elements that can lead to incorrect code implementation and therefore results. This blog is a useful resource for someone to get started on using their algorithm on a complex multi agent environment like SMACv2. -->
