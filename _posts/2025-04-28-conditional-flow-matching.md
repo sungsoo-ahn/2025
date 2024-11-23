@@ -40,6 +40,7 @@ toc:
     - name: Fast Sampling with Straight Flows
     - name: Diffusion Models
     - name: Link Between Diffusion and Flow-Matching
+    - name: CFM Playground
   - name: References
 
 # Below is an example of injecting additional post-specific styles.
@@ -342,7 +343,7 @@ $$
 </div>
 
 The first part of this blog post is an introduction to generative modelling, normalizing flows and continuous normalizing flows.
-The reader already familiar with these topics, or that wants to cover them later, can directly jump to the <a href="#part_cfm">second part</a>, devoted to **conditional flow matching**.
+The reader already familiar with these topics, or that wants to cover them later, can directly jump to the <a href="#conditional-flow-matching">second part</a>, devoted to **conditional flow matching**.
 
 ## Introduction to Generative Modelling with Normalizing Flows
 In a nutshell, the task of generative modelling consists in learning how to sample from a distribution $$p_{\mathrm{data}}$$ given a finite number of samples $$x^{(1)}, \ldots, x^{(n)} \in \bbR^d$$ drawn from $$p_{\mathrm{data}}$$.
@@ -646,7 +647,7 @@ It is a likelihood-free approach, that does not require solving ODE -- being hen
 
 
 ## Conditional Flow Matching
-{:#part_cfm}
+
 
 This part presents **Conditional Flow Matching** (CFM).
 While the first part gives interesting background on normalizing flows, it is not a strict requirement to understand the principle of CFM.
@@ -718,8 +719,8 @@ However, as illustrated in <span class="ref-lastfig">Figure </span>, there exis
 Thus, in order to get supervision for all $$t$$, one must **fully specify a probability path/velocity field**.
 
 **Organization**.
-In the <a href="#sec_modelling"> Modelling Choices Section </a> we provide details on how CFM fully specifies a probability path $$p_t$$ that transforms $$ p_0 $$ into $$ \pdata $$: this is not trivial since $$ \pdata $$ is unknown.
-Then in the <a href="#sec_conditional_velocity"> From Conditional to Unconditional Velocity Section </a> we provide new intuition on how to interpret the corresponding fully specified velocity field $$ \u $$.
+In the <a href="#modelling-choices"> Modelling Choices Section </a> we provide details on how CFM fully specifies a probability path $$p_t$$ that transforms $$ p_0 $$ into $$ \pdata $$: this is not trivial since $$ \pdata $$ is unknown.
+Then in the <a href="#from-conditional-to-unconditional-velocity"> From Conditional to Unconditional Velocity Section </a> we provide new intuition on how to interpret the corresponding fully specified velocity field $$ \u $$.
 Finally, we recall how CFM learns the velocity field $$ \u $$ in a tractable fashion.
  <!-- by regressing against the conditional velocity fields $$ \ucond $$, and why this is optimal. -->
 
@@ -730,7 +731,6 @@ Finally, we recall how CFM learns the velocity field $$ \u $$ in a tractable fas
 -->
 
 ### Modelling Choices
-{:#sec_modelling}
 
 <div class="sidebar" style="--w: 200; --h: 150;">
 <div class="caption" markdown="1">
@@ -774,7 +774,7 @@ $$
 
 where $$\delta$$ denotes the Dirac delta distribution.
 
-<div class="sidebar" style="--w: 200; --h: 200;">
+<div class="sidebar" style="--w: 200; --h: 220;">
 <div class="caption" markdown="1">
 $$ t $$ will always be a uniform random variable between $$0$$ and $$1,$$ hence $$ p(t)=1$$,
 and $$p(x \| t) = \frac{p(x, t)}{p(t)} = p(x, t)$$.
@@ -910,7 +910,6 @@ One easily checks that $$\int_z p(x \vert z, t=0) p(z) \mathrm{d}z = \int_z \pba
 -->
 
 ### From Conditional to Unconditional Velocity
-{:#sec_conditional_velocity}
 
 <div class="left-lined" markdown="1">
 The previous section provided examples on how to choose a conditioning variable $$ z $$
@@ -1372,3 +1371,10 @@ $$
 </details>
 
 </div>
+
+### CFM Playground
+
+<figure class="">
+  <iframe style="--w: 800; --h: 600; width: 100%;" class="invert" src="{{ 'assets/html/2025-04-28-conditional-flow-matching/cfm-1d.html#playground' | relative_url }}" frameborder="0" scrolling="no"></iframe>
+  <figcaption class="caption">A playground to explore a variety of CFM settings.</figcaption>
+</figure>
