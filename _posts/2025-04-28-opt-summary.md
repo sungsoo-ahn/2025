@@ -107,10 +107,7 @@ This notes aims to review state-of-the-art (SOTA) first-order optimization algor
 
 ## Framework: Oracle Complexity Model
 
-We formally recall the definition of complexity. In particular, we stick to the classical **oracle complexity model**<d-cite key='nemirovskij1983problem'></d-cite>, where oracle basically means some
-.orsuggested by acle complexity lia.e.,o cw hicehl cclaassr oo fe nfou nction ypeob nepvle iaim to optigmi noitzaem,r osufch ast   sssnthat could provide that could provide ogradient --based ithe next iterate or query point should be within th eline linear span of the sequence hisrttory and information provided by the oracles taga
-oporpkcab aivno yb nevig noitaitmrOne of theby designing new algorithmsAfor a class of functions and cetrrnritfundamentalssoraclof performance measured by sto achieve secertain accuracy.eceieip eno  sueggested byhtit s sa sdrager eb dluoc rotmaitse ,. Here we assume readers are already familiar with such context,
-,gradient interested readers may refer to these nneidarg a gnitupmoc ,ecnatscnat,ecnatni roF .noitamrofni edi edeivorp dluoc taht yraenihcam
+We formally recall the definition of complexity. In particular, we stick to the classical **oracle complexity model**<d-cite key='nemirovskij1983problem'></d-cite>.
 As the figure below suggest, generally this framework consists of the following components:
 - *Fucntion class* $\mathcal{F}$, e.g., convex Lipschitz continuous function, and (nonconvex) Lipschitz smooth function.
 - *Oracle class* $\mathbb{O}$, e.g., zeroth-order oracle (function value), first-order oracle (function gradient or subdifferential).
