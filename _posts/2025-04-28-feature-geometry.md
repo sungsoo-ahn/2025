@@ -92,7 +92,7 @@ _styles: >
 
 ## An Overview of the Feature Geometry Papers
 
-We present several ablations results and theoretical arguments highlighting challenges with the theses of two recent works, the [**ICML 2024 Mechanistic Interpretability Workshop**](https://icml2024mi.pages.dev/) **1st prize** winning paper - [The Geometry of Categorical and Hierarchical Concepts in LLMs](https://arxiv.org/abs/2406.01506v1) <d-cite key="park2024geometrycategoricalhierarchicalconcepts"></d-cite>, and the **ICML 2024** paper - [The Linear Representation Hypothesis and the Geometry of LLMs](https://arxiv.org/abs/2311.03658) <d-cite key="park2024linearrepresentationhypothesisgeometry"></d-cite>.
+We present several ablation results and theoretical arguments highlighting challenges with the theses of two recent works, the [**ICML 2024 Mechanistic Interpretability Workshop**](https://icml2024mi.pages.dev/) **1st prize** winning paper - [The Geometry of Categorical and Hierarchical Concepts in LLMs](https://arxiv.org/abs/2406.01506v1) <d-cite key="park2024geometrycategoricalhierarchicalconcepts"></d-cite>, and the **ICML 2024** paper - [The Linear Representation Hypothesis and the Geometry of LLMs](https://arxiv.org/abs/2311.03658) <d-cite key="park2024linearrepresentationhypothesisgeometry"></d-cite>.
 
 The methodology described in the two papers we study is as follows -- they split the computation of a large language model (LLM) as:
 
