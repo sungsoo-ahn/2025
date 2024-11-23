@@ -19,7 +19,7 @@ social: false  # includes social icons at the bottom of the page
 
 ## Key Dates
 
-- **Abstract & Submission deadline**: Nov 15th 23:59 AOE, 2024 
+- **Abstract & Submission deadline**: ~~Nov 15th~~ **Extended to** Nov 22nd 23:59 AOE, 2024 
   - *OpenReview and any modifications to your blog post, via a pull request on GitHub*.
 - **Decision Notification**: January 22nd, 2025
 - **Camera-ready merge**: March 15th, 2024
@@ -74,7 +74,7 @@ We will only ask the authors to report if they have a conflict of interest. If s
 
 ## Publication 
 
-The posts will be created and published under a unified template; see [the submission instructions]({{ '/submitting' | relative_url }}) and the [sample post]({% post_url 2025-05-07-distill-example %}) hosted on the blog of this website.
+The posts will be created and published under a unified template; see [the submission instructions]({{ '/submitting' | relative_url }}) and the [sample post]({% post_url 2025-04-28-distill-example %}) hosted on the blog of this website.
 
 #### Poster
 
