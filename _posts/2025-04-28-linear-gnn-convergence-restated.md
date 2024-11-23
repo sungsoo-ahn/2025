@@ -377,13 +377,13 @@ $$
 \end{eqnarray}
 $$
 
-Next, let's bound $\textrm{Eq.(*)}$.
+Next, let's bound Eq.(*).
 
 
 ---
 
 
-Before bounding $\textrm{Eq.(*)}$, we introduce the notation $\mathbf{P}$, 
+Before bounding Eq.(*), we introduce the notation $\mathbf{P}$, 
 which projects vectors onto the **column space** of $$\tilde{G}_H^{\top} \otimes I_{m_y}$$. 
 
 <!-- It can be built through the SVD of $$\tilde{G}_H \otimes I_{m_y}$$.  -->
@@ -536,13 +536,11 @@ Take another look at these two diagrams I drew earlier:
 {% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig2_1.png" width="100" %}
 
 When I drew the illustration, I was thinking about the dynamics we're trying to capture. 
-But besides these time points, there are **sharp upward surges**. 
-At these points, $、nabla_{t} L$ is "under control" (meets Eq.(\ref{L_grad})), 
-because, at these moments, we are adjusting weight matrices using principles based on their current gradients.
+So at each time point, I make the loss surge downward, showing that $\nabla_{t} L$ is "under control" (meets Eq.(\ref{L_grad})) at these points, because at these moments, we are adjusting weight matrices using principles based on their current gradients.
+However, we can **only** control things at these specific moments. 
+So besides these time points, I drew **sharp upward surges**, as highlighted by the orange circles. 
 
-However, we can only control things at these specific moments. 
 In the introduction, we hinted at the intuition behind gradient dynamics:
-
 > "The loss is like a light particle *swimming* through a *velocity field*; how fast it surges is controlled by the field **anywhere** as it swims."
 
 But in reality, **"anywhere"** is impossible, no matter how much we reduce the step size. The actual process is more like a particle speeding out at an initial velocity, **maintaining** that speed until landing at a new point, and then immediately flying to the next point with a new velocity. Thus, the trajectories solved by ODEs and the actual loss trajectories only **share the same slopes at discrete points**.
@@ -560,7 +558,8 @@ The limitation of this approach was pointed out by an anonymous reviewer of the 
 Even so, the method that study the discrete optimization process from a continuous viewpoint is widely adopted <d-cite key="Saxe2013"></d-cite><d-cite key="Huang2020"></d-cite><d-cite key="Ji2020"></d-cite><d-cite key="Kawaguchi2021"></d-cite><d-cite key="Arora2018"></d-cite><d-cite key="Arora2019"></d-cite>.
 
 What's more, 
-we notice that similar approach is also adopted in many other scientific areas, such as establishing mathematical models of **epidemic diseases**. We refer the readers to the SI and SIS models introduced [HERE](http://www.networksciencebook.com/chapter/10#epidemic) on Albert-László Barabási's website.
+
+We notice that similar approaches, which treat inherently discrete entities as continuous by using an ODE or PDE to model the process, are also widely adopted in many other scientific areas. For example, when establishing mathematical models of **epidemic diseases**, researchers treat the disease spreading process among people as a continuous flow, which has led to many valuable insights. We refer the readers to the SI and SIS models introduced [HERE](http://www.networksciencebook.com/chapter/10#epidemic) on Albert-László Barabási's website.
 
 So, while this approach has its own unique value, we should carefully consider if the approximation error is tolerable before using it for analysis and modeling.
 
