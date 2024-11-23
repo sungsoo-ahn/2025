@@ -259,7 +259,7 @@ We visualise this in the next figure, showing the overlap between the 95% Wilson
 {% include figure.html 
   path="assets/img/2025-04-28-towards-more-rigorous-llm-evals/ci_vs_reported.png" 
   class="img-fluid" 
-  caption="<b>95% Wilson score confidence intervals for the point estimates of GSM8K accuracy, \hat{p}^{8K}_{m}$ (red), and range of accuracies achieved on the 50 GSM-Symbolic datasets, $\hat{p}^{Symb}_{m}$ (blue).</b> 
+  caption="<b>95% Wilson score confidence intervals for the point estimates of GSM8K accuracy, $\hat{p}^{8K}_{m}$ (red), and range of accuracies achieved on the 50 GSM-Symbolic datasets, $\hat{p}^{Symb}_{m}$ (blue).</b> 
   The latter ranges are not explicitly reported; we approximate them from the histograms in Figure 1 of Mirzadeh et al. (2024) <d-cite key='mirzadeh2024gsm'></d-cite>, as well as Figures 10 and 12 from the Appendix of the paper. 
   Since such histograms are not available for all models, we only show the subset of the models for which they are." 
 %}
