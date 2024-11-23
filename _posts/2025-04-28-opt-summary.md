@@ -277,9 +277,9 @@ As mentioned above, we categorize the discussion based on the problem, stochasti
 | Type               | Measure | LB                                          | UB                               | Reference-LB      | Reference-UB                                   |
 |--------------------|---------|---------------------------------------------|----------------------------------|-------------------|------------------------------------------------|
 | NC-SC, Deter       | Primal Stationarity | $\Omega(\sqrt{\kappa}\Delta \mathcal{L} \epsilon^{-2})$  | $\checkmark$ | [<d-cite key="zhang2021complexity"></d-cite>, Theorem 3.1] | [<d-cite key="zhang2021complexity"></d-cite>, Theorem 4.1] |
-| NC-C, Deter        | Near-Stationarity | Unknown  | $\mathcal{O}(\Delta L^2 \epsilon^{-3} \log^2 \frac{1}{\epsilon})$               |         | [<d-cite key="lin2020near"></d-cite>, Cor A.8] |
-| WC-C, Deter        | Near-Stationarity | Unknown | $\mathcal{O}(\epsilon^{-6})$                       |         | [<d-cite key="boct2023alternating"></d-cite>, Thm 3.7]         |
-| NC-PL, Deter       | Primal Stationarity | Unknown | $\Omega(\kappa^2\epsilon^{-4})$                   |         | [<d-cite key="yang2022faster"></d-cite>]         |
+| NC-C, Deter        | Near-Stationarity | Unknown  | $\mathcal{O}(\Delta L^2 \epsilon^{-3} \log^2 \frac{1}{\epsilon})$               |   /      | [<d-cite key="lin2020near"></d-cite>, Cor A.8] |
+| WC-C, Deter        | Near-Stationarity | Unknown | $\mathcal{O}(\epsilon^{-6})$                       |  /       | [<d-cite key="boct2023alternating"></d-cite>, Thm 3.7]         |
+| NC-PL, Deter       | Primal Stationarity | Unknown | $\Omega(\kappa^2\epsilon^{-4})$                   | /        | [<d-cite key="yang2022faster"></d-cite>]         |
 
 **Remark:**
 
