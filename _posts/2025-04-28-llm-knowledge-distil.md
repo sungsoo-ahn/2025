@@ -130,10 +130,10 @@ Forward KL is a mean-seeking behavior, while Reverse KL is a Mode-Seeking behavi
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-llm-knowledge-distil/forward_kl.gif" class="img-fluid " %}
+        {% include figure.html path="assets/img/2025-04-28-llm-knowledge-distil/fwd_kl.gif" class="img-fluid " %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-llm-knowledge-distil/reverse_kl.gif" class="img-fluid " %}
+        {% include figure.html path="assets/img/2025-04-28-llm-knowledge-distil/rev_kl.gif" class="img-fluid " %}
     </div>
 </div>
 <div class="caption">
@@ -148,10 +148,10 @@ The behavior changes when a stronger student model is employed. In the following
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-llm-knowledge-distil/forward_kl_dual.gif" class="img-fluid " %}
+        {% include figure.html path="assets/img/2025-04-28-llm-knowledge-distil/fwd_kl_dual.gif" class="img-fluid " %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-llm-knowledge-distil/reverse_kl_dual.gif" class="img-fluid " %}
+        {% include figure.html path="assets/img/2025-04-28-llm-knowledge-distil/rev_kl_dual.gif" class="img-fluid " %}
     </div>
 </div>
 <div class="caption">
