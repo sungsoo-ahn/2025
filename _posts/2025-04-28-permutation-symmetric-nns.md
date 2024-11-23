@@ -1017,14 +1017,18 @@ Now that we have designed a network, let's use a variety of toy problems to test
 ### III.1 Matrix pseudo inverse
 
 A good sanity check of a permutation equivariant network is whether it can learn matrix inverse. The Moore-Penrose inverse is defined as
-```math
+
+$$
 A^{+}=(A^TA)^{-1}A^T
-```
+$$
+
 For any permutation matrix $P$ the Moore-Penrose inverse satisfies
-```math
+
+$$
 (PA)^+=A^+ P^T \\
 (AP)^+=P^T A^+
-```
+$$
+
 So $F(A)=(A^+)^T$ is row-column permutation equivariant. In fact, it is further equivariant to arbitrary rotation.
 
 
