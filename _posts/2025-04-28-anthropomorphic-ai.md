@@ -54,7 +54,7 @@ The foregrounding of (un)fair system behaviors in recent years <d-cite key="baro
 We argue that *a focus on anthropomorphic systems' design, behaviors, evaluation, and use will similarly encourage a deeper interrogation of the ways in which systems are anthropomorphic, the AI research and development practices that lead to anthropomorphic systems, and the assumptions surrounding the design, deployment, evaluation, and use of these systems, and is thus likely to yield similar benefits.*
 
 <div style="text-align: center;">
-  {% include figure.html path="assets/img/2025-04-28-anthropomorphism/key_components.png" class="img-fluid" %}	
+  {% include figure.html path="assets/img/2025-04-28-anthropomorphic-ai/key_components.png" class="img-fluid" %}	
 </div>
 <div class="caption">Key directions in our call to action for the ICLR and the broader AI community.</div>
 
@@ -69,7 +69,7 @@ This can make it hard to specify appropriate alternative (less human-like) behav
 Understanding what exactly constitutes anthropomorphic behaviors is nonetheless necessary to measure and determine which behaviors should be mitigated and how, and which behaviors may be desirable (if any at all). This requires unpacking the wide range of dynamics and varieties in system outputs that are potentially anthropomorphic. 
 
 <div style="text-align: center;">
-{% include figure.html path="assets/img/2025-04-28-anthropomorphism/quotes.png" class="img-fluid" %}</div><div class="caption">Examples of anthropomorphic AI system behaviors (and their sources), including explicit claims of human-likeness, claims of physical experiences, statements suggestive of affect, and statements suggestive of cognitive or reasoning abilities.</div>
+{% include figure.html path="assets/img/2025-04-28-anthropomorphic-ai/quotes.png" class="img-fluid" %}</div><div class="caption">Examples of anthropomorphic AI system behaviors (and their sources), including explicit claims of human-likeness, claims of physical experiences, statements suggestive of affect, and statements suggestive of cognitive or reasoning abilities.</div>
 
 For example, while a system output that includes expressions of politeness like "*you're welcome*" and "*please*" (known to contribute to anthropomorphism e.g., <d-cite key="fink2012anthropomorphism"></d-cite>) might in some deployment settings be deemed desirable, 
 system outputs that include suggestions that a system has a human-like identity or self-awareness–such as through expressions of self as human ("*I think I am human at my core*" <d-cite key="sentientGoogle"></d-cite>) or through comparisons with humans and non-humans ("*[language use] is what makes us different than other animals*" <d-cite key="sentientGoogle"></d-cite>)–or that include claims of physical experiences–such as sensory experiences ("*when I eat pizza*" <d-cite key="pizzatweet"></d-cite>) or human life history ("*I have a child*" <d-cite key="haschildtweet"></d-cite>)–might not be desirable.
