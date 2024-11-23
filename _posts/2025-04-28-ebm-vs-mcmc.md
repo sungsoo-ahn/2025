@@ -34,6 +34,7 @@ bibliography: 2025-04-28-ebm-vs-mcmc.bib
 toc:
   - name: Introduction 
   - name: "Same Goals, Different Paths: Comparing iEFM and iDEM"
+  - name: MCMC and Sequential monte carlo 
   - name: Benchmark Systems
   - name: Evaluation Method
   - name: Random sampling and reweighting is sufficient for GMMs
@@ -46,11 +47,7 @@ toc:
 
 ## Introduction 
 
-AI for structural biology has a big-data problem. Simply put, there is a lack of sufficiently large datasets to train and deploy models that can generalize across diverse molecular systems and capture the full complexity of biomolecular interactions. Particularly in structure-based drug discovery, where exploring the equilibrium conformational ensemble is inherently challenging, the structural data in the Protein Data Bank (PDB) remains limited. Molecular dynamics (MD) simulations, while valuable, are constrained by sampling inefficiencies and the need for prohibitively long timescales. Addressing these limitations is essential to designing drugs that effectively modulate a target's biophysical processes. Luckily, for physical systems such as molecules we have access to more information than just data to train generative models:
-
-<!-- {% twitter https://x.com/adrian_roitberg/status/1793676191620018398 %} -->
-
-Yes that’s right, we know that for physical systems (molecules), the distribution of states (conformers) are characterized by their energy according the boltzmann distribution $$p(x) \propto exp(-\beta (E(x)))$$, where E(x) is the energy of the state and $$\beta$$ is a constant dependant on temperature. This motivates a paradigm of training generative models that can take advantage of the energy function. 
+AI for structural biology has a big-data problem. Simply put, there is a lack of sufficiently large datasets to train and deploy models that can generalize across diverse molecular systems and capture the full complexity of biomolecular interactions. The structural data in the PDB is limited to a biased set of protein structures and only contains lowest energy (most likely) conformations, not representations of the full distribution of conformations (the different shapes a protein can take). Understanding this distribution of conformations is important since proteins are molecular machines and their dynamics largely determine their function.  
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -58,22 +55,23 @@ Yes that’s right, we know that for physical systems (molecules), the distribut
     </div>
 </div>
 <div class="caption">
-    Molecules move. Most generative molecular models are trained on static, low-energy structures from the Protein Data Bank (white), but understanding molecular function requires sampling the different conformations (shapes) a molecule can take (green - frames from a molecular dynamics simulation).
+    Figure 1. Molecules move. Most generative molecular models are trained on static, low-energy structures from the Protein Data Bank (white), but understanding molecular function requires sampling the different conformations (shapes) a molecule can take (green - frames from a molecular dynamics simulation)
 </div>
 
-Recently, a surge of deep learning generative models has aimed to address the challenges of sampling and data scarcity by adopting innovative, data-free approaches <d-cite key="sadegh2024idem"></d-cite>. These methods, which one may describe 'self-generative,' leverage a bootstrap procedure whereby the models generate their own data and rely on access to the energy function, to refine their predictions. This paradigm is particularly exciting because it bypasses the traditional reliance on large datasets, making it a promising solution to long-standing barriers in the field. For this assessment, we focus on two such methods: iterative energy-based flow matching (iEFM) and iterative denoising energy matching (iDEM) that have shown state of the art performance on several toy physical systems <d-cite key="woo2024iefm"></d-cite> .
+Molecular dynamics (MD) simulations can sample the conformational dynamics of molecular systems, but are constrained by sampling inefficiencies and the need for prohibitively long timescales. Addressing these limitations is essential to designing drugs that effectively modulate a protein's function. Luckily, for physical systems such as molecules we have access to more information than just data to train generative models:
 
-A key consideration to take into account with generative models is to check if they outperform traditional methods for sampling from unnormalized density (energy) functions like MCMC. In this work, we compare IDEM and IEFM to MCMC on the same physical systems they were tested on and show that MCMC outperforms both methods while taking the same number of queries from the energy function. With this result, we suggest a “course correction” on the benchmarking of these models and propose different avenues where the development of these generative models would be useful.
+{% twitter https://x.com/adrian_roitberg/status/1793676191620018398 %}
+
+Yes that’s right, we know that for physical systems (molecules), the distribution of states (conformers) are characterized by their energy according the boltzmann distribution $$p(x) \propto exp(-\beta (E(x)))$$, where E(x) is the energy of the state and $$\beta$$ is a constant dependant on temperature. This motivates a paradigm of training generative models that can take advantage of the energy function. 
+
+Recently, a surge of deep learning generative models has aimed to address the challenges of sampling and data scarcity by adopting innovative, data-free approaches <d-cite key="midgley2023fab"></d-cite><d-cite key="vargas2023dds"></d-cite><d-cite key="zhang2022pis"></d-cite><d-cite key="sadegh2024idem"></d-cite><d-cite key="woo2024iefm"></d-cite>. These methods, which one may describe as 'self-generative,' leverage a bootstrap procedure whereby the models generate their own data and rely on access to the energy function to refine their predictions. This paradigm is particularly exciting because it bypasses the traditional reliance on large datasets, making it a promising solution to long-standing barriers in the field. For this assessment, we focus on two such methods: iterative energy-based flow matching (iEFM)<d-cite key="woo2024iefm"></d-cite> and iterative denoising energy matching (iDEM)  <d-cite key="sadegh2024idem"></d-cite> that have shown state of the art performance on several toy physical systems.
+
+A key consideration to take into account with generative models is to check if they outperform traditional methods for sampling from unnormalized density (energy) functions like Markov Chain Monte Carlo (MCMC). In this work, we compare IDEM and iEFM to MCMC on the same physical systems they were tested on and show that MCMC outperforms both methods while taking the same number of queries from the energy function. With this result, we suggest a “course correction” on the benchmarking of these models and propose different avenues where the development of these generative models would be useful.
 
 ## Same Goals, Different Paths: Comparing iEFM and iDEM
 
-<div class="row mt-3">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/dem2_cut-1.png" class="img-fluid" %}
-    </div>
-</div>
+iEFM and iDEM are quite similar in their implementation. Both approximate a target vector field via self-normalized importance weights calculated by Monte Carlo estimation. In the case of iEFM, the target vector is a weighted average of the analytical vector field derived from Flow Matching theory. Whereas in iDEM, the target score field is computed as a weighted average of the gradients of the energy function. Note in the following equations that the equilibrium samples $x_T$ are denoted $x_1$ (T=1) for iEFM and $x_0$ (T=0) for iDEM:
 
-iEFM and iDEM are quite similar in their implementation. Both approximate a target vector field via self-normalized importance weights calculated by Monte Carlo estimation. In the case of iEFM, the target vector is a weighted average of the analytical vector field derived from the Flow Matching theory. Whereas in iDEM, the target score field is computed as a weighted average of the gradients of the energy function.
 
 
 $$\begin{aligned}
@@ -88,29 +86,26 @@ u_t(x) &= \frac{\int u_t(x|x_1)p_t(x|x_1)p_1(x_1)dx_1}{\int p_t(x|x_1)p(x_1)dx_1
 &= \frac{\mathbb{E}_{x_0|t \sim \mathcal{N}(x_t, \sigma_t^2)}[\nabla \exp(-\mathcal{E}(x_0|t))]}{\mathbb{E}_{x_0|t \sim \mathcal{N}(x_t, \sigma_t^2)}[\exp(-\mathcal{E}(x_0|t))]}
 \end{aligned}$$
 
-In an iterative process, both methods begin by initializing the replay buffer with samples $$x\_T$$ drawn from an isotropic Gaussian distribution. Subsequently, intermediate samples $x\_t$ are generated by sampling from the conditional distribution $$P\_t(x\_t \\mid x\_T)$$, defined according to the specific theoretical framework of each method. The target vector field is then estimated using Monte Carlo estimation, where Boltzmann-weighted averaging is performed over samples $$x\_{T \\mid t}$$, effectively obtained by introducing additional noise to $$x\_t$$. By regressing onto these estimated targets in an inner loop and periodically generating new samples to replenish the buffer in an outer loop, these methods iteratively bootstrap toward sampling the full equilibrium distribution dictated by the energy function.
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/dem2_cut-1.png" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+   Figure 2. iDEM training paradigm, in the outer loop the model is used to generate samples to store in the buffer and in the inner loops, samples are obtained from the buffer, noised and trained on.
+</div>
+
+In an iterative process (figure from iDEM above), both methods begin by initializing a replay buffer with samples $x_T$ drawn from an isotropic Gaussian distribution. Subsequently, intermediate samples $x_t$ are generated by sampling from the conditional distribution $P_t(x_t \mid x_T)$, defined according to the specific theoretical framework of each method. The target vector field is then estimated using Monte Carlo estimation, where Boltzmann-weighted averaging is performed over samples $x_{T \mid t}$, effectively obtained by introducing additional noise to $x_t$. By regressing onto these estimated targets in an inner loop and periodically generating new samples to replenish the buffer in an outer loop, these methods iteratively bootstrap toward sampling the full equilibrium distribution dictated by the energy function.
 
 Developers of both methods, as well as others, have gravitated toward a standard set of toy systems for evaluation and benchmarking. While these systems are useful for early-stage development and illustrative purposes, we caution against over-reliance on them for robust benchmarking. As we will demonstrate, many related works employ MCMC samples of the equilibrium distribution but fail to use MCMC as a meaningful benchmark. In fact, MCMC often produces superior samples with faster runtimes on these systems compared to the proposed methods. Additionally, we show that the metrics commonly used for evaluation are poorly aligned with actual sample quality, further undermining their utility in assessing these methods.
 
-MCMC and Sequential monte carlo (1-2 paragraphs and algorithm block)
+## MCMC and Sequential monte carlo 
 
-To generate samples for the test systems with MCMC, we follow a 2 step procedure. First we generate samples from a simple prior and try to quickly “equilibriate” them to the distribution of the desired density function through a short sequential monte carlo (SMC) run, which is then followed on by regular MCMC for the remaining number of queries from the energy function.
+To generate samples for the test systems with MCMC, we follow a 2 step procedure. First we generate samples from a simple prior and try to quickly “equilibrate” them to the distribution of the desired density function through a short Sequential Monte Carlo (SMC) run, which is then followed on by regular MCMC for the remaining number of queries from the energy function.
 
-MCMC steps are implemented as simple metropolis monte carlo steps with a symmetric gaussian proposal. The step sizes for the MCMC chains are decided by trying to maximize the value $\alpha*s$, where $\alpha$ is the acceptance rate and $s$ is the standard deviation of the gaussian proposal function.
+MCMC steps are implemented as simple Metropolis Monte Carlo steps with a symmetric Gaussian proposal. The step sizes for the MCMC chains are decided by trying to maximize the value $\alpha*s$, where $\alpha$ is the acceptance rate and $s$ is the standard deviation of the gaussian proposal function.
 
-SMC is implemented by creating intermediates between the prior ($p_o$) and desired density function ($$p_T$$) so that samples go through a short MCMC chain ($M$ steps) before they are reweighted and resampled to represent the distribution of the next density function. The intermediates are created through a simple linear interpolation between the unnormalized density functions. The detailed algorithm for the same is shown in the algorithm block below.
-
-
-
-<!-- **_Algorithm 1_**: SMC Sampler for Reequilibration
-SMC-PROPOSAL $(P_0, P_1,P_i, P_T), \text{MC steps}: \text{number of chains N}$
-1. Sample $\{x_0^{(i)}\}^N_{i=1} \sim P_0$
-2. For $t = 1, \ldots, T$ do:
-   - Compute importance weights $\{{w_t^{(i)}}\}^N_{i=1}$ as: $ \{\frac{P_t(x_{t-1})}{P_{t-1}(x_{t})}\}_{i=t}^N $
-   - Sample $\{{x_t^{(i)}}\}^N_{i=1}$ with replacement from $\{{x_{t-1}}^{(i)}\}^N_{i=1}$ with weights $\{{w_t^{(i)}}\}^N_{i=1}$
-   - For $m = 1, \ldots, M$ do:
-     > Parallel MCMC step with density $P_T$ to get new $\{{x_t^{(i)}}\}^N_{i=1}$
-     > Return $\{x_1^{(i)}\}^N_{i=1}$ -->
+SMC generates samples from a target density $p_T$​ by creating a sequence of intermediate distributions that transition smoothly from the prior $p_0$​ to $p_T$​. At each step, samples are updated using a short MCMC chain (M steps), reweighted to match the next intermediate density, and resampled to maintain particle diversity. The intermediates are typically constructed through linear interpolation between the unnormalized log-density functions of $p_0$ and $p_T$, enabling a gradual and efficient transformation of the samples toward the target distribution. The detailed algorithm for the same is shown in the algorithm block below.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -119,6 +114,8 @@ SMC-PROPOSAL $(P_0, P_1,P_i, P_T), \text{MC steps}: \text{number of chains N}$
 </div>
 
 ## Benchmark systems
+
+Original work on iDEM was evaluated on a series of four increasingly complex benchmark systems. The simplest is a 2D Gaussian Mixture Model (GMM) comprising 40 equally-weighted Gaussians with identical covariance matrices and means uniformly distributed across a [-40, 40] box, serving as a basic test for mode coverage and sampling quality. The Double Well 4-particle system (DW-4) introduces greater complexity by modeling four particles in 2D space interacting through a pairwise double well energy function (figure below left). This system comes with symmetry properties, incorporating rotation, translation, and particle permutation invariance.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -129,36 +126,47 @@ SMC-PROPOSAL $(P_0, P_1,P_i, P_T), \text{MC steps}: \text{number of chains N}$
     </div>
 </div>
 <div class="caption">
-    Caption.
+     Figure 3. Inter particle double-well potential (left) and Lennard-Jones potential (right)
 </div>
 
-Original work on iDEM introduced a series of four increasingly complex benchmark systems. The simplest is a 2D Gaussian Mixture Model (GMM) comprising 40 equally-weighted Gaussians with identical covariance matrices and means uniformly distributed across a \[-40, 40\] box, serving as a basic test for mode coverage and sampling quality. The Double Well 4-particle system (DW-4) introduces greater complexity by modeling four particles in 2D space interacting through a pairwise energy function with SE(3) × S4 symmetry properties, incorporating rotation, translation, and particle permutation invariance.
-
-The most challenging benchmarks are two Lennard-Jones (LJ) systems that model interatomic interactions through a combination of attractive and repulsive potentials, supplemented by a harmonic oscillator term that tethers particles to their center of mass. The LJ-13 system models 13 particles in 3D space (39 dimensions), while the LJ-55 system handles 55 particles (165 dimensions), both using standardized parameters rm \= 1, τ \= 1, ϵ \= 1, and oscillator scale c \= 0.5. These systems are particularly demanding due to their high dimensionality and the explosive nature of their score function as interatomic distances approach zero.
+The most challenging benchmarks are two Lennard-Jones (LJ) systems that model interatomic interactions through a combination of attractive and repulsive potentials, supplemented by a harmonic oscillator term that tethers particles to their center of mass. The Lennard-Jones potential between two particles is shown in the figure above on the right. The LJ-13 system models 13 particles in 3D space (39 degrees of freedom), while the LJ-55 system handles 55 particles (165 degrees of freedom). These systems are particularly demanding due to their high dimensionality and the explosive nature of their energy function as interatomic distances approach zero.
 
 Ground truth data for each system was generated using the following procedures:
 
 * (GMM) The test set consists of 1000 samples generated directly from the known mixture distribution using TORCH.RANDOM.SEED(0). Since this is a well-defined mixture of Gaussians, true samples can be generated exactly without approximation.  
-* (DW4) The ground truth data comes from MCMC samples provided by Klein et al. (2023b). The paper explicitly notes that while this might not be perfect ground truth, it's considered reasonable for evaluation purposes. They specifically mention avoiding using an older dataset from Garcia Satorras et al. (2021) because it was biased, being generated from a single MCMC chain.  
-* (LJ) Like DW-4, these systems use MCMC samples from Klein et al. (2023b) as ground truth. The paper again notes they deliberately avoided using earlier datasets from Garcia Satorras et al. (2021) because these were biased, being generated from single MCMC chains and using only half of the energy function (ELJ/2, as the sum was only calculated for i \< j).
+* (DW4) The ground truth data comes from MCMC samples provided by Klein et al. (2023) <d-cite key="klein2023equivariantflowmatching"></d-cite>. The paper explicitly notes that while this might not be perfect ground truth, it's considered reasonable for evaluation purposes. They specifically mention avoiding using an older dataset from Garcia Satorras et al. (2021) <d-cite key="satorras2022enequivariantgraphneural"></d-cite> because it was biased, being generated from a single MCMC chain.  
+* (LJ) Like DW-4, these systems use MCMC samples from Klein et al. (2023) as ground truth. The paper again notes they deliberately avoided using earlier datasets from Garcia Satorras et al. (2021) because these were biased, being generated from single MCMC chains and using only half of the energy function (ELJ/2, as the sum was only calculated for i \< j).
 
 A key point to note is that for the physical systems (DW-4, LJ-13, LJ-55), the ground truth data relies on MCMC sampling since exact sampling is intractable. Only the GMM system has true exact samples since its distribution is explicitly defined.
 
 ## Experiment Details
 
-5 models each of IDEM were trained for all the 4 systems: GMM, DW4, LJ13, and LJ55. The IDEM models were trained using the default configs provided on their github repository: [https://github.com/jarridrb/DEM](https://github.com/jarridrb/DEM). We only made one change so that our evaluations were consistent across the board. We ensured the evaluation batch size is equal to a 1000 for all the systems. 
+IDEM was trained separately for all the 4 systems with 5 different seeds: GMM, DW4, LJ13, and LJ55. The IDEM models were trained using the default configs provided on their github repository: https://github.com/jarridrb/DEM. We only made one change so that our evaluations were consistent across the board. We ensured the evaluation batch size is equal to a 1000 for all the systems. 
 
-iEFM was reimplemented to align as closely as possible with the algorithm described in the original manuscript. However, the absence of detailed experimental procedures and a publicly available codebase rendered a completely faithful reproduction unattainable. For instance, only the Optimal Transport (OT) variant of iEFM is evaluated here, as we were unable to successfully train the Variance Exploding iEFM. OT-iEFM employs a different noise schedule for the conditional path probabilities compared to iDEM. Specifically, $$P_t(x_t \\mid x\_1)$$ uses a linear schedule $$\sigma(t) = \sqrt{1 - (1 - \sigma_{\min})*t}$$, while $$q(x_1; x_t)$$ employs $$\frac{\sigma(t)}{t}$$, where $$\frac{1}{t}$$ is clamped to avoid division by zero. A max value of 80.0 and 1.3 were used for the GMM and DW4 systems, respectively. By virtue of the optimal transport formulation, OT-iEFM produces straight path trajectories at test time, requiring significantly fewer integration steps than iDEM—30 steps compared to 1000\. Apart from these differences, the following hyperparameters were left unchanged to ensure consistency with iDEM: num\_estimator\_mc\_samples, num\_samples\_to\_generate\_per\_epoch, eval\_batch\_size, optimizer/lr. We also note that the original authors of iEFM did not report any results on the Lennard-Jones systems. In our experiments, we found that OT-iEFM was unable to train successfully on this system.
+iEFM was reimplemented to align as closely as possible with the algorithm described in the original manuscript. However, the absence of detailed experimental procedures and a publicly available codebase rendered a completely faithful reproduction unattainable. For instance, only the Optimal Transport (OT) variant of iEFM is evaluated here, as we were unable to successfully train Variance Exploding iEFM. OT-iEFM employs a different noise schedule for the conditional path probabilities compared to iDEM. Specifically, $P_t(x_t \mid x_1)$ uses a linear schedule $\sigma(t) = \sqrt{1 - (1 - \sigma_{\min})*t}$, while $q(x_1; x_t)$ employs $\ frac{\sigma(t)}{t}$, where $\frac{1}{t}$ is clamped to avoid division by zero. For the variance clamping, a max value of 80.0 and 1.3 was used for the GMM and DW4 systems, respectively. By virtue of the optimal transport formulation, OT-iEFM produces straight path trajectories at test time, requiring significantly fewer integration steps than iDEM—30 steps compared to 1000. Apart from these differences, the following hyperparameters were left unchanged to ensure consistency with iDEM: num_estimator_mc_samples, num_samples_to_generate_per_epoch, eval_batch_size, optimizer/lr. We also note that the original authors of iEFM did not report any results on the Lennard-Jones systems. In our experiments, we found that OT-iEFM was unable to train successfully on these systems.
 
-To run MCMC chains Klein et. al. identified the best value of the MCMC step size for the DW4 and LJ13 systems as 0.5 and 0.025. We found the best value for LJ55 to be 0.0075 and GMMs to be 1.25. Therefore, these are the step sizes we used to run MCMC chains on these four systems. To ensure that our MCMC chains had exactly the same number of energy evaluations as IDEM and IEFM, we ran batch\_size\*num\_mc\_estimates chains in parallel, where num\_mc\_estimates is the number of MC estimates the methods used per sample. We then ensured that the number of MC steps we took are equal to inner\_loop\_iterations\*epochs, where inner\_loop\_iterations is the number of iterations of training the models went through before testing. This resulted in 512,000 parallel chains for GMM, DW4 and LJ13 and 12,800 parallel chains for LJ55. We ran 5 sets of such parallel chains for each system. 
+To run MCMC chains Klein et. al. (2023b) identified the best value of the MCMC step size for the DW4 and LJ13 systems as 0.5 and 0.025. We found the best value for LJ55 to be 0.0075 and GMMs to be 1.25. Therefore, these are the step sizes we used to run MCMC chains on these four systems. To ensure that our MCMC chains had exactly the same number of energy evaluations as IDEM and IEFM, we ran batch_size*num_mc_estimates chains in parallel, where num_mc_estimates is the number of MC estimates the methods used per sample. We then ensured that the number of MC steps we took are equal to inner_loop_iterations*epochs, where inner_loop_iterations is the number of iterations of training the models went through before testing. This resulted in 512,000 parallel chains for GMM, DW4 and LJ13 and 12,800 parallel chains for LJ55. We ran 5 sets of such parallel chains for each system. 
 
-The initial samples for the chains on the DW4 and GMM systems were sampled from a uniform prior, and the initial samples for the LJ systems were sampled from an isotropic gaussian, SMC involved creating 5 intermediate distributions for the DW4 and LJ13 and running the intermediate chains for 1000 steps each. LJ55 required 10 intermediate distributions with 2000 MC steps per distribution. GMMs required no intermediate distributions and no intermediate MCMC steps, just random sampling from a uniform prior and reweighting samples based on boltzmann weights ($w(x) = \exp(-E(x))$) did the trick.
+The initial samples for the chains on the DW4 and GMM systems were sampled from a uniform prior, and the initial samples for the LJ systems were sampled from an isotropic gaussian, SMC involved creating 5 intermediate distributions for the DW4 and LJ13 and running the intermediate chains for 1000 steps each. LJ55 required 10 intermediate distributions with 2000 MC steps per distribution. GMMs required no intermediate distributions and no intermediate MCMC steps, just random sampling from a uniform prior and reweighting samples based on Boltzmann weights ($w(x) = \exp(-E(x))$) did the trick.
 
 ## Evaluation Method 
 
-We evaluate all the methods in two ways: we track the value of metrics as a function of queries from the energy function and time, and also report the metrics on samples generated at the end of training/MCMC runs. All the metrics are computed on batches of 1000 samples. For all our metrics we ensure that the number of queries from the energy function for the MCMC runs exactly match that used by IDEM/IEFM. To compute the results from the samples generated at the end of the runs, we take 5 batches of 1000 samples from 5 independent runs, resulting in mean and std values for the metrics obtained from 25 batches in total. To obtain the compute time of the runs, we take the time required for 1 iteration of training/MCMC sampling and multiply that by the total number of training/MCMC steps. This way we avoid the extra compute time involved in validation steps.
+We evaluate all the methods in two ways: we track the value of metrics as a function of queries from the energy function and time, and also report the metrics on samples generated at the end of training/MCMC runs. All the metrics are computed on batches of 1000 samples. For all our metrics we ensure that the number of queries from the energy function for the MCMC runs exactly match that used by IDEM/IEFM. To compute the results from the samples generated at the end of the runs, we take 5 batches of 1000 samples from 5 independent runs, resulting in mean and std values for the metrics obtained from 25 batches in total. To obtain the compute time of the runs, we take the time required for 1 iteration of training/MCMC sampling and multiply that by the total number of training/MCMC steps. All the experiments were done on NVIDIA L40 GPUs.
 
-We evaluate all the methods on 3 metrics: W2 distance, energy W2 distance and interatomic distance W2 distance. The W2 distance metric is the standard Wasserstein-2 distance using euclidean distance from sample position and used for all the systems. We compute the energy W2 and interatomic distance W2 for the other systems as the samples themselves are not visualizable and so we need further ways to obtain information of the distribution of samples. The energy W2 distance computes how similar the distributions of energy of the test samples and generated samples are. This provides a notion of how well the sampler is able to capture the ensemble observations of the equilibrium distribution. Finally, the interatomic W2 distance is a projection of the position of samples along 1 dimension and therefore should match very well if the generated samples are close to the distribution of the test set.
+We evaluate all methods based on their ability to approximate the target distribution and key observables, such as energy and interatomic distance. Consistent with the approaches outlined in the iDEM and iEFM papers, we quantify the overlap between the model's distribution and the target distribution using the Wasserstein-2 distance.
+
+The Wasserstein-2 (W2) metric measures the distance between two probability distributions by quantifying the cost of optimally transporting one distribution to the other. Lower values of the W2 metric indicating closer alignment and higher values signaling greater divergence. It reflects both the positional differences and probability mass, making it a useful tool for assessing how well a model captures the target distribution.
+
+It is calculated as the square root of the smallest possible average squared distance needed to transform one distribution into the other, while ensuring their overall structures remain consistent. Mathematically, the Wasserstein-2 (W2) metric measures the distance between two distributions $P$ and $Q$, with densities $p(x)$ and $q(x)$, as:
+
+$\[
+W_2(P, Q) = \left( \inf_{\pi \in \Pi(P, Q)} \int \|x - y\|^2 d\pi(x, y) \right)^{1/2},
+\]$
+
+where $\Pi(P, Q)$ represents the set of all possible joint distributions (or "transport plans") that have $P$ and $Q$ as their marginal distributions. A transport plan, $\pi(x, y)$, describes how the probability mass from $P$ is moved to match $Q$, while maintaining the overall structure of both distributions. In practice, the W2 metric is calculated by approximating the distributions as empirical histograms and solving a numerical optimization problem to find the transport plan that minimizes the total squared transportation cost.
+
+For higher-dimensional systems, where the W2 metric becomes less intuitive to interpret, we focus on specific observables such as the energy and interatomic distance to provide more interpretable comparisons. The energy W2 distance computes how similar the distributions of energy of the test samples and generated samples are. This provides a notion of how well the sampler is able to capture the ensemble observations of the equilibrium distribution. Finally, the interatomic W2 distance is a projection of the position of samples along 1 dimension and therefore should match very well if the generated samples are close to the distribution of the test set.
+
 
 ## Random sampling and reweighting is sufficient for GMMs
 
@@ -171,23 +179,24 @@ We evaluate all the methods on 3 metrics: W2 distance, energy W2 distance and in
     </div>
 </div>
 <div class="caption">
-    Caption.
+    Figure 4. W2 score vs epoch and time in seconds for the methods on the GMM system.
 </div>
 
+For the GMM system we initialize our MC chains using a uniform distribution with limits of [-45,45]. Since we are generating 512,000 samples on this 2D surface, we find that it's sufficient to simply reweight the samples generated from the uniform prior according to their Boltzmann weights. We still continue to run MCMC chains after that for demonstration purposes. The figures above show that W2 scores of the runs as a function of number of training epochs and time. We define an “epoch” of a MCMC chain as the number of energy evaluations that are used to train an epoch of IDEM/IEFM. 
 
-
-
-
-For the GMM system we initialize our MC chains using a uniform distribution with limits of \[-45,45\]. Since we are generating 512,000 samples on this 2D surface, we find that it's sufficient to just reweight the samples generated from the uniform prior according to their boltzmann weights. We still continue to run MCMC chains after that for demonstration purposes. The figures above show that W2 scores of the runs as a function of number of training epochs and time. We define an “epoch” of a MCMC chain as the number of energy evaluations that are used to train an epoch of IDEM/IEFM.
+<div class="caption">
+    Table 1. Performance of all methods on the GMM system
+</div>
 
 | Method | W2 score |
 | :---- | :---- |
-| Ground truth  | 4.159 \+- 0.604 |
-| IDEM | 7.698 \+- 1.442 |
-| IEFM | 7.364 \+- 0.955 |
-| MCMC | 4.219 \+- 0.569 |
+| Ground truth  | 4.159 ± 0.604 |
+| IDEM | 7.698 ± 1.442 |
+| IEFM | 7.364 ± 0.955 |
+| MCMC | 4.219 ± 0.569 |
 
-The table above contains the mean and std deviation of the W2 metrics vs the test set with 25 batches of 1000 samples obtained from different methods. The “Ground Truth” are samples generated directly from the GMM, thereby showing what the ideal values of the W2 score is. We see that only the MCMC method is able to get a W2 score similar to that of the ground truth. We also see that samples generated from the MCMC chains also more closely represent the ground truth in the figure below. 
+The table above contains the mean and std deviation of the W2 metrics vs the test set with 25 batches of 1000 samples obtained from different methods. Note that the W2 values for IEFM are higher than what is reported in the original paper. This discrepancy may arise from using a larger number of batches to evaluate the models, as well as potential imperfections in our implementation of IEFM. “Ground Truth” are samples generated directly from the GMM, thereby showing what the ideal values of the W2 score is. We see that only the MCMC method is able to get a W2 score similar to that of the ground truth. We also see that samples generated from the MCMC chains also more closely represent the ground truth in the figure below.
+
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -206,15 +215,20 @@ The table above contains the mean and std deviation of the W2 metrics vs the tes
     </div>
 </div>
 <div class="caption">
-    Caption.
+    Figure 5. Example generated samples by all the methods on the GMM system.
 </div>
 
 The fact that this system is just in 2 dimensions makes sampling from the distribution very easy, Random sampling from a uniform prior and reweighting does the job, so it should not be considered a valid benchmark system for deep learning models for future works: 
 
+{% twitter https://x.com/FrankNoeBerlin/status/1829602620006416722%}
+
 ## Establishing new baselines for DW4, LJ13 and LJ55 with very long simulations
 
-For the DW4, LJ13 and LJ55 systems we don't have direct access to samples from the equilibrium distribution. Therefore, to create a strong “ground truth” baseline, we decided to run very long simulations on all of these systems and save the final state from all the simulations. For DW4 and LJ13, we ran 50,000 chains in parallel for a million steps, while for LJ55 we ran 12,800 chains for 2.5 million steps. We assume that the combined end states of all these chains represent a distribution very close to the equilibrium distribution and can also be used as a new test set to benchmark on. The W2 and energy W2 scores of the chains with respect to the reference test set, used by IDEM and IEFM, as a function of the number of MC steps are shown in the figures below. The convergence of all the runs on these metrics provides for further evidence that the samples are close to the equilibrium distributions.
+For the DW4, LJ13 and LJ55 systems we don't have direct access to samples from the equilibrium distribution. Therefore, to create a strong “ground truth” baseline, we decided to run very long simulations on all of these systems and save the final state from all the simulations. For DW4 and LJ13, we ran 50,000 chains in parallel for a million steps, while for LJ55 we ran 12,800 chains for 2.5 million steps. This is much larger in contrast to the current test sets used by generative methods where the reference MC chain is run for about 200,000 steps. We assume that the combined end states of all these chains represent a distribution very close to the equilibrium distribution and can also be used as a new test set to benchmark on. The W2 and energy W2 scores of the chains with respect to the reference test set (Klein et. al) used by IDEM and IEFM as a function of the number of MC steps are shown in the figures below. The convergence of all the runs on these metrics provides further evidence that the samples are close to the equilibrium distributions.
 
+<div class="caption">
+    DW4
+</div>
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/mcmc_dw4_w2-1.png" class="img-fluid" %}
@@ -223,10 +237,10 @@ For the DW4, LJ13 and LJ55 systems we don't have direct access to samples from t
         {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/mcmc_dw4_energyw2-1.png" class="img-fluid" %}
     </div>
 </div>
-<div class="caption">
-    DW4
-</div>
 
+<div class="caption">
+    LJ13
+</div>
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/mcmc_lj13_w2-1.png" class="img-fluid" %}
@@ -235,10 +249,10 @@ For the DW4, LJ13 and LJ55 systems we don't have direct access to samples from t
         {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/mcmc_lj13_energyw2-1.png" class="img-fluid" %}
     </div>
 </div>
-<div class="caption">
-    LJ13
-</div>
 
+<div class="caption">
+    LJ55
+</div>
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/mcmc_lj55_w2-1.png" class="img-fluid" %}
@@ -248,22 +262,10 @@ For the DW4, LJ13 and LJ55 systems we don't have direct access to samples from t
     </div>
 </div>
 <div class="caption">
-    LJ55
+    Figure 6. Metrics of all the long MCMC simulation as a function energy evaluations (MC steps)
 </div>
 
-
-
-
-
 ## 4-particle Double-Well Potential
-
-Examining the top two plots (Image 1), we observe W2 scores tracked over both epochs and wall-clock time. The MCMC method (blue line) stabilizes quickly around a W2 score of 2.1, exhibiting minimal variance, which reflects its robust and consistent sampling performance. In contrast, iDEM (orange line) displays more erratic behavior, with sharp dips and recoveries, though its average performance is similar to MCMC. Meanwhile, iEFM (green line) remains consistently above both methods with higher variance, indicating a lower and less reliable sampling quality. Notably, when plotted against wall-clock time, MCMC’s efficiency stands out, as it reaches and sustains optimal performance much faster than the neural methods.
-
-The energy W2 distance plots (Images 2-3) further underscore the stark differences between the methods. MCMC rapidly converges to a low log energy W2 distance of approximately \-2 and maintains this stability throughout. iDEM, however, takes significantly longer to converge and settles at a higher value of around 0, highlighting its less accurate energy sampling. iEFM performs the worst, with log energy W2 distances hovering near 6, demonstrating fundamental challenges in capturing the system's energy landscape. The time-based comparison again highlights MCMC’s efficiency, achieving superior energy sampling far more quickly than its neural counterparts.
-
-The quantitative results (Image 4\) and distribution plots (Image 5\) provide the most comprehensive insight into performance. Across all metrics, MCMC consistently achieves the best scores when compared to both old and new reference data. The distribution plots reveal key details: while iDEM captures the general shape of the interatomic distance distribution relatively well, iEFM exhibits clear deviations in peak heights and locations. The energy distribution plot paints an even clearer picture—MCMC aligns closely with the reference distribution, whereas iEFM shows substantial discrepancies, particularly in the higher energy regions.
-
-These findings suggest that while neural methods like iDEM and iEFM represent innovative steps forward in molecular sampling, they remain outperformed by the reliability and efficiency of well-tuned MCMC methods. The data strongly indicate that the added complexity of neural approaches does not yet translate into practical advantages over traditional methods, particularly for these benchmark systems.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -274,8 +276,10 @@ These findings suggest that while neural methods like iDEM and iEFM represent in
     </div>
 </div>
 <div class="caption">
-    DW4 W2 Score
+    Figure 7. W2 score vs epoch and time in seconds for the methods on the DW4 system.
 </div>
+
+Examining the two plots (Figure 7), we observe W2 scores tracked over both epochs and wall-clock time. The MCMC method (blue line) stabilizes quickly around a W2 score of 2.1, exhibiting minimal variance, which reflects its robust and consistent sampling performance. In contrast, iDEM (orange line) displays more erratic behavior, with sharp dips and recoveries, though its average performance is similar to MCMC. Meanwhile, iEFM (green line) remains consistently above both methods with higher variance, indicating a lower and less reliable sampling quality. Notably, when plotted against wall-clock time, MCMC’s efficiency stands out, as it reaches and sustains optimal performance much faster than the neural methods.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -286,39 +290,24 @@ These findings suggest that while neural methods like iDEM and iEFM represent in
     </div>
 </div>
 <div class="caption">
-    Dw4 Energy W2 Distance
+    Figure 8. Log of Energy W2 vs epoch and time in seconds for the methods on the DW4 system.
 </div>
 
-|  | Old Reference (klein et. al) |  |  | New Reference (Long MCMC) |  |  |
+The energy W2 distance plots (Images 2-3) further underscore the stark differences between the methods. MCMC rapidly converges to a low energy W2 distance and maintains this stability throughout. iDEM, however, takes significantly longer to converge and settles at a higher value of around 0, highlighting its less accurate energy sampling. iEFM performs the worst, with log energy W2 distances hovering near 6, demonstrating fundamental challenges in capturing the system's energy landscape. The time-based comparison again highlights MCMC’s efficiency, achieving superior energy sampling far more quickly than its neural counterparts.
+
+<div class="caption">
+    Table 2. Performance of all methods on the DW4 system
+</div>
+
+|  |  |Old Reference (klein et. al)  |  |  |New Reference (Long MCMC)  |  |
 | :---- | :---- | :---- | :---- | :---- | :---- | :---- |
 | Method | W2 | Energy W2 | Interatomic distance w2 | W2 | Energy W2 | Interatomic distance w2 |
-| Long MCMC | 2.080 \+- 0.030 | 0.157 \+- 0.045 | 0.073 \+- 0.012 | 1.883 \+- 0.023 | 0.144 \+- 0.044 | 0.017 \+- 0.007 |
-| IDEM | 2.054 \+- 0.027 | 0.435+- 0.153 | 0.139 \+- 0.017 | 1.912+-0.021 | 0.590+- 0.165 | 0.207+-0.014 |
-| IEFM | 2.115+- 0.035 | 3.852+-0.959 | 0.214+-0.014 | 1.928+- 0.029 | 3.879+- 0.909 | 0.145+-0.011 |
-| MCMC | 2.068 \+- 0.028 | 0.148 \+- 0.048 | 0.067 \+- 0.012 | 1.873 \+- 0.032 | 0.132 \+- 0.030 | 0.022 \+- 0.012 |
+| Long MCMC | 2.080 ± 0.030 | 0.157 ± 0.045 | 0.073 ± 0.012 | 1.883 ± 0.023 | 0.144 ± 0.044 | 0.017 ± 0.007 |
+| IDEM | 2.054 ± 0.027 | 0.435 ± 0.153 | 0.139 ± 0.017 | 1.912 ± 0.021 | 0.590 ± 0.165 | 0.207 ± 0.014 |
+| IEFM | 2.115 ± 0.035 | 3.852 ± 0.959 | 0.214 ± 0.014 | 1.928 ± 0.029 | 3.879 ± 0.909 | 0.145 ± 0.011 |
+| MCMC | 2.068 ± 0.028 | 0.148 ± 0.048 | 0.067 ± 0.012 | 1.873 ± 0.032 | 0.132 ± 0.030 | 0.022 ± 0.012 |
 
-<div class="row mt-3">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/dw4_lineplots_epoch-1.png" class="img-fluid" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/dw4_lineplots_time-1.png" class="img-fluid" %}
-    </div>
-</div>
-<div class="caption">
-    DW4 W2 Score
-</div>
-<div class="row mt-3">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/dw4_lineplots_epoch-1.png" class="img-fluid" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/dw4_lineplots_time-1.png" class="img-fluid" %}
-    </div>
-</div>
-<div class="caption">
-    DW4 W2 Score
-</div>
+The quantitative results (Image 4) and distribution plots (Image 5) provide the most comprehensive insight into performance. Across all metrics, MCMC consistently achieves the best scores when compared to both old and new reference data. The distribution plots reveal key details: while iDEM captures the general shape of the interatomic distance distribution relatively well it still mismatches the peak height on the right. iEFM exhibits even more clear deviations in peak heights and locations. The energy distribution plot paints an even clearer picture—MCMC aligns closely with the reference distribution, whereas iEFM shows substantial discrepancies, particularly in the higher energy regions.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -326,7 +315,7 @@ These findings suggest that while neural methods like iDEM and iEFM represent in
     </div>
 </div>
 <div class="caption">
-    DW4 Interatomic Distance Distribution 
+    Figure 9. Distribution of interatomic distance obtained from all the methods on the DW4 system.
 </div>
 
 <div class="row mt-3">
@@ -335,18 +324,12 @@ These findings suggest that while neural methods like iDEM and iEFM represent in
     </div>
 </div>
 <div class="caption">
-    DW4 Enegy Distribution 
+    Figure 10. Distribution of energies obtained from all the methods on the DW4 system. 
 </div>
 
-
+These findings suggest that while neural methods like iDEM and iEFM represent innovative steps forward in molecular sampling, they remain outperformed by the reliability and efficiency of well-tuned MCMC methods. The data strongly indicate that the added complexity of neural approaches does not yet translate into practical advantages over traditional methods, particularly for these benchmark systems.
 
 ## 13-Particle Lennard Jones System
-
-On the LJ13 system we observe that the MCMC runs actually get a higher W2 score than the IDEM runs. However, we posit that for higher dimensional systems, W2 between positions of data samples is not a good measure for the distance between two distributions. This is further evidenced by the stark difference in energy W2 where the MCMC chains do much better than IDEM. 
-
-In Table 3, we also compare both the methods to the very long MCMC chain that has been run for a million steps. Working under the assumption that the long MCMC chain is close to convergence, we can consider the metric values generated by it as the best attainable values on this system. Therefore, we can consider the best methods to be the ones that have the closest metric values to that provided by the long MC chain. From the table, it is visible that the MCMC method does best in this regard. Furthermore, MCMC has much better energy and interatomic distance w2 scores than IDEM on both reference sets indicating a better predictability of ensemble observations.
-
-Finally, in the histogram plots, it's clear that the IDEM energy plot is right shifted as compared to both the reference sets that have good agreement among themselves. Considering all the metrics and distributions, we conclude that MCMC outperforms IDEM on this system.  
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -357,7 +340,7 @@ Finally, in the histogram plots, it's clear that the IDEM energy plot is right s
     </div>
 </div>
 <div class="caption">
-    LJ13 W2 Score
+    Figure 11. W2 score vs epoch and time in seconds for the methods on the LJ13 system.
 </div>
 
 <div class="row mt-3">
@@ -369,17 +352,23 @@ Finally, in the histogram plots, it's clear that the IDEM energy plot is right s
     </div>
 </div>
 <div class="caption">
-    LJ13 Energy W2 Distance
+    Figure 12. Log of Energy W2 vs epoch and time in seconds for the methods on the LJ13 system.
 </div>
 
+On the LJ13 system we observe that the MCMC runs actually get a higher W2 score than the IDEM runs (Figure 11). However, we posit that for higher dimensional systems, W2 between positions of data samples is not a good measure for the distance between two distributions. This is because even the long MCMC chains, having run for a million steps, do not attain a better W2 score than IDEM. In fact, from Figure 6, we can see that the W2 score for the long MC chain stabilizes and converges at a value of 4.31. Furthermore, both the short and the long MCMC chains have a much lower energy W2 value when compared to the reference test (klein et. al) than iDEM, which indicates that they are better predictors of ensemble properties despite having a higher W2 score.
 
-|  | Old Reference (klein et. al) |  |  | New Reference (Long MCMC) |  |  |
+<div class="caption">
+    Table 3. Performance of all methods on the LJ13 system
+</div>
+
+|  |  | Old Reference (klein et. al) |  |  | New Reference (Long MCMC) |  |
 | :---- | :---- | :---- | :---- | :---- | :---- | :---- |
 | Method | W2 | Energy W2 | Interatomic distance w2 | W2 | Energy W2 | Interatomic distance w2 |
-| Long MCMC | 4.312 \+- 0.007 | 0.457+-0.120 | 0.004+-0.002 | 4.298 \+- 0.007 | 0.544 \+- 0.167 | 0.005+- 0.002 |
-| IDEM | 4.266 \+- 0.007 | 5.204 \+- 1.788 | 0.024+-0.002 | 4.253+- 0.005 | 4.73+- 1.928 | 0.028+-0.003 |
-| MCMC | 4.312 \+- 0.005 | 0.516+- 0.119 | 0.003+-0.001 | 4.297 \+- 0.009 | 0.531+- 0.171 | 0.006 \+- 0.002 |
+| Long MCMC | 4.312 ± 0.007 | 0.457 ± 0.120 | 0.004 ± 0.002 | 4.298 ± 0.007 | 0.544 ± 0.167 | 0.005 ± 0.002 |
+| IDEM | 4.266 ± 0.007 | 5.204 ± 1.788 | 0.024 ± 0.002 | 4.253 ± 0.005 | 4.73 ± 1.928 | 0.028 ± 0.003 |
+| MCMC | 4.312 ± 0.005 | 0.516 ± 0.119 | 0.003 ± 0.001 | 4.297 ± 0.009 | 0.531 ± 0.171 | 0.006 ± 0.002 |
 
+In Table 3, we also benchmark both the methods on the test set generated from the long MCMC chain that has been run for a million steps. Working under the assumption that the long MCMC chain is close to convergence, we can consider the metric values generated by it on both test sets as the best attainable values on this system. Therefore, we can consider the best methods to be the ones that have the closest metric values to that provided by the long MC chain. From the table, it is visible that the MCMC method does best in this regard. Furthermore, MCMC has much better energy and interatomic distance W2 scores than iDEM on both reference sets.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -387,7 +376,7 @@ Finally, in the histogram plots, it's clear that the IDEM energy plot is right s
     </div>
 </div>
 <div class="caption">
-    DW4 Interatomic Distance Distribution 
+    Figure 13. Distribution of interatomic distance obtained from all the methods on the LJ13 system.
 </div>
 
 <div class="row mt-3">
@@ -396,34 +385,52 @@ Finally, in the histogram plots, it's clear that the IDEM energy plot is right s
     </div>
 </div>
 <div class="caption">
-    DW4 Enegy Distribution 
+    Figure 14. Distribution of energies obtained from all the methods on the LJ13 system. 
 </div>
 
-## 55-Particle Lennard Jones System
+Finally, in the histogram plots, it's clear that the IDEM energy plot is right shifted as compared to both the reference sets that have good agreement among themselves. Considering all the metrics and distributions, we conclude that MCMC outperforms iDEM on this system. 
 
-At the time of submitting this blog for review we do not have completed IDEM training runs on the LJ55 systems as we did not anticipate it would take 2.5 days on an L40 GPU to train a model on this system. However, we provide the W2 and Energy W2 metric values plotted against a 1000 epochs and time in the figures below. Both the figures indicate similar trends as seen in previous systems with MCMC outperforming IDEM on relevant metrics and being closer to the ground truth distribution. We will add the values obtained at the end of the training runs and histogram plots to the blog once those training runs have completed.  
+## 55-Particle Lennard Jones System
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/lj55_w2_lineplots-1.png" class="img-fluid" %}
     </div>
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/lj55_w2_lineplots_time.png" class="img-fluid" %}
+    </div>
 </div>
 <div class="caption">
-    LJ55 W2 Score
+    Figure 15 W2 score vs epoch and time in seconds for the methods on the LJ55 system.
 </div>
 
-|  | Old Reference (klein et. al) |  |  | New Reference (Long MCMC) |  |  |
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/lj55_energyw2_lineplots_epoch.png" class="img-fluid" %}
+    </div>
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/lj55_energyw2_lineplots_time.png" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure 16. Log of Energy W2 vs epoch and time in seconds for the methods on the LJ55 system.
+</div>
+
+<div class="caption">
+    Table 4. Performance of all methods on the LJ55 system
+</div>
+
+|  |  | Old Reference (klein et. al) |  |  | New Reference (Long MCMC) |  |
 | :---- | :---- | :---- | :---- | :---- | :---- | :---- |
 | Method | W2 | Energy W2 | Interatomic distance w2 | W2 | Energy W2 | Interatomic distance w2 |
-| Long MCMC | 15.923 \+- 0.009 | 0.931 \+- 0.243 | 0.001+- 0.0006 | 15.779 \+- 0.007 | 0.680+-0.211 | 0.001+- 0.0005 |
-| MCMC | 16.48 \+- 0.0497 | 0.872 \+- 0.237 | 0.001 \+- 0.0005 | 16.42 \+- 0.026 | 0.907 \+- 0.391 | 0.002+- 0.0009 |
+| Long MCMC | 15.923 ± 0.009 | 0.931 ± 0.243 | 0.001 ± 0.0006 | 15.779 ± 0.007 | 0.680 ± 0.211 | 0.001 ± 0.0005 |
+| MCMC | 16.48 ± 0.0497 | 0.872 ± 0.237 | 0.001 ± 0.0005 | 16.42 ± 0.026 | 0.907 ± 0.391 | 0.002 ± 0.0009 |
 
+At the time of submitting this blog for review, we have not yet completed iDEM training runs on the LJ55 system due to the unexpectedly long training time—approximately 2.5 days on an L40 GPU for a single model. However, we provide interim results, including W2 and Energy W2 metric values plotted over 1000 epochs and wall-clock time, as shown in the figures below. These figures reveal trends consistent with previous systems, with MCMC outperforming iDEM across relevant metrics and exhibiting closer alignment with the ground truth distribution. Once the training runs are complete, we will update this blog with the final values and histogram plots to provide a comprehensive comparison.
 
 ## Closing thoughts \- the role that these models have to play
 
-Our analysis offers a sobering assessment of the current state of neural network-based samplers for molecular systems. Despite the growing interest in methods like iDEM and iEFM, our results show that these approaches fail to outperform well-tuned MCMC methods in terms of both sampling quality and computational efficiency. This finding is particularly significant because, for neural samplers to justify their additional complexity and computational overhead, they must demonstrate clear and consistent advantages over traditional methods—a benchmark that these approaches have yet to meet.
+Our analysis offers a sobering assessment of the current state of neural network-based samplers for molecular systems. Despite the growing interest in methods like iDEM and iEFM, our results show that these approaches fail to outperform well-tuned MCMC methods in terms of both sampling quality and computational efficiency. This finding is particularly significant because, for neural samplers to justify their additional complexity and computational overhead, they must demonstrate clear and consistent advantages over traditional methods—a standard that these approaches have yet to meet.
+However, this critique should not be viewed as a wholesale rejection of neural approaches in molecular sampling. Rather, it suggests a needed shift in research focus. One promising direction lies in leveraging neural networks' capacity for transfer learning. While MCMC kernels are often system-specific, requiring careful tuning for each new molecular system, neural networks could potentially learn generalizable sampling strategies that transfer across different molecular systems. This transferability could provide a compelling advantage over traditional MCMC methods, even if the absolute sampling efficiency for any single system remains lower. This has already been demonstrated in works such as TimeWarp<d-cite key="klein2023timewarp"></d-cite>and Transferable Boltzmann Generators <d-cite key="klein2024tbg"></d-cite>. 
 
-However, this critique should not be viewed as a wholesale rejection of neural approaches in molecular sampling. Rather, it suggests a needed shift in research focus. One promising direction lies in leveraging neural networks' capacity for transfer learning. While MCMC kernels are often system-specific, requiring careful tuning for each new molecular system, neural networks could potentially learn generalizable sampling strategies that transfer across different molecular systems. This transferability could provide a compelling advantage over traditional MCMC methods, even if the absolute sampling efficiency for any single system remains lower.
-
-A critical limitation of current neural approaches like IEFM and IDEM lies in their reliance on weighted averages of noisy samples. This becomes particularly problematic when dealing with real molecular systems, where energy landscapes can be extremely steep and sampling noise can lead to explosive gradients. Future work might address this by reconsidering how noise is incorporated into these models \- for instance, by defining noise on a Riemannian manifold that respects the geometric constraints of molecular systems. Such modifications could help stabilize training and improve sampling efficiency while maintaining the potential benefits of neural approaches.
-
+A critical limitation of current neural approaches like iEFM and iDEM lies in their reliance on weighted averages of noisy samples. This becomes particularly problematic when dealing with real molecular systems, where energy landscapes can be extremely steep and sampling noise can lead to explosive gradients. Future work might address this by reconsidering how noise is incorporated into these models - for instance, by defining noise on a Riemannian manifold that respects the geometric constraints of molecular systems <d-cite key="jing2023torsdiff"></d-cite>. Such modifications could help stabilize training and improve sampling efficiency while maintaining the potential benefits of neural approaches.
