@@ -356,8 +356,8 @@ def forward(x_1, x_2):
   outputs_inter = self.inter_model(torch.cat([x_1, x_2], dim=-1))
   ## Product of experts (additive ensemble in the log-probability space)
   output_num = torch.log_softmax(outputs_modality_1, dim=-1) +  \
-                     torch.log_softmax(outputs_modality_2, dim=-1) + \
-                     torch.log_softmax(outputs_inter, dim=-1)
+               torch.log_softmax(outputs_modality_2, dim=-1) + \
+               torch.log_softmax(outputs_inter, dim=-1)
   ## Normalizing the output
   output_den = torch.logsumexp(output_num, dim=-1)
   outputs = output_num - output_den.unsqueeze(1)
