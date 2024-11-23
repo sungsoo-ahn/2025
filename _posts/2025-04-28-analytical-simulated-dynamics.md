@@ -329,7 +329,8 @@ generalization error and order parameters:
 $$ \begin{align}
 I_{2}(a, b) & = \left< g(\nu_{a}) g(\phi_{b}) \right>, \\ 
 I_{3}(a, b, c) & = \left< g'(\nu_{a}) \phi_{b} g(\psi_{c}) \right>, \\ 
-I_{4}(a, b, c, d) & = \left< g'(\nu_{a}) g'(\phi_{b}) g(\psi_{c}) g(\gamma_{d}) \right>.
+I_{4}(a, b, c, d) & = \left< g'(\nu_{a}) g'(\phi_{b}) g(\psi_{c}) g(\gamma_{d}) \right> \\
+J_{2}(a, b) & = \left< g'(\nu_{a}) g'(\phi_{b}) \right>.
 \end{align} $$
 
 These expectations can be solved in closed form as a function of the covariance between each of the variables $\nu_
@@ -365,26 +366,32 @@ def get_I2(c12, c11, c22):
 ```
 and the generalization error being
 ```python
-def order_parameter_loss(Q, R, T, teacher_W2, student_W2, sigma):
+def order_parameter_loss(Q, R, T, sigma):
+    # Student overlaps
     I2_1 = get_I2(Q, Q, Q)
-    first_term_matrix = jnp.dot(student_W2.T, student_W2) * I2_1
-    first_term = jnp.sum(first_term_matrix)
+    first_term = jnp.sum(I2_1)
 
+    # Student teacher overlaps
     I2_2 = get_I2(R, Q, T)
-    second_term_matrix = jnp.dot(student_W2.T, teacher_W2) * I2_2
-    second_term = jnp.sum(second_term_matrix)
+    second_term = jnp.sum(I2_2)
 
+    # Teacher overlaps
     I2_3 = get_I2(T, T, T)
-    third_term_matrix = jnp.dot(teacher_W2.T, teacher_W2) * I2_3
-    third_term = jnp.sum(third_term_matrix)
+    third_term = jnp.sum(I2_3)
+    
     return first_term/2 - second_term + third_term/2 + sigma**2/2
 ```
-$I_{3}$ and $I_{4}$ follow a similar structure, with the covariance structure defined by the order parameters 
+$I_{3}$, $I_{4}$ and $J_{2}$ follow a similar structure, with the covariance structure defined by the order parameters 
 between the arguments of the expectation. These integrals appear in the order parameters dynamical equation by 
 expanding the error signal $\Delta_{s}^{u}$, giving
 
 $$ \begin{align}
-
+\frac{dR_{in}}{dt} & = \eta_{W} \left[ \sum_{m=1}^{M} I_{3}(i,n,m) - \sum_{j=1}^{K} I_{3}(i, n, j) \right] \\
+\frac{dQ_{ik}}{dt} & = \eta_{W} \left[ \sum_{m=1}^{M} I_{3}(i,k,m) - \sum_{j=1}^{K} I_{3}(i, k, j) \right] \\
+& + \eta_{W} \left[ \sum_{m=1}^{M} I_{3}(k, i, m) - \sum_{j=1}^{K} I_{3}(k, i, j) \right] \\
+& + \eta_{W}^{2} \left[ \sum_{m, n}^{M} I_{4}(i, k, n, m) - 2 \sum_{j, n} I_{4}(i, k, j, n) + \sum_{j, l} I_{4}(i, k,
+j, l) + \sigma^{2} J_{2}(i, j) 
+\right]. 
 \end{align} $$
  
 
