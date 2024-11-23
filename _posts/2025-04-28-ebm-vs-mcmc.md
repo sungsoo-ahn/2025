@@ -62,7 +62,7 @@ Molecular dynamics (MD) simulations can sample the conformational dynamics of mo
 
 {% twitter https://x.com/adrian_roitberg/status/1793676191620018398 %}
 
-Yes that’s right, we know that for physical systems (molecules), the distribution of states (conformers) are characterized by their energy according the boltzmann distribution $$p(x) \propto exp(-\beta (E(x)))$$, where E(x) is the energy of the state and $$\beta$$ is a constant dependant on temperature. This motivates a paradigm of training generative models that can take advantage of the energy function. 
+Yes that’s right, we know that for physical systems (molecules), the distribution of states (conformers) are characterized by their energy according the boltzmann distribution $$p(x) \propto exp(-\beta (E(x)))$$, where $$E(x)$$ is the energy of the state and $$\beta$$ is a constant dependant on temperature. This motivates a paradigm of training generative models that can take advantage of the energy function. 
 
 Recently, a surge of deep learning generative models has aimed to address the challenges of sampling and data scarcity by adopting innovative, data-free approaches <d-cite key="midgley2023fab"></d-cite><d-cite key="vargas2023dds"></d-cite><d-cite key="zhang2022pis"></d-cite><d-cite key="sadegh2024idem"></d-cite><d-cite key="woo2024iefm"></d-cite>. These methods, which one may describe as 'self-generative,' leverage a bootstrap procedure whereby the models generate their own data and rely on access to the energy function to refine their predictions. This paradigm is particularly exciting because it bypasses the traditional reliance on large datasets, making it a promising solution to long-standing barriers in the field. For this assessment, we focus on two such methods: iterative energy-based flow matching (iEFM)<d-cite key="woo2024iefm"></d-cite> and iterative denoising energy matching (iDEM)  <d-cite key="sadegh2024idem"></d-cite> that have shown state of the art performance on several toy physical systems.
 
@@ -99,7 +99,7 @@ In an iterative process (figure from iDEM above), both methods begin by initiali
 
 Developers of both methods, as well as others, have gravitated toward a standard set of toy systems for evaluation and benchmarking. While these systems are useful for early-stage development and illustrative purposes, we caution against over-reliance on them for robust benchmarking. As we will demonstrate, many related works employ MCMC samples of the equilibrium distribution but fail to use MCMC as a meaningful benchmark. In fact, MCMC often produces superior samples with faster runtimes on these systems compared to the proposed methods. Additionally, we show that the metrics commonly used for evaluation are poorly aligned with actual sample quality, further undermining their utility in assessing these methods.
 
-## MCMC and Sequential monte carlo 
+## MCMC and Sequential Monte Carlo 
 
 To generate samples for the test systems with MCMC, we follow a 2 step procedure. First we generate samples from a simple prior and try to quickly “equilibrate” them to the distribution of the desired density function through a short Sequential Monte Carlo (SMC) run, which is then followed on by regular MCMC for the remaining number of queries from the energy function.
 
@@ -293,7 +293,7 @@ Examining the two plots (Figure 7), we observe W2 scores tracked over both epoch
     Figure 8. Log of Energy W2 vs epoch and time in seconds for the methods on the DW4 system.
 </div>
 
-The energy W2 distance plots (Images 2-3) further underscore the stark differences between the methods. MCMC rapidly converges to a low energy W2 distance and maintains this stability throughout. iDEM, however, takes significantly longer to converge and settles at a higher value of around 0, highlighting its less accurate energy sampling. iEFM performs the worst, with log energy W2 distances hovering near 6, demonstrating fundamental challenges in capturing the system's energy landscape. The time-based comparison again highlights MCMC’s efficiency, achieving superior energy sampling far more quickly than its neural counterparts.
+The energy W2 distance plots (Figure 8) further underscore the stark differences between the methods. MCMC rapidly converges to a low energy W2 distance and maintains this stability throughout. iDEM, however, takes significantly longer to converge and settles at a higher value of around 0, highlighting its less accurate energy sampling. iEFM performs the worst, with log energy W2 distances hovering near 6, demonstrating fundamental challenges in capturing the system's energy landscape. The time-based comparison again highlights MCMC’s efficiency, achieving superior energy sampling far more quickly than its neural counterparts.
 
 <div class="caption">
     Table 2. Performance of all methods on the DW4 system
@@ -307,7 +307,7 @@ The energy W2 distance plots (Images 2-3) further underscore the stark differenc
 | IEFM | 2.115 ± 0.035 | 3.852 ± 0.959 | 0.214 ± 0.014 | 1.928 ± 0.029 | 3.879 ± 0.909 | 0.145 ± 0.011 |
 | MCMC | 2.068 ± 0.028 | 0.148 ± 0.048 | 0.067 ± 0.012 | 1.873 ± 0.032 | 0.132 ± 0.030 | 0.022 ± 0.012 |
 
-The quantitative results (Image 4) and distribution plots (Image 5) provide the most comprehensive insight into performance. Across all metrics, MCMC consistently achieves the best scores when compared to both old and new reference data. The distribution plots reveal key details: while iDEM captures the general shape of the interatomic distance distribution relatively well it still mismatches the peak height on the right. iEFM exhibits even more clear deviations in peak heights and locations. The energy distribution plot paints an even clearer picture—MCMC aligns closely with the reference distribution, whereas iEFM shows substantial discrepancies, particularly in the higher energy regions.
+The quantitative results (Table 2) and distribution plots (Figure 9, 10) provide the most comprehensive insight into performance. Across all metrics, MCMC consistently achieves the best scores when compared to both old and new reference data. The distribution plots reveal key details: while iDEM captures the general shape of the interatomic distance distribution relatively well it still mismatches the peak height on the right. iEFM exhibits even more clear deviations in peak heights and locations. The energy distribution plot paints an even clearer picture—MCMC aligns closely with the reference distribution, whereas iEFM shows substantial discrepancies, particularly in the higher energy regions.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
