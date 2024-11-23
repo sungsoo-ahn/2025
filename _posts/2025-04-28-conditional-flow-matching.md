@@ -124,7 +124,8 @@ _styles: >
   }
   .is-right {
     position: relative;
-    left: calc(100% + var(--w) * 1px + 40px);
+    left: calc(var(--w) * 1px - -100% - -40px);
+    /* lol :sadface: https://github.com/digitalsparky/jekyll-minifier/issues/54 */
   }
 
   iframe {
@@ -500,8 +501,8 @@ $$
 \end{equation}
 $$
 
-Under technical conditions and up to divergence-free vector fields, for a given $$p_t$$ (resp. $$u$$) there exists a $$u$$ (resp. $$p_t$$) such that the pair $$(p_t, u)$$ solves the continuity equation<d-footnote><span markdown="1">If $$(p_t)_t$$ is absolutely continuous and $$∣\partial_t p_t∣ \in L^1([0,1])∣$$ then there exists a vector field $$u$$ of finite length such that $$(p_t, v_t)$$ (see <d-cite key="ambrosio2008gradient"/> Theorem 8.3.1).
-For a field $$u_t$$ regular enough such that the initial value problem has a unique solution on $$[0,1]$$, given $$p_0$$, then $$(p_t :=f^u(t,⋅)\#p_0, u_t)$$ is a solution to the continuity equation (see <d-cite key="ambrosio2008gradient"/> Lemma 8.1.6). Note however that the correspondance between $$p_t$$ and $$u_t$$ is unique only up to divergence free fields.
+Under technical conditions and up to divergence-free vector fields, for a given $$p_t$$ (resp. $$u$$) there exists a $$u$$ (resp. $$p_t$$) such that the pair $$(p_t, u)$$ solves the continuity equation<d-footnote><span markdown="1">If $$(p_t)_t$$ is absolutely continuous and $$∣\partial_t p_t∣ \in L^1([0,1])∣$$ then there exists a vector field $$u_t$$ of finite length such that $$(p_t, u)$$ satisfies the continuity equation (see <d-cite key="ambrosio2008gradient"/> Theorem 8.3.1).
+For a field $$u$$ regular enough such that the initial value problem has a unique solution on $$[0,1]$$, given $$p_0$$, then $$(p_t :=f^u(t,⋅)\#p_0, u)$$ is a solution to the continuity equation (see <d-cite key="ambrosio2008gradient"/> Lemma 8.1.6). Note however that the correspondance between $$p_t$$ and $$u$$ is unique only up to divergence free fields.
 </span></d-footnote>.
 
 <figure >
@@ -519,12 +520,17 @@ Sampling is then achieved by solving the initial value problem \eqref{eq:initial
 
 
 
-<figure class="sidebar" style="--w: 300; --h: 420;" >
+<figure class="sidebar" style="--w: 200; --h: 420;" >
   <video style="width: 100%; height: auto; object-fit: cover; border: none;"
          autoplay loop muted onclick="this.controls = true"
          src="{{ 'assets/img/2025-04-28-conditional-flow-matching/traj.mp4' | relative_url }}">
   </video>
+  <!-- <figcaption class="caption">
+     <d-cite key="grathwohl2018ffjord">
+  </figcaption> -->
 </figure>
+
+
 
 
 CNFs are a particular case of Neural ODE networks<d-footnote><span markdown="1">Neural ODE functions are also defined as the solution of an initial value problem like \eqref{eq:initial_value_pb}, but the framework is more general: the loss $$\mathcal{L}$$ used for training is arbitrary, and, in order to train $$u_\theta$$, the authors provide a way to compute $$\nabla_\theta \mathcal{L}$$ by solving an augmented, reversed ODE</span></d-footnote>, with additional tricks to compute the likelihood in order to train them: if $$x(t)$$ is the solution of the ODE \eqref{eq:initial_value_pb} with $$u = u_\theta$$ ,
@@ -1070,14 +1076,14 @@ Finally, computing the CFM loss  requires the values of the conditional velocity
   <tr>
     <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;"><strong>2. Define a simple conditional distribution \(p(x \mid t,z)\)</strong></td>
     <td style="padding: 10px; border-bottom: 1px solid #ddd; background-color: #d8e2dc; text-align: center;">\(\mathcal{N}((1-t) \cdot x_0 + t \cdot x_1, \sigma^2 \cdot \mathrm{Id})\)</td>
-    <td style="padding: 10px; border-bottom: 1px solid #ddd; background-color: #f0e1f5; text-align: center;">\(\mathcal{N}(t \cdot z, (1-t)^2 \cdot \mathrm{Id}) \)</td>
+    <td style="padding: 10px; border-bottom: 1px solid #ddd; background-color: #f0e1f5; text-align: center;">\(\mathcal{N}(t \cdot x_1, (1-t)^2 \cdot \mathrm{Id}) \)</td>
   </tr>
 
   <!-- Row 4 -->
   <tr>
     <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;"><strong>3. Compute an associated velocity field \(\ucond\)</strong></td>
     <td style="padding: 10px; border-bottom: 1px solid #ddd; background-color: #d8e2dc; text-align: center;">\(x_1 - x_0\)</td>
-    <td style="padding: 10px; border-bottom: 1px solid #ddd; background-color: #f0e1f5; text-align: center;">\(\frac{x-z}{1-t}\)</td>
+    <td style="padding: 10px; border-bottom: 1px solid #ddd; background-color: #f0e1f5; text-align: center;">\(\frac{x-x_1}{1-t}\)</td>
   </tr>
 
   <!-- Row 5 (Merged Columns) -->
@@ -1180,7 +1186,7 @@ This is  the approach originally proposed by <d-cite key="liu2023flow"/>.
 </figure>
 
 Another strategy is to directly start from a different coupling than the independent one.
-Consider the coupling $$\pi^* \in \Pi(p_0, p_\mathrm{target})$$ given by Optimal Transport <d-footnote> $$\pi^* = \arg \min_{\pi \in \Pi(p_0, p_\mathrm{target})} \int_{x_0} \int_{x_1}||x_0 -x_1||^2 \pi(x_0, x_1) $$ </d-footnote>, then one property of OT is that the lines between $$x_0$$ and $$x_1$$ **cannot cross**.
+Consider the coupling $$\pi^* \in \Pi(p_0, p_\mathrm{target})$$ given by Optimal Transport <d-footnote> $$\pi^* = \mathrm{argmin}_{\pi \in \Pi(p_0, p_\mathrm{target})} \int_{x_0, x_1} ||x_0 -x_1||^2 \pi(x_0, x_1) dx_0 dx_1$$ </d-footnote>, then one property of OT is that the lines between $$x_0$$ and $$x_1$$ **cannot cross**.
 
 In practice, the optimal transport is costly to compute for big datasets (and possible mainly with discrete distributions) so minibatch optimal transport is used instead.
 As shown in <span class="ref-lastfig">Figure </span>, using minibatches of 10 points for each distribution, trajectories are still crossing but much less often.
@@ -1196,7 +1202,7 @@ This approach can be formalized by setting the conditioning $$z$$ as a minibatch
       background: none;  /* No background */
   ">
     <video style="
-        width: 500px;  /* Adjust this value for smaller video size */
+        width: 100%;  /* Adjust this value for smaller video size */
         background: none;  /* Transparent background */
     "
     autoplay loop muted onclick="this.controls = true"
@@ -1312,30 +1318,30 @@ According to the Proposition 1 in <d-cite key="zhang2024flow"/>, the optimal vel
 $$
 \begin{align*}
     v_\theta(x(t), 1-t) &= \mathbb{E}[\dot{a}_{1-t} x_1 + \dot{b}_{1-t} x_0 | x(t)] \nonumber \\
-    % &= \left( \dot{a}_t - \dot{b}_t \frac{a_t}{b_t}\right) \left[\frac{1}{a_t} (x(t) + b_t^2 \nabla \log p_t(x(t)))  \right] + \frac{\dot{b}_t}{b_t} x(t) \nonumber \\
     &= \frac{\dot{a}_{1-t}}{a_{1-t}} \left[x(t) + b_{1-t}^2 \nabla \log p_t(x(t))\right] - \dot{b}_{1-t}  b_{1-t} \nabla \log p_t(x(t)).
-\end{align*}$$
+\end{align*}
+$$
 
   We have that
 
-  $$\begin{align}
+  $$\begin{align*}
       \dot{a}_{1-t} &= \frac{1}{2} \beta_t e^{-\frac{1}{2} \int_{0}^{t} \beta(s) ds} \\
       \dot{b}_{1-t} &= - \frac{1}{2} \beta_t \frac{e^{-\int_{0}^{t} \beta(s) ds}}{\sqrt{1 - e^{-\int_{0}^{t} \beta(s) ds}}} .
-  \end{align}$$
+  \end{align*}$$
 
   Therefore,
 
-  $$\begin{align}
+  $$\begin{align*}
       \frac{\dot{a}_{1-t}}{a_{1-t}} &= \frac{1}{2} \beta_t \\
       \dot{b}_{1-t} b_{1-t} &= - \frac{1}{2} \beta_t e^{-\int_{0}^{t} \beta(s) ds}
-  \end{align}$$
+  \end{align*}$$
 
   Then
 
-  $$\begin{align}
+  $$\begin{align*}
         v_\theta(x(t), 1-t) &= \frac{1}{2} \beta_t \left[x(t) + \left(1 - e^{-\int_{0}^{t} \beta(s) ds}\right) \nabla \log p_t(x(t))\right] + \frac{1}{2} \beta_t e^{-\int_{0}^{t} \beta(s) ds} \nabla \log p_t(x(t)) \nonumber \\
             &= \frac{1}{2} \beta_t x(t) +\frac{1}{2} \beta_t \nabla \log p_t(x(t)).
-  \end{align}$$
+  \end{align*}$$
 
   Thus, going back to the definitions of $$h$$ and $$g$$, we have
 
