@@ -1,6 +1,6 @@
 ---
 layout: distill
-title: Test-Time Training for Long Contexts
+title: LIFT: Improving Long Context Understanding Through Long Input Fine-Tuning
 description: Long context understanding remains challenging for large language models due to their limited context windows. This blog introduces Long Input Fine-Tuning (LIFT) for Long Contexts, a novel framework that enhances LLM performance on long-context tasks by adapting model parameters to the context at test time. LIFT enables efficient processing of lengthy inputs without the computational burden of offline fine-tuning. The framework is further enhanced by integrating in-context learning and pre-LIFT supervised fine-tuning. Experimental results highlight consistent improvements across popular benchmarks, demonstrating LIFT's effectiveness in boosting model performance and memory efficiency. This blog also provides a comprehensive analysis of the strengths and limitations of LIFT on long context understanding, offering valuable directions for future research.
 date: 2025-04-28
 future: true
