@@ -163,7 +163,7 @@ $$
 $$
 
 where:
-- $$\epsilon_{\theta}(x | c)$$: Noise estimator conditioned on concept $$c$$.
+- $$\epsilon_{\theta}$$: Noise estimator.
 - $$c$$: Harmful concept (e.g., nudity).
 - $$c'$$: A different, unrelated concept.
 - $$\ell_{\text{MSE}}$$: Mean squared error loss for image reconstruction.
