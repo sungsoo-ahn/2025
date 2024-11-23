@@ -2,7 +2,17 @@
 layout: distill
 title: A primer on the analytical learning dynamics of nonlinear neural networks
 description:
-    The learning dynamics of neural networks—in particular, how parameters change over time during training—describe how data, architecture, and algorithm interact in time to produce a trained neural network model. Characterizing these dynamics in general remains an open problem in machine learning, but, handily, restricting the setting allows careful empirical studies and even analytical results. In this blog post, we review approaches to analyzing the learning dynamics of nonlinear neural networks, focusing on a particular setting that permits an explicit analytical expression for the generalization error of a nonlinear neural network trained with online gradient descent. We provide an accessible mathematical formulation of this analysis and a `JAX` codebase to implement simulation of the analytical system of ordinary differential equations alongside neural network training in this setting. We conclude with a discussion of how this analytical paradigm has been used to investigate generalization in neural networks and beyond.
+    The learning dynamics of neural networks—in particular, how parameters change over time during training—describe 
+ how data, architecture, and algorithm interact in time to produce a trained neural network model. Characterizing 
+ these dynamics in general remains an open problem in machine learning, but, handily, restricting the setting allows 
+ careful empirical studies and even analytical results. In this blog post, we review approaches to analyzing the 
+ learning dynamics of nonlinear neural networks, focusing on a particular setting known as *Teacher-Student setup*, 
+ where a teacher neural network is used to generate the data to train a student network, and that permits an 
+ explicit  analytical expression for the generalization error of a nonlinear neural network trained with online  
+ gradient descent. We provide an accessible mathematical formulation of this analysis and a "JAX" codebase to  
+ implement simulation of the analytical system of ordinary differential equations alongside neural network training  
+ in this setting. We conclude with a discussion of how this analytical paradigm has been used to investigate 
+ generalization  in neural networks and beyond.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -88,7 +98,8 @@ These analyses can be performed under various neural network parameter regimes, 
 The teacher-student framework, introduced by Gardner <d-cite key="gardner1989three"></d-cite>, provides perhaps the simplest setting for studying neural network learning with statistical physics techniques.
 In this paradigm, a student network learns to mimic a fixed teacher network that generates labels for training data drawn from a given input  distribution.
 Classical analytical results were achieved by Saad & Solla <d-cite key="saad1995online"></d-cite> and Riegler and Biehl <d-cite key="riegler1995online"></d-cite> in the 1990s, who derived exact equations for the generalization dynamics this teacher-student setup with a particular scaling.
-These analyses requires specific assumptions about the data distribution—in particular, that it is Gaussian—and the results require the input dimension to be large to enable solvability.
+These analyses requires specific assumptions about the data distribution—in particular, that the network inputs are 
+Gaussian—and the results require the input dimension to be large to enable solvability.
 Despite these constraints, this framework allow granular study of various learning regimes, including overparameterization and a feature-learning phenomena termed *specialization*.
 
 Much recent work builds on these classical analyses to expand the frontier of solvable training regimes, exploring parameter settings beyond those considered by Saad & Solla and Riegler & Biehl <d-cite key="goldt2020dynamics"></d-cite>.
@@ -134,7 +145,8 @@ $$ \begin{equation}
 where $$f( \cdot , W)$$ is the mapping defining the student, and $$W$$ are the parameters of the student. 
 In teacher-student, $$f$$ and $$f^{*}$$ share the same parameterizaton to enable finegrained comparison between the learning of the student and the teacher defining the task.
 Commonly, they are both neural networks and the parameters $$W$$ and $$W^{*}$$ are the weights of the networks.
-In Saad & Solla <d-cite key="saad1995online"></d-cite>, both the teacher and student networks were modeled as a soft-committee machine, which is an average of non-linear perceptrons.
+In Saad & Solla <d-cite key="saad1995online"></d-cite>, both the teacher and student networks were modeled as a 
+soft-committee machine, which is a sum of non-linear perceptrons.
 
 To train the student network, Saad & Solla <d-cite key="saad1995online"></d-cite> 
 consider gradient descent to improve on the mean squared error between teacher and student outputs at iteration $u$:
@@ -149,10 +161,10 @@ teacher network.
 The weights of the student network are updated using gradient descent as
 
 $$ \begin{equation}
-W^{u+1} = W^{u} - \eta_{W} \frac{\partial \mathcal{L}^{u}}{\partial W}~, 
+W^{u+1} = W^{u} - \eta_{w} \frac{\partial \mathcal{L}^{u}}{\partial W}~, 
 \end{equation} $$
 
-where $\eta_{W}$ is the learning rate for parameters $$W$$.
+where $\eta_{w}$ is the learning rate for parameters $$W$$.
 This procedure can be shown to converge to near-zero training error up to the irreducible error due to noise 
 in the limit of infinite data and infinitesmal learning rate 
 if the student is sufficiently parameterized 
@@ -190,7 +202,8 @@ It is possible to solve the system of ordinary differential equations in (5)
 Happily, using a teacher-student setup allows for the derivation of a closed-form expression of the learning dynamics, even for *nonlinear* networks with a hidden layer.
 To achieve this, the above differential equation can be 
 written in terms of specific **order parameters**, which sufficiently describe the state of the learning dynamics at each time step. 
-Order parameters are commonly understood in physics as macroscopic variables that describe the time evolution of a complex system in a way that is convenient for further mathematical analysis.
+Order parameters are commonly understood in physics as macroscopic variables that describe the time evolution of a 
+complex system with many microscopic parts, in a way that is convenient for further mathematical analysis.
 
 In the next sections, 
 we will rederive the dynamical equations for two paradigmatic cases of the teacher-student setting,
@@ -247,7 +260,7 @@ with $$\Delta_{s}^{u} = \sum_{m=1}^{M} g\left( \frac{W^{*}_{m}x_{s}^{u}}{\sqrt{N
 \sum_{k=1}^{K} g\left( \frac{W_{k}x_{s}^{u}}{\sqrt{N}} \right)$$.
 Hence, the gradient descent update equations for the student network are
 
-$$ W_{i}^{u+1} = W_{i}^{u} + \frac{\eta_{W}}{B}\sum_{s=1}^{B} \Delta_{s}^{u}  \cdot  g'\left( \frac{W_{i}x_
+$$ W_{i}^{u+1} = W_{i}^{u} + \frac{\eta_{w}}{B}\sum_{s=1}^{B} \Delta_{s}^{u}  \cdot  g'\left( \frac{W_{i}x_
 {s}^{u}}{\sqrt{N}} \right)  \cdot \frac{x_{s}^{u}}{\sqrt{N}}. $$
 
 From this expression, we could take the gradient flow limit as in (5).
@@ -270,11 +283,11 @@ the order parameters. To do this, we simply multiply the gradient updates equati
 updates and by $$(W_{j}^{u+1})^{T}/N$$ to obtain $Q$ updates. Starting with the $R$ updates, we have
 
 $$ \begin{align}
-\frac{W_{i}^{u+1}(W_{n}^{*})^{T}}{N} & = \frac{W_{i}^{u}(W_{n}^{*})^{T}}{N} + \frac{\eta_{W}}{NB}\sum_{s=
+\frac{W_{i}^{u+1}(W_{n}^{*})^{T}}{N} & = \frac{W_{i}^{u}(W_{n}^{*})^{T}}{N} + \frac{\eta_{w}}{NB}\sum_{s=
 1}^{B} \Delta_{s}^ {u}  \cdot  g'\left( \frac{W_{i}x_{s}^{u}}{\sqrt{N}} \right)  \cdot  
 \frac{x_{s}^{u} (W_{n}^{*})^{T}}{\sqrt{N
 }}, \\
-R_{in}^{u+1} & = R_{in}^{u} + \frac{\eta_{W} dt}{B}\sum_{s=1}^{B} 
+R_{in}^{u+1} & = R_{in}^{u} + \frac{\eta_{w} dt}{B}\sum_{s=1}^{B} 
 \Delta_{s}^
 {u}  \cdot  g'\left( \frac{W_{i}x_{s}^{u}}{\sqrt{N}} \right)  \cdot  \frac{x_{s}^{u} (W_{n}^{*})^{T}}{\sqrt{N}}. 
 \end{align} $$
@@ -283,7 +296,7 @@ From this equation, we defined $dt=1/N$, and by moving $R_{in}^{u}$ to the left 
 t$, and taking the *thermodynamic limit* $N \rightarrow \infty$ corresponding to large input dimension, we obtain the time derivative of $R_{in}$ as
 
 $$ \begin{equation}
-\frac{d R_{in}}{d t} = \eta_{W} \left< \Delta_{s}^{u} g'(\lambda_{i}^{u}) \rho_{n}^{u} \right>
+\frac{d R_{in}}{d t} = \eta_{w} \left< \Delta_{s}^{u} g'(\lambda_{i}^{u}) \rho_{n}^{u} \right>
 \end{equation} $$
 
 where we define the *local fields* 
@@ -298,25 +311,25 @@ The equation for $\frac{dR_{in}}{dt}$ is now in a convenient form, where the loc
 scalar as $x \sim \mathcal{N}(0, I)$, and the expectation because an integral over Gaussian distribution 
 with covariances defined by the order parameters. Before solving this expectation, let's derive the same equation for the 
 order parameters $Q$ (slightly trickier). We go back to the gradient descent update equation for the weights, and 
-multiply by $(W_{j}^{u+1})^{T}/N$ and $(W_{j}^{u})^{T}/N$ giving
+multiply by $(W_{j}^{u+1})^{T}/N$ giving
 
 $$ \begin{align} 
-\frac{W_{i}^{u+1}(W_{j}^{u+1})^{T}}{N} & = \frac{W_{i}^{u}(W_{j}^{u+1})^{T}}{N} + \frac{\eta_{W}}{NB}\sum
+\frac{W_{i}^{u+1}(W_{j}^{u+1})^{T}}{N} & = \frac{W_{i}^{u}(W_{j}^{u+1})^{T}}{N} + \frac{\eta_{w}}{NB}\sum
 _{s=1}^{B} 
 \Delta_{s}^{u}  \cdot  g'\left( \lambda_{i}^
 {u} \right)  \cdot  \frac{x_{s}^{u}}{\sqrt{N}}(W_{j}^{u+1})^{T}, \\
-Q^{u+1}_{ij} & = \frac{W_{i}^{u}}{N}\left( W_{j}^{u} + \frac{\eta_{W}}{B}\sum_{s=1}^{B} \Delta_{s}^{u} \cdot g'\left
+Q^{u+1}_{ij} & = \frac{W_{i}^{u}}{N}\left( W_{j}^{u} + \frac{\eta_{w}}{B}\sum_{s=1}^{B} \Delta_{s}^{u} \cdot g'\left
 ( \frac{W_{j}x_{s}^{u}}{\sqrt{N}} \right)  \cdot  \frac{x_{s}^{u}}{\sqrt{N}} \right)^{T} \\
-& + \frac{\eta_{W}}{NB}\sum_{s=1}^{B} \Delta_{s}^{u}  \cdot  g'\left( \lambda_{i}^ {u} \right)  \cdot  \frac{
+& + \frac{\eta_{w}}{NB}\sum_{s=1}^{B} \Delta_{s}^{u}  \cdot  g'\left( \lambda_{i}^ {u} \right)  \cdot  \frac{
 x_{s}^{u}}
-{\sqrt{N}} \left( W_{j}^{u} + \frac{\eta_{W}}{B}\sum_{s=1}^{B} \Delta_{s}^{u}  \cdot  g'\left
+{\sqrt{N}} \left( W_{j}^{u} + \frac{\eta_{w}}{B}\sum_{s=1}^{B} \Delta_{s}^{u}  \cdot  g'\left
 ( \frac{W_{j}x_{s}^{u}}{\sqrt{N}} \right)  \cdot  \frac{x_{s}^{u}}{\sqrt{N}} \right)^{T}, \\
-Q^{u+1}_{ij} & = Q^{u}_{ij} + \frac{\eta_{W}dt}{B}\sum_{s=1}^{B} \Delta_{s}^{u}  \cdot  g'\left( \lambda_{j
+Q^{u+1}_{ij} & = Q^{u}_{ij} + \frac{\eta_{w}dt}{B}\sum_{s=1}^{B} \Delta_{s}^{u}  \cdot  g'\left( \lambda_{j
 }^ {u} 
-\right) \lambda_{i}^{u} + \frac{\eta_{W}dt}{B}\sum_{s=1}^{B} \Delta_{s}^{u}  \cdot  g'\left( \lambda_{i}^{u
+\right) \lambda_{i}^{u} + \frac{\eta_{w}dt}{B}\sum_{s=1}^{B} \Delta_{s}^{u}  \cdot  g'\left( \lambda_{i}^{u
 } 
 \right) \lambda_{j}^{u} \\
-& + \frac{\eta_{W}^{2}dt}{B^{2}}\sum_{s=1}^{B}\sum_{s'=1}^{B} \Delta_{s}^{u} \Delta_{s'}^{u}g'\left( \lambda_{i}^{u}
+& + \frac{\eta_{w}^{2}dt}{B^{2}}\sum_{s=1}^{B}\sum_{s'=1}^{B} \Delta_{s}^{u} \Delta_{s'}^{u}g'\left( \lambda_{i}^{u}
 \right)g'\left( \lambda_{j}^{u} \right) \frac{x_{s}^{u}(x_{s}^{u})^{T}}{N}.
 \end{align} $$
 
@@ -328,8 +341,8 @@ independent samples, we obtain the time
 derivative of $Q_{ij}$ as
 
 $$ \begin{equation}
-\frac{dQ_{ij}}{dt} = \eta_{W} \left< \Delta_{s}^{u} g'(\lambda_{j}^{u}) \lambda_{i}^{u} \right> + \eta_{W
-} \left<\Delta_{s}^{u} g'(\lambda_{i}^{u}) \lambda_{j}^{u} \right> + \eta_{W}^{2}
+\frac{dQ_{ij}}{dt} = \eta_{w} \left< \Delta_{s}^{u} g'(\lambda_{j}^{u}) \lambda_{i}^{u} \right> + \eta_{W
+} \left<\Delta_{s}^{u} g'(\lambda_{i}^{u}) \lambda_{j}^{u} \right> + \eta_{w}^{2}
 \left< (\Delta_{s}^{u})^{2} g'(\lambda_{i}^{u}) g'(\lambda_{j}^{u}) \right>.
 \end{equation} $$
 
@@ -375,9 +388,10 @@ $$ \begin{align}
 \end{align}. $$
 
 The covariances between the local fields are defined by the order parameters. 
-For instance, the covariance for $$I_{2} (i, n)$$ (student-teacher indexes) is $$C_{12} = R_{i, n}$$, $$C_{11}=\text{diag}(Q)_{i}$$ and $$C_{22}=\text{diag}(T)_{n}$$, 
+For instance, the covariance for $$I_{2} (i, n)$$ (student-teacher indexes) is $$C_{12} = R_{in}$$, $$C_{11}=\text{diag}(Q)_{i}$$ and $$C_{22}=\text{diag}(T)_{n}$$, 
 or the covariance for $$I_{2}(i, j)$$ is $$C_{12}=Q_{ij}$$, $$C_{11}=\text{diag}(Q)_{i}$$ and $$C_{22}=\text{diag}(Q)_{j}$$.
-Hence, we can take advantage of broadcasting to compute all elements of $$I_{2}$$ matrix as a function of the
+In other words, the covariance structure for these expectation is given by the local field covariance, which are the 
+order parameters. Hence, we can take advantage of broadcasting to compute all elements of $$I_{2}$$ matrix as a function of the
 corresponding order parameters matrices:
 ```python
 def get_I2(c12, c11, c22):
@@ -408,14 +422,14 @@ between the arguments of the expectation. These integrals appear in the order pa
 expanding the error signal $\Delta_{s}^{u}$, giving
 
 $$ \begin{align}
-\frac{dR_{in}}{dt} & = \eta_{W} \left[ \sum_{m=1}^{M} I_{3}(i,n,m) - \sum_{j=1}^{K} I_{3}(i, n, j) \right] \\
-\frac{dQ_{ik}}{dt} & = \eta_{W} \left[ \sum_{m=1}^{M} I_{3}(i,k,m) - \sum_{j=1}^{K} I_{3}(i, k, j) \right] \\
-& + \eta_{W} \left[ \sum_{m=1}^{M} I_{3}(k, i, m) - \sum_{j=1}^{K} I_{3}(k, i, j) \right] \\
-& + \eta_{W}^{2} \left[ \sum_{m, n}^{M} I_{4}(i, k, n, m) - 2 \sum_{j, n} I_{4}(i, k, j, n) + \sum_{j, l} I_{4}(i, k,
+\frac{dR_{in}}{dt} & = \eta_{w} \left[ \sum_{m=1}^{M} I_{3}(i,n,m) - \sum_{j=1}^{K} I_{3}(i, n, j) \right] \\
+\frac{dQ_{ik}}{dt} & = \eta_{w} \left[ \sum_{m=1}^{M} I_{3}(i,k,m) - \sum_{j=1}^{K} I_{3}(i, k, j) \right] \\
+& + \eta_{w} \left[ \sum_{m=1}^{M} I_{3}(k, i, m) - \sum_{j=1}^{K} I_{3}(k, i, j) \right] \\
+& + \eta_{w}^{2} \left[ \sum_{m, n}^{M} I_{4}(i, k, n, m) - 2 \sum_{j, n} I_{4}(i, k, j, n) + \sum_{j, l} I_{4}(i, k,
 j, l) + \sigma^{2} J_{2}(i, j) 
 \right]. 
-\end{align} $$
- 
+\end{align}.$$
+
 The close form expression for every integral $I_{3}$, $I_{4}$ and $J_{2}$ can be found in <d-cite key="saad1995online"></d-cite>.
 
 #### Neural networks with a hidden layer
@@ -427,9 +441,29 @@ The expectations and integrals remain the same as in Saad & Solla <d-cite key="s
 except that each update now involves the second layer of both the student and 
 teacher networks.
 
-Another way to understand the connection between both frameworks is by considering, for example, the soft committee 
-machine as a two-layer network, where the second layer is fixed with ones in all its entries. At this point, the 
-reader should be well-equipped to follow the derivation in <d-cite key="goldt2020dynamics"></d-cite> as an extension 
+$$ \begin{align}
+\frac{dR_{\text{in}}}{dt} &= \eta_w v_i \left[ \sum_{m=1}^M v_m^* I_{3}(i,n,m) - \sum_{j=1}^K v_j I_{3}(i,n,j) 
+\right] \\
+\frac{dQ_{ik}}{dt} &= \eta_w v_i \left[ \sum_{m=1}^M v_m^* I_{3}(i,k,m) - \sum_{j=1}^K v_j I_{3}(i,k,j) \right] \\
+&+ \eta_w v_k \left[ \sum_{m=1}^M v_m^* I_{3}(i,k,m) - \sum_{j=1}^K v_j I_{3}(i,k,j) \right] \\
+&+ \eta_w^2 v_i v_k \left[ \sum_{n=1}^M \sum_{m=1}^M v_m^* v_n^* I_{4}(i,k,n,m) - 2 \sum_{j=1}^K \sum_{n=1}^M v_j v_n^* I_{4}(i,k,j,n) \right] \\
+&+ \eta_w^2 v_i v_k \left[ \sum_{j=1}^K \sum_{l=1}^K v_j v_l I_{4}(i,k,j,l) + \sigma^2 J_{2}(i,k) \right] \\
+\frac{dv_i}{dt} &= \eta_w \left[ \sum_{n=1}^M v_n^* I_{2}(i,n) - \sum_{j=1}^K v_j I_{2}(i,j) \right] 
+\end{align}, $$
+
+where we introduce the second layer of the teacher and student as $v^{*}$ and $v$, respectively. The generalization 
+error equation is also modified to include the second layer:
+
+$$ \begin{align}
+\mathcal{E} = \frac{1}{2}\sum_{i,k}v_{i}v_{k}I_{2}(i,k) + \frac{1}{2}\sum_{n,m}v_{n}^{*}v_{m}^{*}I_{2}(n,m) - \sum_{i,
+n}v_{i}v_{n}^{*}I_{2}(i,n)
+\end{align} $$.
+
+The derivation of these equation follow in the same way as the soft-committee machine, the only difference is the 
+inclusion of the second layer. Another way to understand the connection between both frameworks is by considering, for example, the soft committee 
+machine as a two-layer network, where the second layer is fixed with ones in all its entries, i.e. $v^{*}_{n}=1$ and 
+$v_{i}=1$ for all entries of each vector.
+At this point, the reader should be well-equipped to follow the derivation in <d-cite key="goldt2020dynamics"></d-cite> as an extension 
 of the results presented here from <d-cite key="saad1995online"></d-cite>.
 
 ## Replications
