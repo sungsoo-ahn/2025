@@ -159,7 +159,7 @@ From our Motivating Experiments, we observed decreasing entropy and increasing E
 The first method involves suppressing the EOS token during the token generation process to prevent th emodel from ending the sequence prematurely.
 
 **Implementation Details:**
-- Sampling Without Replacement: At each generation step, the model uses a sampling without replacement strategy to [select two candidate tokens](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/sampling.py#L60) from the probability distribution.
+- Sampling Without Replacement: At each generation step, the model uses a sampling without replacement strategy to [select two candidate tokens]((https://github.com/Perpetual-text/icrl25-blog-code/blob/main/sampling.py#L60)) from the probability distribution.
 - EOS Token Exclusion: If one of the sampled tokens is the EOS token, it is discarded in favor of the other token. This ensures that the EOS token is not selected during generation.
 - Continuation of Generation: The model continues to generate tokens without the possibility of selecting the EOS token.
 
