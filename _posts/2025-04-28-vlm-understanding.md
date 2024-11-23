@@ -7,23 +7,23 @@ future: true
 htmlwidgets: true
 hidden: false
 
-# Anonymize when submitting
-# authors:
-#   - name: Anonymous
-
+Anonymize when submitting
 authors:
-  - name: Albert Einstein
-    url: "https://en.wikipedia.org/wiki/Albert_Einstein"
-    affiliations:
-      name: IAS, Princeton
-  - name: Boris Podolsky
-    url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
-    affiliations:
-      name: IAS, Princeton
-  - name: Nathan Rosen
-    url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
-    affiliations:
-      name: IAS, Princeton
+  - name: Anonymous
+
+# authors:
+#   - name: Albert Einstein
+#     url: "https://en.wikipedia.org/wiki/Albert_Einstein"
+#     affiliations:
+#       name: IAS, Princeton
+#   - name: Boris Podolsky
+#     url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
+#     affiliations:
+#       name: IAS, Princeton
+#   - name: Nathan Rosen
+#     url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
+#     affiliations:
+#       name: IAS, Princeton
 
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-vlm-understanding.bib  
@@ -320,7 +320,7 @@ Recent advances in the field have demonstrated that VLMs like CLIP can be levera
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/probing.svg' | relative_url }}" type="image/svg+xml" width="80%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
-Probing
+Neural probing architecture for analyzing internal representations through a simple linear classifier.
 </div>
 
 Probing <d-cite key="alain2016understanding"></d-cite><d-cite key="hewitt-manning-2019-structural"></d-cite> serves as a powerful diagnostic tool - essentially a microscope for peering into the internal workings of neural networks, helping us understand what information these models actually capture in their representations. At its core, the technique involves training simple supervised classifiers (probes) to predict specific linguistic or semantic properties from a model's internal representations. 
@@ -355,7 +355,7 @@ Key Takeaways:
 ### Activation Patching
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/activation.svg' | relative_url }}" type="image/svg+xml" width="100%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
-Activation Patching
+Activation patching experiments comparing model behavior under clean, corrupted, noising, and denoising conditions.
 </div>
 
 Activation patching is a powerful interpretability technique for neural networks. It enables researchers to systematically analyze how different components of a model contribute to its behavior by modifying specific internal activations while keeping others constant. This approach, grounded in the principle of control variates, provides causal insights by attributing changes in outputs to specific components. Its utility lies in identifying the roles of individual layers, attention mechanisms, and activation pathways in producing the model's predictions, which is especially valuable for understanding the inner workings of complex vision-language models (VLMs) and transformers.
@@ -421,7 +421,7 @@ Key Takeaways:
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/logit_lens.svg' | relative_url }}" type="image/svg+xml" width="80%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
-Logit Lens
+Logit lens implementation showing multiple prediction heads tapping into different model layers.
 </div>
 
 The logit lens <d-cite key="alignmentforumorg2024interpreting"></d-cite> serves as a powerful analytical tool for understanding how neural networks progressively refine their predictions across different layers. By examining intermediate activations, this technique reveals the evolution of model predictions throughout the computational process, offering insights into how multimodal models integrate and process information. 
@@ -455,7 +455,7 @@ Key Takeaways:
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/sae.svg' | relative_url }}" type="image/svg+xml" width="80%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
-Sparse Autoencoders
+Integration of Sparse Autoencoder for interpreting and analyzing learned features in transformer models.
 </div>
 
 A significant challenge in understanding neural networks is the superposition phenomenon, where individual neurons or layers simultaneously encode multiple features, making their internal representations difficult to interpret. Traditional methods that attempt to assign concepts to individual neurons often fail because these neurons are frequently polysemantic - encoding multiple meanings simultaneously <d-cite key="elhage2022toy"></d-cite>. In late 2023, Sparse Autoencoders (SAEs) emerged as an effective solution to this problem <d-cite key="bricken2023monosemanticity"></d-cite><d-cite key="DBLP:conf/iclr/HubenCRES24"></d-cite>, offering a novel approach to extract mono-semantic concepts from neural networks.
@@ -500,7 +500,7 @@ Building on this work, Balasubramanian et al. <d-cite key="balasubramanian2024de
 #### Data Distribution-Based Methods
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/automated.svg' | relative_url }}" type="image/svg+xml" width="80%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
-automated.
+Comparison between supervised categorical analysis and unsupervised automated explanation using LLM/VLM.
 </div>
 
 Another effective approach to understanding neural networks' internal mechanisms involves analyzing neuron activation patterns across different input types. This method examines how neurons respond to various categories of data, revealing specialized neurons and their roles in information processing. This approach can be broadly categorized into supervised and unsupervised methods.
