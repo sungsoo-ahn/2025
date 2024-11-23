@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: "Repurposing in AI: A Distinct Approach or an Extension of Creative Problem Solving?"
-description: "Creativity is defined as the ability to produce novel, useful, and surprising ideas. A sub area of creativity is creative problem solving, the capacity of an agent to discover novel and previously unseen ways to accomplish a task, according to its perspective. However, there is a related concept, repurposing, that has often been overlooked in the broader context of creative problem solving in AI. Repurposing involves identifying and utilizing existing objects, resources, or processes in innovative ways to address different problems. While these two concepts may seem distinct at first glance, recent studies in creativity in AI suggest that they may be more closely intertwined than previously thought. By examining the underlying mechanisms and cognitive processes involved in both creative problem solving and repurposing, we can begin to understand how these approaches complement each other."
+description: "Creativity is defined as the ability to produce novel, useful, and surprising ideas. A sub area of creativity is creative problem solving, the capacity of an agent to discover novel and previously unseen ways to accomplish a task, according to its perspective. While creative problem solving has been extensively studied in AI, the related concept of repurposing - identifying and utilizing existing resources in innovative ways to address different problems from their intended purpose - has received less formal attention. This paper presents a theoretical framework that distinguishes repurposing from creative problem solving by formalizing both approaches in terms of conceptual spaces, resource properties, and goal achievement mechanisms. We demonstrate that while creative problem solving involves expanding the conceptual space through transformation functions, repurposing operates within existing conceptual spaces by leveraging shared properties of available resources. This formalization provides new insights into how these two approaches to problem-solving differ in their fundamental mechanisms while potentially complementing each other in practical applications."
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -48,15 +48,15 @@ toc:
 # If you use this post as a template, delete this _styles block.
 
 ---
-In an era of rapid technological advancement and resource constraints, repurposing has emerged as a crucial strategy for sustainable innovation and efficient problem-solving. The ability to adapt existing solutions to new goals promotes efficiency. Repurposing allows us to maximize the utility of our resources, reduce waste, and find novel solutions to complex problems while adapting existing solutions to new challenges. There are several use cases, from transforming industrial waste into valuable products to repurposing drugs for new medical treatments.
+In an era of rapid technological advancement and resource constraints, repurposing emerges as a crucial strategy for sustainable innovation and efficient problem-solving. The ability to adapt existing solutions to new goals promotes efficiency, allows us to maximize the utility of resources, reduce waste, and find novel solutions to complex problems. There are several notable use cases, from transforming industrial waste into valuable products to repurposing drugs for new medical treatments.
 
-This blog post aims at exploring the boundaries of creative problem solving (CPS) and proposes repurposing as a valid solution for those limitations. The section on CPS is based on <d-cite key="nair-etal-2024-creative"></d-cite>. The original paper contains a wider overview of computational creativity and creative problem solving. 
+This blogpost aims at exploring the boundaries of creative problem solving (CPS) and proposes repurposing as a valid solution for those limitations. The section on CPS is based on <d-cite key="nair-etal-2024-creative"></d-cite>. The original paper contains a wider overview of computational creativity and creative problem solving. 
 
 
 
 ## Creative Problem Solving
 
-Creative Problem Solving is defined as the cognitive process of searching and coming up with creative and novel solutions to a given problem <d-cite key="Duncker1945OnP"></d-cite>. This ability has proven to be non-trivial for systems, as it requires creativity, commonsense reasoning, and compositionality <d-cite key="davidson2022creativity"></d-cite>. Additionally, creative problem solving can be achieved through planning, learning, or hybrid methods. 
+Creative Problem Solving is defined as the cognitive process of searching and coming up with creative and novel solutions to a given problem <d-cite key="Duncker1945OnP"></d-cite>. This ability has proven to be non-trivial for systems, as it requires creativity, commonsense reasoning, and compositionality <d-cite key="davidson2022creativity"></d-cite>. In general, creative problem solving can be achieved through planning, learning, or hybrid methods. 
 
 ### Definition of Creative Problem Solving
 
@@ -109,7 +109,7 @@ Let $$P$$ be the set of all properties, and $$p: R → P$$ be a property mapping
 - A property mapping function $$p$$
 to achieve a goal $$G$$.
 
-Unlike creative problem solving, which expands the conceptual space, repurposing focuses on finding new mappings between existing resources and concepts based on their shared properties.
+Unlike creative problem solving, which expands the conceptual space, repurposing focuses on finding new mappings between existing resources based on their shared properties. Resources $$R$$ are essentially instances or concrete realizations of concepts in $$C_X$$.
 
 The success of repurposing depends on three key factors:
 1. The existing conceptual space $$C_X$$
@@ -306,12 +306,10 @@ The MACGYVER dataset, consisting of over 1,600 real-world problems designed to t
 
 Framing these as repurposing problems offers several advantages:
 
-- *Resource Constraints*: Repurposing explicitly considers available resources, which is crucial in the MacGyver-style problems where solutions must be crafted from limited, on-hand materials.
-- *Adaptability Focus*: Our repurposing framework's emphasis on adaptability aligns well with the need to adapt existing objects for new purposes in these challenges.
-- *Practical Feasibility*: The repurposing approach inherently considers the practicality of solutions, addressing the issue of physically-infeasible actions proposed by LLMs in the study.
-- *Structured Approach*: Repurposing provides a more structured framework for tackling these problems, potentially bridging the gap between human intuition and AI's broad knowledge base.
+- *Property-Based Analysis*: Repurposing explicitly considers the properties of available resources, helping identify non-obvious substitutions based on shared properties.
+- *Practical Feasibility*:  By focusing on actual properties of objects, the repurposing approach inherently considers the practicality of solutions, addressing the issue of physically-infeasible actions proposed by LLMs in the study.
 
-By viewing such problems through the repurposing lens, we can potentially develop more effective strategies for both human problem-solvers and AI systems. This approach complements creative problem solving, offering a structured method for innovation within constraints - a common scenario in real-world challenges.
+By viewing such problems through the repurposing lens, we can potentially develop more effective strategies for AI systems. This approach complements creative problem solving, offering a structured method for innovation within constraints - a common scenario in real-world challenges.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -332,7 +330,7 @@ The exploration of repurposing through this mathematical framework has shed ligh
 - *Transformation Emphasis*: While creative problem-solving can start from scratch, repurposing always begins with an existing concept or object, focusing on transformation and recontextualization.
 
 These distinctions suggest that repurposing, while related to creative problem-solving, is a unique process that warrants specific attention and methodologies.
-Regarding the question of whether AI efforts should prioritize creative problem-solving over repurposing, our analysis suggests several compelling reasons to focus on repurposing:
+Regarding the question of whether AI efforts should prioritize creative problem-solving over repurposing, our analysis suggests several compelling reasons to focus also on repurposing:
 
 - **Resource Efficiency**: In a world of limited resources, repurposing offers a more sustainable approach to innovation.
 
