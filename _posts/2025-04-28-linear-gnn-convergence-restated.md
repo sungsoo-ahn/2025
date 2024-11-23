@@ -551,7 +551,7 @@ The paper's claim might be a bit too confident.
 But pointing out these issues doesn't mean we're against using dynamic gradients. 
 Our main point is that **we need to know what's uncertain**.
 
-The limitation of this approach was pointed out by an anonymous reviewer of the paper <d-cite key="Saxe2013"></d-cite>. Check out [OpenReview](https://openreview.net/forum?id=_wzZwKpTDF_9C), where the reviewer stated:
+The limitation of this approach was pointed out by an anonymous reviewer of the early paper <d-cite key="Saxe2013"></d-cite>. Check out [OpenReview](https://openreview.net/forum?id=_wzZwKpTDF_9C), where the reviewer stated:
 > "I appreciate the attempt to make the analysis more rigorous in terms of 'learning speed'.  Although perhaps a better way to work out a realistic lambda would be to bound the error one gets by taking the continuous time approximation of the original difference equations and choose lambda based on when this error can be argued to have a negligible effect ... there is **no guarantee** that this will imply a reasonable correspondence between the discrete and continuous time versions, where mere stability isn't enough."
 >     --Reviewer 733d
 
