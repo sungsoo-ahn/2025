@@ -303,17 +303,19 @@ Through our investigation, we find that interpretability in VLMs is still in its
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/probing.svg' | relative_url }}" type="image/svg+xml" width="80%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
-Neural probing architecture for analyzing internal representations through a simple linear classifier.
+Analyzing internal representations through a simple linear classifier.
 </div>
 
-Probing <d-cite key="alain2016understanding"></d-cite><d-cite key="hewitt-manning-2019-structural"></d-cite> serves as a powerful diagnostic tool - essentially a microscope for peering into the internal workings of neural networks, helping us understand what information these models actually capture in their representations. At its core, the technique involves training simple supervised classifiers (probes) to predict specific linguistic or semantic properties from a model's internal representations. 
+Probing <d-cite key="alain2016understanding,hewitt-manning-2019-structural"></d-cite> serves as a powerful diagnostic tool - essentially a microscope for peering into the internal workings of neural networks, helping us understand what information these models actually capture in their representations. At its core, the technique involves **training simple supervised classifiers (probes) to predict specific properties from a model's internal representations.** 
 
 <details markdown="1">
-<summary><b>An Concrete Example</b></summary>
-For instance, in a vision-language model analyzing "a cat sitting on a mat", we might train a linear probe to predict spatial relationships between objects, or whether certain visual attributes are being captured in the textual representations. The probe's performance on such tasks reveals whether this information is readily accessible in the model's representations - high accuracy suggests the property is well-encoded, while poor performance indicates the information may be absent or deeply entangled.
+<summary><b>An Example</b></summary>
+For instance, in a vision-language model analyzing "a cat sitting on a mat", we might train a linear probe to predict spatial relationships between objects, or whether certain visual attributes are being captured in the textual representations. 
+
+The probe's performance on such tasks reveals whether this information is readily accessible in the model's representations - high accuracy suggests the property is well-encoded, while poor performance indicates the information may be absent or deeply entangled.
 </details>
 
-One key advantage of probing is its empirical transparency: by using simple classifiers <d-footnote>single linear probes could suffice in most cases, as their simplicity ensures that strong performance reflects information present in the representations rather than complex learning by the probe itself</d-footnote> as probes, we can directly examine what information is encoded in model representations. This methodological approach has yielded valuable insights into how neural networks process multimodal information, from basic visual-linguistic alignments to complex semantic relationships.
+One key advantage of probing is its empirical transparency: by using simple classifiers <d-footnote>single linear probes could suffice in most cases, as their simplicity ensures that strong performance reflects information present in the representations rather than complex learning by the probe itself</d-footnote> as probes, we can directly examine what information is encoded in model representations. 
 
 <aside class="l-body box-warning" markdown="1">
 However, it's important to note that high probe accuracy alone doesn't necessarily mean the model actively uses this information during its regular operation - it indicates correlation in information encoding but not necessarily causation in the model's decision-making process.
@@ -321,11 +323,11 @@ However, it's important to note that high probe accuracy alone doesn't necessari
 
 #### Findings
 
-Most research on probing tasks in vision-language models (VLMs) focuses on two primary objectives: identifying the concepts these models struggle to capture and assessing the relative importance of visual and linguistic modalities <d-cite key="golovanevsky2024vlms"></d-cite>. 
+Most research on probing tasks in VLMs focuses on two primary objectives: **identifying the concepts these models struggle to capture** and **assessing the relative importance of visual and linguistic modalities** <d-cite key="golovanevsky2024vlms"></d-cite>. 
 
 Cao et al. <d-cite key="cao2020behind"></d-cite> introduced the VALUE (Vision-And-Language Understanding Evaluation) framework, which developed a set of probing tasks to explain individual layers, heads, and fusion techniques in understanding how pre-training influences learned representations. Their key findings include: (i) pre-trained models tend to prioritize language over vision, a trend consistently observed in the literature; (ii) certain attention heads effectively capture cross-modal interactions; and (iii) attention visualization can reveal interpretable visual relationships.
 
-Building on this foundation, researchers have expanded probing methodologies across various domains. Some studies proposed probing tasks for visual semantic spaces <d-cite key="dahlgren-lindstrom-etal-2020-probing"></d-cite>, while others focused on verb understanding <d-cite key="hendricks2021probing,beňová2024beyond"></d-cite>. To delve deeper into specific cognitive capabilities, researchers have explored nuanced aspects like number sense <d-cite key="kajic2022probing"></d-cite> and how multimodal resamplers preserve spatial information <d-cite key="pantazopoulos2024lost"></d-cite>. Another line of research compared representations at pre-trained and fine-tuned levels <d-cite key="Salin_Farah_Ayache_Favre_2022"></d-cite>, carefully designing datasets to minimize bias and improve multimodal analysis.
+Building on previous work, researchers have used probing methodologies to examine diverse model capabilities. Studies have investigated various cognitive abilities, including visual semantics <d-cite key="dahlgren-lindstrom-etal-2020-probing"></d-cite>, verb processing <d-cite key="hendricks2021probing,beňová2024beyond"></d-cite>, number sense <d-cite key="kajic2022probing"></d-cite>, and spatial reasoning <d-cite key="pantazopoulos2024lost"></d-cite>, revealing limitations across these domains. Another line of research compared representations at pre-trained and fine-tuned levels <d-cite key="Salin_Farah_Ayache_Favre_2022"></d-cite>, carefully designing datasets to minimize bias and improve multimodal analysis.
 
 While these diverse probing approaches have advanced our understanding of VLMs, probing tasks present several challenges - they must be meticulously crafted to yield meaningful results and are often model-specific. Sometimes, additional models or classifiers are necessary, which limits their broader applicability <d-cite key="vatsa2023adventures"></d-cite>.
 
@@ -338,10 +340,10 @@ Key Takeaways:
 ### Activation Patching
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/activation.svg' | relative_url }}" type="image/svg+xml" width="100%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
-Activation patching experiments comparing model behavior under clean, corrupted, noising, and denoising conditions.
+Activation patching experiments comparing model behavior under clean, corrupted, noising, and denoising conditions. We can see that noising and denoising influence the logits' A and B values.
 </div>
 
-Activation patching is a powerful interpretability technique for neural networks. It enables researchers to systematically analyze how different components of a model contribute to its behavior by modifying specific internal activations while keeping others constant. This approach, grounded in the principle of control variates, provides causal insights by attributing changes in outputs to specific components. Its utility lies in identifying the roles of individual layers, attention mechanisms, and activation pathways in producing the model's predictions, which is especially valuable for understanding the inner workings of complex vision-language models (VLMs) and transformers.
+Activation patching <d-cite key="NEURIPS2020_92650b2e, NEURIPS2022_6f1d43d5"></d-cite> (also known as Casual Tracing, Interchange Intervention, Causal Mediation Analysis) is a powerful interpretability technique for neural networks. It enables researchers to systematically analyze **how different components of a model contribute to its behavior** by modifying specific internal activations while keeping others constant. This approach, grounded in the principle of control variates, provides causal insights into model behavior, helping researchers identify critical components and potential interventions for improving model performance and reliability.. 
 
 #### Methods
 
@@ -353,7 +355,7 @@ The basic process of activation patching involves five steps:
 5. **Analyze Results:** Examine how patched activations affect the model's output to infer their role.
 
 <details markdown="1">
-<summary><b>A Concrete Example</b></summary>
+<summary><b>An Example</b></summary>
 Consider analyzing a VLM's behavior when identifying objects in an image. Let's say we have:
 - Clean input: An image of "a cat sitting on a mat"
 - Corrupted input: The same image with Gaussian noise added to the "cat" region
@@ -367,28 +369,31 @@ If replacing activations in layer X restores the correct identification, this su
 </details>
 **Common Approaches**
 
-There are two primary ways to apply activation patching:
+There are two primary ways to apply activation patching <d-cite key="heimersheim2024use"></d-cite>:
 
-- **Denoising Analysis** involves taking a corrupted prompt, such as one where Gaussian noise has been added to key embeddings, and replacing its activations with those from a clean prompt. By observing which patched activations restore the clean behavior, researchers can identify the components that are sufficient to correct the corrupted behavior. For example, this technique can reveal layers where key information is integrated or restored during processing.
-- **Noising Analysis**, on the other hand, starts with a clean prompt and replaces its activations with those from a corrupted prompt. By determining which patches disrupt the clean behavior, this method pinpoints the components necessary to maintain the correct output. This analysis is particularly useful for identifying which layers or activations play a critical role in preserving the model's functionality.
-
+- **Denoising Analysis** involves taking a corrupted prompt, such as one where Gaussian noise has been added to key embeddings, and replacing its activations with those from a clean prompt. By observing which patched activations restore the clean behavior, researchers can identify the components that are **sufficient to correct** the corrupted behavior. For example, this technique can reveal layers where key information is integrated or restored during processing.
+- **Noising Analysis**, on the other hand, starts with a clean prompt and replaces its activations with those from a corrupted prompt. By determining which patches disrupt the clean behavior, this method pinpoints the components **necessary to maintain** the correct output. This analysis is particularly useful for identifying which layers or activations play a critical role in preserving the model's functionality.
+<details markdown="1">
+<summary><b>How to create a corrupted input?</b></summary>
+For text inputs, we can introduce perturbations through either Gaussian noise (GN) or Symmetric Token Replacement (STR) <d-cite key="NEURIPS2020_92650b2e, NEURIPS2022_6f1d43d5"></d-cite>, where STR replaces tokens with their semantically similar alternatives. However, since GN pushes inputs out of distribution and disrupts model's internal mechanisms, STR is often preferred <d-cite key="DBLP:conf/iclr/ZhangN24"></d-cite>. For image inputs, we can similarly apply Gaussian noise or use Semantic Image Pairs (SIP) <d-cite key="golovanevsky2024vlms"></d-cite>, a recently introduced approach that serves as the visual domain counterpart to STR. We will discuss SIP in more detail in the Findings section.
+</details>
 **Methodological Variations** 
 
 Several variations of activation patching have been developed: 
-- **Direct Ablations**: A simpler variant where activations are replaced with zeros or dataset means, eliminating the need for corrupted prompts. While zero ablation shows components critical for network behavior, mean ablation offers comparison against an average baseline.
+- **Direct Ablations** <d-cite key="DBLP:conf/iclr/NandaCLSS23"></d-cite>: A simpler variant where activations are replaced with zeros or dataset means. While zero ablation shows components critical for network behavior, mean ablation is more natural version of zero ablation.
 - **Path Patching** <d-cite key="goldowsky-dill2023localizing"></d-cite>: An extension that traces specific causal pathways through the network, helping understand how information flows between different model components. 
 - **Attention Knockout** <d-cite key="geva2023dissecting"></d-cite>: A specialized form focused on analyzing attention mechanisms by selectively blocking attention patterns between tokens. 
 
 #### Findings
 
 **1. Visual-Linguistic Integration** 
-Activation patching has revealed intricate patterns in how VLMs integrate visual and linguistic information. Through careful experimentation with Gaussian noise injection, Palit et al. <d-cite key="Palit_2023_ICCV"></d-cite> discovered that BLIP's outputs are predominantly influenced by correct image embeddings only in specific layers - layer 11 of the question encoder and layers 9-11 of the answer decoder. This suggests either that cross-modal integration is primarily a late-stage process, or that final layers override earlier computations while maintaining weak causal connections. Interestingly, Neo et al. <d-cite key="neo2024towards"></d-cite> found that representations at visual token positions gradually evolve through layers to align with interpretable textual concepts, suggesting VLMs naturally refine visual information towards language-like representations even without explicit visual pretraining. In parallel work, Golovanevsky et al. <d-cite key="golovanevsky2024vlms"></d-cite> developed Semantic Image Pairs (SIP) to enable more precise analysis of how VLMs process semantic information. By modifying single semantic concepts in images, SIP revealed that cross-attention serves three distinct functions (object detection, suppression, and outlier suppression) and uncovered architectural distinctions: LLaVA lacks "text-only" attention heads while BLIP has no "vision-only" heads, though both utilize universal heads for cross-modal integration.
+- Activation patching has revealed intricate patterns in how VLMs integrate visual and linguistic information. Through careful experimentation with Gaussian noise injection, Palit et al. <d-cite key="Palit_2023_ICCV"></d-cite> discovered that BLIP's outputs are predominantly influenced by correct image embeddings only in specific layers --- layer 11 of the question encoder and layers 9-11 of the answer decoder. This suggests **either that cross-modal integration is primarily a late-stage process, or that final layers override earlier computations while maintaining weak causal connections.** Interestingly, Neo et al. <d-cite key="neo2024towards"></d-cite> found that representations at visual token positions gradually evolve through layers to align with interpretable textual concepts, suggesting **VLMs naturally refine visual information towards language-like representations even without explicit visual pretraining.** In parallel work, Golovanevsky et al. <d-cite key="golovanevsky2024vlms"></d-cite> developed Semantic Image Pairs (SIP) to enable more precise analysis of how VLMs process semantic information. By modifying single semantic concepts in images (like changing "cat" to "dog"), SIP revealed that cross-attention serves three distinct functions (object detection, suppression, and outlier suppression) and uncovered architectural distinctions: **LLaVA lacks "text-only" attention heads while BLIP has no "vision-only" heads, though both utilize universal heads for cross-modal integration.**
 
 **2. Layer-wise Processing and Information Flow**
-Studies have uncovered a sophisticated hierarchical processing pattern in VLMs. Through causal tracing, Basu et al. <d-cite key="basu2024understanding"></d-cite> found that models like LLaVA retrieve visual information primarily from early layers (1-4), with consistent summarization in late visual tokens. Neo et al. <d-cite key="neo2024towards"></d-cite> refined this understanding through attention knockout experiments, showing that early layers (1-10) integrate broader contextual information, while middle-to-late layers (15-24) extract object-specific details. Notably, they found minimal impact when blocking attention from visual tokens to the last row, challenging previous assumptions about intermediate summarization steps. Mean ablation studies revealed interesting layer dynamics: Gandelsman et al. <d-cite key="gandelsman2023interpreting"></d-cite> found that only final layers have significant direct effects on accuracy, with early multihead attention removal having minimal impact. These findings were extended by Balasubramanian et al. <d-cite key="balasubramanian2024decomposing"></d-cite> to ViTs, showing that while early layers contribute minimally, the final four layers are crucial for maintaining model performance.
+- Studies have uncovered a sophisticated hierarchical processing pattern in VLMs. Through causal tracing, Basu et al. <d-cite key="basu2024understanding"></d-cite> found that **models like LLaVA retrieve visual information primarily from early layers (1-4), with consistent summarization in late visual tokens.** Neo et al. <d-cite key="neo2024towards"></d-cite> refined this understanding through attention knockout experiments, showing that **early layers (1-10) integrate broader contextual information, while middle-to-late layers (15-24) extract object-specific details.** Notably, they found minimal impact when blocking attention from visual tokens to the last row, challenging previous assumptions about intermediate summarization steps. Mean ablation studies revealed interesting layer dynamics: Gandelsman et al. <d-cite key="gandelsman2023interpreting"></d-cite> found that **only final layers have significant direct effects on accuracy, with early multihead attention removal having minimal impact.** These findings were extended by Balasubramanian et al. <d-cite key="balasubramanian2024decomposing"></d-cite> to ViTs, showing that while early layers contribute minimally, the final four layers are crucial for maintaining model performance.
 
 **3. Methodological Innovations**
-Recent analytical tools have significantly enhanced our understanding of VLMs. Ben et al. <d-cite key="Ben_Melech_Stan_2024_CVPR"></d-cite> developed LVLM-Interpret, an interactive tool that combines attention knockout with relevancy mapping and causal graph construction to visualize information flow patterns and identify critical image regions.
+- Recent analytical tools have significantly enhanced our understanding of VLMs. Ben et al. <d-cite key="Ben_Melech_Stan_2024_CVPR"></d-cite> developed LVLM-Interpret, an interactive tool that combines attention knockout with relevancy mapping and causal graph construction to visualize information flow patterns and identify critical image regions.
 
 <aside class="l-body box-note" markdown="1"> 
 Key Takeaways: 
