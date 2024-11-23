@@ -49,12 +49,6 @@ We believe that drawing attention to anthropomorphic AI systems helps foreground
 
 ## A Call to Action for AI Researchers and Practitioners
 As AI systems have been deployed across a wider range of domains, applications and settings, the AI community has begun investigating and addressing their social impacts. This growing diversity of deployment scenarios has also led to a growing interdisciplinarity in AI research and practice, with researchers and practitioners increasingly finding themselves working with fuzzy and latent concepts that can have competing definitions and are often challenging to quantify or represent, e.g., <d-cite key="jacobs_measurement_2021,blodgett-etal-2021-stereotyping"></d-cite>.
-<!-- 
-In human-computer interaction (HCI), human-robot interaction (HRI), social computing, and other related fields, scholars have long studied how anthropomorphism arises in the context of technology <d-cite key="quintanar1982interactive,shneidermandumpty,reeves1996media"></d-cite>.
-Building on this important groundwork,
-we argue that, like other societal considerations of AI, anthropomorphism is a critical issue that the machine learning community can and must address. We highlight particular directions for the ICLR community to pursue.
-
-With the growing interdisciplinarity of AI research, researchers are increasingly engaging with concepts that are difficult to quantify or represent. As AI systems have become more widespread, the AI community (broadly construed) has begun addressing its social impacts.  -->
 
 The foregrounding of (un)fair system behaviors in recent years <d-cite key="barocas-hardt-narayanan"></d-cite> is particularly instructive, as it illustrates the dividends we have gotten from making fairness a critical concern about AI systems and their behaviors: better conceptual clarity about the ways in which systems can be unfair or unjust e.g., <d-cite key="benjamin2019race,crawford2017neurips"></d-cite>, a richer set of measurement and mitigation practices and tools e.g., <d-cite key="blodgett-etal-2021-stereotyping,jacobs_measurement_2021"></d-cite>, and deeper discussions and interrogations of underlying assumptions and trade-offs e.g., <d-cite key="hoffmann2019fairness,jakesch2022different,keyes2019mulching"></d-cite>. 
 
