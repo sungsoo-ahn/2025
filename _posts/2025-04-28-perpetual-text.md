@@ -53,7 +53,7 @@ _styles: >
   }
 ---
 
-<!-- Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling. -->
+Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling.
 
 # Introduction
 
@@ -79,7 +79,7 @@ By setting a maximum number of tokens, you can override the model's default tend
 
 ### Hitting a stopping criterion <EOS> token
 - If no max_token parameter is set, then the model continues generating tokens until it outputs the <EOS> token, indicating that it should stop.
-- Training with <EOS> Tokens: During training, models are exposed to sequences that conclude with a special end-of-sequence token, often denoted as <EOS> (ref: llama 2 paper) or <|eot_id|> (ref: llama 3 paper). This token signifies the completion of a coherent piece of text.
+- Training with <EOS> Tokens: During training, models are exposed to sequences that conclude with a special end-of-sequence token, often denoted as <EOS> <d-cite key="touvron2023llama2openfoundation"></d-cite> or <|eot_id|> <d-cite key="dubey2024llama3herdmodels"></d-cite>. This token signifies the completion of a coherent piece of text.
 - Learned Termination Behavior: Through exposure to these tokens, the model learns to predict an <EOS> token when it determines that a logical conclusion has been reached in the context of the generated text.
 
 ### Probability Distribution and Sampling Methods:
