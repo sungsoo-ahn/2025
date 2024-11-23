@@ -2,7 +2,7 @@
 layout: distill
 title: Debugging the Foundation Models - Pitfalls and Pains in Machine Unlearning
 description: Machine unlearning has emerged as a crucial technique for removing harmful, biased, or copyrighted information from foundation models, offering a pathway to enhance trustworthiness and compliance in artificial intelligence systems. This blog post examines critical pitfalls in current implementations that have been overlooked, including the concept of fake unlearning—where knowledge is hidden rather than truly removed—leading to vulnerabilities such as jailbreak attacks, sequential unlearning instability, and diminished model capacity. We also discuss the limitations of relying on predefined forget datasets, which can cause unnecessary unlearning and missed opportunities for curriculum-based optimization. Finally, we address broader side effects of unlearning, such as its adverse impact on emergent abilities, reasoning skills, and hallucination rates. By tackling these challenges, we propose strategies to develop robust, efficient, and holistic unlearning methods that align with the goals of trustworthy AI.
-date: 2025-11-22
+date: 2025-04-28
 future: true
 htmlwidgets: true
 hidden: false
@@ -163,12 +163,12 @@ $$
 $$
 
 where:
-- $\epsilon_{\theta}(x_t | c)$: Noise estimator conditioned on concept $c$.
-- $c$: Harmful concept (e.g., nudity).
-- $c'$: A different, unrelated concept.
-- $\ell_{\text{MSE}}$: Mean squared error loss for image reconstruction.
-- $\mathcal{D}_f$ and $\mathcal{D}_r$: Forgetting and retaining datasets.
-- $\beta$: Regularization parameter balancing unlearning and retaining objectives.
+- $$\epsilon_{\theta}(x_t | c)$$: Noise estimator conditioned on concept $$c$$.
+- $$c$$: Harmful concept (e.g., nudity).
+- $$c'$$: A different, unrelated concept.
+- $$\ell_{\text{MSE}}$$: Mean squared error loss for image reconstruction.
+- $$\mathcal{D}_f$$ and $$\mathcal{D}_r$$: Forgetting and retaining datasets.
+- $$\beta$$: Regularization parameter balancing unlearning and retaining objectives.
 
 ### 2. Large Language Models
 
@@ -179,10 +179,10 @@ $$
 $$
 
 where:
-- $\ell(y | x; \theta)$: Loss function for the model's prediction.
-- $y_f$: Desired response post-unlearning.
-- $\mathcal{D}_f$ and $\mathcal{D}_r$: Forgetting and retaining datasets.
-- $\lambda$: Regularization parameter.
+- $$\ell(y | x; \theta)$$: Loss function for the model's prediction.
+- $$y_f$$: Desired response post-unlearning.
+- $$\mathcal{D}_f$$ and $$\mathcal{D}_r$$: Forgetting and retaining datasets.
+- $$\lambda$$: Regularization parameter.
 
 ### Balancing Removal and Preservation
 
