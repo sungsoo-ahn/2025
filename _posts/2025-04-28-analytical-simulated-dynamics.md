@@ -533,8 +533,8 @@ with numerical simulations of training the full student network with standard mi
 <div class="caption">
     Figure 1: Saad and Solla <d-cite key="saad1995online"></d-cite> results. Simulated training of a soft committee 
 machine student network with a fixed teacher network was compared against the analytical ODEs for the order parameters. 
-In this setup, N = 784, M = 4, and K varies. Notably, the generalization error is significantly reduced when 
-the student network has a size of K = 4 or larger.
+In this setup, $$N = 784$$, $$M = 4$$, and $$K$$ varies. Notably, the generalization error is significantly reduced when 
+the student network has a size of $$K = 4$$ or larger.
 </div>
 
 ### Theory-experiment overlap in two-layer neural networks
@@ -546,10 +546,10 @@ the student network has a size of K = 4 or larger.
     Figure 2: 
     Simulated training of a two layer non-linear student network using  <d-cite key="goldt2020dynamics"></d-cite> 
 extension, with a fixed teacher network was compared against the analytical ODEs for the order parameters. 
-In this setup, N = 784, M = 4, and K varies. Notably, the generalization error is also significantly reduced when 
-the student network has a size of K = 4 or larger, as in the soft committee machine case. The alignment corresponds to
+In this setup, $$N = 784$$, $$M = 4$$, and $$K$$ varies. Notably, the generalization error is also significantly reduced when 
+the student network has a size of $$K = 4$$ or larger, as in the soft committee machine case. The alignment corresponds to
 the dot product between the measured order parameter in the simulated network compared to the theoretical one described
-by the ODEs. Note that all alignments are close to 1, indicating that the ODEs accurately describe the dynamics. 
+by the ODEs. Note that all alignments are close to $$1$$, indicating that the ODEs accurately describe the dynamics. 
 Some drops can be seen in the alignment when the loss function is steepest.
 </div>
 
@@ -560,7 +560,9 @@ Some drops can be seen in the alignment when the loss function is steepest.
 </div>
 <div class="caption">
     Figure 3: Simulated two layer non-linear student network using  <d-cite key="goldt2020dynamics"></d-cite>
-for different initial weights in the students network.
+for different initial weights in the student networks.
+The analytical ODEs for the order parameters are compared against numerical training simulations,
+demonstrating that the ODEs accurately describe the dynamics for different initial conditions, corresponding to unique initializations of the student networks.
 </div>
 
 ## Discussion
