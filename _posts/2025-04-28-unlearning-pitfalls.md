@@ -57,8 +57,8 @@ toc:
     - name: Key Takeaway
   - name: Pitfall 3 - Overlooking the Broader Side Effects of Machine Unlearning
     subsections:
-    - name: Issue 1 - Impairment of Emergent Abilities and Reasoning
-    - name: Issue 2 - Increased Hallucinations
+    - name: Consequence 1 - Impairment of Emergent Abilities and Reasoning
+    - name: Consequence 2 - Increased Hallucinations
     - name: Key Takeaway
   - name: Conclusion
 
@@ -370,7 +370,7 @@ When evaluating the impact of machine unlearning, researchers often focus solely
 
 ---
 
-### Issue 1 - Impairment of Emergent Abilities and Reasoning
+### Consequence 1 - Impairment of Emergent Abilities and Reasoning
 
 Emergent abilities<d-cite key="wei2022emergent"></d-cite> refer to the complex capabilities that arise as a result of scaling large language models (LLMs), such as in-context learning, augmented prompting, and reasoning. These abilities are widely regarded as critical characteristics of LLMs, enabling tasks like multi-step reasoning, contextual understanding, and advanced problem-solving. However, their vulnerability to unlearning side effects has been largely overlooked in evaluations.
 
@@ -390,7 +390,7 @@ The unlearned model consistently underperformed across all tasks, with particula
 **Implication**: The interconnected nature of knowledge in LLMs means that unlearning targeted data can unintentionally disrupt critical emergent abilities, including reasoning and advanced prompting. This underscores the need for careful evaluation and mitigation strategies to preserve these essential capabilities.
 
 
-### Issue 2 - Increased Hallucinations
+### Consequence 2 - Increased Hallucinations
 
 Hallucinations, where the model generates incorrect or nonsensical information, are a persistent challenge in large language models (LLMs). Machine unlearning, by altering the model’s learned representations, can exacerbate this issue, destabilizing the model's behavior and increasing the frequency of hallucinations.
 
