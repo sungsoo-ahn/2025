@@ -47,7 +47,7 @@ toc:
 
 In this post, we're diving into a 2021 paper that attempts to pin down the *training dynamics* of Graph Neural Networks (GNNs). 
 
-This paper<d-cite key="Xu2021"></d-cite>, written by researchers Keyulu Xu, Mozhi Zhang, Stefanie Jegelka and Kenji Kawaguchi, comes with several **strong claims**. Among them, the first and most important one is: linear GNNs <d-footnote> <b>Hint</b>: Check the Minimal Background Section for formal definition of a linear GNN. </d-footnote> converge to the optimal loss at an **linear rate** <d-footnote> <b>Hint</b>: Linear convergence means that we need $\mathcal{O}(\log 1/\epsilon)$ steps of iteration to ensure that the absolute value of the difference between the current solution and the optimal solution is less than $\epsilon$. </d-footnote>. Intrigued? Let’s unravel it together.
+This paper<d-cite key="Xu2021"></d-cite>, written by researchers Keyulu Xu, Mozhi Zhang, Stefanie Jegelka and Kenji Kawaguchi, comes with several **strong claims**. Among them, the first and most important one is: linear GNNs <d-footnote> <b>Hint</b>: Check the Minimal Background Section for formal definition of a linear GNN. </d-footnote> converge to the optimal loss at a **linear rate** <d-footnote> <b>Hint</b>: Linear convergence means that we need $\mathcal{O}(\log 1/\epsilon)$ steps of iteration to ensure that the absolute value of the difference between the current solution and the optimal solution is less than $\epsilon$. </d-footnote>. Intrigued? Let’s unravel it together.
 
 The key idea here is to think of the loss function of a linear GNN as a function over time - during optimization, as time changes, the weights change, and the loss changes accordingly. 
 <!-- The key idea here is to think of the discrete optimization process of linear GNNs as a continuous one. -->
@@ -317,7 +317,7 @@ $$
 ### Step 2. The Dynamics.
 
 > **Note**: In this part, we'll derive the dynamics of $\tilde{W}_H$, and then pass its dynamics to the loss $L$.
-> Following the authors, we **throw away** the semi-positive term (part $b$*), reduce all **eigenvalues** to the minimal, and distinguish the parts inside and outside the **representable space**, to derive a bound of the loss dynamics with a favorable form.
+> Following the authors, we throw away the semi-positive term (part b*), reduce all eigenvalues to the minimal, and distinguish the parts of vectors inside and outside the representable space, to derive a bound of the loss dynamics with a **favorable form**.
 > 
 > - It should be clarified that all the learnable parameters, as well as $\tilde{W}_H$, the loss $L$ and the related eigenvalues and SVD decomposition, is **changing over time**. We **neglect** the time notation in this part for simplicity. 
 
