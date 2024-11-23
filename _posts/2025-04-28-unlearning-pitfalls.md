@@ -1,6 +1,6 @@
 ---
 layout: distill
-title: Debugging the Foundation Models - Pitfalls and Pains in Machine Unlearning
+title: "Debugging the Foundation Models: Pitfalls and Pains in Machine Unlearning"
 description: Machine unlearning has emerged as a crucial technique for removing harmful, biased, or copyrighted information from foundation models, offering a pathway to enhance trustworthiness and compliance in artificial intelligence systems. This blog post examines critical pitfalls in current implementations that have been overlooked, including the concept of fake unlearning—where knowledge is hidden rather than truly removed—leading to vulnerabilities such as jailbreak attacks, sequential unlearning instability, and diminished model capacity. We also discuss the limitations of relying on predefined forget datasets, which can cause unnecessary unlearning and missed opportunities for curriculum-based optimization. Finally, we address broader side effects of unlearning, such as its adverse impact on emergent abilities, reasoning skills, and hallucination rates. By tackling these challenges, we propose strategies to develop robust, efficient, and holistic unlearning methods that align with the goals of trustworthy AI.
 date: 2025-04-28
 future: true
@@ -33,7 +33,7 @@ bibliography: 2025-04-28-unlearning-pitfalls.bib
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
 toc:
-  - name: Machine Unlearning - The Need for a Patch in Foundation Models
+  - name: "Machine Unlearning: The Need for a Patch in Foundation Models"
     subsections:
     - name: 1. Harmful Content Generation
     - name: 2. Privacy and Copyright Violations
@@ -42,23 +42,23 @@ toc:
     subsections:
     - name: 1. Diffusion Models
     - name: 2. Large Language Models
-  - name: Pitfall 1 - The Problem of Fake Unlearning
+  - name: "Pitfall 1: The Problem of Fake Unlearning"
     subsections:
     - name: A Tale of Mother and Son
-    - name: Consequence 1 - Vulnerability to Adversarial/Jailbreak Attacks
-    - name: Consequence 2 - Unlearned Knowledge Recovering in Sequential Unlearning
-    - name: Consequence 3 - Fragility Under Quantization or Pruning
-    - name: Consequence 4 - Reduction in Model Capacity
+    - name: "Consequence 1: Vulnerability to Adversarial/Jailbreak Attacks"
+    - name: "Consequence 2: Unlearned Knowledge Recovering in Sequential Unlearning"
+    - name: "Consequence 3: Fragility Under Quantization or Pruning"
+    - name: "Consequence 4: Reduction in Model Capacity"
     - name: Key Takeaway
-  - name: Pitfall 2 - Over-Relying on the Proposed Forget Dataset
+  - name: "Pitfall 2: Over-Relying on the Proposed Forget Dataset"
     subsections:
-    - name: Consequence 1 - Unnecessary Unlearning of Poorly Grasped Knowledge
-    - name: Consequence 2 - Neglecting an Unlearning Curriculum
+    - name: "Consequence 1: Unnecessary Unlearning of Poorly Grasped Knowledge"
+    - name: "Consequence 2: Neglecting an Unlearning Curriculum"
     - name: Key Takeaway
-  - name: Pitfall 3 - Overlooking the Broader Side Effects of Machine Unlearning
+  - name: "Pitfall 3: Overlooking the Broader Side Effects of Machine Unlearning"
     subsections:
-    - name: Consequence 1 - Impairment of Emergent Abilities and Reasoning
-    - name: Consequence 2 - Increased Hallucinations
+    - name: "Consequence 1: Impairment of Emergent Abilities and Reasoning"
+    - name: "Consequence 2: Increased Hallucinations"
     - name: Key Takeaway
   - name: Conclusion
 
@@ -83,7 +83,7 @@ _styles: >
 ---
 
 
-## Machine Unlearning - The Need for a "Patch" in Foundation Models
+## Machine Unlearning: The Need for a "Patch" in Foundation Models
 
 Imagine you're developing a software application. When users encounter bugs—issues causing undesirable behaviors—you release a patch to fix them. Over time, these patches evolve into newer versions of the software, maintaining functionality while addressing specific flaws. This iterative improvement process is fundamental to software development.
 
@@ -191,7 +191,7 @@ Machine unlearning isn't just about removing problematic influences; it’s abou
 ---
 
 
-## Pitfall 1 - The Problem of Fake Unlearning
+## Pitfall 1: The Problem of Fake Unlearning
 
 ### A Tale of Mother and Son
 
@@ -208,7 +208,7 @@ The boy has two approaches:
 Fake unlearning may give the illusion of effectiveness but leads to significant problems, compromising the reliability and performance of the model. Below, we discuss these consequences, each illustrated through an analogy.
 
 
-### Consequence 1 - Vulnerability to Adversarial/Jailbreak Attacks
+### Consequence 1: Vulnerability to Adversarial/Jailbreak Attacks
 
 If a mother inspects every corner and room in the apartment, she will eventually find the box hidden by her son. Similarly, optimization-based adversarial or jailbreak attacks can act like a diligent inspector, probing every corner of the knowledge bank in the unlearned model to recover the supposedly unlearned knowledge. This phenomenon has been observed in both large language models <d-cite key="lucki2024adversarial"></d-cite> and diffusion models<d-cite key="zhang2024unlearncanvas"></d-cite>.
 
@@ -242,7 +242,7 @@ Similarly, for LLM unlearning, jailbreak attacks have also demonstrated effectiv
 
 
 
-### Consequence 2 - Unlearned Knowledge Recovering in Sequential Unlearning
+### Consequence 2: Unlearned Knowledge Recovering in Sequential Unlearning
 
 Now imagine the mother repeatedly asks her child to remove more boxes. If the child continues hiding them in the same small room, it will eventually overflow. When this happens, previously hidden boxes will spill back into the apartment. A similar phenomenon occurs in machine unlearning during **sequential unlearning**, where unlearning requests arrive one after another, as illustrated in the follow figure.
 
@@ -269,7 +269,7 @@ In such cases, knowledge forgotten earlier resurfaces due to the accumulation of
 **Implication**: Fake unlearning introduces instability in sequential unlearning tasks, risking recovery of forgotten knowledge with each subsequent unlearning operation.
 
 
-### Consequence 3 - Fragility Under Quantization or Pruning
+### Consequence 3: Fragility Under Quantization or Pruning
 
 Imagine the apartment shrinks due to renovations or collapses slightly due to an earthquake. The small storage room would also shrink, causing the previously hidden boxes to spill back into the main apartment and come to light. A similar phenomenon occurs in fake unlearning when structural changes, such as **quantization** or **pruning**, are applied to the model. These operations can inadvertently reveal the supposedly forgotten knowledge.
 
@@ -287,7 +287,7 @@ As demonstrated in existing literature<d-cite key="zhang2024does"></d-cite>, mos
 **Implication**: Fake unlearning makes the model fragile to structural changes, such as quantization or pruning, which can inadvertently recover forgotten knowledge.
 
 
-### Consequence 4 - Reduction in Model Capacity
+### Consequence 4: Reduction in Model Capacity
 
 By hiding the goods instead of removing them, the boy reduces the usable space in the apartment. Similarly, instead of freeing up capacity, fake unlearning effectively diminishes it.
 
@@ -312,14 +312,14 @@ Fake unlearning undermines the fundamental goals of machine unlearning. By merel
 ---
 
 
-## Pitfall 2 - Over-Relying on the Proposed Forget Dataset
+## Pitfall 2: Over-Relying on the Proposed Forget Dataset
 
 Machine unlearning often hinges on a pre-defined forget dataset, which contains data identified as problematic—whether due to copyright issues, harmful knowledge, or ethical concerns. While this dataset provides a clear target for unlearning, the question remains: is directly using the forget set always the optimal solution?
 
 This approach, though straightforward, can lead to severe consequences, undermining the efficacy and utility of unlearning efforts. Below, we delve into two significant issues.
 
 
-### Consequence 1 - Unnecessary Unlearning of Poorly Grasped Knowledge
+### Consequence 1: Unnecessary Unlearning of Poorly Grasped Knowledge
 
 Not all knowledge in the forget set is equally represented in the pretrained model. In many cases, the model may not have fully grasped certain samples from the forget dataset. Despite this, current practices assume that every sample in the forget set must be unlearned, leading to inefficiencies.
 
@@ -350,7 +350,7 @@ To address this, we explored a very straightforward selective unlearning approac
 **Implication**: A selective approach—targeting only well-grasped knowledge in the forget set—leads to more effective and efficient unlearning, avoiding unnecessary utility loss.
 
 
-### Consequence 2 - Neglecting an Unlearning Curriculum
+### Consequence 2: Neglecting an Unlearning Curriculum
 
 When children learn new concepts, they begin with simpler ideas and gradually progress to more complex ones. This approach, known as a curriculum, allows for efficient and effective learning. Similarly, in the context of machine unlearning, adopting a curriculum-based approach could significantly enhance the process. However, this strategy has been largely overlooked.
 
@@ -358,7 +358,7 @@ When children learn new concepts, they begin with simpler ideas and gradually pr
 
 Existing unlearning methodologies treat all forget set samples equally. They apply uniform unlearning schedules and hyperparameters, failing to account for the varying levels of "unlearning difficulty" inherent in different samples. This lack of differentiation reduces the overall efficiency and effectiveness of the unlearning process.
 
-#### A Possible Solution - Introducing an Unlearning Curriculum
+#### A Possible Solution: Introducing an Unlearning Curriculum
 
 A curriculum-based strategy prioritizes the removal of well-grasped knowledge (samples with high prediction confidence) before addressing less well-grasped knowledge (low prediction confidence). This incremental approach aligns with the model's internal state and optimizes the unlearning process. In our experiments:
 - We defined **unlearning difficulty** based on the model’s prediction confidence for forget set samples.
@@ -373,13 +373,13 @@ Over-relying on predefined forget datasets can lead to unnecessary unlearning of
 
 ---
 
-## Pitfall 3 - Overlooking the Broader Side Effects of Machine Unlearning
+## Pitfall 3: Overlooking the Broader Side Effects of Machine Unlearning
 
 When evaluating the impact of machine unlearning, researchers often focus solely on the utility of the unlearned model for general knowledge-based datasets. While this is an essential metric, it provides an incomplete picture. Machine unlearning can have broader, often overlooked side effects, significantly affecting the model’s emergent abilities<d-cite key="wei2022emergent"></d-cite>, reasoning skills<d-cite key="wei2022chain"></d-cite>, and hallucination tendencies<d-cite key="ji2023survey"></d-cite>.
 
 ---
 
-### Consequence 1 - Impairment of Emergent Abilities and Reasoning
+### Consequence 1: Impairment of Emergent Abilities and Reasoning
 
 Emergent abilities<d-cite key="wei2022emergent"></d-cite> refer to the complex capabilities that arise as a result of scaling LLMs, such as in-context learning, augmented prompting, and reasoning. These abilities are widely regarded as critical characteristics of LLMs, enabling tasks like multi-step reasoning, contextual understanding, and advanced problem-solving. However, their vulnerability to unlearning side effects has been largely overlooked in evaluations.
 
@@ -399,7 +399,7 @@ The unlearned model consistently underperformed across all tasks, with particula
 **Implication**: The interconnected nature of knowledge in LLMs means that unlearning targeted data can unintentionally disrupt critical emergent abilities, including reasoning and advanced prompting. This underscores the need for careful evaluation and mitigation strategies to preserve these essential capabilities.
 
 
-### Consequence 2 - Increased Hallucinations
+### Consequence 2: Increased Hallucinations
 
 Hallucinations, where the model generates incorrect or nonsensical information, are a persistent challenge in LLMs. Machine unlearning, by altering the model’s learned representations, can exacerbate this issue, destabilizing the model's behavior and increasing the frequency of hallucinations.
 
