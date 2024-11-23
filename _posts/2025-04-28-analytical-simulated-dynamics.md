@@ -48,7 +48,7 @@ toc:
     - name: Large initial weights produce individual differences
     - name: Theory-experiment overlap in two-layer neural networks
     - name: Limits of the analytical teacher-student setting
-- name: Discussion
+- name: Impact & extensions
   subsections:
     - name: Applications of the teacher-student setting
     - name: The analytical frontier
@@ -78,34 +78,25 @@ This theoretical framework has proven valuable for analyzing phenomena like impl
 
 ### Statistical physics for neural network dynamics 
 
-The common shared assumption is distributional the data.
+Statistical physics offers powerful tools for characterizing macroscopic behavior emerging from collections of microscopic particles, an approach with deep roots in physics. 
+Early pioneering work by Gardner applied these techniques to neural networks by viewing neurons as microscopic particles in a complex system <d-cite key="gardner1989three"></d-cite>.
 
-#### A long history 
-
-In 2024, X and Y won the Nobel Prize in Physics for neural networks.
-news that was met with varying emotions: celebration, confusion and skepticism across the scientific communities with an interest in artificial intelligence.
-
-- <d-cite key="mei2018mean"></d-cite>
+The primary goal of statistical physics approaches is to analytically characterize the time-varying generalization error through reduction to macroscopic variables to be defined.
+These analyses can be performed under various neural network parameter regimes, often considering asymptotic limits (such as infinite width or input dimension) where the system concentrates—exhibiting fewer fluctuations in a precise sense—leading to simpler dynamical descriptions; see Cui (2024)<d-cite key="cui2024highdimensional"></d-cite> for a review of these regimes.
 
 #### Our focus: Narrow neural networks in the teacher-student setting
 
-- teacher-student intro <d-cite key="gardner1989three"></d-cite>
-- overview <d-cite key="cui2024highdimensional"></d-cite>
-- analytical results <d-cite key="saad1995online"></d-cite> <d-cite key="riegler1995online"></d-cite>
+The teacher-student framework, introduced by Gardner <d-cite key="gardner1989three"></d-cite>, provides a controlled setting for studying neural network learning with statistical physics techniques.
+In this paradigm, a student network learns to mimic a fixed teacher network that generates the training data.
+Classical analytical results were achieved by Saad and Solla <d-cite key="saad1995online"></d-cite> and Riegler and Biehl <d-cite key="riegler1995online"></d-cite> in the 1990s, who derived exact equations for the generalization dynamics this teacher-student setup with a particular scaling.
 
-temporally describe the history: S&S, Goldt, etc. including HMM
-Highlight Solla and Goldt paper, and a lot form Lenka's lab, (Hugo Cui), Cengiz lab (Blake's work). Teacher student is a framework that people use to derive analytical results for neural network dynamics, we are focusing in one of them (Solla and Goldt's work).
+These analytical results provide exact, time-resolved predictions of learning dynamics, captures nonlinear feature learning phenomena, and allows precise study of generalization behavior.
+These analyses requires specific assumptions about the data distribution—in particular, that it is Gaussian—and the results require the input dimension to be large to enable solvability.
+Despite these constraints, this framework allow granular study of various learning regimes, including feature learning.
 
-- describe the (dis)advantages of this approach to other DL theory approaches:
-  - assumptions on data distribution
-  - asymptotic in the input data dimension
-
-#### Modern applications of teacher-student
-
-Andrew, Lenka, Cenghiz, that meta-learning paper
-Features are fate?
-Check Blake's work
-
+Much recent work builds on these classical analyses to expand the frontier of solvable training regimes, exploring parameter settings beyond those considered by Saad and Solla and Riegler and Biehl. <d-cite key="goldt2020dynamics"></d-cite>
+These techniques have also found applications beyond generalization error dynamics, which we detail in the final section of this blog post. 
+Next, we focus on the foundational results from Saad and Solla that form the basis of these analyses.
 
 ## Methods
 
@@ -414,67 +405,39 @@ Goldt setting?
 
 Check the bounds for learning rate and noise such that the ODEs follow the simulations.
 
-## Discussion
+## Impact & extensions
+
+The analytical techniques pioneered by Saad & Solla and others have inspired two broad directions of research: extending the theoretical framework to handle more complex scenarios, and applying these tools to analyze specific phenomena in machine learning. 
 
 ### The analytical frontier
 
-Other activation functions:
-- RBF <d-cite key="freeman1997online"></d-cite>
+The statistical physics approach to neural network dynamics has expanded significantly beyond the early results of Gardner and others.
 
-Convergence:
-- <d-cite key="richert2022soft"></d-cite>
+Early extensions explored different activation functions, with Freeman and Saad analyzing radial basis function networks <d-cite key="freeman1997online"></d-cite>
+Richert et al. studied the qualitative convergence for these dynamical systems <d-cite key="richert2022soft"></d-cite>.
+Deep networks were analyzed by Tian et al., who first provided empirical evidence for specialization in deep teacher-student networks <d-cite key="tian2019luck"></d-cite>, then developed theoretical characterization of these dynamics <d-cite key="tian2020student"></d-cite>. 
+This work illuminated how hierarchical feature learning emerges in deeper architectures.
 
-Deep:
-- deep teacher-student, empirics <d-cite key="tian2019luck"></d-cite>
-- deep teacher-student, theory <d-cite key="tian2020student"></d-cite>
+The Gaussian equivalence property <d-cite key="goldt2020modelling"></d-cite> <d-cite key="goldt2021gaussian"></d-cite>, showed that many results derived for Gaussian inputs extend to other data distributions, broadening the applicability of these analytical techniques.
 
-Universality. Gaussian equivalence property.
-- <d-cite key="goldt2020modelling"></d-cite>
-- <d-cite key="goldt2021gaussian"></d-cite>
+Recent work has tackled increasingly complex learning scenarios. Loureiro et al. <d-cite key="loureiro2021learning"></d-cite> and Arnaboldi et al. <d-cite key="arnaboldi2021highdimensional"></d-cite> extended the framework to new learning settings, while Bardone et al. analyzed systems with correlated latent variables <d-cite key="bardone2024sliding"></d-cite>. 
+Questions of learnability have been addressed by Troiani et al. <d-cite key="troiani2024fundamental"></d-cite>, who established theoretical limits on what neural networks can learn in various settings. 
 
-Other settings:
-- <d-cite key="loureiro2021learning"></d-cite>
-- <d-cite key="arnaboldi2023highdimensional"></d-cite>
-- correlated latents <d-cite key="bardone2024sliding"></d-cite>
-
-Learnability:
-- <d-cite key="troiani2024fundamental"></d-cite>
+These advances advance the statistical physics approach from a specialized tool for simple networks into a more comprehensive framework for analyzing modern machine learning systems. 
 
 ### Applications of the teacher-student setting
 
-TODO:
--
+Beyond charactierizing generalization error, the teacher-student framework has been applied to a wide range of problems, often to model interesting phenomena in machine learning. 
+In optimization, Yang analyzed natural gradient descent <d-cite key="yang1998complexity"></d-cite>.
+Simsek and Martinelli used the framework to reduce overparameterized deep networks to a minimal size by exploiting student neurons with overlapping tuning to teacher neurons <d-cite key="simsek2021geometry"></d-cite> <d-cite key="martinelli2023expand"></d-cite>.
+Further, Arnaboldi et al. developed quantitative measures of task difficulty <d-cite key="arnaboldi2024online"></d-cite>.
 
-**Optimization.**
-- natural gradient <d-cite key="yang1998complexity"></d-cite>
+The framework has been used extensively to study continual learning.
+Several analyses examine catastrophic forgetting <d-cite key="straat2018statistical"></d-cite> <d-cite key="lee2021continual"></d-cite> <d-cite key="asanuma2021statistical"></d-cite>, transfer learning limitations <d-cite key="lee2022maslow"></d-cite>, meta-learning <d-cite key="wang2024dynamics"></d-cite>, and factors affecting continual learning <d-cite key="hiratani2024disentangling"></d-cite>.
 
-**Reductions.**
-- <d-cite key="simsek2021geometry"></d-cite>
-- <d-cite key="martinelli2023expand"></d-cite>
+Applications extend to learning algorithms including multi-pass SGD <d-cite key="arnaboldi2024repetita"></d-cite>, feedback alignment <d-cite key="refinetti2022align"></d-cite>, and reinforcement learning <d-cite key="patel2023rl"></d-cite>.
+Current work under review at the ICLR conference <d-cite key="anonymous2024analyzing"></d-cite> <d-cite key="anonymous2024optimal"></d-cite> <d-cite key="anonymous2024theory"></d-cite> applies this framework to additional machine learning problems.
 
-
-**Parameterized task difficulty**.
-- task difficulty <d-cite key="arnaboldi2024online"></d-cite>
-
-**Parameterized task similarity for transfer and continual learning.**  
-- continual learning <d-cite key="straat2018statistical"></d-cite>
-- continual learning <d-cite key="lee2021continual"></d-cite>
-- catastrophic forgetting <d-cite key="asanuma2021statistical"></d-cite>
-- Maslow's hammer <d-cite key="lee2022maslow"></d-cite>
-- meta-learning <d-cite key="wang2024dynamics"></d-cite>
-- continual learning <d-cite key="hiratani2024disentangling"></d-cite>
-
-**Reinforcement learning.**
-- reinforcement learning <d-cite key="patel2023rl"></d-cite>
-
-**Learning algorithms.**
-- multi-pass SGD <d-cite key="arnaboldi2024repetita"></d-cite>
-- feedback alignment <d-cite key="refinetti2022align"></d-cite>
-
-Even under review at ICLR 2025!
-- <d-cite key="anonymous2024analyzing"></d-cite>
-- <d-cite key="anonymous2024optimal"></d-cite>
-- <d-cite key="anonymous2024theory"></d-cite>
 
 
 
