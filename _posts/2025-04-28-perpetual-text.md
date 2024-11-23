@@ -53,7 +53,7 @@ _styles: >
   }
 ---
 
-Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling.
+<!-- Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling. -->
 
 # Introduction
 
