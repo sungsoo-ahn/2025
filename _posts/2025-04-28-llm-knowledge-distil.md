@@ -170,7 +170,7 @@ To better suit knowledge distillation methods with modern large language model f
 
 As previously discussed, source/input $x$, output $\hat{y}$ and target $y$ are all sentences. During finetuning and knowledge distillation, the gradients can be applied to the general sentence, or the separated tokens. Here we denote $y=\\{y_t\\}_{t=1}^T$ where $y_t$ refers to the token at position $t$, and $T$ refers to the length of the sentence, i.e. number of tokens in $y$. 
 
-{% include figure.html path="assets/img/2025-04-28-llm-knowledge-distil/token-sequence-level.png" class="img-fluid" width="" caption="Figure 1" %}
+{% include figure.html path="assets/img/2025-04-28-llm-knowledge-distil/token-sequence-level.png" class="img-fluid" width="" %}
 
 <div class="caption">
     Figure 3. Illustration of token level knowledge distillation and sequence level knowledge distillation.
@@ -219,8 +219,6 @@ we need to sample from the student distribution. Since the student distribution 
 
 <!-- TODO [ ] add GKD paper in somewhere -->
 
-<!-- 两者的区别可以被看成，当使用forward -->
-
 <!-- ### The relationship between LLM distillation and preference optimization -->
 
 ## Empirical Comparison, how it works and which one is better?
@@ -255,6 +253,8 @@ class DistilTrainer(SFTTrainer):
             teacher_log_probs,
             reduction='batchmean'
         ) * (temperature ** 2) / self.args.max_seq_length
+
+        return alpha * loss_kd + (1 - alpha) * original_loss
 
 {% endhighlight %}
 
@@ -312,6 +312,9 @@ Since forward KL loss and reverse KL loss differ in their formulations, their lo
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-llm-knowledge-distil/kl_cmp_rank64.jpg" class="img-fluid " %}
     </div>
+</div>
+<div class="caption">
+    Figure 4. Convergence speed for Reverse KL and Forword KL.
 </div>
 
 Across all the images above, regardless of changes in the target matrix's rank, forward KL consistently outperforms reverse KL in both weight-L2 and L2 loss.
