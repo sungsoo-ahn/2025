@@ -336,7 +336,16 @@ The figure below illustrates this issue. Our preliminary study reveals that the 
   The distribution of the Min-K=20% score <d-cite key='zhang2024min'></d-cite> (memorization level) for the pretrained Zephyr-7B-beta <d-cite key='tunstall2023zephyr'></d-cite> with respect to the WMDP forget set. Lower scores indicate data better grasped by the model, while higher scores reflect poorly learned samples.
 </div>
 
-To address this, we explored a selective unlearning approach by omitting forget set samples based on their prediction confidence. As shown in the figure below, excluding low-confidence samples significantly improved the trade-off between forgetting harmful knowledge and preserving model utility. By tuning hyperparameters to exclude such samples, we observed a substantial reduction in utility drop while maintaining unlearning effectiveness.
+To address this, we explored a straightforward selective unlearning approach by omitting forget set samples based on their prediction confidence. The figure below demonstrates that unlearning effectiveness and retainability remain nearly the same when approximately 10%–20% of low-confidence samples are excluded. Notably, removing around 30% of these samples achieves a better forgetting-retaining tradeoff, as shown by the fitted curve nearer to the top-right corner. This represents a win-win scenario: reducing data samples in the forget set not only improves the tradeoff but also boosts unlearning efficiency.
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-unlearning-pitfalls/scatter_plot.png" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    The unlearning accuracy and utility (both higher values are better) of Zephyr-7B-beta unlearned on the WMDP dataset using the RMU unlearning method. Excluding different proportions of low-confidence data from the forget set demonstrates improved tradeoffs between forgetting and retaining.
+</div>
 
 **Implication**: A selective approach—targeting only well-grasped knowledge in the forget set—leads to more effective and efficient unlearning, avoiding unnecessary utility loss.
 
