@@ -293,27 +293,8 @@ This macro-level overview reveals both the impressive progress in VLM developmen
 ## Micro-Level Analysis: Mechanistic interpretability
 
 At the micro level, we explore mechanistic interpretability - seeking to understand the internal processes of neural networks and gain insight into how and why they produce the outputs that they do <d-cite key="saphra2024mechanistic"></d-cite><d-cite key="hastingswoodhouse2024introduction"></d-cite>, which is similar to how neuroscientists study the brain's cognitive processes.
-There are three main approaches to interpretability, based on when and how we interpret models during training <d-cite key="bereska2024mechanistic"></d-cite>:
-1. Intrinsic interpretability: Building models that are naturally interpretable from the start <d-cite key="rudin2019stop"></d-cite>.
-2. Developmental interpretability: Studying how models learn and develop their internal structures during training.
-3. Post-hoc interpretability: Analyzing trained models to understand their features and decision-making processes.
 
-Through our investigation, we find that interpretability in VLMs is still in its early stages. While developmental interpretability could offer crucial insights into how these models learn and evolve, it remains largely unexplored in current research. For this study, we focus on six interpretability methods that have been successfully applied in VLM research:
-
-|  Intrinsic Interpretability   |  Post-hoc Interpretability   |
-| --- | --- |
-|  Concept Bottleneck Model   | Probing, Activation Patching, Logit Lens, Sparse Autoencoders, Automated Explanation |
-
-### Concept Bottleneck Model
-
-<img src="{{ 'assets/img/2025-04-28-vlm-understanding/cbm.png' | relative_url }}" alt="transformer" width="50%" class="l-body rounded z-depth-1 center">
-<div class="l-gutter caption" markdown="1">
-Concept Bottleneck Model.
-</div>
-
-One approach to enhance the interpretability of deep learning systems is through Concept Bottleneck Models (CBMs) <d-cite key="koh2020concept"></d-cite>. The key feature of CBMs is their Concept Bottleneck Layer (CBL), which is positioned before the final fully connected layer of the neural network. This layer is specifically designed and trained to ensure that each neuron corresponds to a single human-interpretable concept. By structuring the model this way, the final decision becomes a linear function (typically sparse) of interpretable concepts, significantly improving our understanding of the model's decision-making process.
-
-Recent advances in the field have demonstrated that VLMs like CLIP can be leveraged to learn these concept bottlenecks without requiring explicit concept labels <d-cite key="oikarinenLabelfreeConceptBottleneck2023"></d-cite>. Some researchers have taken a different approach by first employing post-hoc methods (particularly Sparse Autoencoders, which we will discuss later) to discover concepts before constructing a CBM <d-cite key="raoDiscoverthennameTaskagnosticConcept2024"></d-cite>. While there are emerging approaches aimed at developing CBMs for larger VLMs, this area of research remains in its early stages of exploration.
+Through our investigation, we find that interpretability in VLMs is still in its early stages. While building intrinsic interpretability or developmental interpretability could offer crucial insights into how these models learn and evolve, it remains largely unexplored in current research. For this study, we focus on six post-hoc interpretability methods that have been successfully applied in VLM research.
 
 ### Probing
 
