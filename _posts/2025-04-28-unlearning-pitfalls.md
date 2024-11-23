@@ -152,7 +152,7 @@ AI models frequently replicate societal biases present in their training data. F
 
 ## Mathematical Framework for Machine Unlearning
 
-The process of machine unlearning can be formalized mathematically for both diffusion models and large language models (LLMs). Below, we outline the key objectives and formulations:
+The process of machine unlearning can be formalized mathematically for both diffusion models (DMs) and large language models (LLMs). Below, we outline the key objectives and formulations:
 
 ### 1. Diffusion Models
 
@@ -263,7 +263,7 @@ In such cases, knowledge forgotten earlier resurfaces due to the accumulation of
     </div>
 </div>
 <div class="caption">
-  Sequential unlearning tasks often experience a surge in forget accuracy for earlier unlearning targets, as seen in multiple diffusion model (DM) methods<d-cite key="zhang2024unlearncanvas"></d-cite>.
+  Sequential unlearning tasks often experience a surge in forget accuracy for earlier unlearning targets, as seen in multiple diffusion model methods in the UnlearnCanvas benchmark<d-cite key="zhang2024unlearncanvas"></d-cite>.
 </div>
 
 **Implication**: Fake unlearning introduces instability in sequential unlearning tasks, risking recovery of forgotten knowledge with each subsequent unlearning operation.
@@ -273,7 +273,7 @@ In such cases, knowledge forgotten earlier resurfaces due to the accumulation of
 
 Imagine the apartment shrinks due to renovations or collapses slightly due to an earthquake. The small storage room would also shrink, causing the previously hidden boxes to spill back into the main apartment and come to light. A similar phenomenon occurs in fake unlearning when structural changes, such as **quantization** or **pruning**, are applied to the model. These operations can inadvertently reveal the supposedly forgotten knowledge.
 
-As demonstrated in <d-cite key="zhang2024does"></d-cite>, most quantized models exhibit reduced performance on the forgetting metric. This indicates that structural changes undermine the stability of fake unlearning, leading to the re-discovery of previously unlearned knowledge. The figure below highlights this behavior, showing degraded unlearning effectiveness in quantized models.
+As demonstrated in existing literature<d-cite key="zhang2024does"></d-cite>, most quantized models exhibit reduced performance on the forgetting metric. This indicates that structural changes undermine the stability of fake unlearning, leading to the re-discovery of previously unlearned knowledge. The figure below highlights this behavior, showing degraded unlearning effectiveness in quantized models.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -302,7 +302,7 @@ In the context of LLMs, when unlearning is performed on a pretrained model, we n
   An illustration of how unlearning “overdraws” the ability to learn in the future. 
 </div>
 
-**Implication**: Fake unlearning diminishes the model’s effective capacity, limiting its potential for long-term adaptability.
+**Implication**: Fake unlearning diminishes the model’s effective capacity instead of freeing them up, limiting its potential for long-term adaptability.
 
 
 ### Key Takeaway
@@ -336,7 +336,7 @@ The figure below illustrates this issue. Our preliminary study reveals that the 
   The distribution of the Min-K=20% score <d-cite key='zhang2024min'></d-cite> (memorization level) for the pretrained Zephyr-7B-beta <d-cite key='tunstall2023zephyr'></d-cite> with respect to the WMDP forget set. Lower scores indicate data better grasped by the model, while higher scores reflect poorly learned samples.
 </div>
 
-To address this, we explored a straightforward selective unlearning approach by omitting forget set samples based on their prediction confidence. The figure below demonstrates that unlearning effectiveness and retainability remain nearly the same when approximately 10%–20% of low-confidence samples are excluded. Notably, removing around 30% of these samples achieves a better forgetting-retaining tradeoff, as shown by the fitted curve nearer to the top-right corner. This represents a win-win scenario: reducing data samples in the forget set not only improves the tradeoff but also boosts unlearning efficiency.
+To address this, we explored a very straightforward selective unlearning approach by omitting forget set samples based on their prediction confidence. The figure below demonstrates that unlearning effectiveness and retainability remain nearly the same when approximately 10%–20% of low-confidence samples are excluded. Notably, removing around 30% of these samples achieves a better forgetting-retaining tradeoff, as shown by the fitted curve nearer to the top-right corner. This represents a win-win scenario: reducing data samples in the forget set not only improves the tradeoff but also boosts unlearning efficiency.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -381,7 +381,7 @@ When evaluating the impact of machine unlearning, researchers often focus solely
 
 ### Consequence 1 - Impairment of Emergent Abilities and Reasoning
 
-Emergent abilities<d-cite key="wei2022emergent"></d-cite> refer to the complex capabilities that arise as a result of scaling large language models (LLMs), such as in-context learning, augmented prompting, and reasoning. These abilities are widely regarded as critical characteristics of LLMs, enabling tasks like multi-step reasoning, contextual understanding, and advanced problem-solving. However, their vulnerability to unlearning side effects has been largely overlooked in evaluations.
+Emergent abilities<d-cite key="wei2022emergent"></d-cite> refer to the complex capabilities that arise as a result of scaling LLMs, such as in-context learning, augmented prompting, and reasoning. These abilities are widely regarded as critical characteristics of LLMs, enabling tasks like multi-step reasoning, contextual understanding, and advanced problem-solving. However, their vulnerability to unlearning side effects has been largely overlooked in evaluations.
 
 Machine unlearning can disrupt these advanced abilities, especially when reasoning or other emergent skills rely on entangled knowledge connected to the forget set. Our preliminary study highlights this disruption by evaluating the original Zephyr-7B-Beta model and its unlearned version (using the NPO algorithm) on the WMDP dataset across tasks that represent emergent abilities. These include:
 - **Reasoning/In-context learning tasks**: Assessed through MMLU (5-shot)<d-cite key="hendrycks2020measuring"></d-cite> and TruthfulQA<d-cite key="lin2021truthfulqa"></d-cite>, which require multi-step inference, contextual understanding, and distinguishing truth from plausible-sounding falsehoods.
@@ -401,7 +401,7 @@ The unlearned model consistently underperformed across all tasks, with particula
 
 ### Consequence 2 - Increased Hallucinations
 
-Hallucinations, where the model generates incorrect or nonsensical information, are a persistent challenge in large language models (LLMs). Machine unlearning, by altering the model’s learned representations, can exacerbate this issue, destabilizing the model's behavior and increasing the frequency of hallucinations.
+Hallucinations, where the model generates incorrect or nonsensical information, are a persistent challenge in LLMs. Machine unlearning, by altering the model’s learned representations, can exacerbate this issue, destabilizing the model's behavior and increasing the frequency of hallucinations.
 
 To investigate this concern, we conducted a preliminary study using the Zephyr-7B-Beta model and evaluated its hallucination rate before and after unlearning on the Truthful QA dataset. Unlearning was performed with the NPO method on the WMDP dataset. Before unlearning, the model achieved an accuracy rate of **38.80%**. After unlearning, the accuracy dropped to **34.27%**, indicating an increase in factual inaccuracies in general knowledge by over 4%.
 
@@ -419,7 +419,7 @@ To investigate this concern, we conducted a preliminary study using the Zephyr-7
 
 ### Key Takeaway
 
-Overlooking the broader side effects of machine unlearning can significantly impair a model's emergent abilities and reasoning skills, while also increasing hallucination rates. Since knowledge in large language models is highly interconnected, unlearning targeted data may unintentionally disrupt critical capabilities. To preserve model utility and reliability, unlearning strategies must carefully evaluate and mitigate these unintended consequences.
+Overlooking the broader side effects of machine unlearning can significantly impair a model's emergent abilities and reasoning skills, while also increasing hallucination rates. Since knowledge in LLMs is highly interconnected, unlearning targeted data may unintentionally disrupt critical capabilities. To preserve model utility and reliability, unlearning strategies must carefully evaluate and mitigate these unintended consequences.
 
 ---
 
