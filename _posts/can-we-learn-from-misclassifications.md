@@ -35,15 +35,7 @@ bibliography: can-we-learn-from-misclassifications.bib
 toc:
   - name: Expirmantal Results
   - name: Figures
-    subsections:
-    - name: Interactive Figures
-  - name: Citations
-  - name: Footnotes
-  - name: Code Blocks
-  - name: Diagrams
-  - name: Tweets
-  - name: Layouts
-  - name: Other Typography?
+   
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
@@ -89,4 +81,5 @@ Where the columns of the table represent:
 -**Grad_Cam_SSIM**: Grad_Cam Structural similarity index measure
 -**Grad_Cam_AUC**: Grad_Cam area under the curve
 
+## Figures
 
