@@ -291,17 +291,14 @@ _styles: >
 <!-- preamble -->
 <div class="preamble">
 $$
-%\require{mathtools} % would be nice but breaks other stuff...
 \def\partialt#1{\frac{\partial #1}{\partial t}}
 \def\|{|}
 \def\p{p(x | t)}
-% \def\u{u_t(x)}
 \def\u{u(x, t)}
 \def\utheta{u_{\theta}(x, t)}
 \def\CFM{\mathrm{CFM}}
 \def\uthetacfm{u_{\theta}^{\CFM}(x, t)}
 \def\pcond{p(x | t, z)}
-% \def\pcond{p^{|z}_t(x)}
 \def\ucond{u^{\mathrm{cond}}(x, t, z)}
 \def\ucondzi{u^{\mathrm{cond}}(x, t, z^{(i)})}
 \def\wcond{p^{|x,t}(z)}
@@ -310,8 +307,7 @@ $$
 \def\E#1#2{\mathbb{E}_{#1} #2}
 \def\Ebracket#1#2{\mathbb{E}_{#1} \left[ #2 \right]}
 \def\ucondcustom#1{u^{\mathrm{cond}}(#1)}
-\def\eqchoice{\overset{\mathrm{choice}}{=}}
-\def\foralltx{\forall t, \forall x, \;\;\;}
+\def{\forall t, \forall x, \;\;\;}
 \def\cause#1{\textcolor{grey}{\;\; #1}}
 \def\causetext#1{\cause{\mbox{#1}}}
 \def\pdata{p_{\mathrm{data}} }
@@ -327,7 +323,6 @@ $$
 \DeclareMathOperator{\diag}{diag}
 \def\LCFM{ \cL^{\mathrm{CFM}} }
 \newcommand{\pbase}{p_0}
-% \newcommand{\pbase}{p_\mathrm{base}}
 \newcommand{\ptarget}{p_\mathrm{target}}
 $$
 </div>
@@ -741,7 +736,7 @@ A first choice is to condition on the base points and the target points, i.e., $
 
 $$
 \begin{align*}
-z \eqchoice (x_0, x_1) \sim \pbase \times p_\mathrm{data} \, .
+z \overset{\mathrm{choice}}{=} (x_0, x_1) \sim \pbase \times p_\mathrm{data} \, .
 \end{align*}
 $$
 
@@ -750,7 +745,7 @@ Among all the possible probability paths, one can choose to use very concentrate
 
 $$
 \begin{align*}
-p \big (x | t, z=(x_0, x_1) \big) \eqchoice \mathcal{N}((1 - t) \cdot x_0 + t \cdot x_1, \sigma^2 \mathrm{Id}) \, .
+p \big (x | t, z=(x_0, x_1) \big) \overset{\mathrm{choice}}{=} \mathcal{N}((1 - t) \cdot x_0 + t \cdot x_1, \sigma^2 \mathrm{Id}) \, .
 \end{align*}
 $$
 
@@ -758,7 +753,7 @@ To recover the correct distributions $$\pbase$$ at $$t= 0$$ (resp. $$\ptarget$$ 
 
 $$
 \begin{align*}
-p \big (x | t, z=(x_0, x_1) \big) \eqchoice \delta_{ (1-t) \cdot x_0 + t \cdot x_1 } (x) \, ,
+p \big (x | t, z=(x_0, x_1) \big) \overset{\mathrm{choice}}{=} \delta_{ (1-t) \cdot x_0 + t \cdot x_1 } (x) \, ,
 \end{align*}
 $$
 
@@ -810,7 +805,7 @@ One can make other choices for the conditioning variable, for instance
 
 $$
 \begin{align*}
-z \eqchoice x_1 \sim \pdata \, ,
+z \overset{\mathrm{choice}}{=} x_1 \sim \pdata \, ,
 \end{align*}
 $$
 
@@ -819,7 +814,7 @@ and the following choice for the conditional probability path: simply translate 
 $$
 \begin{align*}
 p(x | t, z=x_1)
-\eqchoice \mathcal{N}(tx_1, (1 - t)^2 \mathrm{Id}) \, .
+\overset{\mathrm{choice}}{=} \mathcal{N}(tx_1, (1 - t)^2 \mathrm{Id}) \, .
 \end{align*}
 $$
 
@@ -955,7 +950,7 @@ recall that $$p(x, t)$$ is defined as $$\int_z p(x, t | z)$$, i.e., by marginali
 $$ p(x, t) = \Ebracket{z}{p(x, t | z)}  $$ has a closed-form formula:
 
 $$\begin{align}
-  \foralltx \u &= \Ebracket{z|x, t} {\ucond } \label{eq:condional_flow}
+  \forall t, x, \, \, \u &= \Ebracket{z|x, t} {\ucond } \label{eq:condional_flow}
   \enspace .
 \end{align}
 $$
