@@ -46,24 +46,15 @@ Various techniques have been developed to extend the sequence length that LLMs c
 - *RAG* stores the extra knowledge in **external databases** and retrieves relevant knowledge on need. However, it is prone to information loss when conditioned on inaccurate retrievals and may produce hallucinations if the retrieved context contains significant noise.
 
 - *Fine-tuning for longer contexts* extends the context window of a pre-trained model and fine-tunes on long documents for adaptation. This method still stores the extra knowledge **in context**. While effective, the inference can become highly inefficient due to processing the entire lengthy context. Moreover, no matter how much the context window length of an LLM is extended, there will still be scenarios involving texts too long to process in context. 
-  
-
-<!-- In real-world applications, relying solely on *in-context learning (ICL)*<d-cite key="dong2022survey"></d-cite> to acquire new knowledge is insufficient. To address this,  -->
 
 In this blog, we explore a third way to store the extra knowledge in the lengthy input. Instead of relying on external databases or extended context window, we propose to leverage **in-parameter knowledge** by
 directly **fine-tuning the long input into the model parameters** and using the fine-tuned model for inference. 
 
-<!-- This method regardless of the input length**. -->
-
 Our novel framework, **Long Input Fine-Tuning (LIFT)**, is designed to enhance the long-context capabilities of any short-context model. It offers the following advantages:
 
 1. **On-the-fly long-context training.** The framework dynamically adapts model parameters to process lengthy inputs as needed, avoiding the resource-intensive processes of offline fine-tuning for long-context models and inference on the entire long input. 
-  
-<!-- By incorporating segmentation strategies, it effectively **overcomes the challenges associated with fine-tuning on long texts within a short context window**. -->
 
 2. **Unlimited input length.** No matter how long the input is, our framework can fine-tune the knowledge into the parameters by segmenting the input into partially overlapping blocks and performing language modeling on them in parallel. Thus, it eliminates the input length restrictions associated with in-context learning (ICL).
-
-<!-- 2. **Improved long-context learning.** The framework effectively improves the long-context comprehension ability of LLMs. For tasks that require integrating new knowledge, the incorporation of truncated ICL further enhances the model's ability to dynamically utilize relevant information. -->
 
 3. **Significant improvement in long-context tasks.** Our evaluations across various benchmarks demonstrate that LIFT greatly benefits tasks such as summarization and complex scenarios like timeline reordering and reading comprehension. Moreover, incorporating supervised fine-tuning prior to applying LIFT further enhances the model's performance on downstream tasks.
 
@@ -82,7 +73,6 @@ As discussed earlier, our method features fine-tuning and inference with only a 
 
 LLMs access knowledge either from contexts or their parameters. Unlike ICL, we propose storing test-time knowledge in the parameters by fine-tuning the model on the given long input.
 
-<!-- which is known as **Test-Time Training (TTT)** <d-cite key="liang2023comprehensivesurveytesttimeadaptation"></d-cite><d-cite key="sun2024learninglearntesttime"></d-cite><d-cite key="sun2020testtimetrainingselfsupervisiongeneralization"></d-cite>. -->
 
 We formalize memorizing the input as a language modeling task. Let the input be $$\mathbf{x}=(x_ {1},x_ {2},\dots,x_ {L})$$, where $$L$$ is a very large number. The objective function for the language modeling task is defined as
 
