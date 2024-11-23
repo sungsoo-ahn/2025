@@ -138,7 +138,7 @@ most of the parameters to match that of the Big Vision reference implementation,
    </div>
 
 3. `torch.nn.Linear` for the classification head: Specifically for the classification head, Big Vision
-   usually zero-init both the weight and bias for the linear layer, including the ViT-S/16 in question.
+   usually zero-inits both the weight and bias for the linear layer, including the ViT-S/16 in question.
    Notably, neither [`simple_vit.py`](https://github.com/lucidrains/vit-pytorch/blob/141239ca86afc6e1fe6f4e50b60d173e21ca38ec/vit_pytorch/simple_vit.py#L108) nor [`simple_flash_attn_vit.py`](https://github.com/lucidrains/vit-pytorch/blob/141239ca86afc6e1fe6f4e50b60d173e21ca38ec/vit_pytorch/simple_flash_attn_vit.py#L162) from vit-pytorch does this.
 
 After fixing 1-3, we verify that all of the per-layer summary statistics including minimum, maximum,
@@ -495,7 +495,46 @@ most of the models written in PyTorch and JAX, as long as they use the default
 * [`torch.nn.Conv2d`](https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html) and other `torch.nn._ConvNd` subclasses / [`flax.linen.Conv`](https://flax.readthedocs.io/en/v0.5.3/_autosummary/flax.linen.Conv.html), or
 * [`torch.nn.init.trunc_normal_()`](https://pytorch.org/docs/stable/nn.init.html#torch.nn.init.trunc_normal_) / [`jax.nn.initializers.variance_scaling` with `distribution="truncated_normal"`](https://jax.readthedocs.io/en/latest/_autosummary/jax.nn.initializers.variance_scaling.html).
 
-However, we don't know which of these discrepancies matter, if any. In the narrow sense, we have
+Even if the user notices the discrepancy, it takes attention to detail to customize correctly. Take
+the `imagenet_vit` workload of AlgoPerf <d-cite key="Dahl2023AlgoPerf"></d-cite>, for example. The
+[PyTorch implementation](https://github.com/mlcommons/algorithmic-efficiency/blob/86d2a0d23c9a3192f878406edc72547fcf0568ec/algorithmic_efficiency/workloads/imagenet_vit/imagenet_pytorch/models.py)
+makes sure that query, key, and value projection matrices are separate and always re-initializes [`torch.nn.Linear`](https://pytorch.org/docs/stable/generated/torch.nn.Linear.html)
+layers with [`xavier_uniform_()`](https://pytorch.org/docs/stable/nn.init.html#torch.nn.init.xavier_uniform_).
+It zero-inits the classification head by default and attempts to
+[take the effect of truncation on standard deviation into account](https://github.com/mlcommons/algorithmic-efficiency/blob/86d2a0d23c9a3192f878406edc72547fcf0568ec/algorithmic_efficiency/init_utils.py#L15-L16)
+for weight initialization. [`trunc_normal_()` of PyTorch](https://pytorch.org/docs/stable/nn.init.html#torch.nn.init.trunc_normal_),
+however, defaults to truncation at $\pm 2$ instead of $\pm 2$ standard deviation, so the resulting
+weight ends up almost untruncated:
+
+```python
+>>> from algorithmic_efficiency.workloads.imagenet_vit.imagenet_pytorch.models import ViT
+>>> from algorithmic_efficiency.workloads.imagenet_vit.workload import decode_variant
+>>> vit = ViT(**decode_variant('S/16'))
+>>> for w in [vit.conv_patch_extract.weight, vit.pre_logits.weight]:
+...   print(w.min(), w.max())
+...
+tensor(-0.2119, grad_fn=<MinBackward1>) tensor(0.1907, grad_fn=<MaxBackward1>)
+tensor(-0.2749, grad_fn=<MinBackward1>) tensor(0.2512, grad_fn=<MaxBackward1>)
+```
+
+compared to the [JAX implementation](https://github.com/mlcommons/algorithmic-efficiency/blob/86d2a0d23c9a3192f878406edc72547fcf0568ec/algorithmic_efficiency/workloads/imagenet_vit/imagenet_jax/models.py):
+
+```python
+>>> import jax.numpy
+>>> import jax.random
+>>> from algorithmic_efficiency.workloads.imagenet_vit.imagenet_jax.models import ViT
+>>> from algorithmic_efficiency.workloads.imagenet_vit.workload import decode_variant
+>>> vit = ViT(**decode_variant('S/16'))
+>>> x = jax.numpy.zeros((1, 224, 224, 3), jax.numpy.float32)
+>>> params = vit.init(jax.random.key(0), x)
+>>> for w in [params['params']['conv_patch_extract']['kernel'], params['params']['pre_logits']['kernel']]:
+...   print(w.min(), w.max())
+...
+-0.08204417 0.08203908
+-0.11602508 0.116011634
+```
+
+In the narrow sense, we have
 shown that the discrepancies in RandAugment and Inception crop implementations impact model performance.
 Some CV people are aware of the RandAugment issues, but to our best knowledge the Inception crop
 discrepancies are not documented anywhere. Given its deep root in training deep image models, it has
