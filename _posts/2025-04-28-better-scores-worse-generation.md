@@ -133,9 +133,7 @@ Audio evaluation traditionally relies on two established audio *similarity* prot
 - Different measures of similarity (ratings, confusion errors, reaction times) often show only modest correlation
 <!-- cite also use of full 5 points despite quality -->
 
-Our investigation focuses on a simpler question: Can listeners detect any difference between the reference and reconstruction?
-Rather than asking "how different?", we ask "detectably different or not?" This binary framing provides cleaner signal about perceptual boundaries while requiring less annotator training.
-For this binary perceptual discrimination task, we adopted two complementary Just Noticeable Difference (JND) protocols:
+Our investigation focuses on a simpler question: Can listeners detect any difference between the reference and reconstruction? Rather than asking "how different?", we ask "detectably different or not?" This binary framing provides cleaner signal about perceptual boundaries while requiring less annotator training. For this binary perceptual discrimination task, we adopted two complementary Just Noticeable Difference (JND) protocols:
 
 Two-Alternative Forced Choice (2-AFC/AX) presents listeners with a reference and reconstruction in known order, requiring a binary judgment: "Do you hear a difference?". While 2-AFC offers intuitive comparison with minimal cognitive load and clear Just Noticeable Difference (JND) criteria, it introduces reference bias and suffers from high false positive rates (50%) under random guessing. More subtly, response bias under uncertainty varies systematically with reconstruction quality---listeners tend to default to "similar" with high-quality samples but "different" with lower-quality ones, creating a complex interaction between model performance and evaluation reliability.
 
