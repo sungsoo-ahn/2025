@@ -318,7 +318,7 @@ where $$\mathbb{1}(\cdot)$$ is the indicator function that outputs 1 if the cond
 To address the challenges of ensuring factual accuracy in GPT systems, we propose a framework that preprocesses data into structured and verifiable units with the aim to enhance the reliability of LLM-generated responses while optimizing storage and retrieval efficiency.
 
 <figure style="text-align: center;">
-    <img src="{{ 'assets/img/2025-04-28-streamlining-factual-validation/method.png' | relative_url }}">
+    <img src="{{ 'assets/img/2025-04-28-streamlining-factual-validation/methodology.png' | relative_url }}" style="width: 95%;">
     <figcaption style="font-size: 15px; text-align: left; margin: 0 auto; max-width: 800px;">
         <strong>Figure 5.</strong> This diagram illustrates the workflow of the LLM Validity Judger. The system fetches relevant facts from a vector database, generates responses based on this context, and simplifies outputs into factual statements. It validates these statements by comparing them with the vector database, generating an overall validity score and explanation. The process repeats with feedback until a valid result is achieved. The diagram also includes the New Data Input System, which independently adds summarized and verified facts into the vector database, ensuring its relevance and accuracy. For clarity, the fetching system mirrors standard vector database retrieval processes.
     </figcaption>
