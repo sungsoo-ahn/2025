@@ -182,12 +182,12 @@ For convenience, we summarize some of the notations commonly used in tables belo
 - FS: finite-sum.
 - Stoc: stochastic
 - $L$-S: $L$-Lipschitz smooth. 
-- $L$-IS / AS / SS<d-footnote>For clarification, $L$-IS means in finite-sum problems, each component function $f_i$ itself is $L$-smooth, for the definition of $L$-AS, please refer to the definition of "mean-squared smoothness" in <d-cite key="arjevani2023lower"></d-cite>, and $L$-SS means the summation $f$ is $L$-smooth while each component $f_i$ may not be Lipschitz smooth. Clearly IS is stronger than AS, AS is stronger than SS.</d-footnote>: $L$-Lipschitz individual / averaged smoothness / summation smoothness.
+- $L$-IS / AS / SS<d-footnote>For clarification, $L$-IS means in finite-sum problems, each component function $f_i$ itself is $L$-smooth, for the definition of $L$-AS, please refer to the definition of "mean-squared smoothness" in <d-cite key="arjevani2023lower"></d-cite>, and $L$-SS means the summation $f$ is $L$-smooth while each component $f_i$ may not be Lipschitz smooth. Clearly IS is stronger than AS, AS is stronger than SS.</d-footnote>: $L$-Lipschitz individual / averaged / summation smoothness.
 - PL: Polyak-Łojasiewicz Condition
 - Optimality gap: the function value gap $f(x) - f^\star$.
 - Stationarity: the function gradient norm $\|\| \nabla f(x) \|\|$.
 - Near-stationarity: the gradient norm $\|\| \nabla f_\lambda(x) \|\|$, where $f_\lambda$ is the Moreau envelope of the original function $f$.
-- Duality Gap (for minimax optimization): the primal-dual gap of a given point $(x',y')$, defined as $G_f(x',y')\triangleq\max_y f(x',y)-\min_x f(x,y')$.
+- Duality Gap (for minimax optimization): the primal-dual gap of a given point $(\hat{x},\hat{y})$, defined as $G_f(\hat{x},\hat{y})\triangleq\max_y f(\hat{x},y)-\min_x f(x,\hat{y})$
 - Primal Stationarity (for minimax optimization): the primal function gradient norm $\|\| \nabla \Phi(x) \|\|$, where $\Phi(x)\triangleq\max_{y\in\mathcal{Y}}f(x,y)$ is the primal function. It is different from the function stationarity in terms of the original objective function $f$.
 
 ---
@@ -218,6 +218,12 @@ Also for **Minimax Problems**, based on the convexity combination of each compon
 | $L$-Smooth NC              | Stationarity    | $\Omega (\Delta L \epsilon^{-2})$                             | $\checkmark$ | [<d-cite key="carmon2020lower"></d-cite>, Theorem 1]      |
 | NS $L$-Lip Cont. $\rho$-WC    | Near-stationarity        | Unknown                                                       | $\mathcal{O}(\epsilon^{-4})$      | [<d-cite key="davis2018stochastic"></d-cite>, Theorem 2.1 implied]                  |
 | $L$-Smooth $\mu$-PL     | Optimality gap        | $\Omega \left( \kappa \log \frac{1}{\epsilon} \right)$ | $\checkmark$      | [<d-cite key="yue2023lower"></d-cite>, Theorem 3; <d-cite key="karimi2016linear"></d-cite>]                  |
+
+**Remark:**
+
+1. Here we use $\checkmark$ to denote that the upper and lower bounds match in this setting, otherwise we use $\times$ or directly present existing best result.
+2. For some cases, we denote the LB as "Unknown" if there is not a specific (nontrivial) lower bound built for this case.
+3. $\Delta$ corresponds to the initial function value gap $f(x_0)-f(x^\star)$, $D$ corresponds to the initial point distance $\|\|x_0-x^*\|\|$.
 
 ### Case 1-2: Finite-sum and Stochastic Optimization
 
@@ -252,7 +258,6 @@ Also for **Minimax Problems**, based on the convexity combination of each compon
 | SC-SC, bilinear       | Duality Gap        | $\Omega(\sqrt{\kappa_x \kappa_y} \log \frac{1}{\epsilon})$ | $\checkmark$               | [<d-cite key="zhang2022lower"></d-cite>, Thm 3.5], [<d-cite key="chambolle2016ergodic"></d-cite>, Thm 5]                                      |
 | SC-SC, general        | Duality Gap        | $\Omega(\sqrt{\kappa_x \kappa_y} \log \frac{1}{\epsilon})$ | $\times$    | [<d-cite key="zhang2022lower"></d-cite>, Thm 4.5], [<d-cite key="wang2020improved"></d-cite>, Thm 3]                                            |
 | PL-PL                 | Duality Gap        | Unknown                                            | $\mathcal{O}(\kappa^3\log \frac{1}{\epsilon})$ | [<d-cite key="yang2020global"></d-cite>] |
-|                       |         |                                                 |                              |                                                          |
 
 ### Case 2-2: SC-SC/SC-C/C-C Finite-sum and Stochastic Minimax Optimization
 
@@ -266,7 +271,6 @@ Also for **Minimax Problems**, based on the convexity combination of each compon
 | SC-SC, Stoc, SS      | Duality Gap | $\Omega(\epsilon^{-1})$                    | $\checkmark$                  | (Stoc SC SS min)                                            | [<d-cite key="hsieh2019convergence"></d-cite>, Thm 5]       |
 | SC-SC, Stoc, NS      | Duality Gap | $\Omega(\epsilon^{-1})$                    | $\checkmark$                  | (Stoc SC NS min)                                            | [<d-cite key="yan2020optimal"></d-cite>]       |
 | PL-PL, Stoc      | Duality Gap | Unknown                    | $\mathcal{O}(\kappa^5\epsilon^{-1})$                  | (Stoc SC NS min)                                            | [<d-cite key="yang2020global"></d-cite>]       |
-|                      |         |                                             |                               |                                                             |
 
 ### Case 2-3: NC-SC/NC-C Deterministic Minimax Optimization
 
