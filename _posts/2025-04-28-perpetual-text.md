@@ -53,7 +53,7 @@ _styles: >
   }
 ---
 
-Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling.
+<!-- Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling. -->
 
 # Introduction
 
@@ -153,13 +153,13 @@ From our Motivating Experiments, we observed decreasing entropy and increasing E
 
 **We propose a few methods to bypass the model's desire to halt:**
 
-## Suppressing the EOS Token
-[Link to CodeBase](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L17)
+## [Suppressing the EOS Token](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L14)
+<!-- [Link to CodeBase](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L17) -->
 
 The first method involves suppressing the EOS token during the token generation process to prevent th emodel from ending the sequence prematurely.
 
 **Implementation Details:**
-- Sampling Without Replacement: At each generation step, the model uses a sampling without replacement strategy to select two candidate tokens from the probability distribution. [link](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L60)
+- Sampling Without Replacement: At each generation step, the model uses a sampling without replacement strategy to [select two candidate tokens]((https://github.com/Perpetual-text/icrl25-blog-code/blob/main/sampling.py#L60)) from the probability distribution.
 - EOS Token Exclusion: If one of the sampled tokens is the EOS token, it is discarded in favor of the other token. This ensures that the EOS token is not selected during generation.
 - Continuation of Generation: The model continues to generate tokens without the possibility of selecting the EOS token.
 
@@ -174,8 +174,8 @@ The first method involves suppressing the EOS token during the token generation 
 - The suppression of the EOS token alone may not be sufficient to prevent premature termination, as the model compensates by generating alternative concluding tokens.
 - Further strategies are needed to guide the model toward producing more extended and coherent continuations.
 
-## Modified Sampling Method Post-EOS Token
-[Link to CodeBase](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L82)   
+## [Modified Sampling Method Post-EOS Token](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L79)
+<!-- [Link to CodeBase/](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L82)    -->
 
 The second method modifies the sampling strategy after the model predicts the EOS token to encourage more diverse continuations and avoid abrupt endings.
 
@@ -192,8 +192,8 @@ The second method modifies the sampling strategy after the model predicts the EO
 - While the increased randomness can prevent the model from ending the sequence prematurely, it may compromise the coherence and relevance of the generated text.
 - Balancing stochasticity and coherence is crucial to ensure that the generated sequences remain contextually appropriate.
 
-## Regenerating Tokens Prior to the EOS Token
-[Link to CodeBase](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L153)   
+## [Regenerating Tokens Prior to the EOS Token](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L150)
+<!-- [Link to CodeBase](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L153)    -->
 The third method involves regenerating a portion of the sequence preceding the EOS token to provide the model with an opportunity to produce alternative continuations.
 
 **Implementation Details:**
@@ -210,8 +210,8 @@ The third method involves regenerating a portion of the sequence preceding the E
 - However, the loss of context may negatively impact the coherence and relevance of the generated text.
 - Fine-tuning the backstep parameter is essential to balance the trade-off between removing the influence of the EOS token and maintaining sufficient context for coherent generation.
 
-## Regnerating the Resampling Tokens Prior to the EOS Token with Dynamic Temperature Adjustment
-[Link to CodeBase](https://github.com/Perpetual-text/iclr2025/blob/main/long_generate.py#L242)  
+## [Regnerating the Resampling Tokens Prior to the EOS Token with Dynamic Temperature Adjustment](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L239)
+<!-- [Link to CodeBase](https://github.com/Perpetual-text/iclr2025/blob/main/long_generate.py#L242)   -->
 The fourth method enhances the previous approach by incorporating a dynamic temperature adjustment during the regeneration of tokens, aiming to improve both diversity and coherence in the generated sequence.
 
 **Implementation Details:**
