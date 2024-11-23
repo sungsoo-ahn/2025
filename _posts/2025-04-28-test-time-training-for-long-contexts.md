@@ -180,11 +180,16 @@ Interestingly, PassageRetrievalEN exhibits a significant drop when combining LIF
 
 ## LIFT can be further enhanced with pre-LIFT supervised fine-tuning
 
-Encouraged by the significant improvement observed in the timeline-reorder task from LooGLE, we aim to further enhance the performance of LIFT on similar tasks like sorting and reordering, by incorporating auxiliary tasks (AT) (Section 3.2) and pre-LIFT SFT (Section 3.3). The results are illustrated in Table 4.
+Encouraged by the significant improvement observed in the timeline-reorder task from LooGLE, we aim to further enhance the performance of LIFT on similar tasks like sorting and reordering, by incorporating auxiliary tasks (AT) (Section 3.2) and pre-LIFT SFT (Section 3.3), where we generate synthetic QAs simliar to the target task and fine-tunes the model on both the input long text and the QAs. The results are illustrated in Table 4.
 
-Comparing the results of LIFT+ICL w/ and w/o AT, as well as LIFT+ICL+SFT w/ and w/o AT, we observe that AT bring negligible improvement or even slightly degrades performance. A possible explanation is that the number of synthesized samples in our evaluation is insuffcient, potentially causing the model to overfit to these tasks. However, it's impractical to synthesise a huge number of training samples at test time due to unacceptable computational cost. Striking a balance between efficiency and effectiveness when using AT at test time remains a significant challenge and requires further exploration.
+There are six models compared:
+- ICL and LIFT+ICL are the same as before; 
+- LIFT+AT+ICL means fine-tuning on both input text and synthetic QAs during the LIFT phase;
+- SFT+ICL, SFT+LIFT+ICL and SFT+LIFT+AT+ICL mean using the SFT model rather than the original LLM for the previous three baselines.
 
-In contrast, we find LIFT w/o AT consistently improves performance. While SFT greatly improves the performance (which is reasonable since the tasks used in the SFT process are similar to those at test time), LIFT can further boost performance (comparing LIFT+ICL to ICL, as well as LIFT+ICL+SFT to ICL+SFT), highlighting the effectiveness of our method.
+Comparing the results of LIFT+ICL w/ and w/o AT, as well as SFT+LIFT+ICL w/ and w/o AT, we observe that AT bring negligible improvement or even slightly degrades performance. A possible explanation is that the number of synthesized samples in our evaluation is insuffcient, potentially causing the model to overfit to these tasks. However, it's impractical to synthesise a huge number of training samples at test time due to unacceptable computational cost. Striking a balance between efficiency and effectiveness when using AT at test time remains a significant challenge and requires further exploration.
+
+In contrast, we find LIFT w/o AT consistently improves performance. While SFT greatly improves the performance (which is reasonable since the tasks used in the SFT process are similar to those at test time), LIFT can further boost performance (comparing LIFT+ICL to ICL, as well as SFT+LIFT+ICL to SFT+ICL), highlighting the effectiveness of our method.
 
 {% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table4_at_sft.svg" class="img-fluid" title="Table 4" %}
 <div class="caption">Table 4. Coordinate score on specific task in Bamboo, LooGLE, and QuALITY using AT and SFT.</div>
