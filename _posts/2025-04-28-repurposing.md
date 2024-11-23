@@ -82,7 +82,7 @@ accomplishing the goal by modifying the agent’s initial conceptual space into 
 </div>
 
 <h4>Example: </h4>
-<aside style="padding:20px;background-color:#a7a7fa;font: 16px bold" class="box-important l-body"> 
+<aside style="padding:20px;background-color:#8585e2;font: 16px bold" class="box-important l-body"> 
   <p> We borrow the simplified example from <d-cite key="nair-etal-2024-creative"></d-cite> illustrating a robot with the goal $G$ of transferring beans from a jar to a cooker: $G = in $(beans, cooker). The initial state is defined as $C_S = in$(beans, jar), $hasContainability$(spoon). The actions are defined as $C_A = scoop$(beans, $Z, loc_s, loc_d)$, where $Z$ refers to an object that satisfies $hasContainability(\cdot)$. 
 </p>
 <p>
@@ -140,7 +140,7 @@ where $$r$$ is a new interpretation/mapping function that achieves $$G$$ using t
 Let us recall the previous example used to describe creative problem solving. For repurposing, the same example becomes:
 
 <h4>Example:</h4>
-<aside style="padding:20px;background-color:#a7a7fa;font: 16px bold" class="box-important l-body">
+<aside style="padding:20px;background-color:#8585e2;font: 16px bold" class="box-important l-body">
  <p> Let's consider the same robot with the same goal of transferring beans from a jar to a cooker: $G = in $(beans, cooker). The initial state is defined as $C_S = in$(beans, jar), $hasContainability$(spoon). The actions are defined as $C_A = scoop$(beans, $Z, loc_s, loc_d)$, where $Z$ refers to an object that satisfies $hasContainability(\cdot)$. Let $P = \{$hasContainability, isTransparent$, ...\}$ be the set of properties for the resources available (in this case only the glass), and $R = \{$glass$\}$ be the set of available resources (no spoon available). The property mapping function $p$ reveals that $p$(glass) = $hasContainability$, indicating that the glass shares the crucial property needed for the scooping action. </p>
 <p>
 In the repurposing framework, when the robot doesn't have a spoon but has a glass, it:
