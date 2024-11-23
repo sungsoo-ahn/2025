@@ -58,7 +58,7 @@ In many practical scenarios, developers need to focus on testing specific progra
 
 Directed fuzzing is a testing technique that automatically generates inputs attempting to reach and trigger buggy program states at specific target locations.
 
-Traditional directed fuzzing techniques have long faced challenges when it comes to handling intricate program structures. But the game is changing. With the rise of Large Language Models (LLMs), we're witnessing a revolution in program analysis<d-cite key=""></d-cite>. These models aren't just about generating text—they're showcasing remarkable abilities in understanding code structures, deciphering semantics, and identifying complex patterns within software. The potential here is enormous. By leveraging LLMs' ability to comprehend and analyze complex program behaviors, we're opening the door to groundbreaking advancements in how we test and secure software systems.
+Traditional directed fuzzing techniques have long faced challenges when it comes to handling intricate program structures. But the game is changing. With the rise of Large Language Models (LLMs), we're witnessing a revolution in program analysis<d-cite key="fang2024large"></d-cite><d-cite key="pei2023can">. These models aren't just about generating text—they're showcasing remarkable abilities in understanding code structures, deciphering semantics, and identifying complex patterns within software. The potential here is enormous. By leveraging LLMs' ability to comprehend and analyze complex program behaviors, we're opening the door to groundbreaking advancements in how we test and secure software systems.
 
 This leads to an interesting question:
 
@@ -312,7 +312,7 @@ Although these models could identify some function relationships, they suffered 
 
 We also evaluated state-of-the-art directed fuzzers on this maze program:
 
-|                              | **AFLGo** | **AFL++** | **DAFL** | **SelectFuzz** | **Beacon** |
+|                              | **AFLGo</d-cite><d-cite key="bohme2017directed"></d-cite>** | **AFL++<d-cite key="fioraldi2020afl"></d-cite>** | **DAFL<d-cite key="kim2023dafl"></d-cite>** | **SelectFuzz<d-cite key="luo2023selectfuzz"></d-cite>** | **Beacon<d-cite key="huang2022beacon"></d-cite>** |
 |------------------------------|-----------|-----------|----------|----------------|------------|
 | **Time to Exposure (min)**   |   4.97    |   0.15    |   0.17   |      3.25      |    1.38    |
 
@@ -337,7 +337,7 @@ Our experiments revealed several insights about using LLMs for directed fuzzing:
 <!-- 3. **Consistency**: LLM outputs can be non-deterministic, potentially leading to inconsistent guidance. -->
 4. **Hallucinations**: LLMs may generate incorrect or fabricated information.
 
-Recent academic work has shown promising results by combining LLMs with fuzzing techniques, particularly in automatic generation of fuzz targets and LLM-assisted input generation. Leveraging the reasoning and decision-making capabilities of LLMs, future directions could include:
+Recent academic work</d-cite><d-cite key="chang2024leveling"></d-cite> has shown promising results by combining LLMs with fuzzing techniques, particularly in automatic generation of fuzz targets and LLM-assisted input generation. Leveraging the reasoning and decision-making capabilities of LLMs, future directions could include:
 
 1. **Directed Fuzz Introspection**: Using LLMs to debug and identify bottlenecks in the fuzzing process and provide feedback to the fuzzer.
 2. **Assisting Static Analysis**: Filtering out false positives and negatives in traditional static analysis.
