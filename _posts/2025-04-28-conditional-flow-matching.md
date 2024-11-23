@@ -296,7 +296,6 @@ $$
 \def\p{p(x | t)}
 \def\u{u(x, t)}
 \def\utheta{u_{\theta}(x, t)}
-\def\CFM{\mathrm{CFM}}
 \def\uthetacfm{u_{\theta}^{\CFM}(x, t)}
 \def\pcond{p(x | t, z)}
 \def\ucond{u^{\mathrm{cond}}(x, t, z)}
@@ -307,26 +306,19 @@ $$
 \def\E#1#2{\mathbb{E}_{#1} #2}
 \def\Ebracket#1#2{\mathbb{E}_{#1} \left[ #2 \right]}
 \def\ucondcustom#1{u^{\mathrm{cond}}(#1)}
-\def{\forall t, \forall x, \;\;\;}
-\def\cause#1{\textcolor{grey}{\;\; #1}}
-\def\causetext#1{\cause{\mbox{#1}}}
 \def\pdata{p_{\mathrm{data}} }
 \newcommand{\cL}{\mathcal{L}}
+\def{\cLL}{\mathcal{L}}
+\newcommand{\cN}{\mathcal{N}}
 \newcommand{\cC}{\mathcal{C}}
 \newcommand{\cO}{\mathcal{O}}
 \newcommand{\bbE}{\mathbb{E}}
 \newcommand{\bbN}{\mathbb{N}}
 \newcommand{\KL}{\mathrm{KL}}
-\newcommand{\norm}[1]{ \lVert {#1} \rVert}
-\DeclareMathOperator*{argmax}{argmax}
-\DeclareMathOperator*{argmin}{argmin}
-\DeclareMathOperator{\diag}{diag}
-\def\LCFM{ \cL^{\mathrm{CFM}} }
-\newcommand{\pbase}{p_0}
-\newcommand{\ptarget}{p_\mathrm{target}}
 $$
 </div>
 
+$$\cL$$, $$\cN$$, $$\cLL$$
 The first part of this blog post is an introduction to generative modelling, normalizing flows and continuous normalizing flows.
 The reader already familiar with these topics, or that wants to cover them later, can directly jump to the <a href="#conditional-flow-matching">second part</a>, devoted to **conditional flow matching**.
 
@@ -441,7 +433,7 @@ This transformation is invertible in closed-form, and the determinant of its Jac
 The Jacobian of $$\phi$$ defined in \eqref{eq:realnvp} is lower triangular:
 
 $$
-J_{\phi}(x) = \begin{pmatrix} \mathrm{Id}_{d'} & 0_{d',d -d'}  \\ ... & \diag(\exp(s(x_{1:d}))) \end{pmatrix}
+J_{\phi}(x) = \begin{pmatrix} \mathrm{Id}_{d'} & 0_{d',d -d'}  \\ ... & \mathrm{diag}(\exp(s(x_{1:d}))) \end{pmatrix}
 $$
 
 hence its determinant can be computed at a low cost, and in particular without computing the Jacobians of $$s$$ and $$t$$.
@@ -660,14 +652,14 @@ Core concepts and visuals manipulated in this post
 <span class="ref-lastfig">Figure </span> illustrates the key background elements necessary to understand Flow Matching.
 
 - **(left)**
-A flow that maps a simple distribution $$ \pbase $$ in blue (typically $$\mathcal{N}(0,1)$$) into the data distribution to be modelled $$\pdata$$ in red.
+A flow that maps a simple distribution $$ p_0 $$ in blue (typically $$\mathcal{N}(0,1)$$) into the data distribution to be modelled $$\pdata$$ in red.
 The probability path $$\p$$ associates to each time $$t$$, a distribution (dashed).
 - **(center)**
 The two distributions (in gray) together with a probability path $$ \p $$ shown as a heatmap.
 Such a sufficiently regular probability path is governed by a velocity field $$ \u $$.
 - **(right)**
 The velocity field $$ \u $$ (shown with arrows and colors) corresponding to the previous probability path.
-The animation shows samples from $$ \pbase $$ that follow the velocity field.
+The animation shows samples from $$ p_0 $$ that follow the velocity field.
 The distribution of these samples corresponds to $$\p$$.
 </div>
 
@@ -684,10 +676,10 @@ The distribution of these samples corresponds to $$\p$$.
 <figure class="sidebar is-right" style="--w: 200; --h: 300;" >
   <iframe style="--h: 147" src="{{ 'assets/html/2025-04-28-conditional-flow-matching/u-anim.html' | relative_url }}" frameborder="0" scrolling="no"></iframe>
   <figcaption class="caption">
-  Generation of samples from \(p_1\) can be done by sampling from \(\pbase\) and then following the velocity field \(\utheta\).
+  Generation of samples from \(p_1\) can be done by sampling from \(p_0\) and then following the velocity field \(\utheta\).
   </figcaption>
 </figure>
-**Goal**. Similarly to continuous normalizing flows, the goal of conditional flow matching is to find a velocity field $$\utheta$$ that, when followed/integrated, transforms $$\pbase$$ into $$\pdata$$.
+**Goal**. Similarly to continuous normalizing flows, the goal of conditional flow matching is to find a velocity field $$\utheta$$ that, when followed/integrated, transforms $$p_0$$ into $$\pdata$$.
 Once the velocity field is estimated, the data generation process of conditional flow matching and continuous normalizing flows are the same.
 It is illustrated in <span class="ref-lastfig">Figure </span>.
 
@@ -695,12 +687,12 @@ It is illustrated in <span class="ref-lastfig">Figure </span>.
 <figure class="sidebar" style="--w: 200; --h: 320;" >
   <iframe style="--h: 200" src="{{ 'assets/html/2025-04-28-conditional-flow-matching/ot-flow-1d.html#loop3' | relative_url }}" frameborder="0" scrolling="no"></iframe>
   <figcaption class="caption">
-  An infinite number of probability paths \((p_t)_{t \in [0,1]}\) that transforms \(\pbase\) in \(\pdata\).
+  An infinite number of probability paths \((p_t)_{t \in [0,1]}\) that transforms \(p_0\) in \(\pdata\).
   </figcaption>
 </figure>
 **Intuition**.
 In order to make the learning of the velocity field $$ \utheta $$ easier, one would like to get a supervision signal at each time step $$t \in [0,1]$$ (and not only at time $$t=1$$).
-However, as illustrated in <span class="ref-lastfig">Figure </span>, there exists an infinite number of probability paths $$ p_t $$ (equivalently an infinite number of velocity fields $$ \u$$) that tranform $$ \pbase $$ in $$ \pdata $$.
+However, as illustrated in <span class="ref-lastfig">Figure </span>, there exists an infinite number of probability paths $$ p_t $$ (equivalently an infinite number of velocity fields $$ \u$$) that tranform $$ p_0 $$ in $$ \pdata $$.
 Thus, in order to get supervision for all $$t$$, one must **fully specify a probability path/velocity field**.
 
 **Organization**.
@@ -725,7 +717,7 @@ We consider $$t$$ as a random variable and interchangeably write $$p(x \| t)$$ a
 
 **How to fully specify a probability path $$p_t$$?**
 For unknown target data distribution $$ \pdata$$ it is hard to choose a priori a probability path or velocity field.
-CFM core idea is to choose a conditioning variable $$z$$ and a conditional probability path $$\pcond$$ (examples below) such that (1) the induced global probability path $$\p$$ transforms $$\pbase$$ into $$\pdata$$, (2) the associated velocity field $$u^\mathrm{cond}$$ has an analytic form.
+CFM core idea is to choose a conditioning variable $$z$$ and a conditional probability path $$\pcond$$ (examples below) such that (1) the induced global probability path $$\p$$ transforms $$p_0$$ into $$\pdata$$, (2) the associated velocity field $$u^\mathrm{cond}$$ has an analytic form.
 
 
 **Example 1: Linear interpolation <d-cite key="albergo_building_2023,liu_flow_2023"/>**
@@ -736,7 +728,7 @@ A first choice is to condition on the base points and the target points, i.e., $
 
 $$
 \begin{align*}
-z \overset{\mathrm{choice}}{=} (x_0, x_1) \sim \pbase \times p_\mathrm{data} \, .
+z \overset{\mathrm{choice}}{=} (x_0, x_1) \sim p_0 \times p_\mathrm{data} \, .
 \end{align*}
 $$
 
@@ -749,7 +741,7 @@ p \big (x | t, z=(x_0, x_1) \big) \overset{\mathrm{choice}}{=} \mathcal{N}((1 - 
 \end{align*}
 $$
 
-To recover the correct distributions $$\pbase$$ at $$t= 0$$ (resp. $$\ptarget$$ at $$t=1$$), one must enforce $$\sigma = 0$$, finally leading to
+To recover the correct distributions $$p_0$$ at $$t= 0$$ (resp. $$p_\mathrm{target}$$ at $$t=1$$), one must enforce $$\sigma = 0$$, finally leading to
 
 $$
 \begin{align*}
@@ -844,12 +836,12 @@ leads to a couple $$(\ucond, \pcond)$$ satisfying the continuity equation.
 To build a conditional probability path, the user must make two modelling choices:
 - first, a **conditioning variable** $$z$$ (independent of $$t$$)
 - then, **conditional probability paths**<d-footnote markdown="1">
-As Albergo and coauthors <d-cite key="albergo_building_2023"/>, one can construct the conditional probability path by  first defining a conditional flow (also called stochastic interpolant) \(f_t^\mathrm{cond}(x, z)\). By pushing \(\pbase\), these flows define random variables \(x \vert t, z = f^\mathrm{cond}(x, t, z)\), which have conditional distributions \(p(\cdot \vert z, t) = f^\mathrm{cond}(\cdot, t, z)\#\pbase\).</d-footnote> $$\pcond$$
-that must satisfy the following constraint: marginalizing $$p(x \vert z, t=0)$$ (resp. $$p(x \vert z, t=1)$$) over $$z$$, yields $$\pbase$$ (resp. $$\pdata$$). In other words, $$\pcond$$ must satisfy
+As Albergo and coauthors <d-cite key="albergo_building_2023"/>, one can construct the conditional probability path by  first defining a conditional flow (also called stochastic interpolant) \(f_t^\mathrm{cond}(x, z)\). By pushing \(p_0\), these flows define random variables \(x \vert t, z = f^\mathrm{cond}(x, t, z)\), which have conditional distributions \(p(\cdot \vert z, t) = f^\mathrm{cond}(\cdot, t, z)\#p_0\).</d-footnote> $$\pcond$$
+that must satisfy the following constraint: marginalizing $$p(x \vert z, t=0)$$ (resp. $$p(x \vert z, t=1)$$) over $$z$$, yields $$p_0$$ (resp. $$\pdata$$). In other words, $$\pcond$$ must satisfy
 
 $$
 \begin{align*}
-\forall x \enspace & \Ebracket{z}{ p(x \vert z, t=0) } = \pbase(x) \enspace, \\
+\forall x \enspace & \Ebracket{z}{ p(x \vert z, t=0) } = p_0(x) \enspace, \\
 \forall x \enspace & \Ebracket{z}{ p(x \vert z, t=1) } = \pdata(x) \enspace.
 \end{align*}
 $$
@@ -862,18 +854,18 @@ $$
 
 $$
 \begin{align*}
-&z = (x_0, x_1) \sim \pbase \times p_\mathrm{target} \\
+&z = (x_0, x_1) \sim p_0 \times p_\mathrm{target} \\
 &\pcond = \delta_{(1 - t) x_0  + t x_1}(x)
 \end{align*}
 $$
 
-One also easily checks that $$\int_z p(x \vert z, t=0) p(z) \mathrm{d}z = \int_z \delta_{x_0}(x) p(z) \mathrm{d}z = \pbase(x)$$ and $$\int_z p(x \vert z, t=1) p(z) \mathrm{d}z = \int_z \delta_{x_1}(x) p(z) \mathrm{d}z = p_\mathrm{target}(x)$$
+One also easily checks that $$\int_z p(x \vert z, t=0) p(z) \mathrm{d}z = \int_z \delta_{x_0}(x) p(z) \mathrm{d}z = p_0(x)$$ and $$\int_z p(x \vert z, t=1) p(z) \mathrm{d}z = \int_z \delta_{x_1}(x) p(z) \mathrm{d}z = p_\mathrm{target}(x)$$
 
 Note that the choice $$ p \big (x | t, z=(x_0, x_1) \big) = \mathcal{N}((1 - t) \cdot x_0 + t \cdot x_1, \sigma^2)$$,
 $$ \sigma> 0$$ does not (exactly) respect the constraint
-$$ \Ebracket{z}{ p(x \vert z, t=0)} = \pbase(x) $$, but it has been sometimes used in the literature.
+$$ \Ebracket{z}{ p(x \vert z, t=0)} = p_0(x) $$, but it has been sometimes used in the literature.
 
-- Choice 2 (valid for a Gaussian $$\pbase$$ only):
+- Choice 2 (valid for a Gaussian $$p_0$$ only):
 
 $$
 \begin{align*}
@@ -883,7 +875,7 @@ $$
 $$
 
 
-One easily checks that $$\int_z p(x \vert z, t=0) p(z) \mathrm{d}z = \int_z \pbase(x) p(z) \mathrm{d}z = \pbase(x)$$ and $$\int_z p(x \vert z, t=1) p(z) \mathrm{d}z = \int_z \delta_z(x) p(z) \mathrm{d}z = p_\mathrm{target}(x)$$, so those are admissible conditional paths.
+One easily checks that $$\int_z p(x \vert z, t=0) p(z) \mathrm{d}z = \int_z p_0(x) p(z) \mathrm{d}z = p_0(x)$$ and $$\int_z p(x \vert z, t=1) p(z) \mathrm{d}z = \int_z \delta_z(x) p(z) \mathrm{d}z = p_\mathrm{target}(x)$$, so those are admissible conditional paths.
 
 </details>
 
@@ -991,7 +983,7 @@ $$\ucond$$ associated to the conditional probability paths $$ \pcond $$.
 Regressing against the conditional velocity field \(\ucond\)  with the following conditional flow matching loss,
 
 $$\begin{aligned}
-\LCFM(\theta) & \overset{\mathrm{def}}{=}
+\mathcal{L}^{\mathrm{CFM}}(\theta) & \overset{\mathrm{def}}{=}
 \E{
   \substack{t \sim \mathcal{U}([0, 1]) \\
             z \sim p_z \\
@@ -1006,9 +998,9 @@ $$\begin{aligned}
  is equivalent to directly regressing against the intractable unknown vector field  \(\u \)
 
   $$\begin{align*}
-  \LCFM(\theta)
+  \mathcal{L}^{\mathrm{CFM}}(\theta)
    & \underset{(\text{proof below})}{=}
-   \E{\substack{ t \sim \mathcal{U}([0, 1]) \\ x \sim p_t} } \norm{\uthetacfm - \underbrace{\u}_{\substack{\text{implicitly defined,} \\ \text{hard/expensive} \\ \text{to compute}}}}^2
+   \E{\substack{ t \sim \mathcal{U}([0, 1]) \\ x \sim p_t} } \Vert{\uthetacfm - \underbrace{\u}_{\substack{\text{implicitly defined,} \\ \text{hard/expensive} \\ \text{to compute}}}}\Vert^2
   + \underbrace{C}_{\text{indep. of } \theta} \enspace.
   \end{align*}$$
 
@@ -1018,7 +1010,7 @@ $$\begin{aligned}
   <summary>Click here to unroll the proof</summary>
 
   $$\begin{aligned}
-  \LCFM(\theta)
+  \mathcal{L}^{\mathrm{CFM}}(\theta)
   & : = \E{(x, t, z)}{\lVert \uthetacfm - \ucond \rVert^2} \\
   & = \E{(x, t, z)}[
   {\lVert \uthetacfm \rVert^2 - 2\langle \uthetacfm, \ucond \rangle] + \underbrace{\E{(x, t, z)}\lVert \ucond \rVert^2}_{:= C_1 \text{ indep. of } \theta}}  \\
@@ -1032,24 +1024,24 @@ $$\begin{aligned}
   & = \E{(x, t)}[ \lVert \uthetacfm \rVert^2 -
   { 2\langle \uthetacfm, \underbrace{\E{(z | x, t)} \ucond}_{= \u \, \text{(eq. \eqref{eq:condional_flow})}} \rangle } ]
   + C_1 \\
-  & = \E{(x, t)}[ \underbrace{\norm{\uthetacfm}^2 -
-  { 2\langle \uthetacfm, \u \rangle } + \norm{\u}^2}_{\norm{\uthetacfm - \u}^2}] - \underbrace{\E{(x, t)} \norm{\u}^2}_{:= C_2 \text{ indep. of }\theta}
+  & = \E{(x, t)}[ \underbrace{\Vert{\uthetacfm}\Vert^2 -
+  { 2\langle \uthetacfm, \u \rangle } + \Vert{\u}\Vert^2}_{\Vert{\uthetacfm - \u}\Vert^2}] - \underbrace{\E{(x, t)} \Vert{\u}\Vert^2}_{:= C_2 \text{ indep. of }\theta}
   + C_1 \\
-  & = \E{(x, t)} \norm{\uthetacfm - \u}^2 + C
+  & = \E{(x, t)} \Vert{\uthetacfm - \u}\Vert^2 + C
   \end{aligned}$$
 
 </details>
 
 
-Finally, the loss $$\LCFM$$ can optimized using standard mini-batch gradient techniques. It is easy to sample $$ (x, t, z)$$:
+Finally, the loss $$\mathcal{L}^{\mathrm{CFM}}$$ can optimized using standard mini-batch gradient techniques. It is easy to sample $$ (x, t, z)$$:
 $$t$$ is uniform, $$x| t, z$$ is easy by design of the conditional paths, and the available samples $$x^{(1)}, \ldots, x^{(n)}$$ can be used to sample $$z$$.
 
-<!-- Finally, the loss $$\LCFM$$ can easily be approximated with Monte-Carlo sampling: $$t$$ is uniform, $$x| t, z$$ is easy by design of the conditional paths, and the available samples $$x^{(1)}, \ldots, x^{(n)}$$ can be used to sample from $$z$$. -->
+<!-- Finally, the loss $$\mathcal{L}^{\mathrm{CFM}}$$ can easily be approximated with Monte-Carlo sampling: $$t$$ is uniform, $$x| t, z$$ is easy by design of the conditional paths, and the available samples $$x^{(1)}, \ldots, x^{(n)}$$ can be used to sample from $$z$$. -->
 
 <!-- **CFM Loss in Practice**
 <div class="left-lined" markdown="1">
 
-Computing the CFM loss is *easy* in practice, for instance for the choices $$ z = (x_0, x_1) \sim \pbase \times p_\mathrm{data} $$ and
+Computing the CFM loss is *easy* in practice, for instance for the choices $$ z = (x_0, x_1) \sim p_0 \times p_\mathrm{data} $$ and
 $$ p \big (x | t, z=(x_0, x_1) \big) = \delta_{((1 - t) \cdot x_0 + t \cdot x_1)}(x) \, ,$$
 the CFM loss requires to sample from a uniform distribution on $$[0, 1]$$,  $$ p_0$$ and the empirical data distribution (which is easy).
 The CFM loss also requires to sample $$x$$ from $$ p( \cdot | t, (x_0, x_1)) $$, that has been precisely chosen to be easy: $$ x = (1 - t) \cdot x_0 + t \cdot x_1) $$.
@@ -1071,7 +1063,7 @@ Finally, computing the CFM loss  requires the values of the conditional velocity
   <!-- Row 2 -->
   <tr>
     <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;"><strong>1. Define a variable \(z\) with some known distribution \(p(z)\)</strong></td>
-    <td style="padding: 10px; border-bottom: 1px solid #ddd; background-color: #d8e2dc; text-align: center;">\(p(z = (x_0, x_1)) = \pbase \times \pdata\)</td>
+    <td style="padding: 10px; border-bottom: 1px solid #ddd; background-color: #d8e2dc; text-align: center;">\(p(z = (x_0, x_1)) = p_0 \times \pdata\)</td>
     <td style="padding: 10px; border-bottom: 1px solid #ddd; background-color: #f0e1f5; text-align: center;">\(p(z= x_1) = \pdata\)</td>
   </tr>
 
@@ -1157,7 +1149,7 @@ To this end, a key observation is that the straighter the line is between the ba
 Hence some recent efforts put to obtain straight flows while using Flow Matching <d-cite key="pooladian23ot,kornilov2024optimal,tong2024improving"/>.
 
 Consider the case where the conditioning variable is $$ z = (x_0, x_1) $$.
-In what precedes we have chosen to use $$ p(z = (x_0, x_1)) = \pbase \times \ptarget$$, but in fact one is free to choose any distribution for $$z$$, as long as it is a *coupling* $$\pi \in \Pi(\pbase, \ptarget)$$ <d-footnote> \(\Pi(\pbase, \ptarget)\) denotes the set of probability measures on the product space having marginals \(\pbase\) and \(\ptarget\). </d-footnote>.
+In what precedes we have chosen to use $$ p(z = (x_0, x_1)) = p_0 \times p_\mathrm{target}$$, but in fact one is free to choose any distribution for $$z$$, as long as it is a *coupling* $$\pi \in \Pi(p_0, p_\mathrm{target})$$ <d-footnote> \(\Pi(p_0, p_\mathrm{target})\) denotes the set of probability measures on the product space having marginals \(p_0\) and \(p_\mathrm{target}\). </d-footnote>.
 
 
 #### Rectified Flow Matching
@@ -1189,11 +1181,11 @@ This is  the approach originally proposed by <d-cite key="liu2023flow"/>.
 </figure>
 
 Another strategy is to directly start from a different coupling than the independent one.
-Consider the coupling $$\pi^* \in \Pi(\pbase, \ptarget)$$ given by Optimal Transport <d-footnote> $$\pi^* = \arg \min_{\pi \in \Pi(\pbase, \ptarget)} \int_{x_0} \int_{x_1}||x_0 -x_1||^2 \pi(x_0, x_1) $$ </d-footnote>, then one property of OT is that the lines between $$x_0$$ and $$x_1$$ **cannot cross**.
+Consider the coupling $$\pi^* \in \Pi(p_0, p_\mathrm{target})$$ given by Optimal Transport <d-footnote> $$\pi^* = \arg \min_{\pi \in \Pi(p_0, p_\mathrm{target})} \int_{x_0} \int_{x_1}||x_0 -x_1||^2 \pi(x_0, x_1) $$ </d-footnote>, then one property of OT is that the lines between $$x_0$$ and $$x_1$$ **cannot cross**.
 
 In practice, the optimal transport is costly to compute for big datasets (and possible mainly with discrete distributions) so minibatch optimal transport is used instead.
 As shown in <span class="ref-lastfig">Figure </span>, using minibatches of 10 points for each distribution, trajectories are still crossing but much less often.
-This approach can be formalized by setting the conditioning $$z$$ as a minibatch of $$M$$ source samples et one of $$M$$ (for simplicity) target samples, i.e., $$z \sim (\pbase^M, \pdata^M)$$.
+This approach can be formalized by setting the conditioning $$z$$ as a minibatch of $$M$$ source samples et one of $$M$$ (for simplicity) target samples, i.e., $$z \sim (p_0^M, \pdata^M)$$.
 
 
 
