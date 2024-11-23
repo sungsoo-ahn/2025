@@ -39,6 +39,20 @@ toc:
   - name: "Beyond DP-SGD: Using Correlated Noise"
   - name: Conclusion
 
+
+# toc:
+#   - name: Introduction
+#   - name: Some Foundations of Differential Privacy
+#     subsections:
+#         - name: "A Practical Example: Private Mean Estimation"
+#         - name: "The Gaussian Mechanism and Its Analysis"
+#   - name: From Gaussian Mechanism to DP-SGD
+#       subsections:
+#     - name: "Privatizing Gradient Descent"
+#     - name: "The Challenge of Multiple Steps: Adaptive Composition"
+#     - name: Tighter Analysis via Renyi Differential Privacy
+#   - name: "Beyond DP-SGD: Using Correlated Noise"
+#   - name: Conclusion
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
 # If you use this post as a template, delete this _styles block.
@@ -58,9 +72,9 @@ In this post, we'll just focus on a particular instance of DP: training a neural
 - Private messages helping improve language models
 - Financial transactions training fraud detection algorithms
 
-In each case, we have a process that takes sensitive individual data points as input and outputs model parameters that could potentially reveal information about that training data. A successful deployment can bring huge social benefits if the model works well, but it could also lead to ugly privacy breaches if the training data can be inferred.
+In each case, we have a process that takes sensitive individual datapoints as input and outputs model parameters, which could potentially reveal information about that training data. A successful deployment can bring huge social benefits if the model works well, but it could also lead to ugly privacy breaches if the training data can be inferred.
 
-We'll explore this challenge through a concrete, minimalist example: training a two-layer neural network on simple classification dataset with DP guarantees. While simple, we try to illustrate some of the challenges and solutions in DP deep learning. Specifically, we'll consider DP guarantees over individual training examples - meaning an observer shouldn't be able to tell whether any particular image-label pair was used during training, even with complete access to the model parameters.
+We'll explore this challenge through a concrete minimalist example: training a two-layer neural network on a simple classification dataset with DP guarantees. While simple, we try to illustrate some of the challenges and solutions in DP deep learning. Specifically, we'll consider DP guarantees over individual training examples - meaning an observer shouldn't be able to tell whether any particular image-label pair was used during training, even with complete access to the model parameters.
 
 *Why this blog:* the main motivation of this blog is to introduce DP in a concrete but simple setting. Even in this very simple setting, training a DP model requires a set of tricks. By introducing a selected highly useful subsets of these tricks, we aim to give the broader community a very limited, yet not completely out-of-touch, perspective on the progress and challenges of DP training. For a broader guide on DP and some best practices, we recommend the review <d-cite key="ponomareva2023dpfy"></d-cite>.
 
@@ -95,7 +109,7 @@ For a small $$\varepsilon$$, an observer looking at the output of $M$ is not abl
 >$$\begin{equation}
 >P\left\{ \ln\left(\frac{ p_{D}(O)}{p_{D'}(O)}\right) \geq  \varepsilon\right\}\leq  \frac{\delta}{1-e^{-\varepsilon/2}}
 >\end{equation} $$
-> where $$p_{D}$$ and $$p_{D'}$$ are the distributions of $$M(D)$$ and $$M(D')$$ respectively. The probability is taken over $$o\sim p_D$$.
+> where $$p_{D}$$ and $$p_{D'}$$ are the distributions of $$M(D)$$ and $$M(D')$$ respectively. The probability is taken over $$O\sim p_D$$.
 
 This result shows that an $$(\varepsilon, \delta)$$-DP guarantee can be interpreted as high-probability bound on the ratio between the log probabilities of the outputs corresponding to two neighbouring datasets. This ratio is actually called the privacy loss and plays a critical role in the analysis of DP mechanisms. 
 
@@ -105,7 +119,7 @@ This result shows that an $$(\varepsilon, \delta)$$-DP guarantee can be interpre
 
 As shown by **Key Result 1**, the privacy loss variable enables us to interpret the $$\delta$$ of an $$(\varepsilon, \delta)$$ mechanism. However, a similar result exists in the reverse direction and often plays an important role. The reverse direction is particularly useful when proving that a mechanism is differentially private.
 
-> **Key Result 2** (Lemma 3.17 <d-cite key=dwork2014algorithmic></d-cite>) If for all neighbouring datasets $$D,D'$$, a mechanism $$M$$ satisfy $$P(L(M,D,D') > \varepsilon) \leq \delta$$, then $$M$$ is $$(\varepsilon,\delta)$$-DP 
+> **Key Result 2** (Lemma 3.17 <d-cite key=dwork2014algorithmic></d-cite>) If for all neighbouring datasets $$D,D'$$, a mechanism $$M$$ satisfies $$P(L(M,D,D') > \varepsilon) \leq \delta$$, then $$M$$ is $$(\varepsilon,\delta)$$-DP.
 
 In other words, if we can show that the privacy loss is bounded by $$\varepsilon$$ with high probability (≥ 1-$$\delta$$), then the mechanism satisfies $$(\varepsilon,\delta)$$-DP<d-footnote> Note that the other direction does not strictly hold as the reverse statement in Key Result 1 is weaker.</d-footnote>. In addition, the above two results also provide insights on the appropriate values of $$\delta$$ and $$\varepsilon$$. Generally, $$\varepsilon$$ indicates the strength of the guarantee and $$\delta$$ signifies the probability of the privacy catastrophically breaking. Thus, we often require $$\delta$$ to be very small. Ideally, $\varepsilon$ should be around or smaller than $1$ so that the ratio between the two probability of outcomes under two datasets differing by a record stays small. However, in practice, $$\varepsilon=1$$ is relatively hard to obtain.
 
@@ -162,9 +176,9 @@ Finally, applying a tail bound on the Gaussian tail allows us to specify a suffi
 $$
 P(L(M,D,D') > \varepsilon) \leq \delta.
 $$
-This in turns allow us to prove the $$(\varepsilon, \delta)$$ guarantee by **key result 2**.
+This then allows us to prove the $$(\varepsilon, \delta)$$ guarantee by **key result 2**.
 
-While this value of $$\sigma$$ is sufficient for ($$\varepsilon, \delta$$)-DP, it is not necessary. In particular, the tail bound we applied during the proof may be loose for some value of $$\varepsilon$$ and $$\delta$$, resulting in a larger than needed $$\sigma$$. For example, in the blog  <d-cite key=PeiBlog1></d-cite>, Pei showed that the bound can be refined to 
+While this value of $$\sigma$$ is sufficient for ($$\varepsilon, \delta$$)-DP, it is not necessary. In particular, the tail bound we applied during the proof may be loose for some values of $$\varepsilon$$ and $$\delta$$, resulting in a larger than needed $$\sigma$$. For example, in the blog  <d-cite key=PeiBlog1></d-cite>, Pei showed that the bound can be refined to 
 
 $$\sigma \geq \Delta \cdot \min \left\{
 \begin{array}{l}
@@ -172,8 +186,8 @@ $$\sigma \geq \Delta \cdot \min \left\{
 \frac{1}{\varepsilon}\left(1\vee \sqrt{ (\log(2\pi)^{-1}\delta^{-2})_+} + {2\varepsilon^{-1/2}} \right) \\
 \frac{1}{\varepsilon}\sqrt{\log(e^\varepsilon\delta^{-2})}  \\
 \frac{1}{\varepsilon}(\sqrt{1+\varepsilon} \vee \sqrt{\log(e^\varepsilon(2\pi)^{-1}\delta^{-2})}_{+}) 
-\end{array} .
-\right\}$$
+\end{array} 
+\right\}.$$
 
 Taking this one step further, <d-cite key=balle2018analytic></d-cite> proposed to use numerical solver to get even tighter bounds on $$\sigma$$, naming this approach the Analytical Gaussian Mechanism. To illustrate the differences of these approaches, we plot the values of $$\sigma$$ computed using them on our mean salary example.
 
@@ -194,7 +208,7 @@ The above two points are very important in both DP practice and research. While 
 
 ## From Gaussian Mechanism to DP-SGD
 
-### 3.1 Privatizing Gradient Descent
+### Privatizing Gradient Descent
 
 Now that we introduced basic notions and tools of DP, let's go back to our goal of training a neural network on a simple dataset, starting with the fundamental optimization algorithm in machine learning - gradient descent (GD). Given a dataset $$D = \{z_1,...,z_k\}$$ and a model $$f_\theta$$ parameterized by $$\theta$$, GD aims to minimize the empirical risk $$R(f_\theta,D) = \sum_i R(f_\theta,z_i)$$ through iterative updates:
 
@@ -221,7 +235,7 @@ Where $$\text{clip}_C(x):={\min(1, C/\|x\|_2)}{x}$$. This gives us bounded sensi
   4. Update: $$\theta_1 = \theta_0 - \eta\hat{g}$$
 * **Output**: $$\theta_1$$
 
-### 3.2 The Challenge of Multiple Steps: Adaptive Composition 
+###  The Challenge of Multiple Steps: Adaptive Composition 
 
 In practice, training requires many gradient steps, a single gradient step gets us nowhere. Since each step accesses the data, we need to account for **cumulative privacy loss** through successive computations. In addition, each computation (gradient step) requires the output of the previous computation. What we showed in the previous subsection is that through clipping and noise addition, we are able to make a single gradient step satisfy DP. Thus, what we need is a method to calculate the $(\varepsilon_{\text{tot}}, \delta_{\text{tot}})$-DP guarantees of a mechanism, which works by combining and iteratively executing multiple $$(\varepsilon, \delta)$$ mechanisms. Let's define this more formally:
 
@@ -244,12 +258,12 @@ and so on.
 Let's interpret how gradient descent with many steps fits within the adaptive composition framework. We set the $i$-th step of gradient descent as $$M_i$$, taking the output of the previous gradient steps and accessing the data to compute the new parameters $$\theta_{i}$$. Then, $$M_{[k]}$$ is the mechanism that releases all the model checkpoints $$\theta_1,\ldots, \theta_k$$ <d-footnote>for the setting where only the final outcome is released check <d-cite key=feldman2018privacy></d-cite>.</d-footnote>. Therefore, requiring a privacy guarantee on the adaptive composition of gradient steps is to protect against adversaries seeing the entire parameter trajectory, not just the final model. This strong guarantee is often desirable since:
 - Training checkpoints are commonly saved for monitoring convergence, early stopping, ensembling
 - Models may be fine-tuned from intermediate checkpoints
-- In federated learning, updates are explicitly shared with all participating agents<d-footnote>Note that the notion of DP used in federated learning is usually slightly different than the one we are using. Indeed. the guarantee is usually not with respect $D$ and $D'$ differing by one datapoint, but instead $D$ and $D'$ differ by all the datapoints belonging to a single user. This is well explained in <d-cite key=ponomareva2023dpfy></d-cite>  </d-footnote>.
+- In federated learning, updates are explicitly shared with all participating agents<d-footnote>Note that the notion of DP used in federated learning is usually slightly different than the one we are using. The guarantee is usually not with respect $D$ and $D'$ differing by one datapoint, but instead $D$ and $D'$ differ by all the datapoints belonging to a single user. This is well explained in <d-cite key=ponomareva2023dpfy></d-cite>  </d-footnote>.
 
 
 Finally, going back to our goal of calculating $$(\varepsilon_{\text{tot}}, \delta_{\text{tot}})$$, we can achieve this using the the advanced composition theorem:
 
->**Theorem (Advanced Composition)**<d-cite key=dwork2014algorithmic></d-cite>: The $$k$$-fold adaptive composition of $$(\varepsilon,\delta)$$-DP mechanisms satisfies $$(\varepsilon',k\delta+\delta')$$-DP where. $$\varepsilon' = \varepsilon\sqrt{2k \ln(1/\delta')} + k\varepsilon(e^\varepsilon - 1)$$ <d-footnote> This is not tight. For the tight bound check <d-cite key=kairouz2015composition></d-cite>.</d-footnote>.
+>**Theorem (Advanced Composition)**<d-cite key=dwork2014algorithmic></d-cite>: The $$k$$-fold adaptive composition of $$(\varepsilon,\delta)$$-DP mechanisms satisfies $$(\varepsilon',k\delta+\delta')$$-DP where. $$\varepsilon' = \varepsilon\sqrt{2k \ln(1/\delta')} + k\varepsilon(e^\varepsilon - 1)$$ <d-footnote> This is not tight. For the tight bound, check <d-cite key=kairouz2015composition></d-cite>.</d-footnote>.
 
 #### A first try at DP training:
 
@@ -298,7 +312,7 @@ That's actually a lot of noise to inject into GD. Let's just try training for $$
 Well it's not particularly good...
 
 
-### 3.3 Tighter Analysis via Renyi Differential Privacy
+### Tighter Analysis via Renyi Differential Privacy
 
 Can we do better? Given that this blog exists, the answer is probably yes. The advanced composition theorem, while powerful, is mechanism-agnostic - it gives a worst-case bound that must hold for any sequence of $$(\varepsilon,\delta)$$-DP mechanisms. For the Gaussian mechanism specifically, we can do much better.
 
@@ -308,14 +322,14 @@ $$L(M,D,D') \sim \mathcal{N}\left(\frac{\|f(D)-f(D')\|_2^2}{2\sigma^2}, \frac{\|
 
 We also showed that to prove $(\varepsilon,\delta)$-DP, it suffices to bound the tails of this privacy loss random variable:
 
-$$P(|L(M,D,D')| > \varepsilon) \leq \delta$$
+$$P(L(M,D,D') > \varepsilon) \leq \delta$$
 
 This suggests that if we can characterize the distribution of the privacy loss random variable more precisely, we might get tighter privacy guarantees. This leads us to Rényi Differential Privacy (RDP)<d-cite key=mironov2017renyi></d-cite>, which bounds the log moments of the privacy loss random variable:
 
 **Definition**: A mechanism $$M$$ satisfies $$(\alpha,\varepsilon)$$-RDP if for all neighbouring datasets $$D,D'$$:
 $$D_\alpha(M(D)||M(D')) := \frac{1}{\alpha-1}\log\mathbb{E}\left[\exp((\alpha-1)L(M,D,D'))\right] \leq \varepsilon$$
 
-For the Gaussian mechanism with noise scale $$\sigma\Delta_f$$, we can show that it satisfies $$(\alpha,\frac{\alpha}{2\sigma^2})$$-RDP for all $$\alpha > 1$$ <d-footnote>What we just stated here is acutally concentrated differential privacy, we dont explore it in details. It is very closely related to RDP and can be also used to get very similar tight bounds on the compositions of Gaussian mechanisms in practice, for more, check <d-cite key=bun2016concentrated></d-cite>.</d-footnote>. Importantly, each RDP guarantee implies a family of $$(\varepsilon,\delta)$$-DP guarantees through the following conversion theorem:
+For the Gaussian mechanism with noise scale $$\sigma\Delta_f$$, we can show that it satisfies $$(\alpha,\frac{\alpha}{2\sigma^2})$$-RDP for all $$\alpha > 1$$ <d-footnote>What we just stated here is actually concentrated differential privacy, which we don't explore it in details. It is very closely related to RDP. For more, check <d-cite key=bun2016concentrated></d-cite>.</d-footnote>. Importantly, each RDP guarantee implies a family of $$(\varepsilon,\delta)$$-DP guarantees through the following conversion theorem:
 
 **Theorem (RDP Conversion)**<d-cite key=mironov2017renyi></d-cite>: If $$M$$ is $$(\alpha,\varepsilon)$$-RDP, then for any $$\delta > 0$$, $$M$$ also satisfies $$(\varepsilon + \frac{\log(1/\delta)}{\alpha-1}, \delta)$$-DP.
 
@@ -356,11 +370,11 @@ This is more encouraging. We need a way smaller noise for the same exact privacy
 </div>
 
 Well, we are actually able to train!
-### 3.4 The Power of Subsampling: From GD to SGD
+### The Power of Subsampling: From GD to SGD
 
 In practice, we rarely use full GD, preferring stochastic gradient descent (SGD) which operates on random minibatches. Beyond very small datasets on simple models, SGD is indispensable as trying to use the full dataset at each iteration makes the computations completely infeasible. In particular, SGD subsamples a random minibatch at the start of each training iteration. However, a critical issue with subsampling is the expanded sensitivity. To illustrate, let's reconsider our earlier example of computing the mean salary of $$n=10^4$$ employees. The sensitivity of this data query scales with $$\mathcal{O}(1/n)$$. Consider an alternative strategy to estimate the average the salary by first sampling the salary of $$250$$ employees and then computing the average using only the sampled salaries. In this sampling approach, the worst-case sensitivity for a datapoint may scale proportionally with $$1/250$$. As typically $$250\ll n$$, this forces us to add even more noise to maintain the same privacy guarantee. 
 
-Nonetheless, implementing a differentially private SGD is still possible. Subsampling itself, under some conditions, can be shown to provide privacy benefits through **privacy amplification by subsampling**. Hence, the stochasticity of SGD makes each step more private, essentially allowing us to train with less noise. As a result, the tradeoff of increased sensitivity along with subsampling privacy amplification typically cancels out enabling us to use SGD<d-footnote>  This tradeoff between amplification by subsampling and increased sensitivity was recently studied in <d-cite key=2024subsampling></d-cite>.</d-footnote>, wich almost the same amount of noise per iteration, independantly of the batch size. In practice, SGD is implemented by using a random batch with fixed batch-size at each iteration. For the following section, we will assume a different sampling strategy, which we will refer to as Poisson subsampling. We assume that given a dataset, at each step of SGD, each datapoint is independently at random selected for training with probability $$q$$. 
+Nonetheless, implementing a differentially private SGD is still possible. Subsampling itself, under some conditions, can be shown to provide privacy benefits through **privacy amplification by subsampling**. Hence, the stochasticity of SGD makes each step more private, essentially allowing us to train with less noise. As a result, the tradeoff of increased sensitivity along with subsampling privacy amplification typically cancels out enabling us to use SGD<d-footnote>  This tradeoff between amplification by subsampling and increased sensitivity was recently studied in <d-cite key=2024subsampling></d-cite>.</d-footnote>, with almost the same amount of noise per iteration, independantly of the batch size. In practice, SGD is implemented by using a random batch with fixed batch-size at each iteration. For the following section, we will assume a different sampling strategy, which we will refer to as Poisson subsampling. We assume that given a dataset, at each step of SGD, each datapoint is independently at random selected for training with probability $$q$$. 
 
 For the Gaussian mechanism specifically, when we combine:
 - Poisson subsampling with rate $$q$$
@@ -377,7 +391,7 @@ Those building blocks allow us to finally recover the DP-SGD algorithm<d-cite ke
 2. Clip the gradient for each example.
 3. Average and add $$\mathcal{N}(0,\sigma^2 I)$$ noise
 4. Update parameters
-5. Track privacy via RDP composition<d-footnote>Technically the original DP-SGD was not introduced with the framework of RDP but with the moment accountant. Motivated by the structure of Gaussian noise, the authors proposed an algorithm to track the composition of Gaussian mechanisms through the moments of the privacy loss random variable. Later, RDP was introduced in <d-cite key=mironov2019r></d-cite>, which in some sense generalized the approach of tracking composition through the moment behavior of the privacy loss random variable. For a nice discussion on this and a substantially more rigorous results on the amplification by subsampling of RDP, check <d-cite key=Wang_Balle_Kasiviswanathan_2021></d-cite>  </d-footnote>
+5. Track privacy via RDP composition<d-footnote>Technically the original DP-SGD was not introduced with the framework of RDP but with the moment accountant. Motivated by the structure of Gaussian noise, the authors proposed an algorithm to track the composition of Gaussian mechanisms through the moments of the privacy loss random variable. Later, RDP was introduced in <d-cite key=mironov2019r></d-cite>, which in some sense generalized the approach of tracking composition through the moment behavior of the privacy loss random variable. For a nice discussion on this and a substantially more rigorous results on the amplification by subsampling of RDP, check <d-cite key=Wang_Balle_Kasiviswanathan_2021></d-cite>.</d-footnote>
 
 
 #### A third try at DP training. 
@@ -389,7 +403,7 @@ The tight analysis through RDP and privacy amplification allows training SGD wit
     </div>
 </div>
 
-Using subsampling, we get a basically the same noise levels for SGD as GD. However, it must be noted that the figures we have are also a function of the numerical solver we are using to compute the $$\sigma$$ for a given setting. Here, as we previously state, we are using the RDP accountant of the Google dp-accounting library. Using tighter numerical solvers, we can actually show that subsampling allows us to add less noise, especially at smaller values of $$T$$ and $$q$$.
+Using subsampling, we get basically the same noise levels for SGD as GD. However, it must be noted that the figures we have are also a function of the numerical solver we are using to compute the $$\sigma$$ for a given setting. Here, as we previously state, we are using the RDP accountant of the Google dp-accounting library. Using tighter numerical solvers, we can actually show that subsampling allows us to add less noise, especially at smaller values of $$T$$ and $$q$$.
 
 
 
@@ -412,7 +426,7 @@ While DP-SGD with privacy amplification has become the standard approach for dif
 
 If not DP-SGD, what else can we do? Well, a growing line of work investigates adding **correlated noise** instead of independent noise at each iteration. To our knowledge, using this idea for training neural networks was first explored in <d-cite key=kairouz2021practical></d-cite><d-footnote> Prior to <d-cite key=kairouz2021practical></d-cite>, the idea of using correlated noise was studied in the streaming setting of DP <d-cite key=dwork2010differential></d-cite>. A brief summary of this setting and its application to SGD can be found in <d-cite key=denisov2022improved></d-cite></d-footnote>. In the rest of this blog, we will look at the matrix factorization mechanism <d-cite key=choquette2023multiMF></d-cite>, which is a specific mechanism that allows us to train DP models while adding correlated noise through the iterations. 
 
-### 4.1 Putting Gradient Descent in Matrix Form
+### Putting Gradient Descent in Matrix Form
 
 To understand the matrix factorization mechanism, let's first look at how standard gradient descent can be viewed in matrix form. Consider training for $$T$$ steps with learning rate $$\eta$$. At each step $$t$$, gradient descent computes:
 
@@ -441,7 +455,7 @@ $$\Theta = \Theta_0 - \eta AG,$$
 
 such that $$\Theta_0$$ is the matrix with all rows set to $$\theta_0$$ and $$i$$-th row of $$\Theta$$ is $$\theta_i$$. Here, $$A$$ encodes how past gradients influence current parameters. Each row of $$A$$ represents which gradients have been accumulated up to that step.
 
-### 4.2 DP-SGD in Matrix Form
+### DP-SGD in Matrix Form
 
 Now, let's consider DP-SGD, which adds noise at each step:
 
@@ -461,9 +475,9 @@ Since $$z_1$$ and $$z_2$$ are independent, the total noise variance is $$2\eta^2
 Now consider an alternative scheme where  $$z_1 = -z_2$$, then 
 $$\theta_2 = \theta_0 - \eta(h_1 + h_1) $$
 
-The noise cancels out. However, clearly releaseing $$\theta_2$$ offers no privacy guarantees at all.  While this specific scheme isn't DP, it illustrates how correlating noise across steps that process the same data could reduce total variance. Then, the question becomes how to do so in a DP way.
+The noise cancels out. However, releaseing $$\theta_2$$ clearly offers no privacy guarantees at all.  While this specific scheme isn't DP, it illustrates how correlating noise across steps that process the same data could reduce total variance. Then, the question becomes how to do so in a DP way.
 
-### 4.3 The Matrix Factorization Framework
+### The Matrix Factorization Framework
 
 Let's try to generalize and to take a wider perspective on DP-SGD. From writing it in matrix form, we can understand DP-SGD as a method to compute $$AH$$ in a DP way by outputing
 
@@ -552,4 +566,4 @@ In this blog post, we explored the building blocks of differentially private tra
 - DP-SGD, which adds independent Gaussian noise at each iteration, with privacy amplification through careful subsampling
 - Matrix factorization mechanisms, which enable carefully correlated noise across iterations through optimized encoder-decoder pairs 
 
-Both approaches offer viable paths to private deep learning, with different tradeoffs. While DP-SGD remains simpler to implement, matrix factorization mechanisms like may achieve better privacy-utility tradeoffs in many settings. For practitioners looking to train neural networks with differential privacy, experimenting with both approaches may be valuable, as their relative performance can depend on factors like model architecture, dataset size, and privacy requirements. 
+Both approaches offer viable paths to private deep learning, with different tradeoffs. While DP-SGD remains simpler to implement, matrix factorization mechanisms may achieve better privacy-utility tradeoffs in many settings. For practitioners looking to train neural networks with differential privacy, experimenting with both approaches may be valuable, as their relative performance can depend on factors like model architecture, dataset size, and privacy requirements. 
