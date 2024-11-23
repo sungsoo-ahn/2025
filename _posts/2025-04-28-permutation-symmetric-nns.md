@@ -906,7 +906,7 @@ The result is an equivariant backbone as follows.
     Stacking multiple equivariant layers to create a practical high capacity network.
 </div>
 
-As
+High order einsum operations can result in large values. One consideration in practice is how to normalize them to be in line with lower order terms. Our experience is that mean subtraction and standard deviation normalization seems to help learning, but obviously more exploration is still needed. Found any better strategies? Let us know!
 
 Another consideration in practice is [einsum path optimization](https://numpy.org/doc/stable/reference/generated/numpy.einsum_path.html). For example, the einsum string `ab,dc,ae,ac,db->de` by default is programmed to be computed pairwise from left to right. By the third term, a large factor `abcde` would be created and stress the memory. Instead, if we compute pairwise via path `ab,db->ad`, `ac,dc->ad`, `ad,ad->ad` and `ad,ae->de`, the largest intermediate factor would only be 2-dimensional and the computation can also be done much faster. For modeling complex higher-order interations under certain types of symmetries, large einsums may be unavoidable, and computing them might be an interesting compute challenge.
 
