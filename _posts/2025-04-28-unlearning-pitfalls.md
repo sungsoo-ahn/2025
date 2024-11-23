@@ -179,7 +179,7 @@ $$
 $$
 
 where:
-- $$\ell(y | x; \theta)$$: Loss function for the model's prediction.
+- $$\ell()$$: Loss function for the model's prediction.
 - $$y_f$$: Desired response post-unlearning.
 - $$\mathcal{D}_f$$ and $$\mathcal{D}_r$$: Forgetting and retaining datasets.
 - $$\lambda$$: Regularization parameter.
