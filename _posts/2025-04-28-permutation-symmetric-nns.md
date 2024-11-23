@@ -821,6 +821,17 @@ Y_abH=einsum('a->ba',a_H)
      +...
 ```
 
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-permutation-symmetric-nns/layer.png" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    Left: Low-rank decomposition of high order coefficients. Right: An equivariant einsum layer with two linear layers an einsum pooling in between, which is the result of moving low-rank coefficients into linear fan-in and fan-out layers.
+</div>
+
+
 We can move the order-0 parameters, as well as $U$, $V$, $W$ matrices into fully connected layers along $H$ that perform input preprocessing and output post_processing. So the end result is two linear layers with pooling in between, and for pooling we need 
 
 ```python
@@ -868,21 +879,27 @@ The following is a quick lookup table of pooling operations for a few common equ
 
 
 <blockquote>
-Did you know: `'ab,cb,cd->ad'` which is linear self-attention is an order-3 term for `ab`-type equivariance. Self-attention operation by itself is equivariant to not only token permutation but also latent rotation, although other linear layers in the transformer architecture do not retain the latent symmetry.
+Did you know: linear self-attention ab,cb,cd->ad is an order-3 term for ab-type equivariance. Self-attention operation by itself is equivariant to not only token permutation but also latent rotation, although other linear layers in the transformer architecture do not retain the latent symmetry.
 </blockquote>
 
 
 ### II.3 Putting everything together: The Equivariant Einsum Network
 
-The following diagram shows the final network design.
+With an equivariant layer, we can stack them to create a practical high capacity neural net that learns well. Let's apply the following recipe
 
-![Complete design](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png)
+1. Stacking multiple equivariant layer to create a deep network.
+2. GELU nonlinearity between equivariant layers to add to the depth and create bottlenecks.
+3. Residual connections for better optimization dynamics.
+4. Average pooling to create invariant dimensions if the symmetry involves invariance. 
 
-In addition to layer stacking of equivariant layesr, the following features are further added:
-
-1) Softmax normalization before einsum pooling to prevent high order einsum from exploding.
-2) GELU nonlinearity between equivariant layers to add to the depth and create bottlenecks.
-3) Residual connections for better optimization dynamics
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-permutation-symmetric-nns/arch.png" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    Stacking multiple equivariant layers to create a practical high capacity network.
+</div>
 
 Another consideration in practice is [einsum path optimization](https://numpy.org/doc/stable/reference/generated/numpy.einsum_path.html). For example, the einsum string `ab,dc,ae,ac,db->de` by default is programmed to be computed pairwise from left to right. By the third term, a large factor `abcde` would be created and stress the memory. Instead, if we compute pairwise via path `ab,db->ad`, `ac,dc->ad`, `ad,ad->ad` and `ad,ae->de`, the largest intermediate factor would only be 2-dimensional and the computation can also be done much faster. For modeling complex higher-order interations under certain types of symmetries, large einsums may be unavoidable, and computing them might be an interesting compute challenge.
 
