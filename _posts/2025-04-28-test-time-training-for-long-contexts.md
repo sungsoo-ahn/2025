@@ -196,7 +196,7 @@ Comparing the results of ICL+LIFT w/ and w/o AT, as well as ICL+SFT+LIFT w/ and 
 
 In contrast, we find LIFT w/o AT consistently improves performance. While SFT greatly improves the performance (which is reasonable since the tasks used in the SFT process are similar to those at test time), LIFT can further boost performance (comparing ICL+LIFT to ICL, as well as ICL+SFT+LIFT to ICL+SFT), highlighting the effectiveness of our method.
 
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table4_at_sft.png" class="img-fluid" title="Table 4" %}
+{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/table4_at_sft.svg" class="img-fluid" title="Table 4" %}
 <div class="caption">Table 4. Coordinate score on specific task in Bamboo, LooGLE, and QuALITY using AT and SFT.</div>
 
 ## 4.2. Efficiency evaluations
@@ -234,8 +234,8 @@ We present the experimental results in the NIAH<d-cite key="niah"></d-cite> task
 
 The maximum context length of our test is 100K, which is within the 128K context window of Llama-3.1-8B-Instruct. As expected, the baseline achieves nearly perfect performance. However, LIFT slightly degrades the performance and the degradation seems irregular.
 
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure4_1_Needle-Long-Baseline.png" class="img-fluid" title="Figure 4(1)" %}
-{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure4_2_Needle-Long-TTT.png" class="img-fluid" title="Figure 4(2)" %}
+{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure4_1_Needle-Long-Baseline.svg" class="img-fluid" title="Figure 4(1)" %}
+{% include figure.html path="assets/img/2025-04-28-test-time-training-for-long-contexts/figure4_2_Needle-Long-TTT.svg" class="img-fluid" title="Figure 4(2)" %}
 <div class="caption">Figure 4. Performance on NIAH: ICL (top) vs. LIFT (bottom)</div>
 
 The reason for the degradation may be that LIFT introduces more noise to the model. While most parts of the context are irrelevant to the answer, LIFT asks the model to memorize all the context. The model is likely to be misled by the large amount of irrelevant information.
