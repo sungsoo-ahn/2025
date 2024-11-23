@@ -242,7 +242,7 @@ These qualitative results suggest that detecting perceptual differences in this 
 
 ## Look at Vision: A Path Forward
 
-The challenges we've identified parallel those faced by computer vision researchers. LPIPS (Learned Perceptual Image Patch Similarity) emerged from a similar realization: traditional measures failed to capture perceptual differences in high-quality generated images. Using 151.4k training pairs and systematically covering 425 distortion types, Zhang et al. created BAPPS (Berkeley-Adobe Perceptual Patch Similarity Dataset) to align deep feature distances with human judgments.
+The challenges we've identified parallel those faced by computer vision researchers. LPIPS (Learned Perceptual Image Patch Similarity) emerged from a similar realization: traditional measures failed to capture perceptual differences in high-quality generated images. Using 151.4k training pairs and systematically covering 425 distortion types, Zhang et al.<d-cite key=zhang2018></d-cite> created BAPPS (Berkeley-Adobe Perceptual Patch Similarity Dataset) to align deep feature distances with human judgments.
 
 Audio presents both advantages and unique challenges:
 
