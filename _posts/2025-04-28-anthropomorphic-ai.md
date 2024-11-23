@@ -11,7 +11,7 @@ htmlwidgets: true
 authors:
   - name: Anonymous 
 
-bibliography: 2025-04-28-anthropomorphism.bib  
+bibliography: 2025-04-28-anthropomorphic-ai.bib  
 
 toc:
   - name: Anthropomorphic AI System Behaviors Are Prevalent Yet Understudied
