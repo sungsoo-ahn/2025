@@ -527,7 +527,7 @@ Where $m$ represents the embedding of a modality (image, audio, etc.). $\text{si
 ### Generalized Alignment
 Generalized Alignment is an approach to multimodal learning that does not center any single modality, like text or image, but instead creates a unified space for all modalities based on a knowledge base or feature-centered approach. This method aims to align different modalities by utilizing shared characteristics derived from a broader knowledge base, rather than anchoring on one modality's features.
 
-In generalized alignment, the learning model is trained to map various modalities (e.g., text, images, audio) into a shared feature space without giving preference to one modality over others. The alignment is based on common semantic features or concepts that exist across modalities, allowing the model to learn more flexible, cross-modal relationships.
+In generalized alignment, the learning model is trained to map various modalities (*e.g.,* text, images, audio) into a shared feature space without giving preference to one modality over others. The alignment is based on common semantic features or concepts that exist across modalities, allowing the model to learn more flexible, cross-modal relationships.
 
 
 <aside class="l-body box-note" markdown="1">
@@ -570,12 +570,12 @@ Where $M_i$ is the embedding of modality $i$ (image, text, audio). $K_i$ is the 
 
 * **Architecture Design Uncertainty**: Autoregressive or Autoregressive + Diffusion Hybrid or Alternative Architectures.
 
-* **Cross-modal Representation Alignment**: Aligning representations across diverse modalities (e.g., text, image, video, and audio) is non-trivial due to their fundamentally different structures.
+* **Cross-modal Representation Alignment**: Aligning representations across diverse modalities (*e.g.,* text, image, video, and audio) is non-trivial due to their fundamentally different structures.
 
 
 ### 2. Data Challenges
 
-* **Multimodal Dataset Diversity**: Collecting and curating datasets that cover all relevant modalities, tasks, and domains is resource-intensive and often biased toward specific modalities (e.g., text-heavy datasets).
+* **Multimodal Dataset Diversity**: Collecting and curating datasets that cover all relevant modalities, tasks, and domains is resource-intensive and often biased toward specific modalities (*e.g.,* text-heavy datasets).
 
 * **Data Quality and Noise**: Large multimodal datasets often contain noisy or misaligned data, leading to suboptimal performance or spurious correlations.
 
