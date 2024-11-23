@@ -42,7 +42,7 @@ toc:
     - name: Theory-experiment overlap in the soft committee machine
     - name: Large initial weights produce individual differences
     - name: Theory-experiment overlap in two-layer neural networks
-- name: "Impact & extensions"
+- name: "Discussion"
   subsections:
     - name: Applications of the teacher-student setting
     - name: The analytical frontier
@@ -86,14 +86,14 @@ These analyses can be performed under various neural network parameter regimes, 
 #### Our focus: The teacher-student setting
 
 The teacher-student framework, introduced by Gardner <d-cite key="gardner1989three"></d-cite>, provides perhaps the simplest setting for studying neural network learning with statistical physics techniques.
-In this paradigm, a student network learns to mimic a fixed teacher network that generates labels for training data drawn from a given input  distrubution.
+In this paradigm, a student network learns to mimic a fixed teacher network that generates labels for training data drawn from a given input  distribution.
 Classical analytical results were achieved by Saad & Solla <d-cite key="saad1995online"></d-cite> and Riegler and Biehl <d-cite key="riegler1995online"></d-cite> in the 1990s, who derived exact equations for the generalization dynamics this teacher-student setup with a particular scaling.
 These analyses requires specific assumptions about the data distribution—in particular, that it is Gaussian—and the results require the input dimension to be large to enable solvability.
-Despite these constraints, this framework allow granular study of various learning regimes, including overparamerization and a feature-learning phenomena termed *specialization*.
+Despite these constraints, this framework allow granular study of various learning regimes, including overparameterization and a feature-learning phenomena termed *specialization*.
 
 Much recent work builds on these classical analyses to expand the frontier of solvable training regimes, exploring parameter settings beyond those considered by Saad & Solla and Riegler & Biehl <d-cite key="goldt2020dynamics"></d-cite>.
 These techniques have also found applications beyond generalization error dynamics, which we detail in the final section of this blog post. 
-Next, we provide a pedagocial introduction to the foundational results from Saad & Solla <d-cite key="saad1995online"></d-cite>.
+Next, we provide a pedagogical introduction to the foundational results from Saad & Solla <d-cite key="saad1995online"></d-cite>.
 
 ## Methods
 
@@ -132,7 +132,7 @@ $$ \begin{equation}
 \end{equation} $$ 
 
 where $$f( \cdot , W)$$ is the mapping defining the student, and $$W$$ are the parameters of the student. 
-In teacher-student, $$f$$ and $$f^{*}$$ share the same parameterizaton to enable finegrained comparison between the learning of the student and the teacher definited the task.
+In teacher-student, $$f$$ and $$f^{*}$$ share the same parameterizaton to enable finegrained comparison between the learning of the student and the teacher defining the task.
 Commonly, they are both neural networks and the parameters $$W$$ and $$W^{*}$$ are the weights of the networks.
 In Saad & Solla <d-cite key="saad1995online"></d-cite>, both the teacher and student networks were modeled as a soft-committee machine, which is an average of non-linear perceptrons.
 
@@ -297,7 +297,7 @@ $$ \begin{equation}
 The equation for $\frac{dR_{in}}{dt}$ is now in a convenient form, where the local fields are simply a Gaussian 
 scalar as $x \sim \mathcal{N}(0, I)$, and the expectation because an integral over Gaussian distribution 
 with covariances defined by the order parameters. Before solving this expectation, let's derive the same equation for the 
-order paramaters $Q$ (slightly trickier). We go back to the gradient descent update equation for the weights, and 
+order parameters $Q$ (slightly trickier). We go back to the gradient descent update equation for the weights, and 
 multiply by $(W_{j}^{u+1})^{T}/N$ and $(W_{j}^{u})^{T}/N$ giving
 
 $$ \begin{align} 
@@ -563,7 +563,7 @@ Some drops can be seen in the alignment when the loss function is steepest.
 for different initial weights in the students network.
 </div>
 
-## Impact & extensions
+## Discussion
 
 The analytical techniques pioneered by Saad & Solla <d-cite key="saad1995online"></d-cite> and others have inspired two broad directions of research: extending the theoretical framework to handle more complex scenarios, and applying these tools to analyze specific phenomena in machine learning. 
 We detail these directions, and conclude with a brief forward-looking perspective.
@@ -583,7 +583,7 @@ Arnaboldi et al. developed quantitative measures of task difficulty <d-cite key=
 Many analyses examine catastrophic forgetting and continual learning <d-cite key="straat2018statistical"></d-cite> <d-cite key="lee2021continual"></d-cite> <d-cite key="asanuma2021statistical"></d-cite> <d-cite key="hiratani2024disentangling"></d-cite>,
 transfer learning <d-cite key="lee2022maslow"></d-cite> <d-cite key="tahir2024features"></d-cite>, and
 meta-learning <d-cite key="wang2024dynamics"></d-cite> with teacher-student.
-Even current work under review at the ICLR 2025 conference <d-cite key="anonymous2024analyzing"></d-cite> <d-cite key="anonymous2024optimal"></d-cite> <d-cite key="anonymous2024theory"></d-cite> applies the steacher-student framework to study additional settings.
+Even current work under review at the ICLR 2025 conference <d-cite key="anonymous2024analyzing"></d-cite> <d-cite key="anonymous2024optimal"></d-cite> <d-cite key="anonymous2024theory"></d-cite> applies the teacher-student framework to study additional settings.
 
 
 ### The analytical frontier
@@ -618,15 +618,3 @@ The code to reproduce all plots in this blog post can be found here at
 [https://anonymous.4open.science/r/teacher-student-BB2ftbMaCJfRG3JXbE9PhYoiqCzwVims](https://anonymous.4open.science/r/teacher-student-BB2ftbMaCJfRG3JXbE9PhYoiqCzwVims).
 This codebase is also easily adaptable to explore the learning dynamics of neural networks in the teacher-student setting beyond the scope of this blog post.
 
-
----
-
-[TODO: Anonymize when submitting!
-
-**Acknowledgements.** 
-We thank 
-[Stefano Sarao Mannelli](https://stefsmlab.github.io/) for historical perspectives,
-[Jin Hwa Lee](https://jinhl9.github.io/) for starter code for the analytical ODEs in Numpy,
-and [Nishil Patel](https://jinhl9.github.io/) for invaluable help in narrowing down details of the implementation.
-
-]: # 
