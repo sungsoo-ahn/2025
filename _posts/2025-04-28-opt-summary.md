@@ -187,7 +187,7 @@ For convenience, we summarize some of the notations commonly used in tables belo
 - Optimality gap: the function value gap $f(x) - f^\star$.
 - Stationarity: the function gradient norm $\|\| \nabla f(x) \|\|$.
 - Near-stationarity: the gradient norm $\|\| \nabla f_\lambda(x) \|\|$, where $f_\lambda$ is the Moreau envelope of the original function $f$.
-- Duality Gap (for minimax optimization): defined as $G_f(x', y')\triangleq\max_{y\in\mathcal{Y}}f(x',y)-\min_{x\in\mathcal{X}}f(x,y')$, the primal-dual gap of a given point $(x', y')$.
+- Duality Gap (for minimax optimization): the primal-dual gap of a given point $(x', y')$, defined as $G_f(x', y')\triangleq \max_y f(x',y)- \min_x f(x,y')$.
 
 - Primal Stationarity (for minimax optimization): the primal function gradient norm $\|\| \nabla \Phi(x) \|\|$, where $\Phi(x)\triangleq\max_{y\in\mathcal{Y}}f(x,y)$ is the primal function. It is different from the function stationarity in terms of the original objective function $f$.
 
@@ -220,7 +220,7 @@ Also for **Minimax Problems**, based on the convexity combination of each compon
 | NS $L$-Lip Cont. $\rho$-WC    | Near-stationarity        | Unknown                                                       | $\mathcal{O}(\epsilon^{-4})$      | [<d-cite key="davis2018stochastic"></d-cite>, Theorem 2.1 implied]                  |
 | $L$-Smooth $\mu$-PL     | Optimality gap        | $\Omega \left( \kappa \log \frac{1}{\epsilon} \right)$ | $\checkmark$      | [<d-cite key="yue2023lower"></d-cite>, Theorem 3; <d-cite key="karimi2016linear"></d-cite>]                  |
 
-### Case 1-2: Finite-sum and Stochastic Optimization (double check)
+### Case 1-2: Finite-sum and Stochastic Optimization
 
 | Problem Type            | Measure | Lower Bound                                                | Upper Bound                               | Reference (LB-UB)                                       |
 |-------------------------|---------|---------------------------------------------------|----------------------------------|-----------------------------------------------------------|
