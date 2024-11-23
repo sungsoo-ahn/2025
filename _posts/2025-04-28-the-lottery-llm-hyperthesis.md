@@ -166,8 +166,8 @@ We describe the procedures of the reasoning algorithm $\mathcal{A}$ as Algorithm
 
 
 <figure style="text-align: center;">
-    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/algorithm.png' | relative_url }}" width="400">
-    <figcaption style="font-size: 1em;">Figure 1: .</figcaption>
+    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/algorithm.png' | relative_url }}" width="200">
+    <figcaption style="font-size: 1em;">Figure 1: A general pseudo code of the reasoning algorithm $\mathcal{A}$.</figcaption>
 </figure>
 
 
@@ -175,8 +175,8 @@ We describe the procedures of the reasoning algorithm $\mathcal{A}$ as Algorithm
 
 
 <figure style="text-align: center;">
-    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/graph-structure.pdf' | relative_url }}" width="400">
-    <figcaption style="font-size: 1em;">Figure 1: .</figcaption>
+    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/graph-structure.png' | relative_url }}" width="400">
+    <figcaption style="font-size: 1em;">Figure 2: The problem solving process of the multi-step reasoning with external tools (the interaction with the external memory and the verification are not shown in the figure).</figcaption>
 </figure>
 
 
@@ -186,34 +186,32 @@ We describe the procedures of the reasoning algorithm $\mathcal{A}$ as Algorithm
 **External Knowledge and Tools.** In each problem solving step, Algorithm 1 will firstly decides whether to directly solve the problem with the help of the external knowledge base $\mathcal{D}$ or the external tools $\mathcal{C}$. If yes, the Algorithm 1 will use the $g_\phi$ to analyse the problem $q$ and find the necessary knowledge or tools to solve the problem. Then, according to the generated requests, the retriever $\mathcal{R}$ will search external knowledge $d \in \mathcal{D}$ or the tool $c \in \mathcal{C}$ to provide the required results. These supplementary results will be combined with the problem $q$ for the model $g_\phi$ to solve. This design helps to cover exploiting the RAG and external tools like the arithmetic calculation functions, the Internet search engine, logic solvers to address the problem $q$ and so on.
 
 
-**External Memory.** The external memory $\mathcal{M}$ is used to store the intermediate results during the reasoning process. When solving different sub-problems, the intermediate results can be stored in the external memory and be reused in the later steps. With interacting with the external memory, the Algorithm 1 can recover the reasoing methods with working memory like<d-cite key="wang2024symbolic"></d-cite>. Here we do not restrict the form of the function `Divide_and_Conquer` in the Algorithm 1. Throught dedicated design and programming, the recurisve mechanism can be used to implement the basic operations like the MOV, COPY, JUMP, and WRITE and READ the external memory, thus simulating the Turing machine like<d-cite key="Memory-Augmented-Turing"></d-cite>.
-
+**External Memory.** The external memory $\mathcal{M}$ is used to store the intermediate results during the reasoning process. When solving different sub-problems, the intermediate results can be stored in the external memory and be reused in the later steps. With interacting with the external memory, the Algorithm 1 can recover the reasoing methods with working memory like<d-cite key="wang2024symbolic"></d-cite>. Here we do not restrict the form of the function `Divide_and_Conquer` in the Algorithm 1. Throught dedicated design and programming, the recurisve mechanism can be used to implement the basic operations like the MOV, COPY, JUMP, and WRITE and READ the external memory, thus simulating the Turing machine like<d-cite key="Memory-Augmented-Turing"></d-cite> as Figure 3 shows.
 
 <figure style="text-align: center;">
-    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/Automata.pdf' | relative_url }}" width="400">
-    <figcaption style="font-size: 1em;">Figure 1: .</figcaption>
+    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/Automata.png' | relative_url }}" width="100">
+    <figcaption style="font-size: 1em;">Figure 3: Simulating the Turing machine with LLMs and the external memory.</figcaption>
 </figure>
 
 
 Most of previous model compression<d-cite key="Sun2023ASA_wanda"></d-cite><d-cite key="Frantar2023SparseGPTML"></d-cite> <d-cite key="Yao2022ZeroQuantEA"></d-cite><d-cite key="Dettmers2022TheCF"></d-cite> and KV cache compression methods<d-cite key="zhang2024h2o"></d-cite><d-cite key="xiao2024efficient"></d-cite>only focus on the guaranteeing the model performance on the perplexity metric<d-cite key="merity2016pointer"></d-cite> or some downstream tasks like the common sense knowledge<d-cite key="hendrycks2021measuring"></d-cite><d-cite key="talmor-etal-2019-commonsenseqa"></d-cite> and the basic arithmetic problems<d-cite key="cobbe2021training"></d-cite>. From the above analysis and the procedures of the Algorithm 1, we can see that there are some other crucial abilities that the lottery LLM and other compression methods must take for considering. We summarize the crucial abilities that the lottery LLM should have as follows.
-**Ability 1: Retrieval from prompts.** Obviously, the useful information in the prompts that related to address the problem $q$ is crucial for the lottery LLM. After collecting the required external results into the prompt, the LLM $q_\phi$ needs to be able to retrieve the required information from the prompt and avoid the interuption of some irrelevant information. This is related to the retrieval ability of the LLM and its measurement test is like the well-known needle-in-the-haystack(NIAH) test<d-cite key="needle"></d-cite>. We show that there is a simple and interesting method to endow the LLM with advanced retrieval ability with preprocessing prompts.
+**Ability 1: Retrieval from prompts.** Obviously, the useful information in the prompts that related to address the problem $q$ is crucial for the lottery LLM. After collecting the required external results into the prompt, the LLM $q_\phi$ needs to be able to retrieve the required information from the prompt and avoid the interuption of some irrelevant information. This is related to the retrieval ability of the LLM and its measurement test is like the well-known needle-in-the-haystack(NIAH) test<d-cite key="needle"></d-cite>. We show that there is a simple and interesting method to endow the LLM with advanced retrieval ability with preprocessing prompts, by applying a small language model to retrieve the related information about the problem $q$ and combine them with the problem $q$ to let the LLM $q_\phi$ to solve the problem $q$ rather let the LLM $q_\phi$ to process the original long context information.
 
-The following two figures show the results of the vanilla LLaMA3-8B-Instruct:
 <figure style="text-align: center;">
-    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/Meta-Llama-3-8B-Instruct_evaluated.pdf' | relative_url }}" width="400">
-    <figcaption style="font-size: 1em;">Figure 1: .</figcaption>
+    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/Meta-Llama-3-8B-Instruct_evaluated.jpg' | relative_url }}" width="400">
+    <figcaption style="font-size: 1em;">Figure 4: Vanilla NIAH results of LLaMA3-8B-Instruct.</figcaption>
 </figure>
 
 
 The following figure shows the results of the retrieval ability of the LLaMA3-8B-Instruct:
 <figure style="text-align: center;">
-    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/Meta-Llama-3-8B-Instruct-retrieval_evaluated.pdf' | relative_url }}" width="400">
-    <figcaption style="font-size: 1em;">Figure 1: .</figcaption>
+    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/Meta-Llama-3-8B-Instruct-retrieval_evaluated.jpg' | relative_url }}" width="400">
+    <figcaption style="font-size: 1em;">Figure 5: NIAH results of LLaMA3-8B-Instruct with preprocessing prompts.</figcaption>
 </figure>
 
 
 
-As shown in the figures, leveraging retrieval capabilities significantly improves the LLM's performance on the NIAH test. Notably, even when the input length exceeds the model's context size (8K tokens for LLaMA3-8B-Instruct), there is no performance degradation, demonstrating the robustness of the retrieval-enhanced approach.
+As shown in the figures, preprocessing prompts significantly improves the LLM's performance on the NIAH test. Notably, even when the input length exceeds the model's context size (8K tokens for LLaMA3-8B-Instruct), there is no performance degradation, demonstrating that we can exploit the preprocessed prompts to improve the LLM's retrieval ability.
 
 
 
@@ -231,20 +229,14 @@ As shown in the figures, leveraging retrieval capabilities significantly improve
 | CoT Minerva 540B | 58.8  | -     | -     | -      | -          |
 | PAL            | **72.0**  | **79.4**  | **79.6**  | **92.5**   | **99.2**       |
 
-Besides, with provided the external documents, the small LLMs show the superb performance in many QA tasks<d-cite key="aaa"></d-cite>.
+Besides, with provided the external documents, the small LLM (Llama-3-Ins8B) show the superb performance in many QA tasks<d-cite key="mallen2023not"></d-cite><d-cite key="kwiatkowski2019natural"></d-cite><d-cite key="stelmakh2022asqa"></d-cite> than the large LLMs (Llama-3-Ins70B and ChatGPT-4oMINI).
 
-
-Besides, with provided the external documents, the small LLMs show the superb performance in many QA tasks<d-cite key="mallen2023not"></d-cite><d-cite key="kwiatkowski2019natural"></d-cite><d-cite key="stelmakh2022asqa"></d-cite>.
-
-
-| Method | LLM | PopQA (acc) | NQ (acc) | ASQA (str-em) | ASQA (hit) | ASQA (rec) |
-|--------|-----|-------------|----------|---------------|-------------|-------------|
-| CoT | Llama-3-Ins8B | 24.8 | 44.0 | 28.8 | 7.8 | 25.5 |
-| CoT | Llama-3-Ins70B | 31.6 | 54.4 | 36.4 | 11.2 | 32.7 |
-| CoT | ChatGPT-4oMINI | 32.4 | 53.2 | 32.4 | 8.0 | 21.6 |
-| Vanilla RAG | Llama-3-Ins8B | 59.8 | 54.0 | 38.8 | 14.0 | 28.4 |
-| Vanilla RAG | Llama-3-Ins70B | 63.4 | 61.0 | 42.2 | 15.2 | 30.6 |
-| Vanilla RAG | ChatGPT-4oMINI | 62.0 | 66.2 | 42.0 | 14.8 | 28.4 |
+| Method | LLM | PopQA (acc) | NQ (acc) | ASQA (str-em) | ASQA (hit) | 
+|--------|-----|-------------|----------|---------------|-------------|
+| CoT without RAG | Llama-3-Ins8B | 24.8 | 44.0 | 28.8 | 7.8 |
+| CoT without RAG  | Llama-3-Ins70B | 31.6 | 54.4 | 36.4 | 11.2 |
+| CoT without RAG | ChatGPT-4oMINI | 32.4 | 53.2 | 32.4 | 8.0 |
+| With RAG | Llama-3-Ins8B | **59.8** | **54.0** | **38.8** | **14.0** |
 
 
 **Ability 3: Planning and Scheduling.** To split the problem $q$ into multiple sub-problems and solve them one by one, the LLM $q_\phi$ needs to have the ability to plan and schedule the sub-problems. This is crucial for the lottery LLM to solve the complex problems. Thus, the LLM $q_\phi$ needs to have a good understanding of the problem $q$ and the sub-problems. However, the details of solving the sub-problems may not be requied for the LLM $q_\phi$. Because the external resources can be used to solve the sub-problems. And the efficient scheduling ability is also important for the lottery LLM for improving the reasoning efficiency.
