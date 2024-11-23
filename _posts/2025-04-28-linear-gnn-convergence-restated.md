@@ -527,7 +527,7 @@ The paper we're talking about makes a bold claim. But does it always hold up in 
 
 {% include figure.html path="assets/img/2025-04-28-linear-gnn-convergence-restated/fig0_2.png" width="100" caption="Theorem in the paper."%}
 
-Some gaps are pretty obvious, and the author points them out: typical GNNs aren't linear, and researchers use more advanced optimizers than just gradient descent. However, there’s a subtler issue regarding the continuous perspective behind it.
+Some gaps are pretty obvious, and the authors <d-cite key="Xu2021"></d-cite> points them out: typical GNNs aren't linear, and researchers use more advanced optimizers than just gradient descent. However, there’s a subtler issue regarding the continuous perspective behind it.
 
 ### Dynamics at Discrete Moments.
 
