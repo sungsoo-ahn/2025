@@ -315,7 +315,7 @@ We then reproduced some of the experimental results from IPPO, MAPPO, and Noisy-
     (b) Experimental results for SMAC, the data in the table represents the win rate.
 </div>
 
-We also cite the experimental results from these papers themselves below,
+We also cite the experimental results from these papers themselves here. 
 
 
 | Map          | corridor | 6h_vs_8z | 3s5z_vs_3s6z | 3m  | 2m_vs_1z |
@@ -325,6 +325,7 @@ We also cite the experimental results from these papers themselves below,
 
 <div class="caption">
     (c) IPPO vs MAPPO results for SMAC (from the Figure 2 in <d-cite key="de2020independent"></d-cite>), the data in the table represents the win rate.
+    Due to the optimization of hyperparameter tuning in our experiments, the win rates in our results differ slightly from this figure.
 </div>
 
 <div class="center"> 
