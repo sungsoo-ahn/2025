@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Can We Learn From Misclassifications
-description: Evaluation of the performace in supervised learning based on common methods, such as the final activation map or the final represantations, is not sparse. We introduce and a novel evaluation based on the gradients of the model. We establish a robust connection
+description: Evaluation of the performace in supervised learning based on common methods, such as the final activation map or the final represantations, is not sparse. We introduce and a novel evaluation based on the gradients of the model. We establish a robust connection bwteen GradCam and Knowladge Distallation
 date: 2025-04-28
 future: true
 htmlwidgets: true
