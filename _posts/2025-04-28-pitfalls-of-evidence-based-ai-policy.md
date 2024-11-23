@@ -27,7 +27,7 @@ authors:
 #      name: MIT CSAIL
 
 # must be the exact same name as your blogpost
-bibliography: 2025-04-28-pitfalls_of_evidence_based_ai_policy.bib  
+bibliography: 2025-04-28-pitfalls-of-evidence-based-ai-policy.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -283,7 +283,7 @@ In their paper, _The Values Encoded in Machine Learning Research_, Birhane et al
 They annotated each based on what values were reflected in the paper text. 
 The results revealed a red flag:
 
-{% include figure.html path="assets/img/2025-04-28-pitfalls_of_evidence_based_ai_policy/birhane.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-pitfalls-of-evidence-based-ai-policy/birhane.png" class="img-fluid" %}
 <div class="caption">
     <strong>Figure 1:</strong> From Birhane et al. (2021), <em>The Values Encoded in Machine Learning Research</em> <d-cite key="birhane2022values"></d-cite>. Among the values represented in prominent AI research papers, there is an overwhelming predominance of ones pertaining to technical system performance.
 </div>
@@ -299,7 +299,7 @@ In many cases, the answer to both is the tech companies who would be directly af
 For instance, consider last year’s [NeurIPS conference](https://neurips.cc/Conferences/2023). 
 Google DeepMind, Microsoft, and Meta all rank in the top 20 organizations by papers accepted: 
 
-{% include figure.html path="assets/img/2025-04-28-pitfalls_of_evidence_based_ai_policy/neurips.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-pitfalls-of-evidence-based-ai-policy/neurips.png" class="img-fluid" %}
 <div class="caption">
      <strong>Figure 2:</strong> Paper count by organization from the <a href="https://neurips.cc/Conferences/2023" target="_blank">NeurIPS 2023 conference</a>.
 </div>
@@ -317,12 +317,12 @@ Meanwhile, the reach of industry labs into the research space involves more than
 > 
 > – A discussion alluding to the [NeurIPS 2019](https://neurips.cc/Conferences/2019) conference from Abdalla and Abdalla (2020), _The Grey Hoodie Project Big Tobacco, Big Tech, and the threat on academic integrity_ <d-cite key="Abdalla2020TheGH"></d-cite>
 
-{% include figure.html path="assets/img/2025-04-28-pitfalls_of_evidence_based_ai_policy/abdalla1.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-pitfalls-of-evidence-based-ai-policy/abdalla1.png" class="img-fluid" %}
 <div class="caption">
      <strong>Figure 3:</strong> From Abdalla and Abdalla (2020) <d-cite key="Abdalla2020TheGH"></d-cite>. There are striking similarities between the anti-regulatory influences of Big Tobacco on public health research and Big Tech on AI research.
 </div>
 
-{% include figure.html path="assets/img/2025-04-28-pitfalls_of_evidence_based_ai_policy/abdalla2.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-pitfalls-of-evidence-based-ai-policy/abdalla2.png" class="img-fluid" %}
 <div class="caption">
      <strong>Figure 4:</strong> From Abdalla and Abdalla (2020) <d-cite key="Abdalla2020TheGH"></d-cite>. The large majority of academic CS faculty have at some point received direct funding/awards from Big Tech or have been employed by Big Tech.
 </div>
