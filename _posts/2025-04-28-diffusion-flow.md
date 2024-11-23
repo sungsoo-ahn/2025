@@ -160,7 +160,7 @@ $$
 | $${\bf u}$$-flow matching vector field      |    $$\tilde{\bf z}_t = {\bf z}_t/(\alpha_t + \sigma_t)$$ and $$\eta_t = {\sigma_t}/(\alpha_t + \sigma_t)$$ | 
 
 
-Recall the flow matching update in Equation (4), look similar? In the last line, if we set  $$\alpha_t = t$$, $$\sigma_t = 1- t$$, we have $$\tilde{\bf z}_t = {\bf z}_t$$ and $$\eta_t = t$$, so that we recover the flow matching update! More formally, the flow matching update can be considered the Euler integration of the underlying sampling ODE (i.e.,, $$\mathrm{d}\tilde{\bf z}_t = \mathrm{[Network \; output]}\cdot\mathrm{d}\eta_t$$), and
+Recall the flow matching update in Equation (4), look similar? In the last line, if we set  $$\alpha_t = 1 - t$$, $$\sigma_t = t$$, we have $$\tilde{\bf z}_t = {\bf z}_t$$ and $$\eta_t = t$$, so that we recover the flow matching update! More formally, the flow matching update can be considered the Euler integration of the underlying sampling ODE (i.e.,, $$\mathrm{d}\tilde{\bf z}_t = \mathrm{[Network \; output]}\cdot\mathrm{d}\eta_t$$), and
 
 
 <div style="padding: 10px 10px 10px 10px; border-left: 6px solid #FFD700; margin-bottom: 20px;">
