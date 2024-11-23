@@ -100,7 +100,7 @@ Our second experiment examines the tokens leading up to the <EOS> token.
 Observation: All four metrics show an increasing probability of EOS token, decreasing information content, decreasing entropy, and decreasing varentropy. 
 
 <div align="center">
-  <img align="center" src="/assets/img/2025-04-28-perpetual-text/eos_token_stats_blockwise_100.png" width="800px;" alt=""/>
+  <img align="center" src="./assets/img/2025-04-28-perpetual-text/eos_token_stats_blockwise_100.png" width="800px;" alt=""/>
   <br>
   Figure 1: Block-Wise Analysis
 </div>
@@ -122,7 +122,7 @@ Observation: Competition between the EOS token and the new line token (\n)
 
 
 <div align="center">
-  <img src="/assets/img/2025-04-28-perpetual-text/prob_dist_0.png" width="700px;" alt=""/>
+  <img src="./assets/img/2025-04-28-perpetual-text/prob_dist_0.png" width="700px;" alt=""/>
   <br>
   Figure 2: Token-Wise Analysis, 0
 </div>
@@ -132,7 +132,7 @@ Another observation we had was that the EOS and (\n) tokens were competing again
 In figure 2, we can see that based on the previous context of the new line token (\n), the highest probable token is *again*, the new line token. 
 
 <div align="center">
-  <img src="/assets/img/2025-04-28-perpetual-text/prob_dist_4.png" width="700px;" alt=""/>
+  <img src="./assets/img/2025-04-28-perpetual-text/prob_dist_4.png" width="700px;" alt=""/>
   <br>
   Figure 3: Token-Wise Analysis, 4
 </div>
@@ -145,12 +145,12 @@ From our Motivating Experiments, we observed decreasing entropy and increasing E
 **We propose a few methods to bypass the model's desire to halt:**
 
 ## Suppressing the EOS Token
-[Link to CodeBase](https://github.com/Perpetual-text/iclr2025/blob/main/long_generate.py#L17)
+[Link to CodeBase](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L17)
 
 The first method involves suppressing the EOS token during the token generation process to prevent th emodel from ending the sequence prematurely.
 
 **Implementation Details:**
-- Sampling Without Replacement: At each generation step, the model uses a sampling without replacement strategy to select two candidate tokens from the probability distribution. [link](https://github.com/Perpetual-text/iclr2025/blob/main/sampling.py#L60)
+- Sampling Without Replacement: At each generation step, the model uses a sampling without replacement strategy to select two candidate tokens from the probability distribution. [link](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L60)
 - EOS Token Exclusion: If one of the sampled tokens is the EOS token, it is discarded in favor of the other token. This ensures that the EOS token is not selected during generation.
 - Continuation of Generation: The model continues to generate tokens without the possibility of selecting the EOS token.
 
@@ -166,7 +166,7 @@ The first method involves suppressing the EOS token during the token generation 
 - Further strategies are needed to guide the model toward producing more extended and coherent continuations.
 
 ## Modified Sampling Method Post-EOS Token
-[Link to CodeBase](https://github.com/Perpetual-text/iclr2025/blob/main/long_generate.py#L82)   
+[Link to CodeBase](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L82)   
 
 The second method modifies the sampling strategy after the model predicts the EOS token to encourage more diverse continuations and avoid abrupt endings.
 
@@ -184,7 +184,7 @@ The second method modifies the sampling strategy after the model predicts the EO
 - Balancing stochasticity and coherence is crucial to ensure that the generated sequences remain contextually appropriate.
 
 ## Regenerating Tokens Prior to the EOS Token
-[Link to CodeBase](https://github.com/Perpetual-text/iclr2025/blob/main/long_generate.py#L153)   
+[Link to CodeBase](https://github.com/Perpetual-text/icrl25-blog-code/blob/main/generation.py#L153)   
 The third method involves regenerating a portion of the sequence preceding the EOS token to provide the model with an opportunity to produce alternative continuations.
 
 **Implementation Details:**
