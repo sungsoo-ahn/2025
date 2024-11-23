@@ -757,14 +757,6 @@ A fully independent batch dimension `Z` and a non-symmetric latent dimension `H`
 
 Across all types of permutation symmetry, as we learned in Section I through Taylor series, it turns out that tensor contractions are are all you need for parameterizing permutation invariant and equivariant layers, which can then be stacked into a deep network.
 
-**How to create an equivariant layer given permutation symmetry type?**
-Our answer is two fully connected layers with a pooling layer in between. 
-
-<div class="my_dropdown" tabindex="1">
-<a>Primer: Tensor contractions and the einsum notation</a>
-<div>
-
-
 Intuitively, tensor contractions like
 
 $$
@@ -788,9 +780,8 @@ y=einsum('Zik,Zlk,Zlj->Z',X,X,X)
 
 Here a batch dimension Z is added to make sure the right hand side is not empty.  
 
-</div>  
-</div>  
-
+**How to create an equivariant layer given permutation symmetry type from tensor contractions?**
+Our answer is two fully connected layers with a pooling layer in between. 
 
 Let us use a 1D + latent `aH`-type equivariant constraint as an example to illustrate the design.
 
