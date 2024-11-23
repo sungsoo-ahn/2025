@@ -315,14 +315,78 @@ Finally, having the order parameters, we can write the generalization error (the
 teacher and student) as
 
 $$ \begin{align}
-asdasd
+\mathcal{E} = & \frac{1}{2} \left< \left( \hat{y} - y \right)^{2} \right> \\
+=  & \frac{1}{2} \sum_
+{i=1}^{K} \sum_{j=1}^{K} \left< g(\lambda_{i}^{u}) g(\lambda_{j}^{u}) \right> - \sum_{m=1}^{M} \sum_{i=1}^{K} \left< 
+g(\rho_{m}^{u}) g(\lambda_{i}^{u}) \right> + \frac{1}{2} \sum_{m=1}^{M} \sum_{n=1}^{M} \left< g(\rho_{m}^{u}) g(\rho_
+{n}^{u}) \right>  + \frac{\sigma^{2}}{2}
 \end{align} $$
 
-Now that we have dynamical equations for $Q_{ij}$ and $R_{in}$, we need to solve the expectation over the dataset. 
-This is tricky for non-linear networks, but for some non-linearities such as the error function or rectified linear 
-units (ReLU), the expectation can be solved analytically. To compute these expectations, a few particular integrals 
-must be solved, which have a general expression for a given covariance structures.
+Here, we encounter the first expectation that can be integrated in closed form for $g$ defined as the 
+error function. Now, we introduce the useful expectations that will appear in the computation of expectations in the
+generalization error and order parameters:
 
+$$ \begin{align}
+I_{2}(a, b) & = \left< g(\nu_{a}) g(\phi_{b}) \right>, \\ 
+I_{3}(a, b, c) & = \left< g'(\nu_{a}) \phi_{b} g(\psi_{c}) \right>, \\ 
+I_{4}(a, b, c, d) & = \left< g'(\nu_{a}) g'(\phi_{b}) g(\psi_{c}) g(\gamma_{d}) \right>.
+\end{align} $$
+
+These expectations can be solved in closed form as a function of the covariance between each of the variables $\nu_
+{a}, \phi_{b}, \psi_{c}$ and $\gamma_{d}$. Let's start with an example from the terms in the generalization error. 
+First, closed form expression for $I_{2}$, with $g$ as the error function, is
+
+$$ \begin{align}
+I_{2}(a, b) = & \frac{2}{\pi} \text{arcsin}\left( \frac{C_{ab}}{\sqrt{1 + C_{aa}} \sqrt{1+C_{bb}}} \right) 
+\end{align} $$
+
+where $C_{ab}$ is the covariance between $\nu_{a}$ and $\phi_{b}$, and $C_{aa}$ and $C_{bb}$ are the variances of
+$\nu_{a}$ and $\phi_{b}$, respectively. The way to select the correct covariance structure, is to look at the 
+arguments of the expectation. Recall the index notation, $i, j, k$ for the student, and $m, n, p$ for the teacher, 
+then $a$ and $b$ can be any of these indices depending on the corresponding local field. For instance, if $a=k$, the 
+notation implies that $\nu = \lambda$, if $b=m$, then $\phi = \rho$. From here, we can write the generalization 
+error in terms of this integral
+
+$$ \begin{align}
+\mathcal{E} = & \frac{1}{2} \sum_{i=1}^{K} \sum_{j=1}^{K} I_{2}(i, j) - \sum_{n=1}^{M} \sum_{i=1}^{K} I_{2}(i, n)+ \frac{1}{2} \sum_{m=1}^{M} \sum_{n=1}^{M} I_{2}(n, m) + \frac{\sigma^{2}}{2}
+\end{align}. $$
+
+The covariances between the local fields are defined by the order parameters. For instance, the covariance for $I_{2}
+(i, n)$ (student-teacher indexes) is $C_{12} = R_{i, n}$, $C_{11}=\text{diag}(Q)_{i}$ and $C_{22}=\text{diag}(T)_{n}
+$, or the covariance for $I_{2}(i, j)$ is $C_{12}=Q_{ij}$, $C_{11}=\text{diag}(Q)_{i}$ and $C_{22}=\text{diag}(Q)_{j}$.
+Hence, we can take advantage of broadcasting to compute all elements of $I_{2}$ matrix as a function of the
+corresponding order parameters matrices:
+```python
+def get_I2(c12, c11, c22):
+    e_c11 = jnp.expand_dims(jnp.diag(c11), axis=1)
+    e_c22 = jnp.expand_dims(jnp.diag(c22), axis=0)
+    denom = jnp.sqrt((1 + e_c11) * (1 + e_c22))
+    return jnp.arcsin(c12 / denom) * (2 / jnp.pi)
+```
+and the generalization error being
+```python
+def order_parameter_loss(Q, R, T, teacher_W2, student_W2, sigma):
+    I2_1 = get_I2(Q, Q, Q)
+    first_term_matrix = jnp.dot(student_W2.T, student_W2) * I2_1
+    first_term = jnp.sum(first_term_matrix)
+
+    I2_2 = get_I2(R, Q, T)
+    second_term_matrix = jnp.dot(student_W2.T, teacher_W2) * I2_2
+    second_term = jnp.sum(second_term_matrix)
+
+    I2_3 = get_I2(T, T, T)
+    third_term_matrix = jnp.dot(teacher_W2.T, teacher_W2) * I2_3
+    third_term = jnp.sum(third_term_matrix)
+    return first_term/2 - second_term + third_term/2 + sigma**2/2
+```
+$I_{3}$ and $I_{4}$ follow a similar structure, with the covariance structure defined by the order parameters 
+between the arguments of the expectation. These integrals appear in the order parameters dynamical equation by 
+expanding the error signal $\Delta_{s}^{u}$, giving
+
+$$ \begin{align}
+
+\end{align} $$
+ 
 
 
 
