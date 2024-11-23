@@ -134,28 +134,21 @@ Doudizhu's outcome is not deterministic but heavily influenced by concrete handc
 
 > My handcards are ..., while the opponents' handcards are ... My possible actions are ...
 
-**Opponent Strategy Prediction:**
-Subsequent to the ascertainment of possible actions at hand, we design an additional neural network head on the shelf of the LLM.
-This module aims to predict the following action of opponents after the player performs a specific current action.
-Firstly, we fine-tune the LLM to learn the common pattern among expert Doudizhu players, thereby enabling it to predict the most likely actions accurately in the following format:
+**Opponent Strategy Prediction: **Subsequent to the ascertainment of possible actions at hand, we design an additional neural network head on the shelf of the LLM. This module aims to predict the following action of opponents after the player performs a specific current action. Firstly, we fine-tune the LLM to learn the common pattern among expert Doudizhu players, thereby enabling it to predict the most likely actions accurately in the following format:
 
 > My handcards are ..., while the opponents' handcards are ... My action is ...
 
-The optimization objective is the cross-entropy between the actual action of opponent and the predicted action. 
-During inference, since the output of LLM may occasionally transgress the bounds of legal actions, we utilize sentence-BERT <d-cite key="reimers2019sentence"></d-cite> to map the original output to the legal action with the most similar embedding. In addition, akin to in-context learning, we provide this fine-tuned model with samples of current opponents, facilitating its rapid adaption to a particular opponent's policy during evaluation.
+The optimization objective is the cross-entropy between the actual action of opponent and the predicted action.  During inference, since the output of LLM may occasionally transgress the bounds of legal actions, we utilize sentence-BERT <d-cite key="reimers2019sentence"></d-cite> to map the original output to the legal action with the most similar embedding. In addition, akin to in-context learning, we provide this fine-tuned model with samples of current opponents, facilitating its rapid adaption to a particular opponent's policy during evaluation.
 
 By training on our curated datasets, the LLM agent can better anticipate opponents' behaviours and refine its own strategy.
 This enhancement significantly amplifies the agent's overall efficacy since the LLM is not confined to a fixed strategy.
-Instead, it engages in dynamic and adaptive decision-making processes within the context of Doudizhu.
-This paradigm also controls the imperfect information and stochastic elements in Doudizhu, making it more suitable for the augmentation of the LLM's reasoning capabilities.
+Instead, it engages in dynamic and adaptive decision-making processes within the context of Doudizhu. This paradigm also controls the imperfect information and stochastic elements in Doudizhu, making it more suitable for the augmentation of the LLM's reasoning capabilities.
 
-**Final Action Selection:** Finally, by prognostically evaluating one's own possible actions opponents' reactions, we can concatenate these analysis to to construct the comprehensive query.
-Then the LLM will understand this information and generate the answer, namely, the final selected action.
-The format of query is:
+**Final Action Selection:** Finally, by prognostically evaluating one's own possible actions opponents' reactions, we can concatenate these analysis to to construct the comprehensive query. Then the LLM will understand this information and generate the answer, namely, the final selected action. The format of query is:
 
 > If I play $$action$$, the next two players will play $$action_1$$, $$action_2$$ ... Therefore, I will play $$action$$
 
-Some example contents of these datasets can be viewed in the following table.
+Some example contents of these dataset can be viewed in the following table.
 
 <div class="l-page">
   <iframe src="{{ 'assets/html/2025-04-28-mastermind/doudizhu_dataset.html' | relative_url }}" frameborder='0' scrolling='no' height="400px" width="100%"></iframe>
@@ -183,15 +176,13 @@ As is shown in the figure, Task 1 is from the rule level, where we have the mode
 
 ### Data Collection
 
-**Board Textual Representation:** Firstly, we explain the method of converting the original Go board into its textual form.  According to the rules of Go, the dimensions of board is fixed at 19x19, with each slot potentially occupied by a black stone, a white stone, or a remaining vacant. Since the board is 2-dimensional, it is challenging to convert it into 1-dimensional language sequence without losing any spatial information. In our settings, we use symbols "o", "#" and "•" to represent white stones, black stones, and unoccupied positions. To facilitate precise reference to each position on the board, we assign labels to 19 rows and 19 columns, ranging from 1 to 19 and A to T, respectively, with the position at the bottom-left corner denoted as "A1".  Additionally, to encode historical information, we assign numbers to the most recent moves of both sides, such as "o(1)" and "#(3)" to denote the first move by a white stone and the third move by a black stone.  This approach completes the representation of the board, converting all necessary information on the board into textual format. 
+**Board Textual Representation:** Firstly, we explain the method of converting the original Go board into its textual form.  According to the rules of Go, the dimensions of board is fixed at 19x19, with each slot potentially occupied by a black stone, a white stone, or a remaining vacant. Since the board is 2-dimensional, it is challenging to convert it into 1-dimensional language sequence without losing any spatial information. In our settings, we use symbols "o", "#" and "•" to represent white stones, black stones, and unoccupied positions. To facilitate precise reference to each position on the board, we assign labels to 19 rows and 19 columns, ranging from 1 to 19 and A to T, respectively, with the position at the bottom-left corner denoted as "A1". Additionally, to encode historical information, we assign numbers to the most recent moves of both sides, such as "o(1)" and "#(3)" to denote the first move by a white stone and the third move by a black stone.  This approach completes the representation of the board, converting all necessary information on the board into textual format. 
 
-**Data Collection for Basic Rules:** To ensure the model grasps the core rules of Go (especially capturing stones), we begin with predicting the state-action transition of the game. 
-Typically, there are two types of pre-training tasks to achieve this goal: 1) $s,s'\rightarrow a$, i.e. predicting corresponding action given adjacent board states; 2) $s,a\rightarrow s'$, i.e. predicting next board state given current state and action. Ultimately, the collected data is presented as follows:
+**Data Collection for Basic Rules:** To ensure the model grasps the core rules of Go (especially capturing stones), we begin with predicting the state-action transition of the game.  Typically, there are two types of pre-training tasks to achieve this goal: 1) $s,s'\rightarrow a$, i.e. predicting corresponding action given adjacent board states; 2) $s,a\rightarrow s'$, i.e. predicting next board state given current state and action. Ultimately, the collected data is presented as follows:
 
 > The following is a game record of 19x19 Go ... The next move is on ... Please predict the next Go board after this move ...
 
-**Data Collection from Agents:** After understanding the fundamental rules of Go, we choose KataGo <d-cite key="wu2019accelerating"></d-cite> as the agent for generating evaluations about current game states.
-KataGo is a reinforcement learning agent based on Monte Carlo Tree Search (MCTS), displaying capabilities that exceed human-level in Go. 
+**Data Collection from Agents:** After understanding the fundamental rules of Go, we choose KataGo <d-cite key="wu2019accelerating"></d-cite> as the agent for generating evaluations about current game states. KataGo is a reinforcement learning agent based on Monte Carlo Tree Search (MCTS), displaying capabilities that exceed human-level in Go. 
 
 In building our dataset, we didn't mimic MCTS search paths due to the unknown logic behind Go moves in MCTS and the exponential growth in search space, which lowers efficiency with too many tokens. Our approach aims to help the model grasp the reasoning behind move placements, implemented as follows: Firstly, we record KataGo self-play games and save the state of the board at each move. Next, we analyze each board state to identify several potential move candidates. After obtaining these potential moves, we simulate the board state after playing these moves and passed the updated board state to KataGo for analysis. We include three aspects of analysis information on the simulation result: 1) the ownership of territories on the board; 2) the lead in points for current player; 3) the winning probability in the current board state. Finally, all the above information is converted into text form and stored in the training data. 
 
@@ -353,4 +344,4 @@ We posit that data generated from decision-making games shares similar advantage
 
 ## Conclusion
 
-In this blog, we have delved into empowering LLMs through the data perspective. Unlike many existing works that focus on code, we firstly incorporate decision-making games and their capacity to generate extensive and varied datasets into LLM's training. Through a suite of our designed techniques in data collection and training, we have developed Mastermind agents, demonstrating commendable performance in both Doudizhu and Go. Empirical experiments serve to substantiate the potential of this approach in improving reasoning capabilities of LLMs. However, our experiments are conducted in the fine-tuning stage, yet game data harbors potential for improvement in the pre-training stage. Additionally, we aspire to broaden the scope of games to which our methods can be applied, especially in those that feature multi-modal representations and more intricate numerical designs.
+In this blog, we have delved into empowering LLMs for mastering complex reasoning games. Unlike many existing works that focus on code and math problems, we firstly incorporate games to evaluate and boost the reasoning capacity of LLMs. Through a suite of our designed techniques in data collection and training, we have developed Mastermind agents, demonstrating commendable performance in both Doudizhu and Go. Empirical experiments serve to substantiate the potential of this approach in improving reasoning capabilities of LLMs. However, our experiments are conducted in the fine-tuning stage, yet game data harbors potential for improvement in the pre-training stage. Additionally, we aspire to broaden the scope of games to which our methods can be applied, especially in those that feature multi-modal representations and more intricate numerical designs.
