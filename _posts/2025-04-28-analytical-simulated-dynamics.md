@@ -400,6 +400,70 @@ j, l) + \sigma^{2} J_{2}(i, j)
 \right]. 
 \end{align} $$
  
+The close form expression for every integral $I_{3}$, $I_{4}$ and $J_{2}$ can be found in <d-cite key="saad1995online"></d-cite>.
+
+### Two Layer Neural Network
+
+From the equations above, extending to a two-layer network can be done simply by adding another layer to both the 
+teacher and student networks. The second layer of the student network is treated as an additional order parameter, a
+s in <d-cite key="goldt2020dynamics"></d-cite>. The expectations and integrals remain the same as in 
+<d-cite key="saad1995online"></d-cite>, except that each update now involves the second layer of both the student and 
+teacher networks.
+
+Another way to understand the connection between both frameworks is by considering, for example, the soft committee 
+machine as a two-layer network, where the second layer is fixed with ones in all its entries. At this point, the 
+reader should be well-equipped to follow the derivation in <d-cite key="goldt2020dynamics"></d-cite> as an extension 
+of the results presented here from <d-cite key="saad1995online"></d-cite>.
+
+## How to use the code
+
+The code is written in a Python package called nndyn, which can be found in the following repository (ADD REPOSITORY). 
+It is implemented in JAX to take advantage of broadcasting and jit compilation. The code has three main components: 
+tasks, networks, and ODEs.
+
+A task is defined by a teacher network, which is used to sample $(x, y)$ pairs for training the student network. A 
+common workflow in the teacher-student setup involves first simulating a student network trained numerically with 
+gradient descent. The resulting dynamics are then compared to the derived ODEs for the order parameters of the student 
+network.
+
+To simulate numerical training of a student network, the following pseudo-code can be used to define the teacher and 
+student networks:
+    
+```python
+from nndyn.tasks import TeacherNetErrorFunc
+from nndyn.networks import ErfTwoLayerNet, SoftCommettee
+
+data = TeacherNetErrorFunc(batch_size=batch_size, W1=W1, W2=W2, seed=batch_sampling_seed,
+                           additive_output_noise=additive_output_noise)  # or sigma in the equations
+
+if saad_solla:
+    true_student = SoftCommettee(layer_sizes=(input_dim, K, 1),
+                                 learning_rate=learning_rate,
+                                 batch_size=batch_size,
+                                 weight_scale=weight_scale,
+                                 seed=true_student_init_seed)
+else:
+    true_student = ErfTwoLayerNet(layer_sizes=(input_dim, K, 1),
+                                  learning_rate=learning_rate,
+                                  batch_size=batch_size,
+                                  weight_scale=weight_scale,
+                                  seed=true_student_init_seed)
+```
+Then, the training loop can be defined as follows:
+
+```python
+W1_list = []
+W2_list = []
+loss_list = []
+
+for i in range(n_steps):
+    x, y = data.sample_batch()
+    if i % save_every == 0:
+        W1_list.append(np.array(true_student.W1))
+        W2_list.append(np.array(true_student.W2))
+    loss = true_student.update(x, y)
+    loss_list.append(np.array(loss))
+```
 
 ### The specialization transition tracks feature learning
 
