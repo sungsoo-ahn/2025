@@ -4,15 +4,6 @@
   booktitle={The 3rd Workshop on Mathematical Reasoning and AI at NeurIPS'23}
 }
 
-
-@inproceedings{gurreal,
-  title={A Real-World WebAgent with Planning, Long Context Understanding, and Program Synthesis},
-  author={Gur, Izzeddin and Furuta, Hiroki and Huang, Austin V and Safdari, Mustafa and Matsuo, Yutaka and Eck, Douglas and Faust, Aleksandra},
-  booktitle={The Twelfth International Conference on Learning Representations}
-}
-
-
-
 @inproceedings{NEURIPS2023_d842425e,
  author = {Schick, Timo and Dwivedi-Yu, Jane and Dessi, Roberto and Raileanu, Roberta and Lomeli, Maria and Hambro, Eric and Zettlemoyer, Luke and Cancedda, Nicola and Scialom, Thomas},
  booktitle = {Advances in Neural Information Processing Systems},
@@ -381,6 +372,16 @@ series = {PLDI 2021}
 }
 
 
+@article{CoT,
+  title={Chain-of-thought prompting elicits reasoning in large language models},
+  author={Wei, Jason and Wang, Xuezhi and Schuurmans, Dale and Bosma, Maarten and Xia, Fei and Chi, Ed and Le, Quoc V and Zhou, Denny and others},
+  journal={Advances in neural information processing systems},
+  volume={35},
+  pages={24824--24837},
+  year={2022}
+}
+
+
 @inproceedings{Xu2024FaithfulLR,
   title={Faithful Logical Reasoning via Symbolic Chain-of-Thought},
   author={Jundong Xu and Hao Fei and Liangming Pan and Qian Liu and Mong Li Lee and Wynne Hsu},
@@ -433,9 +434,7 @@ year = {2024},
 isbn = {9798400703867},
 publisher = {Association for Computing Machinery},
 address = {New York, NY, USA},
-url = {https://doi.org/10.1145/3620666.3651329},
 doi = {10.1145/3620666.3651329},
-abstract = {Recent innovation in large language models (LLMs), and their myriad use cases have rapidly driven up the compute demand for datacenter GPUs. Several cloud providers and other enterprises plan to substantially grow their datacenter capacity to support these new workloads. A key bottleneck resource in datacenters is power, which LLMs are quickly saturating due to their rapidly increasing model sizes.We extensively characterize the power consumption patterns of a variety of LLMs and their configurations. We identify the differences between the training and inference power consumption patterns. Based on our analysis, we claim that the average and peak power utilization in LLM inference clusters should not be very high. Our deductions align with data from production LLM clusters, revealing that inference workloads offer substantial headroom for power oversubscription. However, the stringent set of telemetry and controls that GPUs offer in a virtualized environment make it challenging to build a reliable and robust power management framework.We leverage the insights from our characterization to identify opportunities for better power management. As a detailed use case, we propose a new framework called POLCA, which enables power oversubscription in LLM inference clouds. POLCA is robust, reliable, and readily deployable. Using open-source models to replicate the power patterns observed in production, we simulate POLCA and demonstrate that we can deploy 30\% more servers in existing clusters with minimal performance loss.},
 booktitle = {Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 3},
 pages = {207–222},
 numpages = {16},
@@ -449,15 +448,16 @@ series = {ASPLOS '24}
 @misc{openai2023gpt4,
 	title        = {GPT-4 Technical Report},
 	author       = {OpenAI},
-	year         = 2023,
+	year         = {2023},
 	eprint       = {2303.08774},
 	archiveprefix = {arXiv},
 	primaryclass = {cs.CL}
 }
+
 @article{touvron2023llama,
 	title        = {Llama: Open and efficient foundation language models},
 	author       = {Touvron, Hugo and Lavril, Thibaut and Izacard, Gautier and Martinet, Xavier and Lachaux, Marie-Anne and Lacroix, Timoth{\'e}e and Rozi{\`e}re, Baptiste and Goyal, Naman and Hambro, Eric and Azhar, Faisal and others},
-	year         = 2023,
+	year         = {2023},
 	journal      = {arXiv preprint},
 	url          = {https://arxiv.org/abs/2302.13971}
 }
@@ -467,14 +467,14 @@ series = {ASPLOS '24}
 @inproceedings{Sun2023ASA_wanda,
 	title        = {A Simple and Effective Pruning Approach for Large Language Models},
 	author       = {Mingjie Sun and Zhuang Liu and Anna Bair and J. Zico Kolter},
-	year         = 2024,
+	year         = {2024},
 	booktitle    = {International Conference on Learning Representations}
 }
 
 @article{Frantar2023SparseGPTML,
 	title        = {SparseGPT: Massive Language Models Can Be Accurately Pruned in One-Shot},
 	author       = {Elias Frantar and Dan Alistarh},
-	year         = 2023,
+	year         = {2023},
 	journal      = {ArXiv},
 	volume       = {abs/2301.00774}
 }
@@ -482,7 +482,7 @@ series = {ASPLOS '24}
 @article{Yao2022ZeroQuantEA,
 	title        = {ZeroQuant: Efficient and Affordable Post-Training Quantization for Large-Scale Transformers},
 	author       = {Zhewei Yao and Reza Yazdani Aminabadi and Minjia Zhang and Xiaoxia Wu and Conglong Li and Yuxiong He},
-	year         = 2022,
+	year         = {2022},
 	journal      = {ArXiv},
 	volume       = {abs/2206.01861}
 }
@@ -490,7 +490,7 @@ series = {ASPLOS '24}
 @inproceedings{Dettmers2022TheCF,
 	title        = {The case for 4-bit precision: k-bit Inference Scaling Laws},
 	author       = {Tim Dettmers and Luke Zettlemoyer},
-	year         = 2022,
+	year         = {2022},
 	booktitle    = {International Conference on Machine Learning}
 }
 
@@ -561,11 +561,8 @@ series = {ASPLOS '24}
     booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2024",
     month = nov,
     year = "2024",
-    address = "Miami, Florida, USA",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2024.findings-emnlp.266",
-    pages = "4623--4648",
-    abstract = "Long context capability is a crucial competency for large language models (LLMs) as it mitigates the human struggle to digest long-form texts. This capability enables complex task-solving scenarios such as book summarization, code assistance, and many more tasks that are traditionally manpower-intensive. However, transformer-based LLMs face significant challenges with long context input due to the growing size of the KV cache and the intrinsic complexity of attending to extended inputs; where multiple schools of efficiency-driven approaches {---} such as KV cache quantization, token dropping, prompt compression, linear-time sequence models, and hybrid architectures {---} have been proposed to produce efficient yet long context-capable models. Despite these advancements, no existing work has comprehensively benchmarked these methods in a reasonably aligned environment. In this work, we fill this gap by providing a taxonomy of current methods and evaluating 10+ state-of-the-art approaches across seven categories of long context tasks. Our work reveals numerous previously unknown phenomena and offers insights {---} as well as a friendly workbench {---} for the future development of long context-capable LLMs. The source code is available at https://github.com/henryzhongsc/longctx{\_}bench.",
+    address = {Miami, Florida, USA},
+    publisher = {Association for Computational Linguistics}
 }
 
 @article{banerjee2024llms,
@@ -652,12 +649,10 @@ number = {4},
 issn = {0360-0300},
 url = {https://doi.org/10.1145/3342555},
 doi = {10.1145/3342555},
-abstract = {Huffman’s algorithm for computing minimum-redundancy prefix-free codes has almost legendary status in the computing disciplines. Its elegant blend of simplicity and applicability has made it a favorite example in algorithms courses, and as a result it is perhaps one of the most commonly implemented algorithmic techniques. This article presents a tutorial on Huffman coding and surveys some of the developments that have flowed as a consequence of Huffman’s original discovery, including details of code calculation and of encoding and decoding operations. We also survey related mechanisms, covering both arithmetic coding and the recently developed asymmetric numeral systems approach and briefly discuss other Huffman-coding variants, including length-limited codes.},
 journal = {ACM Comput. Surv.},
 month = aug,
 articleno = {85},
 numpages = {35},
-keywords = {Huffman code, data compression, minimum-redundancy code}
 }
 
 @inproceedings{hendrycks2021measuring,
@@ -749,7 +744,7 @@ url={https://openreview.net/forum?id=d7KBjmI3GmQ}
 
 
 
-@inproceedings{2019-commonsenseqa,
+@inproceedings{talmor-etal-2019-commonsenseqa,
     title = "{C}ommonsense{QA}: A Question Answering Challenge Targeting Commonsense Knowledge",
     author = "Talmor, Alon  and
       Herzig, Jonathan  and
