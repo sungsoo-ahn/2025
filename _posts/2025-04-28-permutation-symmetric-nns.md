@@ -20,8 +20,20 @@ bibliography: 2025-04-28-permutation-symmetric-nns.bib
 #   - please use this format rather than manually creating a markdown table of contents.
 toc:
   - name: I. In Theory - Paramterizing Symmetric Functions in Taylor Series
+    subsections:
+    - name: I.1 Example: 1D permutation invariance
+    - name: I.2 Exercises
+    - name: I.3 What we have learned so far
   - name: II. Engineering a Network with Permutation Symmetry
+    subsections:
+    - name: II.1 Common types of permutation symmetry
+    - name: II.2 Creating a permutation equivariant layer with einsum pooling
+    - name: II.3 Putting everything together: The equivariant Einsum network
   - name: III. Use Cases
+    subsections:
+    - name: III.1 Matrix pseudo inverse
+    - name: III.2 Knowledge graph reasoning
+    - name: III.3 Permutation symmetry in ARC-AGI problems
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
@@ -73,8 +85,8 @@ _styles: >
 ## I. In Theory - Paramterizing Symmetric Functions in Taylor Series
 
 Speaking of permutation invariance, you may already have your faviorite ways to design invariant neural networks for certain types of problems. 
-But here we'll introduce a simple yet general Taylor series-based technique necessary for studying complex symmetry patterns. Specifically, we need to enable efficient universal learners -- that can represent any such invariant or equivariant functions. 
-For advanced readers, the general idea follows [Equivariant Multilayer Perceptrons (EMLP)](https://github.com/mfinzi/equivariant-MLP) but with a high-order twist. 
+But here we'll introduce a simple yet general Taylor series-based view necessary for studying complex symmetry patterns. Specifically, we need to enable efficient universal learners -- that can represent any such invariant or equivariant functions. 
+For advanced readers, the general idea is similar to [Equivariant Multilayer Perceptrons (EMLP)](https://github.com/mfinzi/equivariant-MLP)<d-cite key="finzi2021practical"></d-cite>, universal equivariant MLPs<d-cite key="ravanbakhsh2020universal"></d-cite> as well as many others, but in a more intuitive form. 
 
 Given the desired input-output shapes and symmetry constraints, we would proceed with the following steps: 
 1. Express a general function that matches the input-output shapes in Taylor series form.
@@ -211,7 +223,7 @@ $$
 
 An important effect of this simplification is **reduced compute**. It now requires $O(N)$ compute for $N$ inputs instead of $O(N^2)$ for order-2.  
 
-In math terms, the number of free parameters is the dimensionality of the null space of the symmetry equations. The free parameters can be numerically solved from the basis of this null space which is one of the many innovations in [1]. But note that as the basis is often not unique, numerical solutions can vary by a linear combination and therefore may not be compute-optimal, so further simplification is still needed.
+In math terms, the number of free parameters is the dimensionality of the null space of the symmetry equations. The free parameters can be numerically solved from the basis of this null space. But note that as the basis is often not unique, numerical solutions can vary by a linear combination and therefore may not be compute-optimal, so further simplification is still needed.
 
 Although we didn't unroll order-3 and higher terms because they are difficult to visualize, they can still be analyzed with the same approach. Just imagine a cube or a hypercube of parameters, apply the symmetry transformations simultaneously along all dimensions and solve for the parameter sharing pattern.
 
@@ -873,7 +885,7 @@ Did you know: linear self-attention ab,cb,cd->ad is an order-3 term for ab-type 
 </blockquote>
 
 
-### II.3 Putting everything together: The Equivariant Einsum Network
+### II.3 Putting everything together: The equivariant Einsum network
 
 With an equivariant layer, we can stack them to create a practical high capacity neural net that learns well. Let's apply the following recipe
 
@@ -1106,6 +1118,7 @@ loss_ijr=cross_entropy(Y[:,j,r],i)+cross_entropy(Z[i,:,r],j)
 to be enumerated across all heldout edges (i,r,j).
 
 Here we have a python implementation for knowledge graph completion on the Alyawarra Kinship dataset. The Alyawarra Kinship dataset records the kinship terms among 102 Alyawarra-speaking Aboriginal people of central Austraila. It can be thought of as a real world instance of the "sister of father is aunt" example. It is one of the classical datasets for evaluating knowledge graph reasoning.
+
 The dataset (`train.txt`, `valid.txt` and `test.txt`) are available from the [ConvE Github repository](https://github.com/TimDettmers/ConvE/blob/master/kinship.tar.gz).
 
 ```python
@@ -1237,7 +1250,7 @@ Standard evaluation metric for knowledge graph completion is top-1, top-5, top-1
 | ConvE | 0.83 |  0.98   | 0.91   | 0.73  |
 | EinNet `aaH` | 0.94 |  1.00   | 0.99   | 0.90  |
 
-At 94% MRR, the equivariant network has a strong showing here and does much better than the classic embedding-based ConvE model and even more recent models. Maybe its closer to actually doing some logic reasoning? The limitation here is that memory cost is quadratic to number of entities and 1000 entities seems to be the current limit, where as embedding-based methods can scale to millions of entities. Further research on design is needed.
+At 94% MRR, the equivariant network has a strong showing here and does much better than the classic embedding-based ConvE model and even more recent models. Maybe its closer to actually doing some logic reasoning? The limitation here is that memory cost is quadratic to number of entities and 1000 entities seems to be the current limit, where as embedding-based methods can scale to millions of entities. Further research on design is needed for practical applications.
 
 
 ### III.3 Permutation symmetry in ARC-AGI problems
@@ -1245,7 +1258,7 @@ At 94% MRR, the equivariant network has a strong showing here and does much bett
 
 The Abstraction Reasoning Corpus for Artificial General Intelligence (ARC-AGI) is a collection of complex puzzles for which even advanced Large Language Models (LLMs) struggle to solve. The task is to construct an output "grid" or colors given an input "grid", following several demonstrations of input-output pairs. 
 
-While the ARC-AGI benchmark tests a wide range of intelligence capabilities, there are a few interesting ones with permutation symmetry that can seemingly be solved by a permutation symmetric NN trained only on the ~3 given demonstrations. Here are 3 of them.
+While the ARC-AGI benchmark tests a wide range of intelligence capabilities, there are a few interesting ones with permutation symmetry that can seemingly be solved by a permutation symmetric NN trained only on the ~3 given demonstrations. Here are a few of them.
 
 
 <div class="row mt-3">
@@ -1362,15 +1375,9 @@ for i in range(2000):
 Arguably, hardcoding symmetry constraints specific to a ARC-AGI task can be considered cheating as much as writing a python program to solve the task. But maybe one day just like program synthesis, the LLMs may be able to generate neural network architectures that solve those tasks, so who knows?
 
 
-
-
-
-## Final words
-
 There have you, we've designed and verified various kinds of permutation symmetric network from the basic principles. Building permutation symmetry into neural network architecture helps make learning highly efficient, sometimes solving tasks from as few as 3 examples. 
 
-The same bottom-up approach is applicable to many other types of symmetries, such as translation, scale, rotation. In fact, designing equivariant and invariant networks has been a hot topic. In addition to the EMLP architecture, many network designs for specific types of permutation symmetry have also been proposed previously, such as 
-
-In fact, the matrix pseudo inverse and knowledge graph completion use cases in our post are in part inspired by the [] work and a comment in its reviews. We'd like to encourage curious readers to read those papers as well.
+The same bottom-up approach is applicable to many other types of symmetries, such as translation, scale, rotation. In fact, designing equivariant and invariant networks has been a hot topic. In addition to the EMLP architecture, many network designs for specific types of permutation symmetry have also been proposed, such as <d-cite key="navon2023equivariant"></d-cite> and <d-cite key="zhou2024permutation"></d-cite>. 
+In fact, the matrix pseudo inverse and knowledge graph completion use cases in our post are in part inspired by the <d-cite key="wangsmpe"></d-cite> work and comments from OpenReview. We'd like to encourage curious readers to read those papers as well.
 
 
