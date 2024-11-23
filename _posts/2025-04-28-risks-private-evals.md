@@ -2,7 +2,7 @@
 layout: distill
 title: "Peeking Behind Closed Doors: Risks of LLM Evaluation by Private Data Curators"
 description: A critical examination of the risks and challenges posed by private evaluations in the LLM landscape, highlighting financial incentives, conflicts of interest, and evaluation biases.
-date: 2025-04-28
+date: 2024-11-22
 
 
 authors:
@@ -29,6 +29,7 @@ toc:
    subsections:
    - name: 3-1 Experiment Overview
    - name: 3-2 Results and Analysis
+   - name: 3-3 ELO Simulation
  - name: 4. Conclusion
 
 
@@ -44,13 +45,13 @@ toc:
 
 The rapid advancement in building large language models (LLMs) has intensified competition among big-tech companies and AI startups. In this regard, model evaluations are critical for product and investment-related decision-making. While open evaluation sets like MMLU initially drove progress, concerns around data contamination and data bias have constantly questioned their reliability. As a result, it has led to the rise of private data curators who have begun conducting hidden evaluations with high-quality self-curated test prompts and their own expert annotators. In this blog post, we argue that despite potential advantages in addressing contamination issues, private evaluations introduce inadvertent financial and evaluation risks. In particular, the key concerns include the potential conflict of interest arising from private data curators' business relationships with their clients (leading LLM firms). In addition, we highlight that the subjective preferences of private expert annotators will lead to inherent evaluation bias towards the models trained with the private curators’ data. Overall, this blog post lays the foundation for studying the risks of private evaluations that can lead to wide-ranging community discussions and policy changes.
 
-
+---
 ## 1. Model Evaluation
 
 
 In recent times, there has been rapid progress in training large language models (LLMs) for solving diverse and complex real-world tasks (e.g., instruction-following, agentic flows, reasoning) <d-cite key="pixelplex2024llm,evidentlyai2024llm"></d-cite>. In particular, the ability to create innovative products powered by LLMs has led to a rapidly increasing demand for building highly capable language models. This demand has fueled fierce competition among big-tech companies (e.g., Google, Meta, Alibaba) and AI startups (e.g., Mistral, Deepseek) to train their own LLMs. In an environment with numerous players, model evaluations play a critical role in understanding the capabilities of LLMs. Besides providing insights into model behavior (e.g., studying modes of failure), these evaluations are important for forming a positive opinion of the model for clients and investors <d-cite key="forbes2024openai"></d-cite>.
 
-
+---
 ### 1-1 Open Evaluation
 
 
@@ -65,8 +66,8 @@ Traditionally, open evaluation datasets have been used to benchmark various mode
 
 These issues sparked a debate within the AI community about the reliability of open evaluation sets, paving the way for the emergence of private evaluators.
 
-
-### 1-2 Private Evaluation
+---
+### 1-2 Private Evaluation 
 
 
 We consider private evaluators as organizations that perform LLM assessment by hiding some or all components of the evaluation pipeline. In this regard, we consider two categories: public-driven leaderboard (e.g., LMSYS) and privately-curated leaderboard (e.g., ScaleAI).
@@ -98,7 +99,11 @@ Despite its popularity, its design inherently suffers from several key risks:
 Companies specializing in data curation and evaluation have begun establishing their own private leaderboards. For instance, ScaleAI, which has positioned itself as a leader in AI evaluation, recently introduced the SEAL leaderboard <d-cite key="scale2024leaderboard"></d-cite> as a step towards standardizing privatized leaderboards to provide high-quality, unbiased evaluations by controlling the entire evaluation pipeline. By leveraging proprietary datasets and expert annotators, these companies strive to mitigate issues of data contamination and bias that plague open evaluation methods.
 
 
-{% include figure.html path="assets/img/2025-04-28-risks-private-evals/risks-private-evals.png" class="img-fluid" caption="Structure of private evaluation pipeline showing the relationship between data curators, annotators, and model developers." %}
+{% include figure.html path="assets/img/2025-04-28-risks-private-evals/risks-private-evals.png" class="img-fluid" %}
+<!-- left align caption -->
+<div class="caption" style="text-align: left;">
+    Illustration of private evaluation pipeline showing the relationship between data curators, annotators, and model developers. The dual role of data curators in providing training data and evaluating models can introduce biases.
+</div>
 
 
 Key features include:
@@ -112,13 +117,13 @@ Key features include:
 
 3. **Reduced Susceptibility to Gaming**: By keeping the evaluation data and methodologies confidential, private leaderboards make it more difficult for developers to tune their models specifically to the test set.
 
-
+---
 ## 2. Risks of Private Leaderboards
 
 
 Despite the above advantages, these private evaluation leaderboards by data curators introduce a new set of risks that can have significant implications for the AI community, and may jeopardize their reliability. These risks revolve around financial incentives, potential conflicts of interest, and various forms of evaluation bias that can skew the assessment of language models.
 
-
+---
 ### 2-1 Financial Incentives and Conflicts of Interest
 
 
@@ -128,28 +133,28 @@ As private evaluators like ScaleAI gain prominence, the financial dynamics betwe
 {% include figure.html path="assets/img/2025-04-28-risks-private-evals/scale_customers.png" class="img-fluid" %}
 
 
-This scenario raises important questions about transparency and fairness. Should private evaluators disclose their financial relationships with model developers? In industries like finance, regulations require firms to implement "Chinese walls" to prevent conflicts of interest between different divisions within the same organization <d-cite key="WikipediaChineseWall"></d-cite>. A similar approach could be adopted in the AI industry, where evaluators provide a "Financial Incentive Statement" to declare any potential conflicts. Without such measures, the credibility of private evaluations may be compromised, and smaller players without the financial means to influence evaluators could be unfairly disadvantaged. <d-cite key="scale2024leaderboard"></d-cite>.
+This scenario raises important questions about transparency and fairness. Should private evaluators disclose their financial relationships with model developers? In industries like finance, regulations require firms to implement "Chinese walls" to prevent conflicts of interest between different divisions within the same organization <d-cite key="WikipediaChineseWall"></d-cite>. A similar approach could be adopted in the AI industry, where evaluators provide a "Financial Incentive Statement" to declare any potential conflicts. Without such measures, the credibility of private evaluations may be compromised, and smaller players without the financial means to influence evaluators could be unfairly disadvantaged <d-cite key="scale2024leaderboard"></d-cite>.
 
 
 
-
+---
 ### 2-2 Annotator Bias and Methodological Preferences
 
 
 Private evaluators often employ expert annotators to assess model outputs, aiming to ensure high-quality and reliable evaluations. However, these annotators bring their own subjective preferences and biases, which can influence the evaluation outcomes. If the annotators favor certain styles of responses or have been involved in creating training data for specific models, their assessments might inadvertently favor those models. This bias can create an uneven playing field, where models that align with the annotators' preferences perform better in evaluations, regardless of their general applicability or performance across a broader user base. Even when the annotators act in good faith, biases because of the dual roles of such evaluators can occur in various ways:
 
 
-1. **Overlap in Evaluation and Training Prompts**: Scale AI may have a broad set of “tasks” or questions in their evaluations that are similar or identical to those used in a model's training data. For example, platforms like LMSYS's Chatbot Arena allow users to input prompts and rank model responses. If a model developer has access to these prompts, they can fine-tune their models to perform exceptionally well on them. This practice undermines the integrity of the evaluation by testing models on familiar data rather than truly unseen challenges. It has already been seen how recent efforts in LLM pre-training (like Gemma models) have started fine-tuning on LMSys chats to boost the model’s ELO score on the Chatbot Arena. <br> **Impact:** Models appear to perform better not because they have superior general capabilities, but because they have been specifically trained on the evaluation data. This creates an artificial performance boost and does not reflect the model's real-world effectiveness.
+1. **Overlap in Evaluation and Training Prompts**: Scale AI may have a broad set of “tasks” or questions in their evaluations that are similar or identical to those used in a model's training data. As an example, platforms like LMSys's Chatbot Arena allow users to input prompts and rank model responses. If a model developer has access to these prompts, they can fine-tune their models to perform exceptionally well on them. It has already been seen how recent efforts in LLM pre-training (like Gemma models) have started fine-tuning on LMSys chats to boost the model’s ELO score on the Chatbot Arena. Note that while LMSys is primarily an evaluator and *not* a data curator, this annecdote serves as evidence of how side-information about data curation can be beneficial in gaming evaluations.<br> **Impact:** Models appear to perform better not because they have superior general capabilities, but because they have been specifically trained on the evaluation data. This creates an artificial performance boost and does not reflect the model's real-world effectiveness.
 
 
 
 
-2. **Overlap in Human Annotators Between Training and Evaluation:**: The use of the same pool of annotators for both creating training data and evaluating models can introduce significant bias. Annotators develop certain preferences and expectations based on their experiences during data creation. If these annotators are also responsible for evaluations, they may subconsciously favor models that produce outputs aligning with their expectations. <br>
+2. **Overlap in Human Annotators Between Training and Evaluation:** The use of the same pool of annotators for both creating training data and evaluating models can introduce significant bias. Annotators develop certain preferences and expectations based on their experiences during data creation. If these annotators are also responsible for evaluations, they may subconsciously favor models that produce outputs aligning with their expectations. <br>
 **Impact:** Models trained using data from these annotators may perform better in evaluations simply because they cater to the annotators' biases. This does not necessarily translate to better performance for end-users with diverse backgrounds and preferences, leading to skewed performance metrics that do not reflect real-world applicability.
 
 
 
-
+---
 ## 3. Simulation of Bias in Model Evaluations
 
 
@@ -160,7 +165,7 @@ For this set of experiments, we consider the most benign case in which both comp
 
 
 
-
+---
 ### 3-1 Experiment Overview
 
 
@@ -178,8 +183,8 @@ Crucially, we selected GPT-4o and Sonnet-3.5 because they rank at almost the sam
 
 
 **Models:**
-- Model A: A Mistral<d-cite key="mistral7b"></d-cite> model fine-tuned on outputs provided by Company Alpha (GPT-4o).
-- Model B: The same Mistral fine-tuned on outputs provided by Company Beta (Claude Sonnet).
+- **Model A**: A Mistral<d-cite key="mistral7b"></d-cite> model fine-tuned on outputs provided by Company Alpha (GPT-4o).
+- **Model B**: The same Mistral model fine-tuned on outputs provided by Company Beta (Claude Sonnet).
 
 
 
@@ -200,7 +205,7 @@ Crucially, we selected GPT-4o and Sonnet-3.5 because they rank at almost the sam
 
 
 
-
+---
 ### 3-2 Results and Analysis
 
 
@@ -213,7 +218,7 @@ Crucially, we selected GPT-4o and Sonnet-3.5 because they rank at almost the sam
 | Evaluator Beta (Claude) | <span style="background-color: #ffe6e6; color: black">314 (39.10%)</span> | <span style="background-color: #e6ffe6; color: black">489 (60.90%)</span> |
 
 
-#### 3-2-1 Quantifying Self-Bias
+**Quantifying Self-Bias:**
 
 
 To calculate self-bias, we use the formula:
@@ -225,8 +230,7 @@ $$
 
 
 
-
-For Claude:
+**For Claude:**
 
 
 $$
@@ -234,7 +238,7 @@ $$
 $$
 
 
-For GPT-4:
+**For GPT-4:**
 
 
 $$
@@ -242,16 +246,17 @@ $$
 $$
 
 
+
+The results highlight a clear bias aligned with each evaluator's preferences. While both models exhibit self-bias, the difference in magnitude suggests potential variations in their evaluation mechanisms or inherent tendencies to favor their own outputs. These findings are additionally concurred by the findings of Panickssery et al. <d-cite key="panickssery2024evaluating"></d-cite>, who observed that LLM evaluators recognize and favor their own generations.
+.
+
+
+
 ---
-The results highlight a clear bias aligned with each evaluator's preferences. While both models exhibit self-bias, the difference in magnitude suggests potential variations in their evaluation mechanisms or inherent tendencies to favor their own outputs. 
+### 3-3 ELO Simulation
 
 
-
-
-#### 3-2-2 ELO Simulation!
-
-
-Let us finally dive into the metric that has captivated the LLM world, ELO rankings. How much does the observed amount of self-bias influence the ELO rankings of two models? To quantify the impact of these biases on model rankings, we simulated ELO ratings using the same method as employed by the LMSys leaderboard <cite key="lmsys2024"></cite>.
+Let us finally dive into the metric that has captivated the LLM world, ELO rankings. How much does the observed amount of self-bias influence the ELO rankings of two models? To quantify the impact of these biases on model rankings, we simulated ELO ratings using the same method as employed by the LMSys leaderboard <d-cite key="lmsys2024"></d-cite>.
 
 
 **ELO Ratings Based on Evaluator Preferences:**
@@ -287,7 +292,7 @@ These ELO differences further highlight the significance of the bias each evalua
 
 
 
-
+---
 
 ## 4. Conclusion
 
