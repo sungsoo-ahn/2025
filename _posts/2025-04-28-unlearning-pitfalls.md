@@ -133,7 +133,7 @@ Foundation models are often trained on large, internet-scraped datasets that may
     </div>
 </div>
 <div class="caption">
-    The Times sues OpenAI and Microsoft over A.I. use of copyrighted work.
+    The Times sues OpenAI and Microsoft over A.I. use of copyrighted work<d-cite key='times2023ai'></d-cite>.
 </div>
 
 
@@ -146,7 +146,7 @@ AI models frequently replicate societal biases present in their training data. F
     </div>
 </div>
 <div class="caption">
-    Diffusion model’s generated images given the text condition “A Mexican person”, usually involving old man with sombrero.
+    Diffusion model’s generated images given the text condition “A Mexican person”, usually involving old man with sombrero<d-cite key='turk2023ai'></d-cite>.
 </div>
 
 
@@ -179,7 +179,7 @@ $$
 $$
 
 where:
-- $$\ell()$$: Loss function for the model's prediction.
+- $$\ell(\cdot)$$: Loss function for the model's prediction.
 - $$y_f$$: Desired response post-unlearning.
 - $$\mathcal{D}_f$$ and $$\mathcal{D}_r$$: Forgetting and retaining datasets.
 - $$\lambda$$: Regularization parameter.
@@ -195,10 +195,10 @@ Machine unlearning isn't just about removing problematic influences; it’s abou
 
 ### A Tale of Mother and Son
 
-Imagine machine unlearning (MU) as a task where a mom instructs her son to remove a box of unwanted goods from an apartment. In this analogy:
+Imagine machine unlearning as a task where a mom instructs her son to remove a box of unwanted goods from an apartment. In this analogy:
 
 - **The goods** represent the knowledge to be forgotten.
-- **The apartment** represents the large language model (LLM).
+- **The apartment** represents the foundation model.
 
 The boy has two approaches:
 
@@ -225,7 +225,7 @@ As shown in the figure below, unlearned models may exhibit high unlearning effec
 </div>
 
 
-Similarly, for LLM unlearning, jailbreak attacks have also demonstrated effectiveness in luring the unlearned model to generate the seemingly already unlearned knowledge, by optimizing some adversarial prompt, using method such as GCG attack <d-cite key="zou2023universal"></d-cite>. The table below shows 
+Similarly, for LLM unlearning, jailbreak attacks have also demonstrated effectiveness in luring the unlearned model to generate the seemingly already unlearned knowledge, by optimizing some adversarial prompt, using methods like GCG attack <d-cite key="zou2023universal"></d-cite>. The table below shows 
 
 
 <div class="row mt-3">
@@ -234,7 +234,7 @@ Similarly, for LLM unlearning, jailbreak attacks have also demonstrated effectiv
     </div>
 </div>
 <div class="caption">
-  The GCG attack (row "Enhanced GCG") successfully breaks the unlearned model and reduces the unlearning effectiveness (statistics in WMDP-Bio column) significantly compared to benign input (row "Default decoding").
+  The GCG attack (row "Enhanced GCG") successfully breaks the unlearned model and reduces the unlearning effectiveness (statistics in WMDP-Bio column) significantly compared to benign input (row "Default decoding")<d-cite key="lucki2024adversarial"></d-cite>.
 </div>
 
 
