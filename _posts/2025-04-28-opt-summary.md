@@ -183,6 +183,7 @@ For convenience, we summarize some of the notations commonly used in tables belo
 - Stoc: stochastic
 - $L$-S: $L$-Lipschitz smooth. 
 - $L$-IS / AS / SS<d-footnote>For clarification, $L$-IS means in finite-sum problems, each component function $f_i$ itself is $L$-smooth, for the definition of $L$-AS, please refer to the definition of "mean-squared smoothness" in <d-cite key="arjevani2023lower"></d-cite>, and $L$-SS means the summation $f$ is $L$-smooth while each component $f_i$ may not be Lipschitz smooth. Clearly IS is stronger than AS, AS is stronger than SS.</d-footnote>: $L$-Lipschitz individual / averaged / summation smoothness.
+- NS: Nonsmooth
 - PL: Polyak-Łojasiewicz Condition
 - Optimality gap: the function value gap $f(x) - f^\star$.
 - Stationarity: the function gradient norm $\|\| \nabla f(x) \|\|$.
@@ -360,7 +361,7 @@ $$
 \min_{x\in\mathcal{X}}\sup_{\mathcal{D}\in U_r(Q)} \triangleq\mathbb{E}_{\xi\sim \mathcal{D}}[f(x;\xi)],
 $$
 
-where $U_r(Q)$ refers to an uncertainty set that contains a family of distributions around a nominal distribution $Q$ measured by some distance between probability distribution of radious $r$.
+where $U_r(Q)$ refers to an uncertainty set containing a family of distributions around a nominal distribution $Q$ measured by some distance between distributions with radius $r$.
 
 ### Landscape Analysis
   
