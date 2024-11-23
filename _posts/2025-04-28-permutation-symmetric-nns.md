@@ -1005,3 +1005,5 @@ class einnet(nn.Module):
 #Example usage
 #    net=einnet(1,16,64,1,2,einpool_ab())
 ```
+
+
