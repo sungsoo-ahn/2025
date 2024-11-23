@@ -519,16 +519,11 @@ for i in range(n_steps):
     {% include figure.html path="assets/img/2025-04-28-analytical-simulated-dynamics/fixed_teacher_student_saad_solla.png" class="img-fluid" %}
 </div>
 <div class="caption">
-    Figure 1: Saad and Solla <d-cite key="saad1995online"></d-cite> results.
-</div>
+    Figure 1: Saad and Solla <d-cite key="saad1995online"></d-cite> results. Simulated training of a soft committee 
+machine student network with a fixed teacher network was compared against the analytical ODEs for the order parameters. 
+In this setup, N = 784, M = 4, and K varies. Notably, the generalization error is significantly reduced when 
+the student network has a size of K = 4 or larger.
 
-### Large initial weights produce individual differences
-
-<div class="row mt-3">
-    {% include figure.html path="assets/img/2025-04-28-analytical-simulated-dynamics/varying_weights.png" class="img-fluid" %}
-</div>
-<div class="caption">
-    Figure 2: Saad and Solla <d-cite key="saad1995online"></d-cite> results for various seeds.
 </div>
 
 ### Theory-experiment overlap in two-layer neural networks
@@ -537,9 +532,27 @@ for i in range(n_steps):
     {% include figure.html path="assets/img/2025-04-28-analytical-simulated-dynamics/fixed_teacher_student_base_goldt.png" class="img-fluid" %}
 </div>
 <div class="caption">
-    Figure 3: Goldt et al. <d-cite key="goldt2020dynamics"></d-cite> results.
-    Large weights, varying simulations and average out to show correspondence with ODEs. Show for M=4 and K=2, 4 and 6 (Sebastian Goldt's)
+    Figure 2: 
+    Simulated training of a two layer non-linear student network using  <d-cite key="goldt2020dynamics"></d-cite> 
+extension, with a fixed teacher network was compared against the analytical ODEs for the order parameters. 
+In this setup, N = 784, M = 4, and K varies. Notably, the generalization error is also significantly reduced when 
+the student network has a size of K = 4 or larger, as in the soft committee machine case. The alignment corresponds to
+the dot product between the measured order parameter in the simulated network compared to the theoretical one described
+by the ODEs. Note that all alignments are close to 1, indicating that the ODEs accurately describe the dynamics. 
+Some drops can be seen in the alignment when the loss function is steepest.
 </div>
+
+### Large initial weights produce individual differences
+
+<div class="row mt-3">
+    {% include figure.html path="assets/img/2025-04-28-analytical-simulated-dynamics/varying_weights.png" class="img-fluid" %}
+</div>
+<div class="caption">
+    Figure 3: Simulated two layer non-linear student network using  <d-cite key="goldt2020dynamics"></d-cite>
+for different initial weights in the students network.
+</div>
+
+
 
 ### Limits of the analytical teacher-student setting
 
