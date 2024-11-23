@@ -1067,8 +1067,18 @@ for i in range(10000):
 Let us plot the element-wise mean absolute error between $A^+A$ and $I$ over the course of learning. 
 
 
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-permutation-symmetric-nns/MM.png" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    Learning from 1000 examples for 10k iterations gives near 2 orders of magnitude drop in Mean Absolute Error starting from random, with no signs of overfitting.
+</div>
 
-With only 640k parameters (roughly the size of a $800\times800$ linear layer) and 1000 training points, we get to 0.0015 MAE which is 2 orders of magnitudes below random 0.1250 MAE. 
+
+
+With only 640k parameters (roughly the size of a $800\times800$ linear layer), 1000 training points and 10k iterations, we get to 0.0015 MAE lowest which is 2 orders of magnitudes below random 0.1250 MAE. Running the optimization for longer may further reduce MAE.
 
 
 ### III.2 Knowledge graph reasoning
