@@ -71,15 +71,87 @@ Note: please use the table of contents as defined in the front matter rather tha
 | Resnet101      | 0.898816      | 0.777873      | 0.841248      | 0.451866      | 0.607102      | 0.587721      | 0.471974      |
 | Resnet152      | 0.918961      | 0.784820      | 0.834101      | 0.513276      | 0.560512      | 0.600739      | 0.498934      |
 
+<div class="l-screen">
+  <table>
+    <thead>
+      <tr>
+        <th>model\Matrices</th>
+        <th>Column 1</th>
+        <th>Column 2</th>
+        <th>Column 3</th>
+        <th>Column 4</th>
+        <th>Column 5</th>
+        <th>Column 6</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Row 1</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+      </tr>
+      <tr>
+        <td>Row 2</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+      </tr>
+      <tr>
+        <td>Row 3</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+      </tr>
+      <tr>
+        <td>Row 4</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+      </tr>
+      <tr>
+        <td>Row 5</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+      </tr>
+      <tr>
+        <td>Row 6</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+        <td>Value</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 Where the columns of the table represent: 
 
--**Cos_Sim_G**: Cosin similarity based on the gradiant
--**Cos_Sim_R**: Cosin similarity based on the final represantations
--**Cos_Sim_act**: Cosin similarity based on the activation map
--**Grad_Cam_CC**: Grad_Cam accuracy
--**Grad_Cam_KLD**: Grad_Cam Kullback–Leibler divergence
--**Grad_Cam_SSIM**: Grad_Cam Structural similarity index measure
--**Grad_Cam_AUC**: Grad_Cam area under the curve
+- **Cos_Sim_G**: Cosin similarity based on the gradiant.
+- **Cos_Sim_R**: Cosin similarity based on the final represantations.
+- **Cos_Sim_act**: Cosin similarity based on the activation map.
+- **Grad_Cam_CC**: Grad_Cam accuracy.
+- **Grad_Cam_KLD**: Grad_Cam Kullback–Leibler divergence.
+- **Grad_Cam_SSIM**: Grad_Cam Structural similarity index measure.
+- **Grad_Cam_AUC**: Grad_Cam area under the curve.
 
 
 ## Figures
