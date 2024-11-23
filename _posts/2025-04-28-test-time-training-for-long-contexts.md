@@ -138,7 +138,7 @@ $$
 
 ## 4.1. Results on popular long context benchmarks
 To evaluate our method, we choose two models for evaluation:
-- open-sourced model *LLaMA-3-8B-Instruct*<d-cite key="LLaMA3modelcard"></d-cite> with **8k** context window
+- open-sourced model *LLaMA-3-8B-Instruct*<d-cite key="llama3modelcard"></d-cite> with **8k** context window
 - close-sourced model *GPT3.5-turbo*<d-cite key="chen2023robust"></d-cite> with a longer context window **16k**
 
 
