@@ -39,12 +39,12 @@ toc:
     - name: Negative pair creation taxonomy
   - name: Crafting Effective Positive Pairs
     subsections:
-    - name: Augmentation techniques
-    - name: Embedding based techniques
+    - name: Same instance augmentation techniques
+    - name: Embedding-based techniques
     - name: Synthetic data generation for positive pairs
     - name: Supervised pairing techniques
-    - name: Attribute based pairing techniques
-    - name: Cross modal positive pairing techniques
+    - name: Attribute-based pairing techniques
+    - name: Cross-modal positive pairing techniques
   - name: Crafting Effective Negative Pairs
     subsections:
       - name: Hard negative selection
@@ -253,7 +253,7 @@ Next, we dive into details of most commonly used techiques for crafting effectiv
 
 ## Crafting Effective Positive Pairs
 
-### 1. Same instance augmentation techniques
+### Same instance augmentation techniques
 Data augmentation plays a crucial role in self-supervised learning by generating auxiliary versions of input data, which enhances the model’s robustness and ability to generalize. 
 <aside class="l-body box-important" markdown="1">
 This process involves introducing various transformations to the original data, prompting the learning algorithm to identify consistent underlying patterns. By maintaining semantic integrity while altering visual appearance, augmentation instills a sense of consistency in the model’s representations.
@@ -284,7 +284,7 @@ Most existing surveys (<d-cite key="gui2024survey"></d-cite>, <d-cite key="jaisw
 
 - *SEED* <d-cite key="fang2021seed"></d-cite> simplifies training by using teacher-student distillation with pseudo-labels, reducing computational complexity while maintaining strong performance.
 
-### 2. Embedding-based techniques
+### Embedding-based techniques
 Nearest-Neighbour Contrastive Learning of visual Representations (NNLCR)  <d-cite key="dwibedi2021little"></d-cite> goes beyond single instance positives, i.e. the instance discrimination task so the model can learn better features that are invariant to different viewpoints, deformations, and even intra-class variations.
 The model is encouraged to generalize to new data-points that may not be covered by the data augmentation scheme.
 <aside class="l-body box-important" markdown="1">
@@ -357,7 +357,7 @@ Figure 6: Complete architecture of All4One framework. Feature, Centroid and Neig
 
 
 
-### 3. Synthetic data generation for positive pairs
+### Synthetic data generation for positive pairs
 
 In <d-cite key="wu2023synthetic"></d-cite>, the authors propose a data generation framework to improve contrastive learning training by joint sample generation and contrastive learning as shown in Figure 7. **The generator is jointly learned with the main model to dynamically customize hard samples based on the training state of the main model. Besides, a pair of data generators are proposed to generate similar but distinct samples as positive pairs. In joint learning, the hardness of a positive pair is progressively increased by decreasing their similarity.**
 
@@ -393,7 +393,7 @@ aiming to enhance the feature diversity of positive samples and guide the model�
 CLSP training. This method can be extended to several frameworks including SimCLR, MoCo, SimSiam, etc.
 
 
-### 4. Supervised pairing techniques
+### Supervised pairing techniques
 Supervised contrastive learning (SupCon) <d-cite key="khosla2020supervised"></d-cite> introduces a loss function for supervised learning that builds upon the principles of contrastive self-supervised learning by utilizing information from ground-truth labels. The key novelty of this approach is that it considers multiple positive samples for each anchor, in addition to many negative samples, unlike self-supervised contrastive learning, which typically uses only one positive sample. As shown in Figure 9, **these positive samples are selected from instances of the same class as the anchor, rather than being data augmentations of the anchor, as is done in self-supervised learning.**
 
 
@@ -435,7 +435,7 @@ The human-supervised loss then minimizes the distance between the new centroid o
 
 Similarly, Oracle-guided Contrastive Clustering (OCC) <d-cite key="wang2022oracle"></d-cite> is a deep clustering framework designed to incorporate personalized clustering preferences by interactively querying oracles—entities with specific clustering criteria. Traditional deep clustering methods often aim solely to maximize clustering performance, potentially overlooking the unique demands of specific tasks. In contrast, OCC addresses this by engaging with oracles to obtain pairwise "same-cluster" queries, thereby guiding the clustering process according to the desired orientation.
 
-### 5. Attribute-based pairing techniques
+### Attribute-based pairing techniques
 Attribute-based pairing entails selecting positive pairs based on task-specific criteria. For instance, Geography-aware self supervised learning <d-cite key="ayush2021geography"></d-cite> **use temporal positive pairs from spatially aligned images over time** as shown in Figure 11.
 
 
@@ -474,7 +474,7 @@ time), generates more varied and useful image pairs that result in more informat
 
 By focusing on these positive pairs during training, the authors demonstrate that the learned representations are more effective for downstream supervised classification tasks, even with limited human supervision. The approach was evaluated across four different camera trap image collections and three families of self-supervised learning methods, consistently outperforming conventional self-supervised training and transfer learning baselines. This methodology offers a promising avenue for enhancing global biodiversity monitoring efforts by improving species classification accuracy with minimal labeled data.
 
-### 6. Cross-modal positive pairing techniques
+### Cross-modal positive pairing techniques
 
 <!-- TODO: Write an intro to cross modal pairing before explaining techniques -->
 <aside class="l-body box-important" markdown="1">
@@ -513,7 +513,7 @@ AudioCLIP <d-cite key="guzhov2022audioclip"></d-cite> is an extension of the CLI
 <!-- TODO: Write summary of each technique before explaining papers -->
 <!-- TODO: Explain how these techniques select positive pairs -->
 
-### 1. Hard Negative Selection 
+### Hard negative selection 
 
 Hard negatives are those negative samples that are particularly similar to the anchor (the reference sample) in the embedding space, making them more likely to be misclassified. By incorporating such samples, the model is forced to refine its representation, learning more discriminative features to distinguish between fine-grained differences.
 
@@ -550,7 +550,7 @@ feature space geometry via instance similarity to select informative negative sa
 and (3) a density-based component that assigns more weight to negatives examples that are more
 distant on average from other negative examples in the batch, and satisfies P3.
 
-### 2. Removal of False Negatives
+### Removal of false negatives
 <aside class="l-body box-important" markdown="1">
 A false negative may not be as similar to the anchor as it is to other augmentations of the same image, as each augmentation only holds a specific view of the object. Contrasting false negatives induces two critical issues in representation learning: discarding semantic information and slow convergence.
 </aside>
@@ -578,7 +578,7 @@ Indeed, Khosla et al. <d-cite key="khosla2020supervised"></d-cite>  show that su
 learning (i.e., where an anchor is attracted to samples having the same semantic label) can be more effective than the traditional supervised cross-entropy loss. Thus, this method proposes to treat the false negatives that have been identified as true positives and attract the anchor to this set.
 
 
-### 3. Synthetic Hard Negative Samples for Contrastive Learning
+### Synthetic hard negatives
 Synthetic negatives can be created using various techniques, including generative models, feature space interpolation, or rule-based algorithms that modify existing data.
 Synthetic Hard Negative Samples for Contrastive Learning <d-cite key="dong2024synthetic"></d-cite> proposes a method to enhance contrastive learning by generating synthetic hard negative samples as shown in Figure 16. This approach **involves mixing existing negative samples in the feature space to create more challenging negatives, encouraging the model to learn more discriminative representations. To address the issue of false negatives—samples incorrectly labeled as negative but semantically similar to the anchor, this paper incorporates a debiasing mechanism, ensuring the model focuses on truly dissimilar negative samples.**
  {% include figure.html path="assets/img/2025-04-28-data-curation-for-contrastive-learning-crafting-effective-positive-and-negative-pairs/synthetic.png" class="img-fluid" %}
