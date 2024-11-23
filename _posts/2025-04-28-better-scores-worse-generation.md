@@ -106,7 +106,7 @@ What's missing from all these evaluations? One clear measure that captures what 
 
 Human evaluation remains the gold standard for audio quality assessment, but evaluating perceptual similarity presents specific challenges. Prior work has identified several key considerations in experimental design:
 
-- Reference system bias can systematically affect similarity judgments<d-cite key="zielinski2008bias"></d-cite>
+- Reference system bias can systematically affect similarity judgments<d-cite key=zielinski2008bias></d-cite>
 - Training listeners requires careful methodology to ensure consistent criteria
 - Even small protocol variations can significantly impact results
 
@@ -126,7 +126,7 @@ Each approach represents different trade-offs between speed, reliability, and re
 
 ## Probing the Perceptual Boundary
 
-Audio evaluation traditionally relies on two established audio *similarity* protocols: Mean Opinion Score (MOS), where listeners rate individual samples on a 1-5 scale, and MUSHRA, an ITU standard for rating multiple samples against a reference on a 0-100 scale. There are a handful of difficulties in audio similarity judgment<d-cite key="medin1993"></d-cite>, including:
+Audio evaluation traditionally relies on two established audio *similarity* protocols: Mean Opinion Score (MOS), where listeners rate individual samples on a 1-5 scale, and MUSHRA, an ITU standard for rating multiple samples against a reference on a 0-100 scale. There are a handful of difficulties in audio similarity judgment<d-cite key=medin1993></d-cite>, including:
 - Rating tasks require implicit decisions about what constitutes "highly similar" versus "not similar at all"
 - The presence of other comparisons systematically affects how ratings are assigned
 - Similarity judgments involve an active search process rather than a simple feature comparison
@@ -145,7 +145,7 @@ Both criteria focus on binary perceptual difference detection rather than simila
 
 We evaluated two models that represent different approaches to universal audio generation: NVIDIA's BigVGAN v2 (a universal neural vocoder) and the Descript Audio Codec (DAC). At the time of writing, DAC represents the strongest published baseline for universal audio generation with available weights, with comprehensive evaluations across multiple domains and strong performance on standard measures.<d-footnote>ESPNet-Codec's AMUSE checkpoints for EnCodec, SoundStream, and DAC are forthcoming.</d-footnote> BigVGAN v2, while more recently released with limited published evaluations, showed particularly promising initial results in informal listening tests.
  
-While many universal generative audio ML models uses AudioSet for training, this dataset is based on busy audio scenes (YouTube clips) and can be difficult to obtain. Instead, our investigation used FSD50K.<d-cite key="fsd50k"></d-cite> We chose FSD50K for a specific reason: its individual sound events allow more careful scrutiny of reconstruction quality without the masking effects present in complex auditory scenes, where initial listening tests indicated the models were superior. This choice aligns with our dual objectives: (a) identifying challenging conditions for our distance measures by testing against state-of-the-art models, and (b) finding diverse, instructive examples that reveal actual failure modes rather than artifacts masked by scene complexity.
+While many universal generative audio ML models uses AudioSet for training, this dataset is based on busy audio scenes (YouTube clips) and can be difficult to obtain. Instead, our investigation used FSD50K.<d-cite key=fsd50k></d-cite> We chose FSD50K for a specific reason: its individual sound events allow more careful scrutiny of reconstruction quality without the masking effects present in complex auditory scenes, where initial listening tests indicated the models were superior. This choice aligns with our dual objectives: (a) identifying challenging conditions for our distance measures by testing against state-of-the-art models, and (b) finding diverse, instructive examples that reveal actual failure modes rather than artifacts masked by scene complexity.
 
 ### Annotation Protocol
 
@@ -153,7 +153,7 @@ We conducted an informal formal listening test: structured protocol, three annot
 
 We first selected 150 one-second audio segments from the FSD50K test set.<d-footnote>The FSD50K test set has a balanced representation of the AudioSet ontology. This means that, arguably, typical speech and music clips are underrepresented.</d-footnote> Each segment was then processed through both BigVGAN v2 and DAC, creating our evaluation corpus. Three annotators (two authors and one independent lay-person evaluator) conducted listening tests using headphones in quiet conditions.<d-footnote>Our use of authors as annotators introduces potential experimenter bias, though the independent evaluator provides partial external validation. The small annotator pool with limits demographic representation and may miss perceptual differences salient to a greater population. While these limitations suggest natural extensions to larger, more diverse listener groups, the current design serves our specific goal: using critical listening to probe potential measures failure modes.</d-footnote> Each annotator evaluated all 300 samples (150 per model). For the 3AFC task, samples were presented in random AAB, ABA, or BAA configurations, where A represents the reference audio and B the reconstruction. The 2AFC task presented reference and reconstruction pairs in a fixed order. Annotators were permitted two listens per audio instance before making their forced-choice decision.
 
-We selected 1-second segments as a practical trade-off between annotation efficiency and stimulus completeness. While humans can recognize many sound categories from extremely brief segments---voices in just 4ms and musical instruments in 8-16ms<d-cite key="suied2014"></d-cite>---we chose longer segments to accommodate the full diversity of environmental sounds in FSD50K. This duration allows us to collect many annotations while still maintaining the characteristic temporal envelopes of various sound classes, like impact sounds, textures and environmental events.
+We selected 1-second segments as a practical trade-off between annotation efficiency and stimulus completeness. While humans can recognize many sound categories from extremely brief segments---voices in just 4ms and musical instruments in 8-16ms<d-cite key=suied2014></d-cite>---we chose longer segments to accommodate the full diversity of environmental sounds in FSD50K. This duration allows us to collect many annotations while still maintaining the characteristic temporal envelopes of various sound classes, like impact sounds, textures and environmental events.
 
 ## Results
 
@@ -242,7 +242,7 @@ These qualitative results suggest that detecting perceptual differences in this 
 
 ## Look at Vision: A Path Forward
 
-The challenges we've identified parallel those faced by computer vision researchers. LPIPS (Learned Perceptual Image Patch Similarity) emerged from a similar realization: traditional measures failed to capture perceptual differences in high-quality generated images. Using 151.4k training pairs and systematically covering 425 distortion types, Zhang et al.<d-cite key=zhang2018></d-cite> created BAPPS (Berkeley-Adobe Perceptual Patch Similarity Dataset) to align deep feature distances with human judgments.
+Recent work by Sundaram et al.<d-cite key=sundaram2024></d-cite> demonstrates that aligning vision model representations with human perceptual judgments can improve performance across diverse downstream tasks. This suggests promising parallels for audio. And the challenges we've identified are similar to those faced by computer vision researchers. LPIPS (Learned Perceptual Image Patch Similarity) emerged from a similar realization: traditional measures failed to capture perceptual differences in high-quality generated images. Using 151.4k training pairs and systematically covering 425 distortion types, Zhang et al.<d-cite key=zhang2018></d-cite> created BAPPS (Berkeley-Adobe Perceptual Patch Similarity Dataset) to align deep feature distances with human judgments.
 
 Audio presents both advantages and unique challenges:
 
