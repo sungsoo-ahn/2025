@@ -75,6 +75,10 @@ _styles: >
 
 {% include figure.html path="assets/img/2025-04-28-rethinking-graph-prompts/figure2.png" class="img-fluid" %}
 
+<p align="center" style="color:gray;">
+  <em>Figure 1: An Iceberg towards Graph AGI</em>
+</p>
+
 Graph Neural Networks (GNNs) have played a crucial role in advancing Graph Artificial General Intelligence (AGI) in the past decade, unlocking new possibilities in understanding and processing complex, interconnected data. As powerful tools for representation learning on graphs, GNNs have revolutionized a wide range of applications from social analysis to knowledge graph. However, despite their success, GNNs still face significant challenges that hinder their full potential towards Graph AGI:
 
 - **Distribution Shifts**: Graph data often vary significantly in structure and features across tasks or domains, making it difficult to generalize pre-trained models.
