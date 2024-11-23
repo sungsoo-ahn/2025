@@ -3,7 +3,7 @@ layout: distill
 title: "Rethinking Graph Prompts: Unraveling the Power of Data Manipulation in Graph Neural Networks"
 
 description:
-  Graph Neural Networks (GNNs) have transformed graph learning but face challenges like distribution shifts, data anomalies, and adversarial vulnerabilities. Graph prompt emerge as a novel solution, enabling data transformation to align graph data with pre-trained models without altering model parameters. This paradigm addresses negative transfer, enhances adaptability, and bridges modality gaps.
+  Graph Neural Networks (GNNs) have transformed graph learning but face challenges like distribution shifts, data anomalies, and adversarial vulnerabilities. Graph prompt emerges as a novel solution, enabling data transformation to align graph data with pre-trained models without altering model parameters. This paradigm addresses negative transfer, enhances adaptability, and bridges modality gaps.
   Unlike traditional fine-tuning, graph prompts rewrite graph structures and features through components like prompt tokens and insertion patterns, improving flexibility and efficiency. Applications in IoT, drug discovery, fraud detection, and personalized learning demonstrate their potential to dynamically adapt graph data.
   While promising, challenges such as optimal design, benchmarks, and gradient issues persist. Addressing these will unlock  full potential of graph prompt to advance GNNs for complex real-world tasks.
 
