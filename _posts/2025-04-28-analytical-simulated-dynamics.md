@@ -425,7 +425,7 @@ of the results presented here from <d-cite key="saad1995online"></d-cite>.
 
 ## How to use the code
 
-The code is written in a Python package called nndyn, which can be found in the following repository (ADD REPOSITORY). 
+The code is written in a Python package called nndyn, which can be found in the provided repository. 
 It is implemented in JAX to take advantage of broadcasting and jit compilation. The code has three main components: 
 tasks, networks, and ODEs.
 
@@ -471,6 +471,46 @@ for i in range(n_steps):
         W2_list.append(np.array(true_student.W2))
     loss = true_student.update(x, y)
     loss_list.append(np.array(loss))
+```
+For the ODE calculation, an ode object can be created, where each order parameter are simply attributes of this object,
+which can be moved forward in time using the update method:
+
+```python
+from nndyn.odes import StudentEq, SoftCommetteeEq
+
+# Initialize the student ODE object
+if saad_solla:
+    ode = SoftCommetteeEq(init_W1=student_W1,
+                          init_W2=student_W2,  # These are defined as ones for the committee machine
+                          learning_rate=learning_rate,
+                          time_constant=dt,
+                          teacher_W1=teacher_W1,
+                          teacher_W2=teacher_W2,  # These are defined as ones for the committee machine
+                          sigma=additive_output_noise)
+else:
+    ode = StudentEq(init_W1=student_W1,
+                    init_W2=student_W2,
+                    learning_rate=learning_rate,
+                    time_constant=dt,
+                    teacher_W1=teacher_W1,
+                    teacher_W2=teacher_W2,
+                    sigma=additive_output_noise)
+
+order_parameter_loss = []
+order_param_R = []
+order_param_Q = []
+order_parameter_W2 = []
+save_every = 1000
+
+for i in range(n_steps):
+    # Move order parameters forward in time by one dt step
+    # Every variable is on Jax, so it is useful to convert them to numpy arrays before saving
+    order_loss = ode.update()
+    order_parameter_loss.append(np.array(order_loss))
+    if  i % save_every == 0:
+        order_param_R.append(np.array(ode.R))
+        order_param_Q.append(np.array(ode.Q))
+        order_parameter_W2.append(np.array(ode.student_W2))
 ```
 
 ### The specialization transition tracks feature learning
