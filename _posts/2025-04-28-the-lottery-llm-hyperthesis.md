@@ -8,7 +8,7 @@ description: Motivated by reducing the computational and storage costs of LLMs, 
 date: 2025-04-28
 future: true
 htmlwidgets: true
-hidden: false
+# hidden: false
 
 # Anonymize when submitting
 authors:
@@ -28,10 +28,13 @@ bibliography: 2025-04-28-the-lottery-llm-hyperthesis.bib
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
 toc:
-  - name: Equations
-  - name: Images and Figures
-    subsections:
-    - name: Interactive Figures
+  - name: Current Efforts on Compressing LLMs and KV Cache
+  - name: Tackling Redundant and Unreal Knowledge of LLMs with Knowledge Retrival
+  - name: External Tools
+  - name: Computational Expressivity of LLMs
+  - name: Multi-step Reasoning
+  - name: Lottery LLM Hypothesis
+  - name: Conclusion
 
 
 # Below is an example of injecting additional post-specific styles.
@@ -54,9 +57,6 @@ _styles: >
   }
 ---
 
-Motivated by reducing the computational and storage costs of LLMs, model compression and KV cache compression have attracted much attentions of researchers. However, current methods only focus on guaranteeing the performance of compressed LLMs with the similar perplexity on some common sense knowledge QA tasks and the basic arithmetic reasoning tasks. In this blog, we present a brief review of some of the recent progresses of LLM related to retrieval augmented generation, multi-step reasoning, external tools and computational expressivity which significantly improve the performance of LLMs. Then, we propose a lottery LLM hypothesis suggesting that for a given LLM and task, there exists a smaller lottery LLM capable of producing the same performance with the original LLM with the assistances of multi-step reasoning and external tools. Based on the review of current progresses of LLMs, we discuss and summarize the essential capabilities that the lottery LLM and KV cache compression must possess.
-
-
 ## Current Efforts on Compressing LLMs and KV Cache
 LLMs have demonstrated remarkable proficiency in natural language processing, enabling sophisticated interactions and understanding of human language<d-cite key="openai2023gpt4"></d-cite>.
 To learn the tremendous knowledge in the training datsests, the current advanced LLMs like GPT4 <d-cite key="openai2023gpt4"></d-cite> and Llama3 <d-cite key="touvron2023llama"></d-cite> have enoumous parameters like $7 \sim 750$ billion. Training such an LLM requires extensive computational resources, often measured in enormous GPU days using advanced NVIDIA GPUs<d-cite key="touvron2023llama"></d-cite>. This results in substantial electricity consumption, impacting both economic and energy costs<d-cite key="samsi2023words"></d-cite><d-cite key="tangDVFS"></d-cite>, and raising concerns regarding sustainable computing<d-cite key="wilkins2024hybrid"></d-cite>. Furthermore, providing inference services for LLMs necessitates numerous GPUs and incurs additional energy costs<d-cite key="samsi2023words"></d-cite><d-cite key="tangDVFS"></d-cite>, making it a significant challenge for widespread deployment<d-cite key="10.1145/3620666.3651329"></d-cite>.
@@ -71,7 +71,7 @@ To learn the tremendous knowledge in the training datsests, the current advanced
 In the subsequent sections, we review some progresses of retrival augmented generation, external tool use, and multi-step reasoning, which significantly improve the performance of LLMs. Then, we propose a lottery LLM hypothesis suggesting that for a given LLM and task, there exists a smaller lottery LLM capable of producing the same performance with the original LLM with the assistances of multi-step reasoning and external tools. We discuss and summarize the essential capabilities that the lottery LLM and KV cache compression must possess to support the multi-step reasoning and external tools.
 
 
-## Knowledge Retrival: Tackling Redundant and Unreal Knowledge of LLMs
+## Tackling Redundant and Unreal Knowledge of LLMs with Knowledge Retrival
 **Redundant Knowledge.** In contemporary applications, many individuals utilize LLMs as encyclopedic resources or to verify news and academic research, akin to an Internet search engine. Recent studies indicate that LLMs exhibit varying performance in knowledge retrieval, contingent upon the popularity of the information<d-cite PopQA="PopQA"></d-cite>. Specifically, a small subset of real-world question-answer (QA) pairs constitutes the majority of interactions, while a limited number of QAs receive frequent attention, demonstrating a long-tail distribution in their popularity<d-cite key="PopQA"></d-cite>. LLMs tend to perform better on high-popularity QAs compared to those with lower popularity.
 
 **Hallucinated Knowledge.** Conversely, LLMs often generate outputs based on probabilistic language modeling rather than factual knowledge, a phenomenon known as hallucination<d-cite key="huang2023survey"></d-cite>. This issue has garnered significant attention from researchers<d-cite key="huang2023survey"></d-cite>. There is ongoing debate regarding the feasibility of completely eliminating hallucinations<d-cite key="farquhar2024detecting"></d-cite>. Some studies suggest that hallucinations are inevitable, as they are a byproduct of the model's reasoning and generalization abilities<d-cite key="banerjee2024llms"></d-cite><d-cite key="xu2024hallucination"></d-cite>.
@@ -109,16 +109,6 @@ The core idea of adaptive RAG seems to be related to a classic efficient data st
 The advanced LLMs show their remarkable abilities in function calling, which is the ability to call external tools to solve some specific tasks. The external tools can be the Internet search engine<d-cite key="ToolLLM"></d-cite>, the arithmetic calculation functions<d-cite key="NEURIPS2023_d842425e"></d-cite>, system operations<d-cite key="LLM-as-OS"></d-cite><d-cite key="AIOS"></d-cite>, game interfaces and so on, which are formulated into programming function calls<d-cite key="Granite-Function"></d-cite> and passed to LLMs using prompts. According to the function descriptions, LLMs decide to call which function to solve the given problems<d-cite key="Granite-Function"></d-cite>.
 
 
-<!-- {% include figure.html path="assets/img/2025-04-28-the-lottery-llm-hyperthesis/Tooluse.jpg" class="img-fluid" %} -->
-
-<div class="row mt-3">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-the-lottery-llm-hyperthesis/Tooluse.jpg" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    The ability of function calling in <d-cite key="NEURIPS2023_d842425e"></d-cite>. The smaller models like GPT-2 finetuned with function calling datsets show much better performance with the large models (GPT-3) that are not specifically tuned with function calling datsets.
-</div>
 
 **Arithmetic function callings.** To solve the arithmetic problems, LLMs are trained on the arithmetic datasets<d-cite key="cobbe2021training"></d-cite>. However, some simple errors ofter happen during the arithmetic reasoning process like that LLMs may think the 9.11 is larger than 9.9 <d-cite key="choi2024automatic"></d-cite>. To this end, some works propose to allow LLMs to generate programs including the arithmetic operations and exploit the external Python interpreter to solve the arithmetic problems<d-cite key="pmlr-v202-gao23f"></d-cite>. Besides, some works propose to exploit the arithmetic function calling to solve the arithmetic problems<d-cite key="he23solving"></d-cite>. The experimental results show that the arithmetic function calling can significantly improve the performance of LLMs on the arithmetic problems<d-cite key="pmlr-v202-gao23f"></d-cite><d-cite key="NEURIPS2023_e3936777"></d-cite>.
 
@@ -165,8 +155,7 @@ The chain-of-thought (CoT) reasoning shows that reasoning with detailed progress
 
 ## Lottery LLM Hyperthesis
 
-Introduce the lottery LLM hyperthesis.
-
+### 
 Give an original language model $f_\theta$ which can receive the input with length $n$, and an input problem $q$ with length $m < n$ and groundtruth $\mu$, a performance measure $P(\cdot)$ to evaluate the performance of the model as $P(f_\theta(q), \mu)$, there exists a smaller language model $g_\phi$ with parameters $\phi$ ($|\phi| < |\theta|$) and the same input length $n$, which can solve the problem $q$ with the performance of $f_\theta$ as
 
 $$P(f_\theta(q), \mu) \leq P( \mathcal{A}_{g_\phi, \mathcal{D}, \mathcal{R}, \mathcal{C}, \mathcal{M}}(q), \mu),$$
@@ -175,14 +164,21 @@ in which $\mathcal{A}$ is a reasoning algorithm which may consists of one or mul
 
 We describe the procedures of the reasoning algorithm $\mathcal{A}$ as Algorithm 1, in which the original problem $q$ is solved with a divide-and-conquer strategy. Note that such a dynamic divide-and-conquer methodology is general and can cover many current reasoning algorithms.
 
-{% raw %}{% include figure.html path="assets/img/2025-04-28-the-lottery-llm-hyperthesis/algorithm.png" class="img-fluid" %}{% endraw %}
 
+<figure style="text-align: center;">
+    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/algorithm.png' | relative_url }}" width="400">
+    <figcaption style="font-size: 1em;">Figure 1: .</figcaption>
+</figure>
 
 
 **Recurive and Dynamic Scheduling.** Algorithm 1 can be generalized to the tree-based reasoning methods like ToT<d-cite key="zhoulanguage"></d-cite><d-cite key="yao2024tree"></d-cite>, because the recursive design covers the tree search and the branch-or-solve mechanism can be decided based on LLMs dynamically. And the Algorithm 1 also generalizes to graph-based reasoning methods like GoT<d-cite key="besta2024graph"></d-cite><d-cite key="luoreasoning"></d-cite><d-cite key="sunthink"></d-cite>, because the interaction between the different LLMs and the external memory $\mathcal{M}$ can be viewed as the combination in the GoT, in which different outputs of nodes are combined together thus construct the graph structure.
 
 
-{% raw %}{% include figure.html path="assets/img/2025-04-28-the-lottery-llm-hyperthesis/graph-structure.pdf" class="img-fluid" %}{% endraw %}
+<figure style="text-align: center;">
+    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/graph-structure.pdf' | relative_url }}" width="400">
+    <figcaption style="font-size: 1em;">Figure 1: .</figcaption>
+</figure>
+
 
 
 
@@ -193,17 +189,29 @@ We describe the procedures of the reasoning algorithm $\mathcal{A}$ as Algorithm
 **External Memory.** The external memory $\mathcal{M}$ is used to store the intermediate results during the reasoning process. When solving different sub-problems, the intermediate results can be stored in the external memory and be reused in the later steps. With interacting with the external memory, the Algorithm 1 can recover the reasoing methods with working memory like<d-cite key="wang2024symbolic"></d-cite>. Here we do not restrict the form of the function `Divide_and_Conquer` in the Algorithm 1. Throught dedicated design and programming, the recurisve mechanism can be used to implement the basic operations like the MOV, COPY, JUMP, and WRITE and READ the external memory, thus simulating the Turing machine like<d-cite key="Memory-Augmented-Turing"></d-cite>.
 
 
-{% raw %}{% include figure.html path="assets/img/2025-04-28-the-lottery-llm-hyperthesis/Automata.pdf" class="img-fluid" %}{% endraw %}
+<figure style="text-align: center;">
+    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/Automata.pdf' | relative_url }}" width="400">
+    <figcaption style="font-size: 1em;">Figure 1: .</figcaption>
+</figure>
 
 
 Most of previous model compression<d-cite key="Sun2023ASA_wanda"></d-cite><d-cite key="Frantar2023SparseGPTML"></d-cite> <d-cite key="Yao2022ZeroQuantEA"></d-cite><d-cite key="Dettmers2022TheCF"></d-cite> and KV cache compression methods<d-cite key="zhang2024h2o"></d-cite><d-cite key="xiao2024efficient"></d-cite>only focus on the guaranteeing the model performance on the perplexity metric<d-cite key="merity2016pointer"></d-cite> or some downstream tasks like the common sense knowledge<d-cite key="hendrycks2021measuring"></d-cite><d-cite key="talmor-etal-2019-commonsenseqa"></d-cite> and the basic arithmetic problems<d-cite key="cobbe2021training"></d-cite>. From the above analysis and the procedures of the Algorithm 1, we can see that there are some other crucial abilities that the lottery LLM and other compression methods must take for considering. We summarize the crucial abilities that the lottery LLM should have as follows.
 **Ability 1: Retrieval from prompts.** Obviously, the useful information in the prompts that related to address the problem $q$ is crucial for the lottery LLM. After collecting the required external results into the prompt, the LLM $q_\phi$ needs to be able to retrieve the required information from the prompt and avoid the interuption of some irrelevant information. This is related to the retrieval ability of the LLM and its measurement test is like the well-known needle-in-the-haystack(NIAH) test<d-cite key="needle"></d-cite>. We show that there is a simple and interesting method to endow the LLM with advanced retrieval ability with preprocessing prompts.
 
 The following two figures show the results of the vanilla LLaMA3-8B-Instruct:
-{% raw %}{% include figure.html path="assets/img/2025-04-28-the-lottery-llm-hyperthesis/Meta-Llama-3-8B-Instruct_evaluated.pdf" class="img-fluid" %}{% endraw %}
+<figure style="text-align: center;">
+    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/Meta-Llama-3-8B-Instruct_evaluated.pdf' | relative_url }}" width="400">
+    <figcaption style="font-size: 1em;">Figure 1: .</figcaption>
+</figure>
+
 
 The following figure shows the results of the retrieval ability of the LLaMA3-8B-Instruct:
-{% raw %}{% include figure.html path="assets/img/2025-04-28-the-lottery-llm-hyperthesis/Meta-Llama-3-8B-Instruct-retrieval_evaluated.pdf" class="img-fluid" %}{% endraw %}
+<figure style="text-align: center;">
+    <img src="{{ 'assets/img/2025-04-28-the-lottery-llm-hyperthesis/Meta-Llama-3-8B-Instruct-retrieval_evaluated.pdf' | relative_url }}" width="400">
+    <figcaption style="font-size: 1em;">Figure 1: .</figcaption>
+</figure>
+
+
 
 As shown in the figures, leveraging retrieval capabilities significantly improves the LLM's performance on the NIAH test. Notably, even when the input length exceeds the model's context size (8K tokens for LLaMA3-8B-Instruct), there is no performance degradation, demonstrating the robustness of the retrieval-enhanced approach.
 
@@ -226,9 +234,18 @@ As shown in the figures, leveraging retrieval capabilities significantly improve
 Besides, with provided the external documents, the small LLMs show the superb performance in many QA tasks<d-cite key="aaa"></d-cite>.
 
 
-```
-A table here to show results of the RAG.
-```
+Besides, with provided the external documents, the small LLMs show the superb performance in many QA tasks<d-cite key="mallen2023not"></d-cite><d-cite key="kwiatkowski2019natural"></d-cite><d-cite key="stelmakh2022asqa"></d-cite>.
+
+
+| Method | LLM | PopQA (acc) | NQ (acc) | ASQA (str-em) | ASQA (hit) | ASQA (rec) |
+|--------|-----|-------------|----------|---------------|-------------|-------------|
+| CoT | Llama-3-Ins8B | 24.8 | 44.0 | 28.8 | 7.8 | 25.5 |
+| CoT | Llama-3-Ins70B | 31.6 | 54.4 | 36.4 | 11.2 | 32.7 |
+| CoT | ChatGPT-4oMINI | 32.4 | 53.2 | 32.4 | 8.0 | 21.6 |
+| Vanilla RAG | Llama-3-Ins8B | 59.8 | 54.0 | 38.8 | 14.0 | 28.4 |
+| Vanilla RAG | Llama-3-Ins70B | 63.4 | 61.0 | 42.2 | 15.2 | 30.6 |
+| Vanilla RAG | ChatGPT-4oMINI | 62.0 | 66.2 | 42.0 | 14.8 | 28.4 |
+
 
 **Ability 3: Planning and Scheduling.** To split the problem $q$ into multiple sub-problems and solve them one by one, the LLM $q_\phi$ needs to have the ability to plan and schedule the sub-problems. This is crucial for the lottery LLM to solve the complex problems. Thus, the LLM $q_\phi$ needs to have a good understanding of the problem $q$ and the sub-problems. However, the details of solving the sub-problems may not be requied for the LLM $q_\phi$. Because the external resources can be used to solve the sub-problems. And the efficient scheduling ability is also important for the lottery LLM for improving the reasoning efficiency.
 
@@ -242,11 +259,9 @@ A table here to show results of the reasoning with external logic solvers.
 **Ability 5: Long-context Reasoning.** In the single-step reasoning, the longer the context length, the more information the LLM $q_\phi$ can receive and use to address the problems. In the multi-step reasoning, the prompt can be seen as a kind of working memory of the meta agent, or say the planner (controller). Each returned results of the solved sub-problems should be injected into the prompt for the later steps. With the increased problem complexity, the depth of the tree of sub-problems also increases. Thus, the LLM $q_\phi$ needs to have a long-context reasoning ability to support the deep tree reasoning<d-cite key="merrillexpressive"></d-cite><d-cite key="Reveal-CoT"></d-cite>.
 
 
-## Discussion and Broader Impact
+## Conclusion
 
-The main aim of this blog is to shed light on the possible lottery LLM and summarize the crucial abilities that the lottery LLM should have but missed in the current methods of compressing LLMs and KV cache. The discussion about the redundant knowledge in the LLMs also sheds light on the trade-off between the knowledge and the reasoning ability of LLMs. Once we have the lottery LLM, with the external tools and knowledge base and a strong enough algorithm $\mathcal{A}$, there is the possibility that the lottery LLM can serve as a meta agent to work like humans. Its external memory may work as the human's long-term memory, the prompt can work as the short-term memory, while the LLM inference process $g_\phi$ works as the basic thinking process. The external tools and knowledge base can be viewed as commonly used supplementary tools in our daily life. The deployment of the lottery LLM can help to save the energy and resources for building the large-scale LLM-driven applications.
-
-The future works about LLM compression, KV cache compression and other efficent LLM methods should consider both the efficiency and the crucial abilities of the LLM.
+The main aim of this blog is to shed light on the possible lottery LLM and summarize the crucial abilities that the lottery LLM should have but missed in the current methods of compressing LLMs and KV cache. The discussion about the redundant knowledge in the LLMs also sheds light on the trade-off between the knowledge and the reasoning ability of LLMs. Once we have the lottery LLM, with the external tools and knowledge base and a strong enough algorithm $\mathcal{A}$, there is the possibility that the lottery LLM can serve as a meta agent to work like humans. Its external memory may work as the human's long-term memory, the prompt can work as the short-term memory, while the LLM inference process $g_\phi$ works as the basic thinking process. The external tools and knowledge base can be viewed as commonly used supplementary tools in our daily life. The deployment of the lottery LLM can help to save the energy and resources for building the large-scale LLM-driven applications. The future works of LLM compression, KV cache compression and other efficent LLM methods should consider both the efficiency and the crucial abilities of the LLM.
 
 
 
