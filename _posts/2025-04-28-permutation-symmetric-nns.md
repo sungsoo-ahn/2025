@@ -724,8 +724,6 @@ A Taylor series parameterization is sound in theory. In practice however, functi
 
 From matrices to sets to symbolic processing, permutation symmetry is found in many problems and requires extra attention during modeling. When handled properly however, permutation symmetry is also a blessing. As we have learned in the previous section, if parameterized properly, permutation symmetry has the potential to exponentially reduce parameter count and compute for highly efficient learning. At the other end of the spectrum, reciting the success recipe of deep learning, we can scale the latent dimension and stack equivariant layers to create exponentially more expressive networks at the same parameter count and compute as a regular network.
 
-![Network with Equivariant Backbone](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png)
-
 
 Devil's in the details, in this section we'll walk through the design of permutation symmetric neural networks for various types of permutation symmetry.
 
@@ -761,11 +759,10 @@ Across all types of permutation symmetry, as we learned in Section I through Tay
 **How to create an equivariant layer given permutation symmetry type?**
 Our answer is two fully connected layers with a pooling layer in between. 
 
-<details>
+<div class="my_dropdown" tabindex="1">
+<a>Primer: Tensor contractions and the einsum notation</a>
+<div>
 
-<summary>
-Primer: Tensor contractions and the einsum notation
-</summary> 
 
 Intuitively, tensor contractions like
 
@@ -790,7 +787,8 @@ y=einsum('Zik,Zlk,Zlj->Z',X,X,X)
 
 Here a batch dimension Z is added to make sure the right hand side is not empty.  
 
-</details>  
+</div>  
+</div>  
 
 
 Let us use a 1D + latent `aH`-type equivariant constraint as an example to illustrate the design.
