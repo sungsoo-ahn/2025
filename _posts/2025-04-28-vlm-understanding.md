@@ -252,11 +252,11 @@ $$
 <!-- VLM introduction and interpret limitation -->
 <!-- While VLMs demonstrate impressive empirical performance, our understanding of how these models process, represent, and integrate visual and linguistic information remains limited. For instance, models like CLIP, which have become the de facto standard for vision encoders, consistently outperform alternatives, yet the mechanisms underlying their success are poorly understood. Similarly, fine-tuning techniques such as LoRA and RLHF enhance task-specific performance but provide little insight into the broader dynamics of multimodal alignment. Meanwhile, VLMs continue to exhibit notable deficiencies, such as struggles with fundamental vision-centric tasks like image classification and a propensity for generating hallucinated outputs. -->
 
-Vision language models (VLMs), such as GPT-4o or LLaVA, have achieved remarkable success across a wide range of tasks, including image captioning, visual question answering, and multimodal reasoning. These advancements have driven innovation in diverse fields, such as virtual assistants, autonomous robotics, and medical diagnostics. However, despite their rapid adoption, the internal mechanisms of these models remain largely opaque, raising significant concerns about their reliability, robustness, and interpretability—particularly in high-stakes applications.
+Vision-Language Models (VLMs), such as GPT-4V <d-cite key="2023GPT4VisionSC"></d-cite> or LLaVA <d-cite key="liu2023visual,liu2023improved,liu2024llavanext,li2024llavaonevision"></d-cite>, have achieved remarkable success across a wide range of tasks, including including Image Captioning <d-cite key="vinyals2014show"></d-cite>, Visual Question Answering (VQA)  <d-cite key="agrawal2015vqa"></d-cite>, and Multimodal Reasoning <d-cite key="NEURIPS2022_11332b6b"></d-cite>. These advancements have driven innovation in diverse fields, such as virtual assistants <d-cite key="wu2023visual"></d-cite>, autonomous robotics <d-cite key="driess2023palme"></d-cite>, and medical diagnostics <d-cite key="singhal2023towards"></d-cite>. However, despite their rapid adoption, the internal mechanisms of these models remain largely opaque, raising significant concerns about their reliability, robustness, and interpretability—particularly in high-stakes applications <d-cite key="kolicic2024inherently"></d-cite>.
 
-Interpretability research offers a promising path to address these challenges. Mechanistic interpretability, in particular, seeks to uncover the inner processes of neural networks and explain how specific outputs are generated. By applying these techniques to VLMs, researchers can gain valuable insights into how these models represent, process, store, and integrate visual and linguistic information, advancing both theoretical understanding and practical utility.
+Interpretability research offers a promising path to address these challenges. Mechanistic interpretability, in particular, seeks to uncover the inner processes of neural networks and explain how specific outputs are generated <d-cite key="saphra2024mechanistic,hastingswoodhouse2024introduction"></d-cite>. By applying these techniques to VLMs, researchers can gain valuable insights into how these models represent, process, store, and integrate visual and linguistic information, advancing both theoretical understanding and practical utility.
 
-In this work, we examine how mechanistic interpretability methods can illuminate the inner workings of VLMs. We review five key techniques—probing, activation patching, logit lens analysis, sparse autoencoders, and automated explanations—detailing their mechanisms, applications, and the insights they provide through concrete examples. These methods help answer critical questions, such as what information is encoded in VLM representations, how and when visual and linguistic modalities are integrated, and how individual neurons contribute to the model’s decision-making process.
+In this work, we examine how mechanistic interpretability methods can illuminate the inner workings of VLMs. We review five key techniques—probing <d-cite key="alain2016understanding,hewitt-manning-2019-structural"></d-cite>, activation patching <d-cite key="NEURIPS2020_92650b2e, NEURIPS2022_6f1d43d5"></d-cite>, logit lens <d-cite key="alignmentforumorg2024interpreting"></d-cite>, sparse autoencoders <d-cite key="bricken2023monosemanticity,DBLP:conf/iclr/HubenCRES24"></d-cite>, and automated explanations—detailing their mechanisms, applications, and the insights they provide through concrete examples. These methods help answer critical questions, such as what information is encoded in VLM representations <d-cite key="cao2020behind"></d-cite>, how and when visual and linguistic modalities are integrated <d-cite key="Palit_2023_ICCV,neo2024towards"></d-cite>, and how individual neurons contribute to the model’s decision-making process <d-cite key="huo2024mmneuron,huang2024miner"></d-cite>.
 
 Additionally, we discuss the limitations of current interpretability methods and highlight five key directions for future research: developing approaches that are more generalizable, scalable, vision-centric, dynamic, and capable of macro-level analysis. For instance, the heterogeneity of VLMs calls for interpretability methods that can adapt across diverse models; the micro level of mechanistic interpretability needs to be complemented by a macro-level perspective for a broader understanding. By addressing these challenges, we aim to pave the way for more transparent, reliable, and capable vision language models.
 
@@ -412,7 +412,7 @@ Several variations of activation patching have been developed:
 
 #### Findings
 
-**1. Visual-Linguistic Integration** 
+<!-- **1. Visual-Linguistic Integration** 
 - Activation patching has revealed intricate patterns in how VLMs integrate visual and linguistic information. Through careful experimentation with Gaussian noise injection, Palit et al. <d-cite key="Palit_2023_ICCV"></d-cite> discovered that BLIP's outputs are predominantly influenced by correct image embeddings only in specific layers --- layer 11 of the question encoder and layers 9-11 of the answer decoder. This suggests **either that cross-modal integration is primarily a late-stage process, or that final layers override earlier computations while maintaining weak causal connections.** Interestingly, Neo et al. <d-cite key="neo2024towards"></d-cite> found that representations at visual token positions gradually evolve through layers to align with interpretable textual concepts, suggesting **VLMs naturally refine visual information towards language-like representations even without explicit visual pretraining.** In parallel work, Golovanevsky et al. <d-cite key="golovanevsky2024vlms"></d-cite> developed Semantic Image Pairs (SIP) to enable more precise analysis of how VLMs process semantic information. By modifying single semantic concepts in images (like changing "cat" to "dog"), SIP revealed that cross-attention serves three distinct functions (object detection, suppression, and outlier suppression) and uncovered architectural distinctions: **LLaVA lacks "text-only" attention heads while BLIP has no "vision-only" heads, though both utilize universal heads for cross-modal integration.**
 
 **2. Layer-wise Processing and Information Flow**
@@ -429,6 +429,39 @@ Key Takeaways:
 	- Cross-modal integration occurs primarily in late layers, with visual information gradually evolving towards language-like representations 
 	- VLMs show hierarchical processing: early layers handle context with minimal direct impact, while final layers are crucial 
 	- Different architectures exhibit distinct patterns in how they handle cross-modal information 
+</aside> -->
+**1. Visual-Linguistic Integration**
+
+Recent studies using activation patching have revealed how VLMs combine visual and textual information. Here are the key findings:
+- **Layer-Specific Processing in BLIP**: Palit et al. <d-cite key="Palit_2023_ICCV"></d-cite> used Gaussian noise patching to analyze BLIP's processing patterns. They found that image information primarily influence the model's outputs in specific layers: layer 11 of the question encoder and layers 9-11 of the answer decoder. This observation suggests two possibilities:
+  - The model might primarily combine visual and text information in its later layers
+  - Later layers might play a more decisive role in the final output, while earlier layers provide supporting information
+- **Visual-to-Language Transformation in LLaVA**: Neo et al. <d-cite key="neo2024towards"></d-cite> examined how LLaVA processes visual information. They found that representations at visual token positions change systematically across layers, gradually aligning with interpretable textual concepts. This indicates that VLMs can naturally transform visual information into language-like representations, even without specific visual pretraining.
+- **Architectural Differences**: Golovanevsky et al. <d-cite key="golovanevsky2024vlms"></d-cite> developed a new method called *Semantic Image Pairs (SIP)* - a method where they make concept changes to images (e.g., changing a "cat" to a "dog") to understand how VLMs process meaning. Their analysis revealed:
+  - Cross-attention serves three functions: object detection, suppression, and outlier suppression
+  - Different architectures have distinct characteristics:
+    - LLaVA lacks "text-only" attention heads
+    - BLIP has no "vision-only" heads
+    - Both models use universal heads for cross-modal integration
+
+**2. Layer-wise Information Processing**
+- **Early vs. Late Layer Functions**: Basu et al. <d-cite key="basu2024understanding"></d-cite> used causal tracing to show that LLaVA primarily retrieves visual information in early layers (1-4), followed by consistent summarization in final visual tokens. Neo et al. <d-cite key="neo2024towards"></d-cite> further investigated this through attention knockout experiments, they found that:
+  - Layers 1-10 process broader contextual information
+  - Layers 15-24 focus on extracting specific object details
+  - Notably, they found that blocking visual token attention to the last row had minimal impact, challenging previous theories about intermediate summarization steps
+- **Layer Importance for Model Performance**: Initial studies by Gandelsman et al. <d-cite key="gandelsman2023interpreting"></d-cite> on CLIP showed that final layers have significant direct effects on model accuracy, while early layer modifications (like removing multihead attention) have minimal impact. Balasubramanian et al. <d-cite key="balasubramanian2024decomposing"></d-cite> later extended these findings across a broader range of Vision Transformers, confirming the critical role of the final four layers in model performance.
+
+**3. Analytical Tools**
+- Recent analytical tools have significantly enhanced our understanding of VLMs. Ben et al. <d-cite key="Ben_Melech_Stan_2024_CVPR"></d-cite> developed LVLM-Interpret, an interactive tool that combines attention knockout with relevancy mapping and causal graph construction to visualize information flow patterns and identify critical image regions.
+
+<aside class="l-body box-note" markdown="1">
+Key Takeaways:
+- Activation patching provides causal insights into model behavior by modifying specific internal activations while keeping others constant
+- Different variants (e.g., direct ablation, attention knockout) offer complementary perspectives on information flow and processing
+- Key findings reveal:
+  - Cross-modal integration occurs primarily in late layers, with visual information gradually evolving towards language-like representations
+  - VLMs show hierarchical processing: early layers handle context with minimal direct impact, while final layers are crucial since they extract information more related to the task
+  - Different architectures exhibit distinct patterns in how they handle cross-modal information
 </aside>
 
 ### Logit Lens
@@ -449,7 +482,7 @@ The logit lens <d-cite key="alignmentforumorg2024interpreting"></d-cite> serves 
 #### Findings
 
 1. **Concept Distribution Patterns**
-- MMNeuron <d-cite key="huo2024mmneuron"></d-cite> applies logit lens to analyze hidden states of multimodal models like LLaVA-NeXT and InstructBLIP. Through their analysis of decoded vocabulary distributions, they reveal that image tokens generate notably sparser distributions than text tokens --- even the most probable token '</s>' has less than 40% probability. This observation suggests that **image representations are encoded as mixtures of concepts rather than direct word mappings.**
+- MMNeuron <d-cite key="huo2024mmneuron"></d-cite> applies logit lens to analyze hidden states of multimodal models like LLaVA-NeXT and InstructBLIP. Through their analysis of decoded vocabulary distributions, they reveal that image tokens generate notably sparser distributions than text tokens. This observation suggests that **image representations are encoded as mixtures of concepts rather than direct word mappings.**
 
 2. **Representations Evolution**
 - By examining the entropy of these distributions across layers, Huo et al. <d-cite key="huo2024mmneuron"></d-cite> uncover a distinctive three-stage pattern: **initial feature alignment with high entropy, followed by information processing with sharply declining entropy in middle layers, and finally token selection with slight entropy increase.** More recent work <d-cite key="neo2024towards"></d-cite> further explores how representations at visual token positions evolve through the layers in LLaVa 1.5, finding that **activations in the late layers at each visual token position correspond to token embeddings that describe its original patch object.**
@@ -470,7 +503,7 @@ Key Takeaways:
 Integration of Sparse Autoencoder for interpreting and analyzing learned features in transformer models.
 </div>
 
-A significant challenge in understanding neural networks is the *superposition* phenomenon <d-cite key="arora2016linear,olah2020zoom"></d-cite>, where individual neurons or layers simultaneously encode multiple features, making their internal representations difficult to interpret <d-cite key="elhage2022toy"></d-cite><d-footnote>Superposition can occur because features tend to be sparsely activated - with only a small subset of features being active at any given moment. </d-footnote>. In late 2023, Sparse Autoencoders (SAEs) was adopted as an effective solution to this problem <d-cite key="bricken2023monosemanticity"></d-cite><d-cite key="DBLP:conf/iclr/HubenCRES24"></d-cite>, offering a valid approach to extract mono-semantic concepts from neural networks.
+A significant challenge in understanding neural networks is the *superposition* phenomenon <d-cite key="arora2016linear,olah2020zoom"></d-cite>, where individual neurons or layers simultaneously encode multiple features, making their internal representations difficult to interpret <d-cite key="elhage2022toy"></d-cite><d-footnote>Superposition can occur because features tend to be sparsely activated - with only a small subset of features being active at any given moment. </d-footnote>. In late 2023, Sparse Autoencoders (SAEs) was adopted as an effective solution to this problem <d-cite key="bricken2023monosemanticity,DBLP:conf/iclr/HubenCRES24"></d-cite>, offering a valid approach to extract mono-semantic concepts from neural networks.
 
 **SAEs seek to embed the polysemantic representation into a much higher-dimensional space to distangle features.** The technical mechanism of SAEs follows a specific encoding and decoding process <d-cite key="ferrando2024primer"></d-cite>. Given internal network activations $$ z \in \mathbf{R}^d $$, the SAE first expands the representation into a higher-dimensional space while enforcing sparsity through its encoder <d-footnote markdown="1"> The subtraction of $b_{dec}$ serves as a centering term that allows $W_{enc}$ to operate on normalized hidden states. </d-footnote>: 
 $$
@@ -492,7 +525,7 @@ $$
 $$ 
 balances reconstruction accuracy with sparsity, where the $$ L_1 $$ norm term ensures each dimension captures a distinct, interpretable feature.
 
-This method has demonstrated remarkable success in understanding large language models like Claude <d-cite key="templeton2024scaling"></d-cite>, GPT <d-cite key="gao2024scaling"></d-cite>, and LLaMA-3.1 <d-cite key="he2024llama"></d-cite>, leading to innovative variants such as Transcoders <d-cite key="dunefsky2024transcoders"></d-cite> and CrossCoders <d-cite key="lindsey2024sparse"></d-cite>. These applications have revealed previously hidden patterns in how language models process and represent information.
+This method has demonstrated remarkable success in understanding large language models like Claude 3 Sonnet <d-cite key="templeton2024scaling"></d-cite>, GPT-4 <d-cite key="gao2024scaling"></d-cite>, Gemma 2 <d-cite key="lieberum2024gemma"></d-cite> and LLaMA-3.1 <d-cite key="he2024llama"></d-cite>, leading to innovative variants such as Transcoders <d-cite key="dunefsky2024transcoders"></d-cite> and CrossCoders <d-cite key="lindsey2024sparse"></d-cite>. These applications have revealed previously hidden patterns in how language models process and represent information.
 
 More recently, researchers have begun exploring SAEs' potential in Vision Transformers (ViTs) <d-cite key="joseph2023vit"></d-cite><d-cite key="ewingtonpitsos2024suite"></d-cite><d-cite key="DBLP:conf/eccv/RaoMBS24"></d-cite><d-cite key="hugo2024towards"></d-cite>. Despite computational challenges, early results suggest SAEs can efficiently extract interpretable image features with less data compared to their applications in language models, opening new avenues for understanding visual processing in neural networks.
 
@@ -504,13 +537,13 @@ Key Takeaways:
 
 ### Automated explanation
 
-While traditional explanation methods focus on highlighting important features in the model's input space, users often care more about understanding the underlying meaning of these features. Automated explanation methods aim to bridge this gap by translating abstract mathematical representations within neural networks into human-understandable concepts, without heavily relying on manual analysis. Currently, there are two main approaches to endow such concepts: text-image space alignment and data distribution-based methods.
+While traditional explanation methods focus on highlighting important features in the model's input space, users often care more about understanding the underlying meaning of these features. Automated explanation methods aim to bridge this gap by **translating abstract mathematical representations within neural networks into human-understandable concepts**, without heavily relying on manual analysis. Currently, there are two main approaches to endow such concepts: text-image space alignment and data distribution-based methods.
 
 #### Text-Image Space Alignment
 
-Language serves as a naturally interpretable interface for humans and forms our concept vocabulary, while image representations are inherently less interpretable. Text-Image Space Alignment methods address this challenge by leveraging the semantic richness of visual-language spaces to interpret neural network representations. These approaches use certain algorithms to establish connections between visual features and natural language descriptions. By **mapping activations to a shared text-image space**, these methods can automatically identify relevant concepts that explain model behavior.
+Language serves as a naturally interpretable interface for humans and forms our concept vocabulary, while image representations are inherently less interpretable. The core principle behind Text-Image Space Alignment methods is to establish meaningful connections between neural network's visual features and natural language descriptions. By **mapping neural activations into a shared semantic space** where both textual and visual information coexist, these methods can automatically discover and explain the concepts that drive model behavior.
 
-Recent works have made significant progress in this direction. Rao et al. <d-cite key="DBLP:conf/eccv/RaoMBS24"></d-cite> adopted Sparse Autoencoders (SAEs), using the decoder weight matrix to find minimum cosine similarities between its columns and word embeddings. SpLiCE <d-cite key="bhalla2024interpreting"></d-cite> took a different approach by defining an overcomplete set of semantic concepts and seeking the sparsest solution that maps word embeddings to CLIP embedding space with high cosine similarity.
+Recent works have made progress in this direction. Rao et al. <d-cite key="DBLP:conf/eccv/RaoMBS24"></d-cite> developed a method using Sparse Autoencoders (SAEs) that learns interpretable representations from neural network activations. Their approach analyzes the decoder's weight matrix by computing cosine similarities between its columns and word embeddings, effectively translating network representations into human-understandable concepts. SpLiCE <d-cite key="bhalla2024interpreting"></d-cite> proposed a complementary strategy by first establishing a comprehensive semantic concept vocabulary. This method seeks the sparsest possible mapping between these concepts and the CLIP embedding space while maintaining high cosine similarity, ensuring that the identified concepts are both minimal and maximally informative.
 
 <details markdown="1">
 <summary><b>An Illustrative Graph</b></summary>
@@ -518,9 +551,9 @@ Recent works have made significant progress in this direction. Rao et al. <d-cit
 Find concepts to match with the model's internal representations.
 </details>
 
-A notable advancement came from Gandelsman et al. <d-cite key="gandelsman2023interpreting"></d-cite>, who introduced TEXTSPAN --- an algorithm that creates a text-labeled basis for attention head outputs in CLIP's vision encoder. The algorithm caches vision encoder attention head outputs and greedily selects text embeddings from a precomputed text bank to maximize the explained variance. Their analysis of the last four layers revealed specialized attention heads capturing distinct image properties (such as "color" and "counting"), enabling targeted interventions for reducing spurious correlations and facilitating property-based image retrieval.
+Beyond using cosine similarity, another approach came from Gandelsman et al. <d-cite key="gandelsman2023interpreting"></d-cite>, who introduced TEXTSPAN - an algorithm that creates a text-labeled basis for attention head outputs in CLIP's vision encoder. By caching vision encoder attention head outputs and strategically selecting text embeddings from a predefined text bank <d-footnote>To be more specific, strategically means TEXTSPAN greedily selects text embeddings from the text bank to maximize the explained variance.</d-footnote>, TEXTSPAN revealed specialized attention heads that capture distinct image properties like "color" and "counting". This discovery enabled targeted interventions for reducing spurious correlations and improving property-based image retrieval.
 
-Building on this work, Balasubramanian et al. <d-cite key="balasubramanian2024decomposing"></d-cite> extended TEXTSPAN beyond contrastively-trained language-vision models. Their automated representation decomposition method leverages the computational graph generated during the forward pass, decomposing internal contributions of vanilla vision models into their final representation and mapping these contributions to CLIP space for text-based interpretation.
+Building upon this foundation, Balasubramanian et al. <d-cite key="balasubramanian2024decomposing"></d-cite> extended TEXTSPAN's applicability beyond CLIP to ViTs. Their proposed automated representation decomposition method to analyze the computational graph generated during the forward pass. Using this method, they break down internal contributions of models into their final representation and mapping these components to CLIP space, where they then use TEXTSPAN for text-based interpretation.
 
 #### Data Distribution-Based Methods
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/automated.svg' | relative_url }}" type="image/svg+xml" width="80%" class="l-body rounded z-depth-1 center"></object>
@@ -531,11 +564,11 @@ Comparison between supervised categorical analysis and unsupervised automated ex
 Another effective approach to understanding neural networks' internal mechanisms involves analyzing neuron activation patterns across different input types. This method examines **how neurons respond to various categories of data, revealing specialized neurons and their roles in information processing.** This approach can be broadly categorized into supervised and unsupervised methods.
 
 1. **Supervised Approaches**
-- Supervised approaches utilize concept-labeled data to guide the interpretation of neural network components. These methods analyze how different parts of the network respond to inputs with known concept labels, establishing direct links between network activations and human-understandable concepts. Traditional methods like TCAV (Quantitative Testing with Concept Activation Vectors) <d-cite key="kim2017interpretability"></d-cite> rely on explicit concept datasets with human-curated labels.
-- Recent research has applied this approach to both language and vision-language models. Tang et al. <d-cite key="tang2024languagespecific"></d-cite> identified language-specific neurons in LLMs, while MMNeuron <d-cite key="huo2024mmneuron"></d-cite> made interesting discoveries about domain-specific neurons in vision-language models like LLaVA and InstructBLIP. Their finding that deactivating domain-specific neurons, while significantly perturbing hidden states, doesn't always impact task performance suggests **these models may rely on highly generalized internal representations.** Miner <d-cite key="huang2024miner"></d-cite> further refined this methodology, revealing that **modality-specific neurons are primarily concentrated in shallow layers, with most modality information remaining within its original token set.**
+- Supervised approaches utilize concept-labeled data to guide the interpretation of neural network components. We're essentially looking for some components that consistently "light up" (activate strongly) when presented with specific types of input. For example, if a specific neuron consistently shows high activation when the network processes a particular category of input (such as images of cats) but remains relatively inactive for other categories, we can classify this neuron as specialized for detecting that category.
+- **Neuron Specialization**: Recent research has applied this approach to both language and vision-language models. Tang et al. <d-cite key="tang2024languagespecific"></d-cite> identified *language-specific neurons* in LLMs, while MMNeuron <d-cite key="huo2024mmneuron"></d-cite> made interesting discoveries about *domain-specific neurons* in vision-language models like LLaVA and InstructBLIP. They found that deactivating domain-specific neurons, while significantly perturbing hidden states, doesn't always impact task performance. This suggests that VLMs fail to take full advantage of the domain-specific information in specific domains, which means **VLMs may rely on highly generalized internal representations.** Miner <d-cite key="huang2024miner"></d-cite> further refined this methodology to find *modality-specific neurons*. They also reveal that **modality-specific neurons are primarily concentrated in shallow layers, with most modality information remaining within its original token set.**
 
 2. **Unsupervised Discovery**
-- While supervised approaches provide clear and verifiable concept mappings, their reliance on labeled data can limit scalability and may miss concepts not included in the predefined set. Unsupervised discovery methods take a more data-driven approach, identifying meaningful patterns in network activations without requiring concept labels, greatly reducing the annotation burden and predefined bias. These approaches typically analyze how different network components respond to various inputs, using techniques like clustering or dimensionality reduction to group similar activation patterns. Recent advances have integrated language models or vision-language models to automatically generate natural language descriptions of discovered patterns, eliminating the need for human concept labeling. This approach offers greater flexibility in concept discovery and can uncover unexpected patterns that might be missed by supervised methods. However, the challenge lies in ensuring the discovered concepts are meaningful and reliable for practical applications <d-cite key="DBLP:conf/blackboxnlp/HuangGDWP23"></d-cite>.
+- While supervised approaches provide clear and verifiable concept mappings, their reliance on labeled data can limit scalability and may miss concepts not included in the predefined set. Unsupervised discovery methods take a more data-driven approach, identifying meaningful patterns in network activations without requiring concept labels. These approaches typically analyze how different network components respond to various inputs, using techniques like clustering or dimensionality reduction to group similar activation patterns. Recent advances have **integrated language models or vision-language models to automatically generate natural language descriptions of discovered patterns.** This approach offers greater flexibility in concept discovery and can uncover unexpected patterns that might be missed by supervised methods. However, the challenge lies in ensuring the discovered concepts are meaningful and reliable for practical applications <d-cite key="DBLP:conf/blackboxnlp/HuangGDWP23"></d-cite>.
 - Recent advances have leveraged large language models like GPT-4 to automatically generate natural language descriptions of discovered patterns <d-cite key="hernandez2022natural,singh2023explaining,bills2023language"></d-cite>. In VLMs, a notable example is MAIA <d-cite key="DBLP:conf/icml/ShahamSWRHA024"></d-cite>, which automates interpretability tasks by composing pretrained modules to conduct experiments on other systems. Given an interpretability query (e.g., "Which neurons in Layer 4 are selective for forested backgrounds?"), MAIA runs experiments to test specific hypotheses, observes outcomes, and iteratively updates its understanding until it can answer the user query.
 
 <aside class="l-body box-note" markdown="1">
@@ -546,68 +579,122 @@ Key Takeaways:
 
 
 
-
 ## Future Directions
+
+  
 
 While the above mechanistic interpretability studies have provided significant insights into how vision-language models (VLMs) function, several challenges remain. This section discusses and summarizes these challenges and proposes potential directions for future research.
 
+  
+
 ### From Single Model to Multiple Models
 
-**Current Situation**: Unlike large language models (LLMs), vision-language models (VLMs) exhibit much greater heterogeneity in terms of architectures, data, and training paradigms. For instance, VLMs can differ significantly in their vision encoders, language models, and the connectors between them—ranging from simple linear layers to visual resamplers or cross-modal attention mechanisms. They also vary in their training data, which may include image-captioning datasets, visual instruction tuning data, or interleaved image-text datasets. Additionally, their training paradigms differ, such as whether they perform vision-language alignment, or whether the vision encoder is frozen or fine-tuned during training. This substantial heterogeneity may limit the transferability of findings if interpretability studies are only conducted on a single model.
+  
+
+**Current Situation**: Unlike large language models (LLMs), vision-language models (VLMs) exhibit much greater heterogeneity in terms of architectures, data, and training paradigms. For instance, VLMs can differ significantly in their vision encoders <d-cite key="li2023monkey,ye2023ureader,xue2024xgenmm"></d-cite>, language models <d-cite key="laurençon2024matters"></d-cite>, and the connectors between them—ranging from simple linear layers to visual resamplers or cross-modal attention mechanisms <d-cite key="liu2023visual,NEURIPS2022_960a172b,awadalla2023openflamingo,DBLP:conf/nips/LaurenconSTBSLW23,dubey2024llama"></d-cite>. They also vary in their training data, which may include image-captioning datasets, visual instruction tuning data, or interleaved image-text datasets <d-cite key="laurençon2024building"></d-cite>. Additionally, their training paradigms differ, such as whether they perform alignment <d-cite key="rafailov2023direct,sun2023aligning,yu2023rlhfv,chen2023dress"></d-cite>, or whether the vision encoder is frozen or fine-tuned during training <d-cite key="Qwen-VL,Qwen2VL,lu2024deepseekvl"></d-cite>. This substantial heterogeneity may limit the transferability of findings if interpretability studies are only conducted on a single model.
+
+  
 
 **Path Forward**: Conducting cross-model analyses is essential to verify conclusions across different VLMs and ensure their generalizability. This approach can help identify universal principles applicable across various VLMs, as well as model-specific insights that could lead to tailored improvements.
 
+  
+
 <aside class="l-body box-note" markdown="1">
-Summary: 
+
+Summary:
+
 - Perform cross-model analyses to validate findings across different VLMs and ensure their generalizability.
+
 </aside>
 
+  
+  
 
 ### From Small Models to Large Models
 
+  
+
 **Current Situation**: Current interpretability research in VLMs primarily focuses on smaller-scale models, such as those with 7B parameters. However, larger VLMs often exhibit emergent capabilities that are absent in smaller models. These new capabilities may pose unique challenges for applying interpretability tools to larger models.
 
-**Path Forward**: Scaling up interpretability studies to include larger models is critical for understanding how these tools perform at scale and what new insights they might uncover. This effort can deepen our understanding of emergent behaviors and inform the development of interpretability methods suitable for larger models.
+  
+
+**Path Forward**: Scaling up interpretability studies to include larger models is critical for understanding how these tools perform at scale and what new insights they might uncover <d-cite key="templeton2024scaling,gao2024scaling"></d-cite>. This effort can deepen our understanding of emergent behaviors and inform the development of interpretability methods suitable for larger models.
+
+  
 
 <aside class="l-body box-note" markdown="1">
-Summary: 
+
+Summary:
+
 - Scale up interpretability studies to include larger VLMs to understand emergent capabilities and challenges.
+
 </aside>
+
+  
 
 ### From Language-Centric to Vision-Centric
 
-**Current Situation**: VLMs differ from LLMs in their handling of visual information. While many LLM interpretability tools have been successful in explaining text-based mechanisms, applying these tools directly to VLMs may not suffice due to the richer, more ambiguous nature of visual information. Furthermore, VLMs incorporate vision encoders, language models, and connectors between them, adding layers of complexity to interpretability studies.
+  
+
+**Current Situation**: VLMs differ from LLMs in their handling of visual information. While many LLM interpretability tools have been successful in explaining text-based mechanisms <d-cite key="neo2024towards"></d-cite>, applying these tools directly to VLMs may not suffice due to the richer, more ambiguous nature of visual information <d-cite key="joseph2023vit"></d-cite>. Furthermore, VLMs incorporate vision encoders, language models, and connectors between them, adding layers of complexity to interpretability studies.
 
 **Path Forward**: Developing tools specifically designed for visual contexts is necessary to address the unique challenges posed by vision-based features. Meanwhile, these tools should consider the intricate architectures of VLMs and prioritize analyzing the vision components and vision-language connectors, ensuring that interpretations are accurately attributed to the visual inputs. Additionally, input data used for interpretability should emphasize vision-centric tasks that cannot be easily solved by text-only models, ensuring meaningful insights into how VLMs process visual inputs.
 
+  
 <aside class="l-body box-note" markdown="1">
-Summary: 
+
+Summary:
+
 - Develop interpretability tools tailored for visual contexts and apply them to vision components to understand how VLMs process visual information.
+
 </aside>
 
+  
+  
 
 ### From Static Processes to Dynamic Processes
 
-**Current Situation**: Interpretability studies often focus on a single checkpoint of a model, ignoring the dynamic nature of information flow during training. For example, VLM training typically involves multiple stages, such as initial alignment using image-captioning data (where only the vision-language connector is tuned) followed by end-to-end fine-tuning with diverse instruction-tuning data. These stages may include phase changes where models gain new capabilities or behaviors, such as transitioning from unimodal pre-trained models to multimodal systems.
+  
+
+**Current Situation**: Interpretability studies often focus on a single checkpoint of a model, ignoring the dynamic nature of information flow during training. For example, VLM training typically involves multiple stages, such as initial alignment using image-captioning data (where only the vision-language connector is tuned) followed by end-to-end fine-tuning with diverse instruction-tuning data. These stages may include phase changes <d-cite key="wei2022emergent"></d-cite> where models gain new capabilities or behaviors, such as transitioning from unimodal pre-trained models to multimodal systems.
+
+  
 
 **Path Forward**: Studying the dynamics of VLM training is crucial for uncovering novel insights. Applying interpretability tools at different checkpoints during training can shed light on phase changes and the evolution of information flow. Insights from these dynamic studies could also resonate with cognitive science research, such as experiments on restoring vision in previously blind individuals.
 
+  
+
 <aside class="l-body box-note" markdown="1">
-Summary:  
+
+Summary:
+
 - Study the dynamics of VLM training to understand phase changes and information flow evolution.
+
 </aside>
 
+  
+  
 
 ### From Micro-Level to Macro-Level
 
-**Current Situation**: Interpretability research often focuses on micro-level phenomena, such as individual neurons or layers, to understand how VLMs process information. However, these findings are rarely connected to macro-level behaviors, such as performance variations across tasks or model designs. For example, recent studies show that CLIP/SigLIP vision encoders pre-trained on image-text data outperform those trained purely on images such as DINO when building VLMs. However, the underlying reasons for these differences remain unclear. Similarly, VLMs can struggle with seemingly simple vision-centric tasks like image classification, despite their vision encoders excelling in such tasks.
+  
+
+**Current Situation**: Interpretability research often focuses on micro-level phenomena, such as individual neurons or layers, to understand how VLMs process information. However, these findings are rarely connected to macro-level behaviors, such as performance variations across tasks or model designs. For example, recent studies show that CLIP/SigLIP vision encoders pre-trained on image-text data outperform those trained purely on images such as DINO when building VLMs <d-cite key="tong2024eyes"></d-cite>. However, the underlying reasons for these differences remain unclear. Similarly, VLMs can struggle with seemingly simple vision-centric tasks like image classification, despite their vision encoders excelling in such tasks <d-cite key="zhang2024visuallygrounded"></d-cite>.
+
+  
 
 **Path Forward**: Bridging the gap between micro-level findings and macro-level behaviors is essential for driving advancements in VLM development. Applying interpretability tools to investigate unresolved macro-level questions—such as why certain vision encoders perform better or why VLMs struggle with specific tasks—can yield actionable insights. For example, probing tools have been employed to link VLM failures on vision-centric tasks to limitations in the vision encoder. Such findings can inform the design of improved vision encoders, potentially combining the strengths of models like CLIP and DINO to overcome these shortcomings.
 
+  
+
 <aside class="l-body box-note" markdown="1">
-Summary: 
+
+Summary:
+
 - Connect micro-level insights from interpretability studies to macro-level behaviors to inform VLM design and development.
+
 </aside>
+
 
 ## Conclusion
 
