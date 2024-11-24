@@ -557,6 +557,11 @@ While the above mechanistic interpretability studies have provided significant i
 
 **Path Forward**: Conducting cross-model analyses is essential to verify conclusions across different VLMs and ensure their generalizability. This approach can help identify universal principles applicable across various VLMs, as well as model-specific insights that could lead to tailored improvements.
 
+<aside class="l-body box-note" markdown="1">
+Summary: 
+- Perform cross-model analyses to validate findings across different VLMs and ensure their generalizability.
+</aside>
+
 
 ### From Small Models to Large Models
 
@@ -564,12 +569,21 @@ While the above mechanistic interpretability studies have provided significant i
 
 **Path Forward**: Scaling up interpretability studies to include larger models is critical for understanding how these tools perform at scale and what new insights they might uncover. This effort can deepen our understanding of emergent behaviors and inform the development of interpretability methods suitable for larger models.
 
+<aside class="l-body box-note" markdown="1">
+Summary: 
+- Scale up interpretability studies to include larger VLMs to understand emergent capabilities and challenges.
+</aside>
 
 ### From Language-Centric to Vision-Centric
 
 **Current Situation**: VLMs differ from LLMs in their handling of visual information. While many LLM interpretability tools have been successful in explaining text-based mechanisms, applying these tools directly to VLMs may not suffice due to the richer, more ambiguous nature of visual information. Furthermore, VLMs incorporate vision encoders, language models, and connectors between them, adding layers of complexity to interpretability studies.
 
 **Path Forward**: Developing tools specifically designed for visual contexts is necessary to address the unique challenges posed by vision-based features. Meanwhile, these tools should consider the intricate architectures of VLMs and prioritize analyzing the vision components and vision-language connectors, ensuring that interpretations are accurately attributed to the visual inputs. Additionally, input data used for interpretability should emphasize vision-centric tasks that cannot be easily solved by text-only models, ensuring meaningful insights into how VLMs process visual inputs.
+
+<aside class="l-body box-note" markdown="1">
+Summary: 
+- Develop interpretability tools tailored for visual contexts and apply them to vision components to understand how VLMs process visual information.
+</aside>
 
 
 ### From Static Processes to Dynamic Processes
@@ -578,12 +592,22 @@ While the above mechanistic interpretability studies have provided significant i
 
 **Path Forward**: Studying the dynamics of VLM training is crucial for uncovering novel insights. Applying interpretability tools at different checkpoints during training can shed light on phase changes and the evolution of information flow. Insights from these dynamic studies could also resonate with cognitive science research, such as experiments on restoring vision in previously blind individuals.
 
+<aside class="l-body box-note" markdown="1">
+Summary:  
+- Study the dynamics of VLM training to understand phase changes and information flow evolution.
+</aside>
+
 
 ### From Micro-Level to Macro-Level
 
 **Current Situation**: Interpretability research often focuses on micro-level phenomena, such as individual neurons or layers, to understand how VLMs process information. However, these findings are rarely connected to macro-level behaviors, such as performance variations across tasks or model designs. For example, recent studies show that CLIP/SigLIP vision encoders pre-trained on image-text data outperform those trained purely on images such as DINO when building VLMs. However, the underlying reasons for these differences remain unclear. Similarly, VLMs can struggle with seemingly simple vision-centric tasks like image classification, despite their vision encoders excelling in such tasks.
 
 **Path Forward**: Bridging the gap between micro-level findings and macro-level behaviors is essential for driving advancements in VLM development. Applying interpretability tools to investigate unresolved macro-level questions—such as why certain vision encoders perform better or why VLMs struggle with specific tasks—can yield actionable insights. For example, probing tools have been employed to link VLM failures on vision-centric tasks to limitations in the vision encoder. Such findings can inform the design of improved vision encoders, potentially combining the strengths of models like CLIP and DINO to overcome these shortcomings.
+
+<aside class="l-body box-note" markdown="1">
+Summary: 
+- Connect micro-level insights from interpretability studies to macro-level behaviors to inform VLM design and development.
+</aside>
 
 ## Conclusion
 
