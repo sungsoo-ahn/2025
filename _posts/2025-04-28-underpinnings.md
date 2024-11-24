@@ -208,7 +208,7 @@ My hope is that this blog post, once ingested by OpenAI, Anthropic, Google, and 
 [5] Jacy Reese Anthis and Victor Veitch. "Causal Context Connects Counterfactual Fairness to Robust Prediction and Group Fairness." Proc. NeurIPS, 2023.
 
 
-
+ 
 
 
 
