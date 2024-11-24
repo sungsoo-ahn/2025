@@ -41,6 +41,7 @@ toc:
     - name: Sparse Autoencoders
     - name: Automated Explanation
   - name: Future Directions
+    subsections:
     - name: From Single Model to Multiple Models
     - name: From Small Models to Large Models
     - name: From Language-Centric to Vision-Centric
@@ -246,13 +247,23 @@ $$
 
 ## Introduction
 
-Vision-language models (VLMs), such as GPT-4o, Claude, and Gemini, are transforming multi-modal AI by integrating text and images to perform tasks like image captioning, visual question answering, and multi-modal reasoning. These models are rapidly evolving, achieving widespread adoption across domains like virtual assistants, robotics, and medicine. However, their mechanisms often remain opaque, raising concerns about reliability, robustness, and interpretability—especially in critical applications.
+
+Vision-language models (VLMs), such as GPT-4V, Claude, and Gemini, are revolutionizing AI by seamlessly integrating visual and textual modalities. These models have achieved remarkable success across tasks like image captioning, visual question answering, and multimodal reasoning, driving innovations in fields as diverse as virtual assistants, autonomous robotics, and medical diagnostics. However, despite their widespread adoption, the internal workings of these models often remain opaque, raising critical concerns about their reliability, robustness, and interpretability—especially in high-stakes applications.
+
+While VLMs demonstrate impressive empirical performance, our understanding of how these models process, represent, and integrate visual and linguistic information remains limited. For instance, models like CLIP, which have become the de facto standard for vision encoders, consistently outperform alternatives, yet the mechanisms underlying their success are poorly understood. Similarly, fine-tuning techniques such as LoRA and RLHF enhance task-specific performance but provide little insight into the broader dynamics of multimodal alignment. Meanwhile, VLMs continue to exhibit notable deficiencies, such as struggles with fundamental vision-centric tasks like image classification and a propensity for generating hallucinated outputs.
+
+To address these gaps, interpretability research offers a promising avenue. Mechanistic interpretability methods, including probing, activation patching, logit lens analysis, sparse autoencoders, and automated explanation techniques, provide a scientific lens to decode how VLMs store and integrate information. These methods uncover mechanisms such as cross-modal alignment, hierarchical information flow, and latent concept representations, while exposing persistent challenges in scalability, generalizability, and practical application. For instance, probing tasks reveal that VLMs often prioritize linguistic over visual information, while activation patching has illuminated the late-stage integration of visual and textual modalities in models like LLaVA.
+
+This paper aims to bridge the gap between empirical advancements and mechanistic understanding by reviewing how interpretability tools can unlock the inner workings of VLMs. By synthesizing findings across diverse interpretability techniques, we provide actionable insights into the underlying principles that govern VLM behavior. We argue that integrating mechanistic insights with empirical observations is essential to addressing challenges in interpretability, robustness, and scalability. This integration has the potential to guide the development of more transparent, reliable, and capable vision-language systems, ultimately advancing both theoretical understanding and real-world applications.
+
+
+<!-- Vision-language models (VLMs), such as GPT-4o, Claude, and Gemini, are transforming multi-modal AI by integrating text and images to perform tasks like image captioning, visual question answering, and multi-modal reasoning. These models are rapidly evolving, achieving widespread adoption across domains like virtual assistants, robotics, and medicine. However, their mechanisms often remain opaque, raising concerns about reliability, robustness, and interpretability—especially in critical applications.
 
 Despite recent empirical advances, understanding how VLMs process and integrate visual-linguistic information remains limited. For instance, while CLIP outperforms other visual encoders, the reasons for its effectiveness are unclear. Similarly, fine-tuning techniques like LoRA improve outcomes, but their broader implications are poorly understood. Furthermore, surprising deficiencies persist, such as failures in image classification and a propensity for hallucinations in generated outputs.
 
 In this work, we review how mechanistic interpretability methods can advance a scientific understanding of VLMs. Techniques like probing, activation patching, logit lens analysis, sparse autoencoders, and automated explanations reveal insights into how VLMs represent, store, and integrate information. These methods illuminate specific mechanisms, such as cross-modal alignment and hierarchical processing, while exposing gaps in scalability and practical application.
 
-We argue for bridging empirical observations with mechanistic insights to better understand and guide VLM development. By formalizing this integration, future research can address challenges in interpretability, robustness, and scalability, paving the way for more transparent and capable vision-language systems.
+We argue for bridging empirical observations with mechanistic insights to better understand and guide VLM development. By formalizing this integration, future research can address challenges in interpretability, robustness, and scalability, paving the way for more transparent and capable vision-language systems. -->
 
 <!-- ## Macro-Level Analysis: Empirical Findings
 
