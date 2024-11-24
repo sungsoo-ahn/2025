@@ -517,7 +517,74 @@ Key Takeaways:
 - Automated explanation methods aim to bridge the gap between abstract neural network representations and human-understandable concepts, primarily through two approaches: text-image space alignment and data distribution-based methods.
 </aside>
 
+
+
+
+
 ## Future Directions
+
+While the above mechanistic interpretability studies have provided significant insights into how vision-language models (VLMs) function, several challenges remain. This section discusses and summarizes these challenges and proposes potential directions for future research.
+
+### From Single Model to Multiple Models
+
+**Current Situation**:
+
+Unlike large language models (LLMs), vision-language models (VLMs) exhibit much greater heterogeneity in terms of architectures, data, and training paradigms. For instance, VLMs can differ significantly in their vision encoders, language models, and the connectors between them—ranging from simple linear layers to visual resamplers or cross-modal attention mechanisms. They also vary in their training data, which may include image-captioning datasets, visual instruction tuning data, or interleaved image-text datasets. Additionally, their training paradigms differ, such as whether they perform vision-language alignment, or whether the vision encoder is frozen or fine-tuned during training. This substantial heterogeneity may limit the transferability of findings if interpretability studies are only conducted on a single model.
+
+**Path Forward**:
+
+Conducting cross-model analyses is essential to verify conclusions across different VLMs and ensure their generalizability. This approach can help identify universal principles applicable across various VLMs, as well as model-specific insights that could lead to tailored improvements.
+
+
+### From Small Models to Large Models
+
+**Current Situation**:
+
+Current interpretability research in VLMs primarily focuses on smaller-scale models, such as those with 7B parameters. However, larger VLMs often exhibit emergent capabilities that are absent in smaller models. These new capabilities may pose unique challenges for applying interpretability tools to larger models.
+
+**Path Forward**:
+
+Scaling up interpretability studies to include larger models is critical for understanding how these tools perform at scale and what new insights they might uncover. This effort can deepen our understanding of emergent behaviors and inform the development of interpretability methods suitable for larger models.
+
+
+### From Language-Centric to Vision-Centric
+
+**Current Situation**:
+
+VLMs differ from LLMs in their handling of visual information. While many LLM interpretability tools have been successful in explaining text-based mechanisms, applying these tools directly to VLMs may not suffice due to the richer, more ambiguous nature of visual information. Furthermore, VLMs incorporate vision encoders, language models, and connectors between them, adding layers of complexity to interpretability studies.
+
+**Path Forward**:
+
+Developing tools specifically designed for visual contexts is necessary to address the unique challenges posed by vision-based features. Meanwhile, these tools should consider the intricate architectures of VLMs and prioritize analyzing the vision components and vision-language connectors, ensuring that interpretations are accurately attributed to the visual inputs. Additionally, input data used for interpretability should emphasize vision-centric tasks that cannot be easily solved by text-only models, ensuring meaningful insights into how VLMs process visual inputs.
+
+
+### From Static Processes to Dynamic Processes
+
+**Current Situation**:
+
+Interpretability studies often focus on a single checkpoint of a model, ignoring the dynamic nature of information flow during training. For example, VLM training typically involves multiple stages, such as initial alignment using image-captioning data (where only the vision-language connector is tuned) followed by end-to-end fine-tuning with diverse instruction-tuning data. These stages may include phase changes where models gain new capabilities or behaviors, such as transitioning from unimodal pre-trained models to multimodal systems.
+
+**Path Forward**:
+
+Studying the dynamics of VLM training is crucial for uncovering novel insights. Applying interpretability tools at different checkpoints during training can shed light on phase changes and the evolution of information flow. Insights from these dynamic studies could also resonate with cognitive science research, such as experiments on restoring vision in previously blind individuals.
+
+
+### From Micro-Level to Macro-Level
+
+**Current Situation**:
+
+Interpretability research often focuses on micro-level phenomena, such as individual neurons or layers, to understand how VLMs process information. However, these findings are rarely connected to macro-level behaviors, such as performance variations across tasks or model designs. For example, recent studies show that CLIP/SigLIP vision encoders pre-trained on image-text data outperform those trained purely on images such as DINO when building VLMs. However, the underlying reasons for these differences remain unclear. Similarly, VLMs can struggle with seemingly simple vision-centric tasks like image classification, despite their vision encoders excelling in such tasks.
+
+**Path Forward**:
+
+Bridging the gap between micro-level findings and macro-level behaviors is essential for driving advancements in VLM development. Applying interpretability tools to investigate unresolved macro-level questions—such as why certain vision encoders perform better or why VLMs struggle with specific tasks—can yield actionable insights. For example, probing tools have been employed to link VLM failures on vision-centric tasks to limitations in the vision encoder. Such findings can inform the design of improved vision encoders, potentially combining the strengths of models like CLIP and DINO to overcome these shortcomings.
+
+## Conclusion
+
+This work provides a comprehensive review of studies leveraging mechanistic interpretability tools to analyze vision-language models (VLMs), including probing techniques, activation patching, logit lenses, sparse autoencoders, and automated explanation methods. These tools have greatly enhanced our understanding of how VLMs represent, integrate, and process multimodal information. Despite these advancements, several key challenges remain. These include the need for validation across a wider range of VLM architectures and training paradigms, a deeper exploration of information flow dynamics throughout training stages, and a stronger alignment between micro-level insights and macro-level behaviors. Addressing these challenges will pave the way for developing more robust and effective VLMs, advancing both their design and practical applications.
+
+
+<!-- ## Future Directions
 
 1. **Towards Universality**
 - As mechanistic interpretability matures, the field must transition from isolated empirical findings to developing overarching theories and universal reasoning primitives beyond specific circuits, aiming for a comprehensive understanding of AI capabilities <d-cite key="bereska2024mechanistic"></d-cite>. This is especially important to VLMs since architecture design (self-attention, cross attention etc.) and vision transformers come in many forms (CLIP, vanilla ViT and DINO etc.). Experiments are conducted mainly on LLaVA-NeXT and InstructBLIP may not be directly applicable to models that utilize different frameworks <d-cite key="huo2024mmneuron"></d-cite>.
@@ -543,4 +610,4 @@ Vision-Language Models (VLMs) have demonstrated remarkable capabilities in integ
 
 At the macro level, while we've seen rapid empirical progress in architectures and training methods, theoretical understanding remains limited. At the micro level, interpretability research has begun illuminating VLM internals through various techniques - from Concept Bottleneck Models to Sparse Autoencoders. However, significant challenges remain, including the need to move beyond isolated findings toward comprehensive theories and the development of more robust validation methods.
 
-The path forward requires balancing empirical advances with deeper theoretical understanding, particularly in understanding how these models process and integrate multimodal information. Success in this endeavor will be crucial for developing more reliable, interpretable, and capable VLMs.
+The path forward requires balancing empirical advances with deeper theoretical understanding, particularly in understanding how these models process and integrate multimodal information. Success in this endeavor will be crucial for developing more reliable, interpretable, and capable VLMs. -->
