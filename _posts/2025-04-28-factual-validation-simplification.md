@@ -33,7 +33,6 @@ toc:
     subsections:
     -   name: New Data Input System
     -   name: LLM Validity Judger
-  - name: Advantages of This System
   - name: Experimentation and Results
     subsections:
     -   name: Factual Accuracy
@@ -60,7 +59,7 @@ _styles: >
     font-size: 16px;
   }
   .box-important {
-    background: linear-gradient(135deg, #f8f9fa, #e6f7f9); /* Solid rgba(173, 216, 230, 0.2) */
+    background: linear-gradient(135deg, #f8f9fa, #e6f7f9);
     border: 1px solid #76b7c7;
     padding: 20px;
     margin: 20px 0;
@@ -71,6 +70,16 @@ _styles: >
     line-height: 1.7;
     border-radius: 0px;
   }
+  .box-two {
+    border-left: 5px solid #4A90E2;
+    background: rgba(74, 144, 226, 0.1);
+    padding: 15px;
+    margin: 20px 0;
+    font-family: "Roboto", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    border-radius: 5px;
+  }
   .matrix-box {
     border: 1px solid #d3d3d3;
     border-radius: 10px;
@@ -79,6 +88,17 @@ _styles: >
     background-color: #fefefe;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: inline-block;
+  }
+  .box-future {
+    border: 2px solid #007BFF;
+    background: #F8FAFF;
+    padding: 25px;
+    margin: 20px 0;
+    font-family: "Roboto", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    border-radius: 8px;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.08);
   }
   summary-math {
     text-align: center;
@@ -372,7 +392,7 @@ To address the challenges of ensuring factual accuracy in GPT systems, we propos
   dataset = load_dataset("qiaojin/PubMedQA", name="pqa_labeled", split="train")
   data = dataset.select_columns(["question", "context", "pubid"])
  ```
-**Summarization and Compression**: Each context is summarized using GPT-4o-mini, compressing the content into concise paragraphs. This step ensures efficient downstream processing and storage <d-cite key="gpt4omini"></d-cite>.
+**Summarization and Compression**: Each context is summarized using `GPT-4o-mini`, compressing the content into concise paragraphs. This step ensures efficient downstream processing and storage <d-cite key="gpt4omini"></d-cite>.
  ```python
   new_contexts = [
     str(x)
@@ -381,7 +401,7 @@ To address the challenges of ensuring factual accuracy in GPT systems, we propos
     )
   ]
  ```
-**Embedding with OpenAI Models**: The summarized contexts are embedded into high-dimensional vector representations using OpenAI's text-embedding-3-large model <d-cite key="openaidocs"></d-cite>.
+**Embedding with OpenAI Models**: The summarized contexts are embedded into high-dimensional vector representations using OpenAI's `text-embedding-3-large` model <d-cite key="openaidocs"></d-cite>.
  ```python
   result = client.embeddings.create(
     input=text,
@@ -405,13 +425,13 @@ To address the challenges of ensuring factual accuracy in GPT systems, we propos
       clusters.setdefault(label, []).append(item["id"])
     return [vectors for label, vectors in clusters.items() if label != -1]
  ```
-**Context Combination and Summarization**: Context summaries within each cluster are combined and re-summarized into unified representations using GPT-4o-mini, further reducing redundancy and optimizing coherence <d-cite key="gpt4omini"></d-cite>.
+**Context Combination and Summarization**: Context summaries within each cluster are combined and re-summarized into unified representations using `GPT-4o-mini`, further reducing redundancy and optimizing coherence <d-cite key="gpt4omini"></d-cite>.
  ```python
   def combine_and_summarize(cluster: list[str]):
     combined_context = " ".join(cluster)
     return summarize_context(combined_context)
  ```
-**Final Embedding and Storage**: The new summaries are re-embedded with text-embedding-3-large <d-cite key="openaidocs"></d-cite>. These embeddings, along with any unclustered individual summaries, are stored in PineconeDB for retrieval <d-cite key="pinecone"></d-cite>.
+**Final Embedding and Storage**: The new summaries are re-embedded with `text-embedding-3-large` <d-cite key="openaidocs"></d-cite>. These embeddings, along with any unclustered individual summaries, are stored in PineconeDB for retrieval <d-cite key="pinecone"></d-cite>.
  ```python
   vectors = [
     {"id": id, "values": embedding.vector, "metadata": {"content": content}}
@@ -454,6 +474,17 @@ To address the challenges of ensuring factual accuracy in GPT systems, we propos
     return response.choices[0].text.strip()
  ```
 
+<div class="box-two" markdown="1">
+#### Advantages of This System
+The proposed system introduces several features that enhances the reliability and adaptability of existing RAG pipelines:
+
+- **Innovative Design**: By integrating techniques like LLM summarization, DBSCAN clustering, and vectorized fact storage, the system introduces a new framework for precise fact validation and efficient data storage reduction.
+
+- **Streamlined Architecture**: The system’s design supports simple integration with existing RAG systems while reducing storage needs and retrieval token usage. This adaptability ensures suitability and long-term applicability for large-scale applications across various domains.
+
+- **Granular Fact Verification**: By decomposing responses into discrete factual units and validating each against a vectorized knowledge base, the system achieves significantly higher precision compared to traditional document- or paragraph-level validation methods, reducing inaccuracies and improving trustworthiness.
+</div>
+
 <span style="font-size: 20px; font-weight: bold;">Why Not KNN for Clustering?</span>
 
 K-nearest neighbor (KNN) was considered for fact clustering but was ultimately not used due to its reliance on predefined parameters, such as the number of clusters or neighbors—constraints that are impractical for real-world datasets with high diversity <d-cite key="taunk2019"></d-cite>. In contrast, DBSCAN identifies clusters based on density, eliminating the need for prior knowledge of the dataset's structure <d-cite key="ester1996"></d-cite>. This makes DBSCAN more effective for processing unstructured or unknown data distributions. Additionally, KNN's approach risks significant data abstraction or loss when attempting to condense diverse facts into singular representations, worsening the system's ability to maintain factual granularity <d-cite key="cunningham2020"></d-cite>.
@@ -462,22 +493,13 @@ K-nearest neighbor (KNN) was considered for fact clustering but was ultimately n
 
 If the dataset is preprocessed to isolate one specific fact per entry, we recommend bypassing that step. Instead, the data can directly enter our model, which dynamically groups related facts. This approach preserves the richness of the dataset and streamlines the overall workflow.
 
-## Advantages of This System
-
-- **Granular Verification**: Validates individual facts for higher precision compared to document- or paragraph-level assessments.
-- **Simple Integration**: This system can be integrated into existing RAG infrastructure to enhance the overall functionality without requiring infrastructure changes.
-- **Efficient Storage**: Compresses data through summarization and clustering, reducing storage needs and retrieval token usage.
-- **Fact-Level Accuracy**: Ensures validity by requiring agreement across multiple sources before storing facts.
-- **Real-Time Validation**: Enables fast, efficient validation within the generation process.
-- **Scalable**: Modular design scales across datasets and domains, ensuring long-term applicability.
-
 ## Experimentation and Results
 
 We evaluated our proposed pipeline by benchmarking it against a **Traditional Retrieval-Augmented Generation (RAG) Pipeline** using the PubmedQA dataset <d-cite key="jin2019"></d-cite>. The evaluation focused on three key metrics: **factual accuracy, RAG effectiveness,** and **storage efficiency,** collectively measuring response quality, retrieval precision, and data storage optimization.
 
 <span style="font-size: 20px; font-weight: bold;">Traditional RAG Pipeline</span>
 
-The traditional RAG pipeline was tested under ideal conditions, embedding and retrieving the labeled contexts directly from the PubmedQA dataset <d-cite key="jin2019"></d-cite>. This setup provided perfect access to the correct answer contexts, offering a significant advantage. Despite this, our proposed pipeline—which applies summarization and compression—demonstrates performance comparable to this baseline, underscoring its effectiveness.
+The traditional RAG pipeline was tested under ideal conditions, embedding and retrieving the labeled contexts directly from the PubmedQA dataset <d-cite key="jin2019"></d-cite>. This setup provided perfect access to the correct answer contexts, offering a significant advantage. Despite this, our proposed pipeline—which applies summarization and compression—demonstrates performance comparable to this baseline, emphasizing its effectiveness.
 
 The traditional pipeline workflow includes the following steps:
 - Embed each context using OpenAI's `text-embedding-3-large` model.
@@ -486,10 +508,10 @@ The traditional pipeline workflow includes the following steps:
 <span style="font-size: 20px; font-weight: bold;">Comparative Metrics</span>
 
 | **Metric**           | **Traditional Pipeline** | **Proposed Pipeline** | **Difference**            |
-|-----------------------|--------------------------|------------------------|---------------------------|
-| Factual Accuracy      | 71.7%                   | 71.2%                 | -0.5%                    |
-| RAG Effectiveness     | 99.2%                   | 98.9%                 | -0.3%                    |
-| Storage Efficiency    | 1,351 KB                | 571 KB                | -57.7% (Reduction)       |
+|-----------------------|-------------------------|-----------------------|---------------------------|
+| Factual Accuracy      | **71.7%**               | 71.2%                 | -0.5%                    |
+| RAG Effectiveness     | **99.2%**               | 98.9%                 | -0.3%                    |
+| Storage Efficiency    | 1,351 KB                | **571 KB**            | -57.7% (Reduction)       |
 
 **Table 1.** Comparison of factual accuracy, RAG effectiveness, and storage efficiency between the traditional pipeline and the proposed pipeline. The proposed pipeline achieves comparable performance in accuracy and effectiveness while significantly reducing storage requirements by 57.7%.
 
@@ -518,9 +540,9 @@ While the PubmedQA dataset was not supportive for chain-of-thought reasoning, th
 
 ## Broader Implications
 
-The results of this pipeline highlight its potential to advance how RAG systems handle unstructured and large-scale datasets. Its ability to compress and organize data effectively expands the capacity of vector databases, allowing for systems to manage larger and more diverse datasets without sacrificing query performance. This scalability is critical for large-scale applications and increasing context windows <d-cite key="yao2024"></d-cite>.
+The results of this pipeline highlight its potential to advance how RAG systems handle unstructured and large-scale datasets. Its ability to compress and organize data effectively expands the capacity of vector databases, allowing for systems to manage larger and more diverse datasets without sacrificing query performance. This scalability is critical for large-scale applications and increasing context windows, enabling more complex multi-step reasoning tasks and better contextual understanding <d-cite key="yao2024"></d-cite>.
 
-The modular design ensures easy integration with existing RAG systems, supporting seamless adoption while allowing for domain-specific customization. By balancing efficiency, scalability, and accuracy, this framework contributes to more practical and reliable AI systems.
+In addition to enhancing efficiency, the framework lays the groundwork for dynamic and adaptive AI systems. By leveraging modular components like clustering and vectorized storage, it enables future systems to integrate real-time updates, ensuring that models stay relevant as knowledge evolves without requiring full retraining. The design also ensures seamless integration with existing RAG and GPT systems, supporting easy implementation while allowing for specific customization. This adaptability allows organizations to fit the system for various use cases, such as domain-specific QA systems or bias detection tools. By balancing efficiency, scalability, and accuracy, this framework contributes to more practical and reliable AI systems while offering ways for extending its applications to multi-modal systems that combine text, image, and other data modalities.
 
 ## Limitations and Future Work
 
@@ -533,23 +555,34 @@ The modular design ensures easy integration with existing RAG systems, supportin
 - **Mitigation**: Provide scoring examples during prompting or fine-tune the LLM to compute scores more reliably from source data.
 
 3. **Context Sensitivity Issues**:
-- Facts may be accurate in isolation but misleading when applied in certain contexts, limiting the system's adaptability. 
+- While individual facts may be accurate, they can become misleading when applied without considering the broader context, limiting the system's adaptability. 
 - **Mitigation**: Extend vector embeddings to include source and context information, enabling the system to incorporate situational nuances.
 
 4. **Potential Source Bias**:
 - Bias in the original source documents can propagate into the system, affecting the impartiality of responses. 
 - **Mitigation**: Add a preprocessing step to evaluate and mitigate biases in source data before vectorization.
 
-5. **Scope of Accuracy**:
-- The system prioritizes factual accuracy without focusing on other dimensions of response quality, such as creative inference or prompt analysis.
-- **Mitigation**: Include additional validity metrics, such as evaluating inferential accuracy or alignment with the original prompt, using separate GPT evaluations.
-
-6. **Expanded Dataset Evaluation**:
+5. **Expanded Dataset Evaluation**:
 - Due to time constraints, the system was tested only on PubmedQA and did not undergo evaluation on a broader range of datasets. This limitation restricts the full assessment of the method’s scalability and effectiveness across all data types.
 - **Mitigation**: Future work aims on expanding the evaluation to include additional benchmark datasets, such as SimpleQA <d-cite key="simpleqa"></d-cite>. Sources like Wikipedia pages and news articles will be scraped and processed into the vector database to better assess the pipeline's performance under real-world conditions.
 
+<div class="box-future" markdown="1">
+#### Future Direction: Concept-Based Fact Representation
+
+Building on the strengths of the current system, a future enhancement could involve representing facts as structured relationships between concepts (e.g., `CONCEPT 1, CONNECTION, CONCEPT 2`). By storing concepts as Word2Vec embeddings and dynamically mapping their relationships in a database, this approach could enable more granular validation and reasoning <d-cite key="mikolov2013"></d-cite>. This would extend our existing pipeline by not only validating individual facts but also examining their interconnectedness, facilitating a richer understanding of context and relationships.
+
+The potential benefits of this approach include:
+- **Improved Contextual Validation**: Exploring relationships between concepts could strengthen the system’s ability to handle complex queries, reducing the risk of context misalignment and improving factual accuracy.
+- **Enhanced Scalability**: Dynamically storing concepts and their connections would allow the system to adapt to new knowledge over time, enhancing long-term usability and robustness.
+- **Greater Explainability**: Converting retrieved connections into human-readable formats could improve transparency, offering clearer and more interpretable rationales for decisions made by the system.
+
+While this concept represents a forward-looking direction, it builds naturally on the goals of the current system. By enhancing scalability, reliability, and transparency, it offers a pathway for advancing the framework in future iterations.
+</div>
+
 ## Conclusion
 
-In this blog post, we explored a novel framework for enhancing the efficiency and scalability of RAG pipelines while maintaining high standards of factual accuracy. By incorporating techniques such as summarization, clustering, and vectorized fact storage, we demonstrated how preprocessing can substantially reduce storage and optimize context management. Additionally, we explored a more thorough validity judgment pipeline capable of examining the factual basis of LLM reasoning with a high level of precision.
+In this blog post, we explored a novel approach to improving the scalability and reliability of RAG pipelines by addressing challenges in storage efficiency and factual accuracy. By leveraging techniques such as summarization, clustering, and vectorized fact storage, our framework enhances preprocessing to optimize data size and retrieval. Additionally, the inclusion of a thorough validity judgment pipeline ensures a stronger evaluation of the factual basis underlying LLM-generated reasoning.
 
-Our experimentation with the PubmedQA dataset highlighted the pipeline’s ability to perform competitively with traditional methods with ideal access to labeled contexts. These findings accentuate the potential of fact validation strategies to balance accuracy and efficiency, advancing trust in AI systems and enabling future innovations in managing unstructured data and large-scale knowledge retrieval.
+Through experimentation with the PubmedQA dataset, we demonstrated that the pipeline achieves competitive performance compared to traditional methods while effectively utilizing labeled contexts. These findings accentuate the potential of fact validation strategies to balance precision and efficiency, offering a pathway for creating reliable systems capable of processing unstructured, large-scale datasets.
+
+Looking ahead, by grounding outputs in verified information and ensuring greater transparency in decision-making, this framework takes a step forward in building trust and explainability in AI systems.
