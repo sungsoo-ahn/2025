@@ -109,6 +109,11 @@
       <g id="Line_55">
         <line x1="223.4043" y1="1040.9961" x2="223.4043" y2="1444.634" stroke="#a5a5a5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
       </g>
+      <g id="Graphic_56">
+        <text transform="translate(-39.183594 1366.1133)" fill="black">
+          <tspan font-family="Helvetica" font-size="16" fill="black" x="0" y="15" xml:space="preserve">Activations</tspan>
+        </text>
+      </g>
     </g>
     <g id="版面___7_图层_1">
       <title>图层 1</title>

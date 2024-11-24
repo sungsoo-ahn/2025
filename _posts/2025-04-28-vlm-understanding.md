@@ -327,12 +327,12 @@ Through our investigation, we find that interpretability in VLMs is still in its
 
 ### Probing
 
-<object data="{{ 'assets/img/2025-04-28-vlm-understanding/probing.svg' | relative_url }}" type="image/svg+xml" width="80%" class="l-body rounded z-depth-1 center"></object>
+<object data="{{ 'assets/img/2025-04-28-vlm-understanding/probing.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
 Analyzing internal representations through a simple linear classifier.
 </div>
-
-Probing <d-cite key="alain2016understanding,hewitt-manning-2019-structural"></d-cite> serves as a powerful diagnostic tool - essentially a microscope for peering into the internal workings of neural networks, helping us understand what information these models actually capture in their representations. At its core, the technique involves **training simple supervised classifiers (probes) to predict specific properties from a model's internal representations.** 
+<br>
+*Probing* <d-cite key="alain2016understanding,hewitt-manning-2019-structural"></d-cite> serves as a powerful diagnostic tool - essentially a microscope for peering into the internal workings of neural networks, helping us understand what information these models actually capture in their representations. At its core, the technique involves **training simple supervised classifiers (probes) to predict specific properties from a model's internal representations.** 
 
 <details markdown="1">
 <summary><b>An Example</b></summary>
@@ -340,7 +340,7 @@ For instance, in a vision-language model analyzing "a cat sitting on a mat", we 
 
 The probe's performance on such tasks reveals whether this information is readily accessible in the model's representations - high accuracy suggests the property is well-encoded, while poor performance indicates the information may be absent or deeply entangled.
 </details>
-
+<br>
 One key advantage of probing is its empirical transparency: by using simple classifiers <d-footnote>single linear probes could suffice in most cases, as their simplicity ensures that strong performance reflects information present in the representations rather than complex learning by the probe itself</d-footnote> as probes, we can directly examine what information is encoded in model representations. 
 
 <aside class="l-body box-warning" markdown="1">
@@ -368,8 +368,8 @@ Key Takeaways:
 <div class="l-gutter caption" markdown="1">
 Activation patching experiments comparing model behavior under clean, corrupted, noising, and denoising conditions. We can see that noising and denoising influence the logits' A and B values.
 </div>
-
-Activation patching <d-cite key="NEURIPS2020_92650b2e, NEURIPS2022_6f1d43d5"></d-cite> (also known as Casual Tracing, Interchange Intervention, Causal Mediation Analysis) is a powerful interpretability technique for neural networks. It enables researchers to systematically analyze **how different components of a model contribute to its behavior** by modifying specific internal activations while keeping others constant. This approach, grounded in the principle of control variates, provides causal insights into model behavior, helping researchers identify critical components and potential interventions for improving model performance and reliability.. 
+<br>
+*Activation patching* <d-cite key="NEURIPS2020_92650b2e, NEURIPS2022_6f1d43d5"></d-cite> (also known as Casual Tracing, Interchange Intervention, Causal Mediation Analysis) is a powerful interpretability technique for neural networks. By modifying specific internal activations while maintaining others constant, this method enables researchers to analyze **how different components contribute to model behavior.** This approach, grounded in the principle of control variates, provides causal insights into model behavior, helping researchers identify critical components and potential interventions for improving model performance and reliability. 
 
 #### Methods
 
@@ -393,6 +393,7 @@ Through activation patching, we could:
 
 If replacing activations in layer X restores the correct identification, this suggests layer X is crucial for object recognition. This process helps us understand where and how the model processes object information.
 </details>
+<br>
 **Common Approaches**
 
 There are two primary ways to apply activation patching <d-cite key="heimersheim2024use"></d-cite>:
@@ -403,6 +404,7 @@ There are two primary ways to apply activation patching <d-cite key="heimersheim
 <summary><b>How to create a corrupted input?</b></summary>
 For text inputs, we can introduce perturbations through either Gaussian noise (GN) or Symmetric Token Replacement (STR) <d-cite key="NEURIPS2020_92650b2e, NEURIPS2022_6f1d43d5"></d-cite>, where STR replaces tokens with their semantically similar alternatives. However, since GN pushes inputs out of distribution and disrupts model's internal mechanisms, STR is often preferred <d-cite key="DBLP:conf/iclr/ZhangN24"></d-cite>. For image inputs, we can similarly apply Gaussian noise or use Semantic Image Pairs (SIP) <d-cite key="golovanevsky2024vlms"></d-cite>, a recently introduced approach that serves as the visual domain counterpart to STR. We will discuss SIP in more detail in the Findings section.
 </details>
+<br>
 **Methodological Variations** 
 
 Several variations of activation patching have been developed: 
@@ -430,28 +432,23 @@ Key Takeaways:
 	- VLMs show hierarchical processing: early layers handle context with minimal direct impact, while final layers are crucial 
 	- Different architectures exhibit distinct patterns in how they handle cross-modal information 
 </aside> -->
-**1. Visual-Linguistic Integration**
-
-Recent studies using activation patching have revealed how VLMs combine visual and textual information. Here are the key findings:
+1. **Visual-Linguistic Integration**
 - **Layer-Specific Processing in BLIP**: Palit et al. <d-cite key="Palit_2023_ICCV"></d-cite> used Gaussian noise patching to analyze BLIP's processing patterns. They found that image information primarily influence the model's outputs in specific layers: layer 11 of the question encoder and layers 9-11 of the answer decoder. This observation suggests two possibilities:
   - The model might primarily combine visual and text information in its later layers
   - Later layers might play a more decisive role in the final output, while earlier layers provide supporting information
 - **Visual-to-Language Transformation in LLaVA**: Neo et al. <d-cite key="neo2024towards"></d-cite> examined how LLaVA processes visual information. They found that representations at visual token positions change systematically across layers, gradually aligning with interpretable textual concepts. This indicates that VLMs can naturally transform visual information into language-like representations, even without specific visual pretraining.
 - **Architectural Differences**: Golovanevsky et al. <d-cite key="golovanevsky2024vlms"></d-cite> developed a new method called *Semantic Image Pairs (SIP)* - a method where they make concept changes to images (e.g., changing a "cat" to a "dog") to understand how VLMs process meaning. Their analysis revealed:
   - Cross-attention serves three functions: object detection, suppression, and outlier suppression
-  - Different architectures have distinct characteristics:
-    - LLaVA lacks "text-only" attention heads
-    - BLIP has no "vision-only" heads
-    - Both models use universal heads for cross-modal integration
+  - Different architectures have distinct characteristics: (1) LLaVA lacks "text-only" attention heads; (2) BLIP has no "vision-only" heads; (3) Both models use universal heads for cross-modal integration
 
-**2. Layer-wise Information Processing**
+2. **Layer-wise Information Processing**
 - **Early vs. Late Layer Functions**: Basu et al. <d-cite key="basu2024understanding"></d-cite> used causal tracing to show that LLaVA primarily retrieves visual information in early layers (1-4), followed by consistent summarization in final visual tokens. Neo et al. <d-cite key="neo2024towards"></d-cite> further investigated this through attention knockout experiments, they found that:
   - Layers 1-10 process broader contextual information
   - Layers 15-24 focus on extracting specific object details
   - Notably, they found that blocking visual token attention to the last row had minimal impact, challenging previous theories about intermediate summarization steps
 - **Layer Importance for Model Performance**: Initial studies by Gandelsman et al. <d-cite key="gandelsman2023interpreting"></d-cite> on CLIP showed that final layers have significant direct effects on model accuracy, while early layer modifications (like removing multihead attention) have minimal impact. Balasubramanian et al. <d-cite key="balasubramanian2024decomposing"></d-cite> later extended these findings across a broader range of Vision Transformers, confirming the critical role of the final four layers in model performance.
 
-**3. Analytical Tools**
+3. **Analytical Tools**
 - Recent analytical tools have significantly enhanced our understanding of VLMs. Ben et al. <d-cite key="Ben_Melech_Stan_2024_CVPR"></d-cite> developed LVLM-Interpret, an interactive tool that combines attention knockout with relevancy mapping and causal graph construction to visualize information flow patterns and identify critical image regions.
 
 <aside class="l-body box-note" markdown="1">
@@ -466,18 +463,19 @@ Key Takeaways:
 
 ### Logit Lens
 
-<object data="{{ 'assets/img/2025-04-28-vlm-understanding/logit_lens.svg' | relative_url }}" type="image/svg+xml" width="80%" class="l-body rounded z-depth-1 center"></object>
+<object data="{{ 'assets/img/2025-04-28-vlm-understanding/logit_lens.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
 Logit lens implementation showing multiple prediction heads tapping into different model layers.
 </div>
-
-The logit lens <d-cite key="alignmentforumorg2024interpreting"></d-cite> serves as a powerful analytical tool for understanding **how neural networks progressively refine their predictions across different layers.** The methodology is elegantly simple yet powerful: it applies the model's final classification layer (unembedding matrix) to intermediate activations, projecting them into vocabulary space. By examining intermediate activations, this technique effectively creating a series of "snapshots" of the model's developing understanding, offering insights into how multimodal models integrate and process information. 
+<br>
+*Logit lens* <d-cite key="alignmentforumorg2024interpreting"></d-cite> serves as a powerful analytical tool for understanding **how neural networks progressively refine their predictions across different layers.** The methodology is elegantly simple yet powerful: it applies the model's final classification layer (unembedding matrix) to intermediate activations, projecting them into vocabulary space. By examining intermediate activations, this technique effectively creating a series of "snapshots" of the model's developing understanding, offering insights into how multimodal models integrate and process information. 
 
 <details markdown="1"> <summary><b>An Example</b></summary> Consider a vision-language model processing an image of "a dog chasing a ball in a park". Using the logit lens, we can observe how the model's prediction confidence evolves: 
 - In early layers, the model might show high uncertainty, with similar probabilities for related concepts like "dog", "animal", and "pet" 
 - Middle layers start to refine these predictions, showing increased confidence in "dog" while maintaining awareness of context ("park", "ball") 
 - Final layers demonstrate sharp predictions focusing on the specific action ("chasing") and precise object relationships This progression reveals how the model gradually builds its understanding from basic visual features to complex scene interpretation.
 </details>
+<br>
 
 #### Findings
 
@@ -498,12 +496,12 @@ Key Takeaways:
 
 ### Sparse Autoencoders
 
-<object data="{{ 'assets/img/2025-04-28-vlm-understanding/sae.svg' | relative_url }}" type="image/svg+xml" width="80%" class="l-body rounded z-depth-1 center"></object>
+<object data="{{ 'assets/img/2025-04-28-vlm-understanding/sae.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
 Integration of Sparse Autoencoder for interpreting and analyzing learned features in transformer models.
 </div>
-
-A significant challenge in understanding neural networks is the *superposition* phenomenon <d-cite key="arora2016linear,olah2020zoom"></d-cite>, where individual neurons or layers simultaneously encode multiple features, making their internal representations difficult to interpret <d-cite key="elhage2022toy"></d-cite><d-footnote>Superposition can occur because features tend to be sparsely activated - with only a small subset of features being active at any given moment. </d-footnote>. In late 2023, Sparse Autoencoders (SAEs) was adopted as an effective solution to this problem <d-cite key="bricken2023monosemanticity,DBLP:conf/iclr/HubenCRES24"></d-cite>, offering a valid approach to extract mono-semantic concepts from neural networks.
+<br>
+A significant challenge in understanding neural networks is the *superposition* phenomenon <d-cite key="arora2016linear,olah2020zoom"></d-cite>, where individual neurons or layers simultaneously encode multiple features, making their internal representations difficult to interpret <d-cite key="elhage2022toy"></d-cite> <d-footnote>Superposition can occur because features tend to be sparsely activated - with only a small subset of features being active at any given moment. </d-footnote>. In late 2023, *Sparse Autoencoders (SAEs)* was adopted as an effective solution to this problem <d-cite key="bricken2023monosemanticity,DBLP:conf/iclr/HubenCRES24"></d-cite>, offering a valid approach to extract mono-semantic concepts from neural networks.
 
 **SAEs seek to embed the polysemantic representation into a much higher-dimensional space to distangle features.** The technical mechanism of SAEs follows a specific encoding and decoding process <d-cite key="ferrando2024primer"></d-cite>. Given internal network activations $$ z \in \mathbf{R}^d $$, the SAE first expands the representation into a higher-dimensional space while enforcing sparsity through its encoder <d-footnote markdown="1"> The subtraction of $b_{dec}$ serves as a centering term that allows $W_{enc}$ to operate on normalized hidden states. </d-footnote>: 
 $$
@@ -524,6 +522,8 @@ $$
 \end{equation}
 $$ 
 balances reconstruction accuracy with sparsity, where the $$ L_1 $$ norm term ensures each dimension captures a distinct, interpretable feature.
+
+#### Findings
 
 This method has demonstrated remarkable success in understanding large language models like Claude 3 Sonnet <d-cite key="templeton2024scaling"></d-cite>, GPT-4 <d-cite key="gao2024scaling"></d-cite>, Gemma 2 <d-cite key="lieberum2024gemma"></d-cite> and LLaMA-3.1 <d-cite key="he2024llama"></d-cite>, leading to innovative variants such as Transcoders <d-cite key="dunefsky2024transcoders"></d-cite> and CrossCoders <d-cite key="lindsey2024sparse"></d-cite>. These applications have revealed previously hidden patterns in how language models process and represent information.
 
@@ -548,19 +548,20 @@ Recent works have made progress in this direction. Rao et al. <d-cite key="DBLP:
 <details markdown="1">
 <summary><b>An Illustrative Graph</b></summary>
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/concept.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
+<br>
 Find concepts to match with the model's internal representations.
 </details>
-
+<br>
 Beyond using cosine similarity, another approach came from Gandelsman et al. <d-cite key="gandelsman2023interpreting"></d-cite>, who introduced TEXTSPAN - an algorithm that creates a text-labeled basis for attention head outputs in CLIP's vision encoder. By caching vision encoder attention head outputs and strategically selecting text embeddings from a predefined text bank <d-footnote>To be more specific, strategically means TEXTSPAN greedily selects text embeddings from the text bank to maximize the explained variance.</d-footnote>, TEXTSPAN revealed specialized attention heads that capture distinct image properties like "color" and "counting". This discovery enabled targeted interventions for reducing spurious correlations and improving property-based image retrieval.
 
 Building upon this foundation, Balasubramanian et al. <d-cite key="balasubramanian2024decomposing"></d-cite> extended TEXTSPAN's applicability beyond CLIP to ViTs. Their proposed automated representation decomposition method to analyze the computational graph generated during the forward pass. Using this method, they break down internal contributions of models into their final representation and mapping these components to CLIP space, where they then use TEXTSPAN for text-based interpretation.
 
 #### Data Distribution-Based Methods
-<object data="{{ 'assets/img/2025-04-28-vlm-understanding/automated.svg' | relative_url }}" type="image/svg+xml" width="80%" class="l-body rounded z-depth-1 center"></object>
+<object data="{{ 'assets/img/2025-04-28-vlm-understanding/automated.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
 Comparison between supervised categorical analysis and unsupervised automated explanation using LLM/VLM.
 </div>
-
+<br>
 Another effective approach to understanding neural networks' internal mechanisms involves analyzing neuron activation patterns across different input types. This method examines **how neurons respond to various categories of data, revealing specialized neurons and their roles in information processing.** This approach can be broadly categorized into supervised and unsupervised methods.
 
 1. **Supervised Approaches**
