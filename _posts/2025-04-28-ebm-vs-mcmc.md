@@ -1,6 +1,6 @@
 ---
 layout: distill
-title: "Models trained with unnormalized density functions: A need for a course correction"
+title: "Bootstrapped Energy Based Models: What are they good for?"
 description: Training a generative model with energy or unnormalized density functions is considered an important problem for physical systems such as molecules. This provides a path to train generative models to sample from the much desired Boltzmann distribution in situations of data scarcity. As of late, several generative frameworks have been proposed to target this problem. However, as we show in the following blog post, these methods have not been benchmarked sufficiently well against traditional Markov Chain Monte Carlo (MCMC) methods that are used to sample from energy functions. We take the example of two recent methods (IDEM and IEFM) and show that MCMC outperforms both methods in terms of number of energy evaluations and wall clock time on established baselines. With this, we suggest a “course correction” on the benchmarking of these models and comment on the utility and potential of generative models on these tasks. 
 date: 2025-04-28
 future: true
