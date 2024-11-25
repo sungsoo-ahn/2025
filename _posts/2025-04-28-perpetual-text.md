@@ -75,10 +75,16 @@ There are a couple of ways that a model can do this:
 ### Setting a max_token parameter
 By setting a maximum number of tokens, you can override the model's default tendencies and encourage it to produce longer outputs. However, simply increasing the token limit doesn't guarantee that the model will generate more extended content, as it may still generate the EOS token prematurely due to its learned patterns.
 
-### Hitting a stopping criterion EOS token
-- If no max_token parameter is set, then the model continues generating tokens until it outputs the EOS token, indicating that it should stop.
+<!-- ### Hitting a stopping criterion EOS token
+- If no `max_token` parameter is set, then the model continues generating tokens until it outputs the **EOS** token, indicating that it should stop.
 - Training with EOS Tokens: During training, models are exposed to sequences that conclude with a special end-of-sequence token, often denoted as $\lt$EOS$\gt$ <d-cite key="touvron2023llama2openfoundation"></d-cite> or <|eot_id|> <d-cite key="dubey2024llama3herdmodels"></d-cite>. This token signifies the completion of a coherent piece of text.
-- Learned Termination Behavior: Through exposure to these tokens, the model learns to predict an EOS token when it determines that a logical conclusion has been reached in the context of the generated text.
+- Learned Termination Behavior: Through exposure to these tokens, the model learns to predict an EOS token when it determines that a logical conclusion has been reached in the context of the generated text. -->
+
+### Hitting a Stopping Criterion: EOS Token
+
+- If no `max_token` parameter is set, the model continues generating tokens until it outputs the **EOS** token, indicating that it should stop.
+- **Training with EOS Tokens**: During training, models are exposed to sequences that conclude with a special end-of-sequence token, often denoted as `<EOS>`<d-cite key="touvron2023llama2openfoundation"></d-cite> or `<|eot_id|>`<d-cite key="dubey2024llama3herdmodels"></d-cite>. This token signifies the completion of a coherent piece of text.
+- **Learned Termination Behavior**: Through exposure to these tokens, the model learns to predict an EOS token when it determines that a logical conclusion has been reached in the context of the generated text.
 
 ### Probability Distribution and Sampling Methods:
 - Next Token Prediction: At each generation step, the model computes a probability distribution over the vocabulary for the next token, conditioned on all previously generated tokens.
@@ -178,13 +184,34 @@ From our “Block-wise Analysis” section, we observe that entropy, varentropy,
 
 In this attempt we kept the backstep parameter and the KV-cache adjustment, but incorporated a *dynamic temperature adjustment* during the token regeneration. 
 
-The generation resumes initially with a doubled sampling temperature to promote diversity in the immediate next token. This temperature is then gradually decreased using a scheduling function, aiming to return back to the original temperature at the point where the original EOS token was predicted. The model continues to generate tokens in this fashion until the output is complete.
+The generation resumes initially with a doubled sampling temperature to promote diversity in the immediate next token. This temperature is then gradually decreased using a scheduling function, aiming to return back to the original temperature at the point where the original EOS token was predicted. The model continues to generate tokens in this fashion until the output is complete. 
 
-{INSERT CODE BLOCK SHOWING TEMPERATURE INCREASE HERE}
+```python
+  if next_token_id.squeeze().item() == eos_token_id:
+
+    sampling_params["temperature"] = 2.0
+
+    generated_ids = generated_ids[:, :-n_remove]
+    next_token_id = generated_ids[:, -1:]
+    cache_position = cache_position[-1:] - n_remove
+    attention_mask = attention_mask[:, :-n_remove]
+
+    new_kv_cache = []
+    for i in range(num_layers):
+        past_key, past_value = kv_cache[i]
+        past_key = past_key[:, :, n_remove:, :]
+        past_value = past_value[:, :, n_remove:, :]
+        new_kv_cache.append((past_key, past_value))
+    kv_cache = tuple(new_kv_cache)
+
+```
 
 The initial high temperature encourages the model to explore a wider range of possible continuations, reducing the likelihood of repeating the same ending. 
 
-{INSERT CODE BLOCK SHOWING gradual temperature decrease hERE}
+```python
+  if sampling_params["temperature"] > default_temp:
+    sampling_params["temperature"] -= 0.1
+```
 
 Gradually decreasing the temperature helps the model focus its prediction while slowly toning down on stochasticity. This helps *enhance the coherence of the generated text while maintaining a bit of randomness*.
 
