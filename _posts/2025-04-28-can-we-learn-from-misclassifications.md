@@ -32,43 +32,21 @@ bibliography: 2025-04-28-can-we-learn-from-misclassifications.bib
 #     for hyperlinks within the post to work correctly. 
 #   - please use this format rather than manually creating a markdown table of contents.
 toc:
-  - name: Expirmantal Results
   - name: Figures
-
+  - name: Expirmantal Results
+    subsection:
+    - name: Clustering using Kmeans
+    - name: Clustering using GMM
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
 # If you use this post as a template, delete this _styles block.
-_styles: >
-  .fake-img {
-    background: #bbb;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 0px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 12px;
-  }
-  .fake-img p {
-    font-family: monospace;
-    color: white;
-    text-align: left;
-    margin: 12px 0;
-    text-align: center;
-    font-size: 16px;
-  }
+
 ---
 
-Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling.
+## Figures
+{% include figure.html path="assets/img/22025-04-28-can-we-learn-from-misclassifications/Fig-repre-clustering.png" class="img-fluid" %}
 
-<div class="row mt-3">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-distill-example/9.jpg" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/2025-04-28-distill-example/7.jpg" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    Plotting the gradient weights in comparison to the latent representations and the final prediction scores using PCA. The second and third rows represent the clustering results compared to the original classes, using KMeans and GMM, respectively
-</div>
 
 ## Expirmantal Results 
 
@@ -114,4 +92,3 @@ Where the columns of the table represent:
 - **NMI**: Normalized Mutual Information 
 - **Silhouette**: Silhouette score
 
-## Figures
