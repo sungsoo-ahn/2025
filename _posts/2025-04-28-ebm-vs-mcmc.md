@@ -355,7 +355,7 @@ These findings suggest that while neural methods like iDEM and iEFM represent in
     Figure 12. Log of Energy W2 vs epoch and time in seconds for the methods on the LJ13 system.
 </div>
 
-On the LJ13 system we observe that the MCMC runs actually get a higher W2 score than the IDEM runs (Figure 11). However, we posit that for higher dimensional systems, W2 between positions of data samples is not a good measure for the distance between two distributions. This is because even the long MCMC chains, having run for a million steps, do not attain a better W2 score than IDEM. In fact, from Figure 6, we can see that the W2 score for the long MC chain stabilizes and converges at a value of 4.31. Furthermore, both the short and the long MCMC chains have a much lower energy W2 value when compared to the reference test (Klein et al.) than iDEM, which indicates that they are better predictors of ensemble properties despite having a higher W2 score.
+On the LJ13 system we observe that the MCMC runs actually get a higher W2 score than the IDEM runs (Figure 11). However, we posit that for higher dimensional systems, W2 between positions of data samples is not a good measure for the distance between two distributions. This is because even the long MCMC chains, having run for a million steps, do not attain a better W2 score than IDEM. In fact, from Figure 6, we can see that the W2 score for the long MC chain stabilizes and converges at a value of 4.31. Furthermore, the W2 score is only an upperbound on the best W2 score for a set of samples, as the current metric does not take rotations of the system and permutations of the particles into account. Moreover, both the short and the long MCMC chains have a much lower energy W2 value when compared to the reference test (Klein et al.) than iDEM, which indicates that they are better predictors of ensemble properties despite having a higher W2 score.
 
 <div class="caption">
     Table 3. Performance of all methods on the LJ13 system
@@ -416,6 +416,9 @@ Finally, in the histogram plots, it's clear that the IDEM energy plot is right s
     Figure 16. Log of Energy W2 vs epoch and time in seconds for the methods on the LJ55 system.
 </div>
 
+
+From the figures, we notice similar but exagerated trends that we observed in the LJ13 systems. The MCMC chains return a higher W2 score until but have a significantly lower energy W2 score. Therefore, we emphasize the importance of visualizing the distribution of observations (such as energy and interatomic distance) as the mismatch can get further inflated with increase in dimensions.
+
 <div class="caption">
     Table 4. Performance of all methods on the LJ55 system
 </div>
@@ -424,9 +427,28 @@ Finally, in the histogram plots, it's clear that the IDEM energy plot is right s
 | :---- | :---- | :---- | :---- | :---- | :---- | :---- |
 | Method | W2 | Energy W2 | Interatomic distance w2 | W2 | Energy W2 | Interatomic distance w2 |
 | Long MCMC | 15.923 ± 0.009 | 0.931 ± 0.243 | 0.001 ± 0.0006 | 15.779 ± 0.007 | 0.680 ± 0.211 | 0.001 ± 0.0005 |
+| iDEM | 16.143 ± 0.122 | 21.704 ± 15.174 | 0.085 ± 0.033 | 16.054 ± 0.125 | 21.531 ± 15.314 | 0.084 ± 0.034 |
 | MCMC | 16.48 ± 0.0497 | 0.872 ± 0.237 | 0.001 ± 0.0005 | 16.42 ± 0.026 | 0.907 ± 0.391 | 0.002 ± 0.0009 |
 
-At the time of submitting this blog for review, we have not yet completed iDEM training runs on the LJ55 system due to the unexpectedly long training time—approximately 2.5 days on an L40 GPU for a single model. However, we provide interim results, including W2 and Energy W2 metric values plotted over 1000 epochs and wall-clock time, as shown in the figures above. These figures reveal trends consistent with previous systems, with MCMC outperforming iDEM across relevant metrics and exhibiting closer alignment with the ground truth distribution. Once the training runs are complete, we will update this blog with the final values and histogram plots to provide a comprehensive comparison.
+From the table above and figures below, it is clearly visible that iDEM does not converge to generating the equilibrium distribution, we see huge deviations from what could be considered the ideal energy W2 and interatomic W2. The energy distribution particularly has much lower overlap to the references as compared to all the other methods. Furthermore, iDEM is not even able to obtain the overall correct shape of the interatomic distances despite having the same number of energy evaluations as MCMC.
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/lj55_interatomic_distance_distribution.png" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure 17. Distribution of interatomic distance obtained from all the methods on the LJ55 system.
+</div>
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/lj55_energy_distribution.png" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure 18. Distribution of energies obtained from all the methods on the LJ55 system. 
+</div>
 
 ## Closing thoughts \- the role that these models have to play
 
