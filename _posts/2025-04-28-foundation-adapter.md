@@ -120,12 +120,12 @@ We study the effects of different LoRA ranks—8, 32, 64, and 128—using the [L
 
 {% include figure.html path="assets/img/2025-04-28-foundation-adapter/RougeL.png" class="img-fluid" %}
 <div class="caption">
-    Figure 2. ROUGE-L results for different numbers of training examples. "Random" and "Foundation" indicate that when fine-tuning, the LoRA weights are either randomly initialized or initialized using the pre-trained foundation LoRA rank 64.
+    Figure 2. ROUGE-L test results for different numbers of training examples. "Random" and "Foundation" indicate that when fine-tuning, the LoRA weights are either randomly initialized or initialized using the pre-trained foundation LoRA rank 64.
 </div>
 
 In the last set of experiments, we examine the effectiveness of pre-trained foundation LoRA adapters for downstream task fine-tuning, specifically supervised fine-tuning. We utilize the base LLM [Llama-3.2-1B-Instruct](https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct) and employ the [QMSum](https://github.com/Yale-LILY/QMSum) dataset <d-cite key="zhong-etal-2021-qmsum"></d-cite>, focusing on query-specific summarization with 1,095 training examples. We compare two strategies for LoRA-based LLM fine-tuning: (1) Random initialization, where the LoRA weights are randomly initialized, and (2) Foundation initialization, where the LoRA weights are initialized using the pre-trained foundation LoRA rank 64 from previous experiments exploring the "effects of different LoRA ranks."
 
-Figure 2 presents the ROUGE-L results when fine-tuning with varying numbers of training examples. When the number of training examples is 0, the score reflects the baseline model's performance with zero-shot prompting. Clearly, fine-tuning significantly improves the summarization score, even with just over 100 training examples. Notably, using pre-trained LoRA weights for initialization consistently outperforms the random initialization across all training sizes, clearly demonstrating the effectiveness of foundation initialization from pre-trained LoRA for this specific use case.
+Figure 2 presents the ROUGE-L results on the test set, when fine-tuning with varying numbers of training examples. When the number of training examples is 0, the score reflects the baseline model's performance with zero-shot prompting. Clearly, fine-tuning significantly improves the summarization score, even with just over 100 training examples. Notably, using pre-trained LoRA weights for initialization consistently outperforms the random initialization across all training sizes, clearly demonstrating the effectiveness of foundation initialization from pre-trained LoRA for this specific use case.
 
 ## Conclusion
 
