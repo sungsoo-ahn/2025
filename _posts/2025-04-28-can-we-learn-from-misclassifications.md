@@ -1,7 +1,6 @@
----
 layout: distill
 title: Can We Learn From Misclassifications
-description: Evaluation of the performace in supervised learning based on common methods, such as the final activation map or the final represantations, is not sparse. We introduce and a novel evaluation based on the gradients of the model. We establish a robust connection
+description: Evaluation of the performace in supervised learning based on common methods, such as the final activation map or the final represantations, is not sparse. We introduce and a novel evaluation based on the gradients of the model. We establish a robust connection bwteen GradCam and Knowladge Distallation
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -9,21 +8,21 @@ hidden: false
 
 # Anonymize when submitting
 # authors:
-#   - name: Anonymous
+   - name: Anonymous
 
-authors:
-  - name: Albert Einstein
-    url: "https://en.wikipedia.org/wiki/Albert_Einstein"
-    affiliations:
-      name: IAS, Princeton
-  - name: Boris Podolsky
-    url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
-    affiliations:
-      name: IAS, Princeton
-  - name: Nathan Rosen
-    url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
-    affiliations:
-      name: IAS, Princeton
+# authors:
+#   - name: Albert Einstein
+#     url: "https://en.wikipedia.org/wiki/Albert_Einstein"
+#     affiliations:
+#       name: IAS, Princeton
+#   - name: Boris Podolsky
+#     url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
+#     affiliations:
+#       name: IAS, Princeton
+#   - name: Nathan Rosen
+#     url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
+#     affiliations:
+#       name: IAS, Princeton
 
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-can-we-learn-from-misclassifications.bib  
@@ -35,7 +34,7 @@ bibliography: 2025-04-28-can-we-learn-from-misclassifications.bib
 toc:
   - name: Expirmantal Results
   - name: Figures
-   
+
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
@@ -59,19 +58,27 @@ _styles: >
 
 Note: please use the table of contents as defined in the front matter rather than the traditional markdown styling.
 
-
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-distill-example/9.jpg" class="img-fluid rounded z-depth-1" %}
+    </div>
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-distill-example/7.jpg" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    Plotting the gradient weights in comparison to the latent representations and the final prediction scores using PCA. The second and third rows represent the clustering results compared to the original classes, using KMeans and GMM, respectively
+</div>
 
 ## Expirmantal Results 
 
-| Model\Matrices | 'Cos_Sim_GW'  | 'Cos_Sim_P'   | 'Cos_Sim_FM'  | 'Grad_Cam_CC' | 'Grad_Cam_KLD'|'Grad_Cam_SSIM'| 'Grad_Cam_AUC'|
+| Model\Matrices | 'Cos_Sim_GW'  | 'Cos_Sim_P'   | 'Cos_Sim_FM'  | 'Grad_Cam_CC' | 'Grad_Cam_KLD'|'Grad_Cam_SIM' | 'Grad_Cam_AUC'|
 | -------------- |:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
 | Resnet18       | 0.832475      | 0.750405      | 0.809194      | 0.514107      | 0.546371      | 0.640893      | 0.473252      |
 | Resnet34       | 0.891979      | 0.760314      | 0.821133      | 0.547336      | 0.303619      | 0.717424      | 0.482986      |
 | Resnet50       | 0.970702      | 0.781508      | 0.842356      | 0.387207      | 0.845985      | 0.534813      | 0.441505      |
 | Resnet101      | 0.898816      | 0.777873      | 0.841248      | 0.451866      | 0.607102      | 0.587721      | 0.471974      |
 | Resnet152      | 0.918961      | 0.784820      | 0.834101      | 0.513276      | 0.560512      | 0.600739      | 0.498934      |
-
-
 
 Where the columns of the table represent: 
 
@@ -80,9 +87,31 @@ Where the columns of the table represent:
 - **Cos_Sim_act**: Cosin similarity based on the activation map.
 - **Grad_Cam_CC**: Grad_Cam accuracy.
 - **Grad_Cam_KLD**: Grad_Cam Kullback–Leibler divergence.
-- **Grad_Cam_SSIM**: Grad_Cam Structural similarity index measure.
+- **Grad_Cam_SIM**: Grad_Cam Saliency similarity metric .
 - **Grad_Cam_AUC**: Grad_Cam area under the curve.
 
+### Clustering using Kmeans
+|                    | 'Resnet18'                    | 'Resnet34'                    | 'Resnet50'                    | 'Resnet101'                   | 'Resnet152'                   |
+| ----------------   |:-----------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|
+| Clustring by\Metric| ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      |
+| Gradient Weights   | 0.95 | 0.98 | 0.79            | 0.63 | 0.85 | 0.62            | 1.00 | 1.00 | 0.89            | 0.95 | 0.98 | 0.83            | 0.77 | 0.91 | 0.81            |
+| Final Predictions  | 0.30 | 0.64 | 0.42            | 0.50 | 0.78 | 0.42            | 0.41 | 0.69 | 0.33            | 0.34 | 0.66 | 0.39            | 0.53 | 0.77 | 0.43            |
+| Feature Maps       | 0.41 | 0.72 | 0.42            | 0.57 | 0.80 | 0.51            | 0.41 | 0.73 | 0.49            | 0.23 | 0.57 | 0.41            | 0.39 | 0.69 | 0.35            |
+
+
+### Clustering using GMM
+
+|                    | 'Resnet18'                    | 'Resnet34'                    | 'Resnet50'                    | 'Resnet101'                   | 'Resnet152'                   |
+| ----------------   |:-----------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|
+| Clustring by\Metric| ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      |
+| Gradient Weights   | 0.95 | 0.98 | 0.79            | 0.61 | 0.85 | 0.62            | 1.00 | 1.00 | 0.89            | 0.95 | 0.98 | 0.83            | 0.77 | 0.91 | 0.81            |
+| Final Predictions  | 0.30 | 0.64 | 0.38            | 0.48 | 0.78 | 0.40            | 0.34 | 0.68 | 0.30            | 0.37 | 0.69 | 0.31            | 0.57 | 0.80 | 0.43            |
+| Feature Maps       | 0.46 | 0.74 | 0.42            | 0.52 | 0.77 | 0.48            | 0.41 | 0.73 | 0.49            | 0.24 | 0.58 | 0.39            | 0.40 | 0.71 | 0.30            |
+
+Where the columns of the table represent: 
+
+- **ARI**: Adjusted Rand Index
+- **NMI**: Normalized Mutual Information 
+- **Silhouette**: Silhouette score
 
 ## Figures
-
