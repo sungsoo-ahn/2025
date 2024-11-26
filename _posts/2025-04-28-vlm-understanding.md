@@ -603,7 +603,7 @@ Automated explanation methods have led to several notable discoveries:
 
 - **Neuron Specialization**:
    - **Language-Specific Neurons**: Tang et al. <d-cite key="tang2024languagespecific"></d-cite> discovered neurons in LLMs that activate exclusively for language-related tasks.
-   - **Domain-Specific Neurons**: MMNeuron <d-cite key="huo2024mmneuron"></d-cite> revealed neurons specialized for particular domains in vision-language models. Interestingly, deactivating these neurons often had minimal effect on task performance, suggesting that VLMs rely on generalized representations.
+   - **Domain-Specific Neurons**: MMNeuron <d-cite key="huo2024mmneuron"></d-cite> revealed neurons specialized for particular domains in vision language models. Interestingly, deactivating these neurons often had minimal effect on task performance, suggesting that VLMs rely on generalized representations.
 
 - **Sparse Autoencoders (SAEs)**: Rao et al. <d-cite key="DBLP:conf/eccv/RaoMBS24"></d-cite> used cosine similarities between decoder weights and word embeddings to map neural features to human-understandable concepts, providing interpretable sparse representations.
 
@@ -611,6 +611,12 @@ Automated explanation methods have led to several notable discoveries:
 
 - **MAIA**: Shaham et al. <d-cite key="DBLP:conf/icml/ShahamSWRHA024"></d-cite> developed an automated framework for hypothesis-driven interpretability. MAIA iteratively tested hypotheses, answering queries such as identifying neurons selective for specific features like "forested backgrounds."
 
+
+### Method Variants and Limitations
+
+- **Limitations**: 
+	- Ensuring that discovered concepts are both meaningful and reliable for practical applications remains challenging, particularly for unsupervised approaches that lack predefined ground truths.
+	- Many methods are developed and tested on specific architectures (e.g., CLIP, ViTs). Their applicability to other architectures remains underexplored.
 
 <aside class="l-body box-note" markdown="1">
 Key Takeaways:
