@@ -330,7 +330,7 @@ Through our investigation, we find that interpretability in VLMs is still in its
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/probing.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
-Illustration of the probing process in neural networks. Probing involves training a simple classifier, such as a linear probe, to extract specific information from a model's internal representations. The figure illustrates how intermediate representations are extracted from a vision-language model, where a probe is trained to predict target properties, such as spatial relationships or visual attributes, from these representations. By analyzing the probe's performance, researchers can determine whether the encoded representations effectively capture the desired properties. This process helps identify strengths and limitations in how the model encodes and utilizes information across layers.
+Illustration of probing in neural networks: a simple classifier is trained on intermediate representations of a vision-language model to predict target properties, revealing the model’s encoding strengths and limitations.
 </div>
 <br>
 
@@ -362,7 +362,13 @@ If the probe achieves high accuracy, it suggests that these properties (spatial 
 
 Most research on probing tasks in VLMs focuses on two primary objectives: **identifying the concepts these models struggle to capture** and **assessing the relative importance of visual and linguistic modalities** <d-cite key="golovanevsky2024vlms"></d-cite>. 
 
-Cao et al. <d-cite key="cao2020behind"></d-cite> introduced the VALUE (Vision-And-Language Understanding Evaluation) framework, which developed a set of probing tasks to explain individual layers, heads, and fusion techniques. This study reveals several important insights:
+Cao et al. <d-cite key="cao2020behind"></d-cite> introduced the VALUE (Vision-And-Language Understanding Evaluation) framework, which developed a set of probing tasks to explain individual layers, heads, and fusion techniques. This study reveals several important insights: pre-trained models often prioritize language over vision in multimodal tasks (**modality prioritization**); specific attention heads are effective at capturing interactions between visual and linguistic modalities (**cross-modal interactions**); and visualization of attention mechanisms has revealed interpretable relationships, such as object-object interactions in images (**attention visualization**). 
+
+Studies have also explored diverse model capabilities, such as visual semantics <d-cite key="dahlgren-lindstrom-etal-2020-probing"></d-cite>, verb processing <d-cite key="hendricks2021probing,beňová2024beyond"></d-cite>, numerical reasoning <d-cite key="kajic2022probing"></d-cite>, and spatial reasoning <d-cite key="pantazopoulos2024lost"></d-cite>. A notable line of research compared representations at different training stages, such as pre-training versus fine-tuning, using carefully designed datasets to minimize biases <d-cite key="Salin_Farah_Ayache_Favre_2022"></d-cite>.
+
+
+
+<!-- Cao et al. <d-cite key="cao2020behind"></d-cite> introduced the VALUE (Vision-And-Language Understanding Evaluation) framework, which developed a set of probing tasks to explain individual layers, heads, and fusion techniques. This study reveals several important insights:
 1. **Modality Prioritization**: Pre-trained models often prioritize language over vision in multimodal tasks.
 2. **Cross-Modal Interactions**: Specific attention heads are effective at capturing interactions between visual and linguistic modalities.
 3. **Attention Visualization**: Visualization of attention mechanisms has revealed interpretable relationships, such as object-object interactions in images.
@@ -373,7 +379,7 @@ Studies have also explored diverse model capabilities, such as:
 - **Numerical reasoning** <d-cite key="kajic2022probing"></d-cite>.
 - **Spatial reasoning** <d-cite key="pantazopoulos2024lost"></d-cite>.
 
-A notable line of research compared representations at different training stages, such as pre-training versus fine-tuning, using carefully designed datasets to minimize biases <d-cite key="Salin_Farah_Ayache_Favre_2022"></d-cite>.
+A notable line of research compared representations at different training stages, such as pre-training versus fine-tuning, using carefully designed datasets to minimize biases <d-cite key="Salin_Farah_Ayache_Favre_2022"></d-cite>. -->
 
 #### Method Variants and Limitations
 
