@@ -8,7 +8,7 @@ htmlwidgets: true
 hidden: false
 
 # Anonymize when submitting
-# authors:
+authors:
    - name: Anonymous
 
 # authors:
@@ -60,7 +60,7 @@ _styles: >
 ---
 
 ## Figures
-{% include figure.html path="assets/img/22025-04-28-can-we-learn-from-misclassifications/Fig-repre-clustering.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2025-04-28-can-we-learn-from-misclassifications/Fig-repre-clustering.png" class="img-fluid" %}
 
 
 ## Expirmantal Results 
