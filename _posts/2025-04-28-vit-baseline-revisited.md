@@ -717,6 +717,7 @@ compared to the [JAX implementation](https://github.com/mlcommons/algorithmic-ef
 -0.08204417 0.08203908
 -0.11602508 0.116011634
 ```
+Since they use the same initialization utility, the PyTorch implementation of the [`fastmri`](https://github.com/mlcommons/algorithmic-efficiency/blob/86d2a0d23c9a3192f878406edc72547fcf0568ec/algorithmic_efficiency/workloads/fastmri/fastmri_pytorch/models.py#L75), [`ogbg`](https://github.com/mlcommons/algorithmic-efficiency/blob/86d2a0d23c9a3192f878406edc72547fcf0568ec/algorithmic_efficiency/workloads/ogbg/ogbg_pytorch/models.py#L97), and [`imagenet_resnet`](https://github.com/mlcommons/algorithmic-efficiency/blob/86d2a0d23c9a3192f878406edc72547fcf0568ec/algorithmic_efficiency/workloads/imagenet_resnet/imagenet_pytorch/models.py#L210) workloads are also affected.
 
 In the narrow sense, we have
 shown that the discrepancies in RandAugment and Inception crop implementations impact model performance.
