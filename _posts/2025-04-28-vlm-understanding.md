@@ -258,7 +258,7 @@ In this work, we examine how mechanistic interpretability methods can illuminate
 Additionally, we discuss the limitations of current interpretability methods and highlight five key directions for future research: developing approaches that are more generalizable, scalable, vision-centric, dynamic, and capable of macro-level analysis. For instance, the heterogeneity of VLMs calls for interpretability methods that can adapt across diverse models; the micro level of mechanistic interpretability needs to be complemented by a macro-level perspective for a broader understanding. By addressing these challenges, we aim to pave the way for more transparent, reliable, and capable vision language models.
 
 
-<br>
+<br><br><br>
 # Current Methods
 
 In this section, we review mechanistic interpretability methods applied to vision language models (VLMs), which aim to uncover the internal processes of these VLMs process visual and language information and explain how they produce specific outputs. Key techniques discussed include probing, activation patching, logit lens analysis, sparse autoencoders, and automated explanations.
@@ -536,7 +536,7 @@ Key Takeaways:
 
 
 <br>
-## Automated explanation
+## Automated Explanation
 
 While traditional explanation methods focus on highlighting important features in the model's input space, users often care more about understanding the underlying meaning of these features. Automated explanation methods aim to bridge this gap by **translating abstract mathematical representations within neural networks into human-understandable concepts**, without heavily relying on manual analysis. Currently, there are two main approaches to endow such concepts: text-image space alignment and data distribution-based methods.
 
@@ -580,7 +580,7 @@ Key Takeaways:
 
 
 
-<br>
+<br><br><br>
 # Future Directions
 
   
@@ -697,7 +697,7 @@ Summary:
 
 </aside>
 
-<br>
+<br><br><br>
 # Conclusion
 
 This work provides a comprehensive review of studies leveraging mechanistic interpretability tools to analyze vision language models (VLMs), including probing techniques, activation patching, logit lenses, sparse autoencoders, and automated explanation methods. These tools have greatly enhanced our understanding of how VLMs represent, integrate, and process multimodal information. Despite these advancements, several key challenges remain. These include the need for validation across a wider range of VLM architectures and training paradigms, a deeper exploration of information flow dynamics throughout training stages, and a stronger alignment between micro-level insights and macro-level behaviors. Addressing these challenges will pave the way for developing more robust and effective VLMs, advancing both their design and practical applications.
