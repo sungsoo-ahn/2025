@@ -538,45 +538,88 @@ Key Takeaways:
 <br>
 ## Automated Explanation
 
-While traditional explanation methods focus on highlighting important features in the model's input space, users often care more about understanding the underlying meaning of these features. Automated explanation methods aim to bridge this gap by **translating abstract mathematical representations within neural networks into human-understandable concepts**, without heavily relying on manual analysis. Currently, there are two main approaches to endow such concepts: text-image space alignment and data distribution-based methods.
+### What is Automated Explanation
 
-### Text-Image Space Alignment
+*Automated explanation* methods aim to make neural networks more interpretable by **translating their abstract representations into human-understandable concepts**. Unlike traditional methods that emphasize identifying important features in the input space, automated explanations focus on uncovering the meaning behind these features. These methods minimize reliance on manual analysis, bridging the gap between mathematical representations and human intuition.
 
-Language serves as a naturally interpretable interface for humans and forms our concept vocabulary, while image representations are inherently less interpretable. The core principle behind Text-Image Space Alignment methods is to establish meaningful connections between neural network's visual features and natural language descriptions. By **mapping neural activations into a shared semantic space** where both textual and visual information coexist, these methods can automatically discover and explain the concepts that drive model behavior.
+### How Automated Explanation Works
 
-Recent works have made progress in this direction. Rao et al. <d-cite key="DBLP:conf/eccv/RaoMBS24"></d-cite> developed a method using Sparse Autoencoders (SAEs) that learns interpretable representations from neural network activations. Their approach analyzes the decoder's weight matrix by computing cosine similarities between its columns and word embeddings, effectively translating network representations into human-understandable concepts. SpLiCE <d-cite key="bhalla2024interpreting"></d-cite> proposed a complementary strategy by first establishing a comprehensive semantic concept vocabulary. This method seeks the sparsest possible mapping between these concepts and the CLIP embedding space while maintaining high cosine similarity, ensuring that the identified concepts are both minimal and maximally informative.
+There are two primary approaches to automated explanation:
 
-<details markdown="1">
-<summary><b>An Illustrative Graph</b></summary>
+1. **Text-image space alignment**: This type of method establishes connections between visual features and natural language descriptions by **mapping activations into a shared semantic space**. This enables the discovery of interpretable concepts that explain model behavior.
+
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/concept.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
-<br>
-Text-image space alignment aims to find concepts to match with the model's internal representations.
-</details>
-<br>
-Beyond using cosine similarity, another approach came from Gandelsman et al. <d-cite key="gandelsman2023interpreting"></d-cite>, who introduced TEXTSPAN - an algorithm that creates a text-labeled basis for attention head outputs in CLIP's vision encoder. By caching vision encoder attention head outputs and strategically selecting text embeddings from a predefined text bank <d-footnote>To be more specific, strategically means TEXTSPAN greedily selects text embeddings from the text bank to maximize the explained variance.</d-footnote>, TEXTSPAN revealed specialized attention heads that capture distinct image properties like "color" and "counting". This discovery enabled targeted interventions for reducing spurious correlations and improving property-based image retrieval.
-
-Building upon this foundation, Balasubramanian et al. <d-cite key="balasubramanian2024decomposing"></d-cite> extended TEXTSPAN's applicability beyond CLIP to ViTs. Their proposed automated representation decomposition method to analyze the computational graph generated during the forward pass. Using this method, they break down internal contributions of models into their final representation and mapping these components to CLIP space, where they then use TEXTSPAN for text-based interpretation.
-
-### Data Distribution-Based Methods
-<object data="{{ 'assets/img/2025-04-28-vlm-understanding/automated.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
-Comparison between supervised categorical analysis and unsupervised automated explanation using LLM/VLM.
+Text-image space alignment aims to find concepts to match with the model's internal representations.
 </div>
 <br>
-Another effective approach to understanding neural networks' internal mechanisms involves analyzing neuron activation patterns across different input types. This method examines **how neurons respond to various categories of data, revealing specialized neurons and their roles in information processing.** This approach can be broadly categorized into supervised and unsupervised methods.
 
-1. **Supervised Approaches**
-- Supervised approaches utilize concept-labeled data to guide the interpretation of neural network components. We're essentially looking for some components that consistently "light up" (activate strongly) when presented with specific types of input. For example, if a specific neuron consistently shows high activation when the network processes a particular category of input (such as images of cats) but remains relatively inactive for other categories, we can classify this neuron as specialized for detecting that category.
-- **Neuron Specialization**: Recent research has applied this approach to both language and vision language models. Tang et al. <d-cite key="tang2024languagespecific"></d-cite> identified *language-specific neurons* in LLMs, while MMNeuron <d-cite key="huo2024mmneuron"></d-cite> made interesting discoveries about *domain-specific neurons* in vision language models like LLaVA and InstructBLIP. They found that deactivating domain-specific neurons, while significantly perturbing hidden states, doesn't always impact task performance. This suggests that VLMs fail to take full advantage of the domain-specific information in specific domains, which means **VLMs may rely on highly generalized internal representations.** Miner <d-cite key="huang2024miner"></d-cite> further refined this methodology to find *modality-specific neurons*. They also reveal that **modality-specific neurons are primarily concentrated in shallow layers, with most modality information remaining within its original token set.**
+<details markdown="1">
+<summary><b>Example: TextSpan <d-cite key="gandelsman2023interpreting"></d-cite></b></summary>
 
-2. **Unsupervised Discovery**
-- While supervised approaches provide clear and verifiable concept mappings, their reliance on labeled data can limit scalability and may miss concepts not included in the predefined set. Unsupervised discovery methods take a more data-driven approach, identifying meaningful patterns in network activations without requiring concept labels. These approaches typically analyze how different network components respond to various inputs, using techniques like clustering or dimensionality reduction to group similar activation patterns. Recent advances have **integrated language models or vision language models to automatically generate natural language descriptions of discovered patterns.** This approach offers greater flexibility in concept discovery and can uncover unexpected patterns that might be missed by supervised methods. However, the challenge lies in ensuring the discovered concepts are meaningful and reliable for practical applications <d-cite key="DBLP:conf/blackboxnlp/HuangGDWP23"></d-cite>.
-- Recent advances have leveraged large language models like GPT-4 to automatically generate natural language descriptions of discovered patterns <d-cite key="hernandez2022natural,singh2023explaining,bills2023language"></d-cite>. In VLMs, a notable example is MAIA <d-cite key="DBLP:conf/icml/ShahamSWRHA024"></d-cite>, which automates interpretability tasks by composing pretrained modules to conduct experiments on other systems. Given an interpretability query (e.g., "Which neurons in Layer 4 are selective for forested backgrounds?"), MAIA runs experiments to test specific hypotheses, observes outcomes, and iteratively updates its understanding until it can answer the user query.
+- **Goal**: To reveal interpretable text-labeled bases for outputs of vision encoder.
+- **Process**:
+  1. Cache vision encoder attention head outputs.
+  2. Use a predefined text bank to strategically select text embeddings that maximize explained variance.
+  3. Analyze discovered attention heads to identify interpretable properties like "color" or "counting."
+</details>
+<br>
+
+2. **Data distribution-based analysis**: This type of method explores patterns in neuron activations across diverse input types to reveal specialized neurons or components. This approach uses either supervised or unsupervised to explain the underlying distribution of neural activations.
+
+<object data="{{ 'assets/img/2025-04-28-vlm-understanding/automated.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
+<div class="l-gutter caption" markdown="1">
+Data distribution-based analysis uses supervised or unsupervised methods to explain a distribution of most activating examples into natural language concepts.
+</div>
+<br>
+
+<details markdown="1">
+<summary><b>Example</b></summary>
+
+**Supervised Approaches**  
+
+Supervised methods use concept-labeled data to guide the interpretation of neural network components. These methods identify components that consistently activate strongly when presented with specific input types. For example:
+
+- A neuron that activates strongly for images of cats but remains inactive for other inputs can be classified as specialized for detecting "cat" features.
+
+While supervised approaches provide clear and verifiable concept mappings, their reliance on labeled data limits scalability and may miss concepts not included in the predefined set.
+
+**Unsupervised Approaches**  
+
+Unsupervised methods take a data-driven approach, discovering meaningful patterns in neural activations without requiring labeled data. These techniques use clustering or dimensionality reduction to group similar activation patterns and identify components’ functions. 
+
+Recent advances integrate language models or vision language models to automatically generate natural language descriptions of discovered patterns, offering greater flexibility in concept discovery <d-cite key="DBLP:conf/blackboxnlp/HuangGDWP23"></d-cite>. 
+
+However, ensuring the meaningfulness and reliability of these concepts remains challenging for practical applications.
+
+</details>
+<br>
+
+### Key Findings from Existing Works
+
+Automated explanation methods have led to several notable discoveries:
+
+- **TextSpan**: Identified specialized attention heads in vision encoders responsible for features like "color" and "counting." This enabled targeted interventions, such as reducing spurious correlations and improving property-based image retrieval <d-cite key="gandelsman2023interpreting"></d-cite>.
+
+- **Neuron Specialization**:
+   - **Language-Specific Neurons**: Tang et al. <d-cite key="tang2024languagespecific"></d-cite> discovered neurons in LLMs that activate exclusively for language-related tasks.
+   - **Domain-Specific Neurons**: MMNeuron <d-cite key="huo2024mmneuron"></d-cite> revealed neurons specialized for particular domains in vision-language models. Interestingly, deactivating these neurons often had minimal effect on task performance, suggesting that VLMs rely on generalized representations.
+
+- **Sparse Autoencoders (SAEs)**: Rao et al. <d-cite key="DBLP:conf/eccv/RaoMBS24"></d-cite> used cosine similarities between decoder weights and word embeddings to map neural features to human-understandable concepts, providing interpretable sparse representations.
+
+- **SpLiCE**: Bhalla et al. <d-cite key="bhalla2024interpreting"></d-cite> introduced sparse mappings that align neural features with a comprehensive semantic vocabulary in the CLIP embedding space, ensuring concise yet informative concept representations.
+
+- **MAIA**: Shaham et al. <d-cite key="DBLP:conf/icml/ShahamSWRHA024"></d-cite> developed an automated framework for hypothesis-driven interpretability. MAIA iteratively tested hypotheses, answering queries such as identifying neurons selective for specific features like "forested backgrounds."
+
 
 <aside class="l-body box-note" markdown="1">
-Key Takeaways: 
-- Automated explanation methods aim to bridge the gap between abstract neural network representations and human-understandable concepts, primarily through two approaches: text-image space alignment and data distribution-based methods.
+Key Takeaways:
+- Automated explanation methods connect neural network representations with human concepts, reducing reliance on manual analysis.
+- Two main approaches—text-image space alignment and data distribution-based analysis—form the foundation of this field.
+- Recent advances, such as TextSpan and MAIA, demonstrate the potential of these methods to uncover nuanced model behaviors and improve interpretability.
 </aside>
+
+
 
 
 
