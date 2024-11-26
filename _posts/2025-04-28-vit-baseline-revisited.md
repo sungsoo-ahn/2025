@@ -33,6 +33,7 @@ toc:
     - name: Inception crop
     - name: Big Vision miscellaneous
   - name: Corrected reproduction
+  - name: Schedule-free baseline
   - name: Implication
   - name: Conclusion
     subsections:
@@ -485,6 +486,189 @@ compensate the Inception crop implementation discrepancy by adjusting augmentati
 either through parameters of Inception crop (scale and ratio) or other parts of the augmentation pipeline
 (RandAugment and Mixup).
 
+## Schedule-Free baseline
+
+Since the baselines above use cosine learning rate decay with fixed training budget, the learning rate
+decays to zero at the end and we can't continue training the model beyond the budget, a limitation
+that is subject to much investigation <d-cite key="hagele2024scaling"></d-cite>. More recently, Defazio
+et al.<d-cite key="defazio2024road"></d-cite> proposed Schedule-Free optimizers which promise to completely
+sidestep the limitation of fixed training budget by making the training process invariant to it. More
+specifically, the Schedule-Free AdamW optimizer 1.3 updates the model parameters according to the algorithm:
+
+<div class="caption">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/schedule_free_adamw.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
+</div>
+<div class="caption">
+  Pseudocode of the Schedule-Free AdamW optimizer 1.3, modified from <b>Algorithm 1</b> in <d-cite key="defazio2024road"></d-cite>.
+</div>
+
+While the gradient is calculated on the $$y$$ sequence, the model should be evaluted on the $$x$$ sequence,
+reminiscent of the Polyak-Ruppert average <d-cite key="polyak1992acceleration"></d-cite>. Version 1.3 applies
+Adam bias-correction to the 2nd moment gradient estimate instead of the LR [for stability improvement](https://github.com/facebookresearch/schedule_free/pull/49),
+with the change highlighted in red above. Our baselines consist of 3 different training budgets, which
+serve as a great test ground for Schedule-Free optimizers. Furthermore, Schedule-Free AdamW [has just won
+the self-tuning category of the AlgoPerf competition](https://mlcommons.org/2024/08/mlc-algoperf-benchmark-competition/)
+which includes the exact same `imagenet_vit` workload that trains ViT-S/16 on ImageNet-1k. It is therefore
+of great interest to see whether Schedule-Free AdamW can match the metrics of the 3 baselines by just training
+one model. In our first attempt, we again focus on the “better baseline” main approach and keep all the applicable
+hyperparameters<d-footnote>torchvision Inception crop, 10000 warm-up steps, 1e-3 maximum learning rate, 1e-4 decoupled weight decay, and gradient clip with <a href="https://pytorch.org/docs/stable/generated/torch.nn.utils.clip_grad_norm_.html">max_norm = 1.0</a></d-footnote> and the Schedule-Free AdamW default. For fair comparison,
+we make sure that the model is evaluated at the exact same number of steps as the previous 90ep, 150ep,
+and 300ep experiments. Lastly, for consistency of presentation, we still compare to the metrics reported in <d-cite key="beyer2022better"></d-cite>.
+Here is the result:
+
+| Model | 90ep |  150ep | 300ep |
+|:-------------:|:-------------:|:-------------:|:-------------:|
+| Schedule-Free | 76.4 <r>-0.1</r> | 78.4 <r>-0.1</r> | 79.6 <r>-0.4</r> |
+
+Extensive subsequent hyperparameter sweeps fail to meaningfully improve upon it. Here is the rest of
+the first LR sweep:
+
+<table align="center">
+    <tr>
+        <th>LR</th>
+        <th>90ep</th>
+        <th>150ep</th>
+        <th>300ep</th>
+    </tr>
+    <tr>
+        <th>1e-3</th>
+        <th>76.4 <r>-0.1</r></th>
+        <th>78.4 <r>-0.1</r></th>
+        <th>79.6 <r>-0.4</r></th>
+    </tr>
+    <tr>
+        <th>3e-3</th>
+        <th>76.4 <r>-0.1</r></th>
+        <th>78.2 <r>-0.3</r></th>
+        <th>79.3 <r>-0.7</r></th>
+    </tr>
+    <tr>
+        <th>9e-3</th>
+        <td colspan="3" style="text-align:center;"><r>Diverged</r></td>
+    </tr>
+</table>
+
+We then set [`max_norm = 100.0`](https://pytorch.org/docs/stable/generated/torch.nn.utils.clip_grad_norm_.html)<d-footnote>This effectively removes gradient clipping since it's orders of magnitude larger than the highest logged gradient norm.</d-footnote> and sweep both LR and weight decay (WD):
+
+<table align="center">
+    <tr>
+        <th>LR</th>
+        <th>WD</th>
+        <th>90ep</th>
+        <th>150ep</th>
+        <th>300ep</th>
+    </tr>
+    <tr>
+        <td rowspan="3">1e-3</td>
+        <th>1e-4</th>
+        <th>76.2 <r>-0.3</r></th>
+        <th>78.2 <r>-0.3</r></th>
+        <th>79.4 <r>-0.6</r></th>
+    </tr>
+    <tr>
+        <th>3e-4</th>
+        <th>76.0 <r>-0.5</r></th>
+        <th>77.7 <r>-0.8</r></th>
+        <th>79.0 <r>-1.0</r></th>
+    </tr>
+    <tr>
+        <th>5e-4</th>
+        <th>74.5 <r>-2.0</r></th>
+        <th>76.0 <r>-2.5</r></th>
+        <th>77.0 <r>-3.0</r></th>
+    </tr>
+    <tr>
+        <td rowspan="3">3e-3</td>
+        <th>1e-4</th>
+        <th>76.5 <g>+0.0</g></th>
+        <th>78.2 <r>-0.3</r></th>
+        <th>79.4 <r>-0.6</r></th>
+    </tr>
+    <tr>
+        <th>3e-4</th>
+        <th>76.6 <g>+0.1</g></th>
+        <th>78.2 <r>-0.3</r></th>
+        <th>79.1 <r>-0.9</r></th>
+    </tr>
+    <tr>
+        <th>5e-4</th>
+        <th>75.7 <r>-0.8</r></th>
+        <th>76.8 <r>-1.7</r></th>
+        <th>77.5 <r>-2.5</r></th>
+    </tr>
+    <tr>
+        <td rowspan="3">5e-3</td>
+        <th>1e-4</th>
+        <th>75.4 <r>-1.1</r></th>
+        <th>77.6 <r>-0.9</r></th>
+        <th>78.9 <r>-1.1</r></th>
+    </tr>
+    <tr>
+        <th>3e-4</th>
+        <th>76.6 <g>+0.1</g></th>
+        <th>78.2 <r>-0.3</r></th>
+        <th>78.9 <r>-1.1</r></th>
+    </tr>
+    <tr>
+        <th>5e-4</th>
+        <th>75.9 <r>-0.6</r></th>
+        <th>76.9 <r>-1.6</r></th>
+        <th>77.5 <r>-2.5</r></th>
+    </tr>
+    <tr>
+        <th>9e-3</th>
+        <td colspan="4" style="text-align:center;"><r>Diverged</r></td>
+    </tr>
+</table>
+
+Interestingly, the optimal decoupled weight decay depends on the learning rate, contrary to <d-cite key="adamw-decoupling-blog"></d-cite>.
+Based on this finding, we just use the hyperparameters of Defazio et al.'s AlgoPerf submission <d-cite key="defazio2024road"></d-cite> and
+switch back to their coupled weight decay WD=0.08121616522670176, [`max_norm = 100.0`](https://pytorch.org/docs/stable/generated/torch.nn.utils.clip_grad_norm_.html),
+2799 warm-up steps, $\beta_2$=0.9955159689799007, and Polynomial in $c_t$ average = 0.75. We then also
+halve and double the learning rate:
+
+<table align="center">
+    <tr>
+        <th>LR</th>
+        <th>90ep</th>
+        <th>150ep</th>
+        <th>300ep</th>
+    </tr>
+    <tr>
+        <th>1.25e-3</th>
+        <th>76.5 <g>+0.0</g></th>
+        <th>78.3 <r>-0.2</r></th>
+        <th>79.4 <r>-0.6</r></th>
+    </tr>
+    <tr>
+        <th>2.5e-3</th>
+        <th>76.5 <g>+0.0</g></th>
+        <th>78.1 <r>-0.4</r></th>
+        <th>79.3 <r>-0.7</r></th>
+    </tr>
+    <tr>
+        <th>5e-3</th>
+        <td colspan="3" style="text-align:center;"><r>Diverged</r></td>
+    </tr>
+</table>
+
+These 3 sweeps strongly suggest that we are at the limit of the the Schedule-Free AdamW optimizer.
+It turns out that the `imagenet_vit` workload of AlgoPerf <d-cite key="Dahl2023AlgoPerf"></d-cite>
+sets the validation target [at only 77.3% top-1 accuracy and `step_hint` at 186_666](https://github.com/mlcommons/algorithmic-efficiency/blob/3c61cc458015ad004f58d4f70e3100124bcf7df2/algorithmic_efficiency/workloads/imagenet_vit/workload.py), meaning that their baseline optimizer sets the learning rate schedule for a fixed budget of 186_666 * 1024 / 1281167 = 149.2, almost 150 epochs.
+We find that Schedule-Free AdamW indeed reaches 77.3% top-1 validation set accuracy earlier than our 150ep baseline experiment,
+and the top-1 accuracy curve qualitatively matches Figure 7 in Defazio et al. <d-cite key="defazio2024road"></d-cite>.
+Given the consistency, we have to conclude that Schedule-Free AdamW can get close but not quite match that of our fixed-budget baselines.
+Engineering, however, is about tradeoffs. If the last fractions of percentage points of accuracy are
+vital, it's still viable to just train a few $10^3\text{--}10^4$ steps longer in exchange of the potential
+of continuing training indefinitely.
+
+<div class="caption">
+  <a href="https://api.wandb.ai/links/eify/7jdp1wzy"><img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/schedule_free_vs_baselines.png' | relative_url }}" class="img-fluid" width="auto" height="auto"></a>
+</div>
+<div class="caption">
+  Top-1 validation set accuracy, Schedule-Free AdamW vs. fixed-budget baselines.
+</div>
+
 ## Implication
 
 In the broad sense, the discrepancies in parameter initialization we highlight are likely relevant to
@@ -619,7 +803,7 @@ And our own repo should be no exception.
    * Multi-node, multi-GPU:
     The code is intended to support but currently not tested on a multi-node, multi-GPU setup.
    * Single-node, multi-GPU:
-    Say the ImagNet-1k dataset is at `/data/ImageNet/`. Just point `MUPVIT_MAIN` to `main.py` in the repo and run the bash script `baseline_revisited.sh`:
+    Say the ImagNet-1k dataset is at `/data/ImageNet/`. Just point `MUPVIT_MAIN` to `main.py` in the repo and run the bash script [`scripts/baseline_revisited.sh`](https://github.com/EIFY/mup-vit/blob/213a229852d65dbaf494ecb982540c804b607c46/scripts/baseline_revisited.sh):
 
     ```bash
     #!/bin/bash
@@ -659,3 +843,4 @@ And our own repo should be no exception.
     ```
 
     Warning: On a single GPU these experiments will likely take a long time.
+6. For the Schedule-Free AdamW sweeps, see [`scripts/schedule_free.sh`](https://github.com/EIFY/mup-vit/blob/213a229852d65dbaf494ecb982540c804b607c46/scripts/schedule_free.sh), [`scripts/schedule_free_sweep.sh`](https://github.com/EIFY/mup-vit/blob/213a229852d65dbaf494ecb982540c804b607c46/scripts/schedule_free_sweep.sh), and [`scripts/schedule_free_algoperf.sh`](https://github.com/EIFY/mup-vit/blob/213a229852d65dbaf494ecb982540c804b607c46/scripts/schedule_free_algoperf.sh).
