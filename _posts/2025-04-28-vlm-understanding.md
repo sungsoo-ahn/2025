@@ -258,14 +258,14 @@ In this work, we examine how mechanistic interpretability methods can illuminate
 Additionally, we discuss the limitations of current interpretability methods and highlight five key directions for future research: developing approaches that are more generalizable, scalable, vision-centric, dynamic, and capable of macro-level analysis. For instance, the heterogeneity of VLMs calls for interpretability methods that can adapt across diverse models; the micro level of mechanistic interpretability needs to be complemented by a macro-level perspective for a broader understanding. By addressing these challenges, we aim to pave the way for more transparent, reliable, and capable vision language models.
 
 
-
+<br>
 # Current Methods
 
 In this section, we review mechanistic interpretability methods applied to vision language models (VLMs), which aim to uncover the internal processes of these VLMs process visual and language information and explain how they produce specific outputs. Key techniques discussed include probing, activation patching, logit lens analysis, sparse autoencoders, and automated explanations.
 
 
 
-
+<br>
 ## Probing
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/probing.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
@@ -298,7 +298,7 @@ If the probe achieves high accuracy, it suggests that these properties (spatial 
 </details>
 <br>
 
-### Key Findings from Existing Work
+### Key Findings from Existing Works
 
 Most research on probing tasks in VLMs focuses on two primary objectives: **identifying the concepts these models struggle to capture** and **assessing the relative importance of visual and linguistic modalities** <d-cite key="golovanevsky2024vlms"></d-cite>. 
 
@@ -322,7 +322,7 @@ Key Takeaways:
 </aside>
 
 
-
+<br>
 ## Activation Patching
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/activation.svg' | relative_url }}" type="image/svg+xml" width="100%" class="l-body rounded z-depth-1 center"></object>
@@ -413,7 +413,7 @@ Key Takeaways:
 
 
 
-
+<br>
 ## Logit Lens
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/logit_lens.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
@@ -445,7 +445,7 @@ This example illustrates how the logit lens tracks the progression from basic fe
 </details>
 <br>
 
-### Key Findings from Existing Work
+### Key Findings from Existing Works
 
 1. **Concept Distribution Patterns**
 - MMNeuron <d-cite key="huo2024mmneuron"></d-cite> applies logit lens to analyze hidden states of multimodal models like LLaVA-NeXT and InstructBLIP. Through their analysis of decoded vocabulary distributions, they reveal that image tokens generate notably sparser distributions than text tokens. This observation suggests that **image representations are encoded as mixtures of concepts rather than direct word mappings.**
@@ -470,7 +470,7 @@ Key Takeaways:
 </aside>
 
 
-
+<br>
 ## Sparse Autoencoders
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/sae.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
@@ -535,7 +535,7 @@ Key Takeaways:
 
 
 
-
+<br>
 ## Automated explanation
 
 While traditional explanation methods focus on highlighting important features in the model's input space, users often care more about understanding the underlying meaning of these features. Automated explanation methods aim to bridge this gap by **translating abstract mathematical representations within neural networks into human-understandable concepts**, without heavily relying on manual analysis. Currently, there are two main approaches to endow such concepts: text-image space alignment and data distribution-based methods.
@@ -550,7 +550,7 @@ Recent works have made progress in this direction. Rao et al. <d-cite key="DBLP:
 <summary><b>An Illustrative Graph</b></summary>
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/concept.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <br>
-Find concepts to match with the model's internal representations.
+Text-image space alignment aims to find concepts to match with the model's internal representations.
 </details>
 <br>
 Beyond using cosine similarity, another approach came from Gandelsman et al. <d-cite key="gandelsman2023interpreting"></d-cite>, who introduced TEXTSPAN - an algorithm that creates a text-labeled basis for attention head outputs in CLIP's vision encoder. By caching vision encoder attention head outputs and strategically selecting text embeddings from a predefined text bank <d-footnote>To be more specific, strategically means TEXTSPAN greedily selects text embeddings from the text bank to maximize the explained variance.</d-footnote>, TEXTSPAN revealed specialized attention heads that capture distinct image properties like "color" and "counting". This discovery enabled targeted interventions for reducing spurious correlations and improving property-based image retrieval.
@@ -580,7 +580,7 @@ Key Takeaways:
 
 
 
-
+<br>
 # Future Directions
 
   
@@ -697,7 +697,7 @@ Summary:
 
 </aside>
 
-
+<br>
 # Conclusion
 
 This work provides a comprehensive review of studies leveraging mechanistic interpretability tools to analyze vision language models (VLMs), including probing techniques, activation patching, logit lenses, sparse autoencoders, and automated explanation methods. These tools have greatly enhanced our understanding of how VLMs represent, integrate, and process multimodal information. Despite these advancements, several key challenges remain. These include the need for validation across a wider range of VLM architectures and training paradigms, a deeper exploration of information flow dynamics throughout training stages, and a stronger alignment between micro-level insights and macro-level behaviors. Addressing these challenges will pave the way for developing more robust and effective VLMs, advancing both their design and practical applications.
