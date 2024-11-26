@@ -60,11 +60,17 @@ _styles: >
 ---
 
 ## Figures
-{% include figure.html path="assets/img/2025-04-28-can-we-learn-from-misclassifications/Fig-repre-clustering.png" class="img-fluid" %}
+
+<div class="l-screen-inset">
+  {% include figure.html path="assets/img/2025-04-28-can-we-learn-from-misclassifications/Fig-repre-clustering.png" class="img-fluid" %}
+</div>
+
+
 
 
 ## Expirmantal Results 
 
+<div class="l-screen-inset">
 | Model\Matrices | 'Cos_Sim_GW'  | 'Cos_Sim_P'   | 'Cos_Sim_FM'  | 'Grad_Cam_CC' | 'Grad_Cam_KLD'|'Grad_Cam_SIM' | 'Grad_Cam_AUC'|
 | -------------- |:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
 | Resnet18       | 0.832475      | 0.750405      | 0.809194      | 0.514107      | 0.546371      | 0.640893      | 0.473252      |
@@ -72,6 +78,7 @@ _styles: >
 | Resnet50       | 0.970702      | 0.781508      | 0.842356      | 0.387207      | 0.845985      | 0.534813      | 0.441505      |
 | Resnet101      | 0.898816      | 0.777873      | 0.841248      | 0.451866      | 0.607102      | 0.587721      | 0.471974      |
 | Resnet152      | 0.918961      | 0.784820      | 0.834101      | 0.513276      | 0.560512      | 0.600739      | 0.498934      |
+</div>
 
 Where the columns of the table represent: 
 
@@ -84,22 +91,26 @@ Where the columns of the table represent:
 - **Grad_Cam_AUC**: Grad_Cam area under the curve.
 
 ### Clustering using Kmeans
+
+<div class="l-screen-inset">
 |                    | 'Resnet18'                    | 'Resnet34'                    | 'Resnet50'                    | 'Resnet101'                   | 'Resnet152'                   |
 | ----------------   |:-----------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|
 | Clustring by\Metric| ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      |
 | Gradient Weights   | 0.95 | 0.98 | 0.79            | 0.63 | 0.85 | 0.62            | 1.00 | 1.00 | 0.89            | 0.95 | 0.98 | 0.83            | 0.77 | 0.91 | 0.81            |
 | Final Predictions  | 0.30 | 0.64 | 0.42            | 0.50 | 0.78 | 0.42            | 0.41 | 0.69 | 0.33            | 0.34 | 0.66 | 0.39            | 0.53 | 0.77 | 0.43            |
 | Feature Maps       | 0.41 | 0.72 | 0.42            | 0.57 | 0.80 | 0.51            | 0.41 | 0.73 | 0.49            | 0.23 | 0.57 | 0.41            | 0.39 | 0.69 | 0.35            |
-
+</div>
 
 ### Clustering using GMM
 
+<div class="l-screen-inset">
 |                    | 'Resnet18'                    | 'Resnet34'                    | 'Resnet50'                    | 'Resnet101'                   | 'Resnet152'                   |
 | ----------------   |:-----------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|
 | Clustring by\Metric| ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      | ARI  | NMI  | Silhouette      |
 | Gradient Weights   | 0.95 | 0.98 | 0.79            | 0.61 | 0.85 | 0.62            | 1.00 | 1.00 | 0.89            | 0.95 | 0.98 | 0.83            | 0.77 | 0.91 | 0.81            |
 | Final Predictions  | 0.30 | 0.64 | 0.38            | 0.48 | 0.78 | 0.40            | 0.34 | 0.68 | 0.30            | 0.37 | 0.69 | 0.31            | 0.57 | 0.80 | 0.43            |
 | Feature Maps       | 0.46 | 0.74 | 0.42            | 0.52 | 0.77 | 0.48            | 0.41 | 0.73 | 0.49            | 0.24 | 0.58 | 0.39            | 0.40 | 0.71 | 0.30            |
+</div>
 
 Where the columns of the table represent: 
 
