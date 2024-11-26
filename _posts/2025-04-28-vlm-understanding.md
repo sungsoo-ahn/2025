@@ -715,6 +715,62 @@ Key Takeaways:
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/sae.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
+The sparse autoencoder works by mapping input activations into a high-dimensional sparse representation using an encoder and reconstructing the original input through a decoder.
+</div>
+<br>
+
+#### What Are Sparse Autoencoders
+
+*Sparse Autoencoders (SAEs)* are a neural network-based method designed to disentangle complex internal representations in neural networks by addressing the *superposition* problem <d-cite key="arora2016linear,olah2020zoom"></d-cite>. In superposition, neurons encode multiple overlapping features, which makes interpretation challenging. SAEs mitigate this by mapping representations into a higher-dimensional, sparsely activated space, enabling the extraction of distinct, interpretable features.
+
+#### How Sparse Autoencoders Work
+
+SAEs use an encoder-decoder structure to transform and reconstruct input representations while enforcing sparsity. Given activations $$ z \in \mathbf{R}^d $$ from a neural network, the encoder transforms these into a sparse, high-dimensional representation $$ h $$:
+$$
+h = \text{ReLU}((z - b_{dec})W_{enc} + b_{enc})
+$$
+Here, $$ b_{dec} $$ normalizes hidden states, and $$ W_{enc} $$ maps the activations. The decoder reconstructs the input from the sparse representation:
+$$
+\text{SAE}(z) = h W_{dec} + b_{dec}
+$$
+The training objective minimizes the following loss:
+$$
+\cL(z) = \|\mbz - \text{SAE}(\mbz)\|_2^2 + \alpha \|\mbh(\mbz)\|_1
+$$
+The first term ensures accurate reconstruction, while the $$ L_1 $$ norm encourages sparsity, making each dimension correspond to a distinct feature.
+
+<details markdown="1">
+<summary><b>Example</b></summary>
+
+Consider a vision-language model where internal activations encode multiple concepts (e.g., visual concepts and language semantics). For instance, an activation might simultaneously encode features like “cat” (visual concept) and “playful” (language concept), making interpretation difficult. By applying a Sparse Autoencoder (SAE), these entangled representations are transformed into a high-dimensional sparse space, where each dimension uniquely captures a specific feature, such as “furry animal” or “expressive tone.”
+
+</details>
+<br>
+
+#### Key Findings from Existing Works
+
+- **Language Models**: SAEs have been successfully applied to large language models like GPT-4 and LLaMA-3.1, enabling the discovery of distinct patterns in how these models encode syntax, semantics, and other linguistic features <d-cite key="templeton2024scaling,gao2024scaling,he2024llama"></d-cite>.
+- **Vision Transformers (ViTs)**: Researchers have begun using SAEs to analyze ViTs <d-cite key="joseph2023vit,DBLP:conf/eccv/RaoMBS24"></d-cite>. Early results suggest that SAEs can extract interpretable image features, such as object boundaries and textures, using less data compared to their application in language models.
+
+However, Sparse Autoencoders have not yet been applied to vision-language models.
+
+#### Method Variants and Limitations
+
+- **Variants**: 
+	- TransCoders and CrossCoders extend SAEs by incorporating cross-layer and cross-model feature analysis, enabling comparisons both within layers and across different models <d-cite key="dunefsky2024transcoders,lindsey2024sparse"></d-cite>.
+- **Limitations**: 
+	- Applying SAEs to large-scale models, especially ViTs, is computationally expensive due to the increased dimensionality of the sparse space.
+
+<aside class="l-body box-note" markdown="1">
+Key Takeaways:
+- Sparse Autoencoders offer a powerful method for addressing the superposition problem in neural networks by transforming complex representations into sparse, interpretable features.
+- They have been successfully applied to both language models and vision transformers, uncovering hidden patterns in neural representations, but have yet to be explored in vision-language models.
+</aside>
+
+<!-- ### Sparse Autoencoders
+
+<object data="{{ 'assets/img/2025-04-28-vlm-understanding/sae.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
+<div class="l-gutter caption" markdown="1">
 Integration of Sparse Autoencoder for interpreting and analyzing learned features in transformer models.
 </div>
 <br>
@@ -749,7 +805,7 @@ More recently, researchers have begun exploring SAEs' potential in Vision Transf
 <aside class="l-body box-note" markdown="1">
 Key Takeaways: 
 - SAEs address the superposition problem by transforming complex neural representations into interpretable features
-</aside>
+</aside> -->
 
 
 ### Automated explanation
