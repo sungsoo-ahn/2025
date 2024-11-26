@@ -33,7 +33,7 @@ toc:
     - name: Inception crop
     - name: Big Vision miscellaneous
   - name: Corrected reproduction
-  - name: Schedule-free baseline
+  - name: Schedule-Free baseline
   - name: Implication
   - name: Conclusion
     subsections:
