@@ -537,6 +537,61 @@ Key Takeaways:
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/logit_lens.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
+Logit lens uses the model's unembedding matrix to extract and interpret predictions from intermediate layers, providing insights into how the model refines its understanding at each stage.
+</div>
+<br>
+
+#### What is Logit Lens
+
+*Logit lens* <d-cite key="alignmentforumorg2024interpreting"></d-cite> is an analytical method used to understand how neural networks refine their predictions layer by layer. By applying the model’s final classification layer (unembedding matrix) to intermediate activations, it projects these activations into vocabulary space. This allows researchers to analyze intermediate predictions, offering insights into the model's evolving understanding of multimodal inputs.
+
+#### How Logit Lens Works
+
+The logit lens maps intermediate activations to a sequence of "snapshots" of predictions as they develop across the network’s layers. The process involves:
+- Extracting activations from each layer of the model.
+- Applying the unembedding matrix to transform these activations into vocabulary distributions.
+- Observing how prediction probabilities change from one layer to the next, revealing the model's internal decision-making process.
+
+<details markdown="1">
+<summary><b>Example</b></summary>
+
+Consider a vision-language model analyzing an image of "a dog chasing a ball in a park." Using the logit lens, the prediction evolution might look like this:
+- **Early layers:** Predictions are highly uncertain, with terms like "dog," "animal," and "pet" receiving similar probabilities.
+- **Middle layers:** The model begins refining predictions, focusing on "dog" while maintaining context-related terms such as "park" and "ball."
+- **Final layers:** The model confidently predicts specific relationships like "dog chasing ball" and integrates objects into a coherent scene.
+
+This example illustrates how the logit lens tracks the progression from basic feature recognition to high-level understanding.
+</details>
+<br>
+
+#### Key Findings from Existing Work
+
+1. **Concept Distribution Patterns**
+- MMNeuron <d-cite key="huo2024mmneuron"></d-cite> applies logit lens to analyze hidden states of multimodal models like LLaVA-NeXT and InstructBLIP. Through their analysis of decoded vocabulary distributions, they reveal that image tokens generate notably sparser distributions than text tokens. This observation suggests that **image representations are encoded as mixtures of concepts rather than direct word mappings.**
+
+2. **Representations Evolution**
+- By examining the entropy of these distributions across layers, Huo et al. <d-cite key="huo2024mmneuron"></d-cite> uncover a distinctive three-stage pattern: **initial feature alignment with high entropy, followed by information processing with sharply declining entropy in middle layers, and finally token selection with slight entropy increase.** More recent work <d-cite key="neo2024towards"></d-cite> further explores how representations at visual token positions evolve through the layers in LLaVa 1.5, finding that **activations in the late layers at each visual token position correspond to token embeddings that describe its original patch object.**
+
+3. **Reduce Hallucinations**
+- Building on these insights, Jiang et al. <d-cite key="jiang2024interpreting"></d-cite> demonstrate practical applications of the logit lens by using it to spatially localize objects and perform targeted edits to VLM's latent representations. Their approach effectively reduces hallucinations without compromising the model's overall performance, showcasing how understanding internal representations can lead to concrete improvements in model reliability.
+
+#### Method Variants and Limitations
+
+- **Limitations:**
+   - The logit lens assumes the unembedding matrix remains interpretable across all layers, which may not hold for heavily tuned or non-linear models.
+   - It is less effective for analyzing tasks requiring complex reasoning or long-term dependencies.
+
+<aside class="l-body box-note" markdown="1"> 
+Key Takeaways: 
+- The logit lens enables detailed tracking of prediction evolution across model layers.
+- Key findings highlight how VLMs process images as distributed concept mixtures and exhibit a distinct three-stage representation evolution.
+- Practical applications, such as reducing hallucinations, demonstrate its value in improving model performance.
+</aside>
+
+<!-- ### Logit Lens
+
+<object data="{{ 'assets/img/2025-04-28-vlm-understanding/logit_lens.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
+<div class="l-gutter caption" markdown="1">
 Logit lens implementation showing multiple prediction heads tapping into different model layers.
 </div>
 <br>
@@ -564,7 +619,7 @@ Logit lens implementation showing multiple prediction heads tapping into differe
 Key Takeaways: 
 - Logit lens enables tracking of prediction evolution across model layers
 - Through logit lens analysis, researchers discovered that VLMs process images as distributed concept mixtures through a three-stage evolution pattern 
-</aside>
+</aside> -->
 
 ### Sparse Autoencoders
 
