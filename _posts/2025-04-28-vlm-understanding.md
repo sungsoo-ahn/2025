@@ -436,6 +436,91 @@ Key Takeaways:
 </aside> -->
 
 ### Activation Patching
+
+<object data="{{ 'assets/img/2025-04-28-vlm-understanding/activation.svg' | relative_url }}" type="image/svg+xml" width="100%" class="l-body rounded z-depth-1 center"></object>
+<div class="l-gutter caption" markdown="1">
+Activation patching compares model behavior under clean, corrupted, noising, and denoising conditions. The results highlight how noising disrupts and denoising restores key logits (A and B values), demonstrating the method's utility in identifying critical layers and components.
+</div>
+<br>
+
+#### What is Activation Patching
+
+**Activation patching** <d-cite key="NEURIPS2020_92650b2e, NEURIPS2022_6f1d43d5"></d-cite> (also known as causal tracing or causal mediation analysis) is an interpretability technique for neural networks. It selectively modifies internal activations while keeping others constant, allowing researchers to investigate **how specific components contribute to model behavior**. This method provides causal insights, helping identify critical components and potential interventions to improve performance and robustness.
+
+#### How Activation Patching Works
+
+The activation patching process typically involves five steps:
+
+1. **Save Activations:** Record the internal activations of a model when processing clean and corrupted inputs.
+2. **Select Target Activations:** Identify the specific activations to modify.
+3. **Patch Activations:** Replace activations from one input (e.g., corrupted) with those from another (e.g., clean).
+4. **Rerun the Model:** Run the model with patched activations and observe behavioral changes.
+5. **Analyze Results:** Infer the role of specific components based on how the output changes.
+
+<details markdown="1">
+<summary><b>Example</b></summary>
+Imagine analyzing a Vision-Language Model (VLM) tasked with identifying objects in an image:
+- **Clean Input:** An image of "a cat sitting on a mat."
+- **Corrupted Input:** The same image with Gaussian noise added to the "cat" region.
+
+Steps:
+1. Run both inputs through the model and save activations for all layers.
+2. Replace specific layer activations in the corrupted input with those from the clean input.
+3. Rerun the model with these patched activations.
+4. Observe if replacing activations in certain layers restores the ability to correctly identify "cat."
+
+If restoring activations in a specific layer consistently fixes errors, this suggests that layer plays a critical role in object recognition.
+</details>
+<br>
+
+#### Key Findings from Existing Works
+
+1. **Visual-Linguistic Integration**
+- **Layer-Specific Processing in BLIP**: Palit et al. <d-cite key="Palit_2023_ICCV"></d-cite> used Gaussian noise patching to analyze BLIP's processing patterns. They found that image information primarily influence the model's outputs in specific layers: layer 11 of the question encoder and layers 9-11 of the answer decoder. This observation suggests two possibilities:
+  - The model might primarily combine visual and text information in its later layers
+  - Later layers might play a more decisive role in the final output, while earlier layers provide supporting information
+- **Visual-to-Language Transformation in LLaVA**: Neo et al. <d-cite key="neo2024towards"></d-cite> examined how LLaVA processes visual information. They found that representations at visual token positions change systematically across layers, gradually aligning with interpretable textual concepts. This indicates that VLMs can naturally transform visual information into language-like representations, even without specific visual pretraining.
+- **Architectural Differences**: Golovanevsky et al. <d-cite key="golovanevsky2024vlms"></d-cite> developed a new method called *Semantic Image Pairs (SIP)* - a method where they make concept changes to images (e.g., changing a "cat" to a "dog") to understand how VLMs process meaning. Their analysis revealed:
+  - Cross-attention serves three functions: object detection, suppression, and outlier suppression
+  - Different architectures have distinct characteristics: (1) LLaVA lacks "text-only" attention heads; (2) BLIP has no "vision-only" heads; (3) Both models use universal heads for cross-modal integration
+
+2. **Layer-wise Information Processing**
+- **Early vs. Late Layer Functions**: Basu et al. <d-cite key="basu2024understanding"></d-cite> used causal tracing to show that LLaVA primarily retrieves visual information in early layers (1-4), followed by consistent summarization in final visual tokens. Neo et al. <d-cite key="neo2024towards"></d-cite> further investigated this through attention knockout experiments, they found that:
+  - Layers 1-10 process broader contextual information
+  - Layers 15-24 focus on extracting specific object details
+  - Notably, they found that blocking visual token attention to the last row had minimal impact, challenging previous theories about intermediate summarization steps
+- **Layer Importance for Model Performance**: Initial studies by Gandelsman et al. <d-cite key="gandelsman2023interpreting"></d-cite> on CLIP showed that final layers have significant direct effects on model accuracy, while early layer modifications (like removing multihead attention) have minimal impact. Balasubramanian et al. <d-cite key="balasubramanian2024decomposing"></d-cite> later extended these findings across a broader range of Vision Transformers, confirming the critical role of the final four layers in model performance.
+
+3. **Analytical Tools**
+- Recent analytical tools have significantly enhanced our understanding of VLMs. Ben et al. <d-cite key="Ben_Melech_Stan_2024_CVPR"></d-cite> developed LVLM-Interpret, an interactive tool that combines attention knockout with relevancy mapping and causal graph construction to visualize information flow patterns and identify critical image regions.
+
+#### Method Variants and Limitations
+
+- **Method Variants:**
+  - **Direct Ablations:** Replace activations with zeros or dataset means to highlight critical components <d-cite key="DBLP:conf/iclr/NandaCLSS23"></d-cite>.
+  - **Path Patching:** Trace causal pathways through the network to understand information flow <d-cite key="goldowsky-dill2023localizing"></d-cite>.
+  - **Attention Knockout:** Focus on attention mechanisms by selectively blocking patterns between tokens <d-cite key="geva2023dissecting"></d-cite>.
+
+- **Creating Corrupted Inputs:**
+  - **Text Inputs:** Introduce Gaussian Noise (GN) or use Symmetric Token Replacement (STR), which replaces tokens with semantically similar alternatives. STR is often preferred as GN disrupts model internals.
+  - **Image Inputs:** Apply Gaussian noise or use Semantic Image Pairs (SIP) to modify concepts (e.g., change "cat" to "dog") <d-cite key="golovanevsky2024vlms"></d-cite>.
+
+
+
+
+<aside class="l-body box-note" markdown="1">
+Key Takeaways:
+- Activation patching provides causal insights into model behavior by modifying specific internal activations while keeping others constant
+- Different variants (e.g., direct ablation, attention knockout) offer complementary perspectives on information flow and processing
+- Key findings reveal:
+  - Cross-modal integration occurs primarily in late layers, with visual information gradually evolving towards language-like representations
+  - VLMs show hierarchical processing: early layers handle context with minimal direct impact, while final layers are crucial since they extract information more related to the task
+  - Different architectures exhibit distinct patterns in how they handle cross-modal information
+</aside>
+
+
+
+<!-- ### Activation Patching
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/activation.svg' | relative_url }}" type="image/svg+xml" width="100%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
 Activation patching experiments comparing model behavior under clean, corrupted, noising, and denoising conditions. We can see that noising and denoising influence the logits' A and B values.
@@ -484,7 +569,7 @@ Several variations of activation patching have been developed:
 - **Path Patching** <d-cite key="goldowsky-dill2023localizing"></d-cite>: An extension that traces specific causal pathways through the network, helping understand how information flows between different model components. 
 - **Attention Knockout** <d-cite key="geva2023dissecting"></d-cite>: A specialized form focused on analyzing attention mechanisms by selectively blocking attention patterns between tokens. 
 
-#### Findings
+#### Findings -->
 
 <!-- **1. Visual-Linguistic Integration** 
 - Activation patching has revealed intricate patterns in how VLMs integrate visual and linguistic information. Through careful experimentation with Gaussian noise injection, Palit et al. <d-cite key="Palit_2023_ICCV"></d-cite> discovered that BLIP's outputs are predominantly influenced by correct image embeddings only in specific layers --- layer 11 of the question encoder and layers 9-11 of the answer decoder. This suggests **either that cross-modal integration is primarily a late-stage process, or that final layers override earlier computations while maintaining weak causal connections.** Interestingly, Neo et al. <d-cite key="neo2024towards"></d-cite> found that representations at visual token positions gradually evolve through layers to align with interpretable textual concepts, suggesting **VLMs naturally refine visual information towards language-like representations even without explicit visual pretraining.** In parallel work, Golovanevsky et al. <d-cite key="golovanevsky2024vlms"></d-cite> developed Semantic Image Pairs (SIP) to enable more precise analysis of how VLMs process semantic information. By modifying single semantic concepts in images (like changing "cat" to "dog"), SIP revealed that cross-attention serves three distinct functions (object detection, suppression, and outlier suppression) and uncovered architectural distinctions: **LLaVA lacks "text-only" attention heads while BLIP has no "vision-only" heads, though both utilize universal heads for cross-modal integration.**
@@ -504,7 +589,7 @@ Key Takeaways:
 	- VLMs show hierarchical processing: early layers handle context with minimal direct impact, while final layers are crucial 
 	- Different architectures exhibit distinct patterns in how they handle cross-modal information 
 </aside> -->
-1. **Visual-Linguistic Integration**
+<!-- 1. **Visual-Linguistic Integration**
 - **Layer-Specific Processing in BLIP**: Palit et al. <d-cite key="Palit_2023_ICCV"></d-cite> used Gaussian noise patching to analyze BLIP's processing patterns. They found that image information primarily influence the model's outputs in specific layers: layer 11 of the question encoder and layers 9-11 of the answer decoder. This observation suggests two possibilities:
   - The model might primarily combine visual and text information in its later layers
   - Later layers might play a more decisive role in the final output, while earlier layers provide supporting information
@@ -531,7 +616,7 @@ Key Takeaways:
   - Cross-modal integration occurs primarily in late layers, with visual information gradually evolving towards language-like representations
   - VLMs show hierarchical processing: early layers handle context with minimal direct impact, while final layers are crucial since they extract information more related to the task
   - Different architectures exhibit distinct patterns in how they handle cross-modal information
-</aside>
+</aside> -->
 
 ### Logit Lens
 
