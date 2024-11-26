@@ -64,7 +64,7 @@ Molecular dynamics (MD) simulations can sample the conformational dynamics of mo
 
 Yes that’s right, we know that for physical systems (molecules), the distribution of states (conformers) are characterized by their energy according the boltzmann distribution $$p(x) \propto exp(-\beta (\mathcal{E}(x)))$$, where $$\mathcal{E}(x)$$ is the energy of the state and $$\beta$$ is a constant dependant on temperature. This motivates a paradigm of training generative models that can take advantage of the energy function. 
 
-Recently, a surge of deep learning generative models has aimed to address the challenges of sampling and data scarcity by adopting innovative, data-free approaches<d-cite key="midgley2023fab"></d-cite><d-cite key="vargas2023dds"></d-cite><d-cite key="zhang2022pis"></d-cite><d-cite key="sadegh2024idem"></d-cite><d-cite key="woo2024iefm"></d-cite>. These methods, which one may describe as 'self-generative,' leverage a bootstrap procedure whereby the models generate their own data and rely on access to the energy function to refine their predictions. This paradigm is particularly exciting because it bypasses the traditional reliance on large datasets, making it a promising solution to long-standing barriers in the field. For this assessment, we focus on two such methods: iterative energy-based flow matching (iEFM)<d-cite key="woo2024iefm"></d-cite> and iterative denoising energy matching (iDEM)<d-cite key="sadegh2024idem"></d-cite> that have shown state of the art performance on several toy physical systems.
+Recently, a surge of deep learning generative models has aimed to address the challenges of sampling and data scarcity by adopting innovative, data-free approaches<d-cite key="midgley2023fab"></d-cite><d-cite key="vargas2023dds"></d-cite><d-cite key="zhang2022pis"></d-cite><d-cite key="sadegh2024idem"></d-cite><d-cite key="woo2024iefm"></d-cite>. These methods, which one may describe as 'self-generative', leverage a bootstrap procedure whereby the models generate their own data and rely on access to the energy function to refine their predictions. This paradigm is particularly exciting because it bypasses the traditional reliance on large datasets, making it a promising solution to long-standing barriers in the field. For this assessment, we focus on two such methods: iterative energy-based flow matching (iEFM)<d-cite key="woo2024iefm"></d-cite> and iterative denoising energy matching (iDEM)<d-cite key="sadegh2024idem"></d-cite> that have shown state of the art performance on several toy physical systems.
 
 A key consideration to take into account with generative models is to check if they outperform traditional methods for sampling from unnormalized density (energy) functions like Markov Chain Monte Carlo (MCMC). In this work, we compare iDEM and iEFM to MCMC on the same physical systems they were tested on and show that MCMC outperforms both methods while taking the same number of queries from the energy function. With this result, we suggest a “course correction” on the benchmarking of these models and propose different avenues where the development of these generative models would be useful.
 
@@ -159,9 +159,9 @@ The Wasserstein-2 (W2) metric measures the distance between two probability dist
 
 It is calculated as the square root of the smallest possible average squared distance needed to transform one distribution into the other, while ensuring their overall structures remain consistent. Mathematically, the Wasserstein-2 (W2) metric measures the distance between two distributions $P$ and $Q$, with densities $p(x)$ and $q(x)$, as:
 
-$\[
+$$
 W_2(P, Q) = \left( \inf_{\pi \in \Pi(P, Q)} \int \|x - y\|^2 d\pi(x, y) \right)^{1/2},
-\]$
+$$
 
 where $\Pi(P, Q)$ represents the set of all possible joint distributions (or "transport plans") that have $P$ and $Q$ as their marginal distributions. A transport plan, $\pi(x, y)$, describes how the probability mass from $P$ is moved to match $Q$, while maintaining the overall structure of both distributions. In practice, the W2 metric is calculated by approximating the distributions as empirical histograms and solving a numerical optimization problem to find the transport plan that minimizes the total squared transportation cost.
 
@@ -388,7 +388,7 @@ In Table 3, we also benchmark both the methods on the test set generated from th
     Figure 14. Distribution of energies obtained from all the methods on the LJ13 system. 
 </div>
 
-Finally, in the histogram plots, it's clear that the IDEM energy plot is right shifted as compared to both the reference sets that have good agreement among themselves and with the shorter MCMC chains. iDEM also has lesser agreeement on the interatomic distance histogram as compared to the other methods. Considering all the metrics and distributions, we conclude that MCMC outperforms iDEM on this system. 
+Finally, in the histogram plots, it's clear that the IDEM energy plot is right shifted as compared to both the reference sets that have good agreement among themselves and with the shorter MCMC chains. iDEM also has less agreement on the interatomic distance histogram as compared to the other methods. Considering all the metrics and distributions, we conclude that MCMC outperforms iDEM on this system. 
 
 ## 55-Particle Lennard Jones System
 
@@ -417,7 +417,7 @@ Finally, in the histogram plots, it's clear that the IDEM energy plot is right s
 </div>
 
 
-From the figures, we notice similar but exagerated trends that we observed in the LJ13 systems. The MCMC chains return a higher W2 score until but have a significantly lower energy W2 score. Therefore, we emphasize the importance of visualizing the distribution of observations (such as energy and interatomic distance) as the mismatch can get further inflated with increase in dimensions.
+From the figures, we notice similar but exaggerated trends that we observed in the LJ13 systems. The MCMC chains return a higher W2 score until but have a significantly lower energy W2 score. Therefore, we emphasize the importance of visualizing the distribution of observations (such as energy and interatomic distance) as the mismatch can get further inflated with increase in dimensions.
 
 <div class="caption">
     Table 4. Performance of all methods on the LJ55 system
