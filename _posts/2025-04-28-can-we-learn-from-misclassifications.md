@@ -66,13 +66,15 @@ _styles: >
   {% include figure.html path="assets/img/2025-04-28-can-we-learn-from-misclassifications/Fig-repre-clustering.png" class="img-fluid" %}
 
 </div>
-
+<div class="caption">
+    Plotting the gradient weights in comparison to the latent representations and the final prediction scores using PCA. The second and third rows represent the clustering results compared to the original classes, using KMeans and GMM, respectively
+</div>
 
 
 
 ## Expirmantal Results 
 
-<div class="l-screen">
+
 
 | Model\Matrices | 'Cos_Sim_GW'  | 'Cos_Sim_P'   | 'Cos_Sim_FM'  | 'Grad_Cam_CC' | 'Grad_Cam_KLD'|'Grad_Cam_SIM' | 'Grad_Cam_AUC'|
 | -------------- |:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
@@ -82,7 +84,6 @@ _styles: >
 | Resnet101      | 0.898816      | 0.777873      | 0.841248      | 0.451866      | 0.607102      | 0.587721      | 0.471974      |
 | Resnet152      | 0.918961      | 0.784820      | 0.834101      | 0.513276      | 0.560512      | 0.600739      | 0.498934      |
 
-</div>
 
 Where the columns of the table represent: 
 
@@ -96,7 +97,7 @@ Where the columns of the table represent:
 
 ### Clustering using Kmeans
 
-<div class="l-screen">
+
 
 |                    | 'Resnet18'                    | 'Resnet34'                    | 'Resnet50'                    | 'Resnet101'                   | 'Resnet152'                   |
 | ----------------   |:-----------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|
@@ -105,11 +106,10 @@ Where the columns of the table represent:
 | Final Predictions  | 0.30 | 0.64 | 0.42            | 0.50 | 0.78 | 0.42            | 0.41 | 0.69 | 0.33            | 0.34 | 0.66 | 0.39            | 0.53 | 0.77 | 0.43            |
 | Feature Maps       | 0.41 | 0.72 | 0.42            | 0.57 | 0.80 | 0.51            | 0.41 | 0.73 | 0.49            | 0.23 | 0.57 | 0.41            | 0.39 | 0.69 | 0.35            |
 
-</div>
+
 
 ### Clustering using GMM
 
-<div class="l-screen">
 
 |                    | 'Resnet18'                    | 'Resnet34'                    | 'Resnet50'                    | 'Resnet101'                   | 'Resnet152'                   |
 | ----------------   |:-----------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|
@@ -118,7 +118,7 @@ Where the columns of the table represent:
 | Final Predictions  | 0.30 | 0.64 | 0.38            | 0.48 | 0.78 | 0.40            | 0.34 | 0.68 | 0.30            | 0.37 | 0.69 | 0.31            | 0.57 | 0.80 | 0.43            |
 | Feature Maps       | 0.46 | 0.74 | 0.42            | 0.52 | 0.77 | 0.48            | 0.41 | 0.73 | 0.49            | 0.24 | 0.58 | 0.39            | 0.40 | 0.71 | 0.30            |
 
-</div>
+
 
 Where the columns of the table represent: 
 
