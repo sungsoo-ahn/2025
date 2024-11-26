@@ -325,7 +325,73 @@ In this section, we review mechanistic interpretability methods applied to visio
 
 Through our investigation, we find that interpretability in VLMs is still in its early stages. While building intrinsic interpretability or developmental interpretability could offer crucial insights into how these models learn and evolve, it remains largely unexplored in current research. For this study, we focus on six post-hoc interpretability methods that have been successfully applied in VLM research. -->
 
+
 ### Probing
+
+<object data="{{ 'assets/img/2025-04-28-vlm-understanding/probing.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
+<div class="l-gutter caption" markdown="1">
+Illustration of the probing process in neural networks. Probing involves training a simple classifier, such as a linear probe, to extract specific information from a model's internal representations. The figure illustrates how intermediate representations are extracted from a vision-language model, where a probe is trained to predict target properties, such as spatial relationships or visual attributes, from these representations. By analyzing the probe's performance, researchers can determine whether the encoded representations effectively capture the desired properties. This process helps identify strengths and limitations in how the model encodes and utilizes information across layers.
+</div>
+<br>
+
+#### What is Probing
+
+*Probing* <d-cite key="alain2016understanding,hewitt-manning-2019-structural"></d-cite> is a diagnostic technique used to analyze the internal representations of neural networks. It helps researchers identify whether specific types of information are encoded within the model by training auxiliary classifiers—referred to as probes—on the model's intermediate outputs. This method is particularly useful for understanding what a model has learned and how it organizes information across its layers.
+
+#### How Probing Works
+
+Probing involves training supervised classifiers, typically simple ones like linear probes, to predict specific properties from the internal representations of a model. These properties can include linguistic, visual, or multimodal features. The probe’s performance indicates whether the target information is accessible in the model's representations:
+- **High accuracy**: Suggests the property is well-encoded.
+- **Low accuracy**: Indicates the property may be absent or deeply entangled.
+
+Linear probes are often preferred because their simplicity ensures that high accuracy reflects the quality of the model’s representations, rather than the complexity of the probe itself.
+
+
+
+<details markdown="1">
+<summary><b>Example</b></summary>
+To illustrate, consider a vision-language model analyzing the caption: *"A cat sitting on a mat."*
+- A probe could be trained to predict spatial relationships (e.g., object positioning) from intermediate representations of the model.
+- Another probe might predict visual attributes, such as "furry" or "striped," encoded in the text embeddings.
+
+If the probe achieves high accuracy, it suggests that these properties (spatial relationships or visual attributes) are captured in the model's representations. If accuracy is low, the information may be missing or insufficiently disentangled to be easily accessed.
+</details>
+<br>
+
+#### Key Findings from Existing Work
+
+Most research on probing tasks in VLMs focuses on two primary objectives: **identifying the concepts these models struggle to capture** and **assessing the relative importance of visual and linguistic modalities** <d-cite key="golovanevsky2024vlms"></d-cite>. 
+
+Cao et al. <d-cite key="cao2020behind"></d-cite> introduced the VALUE (Vision-And-Language Understanding Evaluation) framework, which developed a set of probing tasks to explain individual layers, heads, and fusion techniques. This study reveals several important insights:
+1. **Modality Prioritization**: Pre-trained models often prioritize language over vision in multimodal tasks.
+2. **Cross-Modal Interactions**: Specific attention heads are effective at capturing interactions between visual and linguistic modalities.
+3. **Attention Visualization**: Visualization of attention mechanisms has revealed interpretable relationships, such as object-object interactions in images.
+
+Studies have also explored diverse model capabilities, such as:
+- **Visual semantics** <d-cite key="dahlgren-lindstrom-etal-2020-probing"></d-cite>.
+- **Verb processing** <d-cite key="hendricks2021probing,beňová2024beyond"></d-cite>.
+- **Numerical reasoning** <d-cite key="kajic2022probing"></d-cite>.
+- **Spatial reasoning** <d-cite key="pantazopoulos2024lost"></d-cite>.
+
+A notable line of research compared representations at different training stages, such as pre-training versus fine-tuning, using carefully designed datasets to minimize biases <d-cite key="Salin_Farah_Ayache_Favre_2022"></d-cite>.
+
+#### Method Variants and Limitations
+
+**Variants of Probing**:
+- Researchers sometimes use non-linear probes or more sophisticated classifiers to study complex properties. However, this adds a risk of confounding the results with the probe’s own learning capabilities.
+
+**Limitations**:
+- **Correlation vs. Causation**: High probe accuracy indicates correlation, not causation; the model may encode the information but not actively use it for predictions.
+- **Task Design**: Probing tasks must be carefully designed to avoid confounding factors or misleading results.
+- **Model-Specific Dependencies**: Probing results are often architecture-dependent, limiting their generalizability across models.
+
+<aside class="l-body box-note" markdown="1">
+Key Takeaways:
+- **Probing is a powerful tool for interpreting neural networks**, offering insights into the types of information encoded in their representations.
+- For vision-language models, probing has revealed critical findings on modality interactions, representation priorities, and encoding patterns.
+</aside>
+
+<!-- ### Probing
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/probing.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
@@ -361,7 +427,7 @@ While these diverse probing approaches have advanced our understanding of VLMs, 
 Key Takeaways: 
 - Probing is a class of methods for interpreting neural models by assessing whether the model representations encode specific kinds of information
 - In VLMs, probing has revealed crucial insights about modality interactions and information encoding patterns
-</aside>
+</aside> -->
 
 ### Activation Patching
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/activation.svg' | relative_url }}" type="image/svg+xml" width="100%" class="l-body rounded z-depth-1 center"></object>
