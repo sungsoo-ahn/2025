@@ -69,10 +69,11 @@ _styles: >
 To quantify the similarity between images using gradients and feature representations, we utilize the **cosine similarity** metric. The cosine similarity measures the cosine of the angle between two non-zero vectors in an inner product space, which provides a measure of orientation similarity regardless of their magnitude.
 
 Given two vectors, \(\mathbf{u} \in \mathbb{R}^n\) and \(\mathbf{v} \in \mathbb{R}^n\), representing either gradients or feature embeddings of two images, the cosine similarity is defined as:
-
+$$
 \[
 \text{cos\_sim}(\mathbf{u}, \mathbf{v}) = \frac{\mathbf{u}^\top \mathbf{v}}{\|\mathbf{u}\|_2 \|\mathbf{v}\|_2}
 \]
+$$
 
 where:
 
