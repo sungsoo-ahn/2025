@@ -61,16 +61,32 @@ _styles: >
 
 ## Figures
 
-<div class="l-screen">
+<div class="l-page">
 
   {% include figure.html path="assets/img/2025-04-28-can-we-learn-from-misclassifications/Fig-repre-clustering.png" class="img-fluid" %}
 
 </div>
 <div class="caption">
-    Plotting the gradient weights in comparison to the latent representations and the final prediction scores using PCA. The second and third rows represent the clustering results compared to the original classes, using KMeans and GMM, respectively
+    Plotting the gradient weights in comparison to the latent representations and the final prediction scores using PCA. The second and third rows represent the clustering results compared to the original classes, using KMeans and GMM, respectively.
 </div>
 
+<div class="l-page">
 
+  {% include figure.html path="assets/img/2025-04-28-can-we-learn-from-misclassifications/generic_classes_grid-1.png" class="img-fluid" %}
+
+</div>
+<div class="caption">
+    Generated animal classes using stable diffusion.
+</div>
+
+<div class="l-page">
+
+  {% include figure.html path="assets/img/2025-04-28-can-we-learn-from-misclassifications/snail_grid.png" class="img-fluid" %}
+
+</div>
+<div class="caption">
+    Illustration of overlaid GradCAM map on the generated snail classes using Resnet50.
+</div>
 
 ## Expirmantal Results 
 
