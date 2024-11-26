@@ -94,7 +94,7 @@ By setting a maximum number of tokens, you can override the model's default tend
 When no explicit maximum token limit is set, the stopping point relies heavily on the model's ability to predict when a piece of text should logically end. As previous work (Xiong et al., 2024; Fu et al., 2024) has shown models often “cap” their output lengths based on the upper limits present in their SFT datasets, even if they were exposed to longer sequences during pre-training. The model's training data plays a crucial role here; if it includes diverse examples of text lengths and proper use of EOS tokens in the retraining process, the model is better equipped to determine appropriate stopping points.
 
 # Motivating Experiments
-To further explore how these factors influence the model's stopping behavior, we conducted a series of experiments to identify trends that may be causing the convergence to the EOS token. 
+To further explore how these factors influence the model's stopping behavior, we conducted a series of experiments to identify trends that may be causing the convergence to the EOS token. All tests were run on the Llama2-7B-chat language model.
 
 Our first experiment examines the variance and uncertainty in the “blocks” leading up to the EOS token generation. Since the probability of a token can exhibit significant variance, a block-wise trend is analyzed instead of a token-wise trend. A block is defined as a group of consecutive tokens within a sequence. The average probability of a specific token within each block is then calculated to represent its probability in that block. 
 
@@ -216,7 +216,6 @@ The initial high temperature encourages the model to explore a wider range of po
 Gradually decreasing the temperature helps the model focus its prediction while slowly toning down on stochasticity. This helps *enhance the coherence of the generated text while maintaining a bit of randomness*.
 
 The results of this method were by far the best out of our approaches. We were able to obtain 1,000 more generated tokens, and observed longer sequences with more contextually appropriate continuations compared to the previous methods. 
-You can compare the results here {insert link to generated responses}. 
 
 # Conclusion and Looking Ahead
 Our experiments and analysis of EOS token generation highlight a few challenges and potential solutions in managing output length in large language models. Perpetual output is only useful for humans if it is *coherent and an actual extension of the original context*. Our first three methods showed that simply asking the transformer model to “try again” is not enough – we need to backtrack and introduce stochasticity to allow the model to think creatively on how to coherently extend output. 
