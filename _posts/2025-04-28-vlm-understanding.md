@@ -245,7 +245,7 @@ $$
 $$
 </div>
 
-## Introduction
+# Introduction
 
 <!-- VLM introduction -->
 
@@ -282,11 +282,11 @@ In this work, we review how mechanistic interpretability methods can advance a s
 
 We argue for bridging empirical observations with mechanistic insights to better understand and guide VLM development. By formalizing this integration, future research can address challenges in interpretability, robustness, and scalability, paving the way for more transparent and capable vision-language systems. -->
 
-<!-- ## Macro-Level Analysis: Empirical Findings
+<!-- # Macro-Level Analysis: Empirical Findings
 
 The release of GPT-4V <d-cite key="2023GPT4VisionSC"></d-cite> has catalyzed significant research interest in Vision-Language Models (VLMs), leading to numerous empirical advances in architectures, training methodologies, data strategies, and evaluations. While these developments have demonstrated what constitutes effective approaches, our theoretical understanding of why these approaches succeed remains limited.
 
-### Architectural Design
+## Architectural Design
 <img src="{{ 'assets/img/2025-04-28-vlm-understanding/architecture.png' | relative_url }}" alt="transformer" width="90%" class="l-body rounded z-depth-1 center">
 <div class="l-gutter caption" markdown="1">
 Self-attention and cross-attention architectures. Figure from <d-cite key="chen2024evlm"></d-cite>.
@@ -296,7 +296,7 @@ Recent architectural explorations in VLMs demonstrate remarkable diversity and s
 
 While some open-source VLMs now achieve results comparable to commercial models like GPT-4V <d-cite key="2023GPT4VisionSC"></d-cite> and Gemini <d-cite key="team2023gemini"></d-cite><d-cite key="team2024gemini"></d-cite>, fundamental questions about architectural design principles remain unanswered. For example, recent research <d-cite key="tong2024eyes"></d-cite> reveals intriguing differences in task performance between models using DINO <d-cite key="oquab2023dinov2"></d-cite> versus CLIP <d-cite key="DBLP:conf/icml/RadfordKHRGASAM21"></d-cite> as visual encoders, yet the underlying mechanisms driving these differences remain poorly understood.
 
-### Training Recipes
+## Training Recipes
 
 <img src="{{ 'assets/img/2025-04-28-vlm-understanding/training.png' | relative_url }}" alt="transformer" width="90%" class="l-body rounded z-depth-1 center">
 <div class="l-gutter caption" markdown="1">
@@ -309,7 +309,7 @@ In pretraining, which aims to establish robust multimodal understanding capabili
 
 The impact of different training choices extends far beyond benchmark scores. Recent research has revealed that delayed feedback loops can make pretraining ablations misleading <d-cite key="laurençon2024building"></d-cite>, and that scaling alone cannot overcome inherent limitations in CLIP-based models <d-cite key="tong2024eyes"></d-cite>. These findings underscore the need for micro-level analysis to understand how to improve the training process.
 
-### Evaluation
+## Evaluation
 
 The evaluation of VLMs has evolved to include numerous benchmarks testing various capabilities, including but not limited to knowledge and reasoning <d-cite key="Yue_2024_CVPR"></d-cite><d-cite key="yue2024mmmupro"></d-cite>, document understanding <d-cite key="mathew2020docvqa"></d-cite>, and mathematical problem-solving <d-cite key="DBLP:conf/iclr/LuBX0LH0CG024"></d-cite>. These evaluation frameworks quantitatively assess different aspects of model performance, though the challenge persists: understanding the true depth of what our metrics reveal about model capabilities, and leveraging benchmarks not merely as performance indicators, but as informative experiments that illuminate both the potential and limitations of these systems <d-cite key="miller2024adding"></d-cite>.
 
@@ -317,7 +317,7 @@ The evaluation of VLMs has evolved to include numerous benchmarks testing variou
 
 This macro-level overview reveals both the impressive progress in VLM development and the critical gaps in our theoretical understanding. To develop more transparent, reliable, and capable systems, we must complement these macro-level insights with rigorous micro-level interpretability analysis. The following sections will explore how modern interpretability techniques can help us uncover the scientific principles underlying VLM success. -->
 
-## Current Methods
+# Current Methods
 
 In this section, we review mechanistic interpretability methods applied to vision language models (VLMs), which aim to uncover the internal processes of these VLMs process visual and language information and explain how they produce specific outputs. Key techniques discussed include probing, activation patching, logit lens analysis, sparse autoencoders, and automated explanations.
 
@@ -326,7 +326,7 @@ In this section, we review mechanistic interpretability methods applied to visio
 Through our investigation, we find that interpretability in VLMs is still in its early stages. While building intrinsic interpretability or developmental interpretability could offer crucial insights into how these models learn and evolve, it remains largely unexplored in current research. For this study, we focus on six post-hoc interpretability methods that have been successfully applied in VLM research. -->
 
 
-### Probing
+## Probing
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/probing.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
@@ -334,11 +334,11 @@ Illustration of probing in neural networks: a simple classifier is trained on in
 </div>
 <br>
 
-#### What is Probing
+### What is Probing
 
 *Probing* <d-cite key="alain2016understanding,hewitt-manning-2019-structural"></d-cite> is a diagnostic technique used to analyze the internal representations of neural networks. It helps researchers identify whether specific types of information are encoded within the model by training auxiliary classifiers—referred to as probes—on the model's intermediate outputs. This method is particularly useful for understanding what a model has learned and how it organizes information across its layers.
 
-#### How Probing Works
+### How Probing Works
 
 Probing involves training supervised classifiers, typically simple ones like linear probes, to predict specific properties from the internal representations of a model. These properties can include linguistic, visual, or multimodal features. The probe’s performance indicates whether the target information is accessible in the model's representations:
 - **High accuracy**: Suggests the property is well-encoded.
@@ -358,7 +358,7 @@ If the probe achieves high accuracy, it suggests that these properties (spatial 
 </details>
 <br>
 
-#### Key Findings from Existing Work
+### Key Findings from Existing Work
 
 Most research on probing tasks in VLMs focuses on two primary objectives: **identifying the concepts these models struggle to capture** and **assessing the relative importance of visual and linguistic modalities** <d-cite key="golovanevsky2024vlms"></d-cite>. 
 
@@ -381,7 +381,7 @@ Studies have also explored diverse model capabilities, such as:
 
 A notable line of research compared representations at different training stages, such as pre-training versus fine-tuning, using carefully designed datasets to minimize biases <d-cite key="Salin_Farah_Ayache_Favre_2022"></d-cite>. -->
 
-#### Method Variants and Limitations
+### Method Variants and Limitations
 
 **Limitations**:
 - **Correlation vs. Causation**: High probe accuracy indicates correlation, not causation; the model may encode the information but not actively use it for predictions.
@@ -394,7 +394,7 @@ Key Takeaways:
 - For vision-language models, probing has revealed critical findings on modality interactions, representation priorities, and encoding patterns.
 </aside>
 
-<!-- ### Probing
+<!-- ## Probing
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/probing.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
@@ -416,7 +416,7 @@ One key advantage of probing is its empirical transparency: by using simple clas
 However, it's important to note that high probe accuracy alone doesn't necessarily mean the model actively uses this information during its regular operation - it indicates correlation in information encoding but not necessarily causation in the model's decision-making process.
 </aside>
 
-#### Findings
+### Findings
 
 Most research on probing tasks in VLMs focuses on two primary objectives: **identifying the concepts these models struggle to capture** and **assessing the relative importance of visual and linguistic modalities** <d-cite key="golovanevsky2024vlms"></d-cite>. 
 
@@ -432,7 +432,7 @@ Key Takeaways:
 - In VLMs, probing has revealed crucial insights about modality interactions and information encoding patterns
 </aside> -->
 
-### Activation Patching
+## Activation Patching
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/activation.svg' | relative_url }}" type="image/svg+xml" width="100%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
@@ -440,11 +440,11 @@ Activation patching compares model behavior under clean, corrupted, noising, and
 </div>
 <br>
 
-#### What is Activation Patching
+### What is Activation Patching
 
 **Activation patching** <d-cite key="NEURIPS2020_92650b2e, NEURIPS2022_6f1d43d5"></d-cite> (also known as causal tracing or causal mediation analysis) is an interpretability technique for neural networks. It selectively modifies internal activations while keeping others constant, allowing researchers to investigate **how specific components contribute to model behavior**. This method provides causal insights, helping identify critical components and potential interventions to improve performance and robustness.
 
-#### How Activation Patching Works
+### How Activation Patching Works
 
 The activation patching process typically involves five steps:
 
@@ -475,7 +475,7 @@ If restoring activations in a specific layer consistently fixes errors, this sug
 </details>
 <br>
 
-#### Key Findings from Existing Works
+### Key Findings from Existing Works
 
 1. **Visual-Linguistic Integration**
 - **Layer-Specific Processing in BLIP**: Palit et al. <d-cite key="Palit_2023_ICCV"></d-cite> used Gaussian noise patching to analyze BLIP's processing patterns. They found that image information primarily influence the model's outputs in specific layers: layer 11 of the question encoder and layers 9-11 of the answer decoder. This observation suggests two possibilities:
@@ -496,7 +496,7 @@ If restoring activations in a specific layer consistently fixes errors, this sug
 3. **Analytical Tools**
 - Recent analytical tools have significantly enhanced our understanding of VLMs. Ben et al. <d-cite key="Ben_Melech_Stan_2024_CVPR"></d-cite> developed LVLM-Interpret, an interactive tool that combines attention knockout with relevancy mapping and causal graph construction to visualize information flow patterns and identify critical image regions.
 
-#### Method Variants and Limitations
+### Method Variants and Limitations
 
 - **Variants:**
   - **Direct Ablations** <d-cite key="DBLP:conf/iclr/NandaCLSS23"></d-cite>: A simpler variant where activations are replaced with zeros or dataset means. While zero ablation shows components critical for network behavior, mean ablation is more natural version of zero ablation.
@@ -522,7 +522,7 @@ Key Takeaways:
 
 
 
-<!-- ### Activation Patching
+<!-- ## Activation Patching
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/activation.svg' | relative_url }}" type="image/svg+xml" width="100%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
 Activation patching experiments comparing model behavior under clean, corrupted, noising, and denoising conditions. We can see that noising and denoising influence the logits' A and B values.
@@ -530,7 +530,7 @@ Activation patching experiments comparing model behavior under clean, corrupted,
 <br>
 *Activation patching* <d-cite key="NEURIPS2020_92650b2e, NEURIPS2022_6f1d43d5"></d-cite> (also known as Casual Tracing, Interchange Intervention, Causal Mediation Analysis) is a powerful interpretability technique for neural networks. By modifying specific internal activations while maintaining others constant, this method enables researchers to analyze **how different components contribute to model behavior.** This approach, grounded in the principle of control variates, provides causal insights into model behavior, helping researchers identify critical components and potential interventions for improving model performance and reliability. 
 
-#### Methods
+### Methods
 
 The basic process of activation patching involves five steps:
 1. **Save Activations:** Run a clean prompt and a corrupted prompt through the model, saving their internal activations.
@@ -571,7 +571,7 @@ Several variations of activation patching have been developed:
 - **Path Patching** <d-cite key="goldowsky-dill2023localizing"></d-cite>: An extension that traces specific causal pathways through the network, helping understand how information flows between different model components. 
 - **Attention Knockout** <d-cite key="geva2023dissecting"></d-cite>: A specialized form focused on analyzing attention mechanisms by selectively blocking attention patterns between tokens. 
 
-#### Findings -->
+### Findings -->
 
 <!-- **1. Visual-Linguistic Integration** 
 - Activation patching has revealed intricate patterns in how VLMs integrate visual and linguistic information. Through careful experimentation with Gaussian noise injection, Palit et al. <d-cite key="Palit_2023_ICCV"></d-cite> discovered that BLIP's outputs are predominantly influenced by correct image embeddings only in specific layers --- layer 11 of the question encoder and layers 9-11 of the answer decoder. This suggests **either that cross-modal integration is primarily a late-stage process, or that final layers override earlier computations while maintaining weak causal connections.** Interestingly, Neo et al. <d-cite key="neo2024towards"></d-cite> found that representations at visual token positions gradually evolve through layers to align with interpretable textual concepts, suggesting **VLMs naturally refine visual information towards language-like representations even without explicit visual pretraining.** In parallel work, Golovanevsky et al. <d-cite key="golovanevsky2024vlms"></d-cite> developed Semantic Image Pairs (SIP) to enable more precise analysis of how VLMs process semantic information. By modifying single semantic concepts in images (like changing "cat" to "dog"), SIP revealed that cross-attention serves three distinct functions (object detection, suppression, and outlier suppression) and uncovered architectural distinctions: **LLaVA lacks "text-only" attention heads while BLIP has no "vision-only" heads, though both utilize universal heads for cross-modal integration.**
@@ -620,7 +620,7 @@ Key Takeaways:
   - Different architectures exhibit distinct patterns in how they handle cross-modal information
 </aside> -->
 
-### Logit Lens
+## Logit Lens
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/logit_lens.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
@@ -628,11 +628,11 @@ Logit lens uses the model's unembedding matrix to extract and interpret predicti
 </div>
 <br>
 
-#### What is Logit Lens
+### What is Logit Lens
 
 *Logit lens* <d-cite key="alignmentforumorg2024interpreting"></d-cite> is an analytical method used to understand how neural networks refine their predictions layer by layer. By applying the model’s final classification layer (unembedding matrix) to intermediate activations, it projects these activations into vocabulary space. This allows researchers to analyze intermediate predictions, offering insights into the model's evolving understanding of multimodal inputs.
 
-#### How Logit Lens Works
+### How Logit Lens Works
 
 The logit lens maps intermediate activations to a sequence of "snapshots" of predictions as they develop across the network’s layers. The process involves:
 - Extracting activations from each layer of the model.
@@ -651,7 +651,7 @@ This example illustrates how the logit lens tracks the progression from basic fe
 </details>
 <br>
 
-#### Key Findings from Existing Work
+### Key Findings from Existing Work
 
 1. **Concept Distribution Patterns**
 - MMNeuron <d-cite key="huo2024mmneuron"></d-cite> applies logit lens to analyze hidden states of multimodal models like LLaVA-NeXT and InstructBLIP. Through their analysis of decoded vocabulary distributions, they reveal that image tokens generate notably sparser distributions than text tokens. This observation suggests that **image representations are encoded as mixtures of concepts rather than direct word mappings.**
@@ -662,7 +662,7 @@ This example illustrates how the logit lens tracks the progression from basic fe
 3. **Reduce Hallucinations**
 - Building on these insights, Jiang et al. <d-cite key="jiang2024interpreting"></d-cite> demonstrate practical applications of the logit lens by using it to spatially localize objects and perform targeted edits to VLM's latent representations. Their approach effectively reduces hallucinations without compromising the model's overall performance, showcasing how understanding internal representations can lead to concrete improvements in model reliability.
 
-#### Method Variants and Limitations
+### Method Variants and Limitations
 
 - **Limitations:**
    - The logit lens assumes the unembedding matrix remains interpretable across all layers, which may not hold for heavily tuned or non-linear models.
@@ -675,7 +675,7 @@ Key Takeaways:
 - Practical applications, such as reducing hallucinations, demonstrate its value in improving model performance.
 </aside>
 
-<!-- ### Logit Lens
+<!-- ## Logit Lens
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/logit_lens.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
@@ -691,7 +691,7 @@ Logit lens implementation showing multiple prediction heads tapping into differe
 </details>
 <br>
 
-#### Findings
+### Findings
 
 1. **Concept Distribution Patterns**
 - MMNeuron <d-cite key="huo2024mmneuron"></d-cite> applies logit lens to analyze hidden states of multimodal models like LLaVA-NeXT and InstructBLIP. Through their analysis of decoded vocabulary distributions, they reveal that image tokens generate notably sparser distributions than text tokens. This observation suggests that **image representations are encoded as mixtures of concepts rather than direct word mappings.**
@@ -708,7 +708,7 @@ Key Takeaways:
 - Through logit lens analysis, researchers discovered that VLMs process images as distributed concept mixtures through a three-stage evolution pattern 
 </aside> -->
 
-### Sparse Autoencoders
+## Sparse Autoencoders
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/sae.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
@@ -716,11 +716,11 @@ The sparse autoencoder works by mapping input activations into a high-dimensiona
 </div>
 <br>
 
-#### What Are Sparse Autoencoders
+### What Are Sparse Autoencoders
 
 *Sparse Autoencoders (SAEs)* are a neural network-based method designed to disentangle complex internal representations in neural networks by addressing the *superposition* problem <d-cite key="arora2016linear,olah2020zoom"></d-cite>. In superposition, neurons encode multiple overlapping features, which makes interpretation challenging. SAEs mitigate this by mapping representations into a higher-dimensional, sparsely activated space, enabling the extraction of distinct, interpretable features.
 
-#### How Sparse Autoencoders Work
+### How Sparse Autoencoders Work
 
 SAEs use an encoder-decoder structure to transform and reconstruct input representations while enforcing sparsity. Given activations $$ z \in \mathbf{R}^d $$ from a neural network, the encoder transforms these into a sparse, high-dimensional representation $$ h $$:
 
@@ -750,14 +750,14 @@ Consider a vision-language model where internal activations encode multiple conc
 </details>
 <br>
 
-#### Key Findings from Existing Works
+### Key Findings from Existing Works
 
 - **Language Models**: SAEs have been successfully applied to large language models like GPT-4 and LLaMA-3.1, enabling the discovery of distinct patterns in how these models encode syntax, semantics, and other linguistic features <d-cite key="templeton2024scaling,gao2024scaling,he2024llama"></d-cite>.
 - **Vision Transformers (ViTs)**: Researchers have begun using SAEs to analyze ViTs <d-cite key="joseph2023vit,DBLP:conf/eccv/RaoMBS24"></d-cite>. Early results suggest that SAEs can extract interpretable image features, such as object boundaries and textures, using less data compared to their application in language models.
 
 However, Sparse Autoencoders have not yet been applied to vision-language models.
 
-#### Method Variants and Limitations
+### Method Variants and Limitations
 
 - **Variants**: 
 	- TransCoders and CrossCoders extend SAEs by incorporating cross-layer and cross-model feature analysis, enabling comparisons both within layers and across different models <d-cite key="dunefsky2024transcoders,lindsey2024sparse"></d-cite>.
@@ -770,7 +770,7 @@ Key Takeaways:
 - They have been successfully applied to both language models and vision transformers, uncovering hidden patterns in neural representations, but have yet to be explored in vision-language models.
 </aside>
 
-<!-- ### Sparse Autoencoders
+<!-- ## Sparse Autoencoders
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/sae.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
@@ -799,7 +799,7 @@ $$
 $$ 
 balances reconstruction accuracy with sparsity, where the $$ L_1 $$ norm term ensures each dimension captures a distinct, interpretable feature.
 
-#### Findings
+### Findings
 
 This method has demonstrated remarkable success in understanding large language models like Claude 3 Sonnet <d-cite key="templeton2024scaling"></d-cite>, GPT-4 <d-cite key="gao2024scaling"></d-cite>, Gemma 2 <d-cite key="lieberum2024gemma"></d-cite> and LLaMA-3.1 <d-cite key="he2024llama"></d-cite>, leading to innovative variants such as Transcoders <d-cite key="dunefsky2024transcoders"></d-cite> and CrossCoders <d-cite key="lindsey2024sparse"></d-cite>. These applications have revealed previously hidden patterns in how language models process and represent information.
 
@@ -811,11 +811,11 @@ Key Takeaways:
 </aside> -->
 
 
-### Automated explanation
+## Automated explanation
 
 While traditional explanation methods focus on highlighting important features in the model's input space, users often care more about understanding the underlying meaning of these features. Automated explanation methods aim to bridge this gap by **translating abstract mathematical representations within neural networks into human-understandable concepts**, without heavily relying on manual analysis. Currently, there are two main approaches to endow such concepts: text-image space alignment and data distribution-based methods.
 
-#### Text-Image Space Alignment
+### Text-Image Space Alignment
 
 Language serves as a naturally interpretable interface for humans and forms our concept vocabulary, while image representations are inherently less interpretable. The core principle behind Text-Image Space Alignment methods is to establish meaningful connections between neural network's visual features and natural language descriptions. By **mapping neural activations into a shared semantic space** where both textual and visual information coexist, these methods can automatically discover and explain the concepts that drive model behavior.
 
@@ -832,7 +832,7 @@ Beyond using cosine similarity, another approach came from Gandelsman et al. <d-
 
 Building upon this foundation, Balasubramanian et al. <d-cite key="balasubramanian2024decomposing"></d-cite> extended TEXTSPAN's applicability beyond CLIP to ViTs. Their proposed automated representation decomposition method to analyze the computational graph generated during the forward pass. Using this method, they break down internal contributions of models into their final representation and mapping these components to CLIP space, where they then use TEXTSPAN for text-based interpretation.
 
-#### Data Distribution-Based Methods
+### Data Distribution-Based Methods
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/automated.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
 Comparison between supervised categorical analysis and unsupervised automated explanation using LLM/VLM.
@@ -856,7 +856,7 @@ Key Takeaways:
 
 
 
-## Future Directions
+# Future Directions
 
   
 
@@ -973,12 +973,12 @@ Summary:
 </aside>
 
 
-## Conclusion
+# Conclusion
 
 This work provides a comprehensive review of studies leveraging mechanistic interpretability tools to analyze vision-language models (VLMs), including probing techniques, activation patching, logit lenses, sparse autoencoders, and automated explanation methods. These tools have greatly enhanced our understanding of how VLMs represent, integrate, and process multimodal information. Despite these advancements, several key challenges remain. These include the need for validation across a wider range of VLM architectures and training paradigms, a deeper exploration of information flow dynamics throughout training stages, and a stronger alignment between micro-level insights and macro-level behaviors. Addressing these challenges will pave the way for developing more robust and effective VLMs, advancing both their design and practical applications.
 
 
-<!-- ## Future Directions
+<!-- # Future Directions
 
 1. **Towards Universality**
 - As mechanistic interpretability matures, the field must transition from isolated empirical findings to developing overarching theories and universal reasoning primitives beyond specific circuits, aiming for a comprehensive understanding of AI capabilities <d-cite key="bereska2024mechanistic"></d-cite>. This is especially important to VLMs since architecture design (self-attention, cross attention etc.) and vision transformers come in many forms (CLIP, vanilla ViT and DINO etc.). Experiments are conducted mainly on LLaVA-NeXT and InstructBLIP may not be directly applicable to models that utilize different frameworks <d-cite key="huo2024mmneuron"></d-cite>.
@@ -999,7 +999,7 @@ This work provides a comprehensive review of studies leveraging mechanistic inte
 6. **Think more about the big picture**
 - While microscopic interpretability studies have provided valuable insights, there's a pressing need to move beyond merely documenting individual model behaviors. Instead, research should focus on translating these findings into actionable improvements in AI system development and deployment, bridging the gap between theoretical understanding and practical applications <d-cite key="DBLP:conf/emnlp/MosbachGBKG24"></d-cite>.
 
-## Conclusion
+# Conclusion
 Vision-Language Models (VLMs) have demonstrated remarkable capabilities in integrating visual and linguistic information. Our survey has examined VLM research through both macro and micro perspectives, revealing our current understanding and future challenges.
 
 At the macro level, while we've seen rapid empirical progress in architectures and training methods, theoretical understanding remains limited. At the micro level, interpretability research has begun illuminating VLM internals through various techniques - from Concept Bottleneck Models to Sparse Autoencoders. However, significant challenges remain, including the need to move beyond isolated findings toward comprehensive theories and the development of more robust validation methods.
