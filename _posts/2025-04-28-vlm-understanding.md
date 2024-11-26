@@ -249,7 +249,7 @@ $$
 
 
 
-Vision-Language Models (VLMs), such as GPT-4V <d-cite key="2023GPT4VisionSC"></d-cite> or LLaVA <d-cite key="liu2023visual,liu2023improved,liu2024llavanext,li2024llavaonevision"></d-cite>, have achieved remarkable success across a wide range of tasks, including including Image Captioning <d-cite key="vinyals2014show"></d-cite>, Visual Question Answering (VQA)  <d-cite key="agrawal2015vqa"></d-cite>, and Multimodal Reasoning <d-cite key="NEURIPS2022_11332b6b"></d-cite>. These advancements have driven innovation in diverse fields, such as virtual assistants <d-cite key="wu2023visual"></d-cite>, autonomous robotics <d-cite key="driess2023palme"></d-cite>, and medical diagnostics <d-cite key="singhal2023towards"></d-cite>. However, despite their rapid adoption, the internal mechanisms of these models remain largely opaque, raising significant concerns about their reliability, robustness, and interpretability—particularly in high-stakes applications <d-cite key="kolicic2024inherently"></d-cite>.
+Vision language Models (VLMs), such as GPT-4V <d-cite key="2023GPT4VisionSC"></d-cite> or LLaVA <d-cite key="liu2023visual,liu2023improved,liu2024llavanext,li2024llavaonevision"></d-cite>, have achieved remarkable success across a wide range of tasks, including including Image Captioning <d-cite key="vinyals2014show"></d-cite>, Visual Question Answering (VQA)  <d-cite key="agrawal2015vqa"></d-cite>, and Multimodal Reasoning <d-cite key="NEURIPS2022_11332b6b"></d-cite>. These advancements have driven innovation in diverse fields, such as virtual assistants <d-cite key="wu2023visual"></d-cite>, autonomous robotics <d-cite key="driess2023palme"></d-cite>, and medical diagnostics <d-cite key="singhal2023towards"></d-cite>. However, despite their rapid adoption, the internal mechanisms of these models remain largely opaque, raising significant concerns about their reliability, robustness, and interpretability—particularly in high-stakes applications <d-cite key="kolicic2024inherently"></d-cite>.
 
 Interpretability research offers a promising path to address these challenges. Mechanistic interpretability, in particular, seeks to uncover the inner processes of neural networks and explain how specific outputs are generated <d-cite key="saphra2024mechanistic,hastingswoodhouse2024introduction"></d-cite>. By applying these techniques to VLMs, researchers can gain valuable insights into how these models represent, process, store, and integrate visual and linguistic information, advancing both theoretical understanding and practical utility.
 
@@ -270,7 +270,7 @@ In this section, we review mechanistic interpretability methods applied to visio
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/probing.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
-Illustration of probing in neural networks: a simple classifier is trained on intermediate representations of a vision-language model to predict target properties, revealing the model’s encoding strengths and limitations.
+Illustration of probing in neural networks: a simple classifier is trained on intermediate representations of a vision language model to predict target properties, revealing the model’s encoding strengths and limitations.
 </div>
 <br>
 
@@ -290,7 +290,7 @@ Linear probes are often preferred because their simplicity ensures that high acc
 
 <details markdown="1">
 <summary><b>Example</b></summary>
-To illustrate, consider a vision-language model analyzing the caption: *"A cat sitting on a mat."*
+To illustrate, consider a vision language model analyzing the caption: *"A cat sitting on a mat."*
 - A probe could be trained to predict spatial relationships (e.g., object positioning) from intermediate representations of the model.
 - Another probe might predict visual attributes, such as "furry" or "striped," encoded in the text embeddings.
 
@@ -318,7 +318,7 @@ Studies have also explored diverse model capabilities, such as visual semantics 
 <aside class="l-body box-note" markdown="1">
 Key Takeaways:
 - **Probing is a powerful tool for interpreting neural networks**, offering insights into the types of information encoded in their representations.
-- For vision-language models, probing has revealed critical findings on modality interactions, representation priorities, and encoding patterns.
+- For vision language models, probing has revealed critical findings on modality interactions, representation priorities, and encoding patterns.
 </aside>
 
 
@@ -352,7 +352,7 @@ There are two primary ways to apply activation patching <d-cite key="heimersheim
 
 <details markdown="1">
 <summary><b>Example</b></summary>
-Imagine analyzing a Vision-Language Model (VLM) tasked with identifying objects in an image:
+Imagine analyzing a Vision language Model (VLM) tasked with identifying objects in an image:
 - **Clean Input:** An image of "a cat sitting on a mat."
 - **Corrupted Input:** The same image with Gaussian noise added to the "cat" region.
 
@@ -436,7 +436,7 @@ The logit lens maps intermediate activations to a sequence of "snapshots" of pre
 <details markdown="1">
 <summary><b>Example</b></summary>
 
-Consider a vision-language model analyzing an image of "a dog chasing a ball in a park." Using the logit lens, the prediction evolution might look like this:
+Consider a vision language model analyzing an image of "a dog chasing a ball in a park." Using the logit lens, the prediction evolution might look like this:
 - **Early layers:** Predictions are highly uncertain, with terms like "dog," "animal," and "pet" receiving similar probabilities.
 - **Middle layers:** The model begins refining predictions, focusing on "dog" while maintaining context-related terms such as "park" and "ball."
 - **Final layers:** The model confidently predicts specific relationships like "dog chasing ball" and integrates objects into a coherent scene.
@@ -508,7 +508,7 @@ The first term ensures accurate reconstruction, while the $$ L_1 $$ norm encoura
 <details markdown="1">
 <summary><b>Example</b></summary>
 
-Consider a vision-language model where internal activations encode multiple concepts (e.g., visual concepts and language semantics). For instance, an activation might simultaneously encode features like “cat” (visual concept) and “playful” (language concept), making interpretation difficult. By applying a Sparse Autoencoder (SAE), these entangled representations are transformed into a high-dimensional sparse space, where each dimension uniquely captures a specific feature, such as “furry animal” or “expressive tone.”
+Consider a vision language model where internal activations encode multiple concepts (e.g., visual concepts and language semantics). For instance, an activation might simultaneously encode features like “cat” (visual concept) and “playful” (language concept), making interpretation difficult. By applying a Sparse Autoencoder (SAE), these entangled representations are transformed into a high-dimensional sparse space, where each dimension uniquely captures a specific feature, such as “furry animal” or “expressive tone.”
 
 </details>
 <br>
@@ -518,7 +518,7 @@ Consider a vision-language model where internal activations encode multiple conc
 - **Language Models**: SAEs have been successfully applied to large language models like GPT-4 and LLaMA-3.1, enabling the discovery of distinct patterns in how these models encode syntax, semantics, and other linguistic features <d-cite key="templeton2024scaling,gao2024scaling,he2024llama"></d-cite>.
 - **Vision Transformers (ViTs)**: Researchers have begun using SAEs to analyze ViTs <d-cite key="joseph2023vit,DBLP:conf/eccv/RaoMBS24"></d-cite>. Early results suggest that SAEs can extract interpretable image features, such as object boundaries and textures, using less data compared to their application in language models.
 
-However, Sparse Autoencoders have not yet been applied to vision-language models.
+However, Sparse Autoencoders have not yet been applied to vision language models.
 
 ### Method Variants and Limitations
 
@@ -530,7 +530,7 @@ However, Sparse Autoencoders have not yet been applied to vision-language models
 <aside class="l-body box-note" markdown="1">
 Key Takeaways:
 - Sparse Autoencoders offer a powerful method for addressing the superposition problem in neural networks by transforming complex representations into sparse, interpretable features.
-- They have been successfully applied to both language models and vision transformers, uncovering hidden patterns in neural representations, but have yet to be explored in vision-language models.
+- They have been successfully applied to both language models and vision transformers, uncovering hidden patterns in neural representations, but have yet to be explored in vision language models.
 </aside>
 
 
@@ -567,10 +567,10 @@ Another effective approach to understanding neural networks' internal mechanisms
 
 1. **Supervised Approaches**
 - Supervised approaches utilize concept-labeled data to guide the interpretation of neural network components. We're essentially looking for some components that consistently "light up" (activate strongly) when presented with specific types of input. For example, if a specific neuron consistently shows high activation when the network processes a particular category of input (such as images of cats) but remains relatively inactive for other categories, we can classify this neuron as specialized for detecting that category.
-- **Neuron Specialization**: Recent research has applied this approach to both language and vision-language models. Tang et al. <d-cite key="tang2024languagespecific"></d-cite> identified *language-specific neurons* in LLMs, while MMNeuron <d-cite key="huo2024mmneuron"></d-cite> made interesting discoveries about *domain-specific neurons* in vision-language models like LLaVA and InstructBLIP. They found that deactivating domain-specific neurons, while significantly perturbing hidden states, doesn't always impact task performance. This suggests that VLMs fail to take full advantage of the domain-specific information in specific domains, which means **VLMs may rely on highly generalized internal representations.** Miner <d-cite key="huang2024miner"></d-cite> further refined this methodology to find *modality-specific neurons*. They also reveal that **modality-specific neurons are primarily concentrated in shallow layers, with most modality information remaining within its original token set.**
+- **Neuron Specialization**: Recent research has applied this approach to both language and vision language models. Tang et al. <d-cite key="tang2024languagespecific"></d-cite> identified *language-specific neurons* in LLMs, while MMNeuron <d-cite key="huo2024mmneuron"></d-cite> made interesting discoveries about *domain-specific neurons* in vision language models like LLaVA and InstructBLIP. They found that deactivating domain-specific neurons, while significantly perturbing hidden states, doesn't always impact task performance. This suggests that VLMs fail to take full advantage of the domain-specific information in specific domains, which means **VLMs may rely on highly generalized internal representations.** Miner <d-cite key="huang2024miner"></d-cite> further refined this methodology to find *modality-specific neurons*. They also reveal that **modality-specific neurons are primarily concentrated in shallow layers, with most modality information remaining within its original token set.**
 
 2. **Unsupervised Discovery**
-- While supervised approaches provide clear and verifiable concept mappings, their reliance on labeled data can limit scalability and may miss concepts not included in the predefined set. Unsupervised discovery methods take a more data-driven approach, identifying meaningful patterns in network activations without requiring concept labels. These approaches typically analyze how different network components respond to various inputs, using techniques like clustering or dimensionality reduction to group similar activation patterns. Recent advances have **integrated language models or vision-language models to automatically generate natural language descriptions of discovered patterns.** This approach offers greater flexibility in concept discovery and can uncover unexpected patterns that might be missed by supervised methods. However, the challenge lies in ensuring the discovered concepts are meaningful and reliable for practical applications <d-cite key="DBLP:conf/blackboxnlp/HuangGDWP23"></d-cite>.
+- While supervised approaches provide clear and verifiable concept mappings, their reliance on labeled data can limit scalability and may miss concepts not included in the predefined set. Unsupervised discovery methods take a more data-driven approach, identifying meaningful patterns in network activations without requiring concept labels. These approaches typically analyze how different network components respond to various inputs, using techniques like clustering or dimensionality reduction to group similar activation patterns. Recent advances have **integrated language models or vision language models to automatically generate natural language descriptions of discovered patterns.** This approach offers greater flexibility in concept discovery and can uncover unexpected patterns that might be missed by supervised methods. However, the challenge lies in ensuring the discovered concepts are meaningful and reliable for practical applications <d-cite key="DBLP:conf/blackboxnlp/HuangGDWP23"></d-cite>.
 - Recent advances have leveraged large language models like GPT-4 to automatically generate natural language descriptions of discovered patterns <d-cite key="hernandez2022natural,singh2023explaining,bills2023language"></d-cite>. In VLMs, a notable example is MAIA <d-cite key="DBLP:conf/icml/ShahamSWRHA024"></d-cite>, which automates interpretability tasks by composing pretrained modules to conduct experiments on other systems. Given an interpretability query (e.g., "Which neurons in Layer 4 are selective for forested backgrounds?"), MAIA runs experiments to test specific hypotheses, observes outcomes, and iteratively updates its understanding until it can answer the user query.
 
 <aside class="l-body box-note" markdown="1">
@@ -585,7 +585,7 @@ Key Takeaways:
 
   
 
-While the above mechanistic interpretability studies have provided significant insights into how vision-language models (VLMs) function, several challenges remain. This section discusses and summarizes these challenges and proposes potential directions for future research.
+While the above mechanistic interpretability studies have provided significant insights into how vision language models (VLMs) function, several challenges remain. This section discusses and summarizes these challenges and proposes potential directions for future research.
 
   
 
@@ -593,7 +593,7 @@ While the above mechanistic interpretability studies have provided significant i
 
   
 
-**Current Situation**: Unlike large language models (LLMs), vision-language models (VLMs) exhibit much greater heterogeneity in terms of architectures, data, and training paradigms. For instance, VLMs can differ significantly in their vision encoders <d-cite key="li2023monkey,ye2023ureader,xue2024xgenmm"></d-cite>, language models <d-cite key="laurençon2024matters"></d-cite>, and the connectors between them—ranging from simple linear layers to visual resamplers or cross-modal attention mechanisms <d-cite key="liu2023visual,NEURIPS2022_960a172b,awadalla2023openflamingo,DBLP:conf/nips/LaurenconSTBSLW23,dubey2024llama"></d-cite>. They also vary in their training data, which may include image-captioning datasets, visual instruction tuning data, or interleaved image-text datasets <d-cite key="laurençon2024building"></d-cite>. Additionally, their training paradigms differ, such as whether they perform alignment <d-cite key="rafailov2023direct,sun2023aligning,yu2023rlhfv,chen2023dress"></d-cite>, or whether the vision encoder is frozen or fine-tuned during training <d-cite key="Qwen-VL,Qwen2VL,lu2024deepseekvl"></d-cite>. This substantial heterogeneity may limit the transferability of findings if interpretability studies are only conducted on a single model.
+**Current Situation**: Unlike large language models (LLMs), vision language models (VLMs) exhibit much greater heterogeneity in terms of architectures, data, and training paradigms. For instance, VLMs can differ significantly in their vision encoders <d-cite key="li2023monkey,ye2023ureader,xue2024xgenmm"></d-cite>, language models <d-cite key="laurençon2024matters"></d-cite>, and the connectors between them—ranging from simple linear layers to visual resamplers or cross-modal attention mechanisms <d-cite key="liu2023visual,NEURIPS2022_960a172b,awadalla2023openflamingo,DBLP:conf/nips/LaurenconSTBSLW23,dubey2024llama"></d-cite>. They also vary in their training data, which may include image-captioning datasets, visual instruction tuning data, or interleaved image-text datasets <d-cite key="laurençon2024building"></d-cite>. Additionally, their training paradigms differ, such as whether they perform alignment <d-cite key="rafailov2023direct,sun2023aligning,yu2023rlhfv,chen2023dress"></d-cite>, or whether the vision encoder is frozen or fine-tuned during training <d-cite key="Qwen-VL,Qwen2VL,lu2024deepseekvl"></d-cite>. This substantial heterogeneity may limit the transferability of findings if interpretability studies are only conducted on a single model.
 
   
 
@@ -640,7 +640,7 @@ Summary:
 
 **Current Situation**: VLMs differ from LLMs in their handling of visual information. While many LLM interpretability tools have been successful in explaining text-based mechanisms <d-cite key="neo2024towards"></d-cite>, applying these tools directly to VLMs may not suffice due to the richer, more ambiguous nature of visual information <d-cite key="joseph2023vit"></d-cite>. Furthermore, VLMs incorporate vision encoders, language models, and connectors between them, adding layers of complexity to interpretability studies.
 
-**Path Forward**: Developing tools specifically designed for visual contexts is necessary to address the unique challenges posed by vision-based features. Meanwhile, these tools should consider the intricate architectures of VLMs and prioritize analyzing the vision components and vision-language connectors, ensuring that interpretations are accurately attributed to the visual inputs. Additionally, input data used for interpretability should emphasize vision-centric tasks that cannot be easily solved by text-only models, ensuring meaningful insights into how VLMs process visual inputs.
+**Path Forward**: Developing tools specifically designed for visual contexts is necessary to address the unique challenges posed by vision-based features. Meanwhile, these tools should consider the intricate architectures of VLMs and prioritize analyzing the vision components and vision language connectors, ensuring that interpretations are accurately attributed to the visual inputs. Additionally, input data used for interpretability should emphasize vision-centric tasks that cannot be easily solved by text-only models, ensuring meaningful insights into how VLMs process visual inputs.
 
   
 <aside class="l-body box-note" markdown="1">
@@ -658,7 +658,7 @@ Summary:
 
   
 
-**Current Situation**: Interpretability studies often focus on a single checkpoint of a model, ignoring the dynamic nature of information flow during training. For example, VLM training typically involves multiple stages, such as initial alignment using image-captioning data (where only the vision-language connector is tuned) followed by end-to-end fine-tuning with diverse instruction-tuning data. These stages may include phase changes <d-cite key="wei2022emergent"></d-cite> where models gain new capabilities or behaviors, such as transitioning from unimodal pre-trained models to multimodal systems.
+**Current Situation**: Interpretability studies often focus on a single checkpoint of a model, ignoring the dynamic nature of information flow during training. For example, VLM training typically involves multiple stages, such as initial alignment using image-captioning data (where only the vision language connector is tuned) followed by end-to-end fine-tuning with diverse instruction-tuning data. These stages may include phase changes <d-cite key="wei2022emergent"></d-cite> where models gain new capabilities or behaviors, such as transitioning from unimodal pre-trained models to multimodal systems.
 
   
 
@@ -700,5 +700,5 @@ Summary:
 
 # Conclusion
 
-This work provides a comprehensive review of studies leveraging mechanistic interpretability tools to analyze vision-language models (VLMs), including probing techniques, activation patching, logit lenses, sparse autoencoders, and automated explanation methods. These tools have greatly enhanced our understanding of how VLMs represent, integrate, and process multimodal information. Despite these advancements, several key challenges remain. These include the need for validation across a wider range of VLM architectures and training paradigms, a deeper exploration of information flow dynamics throughout training stages, and a stronger alignment between micro-level insights and macro-level behaviors. Addressing these challenges will pave the way for developing more robust and effective VLMs, advancing both their design and practical applications.
+This work provides a comprehensive review of studies leveraging mechanistic interpretability tools to analyze vision language models (VLMs), including probing techniques, activation patching, logit lenses, sparse autoencoders, and automated explanation methods. These tools have greatly enhanced our understanding of how VLMs represent, integrate, and process multimodal information. Despite these advancements, several key challenges remain. These include the need for validation across a wider range of VLM architectures and training paradigms, a deeper exploration of information flow dynamics throughout training stages, and a stronger alignment between micro-level insights and macro-level behaviors. Addressing these challenges will pave the way for developing more robust and effective VLMs, advancing both their design and practical applications.
 
