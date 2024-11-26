@@ -457,6 +457,11 @@ The activation patching process typically involves five steps:
 4. **Rerun the Model:** Run the model with patched activations and observe behavioral changes.
 5. **Analyze Results:** Infer the role of specific components based on how the output changes.
 
+There are two primary ways to apply activation patching <d-cite key="heimersheim2024use"></d-cite>:
+
+- **Denoising Analysis** involves taking a corrupted prompt, such as one where Gaussian noise has been added to key embeddings, and replacing its activations with those from a clean prompt. By observing which patched activations restore the clean behavior, researchers can identify the components that are **sufficient to correct** the corrupted behavior. For example, this technique can reveal layers where key information is integrated or restored during processing.
+- **Noising Analysis**, on the other hand, starts with a clean prompt and replaces its activations with those from a corrupted prompt. By determining which patches disrupt the clean behavior, this method pinpoints the components **necessary to maintain** the correct output. This analysis is particularly useful for identifying which layers or activations play a critical role in preserving the model's functionality.
+
 <details markdown="1">
 <summary><b>Example</b></summary>
 Imagine analyzing a Vision-Language Model (VLM) tasked with identifying objects in an image:
@@ -497,9 +502,9 @@ If restoring activations in a specific layer consistently fixes errors, this sug
 #### Method Variants and Limitations
 
 - **Method Variants:**
-  - **Direct Ablations:** Replace activations with zeros or dataset means to highlight critical components <d-cite key="DBLP:conf/iclr/NandaCLSS23"></d-cite>.
-  - **Path Patching:** Trace causal pathways through the network to understand information flow <d-cite key="goldowsky-dill2023localizing"></d-cite>.
-  - **Attention Knockout:** Focus on attention mechanisms by selectively blocking patterns between tokens <d-cite key="geva2023dissecting"></d-cite>.
+  - **Direct Ablations** <d-cite key="DBLP:conf/iclr/NandaCLSS23"></d-cite>: A simpler variant where activations are replaced with zeros or dataset means. While zero ablation shows components critical for network behavior, mean ablation is more natural version of zero ablation.
+  - **Path Patching** <d-cite key="goldowsky-dill2023localizing"></d-cite>: An extension that traces specific causal pathways through the network, helping understand how information flows between different model components. 
+  - **Attention Knockout** <d-cite key="geva2023dissecting"></d-cite>: A specialized form focused on analyzing attention mechanisms by selectively blocking attention patterns between tokens.
 
 - **Creating Corrupted Inputs:**
   - **Text Inputs:** Introduce Gaussian Noise (GN) or use Symmetric Token Replacement (STR), which replaces tokens with semantically similar alternatives. STR is often preferred as GN disrupts model internals.
