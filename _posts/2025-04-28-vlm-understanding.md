@@ -383,9 +383,6 @@ A notable line of research compared representations at different training stages
 
 #### Method Variants and Limitations
 
-**Variants of Probing**:
-- Researchers sometimes use non-linear probes or more sophisticated classifiers to study complex properties. However, this adds a risk of confounding the results with the probe’s own learning capabilities.
-
 **Limitations**:
 - **Correlation vs. Causation**: High probe accuracy indicates correlation, not causation; the model may encode the information but not actively use it for predictions.
 - **Task Design**: Probing tasks must be carefully designed to avoid confounding factors or misleading results.
@@ -501,7 +498,7 @@ If restoring activations in a specific layer consistently fixes errors, this sug
 
 #### Method Variants and Limitations
 
-- **Method Variants:**
+- **Variants:**
   - **Direct Ablations** <d-cite key="DBLP:conf/iclr/NandaCLSS23"></d-cite>: A simpler variant where activations are replaced with zeros or dataset means. While zero ablation shows components critical for network behavior, mean ablation is more natural version of zero ablation.
   - **Path Patching** <d-cite key="goldowsky-dill2023localizing"></d-cite>: An extension that traces specific causal pathways through the network, helping understand how information flows between different model components. 
   - **Attention Knockout** <d-cite key="geva2023dissecting"></d-cite>: A specialized form focused on analyzing attention mechanisms by selectively blocking attention patterns between tokens.
@@ -726,17 +723,23 @@ The sparse autoencoder works by mapping input activations into a high-dimensiona
 #### How Sparse Autoencoders Work
 
 SAEs use an encoder-decoder structure to transform and reconstruct input representations while enforcing sparsity. Given activations $$ z \in \mathbf{R}^d $$ from a neural network, the encoder transforms these into a sparse, high-dimensional representation $$ h $$:
+
 $$
 h = \text{ReLU}((z - b_{dec})W_{enc} + b_{enc})
 $$
+
 Here, $$ b_{dec} $$ normalizes hidden states, and $$ W_{enc} $$ maps the activations. The decoder reconstructs the input from the sparse representation:
+
 $$
 \text{SAE}(z) = h W_{dec} + b_{dec}
 $$
+
 The training objective minimizes the following loss:
+
 $$
 \cL(z) = \|\mbz - \text{SAE}(\mbz)\|_2^2 + \alpha \|\mbh(\mbz)\|_1
 $$
+
 The first term ensures accurate reconstruction, while the $$ L_1 $$ norm encourages sparsity, making each dimension correspond to a distinct feature.
 
 <details markdown="1">
