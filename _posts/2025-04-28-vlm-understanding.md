@@ -253,7 +253,7 @@ Vision language Models (VLMs), such as GPT-4V <d-cite key="2023GPT4VisionSC"></d
 
 Interpretability research offers a promising path to address these challenges. Mechanistic interpretability, in particular, seeks to uncover the inner processes of neural networks and explain how specific outputs are generated <d-cite key="saphra2024mechanistic,hastingswoodhouse2024introduction"></d-cite>. By applying these techniques to VLMs, researchers can gain valuable insights into how these models represent, process, store, and integrate visual and linguistic information, advancing both theoretical understanding and practical utility.
 
-In this work, we examine how mechanistic interpretability methods can illuminate the inner workings of VLMs. We review five key techniques—probing <d-cite key="alain2016understanding,hewitt-manning-2019-structural"></d-cite>, activation patching <d-cite key="NEURIPS2020_92650b2e, NEURIPS2022_6f1d43d5"></d-cite>, logit lens <d-cite key="alignmentforumorg2024interpreting"></d-cite>, sparse autoencoders <d-cite key="bricken2023monosemanticity,DBLP:conf/iclr/HubenCRES24"></d-cite>, and automated explanations—detailing their mechanisms, applications, and the insights they provide through concrete examples. These methods help answer critical questions, such as what information is encoded in VLM representations <d-cite key="cao2020behind"></d-cite>, how and when visual and linguistic modalities are integrated <d-cite key="Palit_2023_ICCV,neo2024towards"></d-cite>, and how individual neurons contribute to the model’s decision-making process <d-cite key="huo2024mmneuron,huang2024miner"></d-cite>.
+In this work, we examine how mechanistic interpretability methods can illuminate the inner workings of VLMs. We review five key techniques—probing <d-cite key="alain2016understanding,hewitt-manning-2019-structural"></d-cite>, activation patching <d-cite key="NEURIPS2020_92650b2e, NEURIPS2022_6f1d43d5"></d-cite>, logit lens <d-cite key="alignmentforumorg2024interpreting"></d-cite>, sparse autoencoders <d-cite key="bricken2023monosemanticity,DBLP:conf/iclr/HubenCRES24"></d-cite>, and automated explanations <d-cite key="singh2023explaining,bills2023language"></d-cite>—detailing their mechanisms, applications, and the insights they provide through concrete examples. These methods help answer critical questions, such as what information is encoded in VLM representations <d-cite key="cao2020behind"></d-cite>, how and when visual and linguistic modalities are integrated <d-cite key="Palit_2023_ICCV,neo2024towards"></d-cite>, and how individual neurons contribute to the model’s decision-making process <d-cite key="huo2024mmneuron,huang2024miner"></d-cite>.
 
 Additionally, we discuss the limitations of current interpretability methods and highlight five key directions for future research: developing approaches that are more generalizable, scalable, vision-centric, dynamic, and capable of macro-level analysis. For instance, the heterogeneity of VLMs calls for interpretability methods that can adapt across diverse models; the micro level of mechanistic interpretability needs to be complemented by a macro-level perspective for a broader understanding. By addressing these challenges, we aim to pave the way for more transparent, reliable, and capable vision language models.
 
@@ -276,7 +276,7 @@ Illustration of probing in neural networks: a simple classifier is trained on in
 
 ### What is Probing
 
-*Probing* <d-cite key="alain2016understanding,hewitt-manning-2019-structural"></d-cite> is a diagnostic technique used to analyze the internal representations of neural networks. It helps researchers identify whether specific types of information are encoded within the model by training auxiliary classifiers—referred to as probes—on the model's intermediate outputs. This method is particularly useful for understanding what a model has learned and how it organizes information across its layers.
+*Probing* <d-cite key="alain2016understanding,hewitt-manning-2019-structural"></d-cite> is a diagnostic technique used to analyze the internal representations of neural networks. It helps researchers identify **whether specific types of information are encoded within the model** by training auxiliary classifiers—referred to as probes—on the model's intermediate outputs. This method is particularly useful for understanding what a model has learned and how it organizes information across its layers.
 
 ### How Probing Works
 
@@ -284,7 +284,7 @@ Probing involves training supervised classifiers, typically simple ones like lin
 - **High accuracy**: Suggests the property is well-encoded.
 - **Low accuracy**: Indicates the property may be absent or deeply entangled.
 
-Linear probes are often preferred because their simplicity ensures that high accuracy reflects the quality of the model’s representations, rather than the complexity of the probe itself.
+Linear probes are often preferred because their simplicity ensures that high accuracy reflects the quality of the model’s representations, rather than the complexity of the probe itself <d-cite key="belinkov2021probing"></d-cite>.
 
 
 
@@ -311,13 +311,13 @@ Studies have also explored diverse model capabilities, such as visual semantics 
 ### Method Variants and Limitations
 
 **Limitations**:
-- **Correlation vs. Causation**: High probe accuracy indicates correlation, not causation; the model may encode the information but not actively use it for predictions.
-- **Task Design**: Probing tasks must be carefully designed to avoid confounding factors or misleading results.
+- **Correlation vs. Causation**: High probe accuracy indicates correlation, not causation; the model may encode the information but not actively use it for predictions <d-cite key="elazar2021amnesic"></d-cite>.
+- **Task Design**: Probing tasks must be carefully designed to avoid confounding factors or misleading results <d-cite key="vatsa2023adventures"></d-cite>.
 - **Model-Specific Dependencies**: Probing results are often architecture-dependent, limiting their generalizability across models.
 
 <aside class="l-body box-note" markdown="1">
 Key Takeaways:
-- **Probing is a powerful tool for interpreting neural networks**, offering insights into the types of information encoded in their representations.
+- Probing is a powerful tool for interpreting neural networks, offering insights into the types of information encoded in their representations.
 - For vision language models, probing has revealed critical findings on modality interactions, representation priorities, and encoding patterns.
 </aside>
 
@@ -333,7 +333,7 @@ Activation patching compares model behavior under clean, corrupted, noising, and
 
 ### What is Activation Patching
 
-**Activation patching** <d-cite key="NEURIPS2020_92650b2e, NEURIPS2022_6f1d43d5"></d-cite> (also known as causal tracing or causal mediation analysis) is an interpretability technique for neural networks. It selectively modifies internal activations while keeping others constant, allowing researchers to investigate **how specific components contribute to model behavior**. This method provides causal insights, helping identify critical components and potential interventions to improve performance and robustness.
+*Activation patching* <d-cite key="NEURIPS2020_92650b2e, NEURIPS2022_6f1d43d5"></d-cite> (also known as causal tracing or causal mediation analysis) is an interpretability technique for neural networks. It selectively modifies internal activations while keeping others constant, allowing researchers to investigate **how specific components contribute to model behavior**. This method provides causal insights, helping identify critical components and potential interventions to improve performance and robustness.
 
 ### How Activation Patching Works
 
@@ -390,12 +390,12 @@ If restoring activations in a specific layer consistently fixes errors, this sug
 ### Method Variants and Limitations
 
 - **Variants:**
-  - **Direct Ablations** <d-cite key="DBLP:conf/iclr/NandaCLSS23"></d-cite>: A simpler variant where activations are replaced with zeros or dataset means. While zero ablation shows components critical for network behavior, mean ablation is more natural version of zero ablation.
+  - **Direct Ablations** <d-cite key="DBLP:conf/iclr/NandaCLSS23"></d-cite>: A simpler variant where activations are replaced with zeros or dataset means. While zero ablation shows components critical for network behavior, mean ablation is a more natural version of zero ablation.
   - **Path Patching** <d-cite key="goldowsky-dill2023localizing"></d-cite>: An extension that traces specific causal pathways through the network, helping understand how information flows between different model components. 
   - **Attention Knockout** <d-cite key="geva2023dissecting"></d-cite>: A specialized form focused on analyzing attention mechanisms by selectively blocking attention patterns between tokens.
 
 - **Creating Corrupted Inputs:**
-  - **Text Inputs:** Introduce Gaussian Noise (GN) or use Symmetric Token Replacement (STR), which replaces tokens with semantically similar alternatives. STR is often preferred as GN disrupts model internals.
+  - **Text Inputs:** Introduce *Gaussian Noise (GN)* or use *Symmetric Token Replacement (STR)*, which replaces tokens with semantically similar alternatives. STR is often preferred as GN disrupts model internals.
   - **Image Inputs:** Apply Gaussian noise or use Semantic Image Pairs (SIP) to modify concepts (e.g., change "cat" to "dog") <d-cite key="golovanevsky2024vlms"></d-cite>.
 
 
@@ -424,14 +424,14 @@ Logit lens uses the model's unembedding matrix to extract and interpret predicti
 
 ### What is Logit Lens
 
-*Logit lens* <d-cite key="alignmentforumorg2024interpreting"></d-cite> is an analytical method used to understand how neural networks refine their predictions layer by layer. By applying the model’s final classification layer (unembedding matrix) to intermediate activations, it projects these activations into vocabulary space. This allows researchers to analyze intermediate predictions, offering insights into the model's evolving understanding of multimodal inputs.
+*Logit lens* <d-cite key="alignmentforumorg2024interpreting"></d-cite> is an analytical method used to understand **how neural networks refine their predictions layer by layer.** By applying the model’s final classification layer (unembedding matrix) to intermediate activations, it projects these activations into vocabulary space. This allows researchers to analyze intermediate predictions, offering insights into the model's evolving understanding of multimodal inputs.
 
 ### How Logit Lens Works
 
 The logit lens maps intermediate activations to a sequence of "snapshots" of predictions as they develop across the network’s layers. The process involves:
-- Extracting activations from each layer of the model.
-- Applying the unembedding matrix to transform these activations into vocabulary distributions.
-- Observing how prediction probabilities change from one layer to the next, revealing the model's internal decision-making process.
+1. Extracting activations from each layer of the model.
+2. Applying the unembedding matrix to transform these activations into vocabulary distributions.
+3. Observing how prediction probabilities change from one layer to the next, revealing the model's internal decision-making process.
 
 <details markdown="1">
 <summary><b>Example</b></summary>
@@ -459,7 +459,7 @@ This example illustrates how the logit lens tracks the progression from basic fe
 ### Method Variants and Limitations
 
 - **Limitations:**
-   - The logit lens assumes the unembedding matrix remains interpretable across all layers, which may not hold for heavily tuned or non-linear models.
+   - The logit lens can be brittle, as it assumes hidden states remain linearly interpretable across all layers, which may not hold for heavily tuned or non-linear models <d-cite key="belrose2023eliciting"></d-cite>.
    - It is less effective for analyzing tasks requiring complex reasoning or long-term dependencies.
 
 <aside class="l-body box-note" markdown="1"> 
@@ -481,7 +481,7 @@ The sparse autoencoder works by mapping input activations into a high-dimensiona
 
 ### What Are Sparse Autoencoders
 
-*Sparse Autoencoders (SAEs)* are a neural network-based method designed to disentangle complex internal representations in neural networks by addressing the *superposition* problem <d-cite key="arora2016linear,olah2020zoom"></d-cite>. In superposition, neurons encode multiple overlapping features, which makes interpretation challenging. SAEs mitigate this by mapping representations into a higher-dimensional, sparsely activated space, enabling the extraction of distinct, interpretable features.
+*Sparse Autoencoders (SAEs)* are a neural network-based method designed to **disentangle complex internal representations in neural networks** by addressing the *superposition* problem <d-cite key="arora2016linear,olah2020zoom"></d-cite>. In superposition, neurons encode multiple overlapping features, which makes interpretation challenging. SAEs mitigate this by mapping representations into a higher-dimensional, sparsely activated space, enabling the extraction of distinct, interpretable features.
 
 ### How Sparse Autoencoders Work
 
@@ -515,7 +515,7 @@ Consider a vision language model where internal activations encode multiple conc
 
 ### Key Findings from Existing Works
 
-- **Language Models**: SAEs have been successfully applied to large language models like GPT-4 and LLaMA-3.1, enabling the discovery of distinct patterns in how these models encode syntax, semantics, and other linguistic features <d-cite key="templeton2024scaling,gao2024scaling,he2024llama"></d-cite>.
+- **Language Models**: SAEs have been successfully applied to large language models like Claude 3 <d-cite key="templeton2024scaling"></d-cite>, GPT-4 <d-cite key="gao2024scaling"></d-cite> and LLaMA-3.1 <d-cite key="he2024llama"></d-cite>, enabling the discovery of distinct patterns in how these models encode syntax, semantics, and other linguistic features.
 - **Vision Transformers (ViTs)**: Researchers have begun using SAEs to analyze ViTs <d-cite key="joseph2023vit,DBLP:conf/eccv/RaoMBS24"></d-cite>. Early results suggest that SAEs can extract interpretable image features, such as object boundaries and textures, using less data compared to their application in language models.
 
 However, Sparse Autoencoders have not yet been applied to vision language models.
@@ -523,9 +523,9 @@ However, Sparse Autoencoders have not yet been applied to vision language models
 ### Method Variants and Limitations
 
 - **Variants**: 
-	- TransCoders and CrossCoders extend SAEs by incorporating cross-layer and cross-model feature analysis, enabling comparisons both within layers and across different models <d-cite key="dunefsky2024transcoders,lindsey2024sparse"></d-cite>.
+	- TransCoders <d-cite key="dunefsky2024transcoders"></d-cite> and CrossCoders <d-cite key="lindsey2024sparse"></d-cite> extend SAEs by incorporating cross-layer and cross-model feature analysis, enabling comparisons both within layers and across different models.
 - **Limitations**: 
-	- Applying SAEs to large-scale models, especially ViTs, is computationally expensive due to the increased dimensionality of the sparse space.
+	- Applying SAEs to large-scale models is computationally expensive due to the increased dimensionality of the sparse space.
 
 <aside class="l-body box-note" markdown="1">
 Key Takeaways:
@@ -546,7 +546,7 @@ Key Takeaways:
 
 There are two primary approaches to automated explanation:
 
-1. **Text-image space alignment**: This type of method establishes connections between visual features and natural language descriptions by **mapping activations into a shared semantic space**. This enables the discovery of interpretable concepts that explain model behavior.
+- **Text-image space alignment**: This type of method establishes connections between visual features and natural language descriptions by **mapping activations into a shared semantic space**. This enables the discovery of interpretable concepts that explain model behavior.
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/concept.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
@@ -560,12 +560,12 @@ Text-image space alignment aims to find concepts to match with the model's inter
 - **Goal**: To reveal interpretable text-labeled bases for outputs of vision encoder.
 - **Process**:
   1. Cache vision encoder attention head outputs.
-  2. Use a predefined text bank to strategically select text embeddings that maximize explained variance.
+  2. Use a predefined text bank to greedily select text descriptions that maximize explained variance.
   3. Analyze discovered attention heads to identify interpretable properties like "color" or "counting."
 </details>
 <br>
 
-2. **Data distribution-based analysis**: This type of method explores patterns in neuron activations across diverse input types to reveal specialized neurons or components. This approach uses either supervised or unsupervised to explain the underlying distribution of neural activations.
+- **Data distribution-based analysis**: This type of method explores patterns in neuron activations across diverse input types to reveal specialized neurons or components. This approach uses either supervised or unsupervised to explain the underlying distribution of neural activations.
 
 <object data="{{ 'assets/img/2025-04-28-vlm-understanding/automated.svg' | relative_url }}" type="image/svg+xml" width="90%" class="l-body rounded z-depth-1 center"></object>
 <div class="l-gutter caption" markdown="1">
@@ -599,11 +599,12 @@ However, ensuring the meaningfulness and reliability of these concepts remains c
 
 Automated explanation methods have led to several notable discoveries:
 
-- **TextSpan**: Identified specialized attention heads in vision encoders responsible for features like "color" and "counting." This enabled targeted interventions, such as reducing spurious correlations and improving property-based image retrieval <d-cite key="gandelsman2023interpreting"></d-cite>.
+- **TextSpan**: Identified specialized attention heads in vision encoders responsible for features like "color" and "counting." This enabled targeted interventions, such as reducing spurious correlations and improving property-based image retrieval <d-cite key="gandelsman2023interpreting"></d-cite>. Building upon this foundation, Balasubramanian et al. <d-cite key="balasubramanian2024decomposing"></d-cite> extended TEXTSPAN's applicability beyond CLIP to ViTs. Their proposed automated representation decomposition method to analyze the computational graph generated during the forward pass. Using this method, they break down internal contributions of models into their final representation and mapping these components to CLIP space, where they then use TEXTSPAN for text-based interpretation.
 
 - **Neuron Specialization**:
    - **Language-Specific Neurons**: Tang et al. <d-cite key="tang2024languagespecific"></d-cite> discovered neurons in LLMs that activate exclusively for language-related tasks.
    - **Domain-Specific Neurons**: MMNeuron <d-cite key="huo2024mmneuron"></d-cite> revealed neurons specialized for particular domains in vision language models. Interestingly, deactivating these neurons often had minimal effect on task performance, suggesting that VLMs rely on generalized representations.
+   - **Modality-Specific Neurons**: Miner <d-cite key="huang2024miner"></d-cite> further refined the methodology to find modality-specific neurons. They also reveal that modality-specific neurons are primarily concentrated in shallow layers, with most modality information remaining within its original token set.
 
 - **Sparse Autoencoders (SAEs)**: Rao et al. <d-cite key="DBLP:conf/eccv/RaoMBS24"></d-cite> used cosine similarities between decoder weights and word embeddings to map neural features to human-understandable concepts, providing interpretable sparse representations.
 
@@ -615,7 +616,7 @@ Automated explanation methods have led to several notable discoveries:
 ### Method Variants and Limitations
 
 - **Limitations**: 
-	- Ensuring that discovered concepts are both meaningful and reliable for practical applications remains challenging, particularly for unsupervised approaches that lack predefined ground truths.
+	- Ensuring that discovered concepts are both meaningful and reliable for practical applications is challenging, as concepts that seem plausible to humans may not faithfully reflect internal processing mechanisms <d-cite key="atanasova-etal-2023-faithfulness,agarwal2024faithfulness,madsen2024selfexplanations"></d-cite>.
 	- Many methods are developed and tested on specific architectures (e.g., CLIP, ViTs). Their applicability to other architectures remains underexplored.
 
 <aside class="l-body box-note" markdown="1">
@@ -665,7 +666,7 @@ Summary:
 
   
 
-**Current Situation**: Current interpretability research in VLMs primarily focuses on smaller-scale models, such as those with 7B parameters. However, larger VLMs often exhibit emergent capabilities that are absent in smaller models. These new capabilities may pose unique challenges for applying interpretability tools to larger models.
+**Current Situation**: Current interpretability research in VLMs primarily focuses on smaller-scale models, such as those with 2B or 7B parameters. However, larger VLMs often exhibit emergent capabilities that are absent in smaller models. These new capabilities may pose unique challenges for applying interpretability tools to larger models.
 
   
 
