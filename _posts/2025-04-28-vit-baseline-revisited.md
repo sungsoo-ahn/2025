@@ -254,7 +254,7 @@ calibration grid:
 
 We apply both versions of `RandAugment(2, 10)` 100000 times ([notebook](https://github.com/EIFY/mup-vit/blob/e35ab281acb88f669b18555603d9187a194ccc2f/notebooks/RandAugmentOnCalibrationGrid.ipynb)) to gather the stats. All of the resulting pixels remain colorless (i.e. for RGB values (r, g, b), r == g == b) so
 we can sort them from black to white into a spectrum ([notebook](https://github.com/EIFY/mup-vit/blob/e35ab281acb88f669b18555603d9187a194ccc2f/notebooks/GradientVisual.ipynb)).
-For the following $2000 \times 200$ spectra, pixels are sorted top-down, left-right, and each pixel represents 224 * 224 * 100000 / (2000 * 200) = 112 * 112 pixels of the aggregated output, amounting to 1/4 of one output image. In case one batch of 12544 pixels happens to be of different values, I took the average. Here is the spectrum of torchvision's `RandAugment(2, 10)`:
+For the following $2000 \times 200$ spectra, pixels are sorted top-down, left-right, and each pixel represents 224 * 224 * 100000 / (2000 * 200) = 112 * 112 pixels of the aggregated output, amounting to 1/4 of one output image. In case one batch of 12544 pixels happens to be of different values, we take the average. Here is the spectrum of torchvision's `RandAugment(2, 10)`:
 
 <div class="caption">
   <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/torch_vision_randaugment_2_10.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
