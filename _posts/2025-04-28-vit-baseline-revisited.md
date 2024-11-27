@@ -796,11 +796,12 @@ And our own repo should be no exception.
 
 ### Replication guide
 
-1. [Install PyTorch](https://pytorch.org/), including torchvision
-2. Prepare the [ILSVRC 2012 ImageNet-1k dataset](https://pytorch.org/vision/main/generated/torchvision.datasets.ImageNet.html)
+1. [Install PyTorch](https://pytorch.org/), including torchvision.
+2. Prepare the [ILSVRC 2012 ImageNet-1k dataset](https://pytorch.org/vision/main/generated/torchvision.datasets.ImageNet.html).
 3. `git clone https://github.com/EIFY/mup-vit.git`
-4. `pip install wandb` or make changes to use your preferred logging platform
-5. Depending on your machine:
+4. `pip install wandb` or make changes to use your preferred logging platform.
+5. `pip install schedulefree` or `git checkout add6d47` in the repo if you don't plan to run Schedule-Free experiments.
+6. Depending on your machine:
    * Multi-node, multi-GPU:
     The code is intended to support but currently not tested on a multi-node, multi-GPU setup.
    * Single-node, multi-GPU:
@@ -844,4 +845,4 @@ And our own repo should be no exception.
     ```
 
     Warning: On a single GPU these experiments will likely take a long time.
-6. For the Schedule-Free AdamW sweeps, see [`scripts/schedule_free.sh`](https://github.com/EIFY/mup-vit/blob/213a229852d65dbaf494ecb982540c804b607c46/scripts/schedule_free.sh), [`scripts/schedule_free_sweep.sh`](https://github.com/EIFY/mup-vit/blob/213a229852d65dbaf494ecb982540c804b607c46/scripts/schedule_free_sweep.sh), and [`scripts/schedule_free_algoperf.sh`](https://github.com/EIFY/mup-vit/blob/213a229852d65dbaf494ecb982540c804b607c46/scripts/schedule_free_algoperf.sh).
+7. For the Schedule-Free AdamW sweeps, see [`scripts/schedule_free.sh`](https://github.com/EIFY/mup-vit/blob/213a229852d65dbaf494ecb982540c804b607c46/scripts/schedule_free.sh), [`scripts/schedule_free_sweep.sh`](https://github.com/EIFY/mup-vit/blob/213a229852d65dbaf494ecb982540c804b607c46/scripts/schedule_free_sweep.sh), and [`scripts/schedule_free_algoperf.sh`](https://github.com/EIFY/mup-vit/blob/213a229852d65dbaf494ecb982540c804b607c46/scripts/schedule_free_algoperf.sh).
