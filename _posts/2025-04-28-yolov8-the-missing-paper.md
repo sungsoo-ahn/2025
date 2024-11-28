@@ -372,6 +372,8 @@ where $$ N $$ is the total number of epochs.
 
 Before backpropagating the gradients, they are clipped by norm to a value of $$ 10 $$. In addition, weight decay is set to $$ 5e-4 $$, but is turned of for the normalization layers and the biases.
 
+ * YOLOv8 does not use weight decay on the biases and on the normalization layers: [`ultralytics/engine/trainer.py#L792-L814`](https://github.com/ultralytics/ultralytics/blob/0183eaeeba746bb20a88a2b5e7af5e4078249bac/ultralytics/engine/trainer.py#L792-L814)
+
 During the training process YOLOv8 maintains a second (shadow) copy of the model called the *EMA model*<d-cite key="ema"></d-cite>. At every iteration of the training procedure the parameters of the EMA model $$ \theta' $$ are updated completely independently as an exponential moving average of the original model parameters $$ \theta $$:
 
 $$ \theta_t' = \alpha_t \theta_{t-1}' + (1-\alpha_t)\theta_{t}. $$
