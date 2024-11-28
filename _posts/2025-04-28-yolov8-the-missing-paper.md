@@ -87,10 +87,6 @@ YOLOv5, on the other hand, sparked a lot of heated debate, and already [the seco
 
 Nevertheless, being open-sourced, the models developed by Ultralytics are widely used and have a large base of contributors. These models are also designed to be modular and easy to train on a variety of datasets. And while newer YOLO models introduce ever more quirks and kinks to their architectures, YOLOv5 and YOLOv8 remain relatively simple and resemble closely the architecture of YOLOv4. However, as the focus is more on development and improvement, these models lack official publications and the only way to understand them is to read the source code.
 
-<!--
-Try to rewrite this. Try not to dis' people.
--->
-
 In this post we will try to explain in detail the architecture of YOLOv8, discuss some of the design choices made, and layout the training procedure for the neural network. We hope that this will help other people to better understand not only this model, but also the general ideas behind the models from the YOLO family, as well as other single-shot detectors.
 
 ## 100ft View of Object Detectors
@@ -386,11 +382,15 @@ $$ \alpha_t = d(1-e^{-t / \tau}), $$
 
 with default values $$ d=0.9999 $$ and  $$ \tau=2000 $$.
 
-Unlike the procedure outlined in <d-cite key="ema"></d-cite>, in YOLOv8 the EMA model does not participate in the training of the original model. At the end of the training procedure the original model is discarded and
+Unlike the procedure outlined in <d-cite key="ema"></d-cite>, in YOLOv8 the EMA model does not participate in the training of the original model. At the end of the training procedure the original model is discarded and only the EMA model is kept.
 
- * only the EMA model is used for making inference: [`ultralytics/engine/trainer.py#L522`](https://github.com/ultralytics/ultralytics/blob/1c6bfd3039d0456c18611f475ace661111413c85/ultralytics/engine/trainer.py#L522)
+ * YOLOv8 uses the final EMA model for making inference: [`ultralytics/engine/trainer.py#L522`](https://github.com/ultralytics/ultralytics/blob/1c6bfd3039d0456c18611f475ace661111413c85/ultralytics/engine/trainer.py#L522)
 
 Finally, an early stopping procedure is adopted, that at the end of every epoch, tests the model on the validation set and records the achieved mAP. Training stops if no improvement was seen in the last $$ 100 $$ epochs. The mAP on the validation set is calculated using the EMA Model.
+
+On the MS-COCO validation dataset YOLOv8 manages to achive some improvement over the previous models from the YOLO family both in terms of accuracy and in terms of speed. However, arguably the main contribution is the clean approach that YOLOv8 adopts.
+
+{% include figure.html path="assets/img/2025-04-28-yolov8-the-missing-paper/yolo-results.svg" class="img-fluid" %}
 
 ## Data Augmentation
 
