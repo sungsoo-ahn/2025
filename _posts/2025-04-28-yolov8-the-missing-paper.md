@@ -142,7 +142,7 @@ The weights of the head are shared across all feature map resolutions. This appr
 For each bounding box prediction the model outputs $$ 4 $$ numbers. The three most common formats for describing the bounding boxes are:
  * $$ xywh $$ - center coordinates, width and height,
  * $$ xyxy $$ - coordinates of two opposite corners,
- * $$ ltrb $$ - distances to the four sides of the box measured from the grid cell center (also called the *anchor point* of the grid ell).
+ * $$ ltrb $$ - distances to the four sides of the box measured from the grid cell center (also called the *anchor point* of the grid cell).
 
 For prediction YOLOv8 adopts the $$ ltrb $$ bounding box format as proposed in <d-cite key="FCOS"></d-cite>. For every pixel of the feature map $$ F_i $$ the model predicts the distances $$ l, t, r, b, $$ to the four sides of the bounding box, measured from the anchor point corresponding to that pixel.
 
@@ -175,7 +175,7 @@ Using an IoU-based loss function reportedly improves mAP by $$ 1.0-2.0 $$. <d-ci
  * The loss function used in YOLOv8 is CIoU loss: [`ultralytics/utils/loss.py#L102`](https://github.com/ultralytics/ultralytics/blob/b7e9e91d4655b568f6244494be53a391c51c7ffc/ultralytics/utils/loss.py#L102)
 
 <div class="l-body">
-  {% include figure.html path="assets/img/2025-04-28-yolov8-the-missing-paper/bbox-format-iou.svg" class="img-fluid asdf" %}
+  {% include figure.html path="assets/img/2025-04-28-yolov8-the-missing-paper/bbox-iou.svg" class="img-fluid asdf" %}
 </div>
 
 ## DFL
@@ -233,7 +233,7 @@ The total loss is computed as a weighted sum of the three losses $$ L_\text{BCE}
 
 $$ L = \frac{1}{N_\text{pos}} \sum \bigg( \lambda_0 L_\text{BCE} + \mathbb{1}^\text{pos} \lambda_1 L_\text{DFL} + \mathbb{1}^\text{pos} \lambda_2 L_\text{CIoU} \bigg), $$
 
-where the summation is over all predictions across all feature map resolutions. The indicator function $$ \mathbb{1}^\text{obj} $$ is $$ 1 $$ if this prediction is a positive example and $$ 0 $$ otherwise, and $$ N_\text{pos} $$ is the number of positive examples from this summation. The weights $$ \lambda_0, \lambda_1 $$ and $$ \lambda_2 $$ are hyperparameters to balance the contribution of the different losses.
+where the summation is over all predictions across all feature map resolutions. The indicator function $$ \mathbb{1}^\text{pos} $$ is $$ 1 $$ if this prediction is a positive example and $$ 0 $$ otherwise, and $$ N_\text{pos} $$ is the number of positive examples from this summation. The weights $$ \lambda_0, \lambda_1 $$ and $$ \lambda_2 $$ are hyperparameters to balance the contribution of the different losses.
 
  * YOLOv8 uses $$ \lambda_0=\lambda_\text{cls}=0.5, \lambda_1=\lambda_\text{dfl}=1.5, \lambda_2=\lambda_\text{box}=7.5 $$: [`ultralytics/cfg/default.yaml#L97-L99`](https://github.com/ultralytics/ultralytics/blob/e72f19f5cfd5fe7bb8b09a156933e96bd90581bf/ultralytics/cfg/default.yaml#L97-L99)
 
@@ -287,7 +287,7 @@ Here $$ t $$ is the proximity metric between the prediction and the ground-truth
 
 ## The *C2f* Layer
 
-The main building block of YOLOv8 is the *C2f* convolution layer, which is a *CSPNet*-style block<d-cite key="CSPNet"></d-cite>. In the beginning of the CSPNet the input tensor is split in half along the channel dimension and only one half is forwarded through the layers of the network, while the other half is skip-connected to the end where the two halves are concatenated. The main purpose of this architecture is *not* to improve the model accuracy, but rather to reduce the computational and memory costs while introducing only minor degradation to the accuracy.
+The main building block of YOLOv8 is the *C2f* convolution layer, which is a *CSPNet*-style block<d-cite key="CSPNet"></d-cite>. In the beginning of the CSPNet the input tensor is split in half along the channel dimension and only one half is forwarded through the layers of the network, while the other half is skip-connected to the end where the two halves are concatenated. The CPSNet architecture can be applied on top of any network. Its main purpose is *not* to improve the model accuracy, but rather to reduce the computational and memory costs while introducing only minor degradation to the accuracy.
 
 The cross-stage partial connection was developed by trying to improve on the DenseNet<d-cite key="DenseNet"></d-cite>, as these networks introduce the largest amount of redundancy. But even the CSPDenseNets are still too demanding to be used for real-time object detection. A more efficient alternative to DenseNets are VoVNets<d-cite key="VoVNet"></d-cite>, which instead of concatenating features at every subsequent layer, proposes to concatenate features only once in the last feature map. This "*CPSVoVNet*" block is very similar to the *CSPOSANet* block used in the Scaled-YOLOv4-tiny<d-cite key="scaled-yolov4"></d-cite> model and to the *G-ELAN* block reinvented for the YOLOv9<d-cite key="yolov9"></d-cite> model.
 
@@ -311,7 +311,7 @@ After the last stage of the backbone a modified *Spatial Pyramid Pooling* layer 
 
  * YOLOv8 uses the first $$ 1 \times 1 $$ convolution in the *SPPF* layer as a bottleneck: [`ultralytics/nn/modules/block.py#L179-180`](https://github.com/ultralytics/ultralytics/blob/652e05e833087652053346946827034a4a038025/ultralytics/nn/modules/block.py#L179-L180)
 
-The neck is a PANet consisting of three levels. In the top-down path upsampling is performed using the nearest neighbor strategy and after that the two maps are concatenated along the channel dimension. Due to the aliasing effect of the upsampling operation, the output needs to be forwarded through a convolution layer. The original FPN<d-cite key="FPN"></d-cite> paper proposes to use a single $$ 3 \times 3 $$ convolution, while YOLOv8 uses a *C2f* block instead. This choice is natural, as the *C2f* is likely more efficient than a standard convolution because of the cross-stage partial connection.
+The neck is a PANet consisting of three levels. In the top-down path upsampling is performed using the nearest neighbor strategy and after that the two maps are concatenated along the channel dimension. Due to the aliasing effect of the upsampling operation, the output needs to be forwarded through a convolution layer afterwards. The original FPN<d-cite key="FPN"></d-cite> paper proposes to use a single $$ 3 \times 3 $$ convolution, while YOLOv8 uses a *C2f* block instead. This choice is natural, as the *C2f* is likely more efficient than a standard convolution because of the cross-stage partial connection.
 
 It is important to note that while the *C2f* blocks in the backbone use residual connections, this is not the case in the neck. Obviously, adding a residual connection would not help in reducing the aliasing effect of upsampling, and for that reason it is left out.
 
