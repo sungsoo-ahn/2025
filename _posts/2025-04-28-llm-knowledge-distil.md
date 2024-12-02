@@ -230,15 +230,18 @@ We use a subset of 20,000 examples randomly sampled from `HuggingFaceH4/ultracha
 ### Implementation of Token-level Knowledge Distillation
 In this section, we use forward KL as an simple example. For easy implementation and experimentation, we recommend using `trl` trainers<d-footnote>https://github.com/huggingface/trl</d-footnote> and Huggingface `alignment-handbook`<d-footnote>https://github.com/huggingface/alignment-handbook</d-footnote>.
 
-We inherits `DistilTrainer` from `trl`'s `SFTTrainer`, so that we don't need to add some commonly used hyperparameters and functions. Similar implementation can be found in [this code repo](https://github.com/arcee-ai/DistillKit).
+We inherits `DistilTrainer` from `trl`'s `SFTTrainer`, so that we don't need to add some commonly used hyperparameters and functions. Similar implementation can be found in [this code repo](https://github.com/arcee-ai/DistillKit). Below is a comparison between the token level forward KL distillation implementation and the one at sequence level.
 
+
+
+<div style="display: flex; width: 120%; height: 500px;">
+
+<div style="flex: 1; resize: both; overflow: auto; border: 0px solid #ccc; padding: 10px;">
+<pre>
 {% highlight python %}
-class DistilTrainer(SFTTrainer):
-    def distillation_loss(self, student_logits, teacher_logits, inputs, original_loss):
-        student_logits, teacher_logits = pad_logits(student_logits.to(self.model.device), teacher_logits.to(self.model.device))
-
-        temperature = self.args.distillation_temperature
-        alpha = self.args.distillation_alpha
+# Forward KL distillation at token level:
+class TokenDistilTrainer(SFTTrainer):
+    def distillation_loss(self, ...):
         
         student_logits_scaled = student_logits / temperature
         teacher_logits_scaled = teacher_logits / temperature
@@ -251,16 +254,79 @@ class DistilTrainer(SFTTrainer):
         loss_kd = F.kl_div(
             student_log_probs,
             teacher_log_probs,
-            reduction='batchmean'
-        ) * (temperature ** 2) / self.args.max_seq_length
+            reduction='batchmean',
+            log_teacher=True,
+        ) * (temperature ** 2) / max_seq_length
 
         return alpha * loss_kd + (1 - alpha) * original_loss
 
 {% endhighlight %}
 
-Here we mainly emphasize the distillation loss. Given the student logits and teacher logits from model forward, we first pad the input logits into the same size. Then, we apply the given temperature to both logits. This softens the output distributions, making it easier for the student to learn. By using `functions.kl_div` , we can directly calculate the forward KL loss and add it together with the original cross entropy loss.
+</pre>
+</div>
+<div style="width: 2px; background-color: #ccc; cursor: col-resize;"></div>
+<div style="flex: 1; resize: both; overflow: auto; border: 0px solid #ccc; padding: 10px;"> 
+<pre>
+{% highlight python %}
+# Forward KL distillation at sequence level
+class SeqDistilTrainer(SFTTrainer):
+    def distillation_loss(self, ...)
+        prompt_lengths = (inputs['labels'] == -100).sum(dim=1)
 
-To address frequent out-of-memory (OOM) issues during distillation—caused by large tensor computations and the need to serve two models simultaneously—we strongly recommend leveraging the DeepSpeed strategies. Specifically, refer to [the PPOTrainer example here](https://github.com/huggingface/trl/blob/10c2f63b2ac8564cca28aa1598a1f3ac6a5fc63c/trl/trainer/ppo_trainer.py#L1461) and ensure `_prepare_deepspeed` is implemented accordingly to optimize resource utilization. If the teacher model is exceptionally large (e.g., a 64B parameter model), we suggest a two-step process: first, perform teacher model inference and save the resulting logits. Then, during training, load these precomputed logits to perform backpropagation. This approach significantly reduces memory requirements and streamlines the distillation process.
+        max_prompt_length = prompt_lengths.max()
+        prompt_input_ids = inputs['input_ids'][:, :max_prompt_length].clone()
+
+        positions = torch.arange(max_prompt_length).unsqueeze(0)  
+        prompt_mask = positions < prompt_lengths.unsqueeze(1)
+
+        prompt_input_ids[~prompt_mask] = self.tokenizer.pad_token_id
+        prompt_attention_masks = prompt_mask.long()
+
+        generated_sequences = teacher_model.generate(
+            input_ids=prompt_input_ids,
+            attention_mask=prompt_attention_masks,
+            max_new_tokens=getattr(self.args, 'max_new_tokens', 100),
+            do_sample=True
+        )
+
+        gen_input_ids = generated_sequences
+        gen_attention_mask = (gen_input_ids != self.tokenizer.pad_token_id).long()
+
+        gen_inputs = {
+            'input_ids': gen_input_ids, 
+            'attention_mask': gen_attention_mask
+        }
+
+        student_outputs_gen = student_model(**gen_inputs)
+        with torch.no_grad():
+            teacher_outputs_gen = teacher_model(**gen_inputs)
+
+        student_logits = student_outputs_gen.logits
+        teacher_logits = teacher_outputs_gen.logits
+
+        student_log_probs = F.log_softmax(student_logits / temperature, dim=-1)
+        teacher_log_probs = F.log_softmax(teacher_logits / temperature, dim=-1)
+
+        loss_kd = self.forward_kl_loss(
+            student_log_probs,
+            teacher_log_probs,
+            temperature
+        )
+
+        return alpha * loss_kd + (1 - alpha) * original_loss
+
+{% endhighlight %}
+
+</pre>
+</div>
+
+</div>
+
+
+
+Here we mainly emphasize the distillation loss. For token level distillation, it's relatively easier since we don't need to sample the sequence from the teacher model. The `original_loss` refers to the original pretraining/supervised finetuning loss to stable the training. In token level distillation, we only need to call `model(**inputs)` to get the causal LM logits output, which means, probability distribution at each token position, and then call `F.kl_div` to calculate the forward KL divergence between the student logits and the teacher logits. However, for sequence level, we'll need to call `model.generate(prompt)` first the sample the sequence output from the teacher model, and then use `model(**gen_inputs)` to get the logits.
+
+Two common problems arise during distillation training: (1) out-of-memory (OOM) issues and (2) low efficiency in sequence-level training. To address frequent OOM issues during distillation, we strongly recommend leveraging the DeepSpeed strategies. Specifically, refer to [the PPOTrainer example here](https://github.com/huggingface/trl/blob/10c2f63b2ac8564cca28aa1598a1f3ac6a5fc63c/trl/trainer/ppo_trainer.py#L1461) and ensure `_prepare_deepspeed` is implemented accordingly to optimize resource utilization. And for the second issue, low efficiency in sequence-level training occurs because it requires calling `model.generate`, which involves sampling from the learned distribution. To accelerate this process, we can (1) optimize `model.generate` with `vllm` and optimzie the GPU utilization (2) save the precomputed sequence outputs first and then load them during training. This also works when the teacher model is exceptionally large.
 
 ### Empirical Study on Task-Agnostic Knowledge Distillation
 #### Token-level Forward KL and Reverse KL
