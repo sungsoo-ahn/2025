@@ -105,7 +105,7 @@ To generate samples for the test systems with MCMC, we follow a 2 step procedure
 
 MCMC steps are implemented as simple Metropolis Monte Carlo steps with a symmetric Gaussian proposal. The step sizes for the MCMC chains are decided by trying to maximize the value $\alpha*s$, where $\alpha$ is the acceptance rate and $s$ is the standard deviation of the gaussian proposal function.
 
-SMC generates samples from a target density $p_T$​ by creating a sequence of intermediate distributions that transition smoothly from the prior $p_0$​ to $p_T$​. At each step, samples are updated using a short MCMC chain ($M$ steps), reweighted to match the next intermediate density, and resampled to maintain particle diversity. The intermediates are typically constructed through linear interpolation between the unnormalized log-density functions of $p_0$ and $p_T$, enabling a gradual and efficient transformation of the samples toward the target distribution. The detailed algorithm for the same is shown in the algorithm block below.
+SMC generates samples from a target density $p_T$​ by creating a sequence of intermediate distributions that transition smoothly from the prior $p_0$​ to $p_T$​. At each step, samples are updated using a short MCMC chain ($M$ steps), reweighted to match the next intermediate density, and resampled to maintain particle diversity. The intermediates are typically constructed through linear interpolation between the unnormalized log-density functions (energy functions) of $p_0$ and $p_T$, enabling a gradual and efficient transformation of the samples toward the target distribution. The detailed algorithm for the same is shown in the algorithm block below.
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -117,6 +117,10 @@ SMC generates samples from a target density $p_T$​ by creating a sequence of i
 
 Original work on iDEM was evaluated on a series of four increasingly complex benchmark systems. The simplest is a 2D Gaussian Mixture Model (GMM) comprising 40 equally-weighted Gaussians with identical covariance matrices and means uniformly distributed across a [-40, 40] box, serving as a basic test for mode coverage and sampling quality. The Double Well 4-particle system (DW-4) introduces greater complexity by modeling four particles in 2D space interacting through a pairwise double well energy function (figure below left). This system comes with symmetry properties, incorporating rotation, translation, and particle permutation invariance.
 
+<div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/gmm_contour.png" class="img-fluid" %}
+    </div>
+
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/e_d_dw.png" class="img-fluid" %}
@@ -126,7 +130,7 @@ Original work on iDEM was evaluated on a series of four increasingly complex ben
     </div>
 </div>
 <div class="caption">
-     Figure 3. Inter particle double-well potential (left) and Lennard-Jones potential (right)
+     Figure 3. GMM energy surface (top), Inter particle double-well potential (left) and Lennard-Jones potential (right)
 </div>
 
 The most challenging benchmarks are two Lennard-Jones (LJ) systems that model interatomic interactions through a combination of attractive and repulsive potentials, supplemented by a harmonic oscillator term that tethers particles to their center of mass. The Lennard-Jones potential between two particles is shown in the figure above on the right. The LJ-13 system models 13 particles in 3D space (39 degrees of freedom), while the LJ-55 system handles 55 particles (165 degrees of freedom). These systems are particularly demanding due to their high dimensionality and the explosive nature of their energy function as interatomic distances approach zero.
@@ -165,7 +169,7 @@ $$
 
 where $\Pi(P, Q)$ represents the set of all possible joint distributions (or "transport plans") that have $P$ and $Q$ as their marginal distributions. A transport plan, $\pi(x, y)$, describes how the probability mass from $P$ is moved to match $Q$, while maintaining the overall structure of both distributions. In practice, the W2 metric is calculated by approximating the distributions as empirical histograms and solving a numerical optimization problem to find the transport plan that minimizes the total squared transportation cost.
 
-For higher-dimensional systems, where the W2 metric becomes less intuitive to interpret, we focus on specific observables such as the energy and interatomic distance to provide more interpretable comparisons. The energy W2 distance computes how similar the distributions of energy of the test samples and generated samples are. This provides a notion of how well the sampler is able to capture the ensemble observations of the equilibrium distribution. Finally, the interatomic W2 distance is a projection of the position of samples along 1 dimension and therefore should match very well if the generated samples are close to the distribution of the test set.
+For higher-dimensional systems, where the W2 metric becomes less intuitive to interpret, we focus on specific observables such as the energy and interatomic distance to provide more interpretable comparisons. The energy W2 distance computes how similar the distributions of energy of the test samples and generated samples are. This provides a notion of how well the sampler is able to capture the ensemble observations of the equilibrium distribution. Finally, the interatomic W2 distance is a projection of the position of samples along a 1 dimensional measure and therefore should match very well if the generated samples are close to the distribution of the test set.
 
 
 ## Random sampling and reweighting is sufficient for GMMs
@@ -224,7 +228,7 @@ The fact that this system is just in 2 dimensions makes sampling from the distri
 
 ## Establishing new baselines for DW4, LJ13 and LJ55 with very long simulations
 
-For the DW4, LJ13 and LJ55 systems we don't have direct access to samples from the equilibrium distribution. Therefore, to create a strong “ground truth” baseline, we decided to run very long simulations on all of these systems and save the final state from all the simulations. For DW4 and LJ13, we ran 50,000 chains in parallel for a million steps, while for LJ55 we ran 12,800 chains for 2.5 million steps. This is much larger in contrast to the current test sets used by generative methods where the reference MC chain is run for about 200,000 steps. We assume that the combined end states of all these chains represent a distribution very close to the equilibrium distribution and can also be used as a new test set to benchmark on. The W2 and energy W2 scores of the chains with respect to the reference test set (Klein et al.) used by iDEM and iEFM as a function of the number of MC steps are shown in the figures below. The convergence of all the runs on these metrics provides further evidence that the samples are close to the equilibrium distributions.
+For the DW4, LJ13 and LJ55 systems we don't have direct access to samples from the equilibrium distribution. Therefore, to create a strong “ground truth” baseline, we decided to run very long simulations on all of these systems and save the final state from all the simulations. For DW4 and LJ13, we ran 50,000 chains in parallel for a million steps, while for LJ55 we ran 12,800 chains for 2.5 million steps. This is much larger in contrast to the current test sets used by generative methods where the reference MC chain is run for about 200,000 steps. We assume that the combined end states of all these chains represent a distribution very close to the equilibrium distribution and can also be used as a new test set to benchmark on. In all the subsequent experiments, we compare the performance of all the methods on the set of end states of these long simulations (mentioned as "new reference" in the results tables).The W2 and energy W2 scores of the chains with respect to the reference test set (Klein et al.) used by iDEM and iEFM as a function of the number of MC steps are shown in the figures below. The convergence of all the runs on these metrics provides further evidence that the samples are close to the equilibrium distributions. 
 
 <div class="caption">
     DW4
@@ -262,7 +266,7 @@ For the DW4, LJ13 and LJ55 systems we don't have direct access to samples from t
     </div>
 </div>
 <div class="caption">
-    Figure 6. Metrics of all the long MCMC simulation as a function of energy evaluations (MC steps)
+    Figure 6. W2 scores (left), and Log of Energy W2 scores (right) of all the long MCMC simulation as a function of energy evaluations (MC steps)
 </div>
 
 ## 4-particle Double-Well Potential
@@ -417,7 +421,7 @@ Finally, in the histogram plots, it's clear that the IDEM energy plot is right s
 </div>
 
 
-From the figures, we notice similar but exaggerated trends that we observed in the LJ13 systems. The MCMC chains return a higher W2 score but have a significantly lower energy W2 score. Therefore, we emphasize the importance of visualizing the distribution of observations (such as energy and interatomic distance) as the mismatch can get further inflated with increase in dimensions.
+From the figures, we notice similar but exaggerated trends that we observed in the LJ13 systems. The MCMC chains return a higher W2 score but have a significantly lower energy W2 score. Therefore, we emphasize the importance of visualizing the distribution of observations (such as energy and interatomic distance) as the complexity of systems increases with increase in dimensions.
 
 <div class="caption">
     Table 4. Performance of all methods on the LJ55 system
@@ -452,7 +456,7 @@ From the table above and figures below, it is clearly visible that iDEM does not
 
 ## Closing thoughts \- the role that these models have to play
 
-Our analysis offers a sobering assessment of the current state of neural network-based samplers for molecular systems. Despite the growing interest in methods like iDEM and iEFM, our results show that these approaches fail to outperform well-tuned MCMC methods in terms of both sampling quality and computational efficiency. This finding is particularly significant because, for neural samplers to justify their additional complexity and computational overhead, they must demonstrate clear and consistent advantages over traditional methods — a standard that these approaches have yet to meet. A possible solution to having more computationally efficient method would be to learn a more approximate distribution to a complicated energy function and attaining the right distribution through a simple reweighting as is done by Klein et al.<d-cite key="klein2023equivariantflowmatching"></d-cite>.  
+Our analysis offers a sobering assessment of the current state of neural network-based samplers for molecular systems. Despite the growing interest in methods like iDEM and iEFM, our results show that these approaches fail to outperform well-tuned MCMC methods in terms of both sampling quality and computational efficiency. This finding is particularly significant because, for neural samplers to justify their additional complexity and computational overhead, they must demonstrate clear and consistent advantages over traditional methods — a standard that these approaches have yet to meet. A possible solution to having more computationally efficient method would be to learn an approximate distribution of a complicated energy function and obtain the right distribution through a simple reweighting, as demonstrated by Klein et al.<d-cite key="klein2023equivariantflowmatching"></d-cite>.  
 
 However, this critique should not also be viewed as a wholesale rejection of such neural approaches in molecular sampling. Rather, it suggests a needed shift in research focus. One promising direction lies in leveraging neural networks' capacity for transfer learning. While MCMC methods are often system-specific, and require long chains on every new system, neural networks could potentially learn generalizable sampling strategies that transfer across different molecular systems. This transferability could provide a compelling "inference time" advantage over traditional MCMC methods, even if the training cost is significantly higher than running a MCMC chain on a single system. This has already been demonstrated in works such as TimeWarp<d-cite key="klein2023timewarp"></d-cite>and Transferable Boltzmann Generators<d-cite key="klein2024tbg"></d-cite>. 
 
