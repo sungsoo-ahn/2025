@@ -70,7 +70,7 @@ A key consideration to take into account with generative models is to check if t
 
 ## Same Goals, Different Paths: Comparing iEFM and iDEM
 
-iEFM and iDEM are quite similar in their implementation. Both approximate a target vector field via self-normalized importance weights calculated by Monte Carlo estimation. In the case of iEFM, the target vector is a weighted average of the analytical vector field derived from Flow Matching theory. Whereas in iDEM, the target score field is computed as a weighted average of the gradients of the energy function. Note in the following equations that the data samples $x_T$ are denoted $x_1$ ($T=1$) for iEFM and $x_0$ ($T=0$) for iDEM:
+iEFM and iDEM are quite similar in their implementation. While iEFM is an extension of flow matching and iDEM an extension of diffusion, both approximate a target vector field via self-normalized importance weights calculated by Monte Carlo estimation. In the case of iEFM, the target vector is a weighted average of the analytical vector field derived from Flow Matching theory. Whereas in iDEM, the target score field is computed as a weighted average of the gradients of the energy function. Note in the following equations that the data samples $x_T$ are denoted $x_1$ ($T=1$) for iEFM and $x_0$ ($T=0$) for iDEM:
 
 
 
