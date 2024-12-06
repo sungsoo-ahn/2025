@@ -405,7 +405,7 @@ Finally, in the histogram plots, it's clear that the IDEM energy plot is right s
     </div>
 </div>
 <div class="caption">
-    Figure 14 W2 score vs epoch and time in seconds for the methods on the LJ55 system.
+    Figure 14. W2 score vs epoch and time in seconds for the methods on the LJ55 system.
 </div>
 
 <div class="row mt-3">
