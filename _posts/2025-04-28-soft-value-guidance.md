@@ -1,7 +1,7 @@
 ---
 layout: distill
-title: Soft Value Guidance in Sequential Models
-description:   Fine-tuning, controlled generation, and sampling in sequential models has attracted a flurry of recent attention in a variety of settings, particularly with the growing availability of powerful open-source pretrained models.   For language modeling in discrete spaces, we would often like to align responses with human preferences or generate correct responses to complex reasoning questions.  For diffusion models, we may be interested in steering generation to produce samples belonging a certain class, images which score highly on metrics such as realism, preferences, or text-to-image consistency, and proteins or molecules with desired properties such as synthesizability.  Diffusion-based methods have also been applied for sampling from arbitrary target probability densities such as Boltzmann distributions, where we can only assume access to a unnormalized density or energy function.  <br> <br>  In this blog post, we provide overview of these sampling or controlled generation tasks from a probabilistic perspective, which incorporates notions from soft reinforcement learning, stochastic optimal control, and Sequential Monte Carlo.  A key role will be played by the soft value function, which yields both importance sampling weights and gradient guidance for diffusion processes.   This perspective gives a single conceptual framework for guidance in discrete and continuous spaces, and highlights how methodologies can be shared across problem settings.
+title: Posterior Inference and Soft Value Guidance in Sequential Models
+description:   Fine-tuning, controlled generation, and sampling in sequential models has attracted a flurry of recent attention in a variety of settings, particularly with the growing availability of powerful open-source pretrained models.   For language modeling in discrete spaces, we would often like to align responses with human preferences or generate correct responses to complex reasoning questions.  For diffusion models, we may be interested in steering generation to produce samples belonging a certain class, images which score highly on metrics such as realism, preference alignment, or text-to-image consistency, and proteins or molecules with desired properties such as synthesizability.  Diffusion-based methods have also been applied for sampling from arbitrary target probability densities such as Boltzmann distributions, where we can only assume access to a unnormalized density or energy function.  <br> <br>  In this blog post, we provide overview of these sampling or controlled generation tasks from a probabilistic perspective, which incorporates notions from soft reinforcement learning, stochastic optimal control, and Sequential Monte Carlo.  A key role will be played by the soft value function, which yields both importance sampling weights and gradient guidance for diffusion processes.   This perspective gives a single conceptual framework for guidance in discrete and continuous spaces, and highlights how methodologies can be shared across problem settings.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -57,8 +57,9 @@ toc:
 ---
 
 ## Setting & Notation
- Before describing concrete examples in [Targets](targets), we establish notation for the setting where we are given a pretrained model  $$ p^{\text{ref}} $$  such as a language or diffusion model, which we will seek to condition or modulate to achieve some target properties or distribution at the endpoint.  
- We begin by defining a shared notation for sequence models over states  $$ \mathbf{x}_{t} $$  in a discrete or continuous space, where we adapt autoregressive language models to have Markovian structure to match the diffusion setting.
+ Before describing concrete examples in [Targets](targets), we establish notation which will encompass both the language and diffusion modeling settings.
+ Assume we are given a pretrained model  $$ p^{\text{ref}} $$, which we will seek to condition or modulate to achieve some target properties or distribution at the endpoint.  
+ We begin by defining a shared notation, where we adapt autoregressive language models to have Markovian structure to match the diffusion setting.
  
  
 In the language modeling case, we consider the state  $$ \mathbf{x}_{t} = \mathrm{concat}({\mathbf{x}_{0}}, x_{1}, x_{2}, \ldots x_{t}) \in \mathcal{V}^{T_{0}+t}$$ in an expanding state-space, where we concatenate tokens  $$ x_{\tau} \in \mathcal{V}$$  generated in response to a prompt or initial state  $$ \mathbf{x}_{0} \in \mathcal{V}^{T_{0}}$$ of maximum length $$T_{0}$$.  We view a reference policy  $$ p^{\text{ref}}_{\text{LM}}(a_t = x_{t+1} \vert {\mathbf{x}_t}) $$  as selecting a next token  $$ x_{t+1} $$  as the action  $$ a_t $$  with the context  $$ \mathbf{x}_t $$  as the state , with deterministic environment transitions  $$ p^{\text{env}}(\mathbf{x}_{t+1} \vert a_t = x_{t+1}, \mathbf{x}_t) = \mathbb{I}[\mathbf{x}_{t+1} = \text{concat}(\mathbf{x}_t, x_{t+1})] $$  that concatenate the generated token  $$ x_{t+1} $$  with the context  $$ \mathbf{x}_t $$.  The policy is usually given by an autoregressive model  $$ \mathbf{x}_t \sim \prod_{\tau=0}^{t-1} p^{\text{ref}}_{\text{LM}}(x_{\tau+1} \vert \mathbf{x}_{\tau}) $$ .   For convenience, we will write the full state transition as  $$ p^{\text{ref}}_{t+1}(\mathbf{x}_{t+1} \vert \mathbf{x}_{t})=p^{\text{ref}}_{\text{LM}}(x_{t+1} \vert \mathbf{x}_t) \mathbb{I}[\mathbf{x}_{t+1} =\text{concat}(\mathbf{x}_t, x_{t+1})] $$ .   This leads to a slight abuse of notation in which we can write the probability of a (partial) sequence $\mathbf{x}_t$ either using tokens $$ p^{\text{ref}}_t(\mathbf{x}_t)=\prod_{\tau=0}^{t-1} p^{\text{ref}}_{\text{LM}}(x_{\tau+1} \vert \mathbf{x}_{\tau}) $$  or as a joint distribution over its prefixes  $$ p^{\text{ref}}_{t}(\mathbf{x}_{0:t}) = \prod_{\tau=0}^{t-1} p^{\text{ref}}_{\tau+1}(\mathbf{x}_{\tau+1} \vert \mathbf{x}_{\tau}) $$ .   Our goal is to sample transitions which approximate a target [target](#targets)  $$ p^*(\mathbf{x}_{t+1} \vert \mathbf{x}_t) $$  or  $$ p^*_{\text{LM}}(x_{t+1} \vert \mathbf{x}_t) $$ .
@@ -92,7 +93,7 @@ p^*(\mathbf{x}_{0:T} \vert \mathbf{y}) = \frac{1}{\mathcal{Z}_\mathbf{y}} p^{\te
 $$
 
 In particular, we would like our full language model responses or final diffusion states to be distributed according to the endpoint posterior marginal $$ p^*(\mathbf{x}_{T} \vert \mathbf{y}) $$.
-We define a flexible class of target posteriors, which we discuss with concrete examples below.
+We define a flexible class of target posteriors in the following table, with concrete examples below.
 
 
 <!--- While a conditioning on a particular class  $$ \mathbf{y}=c $$  or noisy observation  $$ \mathbf{y}= \mathcal{A}(\mathbf{x}_T) + \epsilon $$  are naturally written using  $$ p(\mathbf{y} \vert \mathbf{x}_T) $$ , we can accommodate a more general family of targets.   
@@ -105,7 +106,7 @@ Constraints may filter responses which factually-correct answers <d-cite key="fe
 | Constraint |   $$ \mathbb{I}[\mathbf{x}_T \in \mathcal{B}] $$ |    $$ \frac{1}{\mathcal{Z}_{\mathcal{B}}} p^{\text{ref}}(\mathbf{x}_{T})\mathbb{I}[\mathbf{x}_T \in \mathcal{B}] $$   |
 | Classifier or Observation |   $$ p(\mathbf{y} \vert \mathbf{x}_T) $$      |  $$ \frac{1}{\mathcal{Z}_\mathbf{y}} p^{\text{ref}}(\mathbf{x}_{T})p(\mathbf{y} \vert \mathbf{x}_T) $$   |
 | Reward or Energy Modulation |   $$ \frac{1}{M}\exp\{ \beta~ r(\mathbf{x}_T) \} $$     |  $$ \frac{1}{\mathcal{Z}_{\beta r}} p^{\text{ref}}(\mathbf{x}_{T})\exp\{ \beta~ r(\mathbf{x}_T) \} $$     |
-| Arbitrary Target |  $$ \frac{1}{M}\frac{\tilde{\pi}_T(\mathbf{x}_T)}{p^{\text{ref}}(\mathbf{x}_T)} $$  |  $$  \frac{1}{\mathcal{Z}} \tilde{\pi}_T(\mathbf{x}_T) $$ |
+| Arbitrary Unnormalized Density |  $$ \frac{1}{M}\frac{\tilde{\pi}_T(\mathbf{x}_T)}{p^{\text{ref}}(\mathbf{x}_T)} $$  |  $$  \frac{1}{\mathcal{Z}} \tilde{\pi}_T(\mathbf{x}_T) $$ |
 
 <!---In particular, we would like our full language model responses or final diffusion states to be distributed according to the endpoint posterior marginal $$ p^*(\mathbf{x}_{T} \vert \mathbf{y}) $$.
 corresponds to performing rejection sampling of candidate  $$ \mathbf{x}_T $$  via the binary acceptance probability  $$ p(\mathbf{y}=1 \vert \mathbf{x}_T) = \frac{1}{M}\frac{\tilde{\pi}_T(\mathbf{x}_T)}{p^{\text{ref}}(\mathbf{x}_T)} \leq 1 $$ .
@@ -134,10 +135,10 @@ Reinforcement learning from human feedback has become a dominant paradigm for al
 
 #### General Unnormalized Target Densities
 
-Most generally, we can seek to sample from a given unnormalized target density $\tilde{\pi}_T(\mathbf{x}_T)$ over the final state, which includes reward modulation as a special case.
+Most generally, we can seek to sample from a given unnormalized target density $\tilde{\pi}_T(\mathbf{x}_T)$ over the final state, which includes reward modulation as a special case $$ \tilde{\pi}_T(\mathbf{x}_T) =  p^{\text{ref}}(\mathbf{x}_{T})\exp\{ \beta~ r(\mathbf{x}_T) \} $$.
 <!---Note that reward modulation is  $$ \tilde{\pi}_T(\mathbf{x}_T) =  p^{\text{ref}}(\mathbf{x}_{T})\exp\{ \beta~ r(\mathbf{x}_T) \} $$  ---> 
 To facilitate a posterior interpretation in these cases, we would like to introduce a random variable $$ \mathbf{y} $$ which reflects `optimality', or the fact that endpoint samples are distributed according to the endpoint target.
-To do so, we construct a hypothetical rejection sampling of the endpoint samples, where we accept samples with probability $$ p(\mathbf{y}=1 \vert \mathbf{x}_T) = \frac{1}{M}\frac{\tilde{\pi}_T(\mathbf{x}_T)}{p^{\text{ref}}(\mathbf{x}_T)} $$, for $$ M = \max \limits_{\mathbf{x}_T}\frac{\tilde{\pi}_T(\mathbf{x}_T)}{p^{\text{ref}}(\mathbf{x}_T)} $$.  The constant $$ M $$, which ensures $$ p(\mathbf{y}=1 \vert \mathbf{x}_T) \leq 1  $$ and that accepted samples have the desired distribution, need not be estimated in practice as it vanishes in the resulting posterior $$ p^*(\mathbf{x}_T|\mathbf{y}) $$.  
+To do so, we construct a hypothetical rejection sampling of the endpoint samples, where we accept samples with probability $$ p(\mathbf{y}=1 \vert \mathbf{x}_T) = \frac{1}{M}\frac{\tilde{\pi}_T(\mathbf{x}_T)}{p^{\text{ref}}(\mathbf{x}_T)} $$, for $$ M = \max \limits_{\mathbf{x}_T}\frac{\tilde{\pi}_T(\mathbf{x}_T)}{p^{\text{ref}}(\mathbf{x}_T)} $$.  The constant $$ M $$, which ensures $$ p(\mathbf{y}=1 \vert \mathbf{x}_T) \leq 1  $$ and that accepted samples have the desired distribution, need not be estimated in practice, since it can be shown to vanish in the eventual posterior $$ p^*(\mathbf{x}_T|\mathbf{y}) $$.  
 
  Again, we emphasize that this construction is hypothetical, but is useful to add detail to presentation in the influential 2018 tutorial by Sergey Levine <d-cite key="levine2018reinforcement"></d-cite> and facilitate our unified viewpoint in terms of posterior inference.
 
@@ -151,7 +152,7 @@ While accepted  $$ \mathbf{x}_T $$  can then be shown to be distributed accordin
 
 ### Initial Sampling
 
-An immediate question arises as to how to initialize sampling, since $$ p^*(\mathbf{x}_{0} \vert \mathbf{y}) $$ is already likely to be intractable in general.  
+An immediate question arises as to how to initialize sampling in \eqref{eq:backward}, since $$ p^*(\mathbf{x}_{0} \vert \mathbf{y}) $$ is already likely to be intractable in general.  
 
 In language modeling settings, we are often given access to prompts $\mathbf{x}_{0}$ via data or user interaction, so it is natural to focus on the posterior over responses to particular prompts,
 $$ \begin{align}
@@ -394,9 +395,11 @@ Finally, we can use this resampling scheme even for approximate $$ V^{\theta}_{t
 #### Language
 For the language modeling setting, recall that we absorbed the autoregressive model into Markov transitions $$ p^{\text{ref}}(\mathbf{x}_{t} \vert \mathbf{x}_{t-1})=p^{\text{ref}}_{\text{LM}}(x_{t} \vert \mathbf{x}_{t-1}) \mathbb{I}[\mathbf{x}_{t} =\text{concat}(\mathbf{x}_{t-1}, x_{t})] $$ where the states expand with concatenation of next tokens.
 In this case, we can think of the weights as evolving according to
+
 $$\begin{align}
 w_{1:T}(\mathbf{x}_{1:T}) &= \prod_{t=1}^T \frac{p(\mathbf{y} \vert \mathbf{x}_t)}{p(\mathbf{y} \vert \mathbf{x}_{t-1})} \frac{p^{\text{ref}}_{\text{LM}}(x_t \vert \mathbf{x}_{t-1})}{q_{\text{LM}}(x_t \vert \mathbf{x}_{t-1})} =  \prod_{t=1}^T \frac{\exp\{ V^{\mathbf{y}}_{t}(\mathbf{x}_{t}) \}}{\exp\{ V^{\mathbf{y}}_{t-1}(\mathbf{x}_{t-1}) \}} \frac{p^{\text{ref}}_{\text{LM}}(x_t \vert \mathbf{x}_{t-1})}{q_{\text{LM}}(x_t \vert \mathbf{x}_{t-1})} \nonumber 
 \end{align}$$
+
 where the likelihood or values are evaluated on the partial sequences $$ \mathbf{x}_t $$ and $$ \mathbf{x}_{t-1} $$.   See <d-cite key="tuan2022twoviews"></d-cite> or <d-cite key="zhao2024probabilistic"></d-cite> for additional discussion.
 
 
@@ -451,10 +454,12 @@ Methods for solving stochastic control problems have an extensive history dating
 
 
 While the ELBO and mode-seeking KL divergence was used to introduce the target distribution as the solution of a variational optimization in \eqref{eq:elbo}, we can perform optimization using any divergence minimization technique with the desired optimum.   One example is to optimize the mass-covering KL divergence as in maximum likelihood training of energy-based models, where recognizing the form of the optimal target marginals in \eqref{eq:marginal}, we optimize 
+
 $$\begin{align} 
-\min \limits_{\theta} \sum_{t=1}^T D_{KL}\big[ p^*(\mathbf{x}_{1:t} | \mathbf{x}_{0}, \mathbf{y}) :  p^{\text{ref}}(\mathbf{x}_{1:t} | \mathbf{x}_{0}) \exp\{V^\theta_t(\mathbf{x}_t) \}/\mathcal{Z}_{V^\theta}(\mathbf{x}_0) \big] 
+\min \limits_{\theta} \sum_{t=1}^T D_{KL}\big[ p^*(\mathbf{x}_{1:t} \vert \mathbf{x}_{0}, \mathbf{y}) :  p^{\text{ref}}(\mathbf{x}_{1:t} \vert \mathbf{x}_{0}) \exp\{V^\theta_t(\mathbf{x}_t) \}/\mathcal{Z}_{V^\theta}(\mathbf{x}_0) \big] 
 \end{align}$$
-Although exact samples from $$ p^*(\mathbf{x}_{1:t} | \mathbf{x}_{0}, \mathbf{y}) $$ are usually not available, one may use importance sampling approximations to reweight samples according to the endpoint target information $$ p(\mathbf{y} \vert \mathbf{x}_T ) $$, and reuse these weights for approximate sampling at intermediate $$t$$. <d-cite key="lu2023contrastive, zhao2024probabilistic"></d-cite>
+
+Although exact samples from $$ p^*(\mathbf{x}_{1:t} \vert \mathbf{x}_{0}, \mathbf{y}) $$ are usually not available, one may use importance sampling approximations to reweight samples according to the endpoint target information $$ p(\mathbf{y} \vert \mathbf{x}_T ) $$, and reuse these weights for approximate sampling at intermediate $$t$$. <d-cite key="lu2023contrastive, zhao2024probabilistic"></d-cite>
 
 #### Language  
 
@@ -469,10 +474,12 @@ For sampling from a general target density, <d-cite key="phillips2024particle"><
 
 ### Path Consistency 
 
-Path Consistency objectives <d-cite key="nachum2017bridging"></d-cite> consider enforcing the first-order optimality conditions associated with the optimization in \eqref{eq:elbo}-\eqref{eq:elbot} using a squared error loss.   Since this is a functional equality which should hold everywhere, we can optimize the loss over some off-policy sampling distribution $$\pi_s(\mathbf{x}_{1:T}|\mathbf{x}_0)$$.    Taking the variation of \eqref{eq:elbo}-\eqref{eq:elbot} with respect to $$q$$ yields a KKT condition, which we can enforce using
+Path Consistency objectives <d-cite key="nachum2017bridging"></d-cite> consider enforcing the first-order optimality conditions associated with the optimization in \eqref{eq:elbo}-\eqref{eq:elbot} using a squared error loss.   Since this is a functional equality which should hold everywhere, we can optimize the loss over some off-policy sampling distribution $$\pi_s(\mathbf{x}_{1:T}\vert\mathbf{x}_0)$$.    Taking the variation of \eqref{eq:elbo}-\eqref{eq:elbot} with respect to $$q$$ yields a KKT condition, which we can enforce using
+
 $$\begin{align}
-\min \limits_{\theta,\phi} \mathbb{E}_{\pi_s(\mathbf{x}_{1:T}|\mathbf{x}_0)}\left[\left( V^{\theta}_{0}(\mathbf{x}_0)  -  \log p(\mathbf{y}\vert \mathbf{x}_{T}) +  \log \frac{q^\phi(\mathbf{x}_{1:T}\vert \mathbf{x}_{0})}{p^{\text{ref}}(\mathbf{x}_{1:T} \vert \mathbf{x}_{0})} \right)^2 \right]
+\min \limits_{\theta,\phi} \mathbb{E}_{\pi_s(\mathbf{x}_{1:T}\vert\mathbf{x}_0)}\left[\left( V^{\theta}_{0}(\mathbf{x}_0)  -  \log p(\mathbf{y}\vert \mathbf{x}_{T}) +  \log \frac{q^\phi(\mathbf{x}_{1:T}\vert \mathbf{x}_{0})}{p^{\text{ref}}(\mathbf{x}_{1:T} \vert \mathbf{x}_{0})} \right)^2 \right]
 \end{align}$$
+
 This may also be viewed as minimizing the square of the log importance weights between forward and reverse processes in \eqref{eq:unbiased}-\eqref{eq:weights}.<d-cite key="zhao2024probabilistic" section="App C1"></d-cite>
 Note that we may also construct one- or $c$-step consistency losses for any $$1 \leq t \leq t + c \leq T$$ using the compositional structure of the optimal values in \eqref{eq:elbot}-\eqref{eq:marginal}.
 
@@ -488,13 +495,15 @@ Trajectory balance or path consistency losses can also be applied for inference 
 
 ### Denoising Mean Approximation for Diffusion Settings
 
-Diffusion models parameterized via denoising mean prediction $$ \hat{\mathbf{x}}_T = D_\theta(t,\mathbf{x}_t) $$ provide a particularly convenient, *training-free* estimator of intermediate value functions.   Instead of fully estimating the expectation in \eqref{eq:int_value} or \eqref{eq:value_martingale}, one can make a single-sample approximation by evaluating $$ p(\mathbf{y}| \hat{\mathbf{x}}_T) $$ at the denoising mean prediction,
+Diffusion models parameterized via denoising mean prediction $$ \hat{\mathbf{x}}_T = D_\theta(t,\mathbf{x}_t) $$ provide a particularly convenient, *training-free* estimator of intermediate value functions.   Instead of fully estimating the expectation in \eqref{eq:int_value} or \eqref{eq:value_martingale}, one can make a single-sample approximation by evaluating $$ p(\mathbf{y}\vert \hat{\mathbf{x}}_T) $$ at the denoising mean prediction,
+
 $$\begin{align}
-V^{\mathbf{y}}_t(\mathbf{x}_t)  = \log \mathbb{E}_{p^{\text{ref}}(\mathbf{x}_{T} \vert\mathbf{x}_{t})}\left[ p(\mathbf{y}|\mathbf{x}_T) \right]  \approx \log p(\mathbf{y}|\hat{\mathbf{x}}_T)
+V^{\mathbf{y}}_t(\mathbf{x}_t)  = \log \mathbb{E}_{p^{\text{ref}}(\mathbf{x}_{T} \vert\mathbf{x}_{t})}\left[ p(\mathbf{y}\vert\mathbf{x}_T) \right]  \approx \log p(\mathbf{y}\vert\hat{\mathbf{x}}_T)
 \end{align}$$
-From this approximation, we can construct an approximate guidance drift $$\nabla V^{\mathbf{y}}_t(\mathbf{x}_t) \approx \nabla \log p(\mathbf{y}|\hat{\mathbf{x}}_T)$$ (for differentiable likelihoods) along with targets for intermediate SMC resampling  <d-cite key="wu2024practical"></d-cite>.
-This approximation has found wide applicability for inverse problems <d-cite key="chung2022diffusion"></d-cite>, protein generation <d-cite key="wu2024practical"></d-cite>, and images <d-cite key="anonymous2024alignment"></d-cite> for continuous diffusion models, along with recent applications for discrete diffusion models <d-cite key="li2024derivative"></d-cite>.   In particular, given that this estimator can be crude even in simple cases <d-cite key="phillips2024particle"></d-cite>, 
-recent work <d-cite key="anonymous2024alignment"></d-cite> find benefits to annealing the contribution of these terms for both guidance and SMC.
+
+From this approximation, we can construct an approximate guidance drift $$\nabla \hat{V}^{\mathbf{y}}_t(\mathbf{x}_t) \approx \nabla \log p(\mathbf{y}\vert\hat{\mathbf{x}}_T)$$ (for differentiable likelihoods) along with targets $$  \hat{V}^{\mathbf{y}}_t(\mathbf{x}_t) $$ for intermediate SMC resampling in \eqref{eq:weights}  <d-cite key="wu2024practical"></d-cite>.
+This approximation has found wide applicability for inverse problems <d-cite key="chung2022diffusion"></d-cite>, protein generation <d-cite key="wu2024practical"></d-cite>, and images <d-cite key="anonymous2024alignment"></d-cite> for continuous diffusion models, along with recent applications for discrete diffusion models <d-cite key="li2024derivative"></d-cite>.   However, given that this estimator can be crude even in simple cases <d-cite key="phillips2024particle"></d-cite>, 
+recent work <d-cite key="anonymous2024alignment"></d-cite> finds benefits to annealing the contribution of these terms for both guidance and SMC.
 
 
 
