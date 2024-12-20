@@ -261,7 +261,7 @@ Finally, we will find it useful to view the value function as measuring the log 
 --->
 which can equivalently be expressed 
 $$\begin{align}
-\log \frac{p^*(\mathbf{x}_{t} \vert \mathbf{x}_{0}, \mathbf{y})}{p^{ref}(\mathbf{x}_{t} | \mathbf{x}_{0})} = V^{\mathbf{y}}_{t}(\mathbf{x}_{t}) - V^{\mathbf{y}}_{0}(\mathbf{x}_{0}) = \log p^*(\mathbf{y} \vert \mathbf{x}_t) - \log \mathcal{Z}^{\mathbf{y}}_{0}(\mathbf{x}_{0})   \label{eq:logits}
+\log \frac{p^*(\mathbf{x}_{t} \vert \mathbf{x}_{0}, \mathbf{y})}{p^{\text{ref}}(\mathbf{x}_{t} | \mathbf{x}_{0})} = V^{\mathbf{y}}_{t}(\mathbf{x}_{t}) - V^{\mathbf{y}}_{0}(\mathbf{x}_{0}) = \log p^*(\mathbf{y} \vert \mathbf{x}_t) - \log \mathcal{Z}^{\mathbf{y}}_{0}(\mathbf{x}_{0})   \label{eq:logits}
 \end{align}
 $$
 
@@ -294,7 +294,7 @@ which can be seen by marginalizing either forward  $$ p^*_{t}(\mathbf{x}_{t} \ve
 Finally, we will find it useful to view the value function as measuring the log importance weights between intermediate posterior and prior marginals by rearranging \eqref{eq:marginal},
 
 $$\begin{align}
-\log \frac{p^*(\mathbf{x}_{t} \vert  \mathbf{y})}{p^{ref}(\mathbf{x}_{t})} = V_{\mathbf{y}}^*(\mathbf{x}_{t+1}) - \log \mathcal{Z}(\mathbf{y}) \label{eq:logits}
+\log \frac{p^*(\mathbf{x}_{t} \vert  \mathbf{y})}{p^{\text{ref}}(\mathbf{x}_{t})} = V_{\mathbf{y}}^*(\mathbf{x}_{t+1}) - \log \mathcal{Z}(\mathbf{y}) \label{eq:logits}
 \end{align}
 $$
 
@@ -383,7 +383,7 @@ The weights in \eqref{eq:weights} suggest a sequential resampling scheme at inte
     - Copy or Reassign Samples: $$ \mathbf{x}_t^{(k)} \gets \mathbf{x}_t^{(i_k)} $$ ( for all $$ k \in [1,K] $$ in parallel)
     - Reset weights:  $$ w_{1:t}^{(k)} \gets  \frac{1}{K} \sum_{j=1}^K w_{1:t}^{(j)} $$
 
-Note that resetting the weights means that only subsequent weights are used for resampling at future timesteps, which preserves the unbiasedness of the eventual weights in \eqref{eq:unbiased}.  See the blog post by Tuan Anh Le for a particularly simple proof <d-cite key="tuan2023unbiased"></d-cite>.
+Note that resetting the weights means that only subsequent weights are used for resampling at future timesteps, which preserves the unbiasedness of the eventual weights in \eqref{eq:unbiased}.  See the blog post by Tuan Anh Le for a particularly simple proof <d-cite key="tuan2023unbiased"></d-cite>.  More advanced resampling techniques such as systematic resampling might also be used.
 
 Finally, we can use this resampling scheme even for approximate $$ V^{\theta}_{t}(\mathbf{x}_{t})$$ or $$ p^\theta(\mathbf{y} \vert \mathbf{x}_{t}) $$ for $$ t < T$$, although it is clear that the efficacy of this scheme will depend on the quality of these intermediate value functions or likelihoods.
 
