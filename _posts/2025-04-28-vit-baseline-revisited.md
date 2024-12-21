@@ -344,10 +344,10 @@ This true reproduction model reaches 76.94% top-1 validation set accuracy after 
 
 | Model | Top-1 val acc. |
 |:-------------:|:-------------:|
-| Reference | 76.7% |
-| Same ViT init. in PyTorch | 76.91% |
-| + Same RandAugment | **77.27%** |
-| + Same Inception Crop | 76.94% |
+| Reference | 76.7 |
+| Same ViT init. in PyTorch | 76.91 |
+| + Same RandAugment | **77.27** |
+| + Same Inception Crop | 76.94 |
 
 Before we move on: Which implementation is correct? While the reference implementation of the Inception crop
 is not publicly available to our best knowledge, here is the relevant excerpt from the paper <d-cite key="szegedy2015going"></d-cite>:
@@ -361,7 +361,7 @@ linear space, it is clear from the description that crop size should be sampled 
 
 ### Big Vision miscellaneous
 
-Finally <d-footnote>Chronologically, these experiments were run before the true reproduction.</d-footnote>,
+Finally <d-footnote>Except the 2nd and 3rd "grafted" experiments, these experiments were run before the true reproduction chronologically.</d-footnote>,
 there are a few idiosyncrasies of the Big Vision reference implementation that either are impractical
 or do not make sense to replicate. Here we run experiments using the Big Vision repo to test their
 effects on model training.
@@ -425,17 +425,49 @@ no gradient accumulation. The model reaches [76.85% top-1 validation set accurac
 but in [`v2.RandomResizedCrop()` of torchvision](https://pytorch.org/vision/main/generated/torchvision.transforms.v2.RandomResizedCrop.html) it's set to 4.0/3.0,
 with difference well above floating point precision. We don't find it relevant however, and it should be the latter as originally described.
 
+Additionally, for debugging purpose we run 3 "grafted" experiments in which we train and evaluate PyTorch models on the Big Vision data pipelines <d-footnote>The first two grafted experiments are affected by two bugs: One that handles padded input incorrectly and causes the code to underreport top-1 validation set accuracy by a factor of $$\frac{50000}{50176}$$ (<a href="https://github.com/EIFY/big_vision/commit/c6983dbbffaeb21d8c9d7f90caea317b04414fea">bugfix commit</a>) and another that flips height and width of the image (<a href="https://github.com/EIFY/big_vision/commit/3159c33be81b99dff19bcbd6d24f527f255ec7df">bugfix commit</a>). While the latter doesn't result in equivalent models due to the sincos2d position embeddings, we don't believe that it changes the distribution of the reported metric.</d-footnote>. Other than 1-2, the reference Big Vision data pipelines are not further modified beyond necessity. These 3 grafted experiments reach [76.65-76.81% top-1 validation set accuracy](https://api.wandb.ai/links/eify/ey4cmaxx).
+
 In summary:
 
 | Model | Top-1 val acc. |
 |:-------------:|:-------------:|
-| Reference | 76.7% |
-| 100% training set, smaller shuffle buffer, grad. acc. | 76.74% |
-| + contrast() fix, consistent anti-aliasing, accurate JPEG decode | **76.87%** |
-| + fp32 1st order acc. | 76.77% |
-| + full shuffle, no grad. acc. | 76.85% |
+| Reference | 76.7 |
+| 100% training set, smaller shuffle buffer, grad. acc. | 76.74 |
+| + contrast() fix, consistent anti-aliasing, accurate JPEG decode | **76.87** |
+| + fp32 1st order acc. | 76.77 |
+| + full shuffle, no grad. acc. | 76.85 |
+| Grafted # 1 | 76.65 |
+| Grafted # 2 | 76.81 |
+| Grafted # 3 | 76.72 |
 
-The metrics suggest that none of them has any effect.
+The metrics suggest that none of them has any effect. However, this doesn't mean that data pipelines
+are interchangeable for trained models. Here is what we observe when we evaluate the models trained on
+the Big Vision data pipeline with the torchvision data pipeline, and vice versa:
+
+| Model | torchvision pp | Big Vision pp |
+|:-------------:|:-------------:|:-------------:|
+| Grafted # 2 | 76.52 <r>-0.29</r> | 76.81 |
+| Grafted # 3 | 76.47 <r>-0.25</r>| 76.72 |
+| + Same RandAugment | 77.27 | 77.30 <g>+0.03</g>  |
+| + Same Inception Crop | 76.94 | 76.96 <g>+0.02</g> |
+| Head: MLP → linear 90ep | 76.83 | 76.86 <g>+0.03</g> |
+| Head: MLP → linear 150ep | 78.05 | 77.94 <r>-0.11</r> |
+| Head: MLP → linear 300ep | 78.87 | 78.76 <r>-0.11</r> |
+
+Where the Head: MLP → linear experiments are `+ Same RandAugment` models trained in parallel from
+the next section. For unknown reasons, models trained on the torchvision data pipeline seem more
+robust. To assess and attribute this surprise discrepancy, we compare the validation set images
+returned by these two pipelines by the L2 difference per pixel after `value_range(-1, 1)` rescaling.
+We find that the tfds pipeline returns nearly all exact images if we specify the decoder to be
+`tf.io.decode_jpeg(..., dct_method="INTEGER_ACCURATE")` <d-footnote>There is only one nonzero L2 value less than 0.01, for some reason.</d-footnote>.
+The difference emerges with the default decoder `tf.io.decode_image` ("Default Decoder"),
+which is further exacerbated by resizing and cropping ("Preprocessed", [notebook](https://github.com/EIFY/mup-vit/blob/0c2d0ddc23614b0c0990ec15c46a90ed6ee7b444/notebooks/dataset_comparison.ipynb)):
+
+<div class="caption">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/imagenet-ds-diff.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
+</div>
+
+Tentatively, we attribute the discrepancy to the long tail of L2 difference after preprocessing.
 
 ## Corrected reproduction
 
@@ -467,10 +499,9 @@ than they are:
 | Head: MLP → linear | 76.8 <g>+0.1</g> | 78.1 <r>-0.5</r> | 78.9 <r>-0.9</r> |
 
 We first notice that there is quite a bit of variation: In particular, 76.8(3)% for 90ep Head: MLP → linear
-is low compared to our previous result 77.27%. This reminds us of our ["grafting" experiment](https://github.com/EIFY/big_vision/tree/grafted)
-of training a PyTorch model on the Big Vision data pipelines that results in [76.38% top-1 validation set accuracy](https://wandb.ai/eify/mup-vit/reports/torch-on-big-vision-input3--Vmlldzo4NTMzMTU4).
-If we believe that they are all from their respective distributions, then the Inception crop implementation
-means the difference between 76.38-76.87 and 76.83-77.27, with variation of $\pm 0.2$ in each range and overlapping extrema.
+is low compared to our previous result 77.27%. Compared to our [grafted experiments](https://github.com/EIFY/big_vision/tree/grafted)
+where the variation is $\pm 0.08$ (76.65-76.81%) with random initialization but deterministic (fixed random seed) training data pipeline,
+we observe variation of $\pm 0.2$ when both initialization and training data pipeline are randomized.
 Regardless, the trend seems to be that the correct Inception crop benefits lower training budget
 experiments but shows mixed results for higher training budget. One plausible explanation
 is that oversampling smaller crops amounts to stronger augmentation, which tends to benefit
@@ -760,7 +791,7 @@ It is out of scope to retrain these models with the correct Inception crop, but 
 or the TF-like uniform crop height sampling:
 
 * "Repro": the true reproduction model (76.94% top-1)
-* "Grafted": the PyTorch model trained on the Big Vision data pipelines (76.38% top-1)
+* "Grafted" # 3: a PyTorch model trained on the Big Vision data pipelines (76.72% top-1)
 
 Loosely inspired by guided backpropagation <d-cite key="DBLP:journals/corr/SpringenbergDBR14"></d-cite>,
 we compute the gradient of the class logit on the images from the ImageNet-1k validation set, sum over
@@ -769,18 +800,19 @@ how evenly the positive gradient is distributed among the $224^2$ pixels of the 
 crop by the entropy ([notebook](https://github.com/EIFY/mup-vit/blob/51bcdc77ea6e26ceef049e96f59702a9d9ef15d1/notebooks/gather_stats.ipynb)).
 We hypothesize that since the correct Inception crop tends to let the model see more of the image,
 How focused the model's attention (in the colloquial sense here) may differ. For reference and sanity
-check, the maximum possible entropy here is $\log(224^2) = 10.82$:
+check, the maximum possible entropy here is $\log(224^2) = 10.82$ <d-footnote>An old version of this figure mistakenly used a grafted model trained in bfloat16 precision (the one in the <a href="https://huggingface.co/EIFY/ViT_Baseline_Revisited/tree/main/05-15_2003">05-15_2003 folder on HF</a>) and failed to take flipped image height and width into account. We link to it <a href="{{ 'assets/img/2025-04-28-vit-baseline-revisited/90ep-pixel-grad-comparison-old.png' | relative_url }}">here</a> with corrected legend for the record.</d-footnote><d-footnote>We find no difference when we carry out this analysis with Big Vision's validation data pipeline. See the equivalent figure <a href="{{ 'assets/img/2025-04-28-vit-baseline-revisited/90ep-pixel-grad-comparison-bv-pp-only.png' | relative_url }}">here</a>.</d-footnote>:
 
 <div class="caption">
-  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/gradient_entropy.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
+  <img src="{{ 'assets/img/2025-04-28-vit-baseline-revisited/90ep-pixel-grad-comparison.png' | relative_url }}" class="img-fluid" width="auto" height="auto">
 </div>
 
-Tentatively we find that to be the case. There is quite a bit of variation between the replications
-just like the evaluation metric, but models trained with the correct uniform area sampling tend to
-have more focused attention with lower positive gradient entropy. This is interesting and not necessary
-what one might have expected. As a plausible explanation, we hypothesize that perhaps the smaller crops
-of TF-like Inception crop force the model to learn different localized features in each epoch, so
-when the model sees the validation set center crop it is paying more evenly distributed attention.
+We find that both data pipeline and Inception crop implementation matter. Reproduction with TF-like
+Inception crop and torchvision data pipeline results in notably higher positive gradient entropy,
+while both the correct Inception crop and the Big Vision data pipeline lower it. For the former,
+we hypothesize that perhaps the smaller crops of TF-like Inception crop force the model to learn
+different localized features in each epoch, so when the model sees the validation set center crop
+it is paying more evenly distributed attention. For the latter some difference is not unexpected
+given the subtle effects of data pipeline we observed, but we have even less insight.
 
 Now, how would the models trained for the highly-cited papers above including SimCLR, SoViT-400M,
 and FlexViT behave differently if they were trained with the correct Inception crop?
@@ -795,6 +827,8 @@ fixing bugs in existing implementations.
 And our own repo should be no exception.
 
 ### Replication guide
+
+Selected model checkpoints are available on Hugging Face [here](https://huggingface.co/EIFY/ViT_Baseline_Revisited).
 
 1. [Install PyTorch](https://pytorch.org/), including torchvision.
 2. Prepare the [ILSVRC 2012 ImageNet-1k dataset](https://pytorch.org/vision/main/generated/torchvision.datasets.ImageNet.html).
