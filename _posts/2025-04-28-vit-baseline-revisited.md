@@ -457,7 +457,7 @@ the Big Vision data pipeline with the torchvision data pipeline, and vice versa:
 Where the Head: MLP → linear experiments are `+ Same RandAugment` models trained in parallel from
 the next section. For unknown reasons, models trained on the torchvision data pipeline seem more
 robust. To assess and attribute this surprise discrepancy, we compare the validation set images
-returned by these two pipelines by the L2 difference per pixel after `value_range(-1, 1)` rescaling.
+returned by these two pipelines and measure the L2 difference per pixel after `value_range(-1, 1)` rescaling.
 We find that the tfds pipeline returns nearly all exact images if we specify the decoder to be
 `tf.io.decode_jpeg(..., dct_method="INTEGER_ACCURATE")` <d-footnote>There is only one nonzero L2 value less than 0.01, for some reason.</d-footnote>.
 The difference emerges with the default decoder `tf.io.decode_image` ("Default Decoder"),
