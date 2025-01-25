@@ -129,14 +129,6 @@ $$
     Oracle Complexity Framework (adapted from Prof. Yangyang Xu's Slides<d-cite key="xu2019slides"></d-cite>)
 </div>
 
-Here we focus on first-order optimization only, in fact there are also many works on *zeroth-order optimization*<d-cite key="liu2020primer"></d-cite>, and *higher-order optimization*<d-cite key="sun2019survey"></d-cite>, and the key difference just lie in the oracle information. For example second-order methods (e.g., Newton's method) generally are able to access the Hessian information, which first-order methods cannot access, so with such finer information, generally second-order methods attain better complexities compared to their first-order counterparts, which is also characterized in theory as mentioned in <d-cite key="carmon2020lower"></d-cite>. 
-  
-  Also here the discussion does not include some other popular algorithms like *proximal algorithms*<d-cite key="parikh2014proximal"></d-cite>, one prominent example is *proximal point algorithm* (PPA)<d-cite key="rockafellar1976monotone"></d-cite> based on *proximal operator*:
-
-   $$x^{t+1}=\text{prox}_{\lambda f}(x^t)\triangleq\underset{x}{\arg\min}\left\{f(x)+\frac{1}{2\lambda}\|\|x-x^t\|\|^2\right\},$$
-
-   and the proximal operator, which requires to be solved exactly, introduces new oracle in the algorithm design, and it goes beyond the main scope of the blog. 
-
 The efficiency of algorithms is quantified by the *oracle complexity*: for an algorithm $\mathtt{A}\in\mathcal{A}(\mathbb{O})$ interacting with an oracle $\mathbb{O}$, an instance $f\in\mathcal{F}$, and the corresponding measurement $\mathcal{M}$, we define
 
 $$
@@ -178,6 +170,15 @@ $$
 $$
 
 In this notes, we will focus on **first-order algorithms** in various optimization problem settings, trying to summarize the state-of-the-art (SOTA) UB and LB results, aiming to identify the gaps in existing reseach, and develop new trends. 
+
+**Remark:**
+Here we focus on first-order optimization only, in fact there are also many works on *zeroth-order optimization*<d-cite key="liu2020primer"></d-cite>, and *higher-order optimization*<d-cite key="sun2019survey"></d-cite>, and the key difference just lie in the oracle information. For example second-order methods (e.g., Newton's method) generally are able to access the Hessian information, which first-order methods cannot access, so with such finer information, generally second-order methods attain better complexities compared to their first-order counterparts, which is also characterized in theory as mentioned in <d-cite key="carmon2020lower"></d-cite>. 
+  
+Also here the discussion does not include some other popular algorithms like *proximal algorithms*<d-cite key="parikh2014proximal"></d-cite>, one prominent example is *proximal point algorithm* (PPA)<d-cite key="rockafellar1976monotone"></d-cite> based on *proximal operator*:
+
+$$x^{t+1}=\text{prox}_{\lambda f}(x^t)\triangleq\underset{x}{\arg\min}\left\{f(x)+\frac{1}{2\lambda}\|\|x-x^t\|\|^2\right\},$$
+
+and the proximal operator, which requires to exactly solve a subproblem, introduces new oracle in the algorithm design, and it goes beyond the main scope of the blog. Similarly, algorithms like alternating direction method of multipliers (ADMM)<d-cite key="boyd2011distributed"></d-cite>, which also inherits subproblems to solve, are not applicable to the discussion here.
 
 ---
 
@@ -404,6 +405,9 @@ $$
 For lower bounds, we adapt the so-called optimization-based lower bounds proved via *zero-chain arguments* <d-cite key="nesterov2013introductory"></d-cite>. The narrative of such lower bounds admits the following form: For any given accuracy $\epsilon>0$, there exists a hard instance $f:\mathbb{R}^{d_\epsilon}\rightarrow\mathbb{R}$ in the function class $\mathcal{F}$, where the dimension $d_\epsilon$ depends on the accuracy $\epsilon>0$, such that it takes at least $\mathrm{poly}(\epsilon^{-1})$ number of oracles to find an $\epsilon$-optimal solution or $\epsilon$-stationary point. Note that the dimension $d_\epsilon$ depends on the accuracy, particularly $d_\epsilon$ increases as $\epsilon$ decreases. For a function class with a given dimension $d$, which is independent of the accuracy, the dependence on $\epsilon$ becomes loose especially when $d$ is small. In other words, for a $d$-dimension function classes and a given accuracy $\epsilon>0$, the upper bounds on the complexity of first-order methods given in the tables still hold, yet the lower bounds becomes loose, which could lead to a mismatch between upper and lower bounds. This leads to a fundamental question: how to prove lower bounds of first-order methods for any given $d$-dimensional function classes. 
 
 Such a question has been partially addressed for stochastic optimization using *information theoretic-based lower bounds*<d-cite key="agarwal2009information"></d-cite> and for deterministic one-dimensional optimization<d-cite key="chewi2023complexity"></d-cite>. For stochastic convex optimization, <d-cite key="agarwal2009information"></d-cite> shows that  for any given $d$-dimensional Lipschitz continuous convex function class and any $\epsilon>0$, it takes at least $\mathcal{O}(\sqrt{d} \epsilon^{-2})$ number of gradient oracles to find an $\epsilon$-optimal solution. Such information-theoretic lower bounds admits explicit dependence on the problem dimension. In addition, even ignoring dimension dependence, the dependence on the accuracy matches the upper bounds of stochastic gradient descent.  Thus such a lower bound addresses the aforementioned question for stochastic convex optimization. Yet, it raises another interesting observation, i.e., the obtained lower bounds  $\mathcal{O}(d\epsilon^{-2})$<d-cite key="agarwal2009information"></d-cite> is larger than the upper bounds $\mathcal{O}(\epsilon^{-2})$<d-cite key="nemirovski2009robust"></d-cite>. This is of course not a conflict as the two papers make different assumptions. Yet, it would be interesting to ask, if first-order methods such as mirror descent are really dimension independent or is it the case that existing optimization literature is treating some parameters that could be dimension dependent as dimension independent ones. 
+
+
+test test
   
 
 ### Beyond Classical Oracle Model
