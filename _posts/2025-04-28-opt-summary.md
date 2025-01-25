@@ -129,6 +129,13 @@ $$
     Oracle Complexity Framework (adapted from Prof. Yangyang Xu's Slides<d-cite key="xu2019slides"></d-cite>)
 </div>
 
+Here we focus on first-order optimization only, in fact there are also many works on *zeroth-order optimization*<d-cite key="liu2020primer"></d-cite>, and *higher-order optimization*<d-cite key="sun2019survey"></d-cite>, and the key difference just lie in the oracle information. For example second-order methods (e.g., Newton's method) generally are able to access the Hessian information, which first-order methods cannot access, so with such finer information, generally second-order methods attain better complexities compared to their first-order counterparts, which is also characterized in theory as mentioned in <d-cite key="carmon2020lower"></d-cite>. 
+  
+  Also here the discussion does not include some other popular algorithms like *proximal algorithms*<d-cite key="parikh2014proximal"></d-cite>, one prominent example is *proximal point algorithm* (PPA)<d-cite key="rockafellar1976monotone"></d-cite> based on *proximal operator*:
+
+   $$x^{t+1}=\text{prox}_{\lambda f}(x^t)\triangleq\underset{x}{\arg\min}\left\{f(x)+\frac{1}{2\lambda}\|\|x-x^t\|\|^2\right\},$$
+
+   and the proximal operator, which requires to be solved exactly, introduces new oracle in the algorithm design, and it goes beyond the main scope of the blog. 
 
 The efficiency of algorithms is quantified by the *oracle complexity*: for an algorithm $\mathtt{A}\in\mathcal{A}(\mathbb{O})$ interacting with an oracle $\mathbb{O}$, an instance $f\in\mathcal{F}$, and the corresponding measurement $\mathcal{M}$, we define
 
@@ -190,13 +197,13 @@ For convenience, we summarize some of the notations commonly used in tables belo
 - NS: Nonsmooth
 - PL: Polyak-Łojasiewicz Condition
 - $\mathcal{O},\tilde{\mathcal{O}},\Omega$: For nonnegative functions $f(x)$ and $g(x)$, we say $f=\mathcal{O}(g)$ if $f(x)\leq cg(x)$ for some $c>0$, and further write $f=\tilde{\mathcal{O}}(g)$ to omit poly-logarithmic terms on some constants, and $f=\Omega(g)$ if $f(x)\geq cg(x)$.
-- $\Delta$, $D$: The initial function value gap $\Delta\triangleq(x_0)-f(x^\star)$, and the initial point distance $D\triangleq\|\|x_0-x^\star\|\|$.
+- $\Delta$, $D$: The initial function value gap $\Delta\triangleq f(x_0)-f(x^\star)$, and the initial point distance $D\triangleq\|\|x_0-x^\star\|\|$.
 - Optimality gap: the function value gap $f(x) - f^\star$.
 - Stationarity: the function gradient norm $\|\| \nabla f(x) \|\|$.
 - Near-stationarity: the gradient norm $\|\| \nabla f_\lambda(x) \|\|$, where $f_\lambda$ is the Moreau envelope of the original function $f$.
 - Duality Gap (for minimax optimization): the primal-dual gap of a given point $(\hat{x},\hat{y})$, defined as $G_f(\hat{x},\hat{y})\triangleq\max_y f(\hat{x},y)-\min_x f(x,\hat{y})$
 
-- Primal Stationarity (for minimax optimization)<d-footnote>Here we always define the convergence in terms that the **norm** is driven be smaller than $\epsilon$, note that some works may deduce the final result measured by the square, e.g., $\|\| \nabla f(x) \|\|^2$ or $\|\| \nabla f_\lambda(x) \|\|^2$. </d-footnote>: the primal function gradient norm $\|\| \nabla \Phi(x) \|\|$, where $\Phi(x)\triangleq\max_{y\in\mathcal{Y}}f(x,y)$ is the primal function. It is different from the function stationarity in terms of the original objective function $f$.
+- Primal Stationarity (for minimax optimization)<d-footnote>Here we always define the convergence in terms that the **norm** is driven be smaller than $\epsilon$, note that some works may deduce the final result measured by the square, e.g., $\| \nabla f(x) \|^2$ or $\| \nabla f_\lambda(x) \|^2$. </d-footnote>: the primal function gradient norm $\|\| \nabla \Phi(x) \|\|$, where $\Phi(x)\triangleq\max_{y\in\mathcal{Y}}f(x,y)$ is the primal function. It is different from the function stationarity in terms of the original objective function $f$.
 
 ---
 
@@ -236,7 +243,11 @@ We present the lower and upper bound results in tables below<d-footnote>Given th
 | NS $L$-Lip Cont. $\rho$-WC    | Near-stationarity        | Unknown                                                    | $\mathcal{O}(\epsilon^{-4})$  | /                                                | <d-cite key="davis2018stochastic"></d-cite>, Corollary 2.2 |
 | $L$-Smooth $\mu$-PL     | Optimality gap | $\Omega \left( \kappa \log \frac{1}{\epsilon} \right)$                     | $\checkmark$      | <d-cite key="yue2023lower"></d-cite>, Theorem 3              | <d-cite key="karimi2016linear"></d-cite>, Theorem 1 |
 
-</div>
+**Remark:**
+
+1. $\kappa\triangleq L/\mu\geq 1$ is called the condition number, which can be very large in many applications, e.g., the optimal regularization parameter choice in statistical learning can lead to $\kappa=\Omega(\sqrt{n})$ where $n$ is the sample size<d-cite key="shalev2014understanding"></d-cite>.
+2. PL condition is a popular assumption in noncovex optimization which can be implied by the strong convexity condition. Based on the summary above, we can find that both smooth strongly convex and smooth PL condition optimization problems have established the optimal complexities (i.e., UB matches LB), and the LB in the PL case is strictly larger than that of the SC case, so in terms of the worst-case complexity, we can say that the PL case is "strictly harder" than the strongly convex case.
+3. The $L$-Smooth Convex setting comes with two cases, the "function case" assumed the initial optimality gap is bounded $f(x_0)-f(x^\star)\leq \Delta$, and the other assumed bounded initialization $\|\|x_0-x^\star\|\|\leq D$.
 
 ### Case 1-2: Finite-sum and Stochastic Optimization
 
@@ -263,6 +274,8 @@ We present the lower and upper bound results in tables below<d-footnote>Given th
 
 1. Here $n$ corresponds to the number of component functions $f_i$, and $\kappa\triangleq L/\mu$ is the condition number, $\sigma^2$ corresponds to the variance of gradient estimator.
 2. "Thm" and "Cor" stand for "Theorem" and "Corollary" respectively.
+
+</div>
  
 ### Case 2-1: SC-SC/SC-C/C-C Deterministic Minimax Optimization
 
@@ -321,7 +334,7 @@ We present the lower and upper bound results in tables below<d-footnote>Given th
 ---
 
 ## What is next?
-The section above summarize the upper and lower bounds of the oracle complexity for finding an $\epsilon$-optimal solution or $\epsilon$-stationary points for minimization and minimax problems. Clearly this is not the end of the story, there are more and more optimization problems arising from various applications like machine learning and operation research<d-cite key="bottou2018optimization"></d-cite>, which come with more involved problem structure and complicated landscape characteristics; also sometimes we find it harder to explain algorithm behavior in practice using existing theory, e.g., <d-cite key="defazio2019ineffectiveness"></d-cite> shows that variance reduction may be ineffective on accelerating the training of deep learning models, which contrast the classical convergence theory. Here we discuss what could be potential interesting next steps. 
+The section above summarize the upper and lower bounds of the oracle complexity for finding an $\epsilon$-optimal solution or $\epsilon$-stationary points for minimization and minimax problems. Clearly this is not the end of the story, there are more and more optimization problems arising from various applications like machine learning and operation research<d-cite key="bottou2018optimization"></d-cite>, which come with more involved problem structure and complicated landscape characteristics; also we need to indicate that the above summary corresponds to asymptotic upper and lower bounds in theory, sometimes (or often) we find it harder to explain algorithm behavior in practice using existing theory, e.g., <d-cite key="defazio2019ineffectiveness"></d-cite> shows that variance reduction may be ineffective on accelerating the training of deep learning models, which contrast the classical convergence theory. Here we discuss what could be potential interesting next steps. 
 
 ### Richer Problem Structure
 
@@ -381,7 +394,7 @@ $$
 
   - *Hidden convexity* says that the original nonconvex optimization problem might admit a convex reformulation via a variable change. It appears in operations research <d-cite key="chen2024efficient"></d-cite><d-cite key="chen2023network"></d-cite>, reinforcement learning <d-cite key="zhang2020variational"></d-cite>, control <d-cite key="anderson2019system"></d-cite>. Despite that the concrete transformation function is unknown, one could still solve the problem to global optimality efficiently <d-cite key="fatkhullin2023stochastic"></d-cite> with $\mathcal{O}(\epsilon^{-3})$ complexity for hidden convex case and $\mathcal{O}(\epsilon^{-1})$ complexity for hidden strongly convex case. In the hidden convex case, one could further achieve $\mathcal{O}(\epsilon^{-2})$ complexity in the hidden convex case via mirror stochastic gradient <d-cite key="chen2024efficient"></d-cite> or variance reduction <d-cite key="zhang2021convergence"></d-cite>.
   
-  - Another stream considers *Polyak-Łojasiewicz* (PL) or *Kurdyka-Łojasiewicz* (KL) type of conditions, or other gradient dominance conditions <d-cite key="karimi2016linear"></d-cite>. Such conditions imply that the (generalized) gradient norm could upper bound the optimality gap, implying that any (generalized) stationary point are also global optimal. However, establishing hidden convexity, PL, or KL condition is usually done in a case-by-case manner and could be challenging. See <d-cite key="chen2024landscape"></d-cite> for some examples about KL conditions in finite horizon MDP with general state and action and its applications in operations and control. See <d-cite key="fatkhullin2022sharp"></d-cite> and reference therein for convergence rate analysis under KL conditions.
+  - Another stream considers *Polyak-Łojasiewicz* (PL) or *Kurdyka-Łojasiewicz* (KL) type of conditions, or other gradient dominance conditions <d-cite key="karimi2016linear"></d-cite>. Such conditions imply that the (generalized) gradient norm dominates the optimality gap, implying that any (generalized) stationary point are also global optimal. However, establishing hidden convexity, PL, or KL condition is usually done in a case-by-case manner and could be challenging. See <d-cite key="chen2024landscape"></d-cite> for some examples about KL conditions in finite horizon MDP with general state and action and its applications in operations and control. See <d-cite key="fatkhullin2022sharp"></d-cite> and reference therein for convergence rate analysis under KL conditions.
   
   - With numerical experiments disclosing structures in objective functions, some works proposed new assumptions which drive the algorithm design and corresponding theoretical analysis, which in turn reveals acceleration in empirical findings. For example, <d-cite key="zhang2019gradient"></d-cite> introduced the *relaxed smoothness assumption* (or $(L_0, L_1)$-smoothness) inspired by empirical observations on deep neural networks, and proposed a clipping-based first-order algorithm which enjoys both theoretical and practical outperformance.
   
@@ -406,8 +419,8 @@ Such a question has been partially addressed for stochastic optimization using *
 
   - In <d-cite key="pedregosa2020acceleration"></d-cite> and <d-cite key="paquette2021sgd"></d-cite>, they considered *average-case complexity* in optimization algorithm analysis, this topic is well established in theoretical computer science. Such pattern considers the convergence behavior in the average sense rather than the classical worst-case flavor, and it further specified the objective formulation and data distribution, which results in more refined complexity bounds than the common worst-case complexities, while at the expense of more complicated analysis. The study of average-case complexity in the context of optimization algorithms is still less mature and there are still many open questions.
   - On the other hand, with the development of higher-order algorithms, some recent works<d-cite key="doikov2023second"></d-cite> further considered the *arithmetic complexity* in optimization by incorporating the computational cost of each oracle into accout<d-footnote>In Nesterov's book<d-cite key="nesterov2018lectures"></d-cite>, these two are also called "analytical complexity" and "arithmetical complexity".</d-footnote>
-  - Also in distributed optimization (or federated learning) literature, the communication cost is one of the main bottlenecks compared to computation<d-cite key="konevcny2016federated"></d-cite><d-cite key="mcmahan2017communication"></d-cite><d-cite key="karimireddy2020scaffold"></d-cite><d-cite key="kairouz2021advances"></d-cite>, so many works modified the oracle framework a bit turn to study the complexity bound in terms of *communication cost* (or communication oracle) rather than the computation efforts, such change also motivated the fruitful study of *local algorithms*<d-cite key="stich2019local"></d-cite><d-cite key="mishchenko2022proxskip"></d-cite>, which try to skip unnecessary communications while still attain the convergence guarantees. 
-  - Recently another series of recent works<d-cite key="grimmer2024provably"></d-cite><d-cite key="altschuler2023acceleration1"></d-cite><d-cite key="altschuler2023acceleration2"></d-cite> consider *long stepsize* by incorporating a craft stepsize schedule into first-order methods and achieve a faster convergence rate, which is quite counterintuitive and may be of interests to the community. At the same time, as indicated in <d-cite key="kornowski2024open"></d-cite><d-cite key="altschuler2023acceleration1"></d-cite>, such theoretical outperformance generally only works for some specific iteration numbers, while in lack of guarantees of *anytime convergence*, also the extension of the study beyond the deterministic and convex case is still an open problem. 
+  - Also in distributed optimization (or federated learning) literature, the communication cost is one of the main bottlenecks compared to computation<d-cite key="konevcny2016federated"></d-cite><d-cite key="mcmahan2017communication"></d-cite><d-cite key="karimireddy2020scaffold"></d-cite><d-cite key="kairouz2021advances"></d-cite>, so many works modified the oracle framework a bit and turn to study the complexity bound in terms of *communication cost* (or communication oracle) rather than the computation efforts, such change also motivated the fruitful study of *local algorithms*<d-cite key="stich2019local"></d-cite><d-cite key="mishchenko2022proxskip"></d-cite>, which try to skip unnecessary communications while still attain the convergence guarantees. 
+  - Recently another series of recent works<d-cite key="grimmer2024provably"></d-cite><d-cite key="altschuler2023acceleration1"></d-cite><d-cite key="altschuler2023acceleration2"></d-cite> consider *long stepsize* by incorporating a craft stepsize schedule into first-order methods and achieve a faster convergence rate, which is quite counterintuitive and may be of interests to the community. At the same time, as indicated in <d-cite key="kornowski2024open"></d-cite><d-cite key="altschuler2023acceleration1"></d-cite>, such theoretical outperformance generally only works for some specific iteration numbers, while in lack of guarantees of *anytime convergence*, also the extension of the study beyond the deterministic and convex case is still an open problem<d-footnote>Update (Nov. 27, 2024): Today there appeared a new work on arXiv<d-cite key="zhang2024anytime"></d-cite>, which claimed to solve the anytime convergence issue mentioned above<d-cite key="kornowski2024open"></d-cite>.</d-footnote>. 
 
 ---
 
