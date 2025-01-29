@@ -52,7 +52,7 @@ toc:
 
 ## Introduction 
 
-AI for structural biology has a big-data problem. Simply put, there is a lack of sufficiently large datasets to train and deploy models that can generalize across diverse molecular systems and capture the full complexity of biomolecular interactions. The structural data available in the Protein Data Bank (PDB)<d-cite key="bank1971protein"></d-cite> is limited to a biased set of protein structures and only contains lowest energy (most likely) conformations, not representations of the full distribution of conformations (the different shapes a protein can take). Understanding this distribution of conformations is important since proteins are molecular machines and their dynamics largely determine their function.  
+AI for structural biology has a big-data problem. Simply put, there is a lack of sufficiently large datasets to train and deploy models that can generalize across diverse molecular systems and capture the full complexity of biomolecular interactions. The structural data available in the [Protein Data Bank (PDB)](https://www.rcsb.org/)<d-cite key="bank1971protein"></d-cite> is limited to a biased set of protein structures and only contains lowest energy (most likely) conformations, not representations of the full distribution of conformations (the different shapes a protein can take). Understanding this distribution of conformations is important since proteins are molecular machines and their dynamics largely determine their function.  
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
