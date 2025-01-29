@@ -7,23 +7,28 @@ future: true
 htmlwidgets: true
 
 # anonymize when submitting 
-authors:
-  - name: Anonymous 
+#authors:
+#  - name: Anonymous 
 
 # do not fill this in until your post is accepted and you're publishing your camera-ready post!
-# authors:
-#   - name: Albert Einstein
-#     url: "https://en.wikipedia.org/wiki/Albert_Einstein"
-#     affiliations:
-#       name: IAS, Princeton
-#   - name: Boris Podolsky
-#     url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
-#     affiliations:
-#       name: IAS, Princeton
-#   - name: Nathan Rosen
-#     url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
-#     affiliations:
-#       name: IAS, Princeton 
+authors:
+   - name: Rishal Aggarwal
+     url: "rishalaggarwal.github.io"
+     affiliations:
+       name: CMU-PITT Computational Biology PhD Program, University of Pittsburgh
+   - name: Daniel Penaherrera
+     affiliations:
+       name: CMU-PITT Computational Biology PhD Program, University of Pittsburgh
+   - name: Justin Shao
+     affiliations:
+       name: Computational Biology Department, Carnegie Mellon University
+   - name: Minhyek Jeon
+     affiliations:
+       name: Computational Biology Department, Carnegie Mellon University
+   - name: David Koes
+     url: "https://bits.csb.pitt.edu/"
+     affiliations:
+       name: Department of Computational and Systems Biology, University of Pittsburgh
 
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-ebm-vs-mcmc.bib  
@@ -47,7 +52,7 @@ toc:
 
 ## Introduction 
 
-AI for structural biology has a big-data problem. Simply put, there is a lack of sufficiently large datasets to train and deploy models that can generalize across diverse molecular systems and capture the full complexity of biomolecular interactions. The structural data in the Protein Data Bank (PDB) is limited to a biased set of protein structures and only contains lowest energy (most likely) conformations, not representations of the full distribution of conformations (the different shapes a protein can take). Understanding this distribution of conformations is important since proteins are molecular machines and their dynamics largely determine their function.  
+AI for structural biology has a big-data problem. Simply put, there is a lack of sufficiently large datasets to train and deploy models that can generalize across diverse molecular systems and capture the full complexity of biomolecular interactions. The structural data available in the Protein Data Bank (PDB)<d-cite key="bank1971protein"></d-cite> is limited to a biased set of protein structures and only contains lowest energy (most likely) conformations, not representations of the full distribution of conformations (the different shapes a protein can take). Understanding this distribution of conformations is important since proteins are molecular machines and their dynamics largely determine their function.  
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -64,7 +69,7 @@ Molecular dynamics (MD) simulations can sample the conformational dynamics of mo
 
 Yes that’s right, we know that for physical systems (molecules), the distribution of states (conformers) are characterized by their energy according the boltzmann distribution $$p(x) \propto exp(-\beta (\mathcal{E}(x)))$$, where $$\mathcal{E}(x)$$ is the energy of the state and $$\beta$$ is a constant dependant on temperature. This motivates a paradigm of training generative models that can take advantage of the energy function. 
 
-Recently, a surge of deep learning generative models has aimed to address the challenges of sampling and data scarcity by adopting innovative, data-free approaches<d-cite key="midgley2023fab"></d-cite><d-cite key="vargas2023dds"></d-cite><d-cite key="zhang2022pis"></d-cite><d-cite key="sadegh2024idem"></d-cite><d-cite key="woo2024iefm"></d-cite>. These methods, which one may describe as 'self-generative,' leverage a bootstrap procedure whereby the models generate their own data and rely on access to the energy function to refine their predictions. This paradigm is particularly exciting because it bypasses the traditional reliance on large datasets, making it a promising solution to long-standing barriers in the field. For this assessment, we focus on two such methods: iterative energy-based flow matching (iEFM)<d-cite key="woo2024iefm"></d-cite> and iterative denoising energy matching (iDEM)<d-cite key="sadegh2024idem"></d-cite> that have shown state of the art performance on several toy physical systems.
+Recently, a surge of deep learning generative models has aimed to address the challenges of sampling and data scarcity by adopting innovative, data-free approaches<d-cite key="midgley2023fab"></d-cite><d-cite key="vargas2023dds"></d-cite><d-cite key="zhang2022pis"></d-cite><d-cite key="sadegh2024idem"></d-cite><d-cite key="woo2024iefm"></d-cite><d-cite key="sendera2024improved"></d-cite>. These methods, which one may describe as 'self-generative,' leverage a bootstrap procedure whereby the models generate their own data and rely on access to the energy function to refine their predictions. This paradigm is particularly exciting because it bypasses the traditional reliance on large datasets, making it a promising solution to long-standing barriers in the field. For this assessment, we focus on two such methods: iterative energy-based flow matching (iEFM)<d-cite key="woo2024iefm"></d-cite> and iterative denoising energy matching (iDEM)<d-cite key="sadegh2024idem"></d-cite> that have shown state of the art performance on several toy physical systems.
 
 A key consideration to take into account with generative models is to check if they outperform traditional methods for sampling from unnormalized density (energy) functions like Markov Chain Monte Carlo (MCMC). In this work, we compare iDEM and iEFM to MCMC on the same physical systems they were tested on and show that MCMC outperforms both methods while taking the same number of queries from the energy function. With this result, we suggest a “course correction” on the benchmarking of these models and propose different avenues where the development of these generative models would be useful.
 
@@ -92,10 +97,19 @@ u_t(x) &= \frac{\int u_t(x|x_1)p_t(x|x_1)p_1(x_1)dx_1}{\int p_t(x|x_1)p(x_1)dx_1
     </div>
 </div>
 <div class="caption">
-    Adapted from<d-cite key="sadegh2024idem"></d-cite>, iDEM training paradigm. in the outer loop the model is used to generate samples to store in the buffer and in the inner loops, samples are obtained from the buffer, noised and trained on.
+    Source: iDEM<d-cite key="sadegh2024idem"></d-cite>. iDEM training paradigm, in the outer loop the model is used to generate samples to store in the buffer and in the inner loops, samples are obtained from the buffer, noised and trained on.
 </div>
 
-In an iterative process (Figure for iDEM above), both methods begin by initializing a replay buffer with samples $x_T$ drawn from an isotropic Gaussian distribution. Subsequently, intermediate samples $x_t$ are generated by sampling from the conditional distribution $P_t(x_t \mid x_T)$, defined according to the specific theoretical framework of each method. The target vector field is then estimated using Monte Carlo estimation, where Boltzmann-weighted averaging is performed over samples $x_{T \mid t}$, effectively obtained by introducing additional noise to $x_t$. By regressing onto these estimated targets in an inner loop and periodically generating new samples to replenish the buffer in an outer loop, these methods iteratively bootstrap toward sampling the full equilibrium distribution dictated by the energy function.
+In an iterative process (Figure source: iDEM<d-cite key="sadegh2024idem"></d-cite>), both methods begin by initializing a replay buffer with samples $x_T$ drawn from an isotropic Gaussian distribution. Subsequently, intermediate samples $x_t$ are generated by sampling from the conditional distribution $P_t(x_t \mid x_T)$, defined according to the specific theoretical framework of each method. The target vector field is then estimated using Monte Carlo estimation, where Boltzmann-weighted averaging is performed over samples $x_{T \mid t}$, effectively obtained by introducing additional noise to $x_t$. By regressing onto these estimated targets in an inner loop and periodically generating new samples to replenish the buffer in an outer loop, these methods iteratively bootstrap toward sampling the full equilibrium distribution dictated by the energy function.
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-ebm-vs-mcmc/iefm.gif" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Target estimation procedure in iEFM: At the start of training, randomly initialized samples are draw from the replay buffer. Then samples $x_t$ are draw from $P_{t}(x \mid x_{1} )$ (red points). Using $x_{t}$, a Gaussian mean $\mu_{\text{MC}}$ (green x marks) is calculated to draw Monte Carlo samples (black points) for the estimation of a Boltzmann-weighted average, $\tilde{x}_{1}$ (green stars). Note that the standard deviations of these Gaussain (grey circles) are also determined by the variance schedule $\simga(t)$ where $t \sim \mathcal{U}[0, 1]$ during training. Subsequently, the Monte Carlo estimates, $\tilde{x}_1$, will then be used to define the target flow matching vector field that the model is trained on. Upon completion of this inner loop training procedure, the model then generates new samples to replenish the buffer in the outer loop. This process iterates until the model converges to the target distribution.
+</div>
 
 Developers of both methods, as well as others, have gravitated toward a standard set of toy systems for evaluation and benchmarking. While these systems are useful for early-stage development and illustrative purposes, we caution against over-reliance on them for robust benchmarking. As we will demonstrate, many related works employ MCMC samples of the equilibrium distribution but fail to use MCMC as a meaningful benchmark. In fact, MCMC often produces superior samples with faster runtimes on these systems compared to the proposed methods. Additionally, we show that the metrics commonly used for evaluation are poorly aligned with actual sample quality, further undermining their utility in assessing these methods.
 
@@ -456,8 +470,8 @@ From the table above and figures below, it is clearly visible that iDEM does not
 
 ## Closing thoughts \- the role that these models have to play
 
-Our analysis offers a sobering assessment of the current state of neural network-based samplers for molecular systems. Despite the growing interest in methods like iDEM and iEFM, our results show that these approaches fail to outperform well-tuned MCMC methods in terms of both sampling quality and computational efficiency. This finding is particularly significant because, for neural samplers to justify their additional complexity and computational overhead, they must demonstrate clear and consistent advantages over traditional methods — a standard that these approaches have yet to meet. A possible solution to having more computationally efficient method would be to learn an approximate distribution specified by a complicated energy function and obtain the right distribution through a simple reweighting, as demonstrated by Klein et al.<d-cite key="klein2023equivariantflowmatching"></d-cite>.  
+Our analysis offers a sobering assessment of the current state of neural network-based samplers for molecular systems. Despite the growing interest in methods like iDEM and iEFM, our results show that these approaches fail to outperform well-tuned MCMC methods in terms of both sampling quality and computational efficiency. This finding is particularly significant because, for neural samplers to justify their additional complexity and computational overhead, they must demonstrate clear and consistent advantages over traditional methods — a standard that these approaches have yet to meet. A possible solution to having more computationally efficient method would be to learn an approximate distribution specified by a complicated energy function and obtain the right distribution through a simple reweighting, as demonstrated by Klein et al.<d-cite key="klein2023equivariantflowmatching"></d-cite>. The code for the experiments is available at [https://github.com/RishalAggarwal/EnergyBasedMCMC](https://github.com/RishalAggarwal/EnergyBasedMCMC). 
 
-However, this critique should not also be viewed as a wholesale rejection of such neural approaches in molecular sampling. Rather, it suggests a needed shift in research focus. One promising direction lies in leveraging neural networks' capacity for transfer learning. While MCMC methods are often system-specific, and require long chains on every new system, neural networks could potentially learn generalizable sampling strategies that transfer across different molecular systems. This transferability could provide a compelling "inference time" advantage over traditional MCMC methods, even if the training cost is significantly higher than running a MCMC chain on a single system. This has already been demonstrated in works such as TimeWarp<d-cite key="klein2023timewarp"></d-cite>and Transferable Boltzmann Generators<d-cite key="klein2024tbg"></d-cite>. 
+However, this critique should not also be viewed as a wholesale rejection of such neural approaches in molecular sampling. Rather, it suggests a needed shift in research focus. One promising direction lies in leveraging neural networks' capacity for transfer learning. While MCMC methods are often system-specific, and require long chains on every new system, neural networks could potentially learn generalizable sampling strategies that transfer across different molecular systems. This transferability could provide a compelling "inference time" advantage over traditional MCMC methods, even if the training cost is significantly higher than running a MCMC chain on a single system. This has already been demonstrated in works such as TimeWarp<d-cite key="klein2023timewarp"></d-cite>and Transferable Boltzmann Generators<d-cite key="klein2024tbg"></d-cite>. Additionally, while ML-based methods in this context remain suboptimal, we are optimistic that future models will soon be capable of generating samples zero-shot with near-Boltzmann accuracy.
 
 A critical limitation of current neural approaches like iEFM and iDEM lies in their reliance on weighted averages of noisy samples. This becomes particularly problematic when dealing with real molecular systems, where energy landscapes can be extremely steep and sampling noise can lead to explosive gradients. Future work might address this by reconsidering how noise is incorporated into these models - for instance, by defining noise on a Riemannian manifold that respects the geometric constraints of molecular systems<d-cite key="jing2023torsdiff"></d-cite>. Such modifications could help stabilize training and improve sampling efficiency while maintaining the potential benefits of neural approaches.
