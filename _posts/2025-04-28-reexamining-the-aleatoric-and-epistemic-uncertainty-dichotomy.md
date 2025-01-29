@@ -9,7 +9,15 @@ hidden: false
 
 # Anonymize when submitting
 authors:
-  - name: Anonymous
+  - name: Michael Kirchhof
+    affiliations:
+      name: University of Tübingen
+  - name: Gjergji Kasneci
+    affiliations:
+      name: Technical University of Munich
+  - name: Enkelejda Kasneci
+    affiliations:
+      name: Technical University of Munich
 
 #authors:
 #  - name: Albert Einstein
@@ -156,11 +164,22 @@ Der Kiureghian and Ditlevsen <d-cite key="der2009aleatory"></d-cite> conclude th
 
 The recent findings presented above suggest that research should not focus on binarizing uncertainties into either aleatoric or epistemic, as if there were some ground-truth notions of it. So what do we suggest future researchers instead? 
 
-First, we want to point out what we do _not_ intend. We do not suggest deleting the words "aleatoric" and "epistemic" from our vocabularies. As touched upon in the introduction, they serve a good purpose in roughly communicating what an uncertainty's goal is. However, after using one of those two umbrella terms, we propose to relentlessly follow-up by defining what exactly is meant, and what exactly one intends to solve with a specific uncertainty estimator. Maybe, the most basic common denominator we propose to the field is to spare a couple of characters: To start talking about aleatoric and epistemic uncertaint*ies*, reflecting that both are broad regions with many subfields and overlaps. This view is rising in recent uncertainty papers, as put by Gruber et al. <d-cite key="gruber2023sources"></d-cite> (and similarly by Mucsányi et al. <d-cite key="mucsanyi2024benchmarking"></d-cite>, Ulmer <d-cite key="ulmer2024uncertainty"></d-cite>, and Baan et al. <d-cite key="baan2023uncertainty"></d-cite>): 
+First, we want to point out what we do _not_ intend. We do not suggest deleting the words "aleatoric" and "epistemic" from our vocabularies. As touched upon in the introduction, they serve a good purpose in roughly communicating what an uncertainty's goal is and, as the plot below shows, their popularity is on an all-time high. However, after using one of those two umbrella terms, we propose to relentlessly follow-up by defining what exactly is meant, and what exactly one intends to solve with a specific uncertainty estimator. Maybe, the most basic common denominator we propose to the field is to spare a couple of characters: To start talking about aleatoric and epistemic uncertaint*ies*, reflecting that both are broad regions with many subfields and overlaps. This view is rising in recent uncertainty papers, as put by Gruber et al. <d-cite key="gruber2023sources"></d-cite> (and similarly by Mucsányi et al. <d-cite key="mucsanyi2024benchmarking"></d-cite>, Ulmer <d-cite key="ulmer2024uncertainty"></d-cite>, and Baan et al. <d-cite key="baan2023uncertainty"></d-cite>): 
 <blockquote>
 [A] simple decomposition of uncertainty into aleatoric and epistemic does not do justice to a much more complex constellation with multiple sources of uncertainty. 
 — Gruber et al. <d-cite key="gruber2023sources"></d-cite>
 </blockquote>
+
+<center>
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/2025-04-28-reexamining-the-aleatoric-and-epistemic-uncertainty-dichotomy/arxiv_papers_aleatoric_epistemic.png" class="col-8 rounded z-depth-1" style="width: 300"%}
+    </div>
+</div>
+<div class="caption">
+    The arXiv preprints in computer science, statistics, and math that mention aleatoric and epistemic uncertainty in their title or abstract have reached a new high. In 2024, there was a new preprint nearly every day.
+</div>
+</center>
 
 Our main suggestion for theoreticians is to keep the challenges in mind that practitioners face. Instead of binarizing uncertainties into two categories, and trying to estimate one ground-truth for each (if it exists), we suggest to pragmatically view uncertainties from the tasks they are trying to solve. This opens three new research avenues.
 
@@ -182,3 +201,7 @@ Our main suggestion for theoreticians is to keep the challenges in mind that pra
 ## Conclusion
 
 This blog post critically assessed the recent literature in aleatoric and epistemic uncertainty decompositions. Through our examples and references to quantitative and theoretical findings in the literature, we have shown that binarizing uncertainties into either aleatoric or epistemic can  create conflicts, and that a strict dichotomy is not supportive for many future applications related to large language models. We anticipate that our recommendations -- to initiate uncertainty quantification research from specific application contexts and to investigate appropriate theoretical frameworks and types of uncertainty pertinent to those contexts -- will inspire future researchers to develop more practically oriented and nuanced uncertainty measures. By moving beyond the traditional dichotomy of aleatoric and epistemic uncertainty and considering specific practical categories such as model bias, robustness,  structural uncertainty, or computational/generation uncertainty such as in NLP applications, researchers can develop comprehensive uncertainty quantification methods tailored to real-world applications. This approach not only aligns uncertainty measures more closely with the practical needs of specific domains but also contributes to the creation of more robust predictive models and more informed decision-making processes.
+
+### Acknowledgements
+
+The authors would like to thank Kajetan Schweighofer and Bálint Mucsányi. The exchanges on what the true nature of aleatoric and epistemic uncertainty is, if there is any at all, have motivated and shaped this work.
