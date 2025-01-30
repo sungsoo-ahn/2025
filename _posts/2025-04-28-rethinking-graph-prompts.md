@@ -118,7 +118,7 @@ Let $\mathcal{P}_{\omega}$ denote a parameterized graph prompt function with lea
 
 $$\mathcal{P}_{\omega}=\psi(\mathcal{G}, \mathcal{G_p}) \tag{1}$$
 
-where $\psi$ denotes the insert pattern, and $\mathcal{G_p}$ represents the prompt graph, which consits of prompt tokens organized according to a specific token structure.
+where $\psi$ denotes the insert pattern, and $\mathcal{G_p}$ represents the prompt graph, which consists of prompt tokens organized according to a specific token structure.
 These three components work together organically to lead to different graph prompts, which can be broadly classified into two types: prompt as tokens (focusing more on the design of the prompt tokens themselves) and prompt as graphs (focusing more on the organic integration of the three components).
 
 Let's see the simplest graph prompt `GPF`<d-cite key="gpfplus2023"></d-cite> , which adds a learnable prompt vector to each node's feature vectors. Let $\mathcal{\omega}=p$, $p \in \mathbb{R}^{F \times 1}$ then the updated node features are:
@@ -201,7 +201,7 @@ class FeatureAdjustmentPrompt(nn.Module):
         return torch.cat((x, global_emb_expanded), dim=1)
 ```
 
-In this example, the prompt learns a vector that, when added, multiplicated or concatenated to the node features, improves the data quality or aligns it with the pre-trained model's expectations.
+In this example, the prompt learns a vector that, when added, multiplied or concatenated to the node features, improves the data quality or aligns it with the pre-trained model's expectations.
 
 #### Example 2: Integrating Subgraphs
 
@@ -411,7 +411,7 @@ Despite the promising potential of graph prompt as data manipulation tools, seve
 
 ### Limited Understanding of Prompt Design
 
-Although we can theoretically prove that there exists a graph prompt that can approximate or even equal the optimal solution for a downstream task from formula 6, our practical ability to construct such a prompt remains limited. The exact form of an optimal graph prompt is often difficult to find, and this gap in understanding affects subsequent prompt design. Without clear insights into the optimal prompt structure, designing effective prompts often relies on trial-and-error or heuristic-based methods. Existing prompts may not fully leverage the theoretical potential of graph prompt, leading to less efficient or less effective performance in practical applications. The absence of a clear framework for designing graph prompts makes it challenging to scale them to more complex or diverse graph data. This limitation emphasizes the need for more research into theoretical frameworks that connect graph structure and task objectives to prompt design and methods for learning or discovering optimal prompts directly from data.
+Although we can theoretically prove that there exists a graph prompt that can approximate or even equal the optimal solution for a downstream task from **Equation 5**, our practical ability to construct such a prompt remains limited. The exact form of an optimal graph prompt is often difficult to find, and this gap in understanding affects subsequent prompt design. Without clear insights into the optimal prompt structure, designing effective prompts often relies on trial-and-error or heuristic-based methods. Existing prompts may not fully leverage the theoretical potential of graph prompts, leading to less efficient or less effective performance in practical applications. The absence of a clear framework for designing graph prompts makes it challenging to scale them to more complex or diverse graph data. This limitation emphasizes the need for more research into theoretical frameworks that connect graph structure and task objectives to prompt design and methods for learning or discovering optimal prompts directly from data.
 
 ### Limited Standardized Benchmarks
 
