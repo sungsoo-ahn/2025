@@ -1,30 +1,29 @@
 ---
 layout: distill
 title: Pitfalls of Evidence-Based AI Policy
-description: Evidence is of irreplaceable value to policymaking. But holding regulation to too high an evidentiary standard can lead to systmatic neglect of certain risks. We need to be critical of the systematic biases shaping the evidence that the AI community produces and actively facilitate the process of identifying, studying, and deliberating about AI risks.
+description: Evidence is of irreplaceable value to policymaking. However, there are systematic biases shaping the evidence that the AI community produces. Holding regulation to too high an evidentiary standard can lead to systmatic neglect of certain risks. If the goal is evidence-based AI policy, the first regulatory objective must be to actively facilitate the process of identifying, studying, and deliberating about AI risks.
 
 date: 2025-04-28
 future: true
 htmlwidgets: true
 hidden: false
 
-# Anonymize when submitting
-authors:
-  - name: Anonymous
-
+## Anonymize when submitting
 #authors:
-#  - name: Stephen Casper
-#    url: "[https://en.wikipedia.org/wiki/Albert_Einstein](https://stephencasper.com/)"
-#    affiliations:
-#      name: MIT CSAIL
-#  - name: David Krueger
-#    url: "[https://en.wikipedia.org/wiki/Boris_Podolsky](https://davidscottkrueger.com/)"
-#    affiliations:
-#      name: Mila
-#  - name: Dylan Hadfield-Menell
-#    url: "[https://en.wikipedia.org/wiki/Nathan_Rosen](https://people.csail.mit.edu/dhm/)"
-#    affiliations:
-#      name: MIT CSAIL
+#  - name: Anonymous
+authors:
+  - name: Stephen Casper
+    url: https://stephencasper.com/
+    affiliations:
+      name: MIT CSAIL
+  - name: David Krueger
+    url: https://davidscottkrueger.com/
+    affiliations:
+      name: Mila
+  - name: Dylan Hadfield-Menell
+    url: https://people.csail.mit.edu/dhm/
+    affiliations:
+      name: MIT CSAIL
 
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-pitfalls-of-evidence-based-ai-policy.bib  
@@ -52,11 +51,12 @@ toc:
     subsections:
     - name: Substantive vs. Process Regulation
     - name: In Defense of Compute and Cost Thresholds in AI Regulation
-  - name: We Can Pass Commonsense AI Policies Now
+  - name: We Can Pass Evidence-Seeking Policies Now
     subsections:
     - name: 16 Evidence-Seeking AI Policy Objectives
-    - name: Governments are Dragging Their Feet
+    - name: Ample Room for Progress
     - name: The 7D Effect
+    - name: Discussion of Counterarguments
   - name: Building a Healthier Ecosystem
   - name: Acknowledgments
 
@@ -88,13 +88,13 @@ _styles: >
 ## Abstract
 
 Nations across the world are working to govern AI. 
-However, from a technical perspective, the best way to do this is not yet clear. 
+However, from a technical perspective, there is uncertainty and disagreement on the best way to do this. 
 Meanwhile, recent debates over AI regulation have led to calls for “evidence-based AI policy” which emphasize holding regulatory action to a high evidentiary standard. 
 Evidence is of irreplaceable value to policymaking. 
 However, holding regulatory action to too high an evidentiary standard can lead to systematic neglect of certain risks. 
-In historical policy debates (e.g., over tobacco ca. 1965 and fossil fuels ca. 1990) “evidence-based policy” rhetoric is also a well-precedented strategy to downplay the urgency of action, delay regulation, and protect industry interests. 
+In historical policy debates (e.g., over tobacco ca. 1965 and fossil fuels ca. 1985) “evidence-based policy” rhetoric is also a well-precedented strategy to downplay the urgency of action, delay regulation, and protect industry interests. 
 Here, we argue that if the goal is evidence-based AI policy, the first regulatory objective must be to actively facilitate the process of identifying, studying, and deliberating about AI risks. 
-We discuss a set of 16 regulatory goals to facilitate this and show that the EU, UK, USA, Brazil, Canada, and China all have substantial opportunities to adopt further evidence-seeking policies.
+We discuss a set of 16 regulatory goals to facilitate this and show that Brazil, Canada, China, the EU, South Korea, the UK, and the USA all have substantial opportunities to adopt further evidence-seeking policies.
 
 ## How Do We Regulate Emerging Tech?
 
@@ -118,7 +118,7 @@ As we will argue, focusing too much on getting evidence before we act can parado
 
 ### A Broad, Emerging Coalition
 
-There have been numerous recent calls for evidence-based AI policy. 
+Recently, there have been a number of prominent calls for evidence-based AI policy. 
 For example, several California congressmembers and Governor Gavin Newsom recently argued against an AI regulatory bill in California by highlighting that it was motivated by mitigating future risks that have not been empirically observed:
 
 > There is little scientific evidence of harm of ‘mass casualties or harmful weapons created’ from advanced models.
@@ -145,7 +145,7 @@ Meanwhile, Jacob Helberg, a senior adviser at the Stanford University Center on 
 > 
 > — Jacob Helberg on [priorities](https://www.wired.com/story/donald-trump-ai-safety-regulation/) for the next US presidential administration
 
-Finally, the 17 authors of a recent article titled, _A Path for Science- and Evidence-Based AI Policy_, argue that:
+Finally, the seventeen authors of a recent article titled, _A Path for Science- and Evidence-Based AI Policy_, argue that:
 
 > AI policy should be informed by scientific understanding…if policymakers pursue highly committal policy, the…risks should meet a high evidentiary standard.
 > 
@@ -154,7 +154,7 @@ Finally, the 17 authors of a recent article titled, _A Path for Science- and Evi
 Overall, the evidence-based AI policy coalition is diverse. 
 It includes a variety of policymakers and researchers who do not always agree with each other. 
 We caution against developing a one-dimensional view of this coalition or jumping to conclusions from quotes out of context. 
-However, **this camp is generally characterized by a desire to approach AI regulation in a relatively reactive way and to avoid pursuing highly committal policy absent compelling evidence.**
+However, **this camp is generally characterized by a desire to avoid pursuing highly committal policy absent compelling evidence.**
 
 ## A Vague Agenda?
 
@@ -175,21 +175,21 @@ Unfortunately, they are also unworkably vague.
 It is unclear what it would mean for them to be accomplished. 
 In fact, for these milestones, it is not hard to argue that existing reports reasonably meet them. 
 For example, the AI Risk Repository <d-cite key="slattery2024ai"></d-cite> predates Bommasani et al. <d-cite key="path_for_ai_policy"></d-cite> and offers a meta-review, taxonomy, and living database of AI risks discussed in the literature. 
-If this does not offer a workable taxonomy of risks, it is frustratingly unclear what would.<d-footnote>For milestone 2, most relevant research is domain-specific, but consider Metta et al. (2024) <d-cite key="metta2024generativeaicybersecurity"></d-cite>, Sandbrink (2023) <d-cite key="sandbrink2023artificial"></d-cite>, Musser (2023) <d-cite key="musser2023cost"></d-cite>, and Cazzaniga et al. (2024) <d-cite key="cazzaniga2024gen"></d-cite> as examples. 
+If this does not offer a workable taxonomy of risks (Milestone 1), it is unclear what would.<d-footnote>For milestone 2, most relevant research is domain-specific, but consider Metta et al. (2024) <d-cite key="metta2024generativeaicybersecurity"></d-cite>, Sandbrink (2023) <d-cite key="sandbrink2023artificial"></d-cite>, Musser (2023) <d-cite key="musser2023cost"></d-cite>, and Cazzaniga et al. (2024) <d-cite key="cazzaniga2024gen"></d-cite> as examples. 
 Note, however, that forecasting future marginal risks will always be speculative to some degree. 
-See also Bengio et al (2024) <d-cite key="yohsua2024international"></d-cite>. 
-Meanwhile, milestones 3 and 4 essentially describe the first and second stages of the AI regulation process, so existing regulatory efforts already seem to be accomplishing these (e.g., Arda, 2024) <d-cite key="arda2024taxonomy"></d-cite>.</d-footnote>
+See also Bengio et al. (2024) <d-cite key="bengio2025international"></d-cite>. 
+Meanwhile, milestones 3 and 4 essentially describe the first and second stages of the AI regulation process, so existing regulatory efforts already seem to be working on these (e.g., Arda, 2024) <d-cite key="arda2024taxonomy"></d-cite>.</d-footnote>
 
 These milestones are an encouraging call to actively improve our understanding. 
 However, absent more precision, we worry that similar arguments could be misused as a form of tokenism to muddy the waters and stymie policy action. 
 
-In the rest of this post we will argue that holding regulatory action to too high an evidentiary standard can paradoxically make it harder to gather the information that we need for good AI governance. 
+In the rest of this post, we will argue that holding regulatory action to too high an evidentiary standard can paradoxically make it harder to gather the information that we need for good AI governance. 
 
 ## The Evidence is Biased
 
 In its pure form, science is a neutral process. 
 But it is never done in a vacuum. 
-Beneath the cloak of objectivity, there are subjective human beings working on problems that were not randomly selected. 
+Beneath the cloak of objectivity, there are subjective human beings working on problems that were not randomly selected <d-cite key="kuhn1962structure"></d-cite>. 
 There is a laundry list of biases subtly shaping the evidence produced by AI researchers. 
 A policymaking approach that fixates on existing evidence to guide decision-making will systematically neglect certain problems. 
 
@@ -198,13 +198,14 @@ A policymaking approach that fixates on existing evidence to guide decision-maki
 In February 2023, Microsoft [announced](https://blogs.microsoft.com/blog/2023/02/07/reinventing-search-with-a-new-ai-powered-microsoft-bing-and-edge-your-copilot-for-the-web/) Bing Chat, an AI-powered web browsing assistant. 
 It was the first of a new generation of advanced AI applications. 
 Powered by GPT-3.5, [released a few months prior](https://openai.com/index/chatgpt/), Bing Chat offered a versatile, semi-autonomous copilot to help users browse the web. 
-It was usually helpful, but every once in a while, it went off the rails. 
+It was usually helpful, but sometimes, it went off the rails. 
 Users found that [it occasionally took on shockingly angsty, deceptive, and outright aggressive personas](https://www.lesswrong.com/posts/jtoPawEhLNXNxvgTT/bing-chat-is-blatantly-aggressively-misaligned). 
 It would go so far as to sometimes [threaten](https://x.com/marvinvonhagen/status/1625520707768659968?lang=en) [users](https://x.com/sethlazar/status/1626241169754578944?s=20) chatting with it. 
 Rest assured, everyone was fine. 
 Bing Chat was just a babbling web app that could not directly harm anyone or anything. 
-But it is a worrying sign for the future because, right now, developers are racing to develop increasingly agentic and advanced AI systems <d-cite key="chan2023harms"></d-cite>. 
-If more powerful future systems go off the rails in similar ways, we might be in trouble.  
+But it offers a cautionary tale.
+Right now, developers are racing to develop increasingly agentic and advanced AI systems <d-cite key="chan2023harms"></d-cite>. 
+If more powerful future systems go off the rails in similar ways, we could be in trouble.  
 
 Following the Bing Chat incidents, Microsoft’s public relations strategy focused on patching the issues and moving on. 
 To the dismay of many AI researchers, Microsoft never published a public report on the incident. 
@@ -221,13 +222,13 @@ There is a mounting crisis of transparency in AI when it is needed the most.
 
 The scientific process may be intrinsically neutral, but not all phenomena are equally easy to study. 
 Most of the downstream societal impacts of AI are difficult to accurately predict in a laboratory setting. 
-The resulting gap between the scientific community’s understanding of different problems will bias purely evidence-based approaches toward neglecting some issues simply because they are difficult to study. 
+The resulting knowledge gap will bias purely evidence-based approaches toward neglecting some issues simply because they are difficult to study. 
 
 > Thoroughly assessing downstream societal impacts requires nuanced analysis, interdisciplinarity, and inclusion…there are always differences between the settings in which researchers study AI systems and the ever-changing real-world settings in which they will be deployed.
 >
 > — Bengio et al. (2024), International Scientific Report on the Safety of Advanced AI <d-cite key="yohsua2024international"></d-cite>
 
-**Differences in the measurability of different problems can cause insidious issues to sneak past our efforts to make AI harmless.** 
+**Differences in the measurability of different phenomena can cause insidious issues to sneak past our efforts to make AI harmless.** 
 For instance, compare explicit and implicit social biases in modern language models. 
 Explicit biases from LLMs are usually easy to spot. 
 For example, it is relatively easy to train a language model against expressing harmful statements about a demographic group. 
@@ -254,7 +255,7 @@ But AI is a very powerful technology, and if it ever has a Chernobyl moment, a m
 
 ### Ingroups vs. Outgroups
 
-The AI research community does not represent humanity well. For example, AI research is dominated by White and Asian <d-cite key="aiindex2021diversity"></d-cite> men <d-cite key="AbdullaChahal2023"></d-cite>. 
+The AI research community does not represent humanity well. For example, AI research is dominated by White and Asian <d-cite key="aiindex2021diversity"></d-cite>, English-speaking <d-cite key="singh2024aya"></d-cite> men <d-cite key="AbdullaChahal2023"></d-cite>. 
 The AI research community is also relatively culturally homogenous:
 
 > Since AI technologies are mostly conceived and developed in just a handful of countries, they embed the cultural values and practices of these countries.
@@ -270,7 +271,7 @@ This has led researchers to argue that the AI community is systematically poised
 ### The Culture and Values of the AI Research Community
 
 Perhaps the most important ingroup/outgroup contrast to consider is the one between the AI research community and the rest of humanity. 
-It is clear that the AI researchers do not demographically represent the world <d-cite key="aiindex2021diversity"></d-cite><d-cite key="AbdullaChahal2023"></d-cite>. 
+It is clear that AI researchers do not demographically represent the world <d-cite key="aiindex2021diversity"></d-cite><d-cite key="singh2024aya"></d-cite><d-cite key="AbdullaChahal2023"></d-cite>. 
 Meanwhile, they tend to have much more wealth and privilege than the vast majority of the rest of the world. 
 And they tend to be people who benefit from advances in technology instead of being historically or presently marginalized by it. 
 This prompts a serious question:
@@ -307,8 +308,9 @@ Google DeepMind, Microsoft, and Meta all rank in the top 20 organizations by pap
 Meanwhile, other labs like OpenAI and Anthropic may not publish as many papers, but they nonetheless have highly influential work (e.g., <d-cite key="bai2022constitutional"></d-cite><d-cite key="tamkin2021understanding"></d-cite>). 
 These industry papers often paint conveniently rosy picture of AI. 
 For example, they sometimes engage in “safety washing”<d-cite key="ren2024safetywashing"></d-cite> in which research that is not differentially useful for safety is presented as if it is. 
-Meanwhile, the reach of industry labs into the research space involves more than just papers. 
-**AI academia is deeply entangled with industry:**
+
+The reach of industry labs into the research space involves more than just papers. 
+**AI academia's entanglement with industry runs deep:**
 
 > Imagine if, in mid-December of 2019, over 10,000 health policy researchers made the yearly pilgrimage to the largest international health policy conference in the world. 
 > Among the many topics discussed…was how to best deal with the negative effects of increased tobacco usage…
@@ -335,7 +337,7 @@ When a powerful industry is facing regulation, it is in its interest to pollute 
 > – Giere et al. (2006), Understanding Scientific Reasoning <d-cite key="giere2006understanding"></d-cite>
 
 **A certain ‘Deny and Delay Playbook’ has been used multiple times before to delay meaningful regulation until long after it was needed.** 
-We have infamously seen the same story play out in historical debates around tobacco, acid rain, the ozone layer, and climate change <d-cite key="oreskes2010merchants"></d-cite>. 
+A common story has played out in historical debates around tobacco, acid rain, the ozone layer, and climate change <d-cite key="oreskes2010merchants"></d-cite>. 
 In each case, industry interests pushed biased science to cast doubt on risks and made noise in the media about how there just wasn’t enough evidence to act yet. 
 This represents a misuse of the scientific process. 
 Of course, all scientific theories are tentative and subject to criticism – this is exactly why science is so useful. 
@@ -380,8 +382,8 @@ The scientific base for [redacted] includes some facts, lots of uncertainty, and
 
 
 To see an example of Big Tech entangled with calls for “evidence-based AI policy,” we need to look no further than Bommasani et al. (2024): _A Path for Science‑ and Evidence‑based AI Policy_ <d-cite key="path_for_ai_policy"></d-cite> ([discussed above](#how-do-we-regulate-emerging-tech)). 
-5 out of its 17 authors have undisclosed for-profit industry affiliations. 
-These include an employee at [Meta](https://www.meta.com/) and cofounders of [World Labs](https://www.worldlabs.ai/), [Together.ai](http://together.ai), [Databricks](https://www.databricks.com/), [Anyscale](https://www.anyscale.com/), and [:probabl](https://probabl.ai/), each of which might be affected by future AI regulations.<d-footnote>The original version of the article did not contain any disclaimers about omitted author affiliations. However, it was updated in late October to disclaim that “Several authors have unlisted affiliations in addition to their listed university affiliation. This piece solely reflects the authors' personal views and not those of any affiliated organizations.” However, these conflicts of interest are still not disclosed. </d-footnote>
+Five of its seventeen authors have undisclosed for-profit industry affiliations. 
+These include the vice president of AI research at [Meta](https://www.meta.com/) and cofounders of [World Labs](https://www.worldlabs.ai/), [Together.ai](http://together.ai), [Databricks](https://www.databricks.com/), [Anyscale](https://www.anyscale.com/), and [:probabl](https://probabl.ai/), each of which might be affected by future AI regulations.<d-footnote>The original version of the article did not contain any disclaimers about omitted author affiliations. However, it was updated in October 2024 to disclaim that “Several authors have unlisted affiliations in addition to their listed university affiliation. This piece solely reflects the authors' personal views and not those of any affiliated organizations.” However, these conflicts of interest are still not disclosed. </d-footnote>
 Failing to disclose clear conflicts of interest in an explicitly political article fails to meet [basic standards](https://www.acs.org/content/dam/acsorg/about/governance/committees/ethics/conflict-of-interest-10-2.pdf) for ethical disclosure in research. 
 These standards exist for good reason because a policymaker reading the article might interpret it very differently if it were clear that some of the authors had obvious conflicts of interest. 
 It is certainly a red flag that calls for more evidence before passing highly committal regulation are coming, in part, from authors with conveniently hidden industry ties. 
@@ -399,7 +401,7 @@ For our purposes, we define them as such:
 - **Process regulation** limits **how** developers do what they do with their AI systems. 
 
 These two categories of regulations do not only apply to AI. 
-In gun control, for example, an assault weapons ban is substantive regulation while universal background checks are process regulation. 
+In the food industry, for example, ingredient bans are substantive regulations while requirements for nutrition facts are process regulations. 
 Process regulations usually pose significantly lower burdens and downsides than substantive ones.
 The key reason why this distinction is important is that, as we will argue:
 
@@ -418,18 +420,17 @@ Some researchers have rightly pointed out that there are hazards associated with
 These are important and needed points about the limitations of cost and compute thresholds. 
 For example, suppose that we are considering substantive regulations that prevent deploying certain models in certain ways. 
 In this case, we would need careful cost-benefit analysis and the ability to adapt regulatory criteria over time. 
-But it is also important to not let the impractical perfect become the enemy of the practical good. 
-Until we have government agencies who are capable of performing high-quality evaluations of AI systems’ risks, cost and compute thresholds may be the only tenable proxy available. 
+But until we have government agencies who are capable of performing high-quality evaluations of AI systems’ risks, cost and compute thresholds may be the only tenable proxy available. 
 
-**In the case of process regulation, there is often simply a lack of substantial downside.** 
+**In the case of process regulation, there is often a lack of substantial downside.** 
 For example, consider policies that require developers to register a system with the government if the development process exceeds a cost or compute threshold. 
-Compared to inaction, the upside is a significantly increased ability of the government to monitor frontier models. 
+Compared to inaction, the upside is a significantly increased ability of the government to monitor the frontier model ecosystem. 
 As for the downside? 
 Sometimes certain companies will accidentally be required to do more paperwork than regulators may have intended. 
 Compared to the laundry list of societal-scale risks from AI <d-cite key="slattery2024ai"></d-cite>, we can safely say that this risk is practically negligible. 
 
-## We Can Pass Commonsense AI Policies Now
-It is crucial to understand the role of process regulation in helping us to get evidence, especially since governments often tend to underinvest in evidence-seeking during institutional design <d-cite key="Stephenson2011InformationAA"></d-cite>. 
+## We Can Pass Evidence-Seeking Policies Now
+It is important to understand the role of process regulation in helping us to get evidence, especially since governments often tend to underinvest in evidence-seeking during institutional design <d-cite key="Stephenson2011InformationAA"></d-cite>. 
 In contrast to vague calls for more research, we argue that a truly evidence-based approach to AI policy is one that proactively helps to produce more information.
 
 <div style="text-align: center; font-size: 1.25em; margin: 20px 10%; line-height: 1.5;">
@@ -438,78 +439,75 @@ In contrast to vague calls for more research, we argue that a truly evidence-bas
 
 ### 16 Evidence-Seeking AI Policy Objectives
 
-Here, we outline a set of AI regulations related to **<span style="color: blue;">institutions</span>**, **<span style="color: darkorange;">documentation</span>**, **<span style="color: green;">accountability</span>**, and **<span style="color: darkred;">risk-mitigation</span>** practices designed to improve transparency and accountability.
+Here, we outline a set of AI regulations related to **<span style="color: rgb(70, 90, 255);">institutions</span>**, **<span style="color: darkorange;">documentation</span>**, **<span style="color: green;">accountability</span>**, and **<span style="color: rgb(200, 40, 40);">risk-mitigation</span>** practices designed to improve transparency and accountability.
 Each is process-based and fully risk-agnostic. 
 We argue that **the current lack of evidence about AI risks is not a reason to delay these, but rather, a key reason why they are useful**. 
 
-1. **<span style="color: blue;">AI Governance institutes:</span>** National governments (or international coalitions) can create AI governance institutes to research risks, evaluate systems, and curate best safety practices that developers are encouraged to adhere to.
+1. **<span style="color: rgb(70, 90, 255);">AI governance institutes:</span>** National governments (or international coalitions) can create AI governance institutes to research risks, evaluate systems, and curate best safety practices that developers are encouraged to adhere to.
 2. **<span style="color: darkorange;">Model registration:</span>** Developers can be required to register <d-cite key="McKernon2024AIMR"></d-cite> frontier systems with governing bodies (regardless of whether they will be externally deployed).
 3. **<span style="color: darkorange;">Model specification and basic info:</span>** Developers can be required to document intended use cases and behaviors (e.g., <d-cite key="openai_model_spec"></d-cite>) and basic information about frontier systems such as scale.
 4. **<span style="color: darkorange;">Internal risk assessments:</span>** Developers can be required to conduct and report on internal risk assessments of frontier systems.
-5. **<span style="color: darkorange;">Independent third-party risk assessments:</span>** Developers can be required to have an independent third-party conduct and produce a report (including access, methods, and findings) on risk assessments of frontier systems <d-cite key="Raji2022OutsiderOD"></d-cite><d-cite key="anderljung2023towards"></d-cite><d-cite key="Casper2024BlackBoxAI"></d-cite>.
+5. **<span style="color: darkorange;">Independent third-party risk assessments:</span>** Developers can be required to have an independent third-party conduct and produce a report (including access, methods, and findings) on risk assessments of frontier systems <d-cite key="Raji2022OutsiderOD"></d-cite><d-cite key="anderljung2023towards"></d-cite><d-cite key="Casper2024BlackBoxAI"></d-cite>. They can also be required to document if and what “safe harbor” policies they have to facilitate independent evaluation and red-teaming <d-cite key="longpre2024safe"></d-cite>.
 6. **<span style="color: darkorange;">Plans to minimize risks to society:</span>** Developers can be required to produce a detailed report on risks <d-cite key="slattery2024ai"></d-cite> posed by their frontier systems and risk mitigation practices that they are taking to reduce them.
 7. **<span style="color: darkorange;">Post-deployment monitoring reports:</span>** Developers can be required to establish procedures for monitoring and periodically reporting on the uses and impacts of their frontier systems.
 8. **<span style="color: darkorange;">Security measures:</span>** Given the challenges of securing model weights and the hazards of leaks <d-cite key="nevo2024securing"></d-cite>, frontier developers can be required to document high-level non-compromising information about their security measures (e.g., <d-cite key="anthropic2024rsp"></d-cite>).
 9. **<span style="color: darkorange;">Compute usage:</span>** Given that computing power is key to frontier AI development <d-cite key="sastry2024computing"></d-cite>, frontier developers can be required to document their compute resources including details such as the total usage, providers, and the location of compute clusters.
 10. **<span style="color: darkorange;">Shutdown procedures:</span>** Developers can be required to document if and which protocols exist to shut down frontier systems that are under their control.
 11. **<span style="color: green;">Documentation availability:</span>** All of the above documentation can be made available to the public (redacted) and AI governing authorities (unredacted).
-12. **<span style="color: green;">Documentation and court:</span>** To incentivize a race to the top where frontier developers pursue established best safety practices, courts can be given the explicit power to compare all of the above documentation for defendants with that of other similar developers.
-13. **<span style="color: darkred;">Deployment in stages:</span>** Frontier systems can be required to be deployed in stages <d-cite key="Solaiman2023TheGO"></d-cite> to facilitate our study of risks as they more gradually emerge.
-14. **<span style="color: darkred;">Labeling AI-generated content:</span>** To aid in digital forensics, content produced from AI systems can be labeled with metadata, watermarks, and warnings.
-15. **<span style="color: darkred;">Whistleblower protections:</span>** Regulations can explicitly prevent retaliation and offer incentives for whistleblowers to report violations of those regulations.
-16. **<span style="color: darkred;">Incident reporting:</span>** Frontier developers can be required to document and report on substantial incidents in a timely manner. 
+12. **<span style="color: green;">Documentation comparison in court:</span>** To incentivize a race to the top where frontier developers pursue established best safety practices, courts can be given the explicit power to compare all of the above documentation for defendants with that of peer developers.
+13. **<span style="color: rgb(200, 40, 40);">Deployment in stages:</span>** Frontier systems can be required to be deployed in stages <d-cite key="Solaiman2023TheGO"></d-cite> to facilitate our study of risks as they more gradually emerge.
+14. **<span style="color: rgb(200, 40, 40);">Labeling AI-generated content:</span>** To aid in digital forensics, content produced from AI systems can be labeled with metadata, watermarks, and notices.
+15. **<span style="color: rgb(200, 40, 40);">Whistleblower protections:</span>** Regulations can explicitly prevent retaliation and offer incentives for whistleblowers to report violations of those regulations.
+16. **<span style="color: rgb(200, 40, 40);">Incident reporting:</span>** Frontier developers can be required to document and report on substantial incidents in a timely manner. 
 
-We also note that, subjectively, in our conversations with other researchers – including proponents of evidence-based AI policy – we have found these proposals to be surprisingly non-controversial. 
-We take this as an encouraging sign that there is a high degree of common ground even amongst researchers who don’t always agree.
+### Ample Room for Progress
 
-### Governments are Dragging Their Feet
+As we write this in February 2025, parallel debates over AI safety governance are unfolding across the world. There are a number of particularly notable existing and proposed policies. 
 
-…some more than others.
-
-As we write this in November 2024, parallel debates over AI safety governance are unfolding across the world. There are a number of particularly notable existing and proposed policies. 
-
-- 🇪🇺 In the European Union, the EU AI Act <d-cite key="eu_ai_act_2024"></d-cite> (enacted) was recently passed, and a large undertaking to design codes or practices [is underway](https://digital-strategy.ec.europa.eu/en/news/kick-plenary-general-purpose-ai-code-practice-took-place-online).
-- 🇬🇧 The UK’s [AI Safety Institute](https://www.aisi.gov.uk/) (exists) is currently building capacity and partnerships to evaluate risks and establish best risk-management practices. Thus far, the UK’s approach to AI regulation has been non-statutory (but new draft legislation may be available within a few months).
-- 🇺🇸 In the United States, Donald Trump has promised to overturn Executive Order 14110 <d-cite key="ExecutiveOrder14110"></d-cite> (soon-to-be overturned) after assuming office in January. Meanwhile, the AI Advancement and Reliability Act <d-cite key="HR9497"></d-cite> (proposed) and the Future of AI Innovation Act <d-cite key="S4178"></d-cite> (proposed) are currently in House and Senate committees respectively. Neither of these, one of these, or a compromise between them might be passed, but both are not expected to pass because of substantial overlap.
 - 🇧🇷 Brazil has recently introduced drafts of Bill No. 2338 of 2023 <d-cite key="Bill2338"></d-cite> (proposed) on regulating the use of Artificial Intelligence, including algorithm design and technical standards.
 - 🇨🇦 Canada recently established an [AI Safety Institute](https://ised-isde.canada.ca/site/ised/en/canadian-artificial-intelligence-safety-institute) (exists), and its proposed AI and Data Act <d-cite key="AIDAct"></d-cite> (proposed) is currently under consideration in House of Commons Committee.
 - 🇨🇳 China has enacted its Provisions on the Administration of Deep Synthesis Internet Information Services <d-cite key="DeepSynthesisProvisions"></d-cite> (enacted), Provisions on the Management of Algorithmic Recommendations in Internet Information Services <d-cite key="AlgorithmicRecommendationsProvisions"></d-cite> (enacted), and Interim Measures for the Management of Generative AI Services <d-cite key="GenerativeAIInterimMeasures"></d-cite> (enacted). There are also working drafts of a potential future ‘The Model Artificial Intelligence Law’ <d-cite key="ModelAILaw"></d-cite> (proposed).
+- 🇪🇺 In the European Union, the EU AI Act <d-cite key="eu_ai_act_2024"></d-cite> (enacted) was recently passed, and a large undertaking to design specific codes of practice [is underway](https://digital-strategy.ec.europa.eu/en/news/kick-plenary-general-purpose-ai-code-practice-took-place-online).
+- 🇰🇷 South Korea recently passed the [Act on the Development of Artificial Intelligence and Establishment of Trust (AI Basic Act)](https://likms.assembly.go.kr/bill/billDetail.do?billId=PRC_R2V4H1W1T2K5M1O6E4Q9T0V7Q9S0U0). 
+- 🇬🇧 The UK’s [AI Safety Institute](https://www.aisi.gov.uk/) (exists) is currently building capacity and partnerships to evaluate risks and establish best risk-management practices. Thus far, the UK’s approach to AI regulation has been non-statutory (but new draft legislation may be available within a few months).
+- 🇺🇸 In the United States, Donald Trump overturned Executive Order 14110 <d-cite key="ExecutiveOrder14110"></d-cite> after assuming office in January 2025. This may or may not lead the [US AI Safety Institute](https://www.nist.gov/aisi) (exists) to be shut down. It also might permanently stall a potential policy <d-cite key="federal_register_ai_reporting_2024"></d-cite> (proposed) on model and compute reporting that the Department of Commerce proposed in response to the executive order. Meanwhile, the AI Advancement and Reliability Act <d-cite key="HR9497"></d-cite> (drafted), the Future of AI Innovation Act <d-cite key="S4178"></d-cite> (drafted), and the Preserving American Dominance in Artificial Intelligence Act <d-cite key="S5616"></d-cite> (drafted) were introduced last congress. However, as of February 2025, they are currently simply drafts. 
 
 So how are each of these countries faring?
 
-|                                              | EU   | UK   | USA  | Brazil | Canada | China |
-|----------------------------------------------|------|------|------|--------|--------|-------|
-| **1. AI gov. institutes**                    | ✅   | ✅   | ✅ * | 🟨 *   | ✅     | 🟨 *  |
-| **2. Model registration**                    | ✅   | ❌   | ❌   | ❌     | ❌     | ✅    |
-| **3. Model spec. & basic info**              | ✅   | ❌   | ❌   | 🟨 *   | 🟨 *   | 🟨    |
-| **4. Internal risk assessment**              | ✅   | ❌   | ❌   | ✅ *   | 🟨 *   | 🟨    |
-| **5. Independent 3rd-party risk assessment** | 🟨   | ❌   | ❌   | ❌     | ❌     | 🟨    |
-| **6. Plans for min. risks to society**       | ✅   | ❌   | ❌   | 🟨 *   | ❌     | 🟨    |
-| **7. Post-deployment monitoring reports**    | ✅   | ❌   | ❌   | ❌     | ❌     | ❌    |
-| **8. Security measures**                     | ✅   | ❌   | ❌   | ❌     | ❌     | 🟨    |
-| **9. Compute usage**                         | 🟨   | ❌   | ❌   | ❌     | ❌     | ❌    |
-| **10. Shutdown procedures**                  | 🟨   | ❌   | ❌   | ✅ *   | 🟨 *   | ❌    |
-| **11. Documentation availability**           | 🟨   | ❌   | ❌   | ❌     | 🟨 *   | 🟨    |
-| **12. Documentation in court**               | ❌   | ❌   | ❌   | ❌     | ❌     | ❌    |
-| **13. Deployment in stages**                 | ❌   | ❌   | ❌   | ❌     | ❌     | ❌    |
-| **14. Labeling AI-generated content**        | 🟨   | ❌   | ❌   | ❌     | ❌     | ✅    |
-| **15. Whistleblower protections**            | ✅   | ❌   | ❌   | ❌     | ❌     | ✅    |
-| **16. Incident reporting**                   | ✅   | ❌   | ❌   | ✅ *   | ❌     | ❌    |
+|                                                                                          | Brazil | Canada | China | EU   | Korea | UK   | USA  |
+|------------------------------------------------------------------------------------------|--------|--------|-------|------|-------|------|------|
+| **1. <span style="color: rgb(70, 90, 255);">AI governance institutes:</span>**                       | 🟨 *   | ✅     | 🟨 *  | ✅   | ✅     | ✅   | ✅ * |
+| **2. <span style="color: darkorange;">Model registration:</span>**                       | ❌     | ❌     | ✅    | ✅   | ✅     | ❌   | 🟨 * |
+| **3. <span style="color: darkorange;">Model specification and basic info:</span>**       | 🟨 *   | 🟨 *   | 🟨    | ✅   | 🟨    | ❌   | ❌   |
+| **4. <span style="color: darkorange;">Internal risk assessments:</span>**                | ✅ *   | 🟨 *   | 🟨    | ✅   | ✅     | ❌   | ❌   |
+| **5. <span style="color: darkorange;">Independent third-party risk assessments:</span>** | ❌     | ❌     | 🟨    | 🟨   | 🟨    | ❌   | ❌   |
+| **6. <span style="color: darkorange;">Plans to minimize risks to society:</span>**       | 🟨 *   | ❌     | 🟨    | ✅   | 🟨    | ❌   | ❌   |
+| **7. <span style="color: darkorange;">Post-deployment monitoring reports:</span>**       | ❌     | ❌     | ❌    | ✅   | ❌     | ❌   | ❌   |
+| **8. <span style="color: darkorange;">Security measures:</span>**                        | ❌     | ❌     | 🟨    | ✅   | ❌     | ❌   | ❌   |
+| **9. <span style="color: darkorange;">Compute usage:</span>**                            | ❌     | ❌     | ❌    | 🟨   | ❌     | ❌   | 🟨 * |
+| **10. <span style="color: darkorange;">Shutdown procedures:</span>**                     | ✅ *   | 🟨 *   | ❌    | 🟨   | ❌     | ❌   | ❌   |
+| **11. <span style="color: green;">Documentation availability:</span>**                   | ❌     | 🟨 *   | 🟨    | 🟨   | 🟨    | ❌   | ❌   |
+| **12. <span style="color: green;">Documentation comparison in court:</span>**            | ❌     | ❌     | ❌    | ❌   | ❌    | ❌   | ❌   |
+| **13. <span style="color: rgb(200, 40, 40);">Deployment in stages:</span>**                       | ❌     | ❌     | ❌    | ❌   | ❌    | ❌   | ❌   |
+| **14. <span style="color: rgb(200, 40, 40);">Labeling AI-generated content:</span>**              | ❌     | ❌     | ✅    | 🟨   | 🟨    | ❌   | ❌   |
+| **15. <span style="color: rgb(200, 40, 40);">Whistleblower protections:</span>**                  | ❌     | ❌     | ✅    | ✅   | ❌    | ❌   | ❌   |
+| **16. <span style="color: rgb(200, 40, 40);">Incident reporting:</span>**                         | ✅ *   | ❌     | ❌    | ✅   | ❌    | ❌   | ❌   |
+
 
 <div class="caption">
 
     <strong>Table 1:</strong> ✅ Yes | 🟨 Partial | ❌ No | * = proposed but not enacted.
 
-    There is significant room for improvement across the world for passing evidence-seeking AI policy measures. See details on each row <a href="#15-evidence-seeking-ai-policy-objectives">above</a>. In some countries, this is much more the case than in others. Note that this table represents a snapshot in time (November 2024). In the USA, we omit Executive Order 14110 (soon to be overturned).
+    There is significant room for progress across the world on passing evidence-seeking AI policy measures. See details on each row <a href="#15-evidence-seeking-ai-policy-objectives">above</a>. In some countries, this is much more the case than in others. Note that this table represents a snapshot in time (February 2025). In the USA, we omit Executive Order 14110 (soon to be overturned).
 
 </div>
 
-## The 7D Effect
+### The 7D Effect
 
 The objectives outlined above hinge on documentation.
-2-10 are simply requirements for documentation and 11-12 are accountability mechanisms to ensure that the documentation is not perfunctory. 
+2-10 are simply requirements for documentation, and 11-12 are accountability mechanisms to ensure that the documentation is not perfunctory. 
 This is no coincidence. 
-When it is connected to external scrutiny and potential liability, documentation can be a powerful incentive-shaping force. 
+When it is connected to external scrutiny, documentation can be a powerful incentive-shaping force. 
 Under a robust regime implementing the above, if a developer exercises poor risk management, a court could see this and take it into account. 
 As such, this type of regulatory regime could incentivize a race to the top on risk-mitigation standards <d-cite key="Hadfield2023RegulatoryMT"></d-cite>.
 
@@ -524,11 +522,26 @@ For example, common legal advice warns companies against documenting dangers in 
 
 We personally enjoyed the use of “when” and not “if” in this excerpt. 
 
-Meanwhile, there is legal precedent for companies to lose court cases because they internally communicated risks through legally discoverable media such as in Grimshaw v. Ford (1981) <d-cite key="grimshaw1981"></d-cite>. 
+Meanwhile, there is a legal precedent for companies to lose court cases because they internally communicated risks through legally discoverable media such as in Grimshaw v. Ford (1981) <d-cite key="grimshaw1981"></d-cite>. 
 **Unfortunately, absent requirements, companies will tend to suppress the documentation of dangers to avoid accountability.** 
 Meanwhile, mere voluntary transparency can be deceptive by selectively revealing information that reflects positively on the company <d-cite key="Ananny2018SeeingWK"></d-cite>. 
 Thus, we argue that a regime like the one outlined above will be key to facilitate the production of more meaningful evidence.
 
+### Discussion of Counterarguments
+
+**“These 16 objectives would be too burdensome for developers.”** 
+It's true that following protocols and producing documentation can impose burdens. 
+However, these burdens are generally far lighter than those imposed by substantive regulations. 
+Moreover, compliance with many of these requirements may be trivial for developers already planning to take similar actions internally. 
+For instance, even the most potentially burdensome measures – such as risk assessments and staged deployments – are practices that major developers like [OpenAI](https://cdn.openai.com/openai-preparedness-framework-beta.pdf), [Anthropic](https://assets.anthropic.com/m/24a47b00f10301cd/original/Anthropic-Responsible-Scaling-Policy-2024-10-15.pdf), and [Google DeepMind](https://storage.googleapis.com/deepmind-media/DeepMind.com/Blog/introducing-the-frontier-safety-framework/fsf-technical-report.pdf) have publicly committed to implementing.
+
+**“It’s a slippery slope toward overreach.”** 
+A second concern is that these 16 regulatory objectives might generate information that could pave the way for future substantive regulations or liability for developers. 
+Regulatory and liability creep are legitimate risks that can harm industry interests. 
+However, it's important to emphasize that any progression from these objectives to future regulations or liability will ultimately depend on human decision-makers acting on evidence. 
+Evidence is essential for society to engage in meaningful deliberation and exercise informed agency – this is the entire point of evidence-based policy. 
+Therefore, if process-based AI regulations eventually lead to substantive regulations, it won't be because the process regulations laid an inevitable framework. 
+Rather, it would be because the information produced by those regulations persuaded policymakers to take further action.
 
 ## Building a Healthier Ecosystem
 
@@ -537,9 +550,11 @@ We don’t know what is coming next.
 We echo the concerns of other researchers that there are critical uncertainties with the near and long-term future of AI. 
 Anyone who says otherwise is probably trying to sell you something. 
 So how do we go about governing AI under uncertainty? 
-Yes, we need to place a high degree of value on evidence. 
-It’s irreplaceable. 
-But we also need to be critical of the systematic biases shaping the evidence that the AI community produces and actively work toward obtaining more information.
+History teaches us some lessons about the importance of prescient action amidst uncertainty.
+
+> [Early] studies of global warming and the ozone hole involved predicting damage before it was detected. It was the prediction that motivated people to check for damage; research was intended in part to test their prediction, and in part to stimulate action before it was too late to stop...It was too soon to tell whether or not widespread and serious…damage was occurring, but the potential effects were troubling…A scientist would be in a bit of a bind: wanting to prevent damage, but not being able to prove that damage was coming…There are always more questions to be asked.
+> 
+> – Oreskes and Conway (2010), Merchants of Doubt <d-cite key="oreskes2010merchants"></d-cite>
 
 We often hear discussions about how policymakers need help from AI researchers to design technically sound policies. 
 This is essential. 
@@ -549,6 +564,7 @@ Policymakers can do a great deal to help researchers, governments, and society a
 **Process regulations can lay the foundation for more informed debates and decision-making in the future.** 
 Right now, the principal objective of AI governance work is not necessarily to get all of the right substantive regulations in place. 
 It is to shape the AI ecosystem to better facilitate the ongoing process of identifying, studying, and deliberating about risks.
+This requires being critical of the biases shaping the evidence we see and proactively working to seek more information.
 Kicking the can down the road for a lack of 'enough' evidence could impair our ability to take needed action. 
 
 This lesson is sometimes painfully obvious in retrospect.
@@ -560,10 +576,9 @@ However, he later split with the company, and after reflecting on the intellectu
 > 
 > – S. J. Green, Smoking, Related Disease, and Causality <d-cite key="greensmoking"></d-cite>
 
-[//]: # (## Acknowledgments)
+## Acknowledgments
 
-[//]: # ()
-[//]: # (We are thankful for discussions with Ariba Khan, Aruna Sankaranarayanan, Kwan Yee Ng, Landon Klein, Shayne Longpre, and Thomas Woodside.)
+We are thankful for our discussions with Rishi Bommasani, Ariba Khan, Aruna Sankaranarayanan, Kwan Yee Ng, Landon Klein, Shayne Longpre, Dawn Song, and Thomas Woodside.
 
 
 
