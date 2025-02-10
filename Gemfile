@@ -49,9 +49,6 @@ group :jekyll_plugins do
     gem 'mini_racer'
     gem 'unicode_utils'
     gem 'webrick'
-    gem "jekyll-sass-converter", "~> 2.2"   # or 2.x in general
-    gem "sassc"
-
 end
 group :other_plugins do
     gem 'css_parser'
