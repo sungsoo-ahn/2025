@@ -27,6 +27,8 @@ jobs:
       run: |
         gem update --system
         gem install bundler
+        bundle remove sass-embedded
+        bundle update jekyll-sass-converter
     - name: Setup deploy options
       id: setup
       run: |
