@@ -25,6 +25,8 @@ jobs:
       run: |
         gem install bundler
         bundle install
+    - name: Install ImageMagick
+      run: sudo apt-get install -y imagemagick
     - name: Setup deploy options
       id: setup
       run: |
