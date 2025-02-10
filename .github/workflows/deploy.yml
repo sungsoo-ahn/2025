@@ -21,6 +21,8 @@ jobs:
     - name: Install deps
       run: |
         npm install -g mermaid.cli
+    - name: Install ImageMagick
+      run: sudo apt-get install -y imagemagick
     - name: Update Bundler
       run: |
         gem update --system
