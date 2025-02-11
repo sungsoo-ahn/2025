@@ -36,6 +36,7 @@ toc:
   - name: What does meaningful jailbreak work look like?
   - name: If you work on defenses, keep the bar high
   - name: Should you work on that next jailbreak paper?
+  - name: Reflections after releasing this blogpost
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
