@@ -8,14 +8,14 @@ htmlwidgets: true
 hidden: false
 
 # Anonymize when submitting
+# authors:
+#   - name: Javier Rando
+
 authors:
   - name: Javier Rando
-
-# authors:
-#   - name: Albert Einstein
-#     url: "https://en.wikipedia.org/wiki/Albert_Einstein"
-#     affiliations:
-#       name: IAS, Princeton
+    url: "https://javirando.com"
+    affiliations:
+      name: ETH Zurich
 #   - name: Boris Podolsky
 #     url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
 #     affiliations:
