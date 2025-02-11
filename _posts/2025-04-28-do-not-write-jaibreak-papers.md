@@ -9,7 +9,7 @@ hidden: false
 
 # Anonymize when submitting
 authors:
-  - name: Anonymous
+  - name: Javier Rando
 
 # authors:
 #   - name: Albert Einstein
@@ -99,7 +99,7 @@ If you work on defenses, you should take the following into account:
 * **Reducing the attack success rate by 10% with simple methods is not valuable**. We already know that if we make the system more complex, it is going to be harder to attack. But we need to advance protections that target worst-case behavior\!  
 * **Academics should be working on foundational defenses**. Industry is already taking care of scaffolding protections—filters here and there—to prevent misuse. Academic work should take long-shot projects that try to understand the broader problem of robustly making models behave the way we want. Latent adversarial training<d-cite key="casper2024defending"></d-cite> and circuit breakers<d-cite key="zou2024improving"></d-cite> are good examples of the work we should be aiming for.   
 * **Please, be transparent and faithful in your evaluations.** Claiming a perfect defense might make you a cool researcher for a while. But watch out, chances are [someone quickly breaks your defense](https://nicholas.carlini.com/writing/2020/are-adversarial-exampe-defenses-improving.html)\! Academia provides the perfect environment to take long-shots, fail, and collectively keep improving our methods to solve a very hard problem. Negative results can also be very valuable. You probably won't be able to solve this on your own\!  
-* **Try your best to break your own defense.** You spent a lot of time building a defense and you really want to put it out there. You are probably missing the most important part of your work: doing an adative evaluation<d-cite key="carlini2017adversarial"></d-cite>. Readers should know how your defense fails, and what they should work on next. You can still write a great paper that says “we tried a new defense that looked great against existing attacks, but we found that method X can bypass it”. Again, this is not new and people have been asking for proper adaptive evaluations<d-cite key="carlini2017adversarial"></d-cite> for a long time.  
+* **Try your best to break your own defense.** You spent a lot of time building a defense and you really want to put it out there. You are probably missing the most important part of your work: doing an adative evaluation<d-cite key="carlini2017adversarial"></d-cite>. Readers should know how your defense fails, and what they should work on next. You can still write a great paper that says "we tried a new defense that looked great against existing attacks, but we found that method X can bypass it". Again, this is not new and people have been asking for proper adaptive evaluations<d-cite key="carlini2017adversarial"></d-cite> for a long time.  
 * **Release your models\!** A good defense should be tested by as many people as possible. Let the community red-team it.
 
 ### Should you work on that next jailbreak paper?
@@ -110,3 +110,15 @@ We should all think about the bigger problem we have at hand: **we do not know h
 * Is my attack an incremental improvement upon an existing vulnerability? Or in other words, does fixing an existing attack clearly fix my attack?
 
 If you are interested in improving the security and safety of LLMs (these two are very different<d-cite key="qi2024ai"></d-cite>\!), jailbreaks have a small probability of taking you somewhere meaningful. It is time to move on and explore more challenging problems. For instance, Anwar et al. wrote an agenda containing hundreds of specific challenges the community thinks we should solve to ensure we can build AI systems that robustly behave the way we want<d-cite key="anwar2024foundational"></d-cite>.
+
+### Reflections after releasing this blogpost
+
+This blogpost has been going around for some time now and has sparked valuable discussions in the community. In this section, I want to share some alternative perspectives I have collected.
+
+* **It is hard to self-assess impact and reviewers should take part**. This blogpost mostly focuses on how researchers can think about their own work and what to avoid when starting a new project. However, determining the impact of one’s work is notoriously difficult. People are likely to be biased towards thinking their paper is actually _the_ paper worth writing. I think this is a great point, but still believe write-ups like this are a good way to improve self-reflection and encourage people to think about newer problems. Engaging with external reviewers and colleagues while ideating a new project can help us find more impactful directions.
+
+* **Even _incremental_ work is valuable to the community**. Some colleagues have raised [interesting points](https://x.com/AlexRobey23/status/1869440050460856451) about how getting people to work on jailbreaks can create a larger community and build knowledge that may eventually lead us to breakthroughs. I largely agree with this. I think it is important to get people to work on relevant security and safety problems and build collective knowledge. I just think that, whenever possible, we should be working on more promising problems where exploration may have a larger counterfactual impact.
+
+* **We might actually be making progress**. It is true that systems are getting more robust in practice. However, I think most of this progress is due to black-box affordances like complex closed-source systems with many components. This is important to protect users from existing risks. However, I would like to caution the community. Worst-case robustness remains unsolved and all systems out there have been broken in some way or another. The increasingly closed nature of systems is making evaluation harder and hindering our ability to track scientific understanding of the problem we ultimately want to solve. We have written about this extensively in our new paper <d-cite key="rando2025adversarial"></d-cite>.
+
+As a final word, I would like to stress that the ultimate goal of this blogpost is to get the community to collectively think about what we need to make progress on some of the most important problems ahead! 
