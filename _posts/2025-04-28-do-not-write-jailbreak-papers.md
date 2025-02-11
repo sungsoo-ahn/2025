@@ -123,3 +123,7 @@ This blogpost has been going around for some time now and has sparked valuable d
 * **We might actually be making progress**. It is true that systems are getting more robust in practice. However, I think most of this progress is due to black-box affordances like complex closed-source systems with many components. This is important to protect users from existing risks. However, I would like to caution the community. Worst-case robustness remains unsolved and all systems out there have been broken in some way or another. The increasingly closed nature of systems is making evaluation harder and hindering our ability to track scientific understanding of the problem we ultimately want to solve. We have written about this extensively in our new paper <d-cite key="rando2025adversarial"></d-cite>.
 
 As a final word, I would like to stress that the ultimate goal of this blogpost is to get the community to collectively think about what we need to make progress on some of the most important problems ahead! 
+
+#### Acknowledgements
+
+I would like to thank Florian Tramèr, Edoardo Debenedetti, Daniel Paleka, Stephen Casper, and Nicholas Carlini for valuable discussions and feedback on drafts of this post.
