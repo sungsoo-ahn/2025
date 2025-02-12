@@ -12,19 +12,36 @@ hidden: false
 authors:
   - name: Anonymous
 
-# authors:
-#   - name: Albert Einstein
-#     url: "https://en.wikipedia.org/wiki/Albert_Einstein"
-#     affiliations:
-#       name: IAS, Princeton
-#   - name: Boris Podolsky
-#     url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
-#     affiliations:
-#       name: IAS, Princeton
-#   - name: Nathan Rosen
-#     url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
-#     affiliations:
-#       name: IAS, Princeton
+## Anonymize when submitting
+#authors:
+#  - name: Anonymous
+authors:
+  - name: Satvik Golechha
+    url: https://www.7vik.io
+    affiliations:
+      name: MATS Program, MSR
+      url: https://www.matsprogram.org
+      # url: https://www.microsoft.com/en-us/research
+  - name: Lucius Bushnaq
+    url: https://www.lesswrong.com/users/lblack
+    affiliations:
+      name: Apollo Research
+      url: https://www.apolloresearch.ai
+  - name: Euan Ong
+    url: https://ong.ac/
+    affiliations:
+      name: Anthropic
+      url: https://www.anthropic.com
+  - name: Neeraj Kayal
+    url: https://www.microsoft.com/en-us/research/people/neeraka/
+    affiliations:
+      name: Microsoft Research
+      url: https://www.microsoft.com/en-us/research
+  - name: Nandi Schoots
+    url: https://scholar.google.com/citations?hl=en&user=wO7fg6wAAAAJ
+    affiliations:
+      name: University of Oxford
+      url: https://www.ox.ac.uk
 
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-feature-geometry.bib
@@ -94,7 +111,7 @@ _styles: >
 
 We present several ablation results and theoretical arguments highlighting challenges with the theses of two recent works, the [**ICML 2024 Mechanistic Interpretability Workshop**](https://icml2024mi.pages.dev/) **1st prize** winning paper - [The Geometry of Categorical and Hierarchical Concepts in LLMs](https://arxiv.org/abs/2406.01506v1) <d-cite key="park2024geometrycategoricalhierarchicalconcepts"></d-cite>, and the **ICML 2024** paper - [The Linear Representation Hypothesis and the Geometry of LLMs](https://arxiv.org/abs/2311.03658) <d-cite key="park2024linearrepresentationhypothesisgeometry"></d-cite>.
 
-The methodology described in the two papers we study is as follows -- they split the computation of a large language model (LLM) as:
+The methodology described in the two papers we study is as follows -- they split the computation of a large language model (LLM) into everything before the unembedding and the unembedding itself:
 
 $$
 P(y \mid x) = \frac{\exp(\lambda(x)^\top \gamma(y))}{\sum_{y' \in \text{Vocab}} \exp(\lambda(x)^\top \gamma(y'))}
@@ -118,7 +135,7 @@ In the embedding space, they say that $\bar{\lambda}_W$ is a representation of a
 $$
 \frac{\mathbb{P}(W = 1 \mid \lambda_1)}{\mathbb{P}(W = 1 \mid \lambda_0)} > 1 \quad \text{and} \quad \frac{\mathbb{P}(W, Z \mid \lambda_1)}{\mathbb{P}(W, Z \mid \lambda_0)} = \frac{\mathbb{P}(W \mid \lambda_1)}{\mathbb{P}(W \mid \lambda_0)},
 $$
-for each concept $Z$ that is causally separable with $W$.
+for each concept $Z$ that is causally separable with $W$. The first condition means that the probability of a concept $W$ being true given a context embedding $\lambda_1$ is greater than under context embedding $\lambda_0$.
 
 Now, in order to work with concept representations (i.e. look at similarities, projections, etc.), we need to define an inner product. They provide the following definition <d-cite key="park2024linearrepresentationhypothesisgeometry"></d-cite>:
 
@@ -130,9 +147,9 @@ for any pair of causally separable concepts $W$ and $Z$.
 
 > Comment: Note that this definition allows the inner product $<a,b>=0 \forall (a,b) : a\ne b$ to be a causal inner product. As we show, the whitening transformation they apply as an explicit example of a causal inner product does indeed make almost everything almost orthogonal.
 
-This choice turns out to have the key property that it unifies the unembedding and embedding representations <d-cite key="park2024linearrepresentationhypothesisgeometry"></d-cite>:
+This choice turns out to have the key property that it unifies the unembedding and embedding representations <d-cite key="park2024linearrepresentationhypothesisgeometry"></d-cite>. Intuitively, this means that how concepts are represented in the model's output space matches how they're represented in its internal computation:
 
-$\textbf{Theorem 3.2 (Unification of Representations).}$ Suppose that, for any concept $W$, there exist concepts $$ \{ Z_i \} _{i=1}^{d-1} $$ such that each $$Z_i$$ is causally separable with $$W$$ and $$\{ \overline{\gamma}_W \} \cup \{ \overline{\gamma}_{Z_i} \}_{i=1}^{d-1}$$ is a basis of $$\mathbb{R}^d$$. If $$\langle \cdot, \cdot \rangle_\mathcal{C}$$ is a causal inner product, then the Riesz isomorphism $$\overline{\gamma} \mapsto \langle \overline{\gamma}, \cdot \rangle_\mathcal{C}$$, for $$\overline{\gamma} \in \overline{\Gamma}$$, maps the unembedding representation $$\overline{\gamma}_W$$ of each concept $$W$$ to its embedding representation $$\overline{\lambda}_W$$:
+$\text{Theorem 3.2 (Unification of Representations).}$ Suppose that, for any concept $W$, there exist concepts $$ \{ Z_i \} _{i=1}^{d-1} $$ such that each $$Z_i$$ is causally separable with $$W$$ and $$\{ \overline{\gamma}_W \} \cup \{ \overline{\gamma}_{Z_i} \}_{i=1}^{d-1}$$ is a basis of $$\mathbb{R}^d$$. If $$\langle \cdot, \cdot \rangle_\mathcal{C}$$ is a causal inner product, then the Riesz isomorphism $$\overline{\gamma} \mapsto \langle \overline{\gamma}, \cdot \rangle_\mathcal{C}$$, for $$\overline{\gamma} \in \overline{\Gamma}$$, maps the unembedding representation $$\overline{\gamma}_W$$ of each concept $$W$$ to its embedding representation $$\overline{\lambda}_W$$:
 
 $$
 \langle \overline{\gamma}_W, \cdot \rangle_\mathcal{C} = \overline{\lambda}_W^\top.
@@ -459,6 +476,6 @@ Lastly, instead of the whitening transformation (which leads to identity covaria
 
 ## Reproducibility
 
-All our results are completely reproducible and do not change with random seeds. The complete dictionaries for the two ablations we run (emotions and nonsense) are available at [anonymous repository](https://anonymous.4open.science/r/intricacies-feature-geometry-8E52/data.txt), and the code and hyperparameters we use are exactly the same as those used by the original authors, all of which is available on their [public repository](https://github.com/KihoPark/LLM_Categorical_Hierarchical_Representations). 
+All our results are completely reproducible and do not change with random seeds. The complete dictionaries for the two ablations we run (emotions and nonsense) are available [here](https://github.com/7vik/intricacies-feature-geometry), and the code and hyperparameters we use are exactly the same as those used by the original authors, all of which is available on their [public repository](https://github.com/KihoPark/LLM_Categorical_Hierarchical_Representations). 
 
-In order to run our ablations, one needs to replace the original dictionary in the paper (for animals) with one of the others. For the random unembedding experiment, we just replace the unembedding matrix $W_U$ with `torch.randn_like(W_U)` and follow the rest of their methodology.
+To reproduce our results, replace the original dictionary in the paper (for animals) with one of the others. For the random unembedding experiment, replace the unembedding matrix $W_U$ with `torch.randn_like(W_U)` and follow the rest of their methodology.
