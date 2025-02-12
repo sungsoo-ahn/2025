@@ -23,7 +23,7 @@ social: false  # includes social icons at the bottom of the page
   - *OpenReview and any modifications to your blog post, via a pull request on GitHub*.
 - **Meta Review Deadline**: January 20th, 2025
 - **Decision Notification**: January 22nd, 2025
-- **Camera-ready merge**: March 15th, 2024
+- **Camera-ready merge**: March 31st, 2024
 
 ## Contents
 
