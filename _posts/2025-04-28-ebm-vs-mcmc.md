@@ -48,6 +48,7 @@ toc:
   - name: 13-Particle Lennard Jones System
   - name: 55-Particle Lennard Jones System
   - name: Closing thoughts - the role that these models have to play
+  - name: Acknowledgements
 ---
 
 ## Introduction 
@@ -475,3 +476,7 @@ Our analysis offers a sobering assessment of the current state of neural network
 However, this critique should not also be viewed as a wholesale rejection of such neural approaches in molecular sampling. Rather, it suggests a needed shift in research focus. One promising direction lies in leveraging neural networks' capacity for transfer learning. While MCMC methods are often system-specific, and require long chains on every new system, neural networks could potentially learn generalizable sampling strategies that transfer across different molecular systems. This transferability could provide a compelling "inference time" advantage over traditional MCMC methods, even if the training cost is significantly higher than running a MCMC chain on a single system. This has already been demonstrated in works such as TimeWarp<d-cite key="klein2023timewarp"></d-cite>and Transferable Boltzmann Generators<d-cite key="klein2024tbg"></d-cite>. Additionally, while ML-based methods in this context remain suboptimal, we are optimistic that future models will soon be capable of generating samples zero-shot with near-Boltzmann accuracy.
 
 A critical limitation of current neural approaches like iEFM and iDEM lies in their reliance on weighted averages of noisy samples. This becomes particularly problematic when dealing with real molecular systems, where energy landscapes can be extremely steep and sampling noise can lead to explosive gradients. Future work might address this by reconsidering how noise is incorporated into these models - for instance, by defining noise on a Riemannian manifold that respects the geometric constraints of molecular systems<d-cite key="jing2023torsdiff"></d-cite>. Such modifications could help stabilize training and improve sampling efficiency while maintaining the potential benefits of neural approaches.
+
+## Acknowledgements
+
+This work is funded through R35GM140753 from the National Institute of General Medical Sciences. The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institute of General Medical Sciences or the National Institutes of Health.
