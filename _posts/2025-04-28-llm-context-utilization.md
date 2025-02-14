@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: "Open-Source vs Close-Source: The Context Utilization Challenge"
-description: This blog post aims to evaluate how well the most capable open-source long context large language models (LLMs) utilize context, using the Needle In A Haystack test. We adopt the task of chapter summarization for recently published books to minimize data contamination while ensuring a challenging test. Our results show that open-source models still has room to improve in context utilization compared to close-source models.
+description: This blog post aims to evaluate how well the most capable open-source long context large language models (LLMs) utilize context, using the Needle In A Haystack test. We adopt the task of chapter summarization for recently published books to minimize data contamination while ensuring a challenging test. Our results show that open-source models still have room to improve in context utilization compared to close-source models.
 date: 2025-04-28
 future: true
 htmlwidgets: true
@@ -9,7 +9,10 @@ hidden: false
 
 # Anonymize when submitting
 authors:
-  - name: Anonymous
+  - name: Litu Ou
+    url: https://www.linkedin.com/in/litu-ou-77baa61a6/
+    affiliation:
+      name: University of Edinburgh
 
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-llm-context-utilization.bib  
@@ -27,6 +30,7 @@ toc:
   - name: In-depth Analysis for Llama
   - name: Comparison with GPT-4o-mini at 128k Context Length
   - name: Conclusion
+  - name: Acknowledgements
   - name: Book List
 
 # Below is an example of injecting additional post-specific styles.
@@ -44,7 +48,7 @@ The context length of LLMs has increased dramatically over the years, evolving f
 
 Although existing benchmarks have attempted to include questions requiring aggregation of information distributed across the context, they are still insufficient for conducting fine-grained analysis of context utilization. Specifically, we aim to quantify which parts of the context the model focuses on when answering a query, helping us understand whether models can truly identify the key information needed for an accurate response. Fortunately, the Needle In A Haystack (NIAH) test provides an effective framework for such analysis. The simplest version of the test places a unique piece of information within a long, irrelevant context. After the context is presented to the model, a question is asked about this piece of information. A correct response indicates that the model successfully retrieved the key information; an incorrect response suggests otherwise.
 
-Despite its simplicity, many previous long context LLMs struggled with this test. For instance, GPT-4-1106 128K achieved only 87.1% overall accuracy <d-cite key="fu2024dataengineeringscalinglanguage"></d-cite>. While long context LLMs continue to improve in context utilization, more complex versions of the NIAH test have been developed to further stress-test these models. These versions include placing multiple pieces of key information within the context <d-cite key="li2024needlebenchllmsretrievalreasoning"></d-cite>, increasinng task difficulty <d-cite key="roberts2024needlethreadingllmsfollow"></d-cite>, etc. These more complex tests revealed that the most recent and capable LLMs still have shortfalls in context utilization. 
+Despite its simplicity, many previous long context LLMs struggled with this test. For instance, GPT-4-1106 128K achieved only 87.1% overall accuracy <d-cite key="fu2024dataengineeringscalinglanguage"></d-cite>. While long context LLMs continue to improve in context utilization, more complex versions of the NIAH test have been developed to further stress-test these models. These versions include placing multiple pieces of key information within the context <d-cite key="li2024needlebenchllmsretrievalreasoning"></d-cite>, increasing task difficulty <d-cite key="roberts2024needlethreadingllmsfollow"></d-cite>, etc. These more complex tests revealed that the most recent and capable LLMs still have shortfalls in context utilization. 
 
 Context utilization remains a significant challenge yet to be effectively addressed, even for the most capable LLMs. In this blog post, we examine one of the best long context LLMs from the open-source community to evaluate how it compares to the most advanced closed-source models in terms of context utilization. Using the challenging task of chapter summarization for recently published books, we aim to uncover the limitations of the 70B Nemotron Instruct model, [nvidia/Llama-3.1-Nemotron-70B-Instruct](https://huggingface.co/nvidia/Llama-3.1-Nemotron-70B-Instruct-HF). By analyzing the results of this test and comparing them to those of more advanced closed-source models, we hope to highlight key areas for improvement in the development of more robust open-source long context LLMs.
 
@@ -96,7 +100,7 @@ Finally, we also evaluate the GPT-4o-mini model on the full 128k context length 
 </div>
 
 <div class="l-gutter caption" style="width: 150%">
-  <b>Figure 1:</b> Relevance scores of the Llama-3.1-Nemotron-70B-Instruct model across different context lengths and needle positions..
+  <b>Figure 1:</b> Relevance scores of the Llama-3.1-Nemotron-70B-Instruct model across different context lengths and needle positions.
 </div>
 
 <div class="row justify-content-center">
@@ -115,7 +119,7 @@ Traditionally, when models are asked to summarize documents, the output summarie
 
 <div class="row justify-content-center">
     <div style="height: 70%">
-        {% include figure.html path="assets/img/2025-04-28-llm-context-utilization/example1.png" class="img-fluid rounded z-depth-1" zoomable=true %}
+        {% include figure.html path="assets/img/2025-04-28-llm-context-utilization/example.png" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
 </div>
 
@@ -184,6 +188,10 @@ Comparison of vanilla chapter summarization results with NIAH tests is shown in 
 In this blog post, we evaluate open-source long context LLMs including Llama-3.1-Nemotron-70B-Instruct and Qwen2.5-72B-Instruct using the chapter summarization version of the NIAH test. Our results show that the ~70B models still needs to improve context utilization, with the Llama model demonstrating more severe performance degradation compared to the Qwen model. We also observe a "lost in the beginning" pattern in terms of document depth, where the model performs particularly poorly when key information is placed in the initial parts of the context, specifically at depths between 10-50% for long context lengths. Comparing to GPT-4o-mini, we find that the tested open-source models still have a significant gap to close in terms of accurately identifying key information in the context.
 
 Nevertheless, the ~70B models demonstrate a promising ability to generate summaries with quality on-par with GPT-4o-mini, when there is no irrelevant context is introduced. This suggests that the primary limitation of the tested open-source models is not their natural language generation abilities, but their capacity to leverage all parts of the context equally effectively. We hope these findings highlight the problems of context utilization and inspire further research into developing more robust open-source long context LLMs in the future.
+
+## Acknowledgements
+
+This work has made use of the resources provided by the Edinburgh Compute and Data Facility (ECDF) (http://www.ecdf.ed.ac.uk/), and supported by the Edinburgh International Data Facility (EIDF) and the Data-Driven Innovation Programme at the University of Edinburgh. We also would like to thank Prof. Mirella Lapata for her helpful comments and suggestions for improving the camera-ready version of this blog post.
 
 ## Book List
 
