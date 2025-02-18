@@ -57,6 +57,72 @@ toc:
 # If you use this post as a template, delete this _styles block.
 
 ---
+
+<!-- Light/dark modes styles -->
+<style>
+  /* Light mode styles */
+  details {
+    background-color: #f5f5f5;
+    border-radius: 3px;
+    padding: 15px;
+  }
+
+  summary {
+    color: black;
+  }
+
+  figcaption {
+    color: black;
+  }
+
+  .llm-cite {
+    margin-bottom: 10px;
+    border-left: 4px solid lightgrey;
+    border-radius: 3px;
+    padding: 10px;
+    font-style: italic;
+    background-color: #EEEEEE;
+  }
+
+  .weasel-caption {
+    color: black;
+  }
+
+  .theme-image {
+    height: 27rem;
+    background-size: contain; /* Ensures the entire SVG fits */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("{{ 'assets/img/2025-04-28-imagenet-flaws/mustelidae.svg' | relative_url }}");
+  }
+
+  /* Dark mode styles */
+  html[data-theme="dark"] details {
+    background-color: #424346;
+  }
+
+  html[data-theme="dark"] summary {
+    color: white;
+  }
+
+  html[data-theme="dark"] figcaption {
+    color: white;
+  }
+
+  html[data-theme="dark"] .llm-cite {
+    background-color: #424346;
+  }
+
+  html[data-theme="dark"] .weasel-caption {
+    color: white;
+  }
+
+  html[data-theme="dark"] .theme-image {
+    background-image: url("{{ 'assets/img/2025-04-28-imagenet-flaws/mustelidae_dark.svg' | relative_url }}");
+  }
+
+</style>
+
 <span style="font-size:17px; font-weight:800">Disclaimer:</span>
 By undertaking this work, we have no intention to diminish the significant contributions of the ImageNet, whose value remains undeniable. It was, at the time of its publication, far ahead of all existing datasets. Given ImageNet-1k's continued broad use, especially in model evaluation, fixing the issues may help the field move forward. With current tools, we belive it is possible to improve ImageNet-1k without huge manual effort. 
 
@@ -124,8 +190,8 @@ The inclusion of  multilables images depicting multiple objects from different I
 
 Prior studies identified and analyzed issues related to the ImageNet dataset, but they each deal only with a specific concern and usually focus on the validation set. The topic that received most attention are annotation errors, which distort the evaluation of model accuracy<d-cite key="4,6,5,7,9"/>. 
 Overlapping class definitions were reported in Vasudevan et al.<d-cite key="8"/>. Duplicate images, which cause overestimation of model performance for certain classes, were mentioned in several papers <d-cite key="8, 11, 16"/>.
-    
-<details style="background-color:#f5f5f5; border-radius: 3px; padding:15px">
+
+<details>
     <summary style="font-weight:800">Previous Work in Detail</summary>
 
 <div style="margin:15px 0px 15px 0;">
@@ -165,11 +231,14 @@ Interestingly, each image in a group of duplicates is found to have a different 
 </div>
 
 <div style="display: flex; justify-content: center; align-items: center;">
-    <img src="https://hackmd.io/_uploads/BySMouifJx.png" style="width: 100%; margin: 25px;" />
+    <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/prev_work_in_detail.png' | relative_url }}" style="width: 100%; margin: 25px;" />
 </div>
     
-<div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">Figure 2. Error analyses <d-cite key="4,5,6,7"/> for the ImageNet validation set. <span style="display:inline-block;width:10px;height:10px;background-color:#A3D8A0;"></span> Single label image, original label is correct. <span style="display:inline-block;width:10px;height:10px;background-color:#4C8C99;"></span> Single label image, original label is incorrect, full agreement on correction. <span style="display:inline-block;width:10px;height:10px;background-color:#8BBEE8;"></span>  Multilabel images. <span style="display:inline-block;width:10px;height:10px;background-color:#F8D76E;"></span> Single label image, inconsistent label corrections. <span style="display:inline-block;width:10px;height:10px;background-color:#E55353;"></span> Ambiguous, no agreement on the label.</div> The significant differences in the estimates for the percentages of some types of errors have multiple reasons, the two major ones is the percentage of images seen and methodology used by human annotators and the models used for label error prediction.
+<div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">Figure 2. Error analyses <d-cite key="4,5,6,7"/> for the ImageNet validation set. <span style="display:inline-block;width:10px;height:10px;background-color:#A3D8A0;"></span> Single label image, original label is correct. <span style="display:inline-block;width:10px;height:10px;background-color:#4C8C99;"></span> Single label image, original label is incorrect, full agreement on correction. <span style="display:inline-block;width:10px;height:10px;background-color:#8BBEE8;"></span>  Multilabel images. <span style="display:inline-block;width:10px;height:10px;background-color:#F8D76E;"></span> Single label image, inconsistent label corrections. <span style="display:inline-block;width:10px;height:10px;background-color:#E55353;"></span> Ambiguous, no agreement on the label.</div> 
 
+<div>
+The significant differences in the estimates for the percentages of some types of errors have multiple reasons, the two major ones is the percentage of images seen and methodology used by human annotators and the models used for label error prediction.
+</div>
     
 </details>  
 
@@ -179,7 +248,7 @@ Interestingly, each image in a group of duplicates is found to have a different 
 After downloading the available error analysis from prior works, we discovered that approximately 57.2% of the images in the validation set were reviewed by multiple studies. 
 Further examination revealed that only 33% of the entire validation set had identical labels across all the studies that reviewed the images. This finding reminded us that error-correction processes are not error-free. We analyzed the images with consistent labels, and for nearly 94% of them the original labels were correct. The remaining 6% consisted of images where the original label was incorrect but had full agreement on the corrected label, as well as images that were either multi-labeled or ambiguous.
 
-<details style="background-color:#f5f5f5; border-radius: 3px; padding:15px; margin-bottom: 10px;">
+<details>
     <summary style="font-weight:800">Results Evaluation Note</summary>
     
 <div style="margin:15px 0px 0px 0;">
@@ -246,18 +315,18 @@ To understand the issue with (b), we must know that ImageNet-1k also includes a 
 
 We find modern large language models (LLMs) to be more accurate when handling such questions, so we asked them whether these two definitions overlap:
 
-<div style="margin-bottom:10px; border-left: 4px solid lightgrey; border-radius:3px; padding:10px; font-style:italic; background-color:#EEEEEE;">
+<div class="llm-cite">
     Yes, the "tabby, tabby cat" definition and the "tiger cat" definition overlap. While the first definition is broader in its description of coloration and pattern, the second one specifies the striped aspect, which is a common characteristic of the broader "mottled" description in the first.
 </div>
 
 -- *ChatGPT-4o* 
 
-<div style="margin-bottom:10px; border-left: 4px solid lightgrey; border-radius:3px; padding:10px; font-style:italic; background-color:#EEEEEE;">Yes - a tabby cat definition ("a cat with a grey or tawny coat mottled with black") overlaps with the tiger cat definition ("a cat having a striped coat") since "mottled with black" typically manifests as stripes in domestic cats.</div>
+<div class="llm-cite">Yes - a tabby cat definition ("a cat with a grey or tawny coat mottled with black") overlaps with the tiger cat definition ("a cat having a striped coat") since "mottled with black" typically manifests as stripes in domestic cats.</div>
 
 -- *Claude 3.5 Sonnet*
 
 
-<div style="margin-bottom:10px; border-left: 4px solid lightgrey; border-radius:3px; padding:10px; font-style:italic; background-color:#EEEEEE;">Yes, mottled patterns can sometimes include stripes, so the "tabby, tabby cat" definition can occasionally overlap with the "tiger cat" definition.</div>
+<div class="llm-cite">Yes, mottled patterns can sometimes include stripes, so the "tabby, tabby cat" definition can occasionally overlap with the "tiger cat" definition.</div>
 
 -- *Microsoft Copilot*
 
@@ -291,7 +360,7 @@ Distinguishing between a tabby and a tiger isn't even a particularly challenging
 
 Consider two synsets: *"laptop, laptop computer"* and *"notebook, notebook computer"*. Their respective WordNet definitions are "a portable computer small enough to use in your lap" and "a small compact portable computer". In this case, the definitions clearly overlap, with the first being a subset of the second. We again asked modern LLMs about the difference between laptops and notebooks: 
 
-<div style="margin-bottom:10px; border-left: 4px solid lightgrey; border-radius:3px; padding:10px; font-style:italic; background-color:#EEEEEE;">Previously, "laptops" referred to portable computers with larger screens and more powerful hardware, while "notebooks" were slimmer, lighter, and less powerful. Today, the terms are used interchangeably, as advancements in technology have blurred the distinctions.</div>
+<div class="llm-cite">Previously, "laptops" referred to portable computers with larger screens and more powerful hardware, while "notebooks" were slimmer, lighter, and less powerful. Today, the terms are used interchangeably, as advancements in technology have blurred the distinctions.</div>
 
 -- *ChatGPT-4o*
 
@@ -519,17 +588,77 @@ We categorize the problems with class selection into the following groups:
  - *"Indian elephant, Elephas maximus"* & *"African elephant, Loxodonta africana"* are also *"tusker"*  
  - *"bathtub, bathing tub, bath, tub"* is also a *"tub, vat"*  
 
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); row-gap: 15px; column-gap: 35px; justify-items: center;">
+    <div style="text-align: center;">
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/bathtub.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <p><em>"bathtub, bathing tub, bath, tub” </em></p>
+    </div>
+    <div style="text-align: center;">
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/tub.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <p><em>"tub, vat”</em></p>
+    </div>
+</div>
+
+<div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
+    Figure X. Do we want to have figure captions to be consistent?
+</div>
+
 **Class Is a Part of Another Class Object**  
    - *"space bar"* is a part of *"computer keyboard, keypad"*  
    - *"car wheel"* wheel is a part of any vehicle class (*"racer, race car, racing car"*, *"sports car, sport car"*, *"minivan"*, etc.)
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); row-gap: 15px; column-gap: 35px; justify-items: center;">
+    <div style="text-align: center;">
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/spacebar.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <p><em>"space bar"</em></p>
+    </div>
+    <div style="text-align: center;">
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/computer_keyboard.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <p><em>"computer keyboard, keypad"</em></p>
+    </div>
+</div>
+
+<div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
+    Figure X. Do we want to have figure captions to be consistent?
+</div>
 
 **Near Synonyms as Understood by Non-experts**  
    - *"laptop, laptop computer"* & *"notebook, notebook computer"*  
    - *"sunglasses, dark glasses, shades"* & *"sunglass"*  
 
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); row-gap: 15px; column-gap: 35px; justify-items: center;">
+    <div style="text-align: center;">
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/sunglasses.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <p><em>"sunglasses, dark glasses, shades"</em></p>
+    </div>
+    <div style="text-align: center;">
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/sunglass.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <p><em>"sunglass"</em></p>
+    </div>
+</div>
+
+<div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
+    Figure X. Do we want to have figure captions to be consistent?
+</div>
+
 **Mostly Occur Together**  
    - *"sea anemone"* & *"anemone fish"*  
    - *"microphone, mike"* & *"stage"*  
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); row-gap: 15px; column-gap: 35px; justify-items: center;">
+    <div style="text-align: center;">
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/sea_anemone.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <p><em>"sea anemone"</em></p>
+    </div>
+    <div style="text-align: center;">
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/anemone_fish.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <p><em>"anemone fish"</em></p>
+    </div>
+</div>
+
+<div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
+    Figure X. Do we want to have figure captions to be consistent?
+</div>
 
 To identify such groups within the dataset, we conducted an analysis using the updated ImageNet training labels from the Re-labeling ImageNet paper<d-cite key="9"/>, where an EfficientNet-L2 model was applied. 
 
@@ -569,7 +698,7 @@ Our analysis focuses on three types of duplicate sets:
 
 The search began with the duplicate candidate detection process. We then categorized duplicates in 2 groups: **exact duplicates** and **near duplicates**, and the results are surprising...
 
-<details style="background-color:#f5f5f5; border-radius: 3px; padding:15px">
+<details>
   <summary style="font-weight:800">Candidate Detection Details</summary>
 
 <div style="margin:15px 0px 15px 0; font-weight:800">
@@ -814,25 +943,25 @@ We consider images from the following classes:
 <div style="display: flex; flex-wrap:wrap; gap: 10px; align-items: center; justify-content;center; ">
     <div style="text-align: center; flex: 1 1 48%; box-sizing: border-box;">
         <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/weasel.png' | relative_url }}" style="height: 190px; " />
-        <p><em style="color:black;">"weasel"</em></p>
+        <p><em class="weasel-caption">"weasel"</em></p>
     </div>
 <div style="text-align: center; box-sizing: border-box; flex: 1 1 48%;">
         <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/mink.png' | relative_url }}" style="height: 190px;" />
-    <p><em style="color:black;">"mink"</em></p>
+    <p><em class="weasel-caption">"mink"</em></p>
     </div>
     <div style="text-align: center; box-sizing: border-box; flex: 1 1 48%;">
         <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/polecat.png' | relative_url }}" style="height: 190px; " />
-        <p><em style="color:black;">"polecat, fitch, foulmart, foumart, Mustela putorius"</em></p>
+        <p><em class="weasel-caption">"polecat, fitch, foulmart, foumart, Mustela putorius"</em></p>
     </div>
 
 <div style="text-align: center; box-sizing: border-box; flex: 1 1 48%;">
         <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/ferret.png' | relative_url }}" style="height: 190px; " />
-    <p><em style="color:black;">"black-footed ferret, ferret, Mustela nigripes"</em></p>
+    <p><em class="weasel-caption">"black-footed ferret, ferret, Mustela nigripes"</em></p>
     </div>
 </div>
 
 <div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
-    Figure 13.  Correctly labeled ImageNet-1k images from the <em style="color:grey;">"weasel"</em>, <em style="color:grey;">"mink"</em>, <em style="color:grey;">"polecat"</em>, and <em style="color:grey;">"black-footed ferret"</em>  classes.       
+    Figure 13.  Correctly labeled ImageNet-1k images from the <em>"weasel"</em>, <em>"mink"</em>, <em>"polecat"</em>, and <em>"black-footed ferret"</em>  classes.       
 The ground truth labels for these categories are often wrong, mainly confusing these species. 
 </div>
 
@@ -847,9 +976,13 @@ Let us look at *"weasel"* class definitions:
 
 The definition of the *"weasel"* synset in WordNet is too broad - it potentially encompasses all the other mentioned classes. Moreover, the interpretation of the term weasel varies, between UK and US English, further complicating its consistent application. In US English, the term weasel often refers to the whole *Mustelidae*, also called 'the weasel family'. All of the following - weasel, mink, European polecat, and black-footed ferret - belong to the weasel family, as understood by US English.
 
+<!--
 <div style="display: flex; justify-content: center; align-items: center;">
     <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/mustelidae.svg' | relative_url }}" style="width: 100%; margin: 25px;" />
 </div>
+-->
+
+<div class="theme-image"></div>
 
 <div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
     Figure 14. A simplified branching diagram showing the <em style="color:grey;">Mustelidae</em> family, also referred to as 'the weasel family', or simply 'weasels' in US English. Some of ImageNet classes are: <em style="color:grey;">"weasel"</em>, <em style="color:grey;">"polecat"</em>, <em style="color:grey;">"black-footed ferret"</em> and <em style="color:grey;">"mink"</em>. All of these belong to the weasel family, pointing at yet another issue with class names. Images of these classes also depict species outside of ImageNet, such as tayras or voles, or even different ImageNet classes, such as otter or badger. The diagram shows evolutionary relationships between selected species from the ImageNet dataset; the circles mark higher taxonomic units.
