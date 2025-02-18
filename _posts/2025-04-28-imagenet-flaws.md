@@ -105,6 +105,22 @@ toc:
     background-image: url("{{ 'assets/img/2025-04-28-imagenet-flaws/weasel_fam_distr.svg' | relative_url }}");
   }
 
+  .related-papers-image {
+    height: 17rem;
+    background-size: contain; /* Ensures the entire SVG fits */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("{{ 'assets/img/2025-04-28-imagenet-flaws/related_papers.svg' | relative_url }}");
+  }
+
+  .multiple-papers-image {
+    height: 15rem;
+    background-size: contain; /* Ensures the entire SVG fits */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("{{ 'assets/img/2025-04-28-imagenet-flaws/multiple_papers.svg' | relative_url }}");
+  }
+
   .iframe-dark {
     display: none;
   }
@@ -146,6 +162,14 @@ toc:
     display: none;
   }
 
+  html[data-theme="dark"] .related-papers-image {
+    background-image: url("{{ 'assets/img/2025-04-28-imagenet-flaws/related_papers_dark.svg' | relative_url }}");
+  }
+
+  html[data-theme="dark"] .multiple-papers-image {
+    background-image: url("{{ 'assets/img/2025-04-28-imagenet-flaws/multiple_papers_dark.svg' | relative_url }}");
+  }
+
 </style>
 
 <span style="font-size:17px; font-weight:800">Disclaimer:</span>
@@ -157,39 +181,39 @@ By undertaking this work, we have no intention to diminish the significant contr
 <div style="display: flex; gap: 15px; flex-wrap:wrap; justify-content:center;">
 <figure style="margin: 0; text-align: left;">
     <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/otter.png' | relative_url }}" height="200px">
-    <figcaption style="font-size: 13px;">(a) <span style="color:green; font-style:italic;">"otter" ✓ </span></figcaption>
+    <figcaption style="font-size: 13px;">(a) <span style="color:green; font-weight:bold;">"otter" ✓ </span></figcaption>
   </figure>
     <figure style="margin: 0; text-align: left;">
     <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/tiger_shark.png' | relative_url }}" height="220px">
-        <figcaption style="font-size: 13px;">(b) <span style="color:red; font-style:italic;">"tiger shark" ×</span></figcaption>
-        <figcaption style="font-size: 13px;">&emsp;&nbsp; <span style="color:green; font-style:italic;">"grey whale" ✓</span></figcaption>
+        <figcaption style="font-size: 13px;">(b) <span style="color:red; font-weight:bold;">"tiger shark" ×</span></figcaption>
+        <figcaption style="font-size: 13px;">&emsp;&nbsp; <span style="color:green; font-weight:bold;">"grey whale" ✓</span></figcaption>
   </figure>
 
   <figure style="margin: 0; text-align: left;">
     <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/parallel_bars.png' | relative_url }}" height="220px">
-      <figcaption style="font-size: 13px;">(c) <span style="color:red; font-style:italic;">"parallel bars" ×</span></figcaption>
-      <figcaption style="font-size: 13px;">&emsp;&nbsp; <span style="color:green; font-style:italic;">"horizontal bar" ✓</span></figcaption>
+      <figcaption style="font-size: 13px;">(c) <span style="color:red; font-weight:bold;">"parallel bars" ×</span></figcaption>
+      <figcaption style="font-size: 13px;">&emsp;&nbsp; <span style="color:green; font-weight:bold;">"horizontal bar" ✓</span></figcaption>
   </figure>
   <figure style="margin: 0; text-align: left;">
     <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/wine_bottle.png' | relative_url }}" height="220px">
-      <figcaption style="font-size: 13px;">(d) <span style="color:green; font-style:italic;">"wine bottle" ✓</span></figcaption>
-      <figcaption style="font-size: 13px;">&nbsp; <span style="color:green; font-style:italic;">+ "goblet" ✓</span></figcaption>
-      <figcaption style="font-size: 13px;">&nbsp; <span style="color:green; font-style:italic;">+ "red wine" ✓</span></figcaption>
+      <figcaption style="font-size: 13px;">(d) <span style="color:green; font-weight:bold;">"wine bottle" ✓</span></figcaption>
+      <figcaption style="font-size: 13px;">&nbsp; <span style="color:green; font-weight:bold;">+ "goblet" ✓</span></figcaption>
+      <figcaption style="font-size: 13px;">&nbsp; <span style="color:green; font-weight:bold;">+ "red wine" ✓</span></figcaption>
   </figure>
   <figure style="margin: 0; text-align: left;">
     <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/toilet_seat.png' | relative_url }}" height="220px">
-      <figcaption style="font-size: 13px;">(e) <span style="color:red; font-style:italic;">"toilet seat" ×</span></figcaption>
+      <figcaption style="font-size: 13px;">(e) <span style="color:red; font-weight:bold;">"toilet seat" ×</span></figcaption>
   </figure>
 
   <div style="display: flex; flex-direction: column; gap: 10px;">
     <figure style="margin: 0; text-align: left;">
       <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/race_car.png' | relative_url }}" height="105px">
-        <figcaption style="font-size: 13px;">(f) <span style="color:green; font-style:italic;">"race car" ✓</span></figcaption>
+        <figcaption style="font-size: 13px;">(f) <span style="color:green; font-weight:bold;">"race car" ✓</span></figcaption>
     </figure>
     <figure style="margin: 0; text-align: left;">
       <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/race_sports_car.png' | relative_url }}" height="105px">
-        <figcaption style="font-size: 13px;">(g) <span style="color:red; font-style:italic;">"sports car" ×</span></figcaption>
-        <figcaption style="font-size: 13px;">&emsp;&nbsp; <span style="color:green; font-style:italic;">"race car" ✓</span> </figcaption>
+        <figcaption style="font-size: 13px;">(g) <span style="color:red; font-weight:bold;">"sports car" ×</span></figcaption>
+        <figcaption style="font-size: 13px;">&emsp;&nbsp; <span style="color:green; font-weight:bold;">"race car" ✓</span> </figcaption>
     </figure>
   </div>
 </div>
@@ -255,9 +279,13 @@ The study identifies duplicate images in the validation and training sets.
 Interestingly, each image in a group of duplicates is found to have a different label. This indicates duplicates were removed only within the same class, incorrectly assuming that duplicate images cannot have different label. The work emphasizes the importance of addressing not only duplicates but also near-duplicate images, e.g., similar photos from the same photoshoot.
 </div>
 
+<!--
 <div style="display: flex; justify-content: center; align-items: center;">
     <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/prev_work_in_detail.png' | relative_url }}" style="width: 100%; margin: 25px;" />
 </div>
+-->
+
+<div class="related-papers-image"></div>
     
 <div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">Figure 2. Error analyses <d-cite key="4,5,6,7"/> for the ImageNet validation set. <span style="display:inline-block;width:10px;height:10px;background-color:#A3D8A0;"></span> Single label image, original label is correct. <span style="display:inline-block;width:10px;height:10px;background-color:#4C8C99;"></span> Single label image, original label is incorrect, full agreement on correction. <span style="display:inline-block;width:10px;height:10px;background-color:#8BBEE8;"></span>  Multilabel images. <span style="display:inline-block;width:10px;height:10px;background-color:#F8D76E;"></span> Single label image, inconsistent label corrections. <span style="display:inline-block;width:10px;height:10px;background-color:#E55353;"></span> Ambiguous, no agreement on the label.</div> 
 
@@ -281,10 +309,13 @@ It should be noted that for the <span style="font-weight:800">Label Errors<d-cit
 </div>
 </details>
 
+<!--
 <div style="display: flex; justify-content: center; align-items: center; flex-wrap:wrap; margin: 20px;">
     <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/multiple_papers.png' | relative_url }}" style="width: 100%;" />
         <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/consistent_images.png' | relative_url }}" style="width: 100%;" />
 </div>
+-->
+<div class="multiple-papers-image"></div>
 
 <div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
     Figure 3. Top: Number of images checked by one <span style="display:inline-block;width:10px;height:10px;background-color:#F8D76E;"></span>, two <span style="display:inline-block;width:10px;height:10px;background-color:#4C8C99;"></span>, three <span style="display:inline-block;width:10px;height:10px;background-color:#8BBEE8;"></span> and four <span style="display:inline-block;width:10px;height:10px;background-color:#A3D8A0;"></span> papers. <br> Bottom: Images checked by more than one paper where the annotators agreed <span style="display:inline-block;width:10px;height:10px;background-color:#F2A477;"></span> and disagreed <span style="display:inline-block;width:10px;height:10px;background-color:#B784C6;"></span>.
@@ -615,11 +646,11 @@ We categorize the problems with class selection into the following groups:
 
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); row-gap: 15px; column-gap: 35px; justify-items: center;">
     <div style="text-align: center;">
-        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/bathtub.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/bathtub.png' | relative_url }}" style="height: 190px; margin-top: 30px;" />
         <p><em>"bathtub, bathing tub, bath, tub” </em></p>
     </div>
     <div style="text-align: center;">
-        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/tub.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/tub.png' | relative_url }}" style="height: 190px; margin-top: 30px;" />
         <p><em>"tub, vat”</em></p>
     </div>
 </div>
@@ -634,11 +665,11 @@ We categorize the problems with class selection into the following groups:
 
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); row-gap: 15px; column-gap: 35px; justify-items: center;">
     <div style="text-align: center;">
-        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/spacebar.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/spacebar.png' | relative_url }}" style="height: 190px; margin-top: 30px;" />
         <p><em>"space bar"</em></p>
     </div>
     <div style="text-align: center;">
-        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/computer_keyboard.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/computer_keyboard.png' | relative_url }}" style="height: 190px; margin-top: 30px;" />
         <p><em>"computer keyboard, keypad"</em></p>
     </div>
 </div>
@@ -653,11 +684,11 @@ We categorize the problems with class selection into the following groups:
 
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); row-gap: 15px; column-gap: 35px; justify-items: center;">
     <div style="text-align: center;">
-        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/sunglasses.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/sunglasses.png' | relative_url }}" style="height: 190px; margin-top: 30px;" />
         <p><em>"sunglasses, dark glasses, shades"</em></p>
     </div>
     <div style="text-align: center;">
-        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/sunglass.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/sunglass.png' | relative_url }}" style="height: 190px; margin-top: 30px;" />
         <p><em>"sunglass"</em></p>
     </div>
 </div>
@@ -672,11 +703,11 @@ We categorize the problems with class selection into the following groups:
 
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); row-gap: 15px; column-gap: 35px; justify-items: center;">
     <div style="text-align: center;">
-        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/sea_anemone.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/sea_anemone.png' | relative_url }}" style="height: 190px; margin-top: 30px;" />
         <p><em>"sea anemone"</em></p>
     </div>
     <div style="text-align: center;">
-        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/anemone_fish.JPEG' | relative_url }}" style="height: 190px; margin-top: 30px;" />
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/anemone_fish.png' | relative_url }}" style="height: 190px; margin-top: 30px;" />
         <p><em>"anemone fish"</em></p>
     </div>
 </div>
@@ -712,6 +743,37 @@ The OpenCLIP accuracies for both problematic and non-problematic groups of class
 The classes from the problematic groups significant lower OpenCLIP accuracy.
 
 ## Addressing Duplicates
+
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; text-align: center; align-items: center;">
+    <div style="grid-row: span 2;">
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/val_lynx.png' | relative_url }}" style="height: 110px;" />
+        <p>(a) Lynx</p>
+    </div>
+    <div>
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/red_wolf.png' | relative_url }}" style="height: 110px;" />
+        <p>(b) Red Wolf</p>
+    </div>
+    <div>
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/dingo.png' | relative_url }}" style="height: 110px;" />
+        <p>(c) Dingo</p>
+    </div>
+    <div>
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/timber_wolf.png' | relative_url }}" style="height: 110px;" />
+        <p>(d) Timber Wolf</p>
+    </div>
+    <div style="grid-column: 2 / 3;">
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/white_wolf.png' | relative_url }}" style="height: 110px;" />
+        <p>(e) White Wolf</p>
+    </div>
+    <div style="grid-column: 3 / 4;">
+        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/coyote.png' | relative_url }}" style="height: 110px;" />
+        <p>(f) Coyote</p>
+    </div>
+</div>
+
+<div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
+    Figure X. The glory of ImageNet duplicates.
+</div>
 
 Of all prior studies, **When Does Dough Become a Bagel?<d-cite key="8"/>** examined the issue of duplicates most extensively. The paper identified 797 validation images that also appear in the training set, with some images occurring multiple times. They also highlighted the broader problem of near duplicates in ImageNet-1k (e.g. images from the same photoshoot). However, no statistics were provided since near duplicate are significanlty more difficult to detection than identical images.
 
