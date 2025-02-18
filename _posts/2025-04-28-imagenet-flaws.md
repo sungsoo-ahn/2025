@@ -96,6 +96,19 @@ toc:
     background-image: url("{{ 'assets/img/2025-04-28-imagenet-flaws/mustelidae.svg' | relative_url }}");
   }
 
+  .weasel-image {
+    height: 30rem;
+    margin-bottom: 25px;
+    background-size: contain; /* Ensures the entire SVG fits */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("{{ 'assets/img/2025-04-28-imagenet-flaws/weasel_fam_distr.svg' | relative_url }}");
+  }
+
+  .iframe-dark {
+    display: none;
+  }
+
   /* Dark mode styles */
   html[data-theme="dark"] details {
     background-color: #424346;
@@ -119,6 +132,18 @@ toc:
 
   html[data-theme="dark"] .theme-image {
     background-image: url("{{ 'assets/img/2025-04-28-imagenet-flaws/mustelidae_dark.svg' | relative_url }}");
+  }
+
+  html[data-theme="dark"] .weasel-image {
+    background-image: url("{{ 'assets/img/2025-04-28-imagenet-flaws/weasel_fam_distr_dark.svg' | relative_url }}");
+  }
+
+  html[data-theme="dark"] .iframe-dark {
+    display: block;
+  }
+
+  html[data-theme="dark"] .iframe-light {
+    display: none;
   }
 
 </style>
@@ -600,7 +625,7 @@ We categorize the problems with class selection into the following groups:
 </div>
 
 <div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
-    Figure X. Do we want to have figure captions to be consistent?
+    Figure 10. An example of <em style="color:grey;">"bathtub, bathing tub, bath, tub”</em> and <em style="color:grey;">"tub, vat”</em>.
 </div>
 
 **Class Is a Part of Another Class Object**  
@@ -619,7 +644,7 @@ We categorize the problems with class selection into the following groups:
 </div>
 
 <div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
-    Figure X. Do we want to have figure captions to be consistent?
+    Figure 11. An example of <em style="color:grey;">"space bar"</em> and <em style="color:grey;">"computer keyboard, keypad"</em>.
 </div>
 
 **Near Synonyms as Understood by Non-experts**  
@@ -638,7 +663,7 @@ We categorize the problems with class selection into the following groups:
 </div>
 
 <div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
-    Figure X. Do we want to have figure captions to be consistent?
+    Figure 12. An example of <em style="color:grey;">"sunglasses, dark glasses, shades"</em> and <em style="color:grey;">"sunglass"</em>.
 </div>
 
 **Mostly Occur Together**  
@@ -657,7 +682,7 @@ We categorize the problems with class selection into the following groups:
 </div>
 
 <div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
-    Figure X. Do we want to have figure captions to be consistent?
+    Figure 13. An example of <em style="color:grey;">"sea anemone"</em> and <em style="color:grey;">"anemone fish"</em>.
 </div>
 
 To identify such groups within the dataset, we conducted an analysis using the updated ImageNet training labels from the Re-labeling ImageNet paper<d-cite key="9"/>, where an EfficientNet-L2 model was applied. 
@@ -665,11 +690,12 @@ To identify such groups within the dataset, we conducted an analysis using the u
 We performed hierarchical clustering on the classes with high EfficientNet-L2 error rates. Next, we manually reviewed the clusters, defined the mentioned categories, and organized the images accordingly. Each cluster consists of between 2 and 10 classes. Ultimately, this process led to the identification of 151 classes, which we organized into 48 groups. Each group contains a list of classes alongside their corresponding category. In some cases, multiple predefined relationships apply to the same classes, so a single group may span several categories.
 
 <div class="l-page">
-  <iframe src="{{ 'assets/html/2025-04-28-imagenet-flaws/confusion_matrix.html' | relative_url }}" frameborder='0' scrolling='no' height="600px" width="100%"></iframe>
+  <iframe class="iframe-light" src="{{ 'assets/html/2025-04-28-imagenet-flaws/confusion_matrix.html' | relative_url }}" frameborder='0' scrolling='no' height="550px" width="100%"></iframe>
+  <iframe class="iframe-dark" src="{{ 'assets/html/2025-04-28-imagenet-flaws/confusion_matrix_dark.html' | relative_url }}" frameborder='0' scrolling='no' height="550px" width="100%"></iframe>
 </div>
 
 <div style="margin: 0px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
-    Figure 10. The interactive confusion matrix generated for all ImageNet-1k classes, based on predictions made by the EfficientNet-L2 model following the clustering process.
+    Figure 14. The interactive confusion matrix generated for all ImageNet-1k classes, based on predictions made by the EfficientNet-L2 model following the clustering process. The top-1 predicted classes match the ground truth for all classes except <em style="color:grey;">'projectile, missile,'</em> which is predicted as <em style="color:grey;">'missile'</em> for 56.85% of its images.
 </div>
 
 
@@ -784,7 +810,7 @@ The initial automatic search for duplicates was followed by a careful manual rev
 </div>
 
 <div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
-    Figure 11. Near duplicates - Image Augmentation.
+    Figure 15. Near duplicates - Image Augmentation.
 </div>
 
 **Similar View**: images of the same object taken from slightly different angles at different times. An example is depicted below.
@@ -801,7 +827,7 @@ The initial automatic search for duplicates was followed by a careful manual rev
 </div>
 
 <div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
-    Figure 12. Near duplicates - Simalar View.
+    Figure 16. Near duplicates - Simalar View.
 </div>
 
 #### Key Findings
@@ -811,7 +837,7 @@ The initial automatic search for duplicates was followed by a careful manual rev
     
 We continued evaluating models with near duplicates removed. First, we removed all near duplicate groups in the validation set. Next, we removed validation images that appeared in the training set (referred to as near cross duplicates), then we removed both. Lastly, we removed all exact duplicates and near duplicates from the validation set. As shown in **Table 5**, removing near duplicates had minimal impact on accuracy, as these images were mostly consistently assigned the same label within each duplicate group.
     
-| Model | Overall | × Val | × Cross | × Val+Cross | × all |
+| Model | Overall | × Val | × Cross | × Val+Cross | × All |
 | --- | --- | --- | --- | --- | --- |
 | OpenCLIP | 84.61 | 84.60 | 84.63 | 84.62 | 85.32 |
 | EfficientNetV2 | 85.56 | 85.54 | 85.59 | 85.59 | 86.59 |
@@ -961,7 +987,7 @@ We consider images from the following classes:
 </div>
 
 <div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
-    Figure 13.  Correctly labeled ImageNet-1k images from the <em>"weasel"</em>, <em>"mink"</em>, <em>"polecat"</em>, and <em>"black-footed ferret"</em>  classes.       
+    Figure 17.  Correctly labeled ImageNet-1k images from the <em>"weasel"</em>, <em>"mink"</em>, <em>"polecat"</em>, and <em>"black-footed ferret"</em>  classes.       
 The ground truth labels for these categories are often wrong, mainly confusing these species. 
 </div>
 
@@ -985,7 +1011,7 @@ The definition of the *"weasel"* synset in WordNet is too broad - it potentially
 <div class="theme-image"></div>
 
 <div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
-    Figure 14. A simplified branching diagram showing the <em style="color:grey;">Mustelidae</em> family, also referred to as 'the weasel family', or simply 'weasels' in US English. Some of ImageNet classes are: <em style="color:grey;">"weasel"</em>, <em style="color:grey;">"polecat"</em>, <em style="color:grey;">"black-footed ferret"</em> and <em style="color:grey;">"mink"</em>. All of these belong to the weasel family, pointing at yet another issue with class names. Images of these classes also depict species outside of ImageNet, such as tayras or voles, or even different ImageNet classes, such as otter or badger. The diagram shows evolutionary relationships between selected species from the ImageNet dataset; the circles mark higher taxonomic units.
+    Figure 18. A simplified branching diagram showing the <em style="color:grey;">Mustelidae</em> family, also referred to as 'the weasel family', or simply 'weasels' in US English. Some of ImageNet classes are: <em style="color:grey;">"weasel"</em>, <em style="color:grey;">"polecat"</em>, <em style="color:grey;">"black-footed ferret"</em> and <em style="color:grey;">"mink"</em>. All of these belong to the weasel family, pointing at yet another issue with class names. Images of these classes also depict species outside of ImageNet, such as tayras or voles, or even different ImageNet classes, such as otter or badger. The diagram shows evolutionary relationships between selected species from the ImageNet dataset; the circles mark higher taxonomic units.
 </div>
 
 #### Solution
@@ -1015,7 +1041,7 @@ There is also a potential for contextual bias in labeling, as ferrets are common
     </div>
 </div>
 
-<div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;"> Figure 15. Training set images from the ImageNet-1k <em style="color:grey;">"polecat"</em> class. Distinguishing between European polecat and domestic ferret is challenging due to the similarity in appearence. European polecats tend to be more muscular than domestic ferrets, have overall darker fur and well-defined white face mask.
+<div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;"> Figure 19. Training set images from the ImageNet-1k <em style="color:grey;">"polecat"</em> class. Distinguishing between European polecat and domestic ferret is challenging due to the similarity in appearence. European polecats tend to be more muscular than domestic ferrets, have overall darker fur and well-defined white face mask.
 </div>
 
 To make matters worse, in the **validation set for the class *"black-footed ferret"*, only one image depicts this species!** A solution to this problem thus requires not only removal, or transfer to the correct class, of the incorrectly labeled images, but also collection of new data.
@@ -1033,7 +1059,7 @@ The term polecat presents a similar ambiguity w.r.t. the term ferret, as it is c
     </div>
 </div>
 
-<div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;"> Figure 16. European polecat and skunk. These species share the term 'polecat' in their synsets but belong to different families (see Figure 14).
+<div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;"> Figure 20. European polecat and skunk. These species share the term 'polecat' in their synsets but belong to different families (see Figure 18).
 </div>
 
 #### Solution
@@ -1057,9 +1083,9 @@ The percentage of the **correctly** labeled images in ImageNet-1k was:
 | Polecat                        | 32%                          |
 | Black-footed ferret            | 2%                           |
 
-The misclassified images either show an animal from the aforementioned classes, or from a different ImageNet class (such as otter or badger). There are also images of animals outside of ImageNet-1k classes, while some images are ambiguous, see Figure 17.
+The misclassified images either show an animal from the aforementioned classes, or from a different ImageNet class (such as otter or badger). There are also images of animals outside of ImageNet-1k classes, while some images are ambiguous, see Figure 21.
 
-Images of animals that do not belong to any ImageNet class are assigned to the 'non-ImageNet' label in the graph shown in Figure 18. This category includes animals such as vole, tayra, marten, and Chinese ferret-badger. Although 'domestic ferret' is also a non-ImageNet label, it is shown separately because of its large representation in the sets.
+Images of animals that do not belong to any ImageNet class are assigned to the 'non-ImageNet' label in the graph shown in Figure 22. This category includes animals such as vole, tayra, marten, and Chinese ferret-badger. Although 'domestic ferret' is also a non-ImageNet label, it is shown separately because of its large representation in the sets.
 
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); row-gap: 15px; column-gap: 35px; justify-items: center;">
     <div style="text-align: center;">
@@ -1072,7 +1098,7 @@ Images of animals that do not belong to any ImageNet class are assigned to the '
     </div>
 </div>
 
-<div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;"> Figure 17. Images from the validation set <em style="color:grey;">"mink"</em> class, which our expert labeled as ambiguous. 
+<div style="margin: 15px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;"> Figure 21. Images from the validation set <em style="color:grey;">"mink"</em> class, which our expert labeled as ambiguous. 
 Left: the characteristic features are obscured; most likely a mink, but possibly a species from genus <em style="color:grey;">'Martes'</em>.
 Right: an animal from genus <em style="color:grey;">'Mustela'</em>; possibly a mink or another dark-furred species. 
 </div>
@@ -1081,12 +1107,10 @@ The 'ambiguous' label is used for images that are blurry, have the characteristi
 
 Let us take a closer look at the four examined classes.
 
-<div style="display: flex; justify-content: center; align-items: center;">
-    <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/weasel_fam_distr.svg' | relative_url }}" style="width: 100%; margin: 25px;" />
-</div>
+<div class="weasel-image"></div>
 
 <div style="margin: 0px 0px 25px 0px; color:grey; font-size:14px; font-weight:600; line-height: 1.3;">
-    Figure 18. Validation set relabeling results for the <em style="color:grey;">"weasel"</em>, <em style="color:grey;">"mink"</em>, <em style="color:grey;">"polecat, fitch, foulmart, foumart, Mustela putorius"</em>, and <em style="color:grey;">"black-footed ferret, ferret, Mustela nigripes"</em> classes.
+    Figure 22. Validation set relabeling results for the <em style="color:grey;">"weasel"</em>, <em style="color:grey;">"mink"</em>, <em style="color:grey;">"polecat, fitch, foulmart, foumart, Mustela putorius"</em>, and <em style="color:grey;">"black-footed ferret, ferret, Mustela nigripes"</em> classes.
 </div>
 
 The weasel class contains a wide variety of misclassified images. This includes minks (6%), polecats (16%), domestic ferrets (10%), otters (6%), and badgers (6%). The high rate of misclassification may be due to the unclear definition of this class, as all of these species belong to the weasel family discussed earlier.
