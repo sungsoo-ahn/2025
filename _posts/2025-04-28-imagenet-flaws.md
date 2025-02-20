@@ -744,30 +744,44 @@ The classes from the problematic groups significantly lower OpenCLIP accuracy.
 
 ## Addressing Duplicates
 
-<div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; text-align: center; align-items: center;">
-    <div style="grid-row: span 2; margin-right: 30px;">
-        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/val_lynx.png' | relative_url }}" style="height: 107px;" />
-        <p style="font-size: 13px;"> <span style="color:red; font-weight:bold;">"lynx, ..." ×</span></p>
+<div style="display: flex; gap: 30px; align-items: stretch; min-height: 240px;">
+    <!-- Left column - first wolf centered vertically -->
+    <div style="flex: 0 0 auto; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div>
+            <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/val_lynx.png' | relative_url }}" style="height: 107px;" />
+            <p style="font-size: 13px;"> <span style="color:red; font-weight:bold;">"lynx, ..." ×</span></p>
+        </div>
     </div>
-    <div>
-        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/timber_wolf.png' | relative_url }}" style="height: 107px;" />
-        <p style="font-size: 13px;"> <span style="color:green; font-weight:bold;">"timber wolf, ..." ✓</span></p>
-    </div>
-    <div>
-        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/dingo.png' | relative_url }}" style="height: 107px;" />
-        <p style="font-size: 13px;"> <span style="color:red; font-weight:bold;">"dingo, ..." ×</span></p>
-    </div>
-    <div>
-        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/white_wolf.png' | relative_url }}" style="height: 107px;" />
-        <p style="font-size: 13px;"> <span style="color:red; font-weight:bold;">"white wolf, ..." ×</span></p>
-    </div>
-    <div style="grid-column: 2 / 3;">
-        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/red_wolf.png' | relative_url }}" style="height: 107px;" />
-        <p style="font-size: 13px;"> <span style="color:red; font-weight:bold;">"red wolf, ..." ×</span></p>
-    </div>
-    <div style="grid-column: 3 / 4;">
-        <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/coyote.png' | relative_url }}" style="height: 107px;" />
-        <p style="font-size: 13px;"> <span style="color:red; font-weight:bold;">"coyote, ..." ×</span></p>
+    
+    <!-- Right column - containing the other 5 wolves in two rows -->
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+        <!-- Top row with 3 wolves -->
+        <div style="display: flex; gap: 15px; text-align: center;">
+            <div>
+                <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/timber_wolf.png' | relative_url }}" style="height: 107px;" />
+                <p style="font-size: 13px;"> <span style="color:green; font-weight:bold;">"timber wolf, ..." ✓</span></p>
+            </div>
+            <div>
+                <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/dingo.png' | relative_url }}" style="height: 107px;" />
+                <p style="font-size: 13px;"> <span style="color:red; font-weight:bold;">"dingo, ..." ×</span></p>
+            </div>
+            <div>
+                <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/white_wolf.png' | relative_url }}" style="height: 107px;" />
+                <p style="font-size: 13px;"> <span style="color:red; font-weight:bold;">"white wolf, ..." ×</span></p>
+            </div>
+        </div>
+        
+        <!-- Bottom row with 2 centered wolves -->
+        <div style="display: flex; gap: 15px; text-align: center; justify-content: center;">
+            <div>
+                <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/red_wolf.png' | relative_url }}" style="height: 107px;" />
+                <p style="font-size: 13px;"> <span style="color:red; font-weight:bold;">"red wolf, ..." ×</span></p>
+            </div>
+            <div>
+                <img src="{{ 'assets/img/2025-04-28-imagenet-flaws/coyote.png' | relative_url }}" style="height: 107px;" />
+                <p style="font-size: 13px;"> <span style="color:red; font-weight:bold;">"coyote, ..." ×</span></p>
+            </div>
+        </div>
     </div>
 </div>
 
