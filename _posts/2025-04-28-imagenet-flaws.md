@@ -276,7 +276,7 @@ authors used the EfficientNet-L2<d-cite key="12"/> model trained on the JFT-300M
 <div style="margin:15px 0px 15px 0;">
 <span style="font-weight:800">When Does Dough Become a Bagel?<d-cite key="8"/></span>
 The study identifies duplicate images in the validation and training sets.
-Interestingly, each image in a group of duplicates is found to have a different label. This indicates duplicates were removed only within the same class, incorrectly assuming that duplicate images cannot have different label. The work emphasizes the importance of addressing not only duplicates but also near-duplicate images, e.g., similar photos from the same photoshoot.
+Interestingly, each image in a group of duplicates is found to have a different label. This indicates duplicates were removed only within the same class, incorrectly assuming that duplicate images cannot have different labels. The work emphasizes the importance of addressing not only duplicates but also near-duplicate images, e.g., similar photos from the same photoshoot.
 </div>
 
 <!--
@@ -305,7 +305,7 @@ Further examination revealed that only 33% of the entire validation set had iden
     <summary style="font-weight:800">Results Evaluation Note</summary>
     
 <div style="margin:15px 0px 0px 0;">
-It should be noted that for the <span style="font-weight:800">Label Errors<d-cite key="7"/></span> paper (see Previous Work in Detail), the .json file containing Mturk decisions was used and evaluated with a modification from the original methodology. Instead of using the majority consensus (3+ out of 5 workers), only decisions unanimously agreed upon by all 5 workers were considered.
+It should be noted that for the <span style="font-weight:800">Label Errors<d-cite key="7"/></span> paper (see Previous Work in Detail), the .json file containing MTurk decisions was used and evaluated with a modification from the original methodology. Instead of using the majority consensus (3+ out of 5 workers), only decisions unanimously agreed upon by all 5 workers were considered.
 </div>
 </details>
 
@@ -328,10 +328,10 @@ This analysis highlights significant inconsistencies in the labeling of reannota
 Let us first examine the two-step process used to construct ImageNet: 
 
 1. **Image collection.** Images were scraped from the web and organized according to the WordNet hierarchy, which will be revisited later. Both automated and manual methods were involved: automated tools initially assigned labels based on information available (textual description, category) at the image source, often [flickr](https://flickr.com) or general web search. 
-2. **Annotation process**. The preliminary labels were then reviewed by MTurk workers, who were only asked to confirm whether the object with the given label was present in the image. Notably, no alternative labels were suggested, such as other similar classes. The Mturkers were shown the target synset definition and a link to Wikipedia.
+2. **Annotation process**. The preliminary labels were then reviewed by MTurk workers, who were only asked to confirm whether the object with the given label was present in the image. Notably, no alternative labels were suggested, such as other similar classes. The MTurkers were shown the target synset definition and a link to Wikipedia.
 
 
-**ImageNet-1k** was constructed later. It consists of three sets: a *training set* with over 1 million images, a *validation set* with 50,000 images, and a *test set* with 100,000 images. The training set is drawn from the ImageNet. Images for the evaluation subsets were obtained through a process that tried to replicate the one used for the ImageNet. The new data were collected up to three years later than training data and then they were randomly split between the validation and test sets.
+**ImageNet-1k** was constructed later. It consists of three sets: a *training set* with over 1 million images, a *validation set* with 50,000 images, and a *test set* with 100,000 images. The training set is drawn from ImageNet. Images for the evaluation subsets were obtained through a process that tried to replicate the one used for the ImageNet. The new data were collected up to three years later than training data and then they were randomly split between the validation and test sets.
 
  ImageNet links each image category to a specific noun **WordNet** synset. WordNet is a comprehensive lexical database of English. It organizes nouns, verbs, adjectives, and adverbs into cognitive synonym sets, or synsets, each representing a unique concept (see the official [website](https://wordnet.princeton.edu/)).
 
@@ -894,10 +894,10 @@ The initial automatic search for duplicates was followed by a careful manual rev
 
 #### Key Findings
 
-- In the **validation set**, 26 near-duplicate groups were found, involving 69 images in total. All duplicates in a groups had consistent labels, which helps maintain label reliability for model evaluation.
+- In the **validation set**, 26 near-duplicate groups were found, involving 69 images in total. All duplicates in a group had consistent labels, which helps maintain label reliability for model evaluation.
 - For the **cross-validation-training search**, we discovered that 269 images from the validation set matched 400 training images.
     
-We continued evaluating models with near duplicates removed. First, we removed all near duplicate groups in the validation set. Next, we removed validation images that appeared in the training set (referred to as near cross-duplicates), then we removed both. Lastly, we removed all exact duplicates and near duplicates from the validation set. As shown in **Table 5**, removing near duplicates had minimal impact on accuracy, as these images were mostly consistently assigned the same label within each duplicate group.
+We continued evaluating models with near duplicates removed. First, we removed all near duplicate groups in the validation set. Next, we removed validation images that appeared in the training set (referred to as near cross-duplicates), and then we removed both. Lastly, we removed all exact duplicates and near duplicates from the validation set. As shown in **Table 5**, removing near duplicates had minimal impact on accuracy, as these images were mostly consistently assigned the same label within each duplicate group.
     
 | Model | Overall | × Val | × Cross | × Val+Cross | × All |
 | --- | --- | --- | --- | --- | --- |
@@ -1187,13 +1187,13 @@ Luccioni and Rolnick (2022)<d-cite key="19"/> analyzed the classes representing 
 
 ## Conclusion
 <!--
-Some ideas about solutions of the problems.
+Some ideas about solutions to the problems.
 
 Visual dictionary.
 
 We are left with an important question: Do we need something like ImageNet, but designed to avoid the issues prevalent today? Should it serve as a dataset for both training and testing? Alternatively, given the modern shift toward vision-language models and the abundance of massive unsupervised datasets, should it instead take the form of a "visual dictionary"? Such a dictionary could aim to capture the diversity of the world, serving primarily as a comprehensive and robust evaluation benchmark.
 
-Mech. turk x expert. - should images be labeled as understood by non-expert, or general public?
+Mechanical Turk x expert. - should images be labeled as understood by non-experts, or general public?
 
 Should the task involve a group of experts dedicating many hours to performing annotations? Or could it be managed by a team of minimally trained annotators, improving on the approach initially used with MTurkers? This would help reduce the overall cost of the process.
 
@@ -1220,5 +1220,5 @@ In prior work<d-cite key="7"/>, MTurkers have been used to find incorrect labels
 
 Some of the issues, like the presence of image duplicates and near duplicates, may create an opportunity for performing meta-experiments. For instance, what if two methods with identical overall performance on ImageNet-1k differ significantly in accuracy on duplicates? What is the interpretation of a situation where a method performs well on classes with many incorrectly labeled images?
 
-In many areas of computer vision, models reached accuracy comparable to the so-called ground truth, losing the compass pointing to better performance. As we have seen, improving ground truth quality is not a simple task of checking and re-checking, but touches some core issues of both vision and language modeling. This blog is a small step towards resetting the compass for ImageNet-1k.
+In many areas of computer vision, models reached accuracy comparable to the so-called ground truth, losing the compass pointing to better performance. As we have seen, improving ground truth quality is not a simple task of checking and re-checking, but touches on some core issues of both vision and language modeling. This blog is a small step towards resetting the compass for ImageNet-1k.
  
