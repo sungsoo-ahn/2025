@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: The Lottery LLM Hypothesis, Rethinking What Abilities Should LLM Compression Preserve?
-description: Motivated by reducing the computational and storage costs of LLMs, model compression and KV cache compression have attracted much attention of researchers. However, Current methodologies predominantly emphasize maintaining the performance of compressed LLMs, as measured by perplexity or simple accuracy, on tasks involving common sense knowledge question answering and basic arithmetic reasoning. In this blog, we present a brief review of the recent advancements of LLM related to retrieval augmented generation, multi-step reasoning, external tools and computational expressivity, all of which substantially enhance LLM performance. Then, we propose a lottery LLM hypothesis suggesting that for a given LLM and task, there exists a smaller lottery LLM capable of producing the same performance with the original LLM with the assistances of multi-step reasoning and external tools. Based on the review of current progresses of LLMs, we discuss and summarize the essential capabilities that the lottery LLM and KV cache compression must possess, which are currently overlooked in existing methods.
+description: Motivated by reducing the computational and storage costs of LLMs, model compression and KV cache compression have attracted much attention of researchers. However, Current methods predominantly emphasize maintaining the performance of compressed LLMs, as measured by perplexity or simple accuracy on tasks of common sense knowledge QA and basic arithmetic reasoning. In this blog, we present a brief review of recent advancements of LLM related to retrieval augmented generation, multi-step reasoning, external tools and computational expressivity, all of which substantially enhance LLM performance. Then, we propose a lottery LLM hypothesis suggesting that for a given LLM and task, there exists a smaller lottery LLM capable of producing the same performance with the original LLM with the assistances of multi-step reasoning and external tools. Based on the review of current progresses of LLMs, we discuss and summarize the essential capabilities that the lottery LLM and KV cache compression must possess, which are currently overlooked in existing methods.
 
 
 date: 2025-04-28
@@ -10,14 +10,39 @@ htmlwidgets: true
 hidden: false
 
 # Anonymize when submitting
-authors:
-  - name: Anonymous
-
 # authors:
-#   - name: Albert Einstein
-#     url: "https://en.wikipedia.org/wiki/Albert_Einstein"
-#     affiliations:
-#       name: IAS, Princeton
+#   - name: Anonymous
+
+authors:
+  - name: Zhenheng Tang
+    url: "https://scholar.google.com/citations?user=FlYcrEcAAAAJ"
+    affiliations:
+      name: The Hong Kong University of Science and Technology
+  - name:  Xiang Liu
+    url: "https://scholar.google.com/citations?user=VtK5lwUAAAAJ"
+    affiliations:
+      name: The Hong Kong University of Science and Technology (Guangzhou)
+  - name: Qian Wang
+    url: "https://scholar.google.com/citations?user=KAGrBdoAAAAJ"
+    affiliations:
+      name: National University of Singapore
+  - name: Peijie Dong
+    url: "https://scholar.google.com/citations?user=TqS6s4gAAAAJ"
+    affiliations:
+      name: The Hong Kong University of Science and Technology (Guangzhou)
+  - name: Bingsheng He 
+    url: "https://scholar.google.com/citations?user=RogYLKYAAAAJ"
+    affiliations:
+      name: National University of Singapore
+  - name: Xiaowen Chu
+    url: "https://scholar.google.com/citations?user=v4rX24EAAAAJ"
+    affiliations:
+      name: The Hong Kong University of Science and Technology (Guangzhou)
+  - name: Bo Li
+    url: "https://scholar.google.com/citations?user=SLgWQLEAAAAJ"
+    affiliations:
+      name: The Hong Kong University of Science and Technology
+
 
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-the-lottery-llm-hyperthesis.bib
