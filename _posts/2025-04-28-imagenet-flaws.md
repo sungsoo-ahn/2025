@@ -1199,6 +1199,34 @@ Finally, the *"black-footed ferret"* class contains only one image of this speci
 
 Luccioni and Rolnick (2022)<d-cite key="19"/> analyzed the classes representing wildlife species and the misrepresentation of biodiversity within the ImageNet-1k dataset. Their findings reveal a substantial proportion of incorrect labels across these classes. Notably, they examined the class *"black-footed ferret"* and reported results consistent with those observed in our relabeling process.
 
+## New Contribution to ImageNet Dataset Knowledge
+1. **Detailed Dataset Construction Issues**  
+   - Explained the problem with using MTurkers in dataset construction, and showing the WordNet definitions issues with the tiger cat example.  
+
+2. **Analysis of Distribution Shift**  
+   - Investigated the distribution shift between training and validation sets in detail. Being the first to demonstrate the issues with canoe & kayak and the planetaria class.  
+
+3. **Extended Analysis of Problematic Classes**
+   - Expanding the number of problematic classes within the groups:
+     - Hierarchical relationships 
+     - Duplicate classes 
+   - Identifying additional groups of problematic classes and incorporating the relevant classes into them, including:
+     - Part-of relationships 
+     - Co-occurrence relationships
+
+4. **Comprehensive Duplicate Analysis**  
+   - Studied dataset duplicates across the entire training and validation sets (previous studies focused only on cross-duplicates).  
+
+5. **Near-Duplicate Investigation**  
+   - Conducted an in-depth study of near-duplicates within the validation set and across training-validation sets.  
+
+6. **Impact of Class Names on Vision-Language Models**  
+   - Demonstrated how class names affect the evaluation of vision-language models on ImageNet.  
+
+7. **Weasel-Like Family Case Study by an Expert**  
+   - Performed an extensive analysis of fine-grained classes within the weasel-like family, with all validation images manually reviewed and labeled by a wildlife expert.
+
+
 ## Conclusion
 <!--
 Some ideas about solutions to the problems.
