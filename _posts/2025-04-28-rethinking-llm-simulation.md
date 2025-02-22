@@ -7,24 +7,20 @@ future: true
 htmlwidgets: true
 # hidden: false
 
-# Anonymize when submitting
-authors:
-  - name: Anonymous
-
+# # Anonymize when submitting
 # authors:
-#   - name: Albert Einstein
-#     url: "https://en.wikipedia.org/wiki/Albert_Einstein"
-#     affiliations:
-#       name: IAS, Princeton
-#   - name: Boris Podolsky
-#     url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
-#     affiliations:
-#       name: IAS, Princeton
-#   - name: Nathan Rosen
-#     url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
-#     affiliations:
-#       name: IAS, Princeton
+#   - name: Anonymous
 
+authors:
+  - name: Qian Wang
+    affiliations:
+      name: National University of Singapore
+  - name: Zhenheng Tang
+    affiliations:
+      name: Hong Kong University of Science and Technology
+  - name: Bingsheng He
+    affiliations:
+      name: National University of Singapore
 # must be the exact same name as your blogpost
 bibliography: 2025-04-28-rethinking-llm-simulation.bib  
 
@@ -61,7 +57,7 @@ _styles: >
 ## Introduction
 With the approximate human knowledge, large language models have revolutionized the way of simulations of social and psychological phenomena <d-cite key="Park2023GenerativeAgents, gao2023s"></d-cite>. By processing and generating human-like language, LLMs offer unprecedented opportunities to model complex interactions and behaviors that were previously challenging to simulate. This capability opens doors to exploring societal trends, market dynamics, and individual psychological states through a new lens.
 
-However, there is a notable lack of comprehensive studies **<span style="color:blue">examining whether LLM simulations can accurately reflect real-world human behaviors</span>**. Some studies have explored this dimension from various angles. First, recent studies <d-cite key="wang2023not, wang2024new"></d-cite> show that the inner knowledge of LLMs show **strong cultural bias**, **decision preference** <d-cite key="huang2024far"></d-cite>, **prior psychological character**<d-cite key="pan2023llms"></d-cite>. Second, the current training datasets of LLMs **lack personal inner psychological states, thoughts and life experiences**. LLM may reflect the common cognition of all humans instead of individual persons. Third, unlike humans who make decisions and act based on motivations from the living, emotions and achievements <d-cite key="felin2024theory"></d-cite>, LLMs **lack intrinsic motivations, emotions, and consciousness**. They operate based on resultant patterns in training data, not from lived experiences. These fundamental differences motivate rethinking how we use LLMs for simulation purposes and to critically assess their ability to replicate the depth and complexity of human society.
+However, there is a notable lack of comprehensive studies **<span style="color:blue">examining whether LLM simulations can accurately reflect real-world human behaviors</span>**. Some studies have explored this dimension from various angles. First, recent studies <d-cite key="wang2023not, wang2024new, wang2025limits"></d-cite> show that the inner knowledge of LLMs show **strong cultural bias**, **decision preference** <d-cite key="huang2024far"></d-cite>, **prior psychological character**<d-cite key="pan2023llms"></d-cite>. Second, the current training datasets of LLMs **lack personal inner psychological states, thoughts and life experiences**. LLM may reflect the common cognition of all humans instead of individual persons. Third, unlike humans who make decisions and act based on motivations from the living, emotions and achievements <d-cite key="felin2024theory"></d-cite>, LLMs **lack intrinsic motivations, emotions, and consciousness**. They operate based on resultant patterns in training data, not from lived experiences. These fundamental differences motivate rethinking how we use LLMs for simulation purposes and to critically assess their ability to replicate the depth and complexity of human society.
 
 In this post, we delve into the limitations of LLM-driven social simulations. We discuss and summarize the challenges these models face in capturing human psychological depth, intrinsic motivation, and ethical considerations. These challenges provide insights for future LLM evaluation and development. Nevertheless, we compare the traditional simulation and the LLM-based simulation, and find that the LLM-based simulation is still a significantly potential direction due to their low costs compared to humans, scalability, and the ability to simulate emergent behaviors. Furthermore, we propose future research directions to better align LLM simulations with humans.
 
